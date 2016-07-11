@@ -60,7 +60,7 @@ canvas {
 
 #colormenu input, #canvasmenu input {
   display: inline-block;
-  width: 100px; }
+  /* width:100px; */ }
 #colormenu #html-color, #colormenu #bkg-img, #colormenu #bkg-x, #colormenu #bkg-y, #colormenu #bkg-size, #canvasmenu #html-color, #canvasmenu #bkg-img, #canvasmenu #bkg-x, #canvasmenu #bkg-y, #canvasmenu #bkg-size {
   width: 80px; }
 
