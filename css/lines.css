@@ -36,8 +36,8 @@ canvas {
 .menu-panel {
   width: 160px;
   float: left;
-  margin-right: 10px;
-  margin-top: 10px;
+  margin-right: 0.5em;
+  margin-top: 0.5em;
   border-top: 1px solid lightgray;
   border-left: 1px solid lightgray;
   border-right: 1px solid lightgray;
