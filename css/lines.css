@@ -24,6 +24,7 @@ canvas {
 
 #keys {
   float: left;
+  clear: both;
   cursor: pointer;
   padding: 1em; }
   #keys ul {
@@ -33,17 +34,16 @@ canvas {
     vertical-align: middle; }
 
 .menu-panel {
-  width: 150px;
+  width: 160px;
   float: left;
   margin-right: 10px;
   margin-top: 10px;
   border-top: 1px solid lightgray;
   border-left: 1px solid lightgray;
   border-right: 1px solid lightgray;
-  padding: 3px;
-  border-top-left-radius: 3px;
-  background: linear-gradient(to right, #ffffff 97%, #d2d2d2 100%);
-  box-shadow: 0 2px 3px lightgray; }
+  padding: 0.5em;
+  /* background: linear-gradient(to right, #ffffff 97%,#d2d2d2 100%); */
+  box-shadow: 2px 2px 1px lightgray; }
   .menu-panel .row {
     margin: 1em 0;
     display: block; }
@@ -63,6 +63,13 @@ canvas {
   /* width:100px; */ }
 #colormenu #html-color, #colormenu #bkg-img, #colormenu #bkg-x, #colormenu #bkg-y, #colormenu #bkg-size, #canvasmenu #html-color, #canvasmenu #bkg-img, #canvasmenu #bkg-x, #canvasmenu #bkg-y, #canvasmenu #bkg-size {
   width: 80px; }
+#colormenu #colorways, #canvasmenu #colorways {
+  margin-top: 0.5em; }
+  #colormenu #colorways button, #canvasmenu #colorways button {
+    padding: 2px;
+    border: 1px solid lightgray; }
+    #colormenu #colorways button:hover, #canvasmenu #colorways button:hover {
+      cursor: pointer; }
 
 #color, #color-gradient {
   width: 100%;
@@ -72,11 +79,11 @@ canvas {
 
 #frames {
   clear: both;
-  float: right;
+  float: left;
   margin: 10px;
+  padding: 0.5em;
   width: auto;
   border: 1px solid gray;
-  border-radius: 3px;
   right: 0;
   top: 260px; }
   #frames .frame, #frames .plusframe {
@@ -85,7 +92,8 @@ canvas {
     display: inline-block;
     background-color: lightgray;
     margin-right: 1px;
-    margin-top: 1px; }
+    margin-top: 1px;
+    padding: 0.5em; }
     #frames .frame:hover, #frames .plusframe:hover {
       background-color: gray; }
   #frames .current {

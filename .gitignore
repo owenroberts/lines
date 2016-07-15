@@ -1,7 +1,9 @@
 .DS_Store
 lines/
 doc/
+audio/
+comics/
+animations/
 css/.sass-cache/
 css/lines.css.map
-thepig/
 .sass-cache/

@@ -25,6 +25,7 @@ canvas {
 
 #keys {
 	float:left;
+	clear:both;
 	cursor:pointer;
 	padding:1em;
 	ul { list-style:none; padding: 0;}
@@ -32,17 +33,17 @@ canvas {
 }
 
 .menu-panel {
-	width:150px;
+	width:160px;
 	float:left;
 	margin-right:10px;
 	margin-top:10px;
 	border-top:1px solid lightgray;
 	border-left:1px solid lightgray;
 	border-right:1px solid lightgray;
-	padding:3px;
-	border-top-left-radius: 3px;
-	background: linear-gradient(to right, #ffffff 97%,#d2d2d2 100%);
-	box-shadow: 0 2px 3px lightgray;
+	padding:0.5em;
+	
+	/* background: linear-gradient(to right, #ffffff 97%,#d2d2d2 100%); */
+	box-shadow: 2px 2px 1px lightgray;
 	.row {
 		margin: 1em 0;
 		display:block;
@@ -68,6 +69,14 @@ canvas {
 		/* width:100px; */
 	}
 	#html-color, #bkg-img, #bkg-x, #bkg-y, #bkg-size { width:80px; }
+	#colorways {
+		margin-top: 0.5em;
+		button {
+			padding: 2px;
+			border: 1px solid lightgray;
+			&:hover{ cursor: pointer; }
+		}
+	} 
 }
 
 #color, #color-gradient {
@@ -79,14 +88,13 @@ canvas {
 
 #frames {
 	clear:both;
-	float:right;
+	float:left;
 	margin:10px;
+	padding: 0.5em;
 	width: auto;
 	border: 1px solid gray;
-	border-radius: 3px;
 	right:0;
 	top:260px;
-	
 	.frame, .plusframe {
 		width:20px;
 		height:30px;
@@ -94,6 +102,7 @@ canvas {
 		background-color:lightgray;
 		margin-right:1px;
 		margin-top:1px;
+		padding: 0.5em;
 		&:hover {
 			background-color:gray;
 		}
