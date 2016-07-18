@@ -9,47 +9,36 @@
 <body>
 <div id="container">
 	<canvas id="canvas" class="draw" height="375" width="667" ></canvas>
-
-	<div id="drawmenu" class="menu-panel">
-		<div class="row">
-			<span class="btn" id="save">Save</span>
-			<span class="btn" id="open">Open</span>
-		</div>
-
-		<div class="row">Segment number	 
-			<span id="num-range"></span>
-			<input type="range" id="num" min="1" max="20" value="2" />
-		</div>
-		
-		<div class="row">Jiggle range 
-			<span id="diff-range"></span>
-			<input type="range" id="diff" min="0" max="10" value="1" />
-		</div>
-		<div class="row">Mouse time
-			<span id="mouse-range"></span>
-			<input type="range" id="mouse" min="0" max="100" value="25" />
-		</div>
+	<div id="nav">
+		<h2 id="title">Title</h2>
+		<span class="btn" id="save">Save</span>
+		<span class="btn" id="open">Open</span>
 	</div>
+
+	
 	<div id="animatemenu" class="menu-panel">
 		<div class="row">
 			<span class="btn" id="play">Play</span>
 			<span class="btn" id="stop">Stop</span>
+			<span class="btn" id="prev-frame"><<</span>
+			<span class="btn" id="next-frame">>></span>
 
 		</div>
 		<div class="row">
 			Frame: <span id="frame">0</span>
 		</div>
 		<div class="row" >
-			<span class="btn" id="prev-frame"><<</span>
-			<span class="btn" id="next-frame">>></span>
+			
 		</div>
 		<div class="row">	
 			<span class="btn" id="add-frame">+</span>
 			<span class="btn" id="insert-frame">i</span>
 			<span class="btn" id="delete-frame">d</span>
+			<span class="btn" id="clear-frame">X</span>
+			<span class="btn" id="cut-line">zcut</span>
 		</div>
 		<div class="row">
-			<span class="btn" id="clear-frame">X</span>
+			
 			<span class="btn" id="copy">Copy</span>
 			<span class="btn" id="paste">Paste</span>
 		</div>
@@ -81,9 +70,7 @@
 				<option>60</option>
 			</select>
 		</div>
-		<div class="row">
-			<span class="btn" id="cut-line">Cut Line</span>
-		</div>
+
 		<div class="row">
 			<span class="btn" id="explode">Explode</span>
 			<span class="btn" id="explode-over">Ex Over</span>
@@ -105,6 +92,21 @@
 			<div id="colorways"></div>
 		</div>
 	</div>
+	<div id="drawmenu" class="menu-panel">
+		<div class="row">Segment number	 
+			<span id="num-range"></span>
+			<input type="range" id="num" min="1" max="20" value="2" />
+		</div>
+		
+		<div class="row">Jiggle range 
+			<span id="diff-range"></span>
+			<input type="range" id="diff" min="0" max="10" value="1" />
+		</div>
+		<div class="row">Mouse time
+			<span id="mouse-range"></span>
+			<input type="range" id="mouse" min="0" max="100" value="25" />
+		</div>
+	</div>
 	<div id="canvasmenu" class="menu-panel">
 		<div class="row">
 			Width: <input type="text" id="canvas-width" placeholder="667" >
@@ -124,10 +126,14 @@
 			<li><span class="key">e</span>next</li>
 			<li><span class="key">w</span>prev</li>
 			<li><span class="key">c</span>copy</li>
+			<li><span class="key">Vc</span>clear copy frames</li>
+			<li><span class="key">Xc</span>copy</li>
 			<li><span class="key">v</span>paste</li>
+			<li><span class="key">Sv</span>paste multiple frames</li>
 			<li><span class="key">x</span>clear</li>
 			<li><span class="key">r</span>add</li>
 			<li><span class="key">z</span>cut last</li>
+			<li><span class="key">Sz</span>cut last drawing from frame</li>
 			<li><span class="key">s</span>save</li>
 			<li><span class="key">o</span>load</li>
 			<li><span class="key">i</span>insert</li>
