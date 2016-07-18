@@ -33,6 +33,17 @@ canvas {
   #keys li {
     vertical-align: middle; }
 
+#nav h2 {
+  display: inline; }
+#nav .btn {
+  border: 1px solid gray;
+  padding: 0.25em;
+  margin: .25em 0;
+  border-radius: 3px;
+  cursor: pointer; }
+  #nav .btn:hover {
+    background: lightgray; }
+
 .menu-panel {
   width: 160px;
   float: left;
@@ -87,7 +98,7 @@ canvas {
   right: 0;
   top: 260px; }
   #frames .frame, #frames .plusframe {
-    width: 20px;
+    width: 30px;
     height: 30px;
     display: inline-block;
     background-color: lightgray;
