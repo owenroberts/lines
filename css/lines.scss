@@ -23,13 +23,6 @@ canvas {
 	}
 }
 
-#tools {
-	margin:1em;
-	/* float:left; */
-}
-
-
-
 #keys {
 	float:left;
 	clear:left;
@@ -115,13 +108,9 @@ canvas {
 }
 
 #frames {
-	float:left;
-	margin-top:1em;
+	height:auto;
 	padding: 0.5em;
 	width: auto;
-	border: 1px solid gray;
-	right:0;
-	top:260px;
 	.frame, .plusframe {
 		width:30px;
 		height:30px;
