@@ -16,7 +16,7 @@ body {
 
 canvas {
   float: left;
-  margin: 0.5em; }
+  margin: 1em; }
   canvas.draw {
     border: 1px solid gray; }
     canvas.draw:active, canvas.draw:hover {
@@ -24,28 +24,34 @@ canvas {
 
 #keys {
   float: left;
-  clear: both;
+  clear: left;
   cursor: pointer;
-  padding: 1em; }
+  padding: 1em;
+  max-width: 500px; }
   #keys ul {
     list-style: none;
     padding: 0; }
   #keys li {
-    vertical-align: middle; }
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0.25em; }
 
-#nav h2 {
-  display: inline; }
-#nav .btn {
-  border: 1px solid gray;
-  padding: 0.25em;
-  margin: .25em 0;
-  border-radius: 3px;
-  cursor: pointer; }
-  #nav .btn:hover {
-    background: lightgray; }
+#nav {
+  padding: 1em; }
+  #nav h2 {
+    display: inline; }
+  #nav .btn {
+    border: 1px solid gray;
+    padding: 0.25em;
+    margin: .25em 0;
+    border-radius: 3px;
+    cursor: pointer; }
+    #nav .btn:hover {
+      background: lightgray; }
 
 .menu-panel {
   width: 160px;
+  height: 240px;
   float: left;
   margin-right: 0.5em;
   margin-top: 0.5em;
@@ -89,14 +95,9 @@ canvas {
   margin-bottom: 1em; }
 
 #frames {
-  clear: both;
-  float: left;
-  margin: 10px;
+  height: auto;
   padding: 0.5em;
-  width: auto;
-  border: 1px solid gray;
-  right: 0;
-  top: 260px; }
+  width: auto; }
   #frames .frame, #frames .plusframe {
     width: 30px;
     height: 30px;

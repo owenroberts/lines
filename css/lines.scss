@@ -14,7 +14,7 @@ body {
 }
 canvas {
 	float:left;
-	margin:0.5em;
+	margin:1em;
 	&.draw {
 		border:1px solid gray;
 		&:active, &:hover {
@@ -25,14 +25,20 @@ canvas {
 
 #keys {
 	float:left;
-	clear:both;
+	clear:left;
 	cursor:pointer;
 	padding:1em;
+	max-width:500px;
 	ul { list-style:none; padding: 0;}
-	li { vertical-align:middle;}
+	li { 
+		vertical-align:middle; 
+		display:inline-block;
+		margin:0.25em;
+	}
 }
 
 #nav {
+	padding:1em;
 	h2 {display:inline;}
 	.btn {
 		border: 1px solid gray;
@@ -48,6 +54,7 @@ canvas {
 
 .menu-panel {
 	width:160px;
+	height:240px;
 	float:left;
 	margin-right:0.5em;
 	margin-top:0.5em;
@@ -101,14 +108,9 @@ canvas {
 }
 
 #frames {
-	clear:both;
-	float:left;
-	margin:10px;
+	height:auto;
 	padding: 0.5em;
 	width: auto;
-	border: 1px solid gray;
-	right:0;
-	top:260px;
 	.frame, .plusframe {
 		width:30px;
 		height:30px;
