@@ -15,18 +15,24 @@ body {
   width: 100%; }
 
 canvas {
-  float: left;
+  /* float:left; */
+  display: inline-block;
+  vertical-align: top;
   margin: 1em; }
   canvas.draw {
     border: 1px solid gray; }
     canvas.draw:active, canvas.draw:hover {
       cursor: crosshair; }
 
+#tools {
+  width: 680px;
+  display: inline-block; }
+
 #keys {
   float: left;
   clear: left;
   cursor: pointer;
-  padding: 1em;
+  padding: 1em 0;
   max-width: 500px; }
   #keys ul {
     list-style: none;
@@ -37,7 +43,7 @@ canvas {
     margin: 0.25em; }
 
 #nav {
-  padding: 1em; }
+  padding: 1em 0; }
   #nav h2 {
     display: inline; }
   #nav .btn {
@@ -49,10 +55,13 @@ canvas {
     #nav .btn:hover {
       background: lightgray; }
 
+#animatemenu, #colormenu, #colormenu, #drawmenu, #canvasmenu {
+  width: 160px; }
+
 .menu-panel {
-  width: 160px;
-  height: 240px;
   float: left;
+  height: 240px;
+  /* float:left; */
   margin-right: 0.5em;
   margin-top: 0.5em;
   border-top: 1px solid lightgray;
@@ -97,7 +106,7 @@ canvas {
 #frames {
   height: auto;
   padding: 0.5em;
-  width: auto; }
+  /* width: auto; */ }
   #frames .frame, #frames .plusframe {
     width: 30px;
     height: 30px;
