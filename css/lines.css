@@ -58,6 +58,17 @@ canvas {
 #animatemenu, #colormenu, #colormenu, #drawmenu, #canvasmenu {
   width: 160px; }
 
+#nav h2 {
+  display: inline; }
+#nav .btn {
+  border: 1px solid gray;
+  padding: 0.25em;
+  margin: .25em 0;
+  border-radius: 3px;
+  cursor: pointer; }
+  #nav .btn:hover {
+    background: lightgray; }
+
 .menu-panel {
   float: left;
   height: 240px;
