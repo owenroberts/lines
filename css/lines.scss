@@ -45,7 +45,6 @@ canvas {
 }
 
 #nav {
-	padding:1em 0;
 	h2 {display:inline;}
 	.btn {
 		border: 1px solid gray;
@@ -59,7 +58,7 @@ canvas {
 	}
 }
 
-#animatemenu,#colormenu, #colormenu, #drawmenu, #canvasmenu {
+.menu-panel {
 	width:160px;
 }
 
