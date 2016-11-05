@@ -42,22 +42,6 @@ canvas {
     display: inline-block;
     margin: 0.25em; }
 
-#nav {
-  padding: 1em 0; }
-  #nav h2 {
-    display: inline; }
-  #nav .btn {
-    border: 1px solid gray;
-    padding: 0.25em;
-    margin: .25em 0;
-    border-radius: 3px;
-    cursor: pointer; }
-    #nav .btn:hover {
-      background: lightgray; }
-
-#animatemenu, #colormenu, #colormenu, #drawmenu, #canvasmenu {
-  width: 160px; }
-
 #nav h2 {
   display: inline; }
 #nav .btn {
@@ -68,6 +52,9 @@ canvas {
   cursor: pointer; }
   #nav .btn:hover {
     background: lightgray; }
+
+.menu-panel {
+  width: 150px; }
 
 .menu-panel {
   float: left;
@@ -117,7 +104,8 @@ canvas {
 #frames {
   height: auto;
   padding: 0.5em;
-  /* width: auto; */ }
+  width: auto;
+  /*  idk?  */ }
   #frames .frame, #frames .plusframe {
     width: 30px;
     height: 30px;
