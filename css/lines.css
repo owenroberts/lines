@@ -9,13 +9,20 @@ body {
 * {
   box-sizing: border-box; }
 
+#splash {
+  font-size: 18px;
+  width: 600px;
+  margin: 2em auto; }
+
 #container {
   min-width: 720px;
   position: relative;
-  width: 100%; }
+  width: 100%;
+  display: table; }
 
 canvas {
-  /* float:left; */
+  display: table-cell;
+  vertical-align: top;
   display: inline-block;
   vertical-align: top;
   margin: 1em; }
@@ -25,15 +32,19 @@ canvas {
       cursor: crosshair; }
 
 #tools {
-  width: 680px;
-  display: inline-block; }
+  display: table-cell;
+  vertical-align: top;
+  text-align: left;
+  width: 100%; }
 
 #keys {
-  float: left;
-  clear: left;
-  cursor: pointer;
-  padding: 1em 0;
-  max-width: 500px; }
+  /* 	float:left;
+  	clear:left;
+  	cursor:pointer;
+  	padding:1em 0;
+  	max-width:500px; */
+  width: auto;
+  position: relative; }
   #keys ul {
     list-style: none;
     padding: 0; }
@@ -53,21 +64,29 @@ canvas {
   #nav .btn:hover {
     background: lightgray; }
 
-.menu-panel {
-  width: 150px; }
+.panel-toggle {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.1em 0.25em;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 100; }
 
 .menu-panel {
-  float: left;
-  height: 240px;
-  /* float:left; */
+  width: 150px;
   margin-right: 0.5em;
   margin-top: 0.5em;
   border-top: 1px solid lightgray;
   border-left: 1px solid lightgray;
   border-right: 1px solid lightgray;
   padding: 0.5em;
+  overflow: hidden;
   /* background: linear-gradient(to right, #ffffff 97%,#d2d2d2 100%); */
-  box-shadow: 2px 2px 1px lightgray; }
+  box-shadow: 2px 2px 1px lightgray;
+  position: relative;
+  height: 25px; }
   .menu-panel .row {
     margin: 1em 0;
     display: block; }

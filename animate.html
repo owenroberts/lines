@@ -8,9 +8,7 @@
 </head>
 <body>
 <div id="container">
-
 	<canvas id="canvas" class="draw" height="667" width="375" ></canvas>
-
 	<div id="tools">
 
 		<div id="nav">
@@ -20,6 +18,9 @@
 		</div>
 		
 		<div id="animatemenu" class="menu-panel">
+			<div class="panel-toggle">v</div>
+			<div class="panel-title">Animation</div> 
+
 			<div class="row">
 				<span class="btn" id="play">Play</span>
 				<span class="btn" id="stop">Stop</span>
@@ -29,9 +30,6 @@
 			</div>
 			<div class="row">
 				Frame: <span id="frame">0</span>
-			</div>
-			<div class="row" >
-				
 			</div>
 			<div class="row">	
 				<span class="btn" id="add-frame">+</span>
@@ -85,6 +83,9 @@
 		</div>
 		
 		<div id="colormenu" class="menu-panel">
+			<div class="panel-toggle">v</div>
+			<div class="panel-title">Color</div> 
+
 			<div class="row">
 				<div id="color"></div>
 				<div id="color-gradient"></div>
@@ -95,7 +96,10 @@
 				<div id="colorways"></div>
 			</div>
 		</div>
+
 		<div id="drawmenu" class="menu-panel">
+			<div class="panel-toggle">v</div>
+			<div class="panel-title">Lines</div> 
 			<div class="row">Segment number	 
 				<span id="num-range"></span>
 				<input type="range" id="num" min="1" max="20" value="2" />
@@ -110,7 +114,10 @@
 				<input type="range" id="mouse" min="0" max="100" value="25" />
 			</div>
 		</div>
+
 		<div id="canvasmenu" class="menu-panel">
+			<div class="panel-toggle">v</div>
+			<div class="panel-title">Canvas</div> 
 			<div class="row">
 				Width: <input type="text" id="canvas-width" placeholder="667" >
 				Height: <input type="text" id="canvas-height" placeholder="375" >
@@ -124,34 +131,40 @@
 			</div>
 		</div>
 
-
-
 		<div id="frames" class="menu-panel">
 			Frames
 			<div class="plusframe current">+</div>
 		</div>
-		<div id="keys" >
-			<div id="key-toggle">keys +</div>
-			<ul id="keys-list">
-				<li><span class="key">e</span>next</li>
-				<li><span class="key">w</span>prev</li>
-				<li><span class="key">c</span>copy</li>
-				<li><span class="key">Vc</span>clear copy frames</li>
-				<li><span class="key">Xc</span>copy</li>
-				<li><span class="key">v</span>paste</li>
-				<li><span class="key">Sv</span>paste multiple frames</li>
-				<li><span class="key">x</span>clear</li>
-				<li><span class="key">r</span>add</li>
-				<li><span class="key">z</span>cut last</li>
-				<li><span class="key">Sz</span>cut last drawing</li>
-				<li><span class="key">s</span>save</li>
-				<li><span class="key">o</span>load</li>
-				<li><span class="key">i</span>insert</li>
-				<li><span class="key">d</span>delete</li>
-				<li><span class="key">X</span>play/pause</li>
-				<li><span class="key">m</span>multiples</li>
-				<li><span class="key">f</span>fit canvas</li>
-			</ul>
+
+		<div id="keys" class="menu-panel">
+			<div class="panel-toggle">v</div>
+			<div class="panel-title">Keys</div>
+			<div class="row"></div>
+				<ul id="keys-list">
+					<li><span class="key">s</span>save</li>
+					<li><span class="key">o</span>open</li>
+					<br>
+					<li><span class="key">e</span>next</li>
+					<li><span class="key">w</span>prev</li>
+					<li><span class="key">c</span>copy</li>
+					<li><span class="key">v</span>paste</li>
+					<li><span class="key">m</span>add multiple copies</li>
+					<li><span class="key">Sv</span>paste multiple frames (select with right mouse over)</li>
+					<li><span class="key">Vc</span>clear multiple frames</li>
+					<br>
+					<li><span class="key">x</span>clear frame</li>
+					<li><span class="key">r</span>add to frame</li>
+					<li><span class="key">z</span>cut last line</li>
+					<li><span class="key">Sz</span>cut last drawing</li>
+					<br>
+					<li><span class="key">i</span>insert frame before</li>
+					<li><span class="key">d</span>delete current frame</li>
+					<br>
+					<li><span class="key">X</span>play/pause</li>
+					<br>
+					<li><span class="key">f</span>fit canvas to drawing</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	
