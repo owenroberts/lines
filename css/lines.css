@@ -35,7 +35,8 @@ canvas {
   display: table-cell;
   vertical-align: top;
   text-align: left;
-  width: 100%; }
+  width: 100%;
+  padding-top: 1em; }
 
 #keys {
   /* 	float:left;
