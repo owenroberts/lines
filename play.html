@@ -5,14 +5,19 @@
 	<meta charset="utf-8" />
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
-	<!-- <link href="css/lines.css" rel="stylesheet" type="text/css" /> -->
+	<link href="css/lines.css" rel="stylesheet" type="text/css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
 	<h1>Play example</h1>
-	<canvas class="draw" data-src="lines/logo.json" data-fps="10"></canvas>
+	<canvas class="draw" data-src="ex.json"></canvas>
 	<script type="text/javascript" src="lib/jquery.min.js"></script>
 	<script type="text/javascript" src="lib/cool.js"></script>
 	<script type="text/javascript" src="lib/play.js"></script>
+	<script type="text/javascript">
+		window.onload = function() {
+			loadAnimation(document.querySelector('.draw').dataset.src);
+		}
+	</script>
 </body>
 </html>
