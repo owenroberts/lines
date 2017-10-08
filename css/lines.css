@@ -129,8 +129,8 @@ canvas {
   width: auto;
   /*  idk?  */ }
   #frames .frame, #frames .plusframe {
-    width: 30px;
-    height: 30px;
+    /* width:30px;
+    height:30px; */
     display: inline-block;
     background-color: lightgray;
     margin-right: 1px;
