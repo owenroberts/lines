@@ -22,6 +22,7 @@ const c = document.querySelector('#canvas');
 var w = c.width;
 var h = c.height;
 const ctx = c.getContext('2d');
+var ctxStrokeColor = "000000";
 var bkg = new Image();
 var bkgx = 0, bkgy = 0, bkgSize = 0, bkgRatio = 1;
 var title = document.getElementById("title");
@@ -275,23 +276,28 @@ function addLine(mx, my) {
 }
 
 function drawLines(lns, index, end, nr, dr, col, onion) {
+	ctx.beginPath();
 	for (var h = index; h < end; h++) {
 		var line = lns[h];
 		if (line && line.e) {
 			var v = new Vector(line.e.x, line.e.y);
 			v.subtract(line.s);
 			v.divide(nr);
-			ctx.beginPath();
 			ctx.moveTo( line.s.x + getRandom(-dr, dr), line.s.y + getRandom(-dr, dr) );
 			for (var i = 0; i < nr; i++) {
 				var p = new Vector(line.s.x + v.x * i, line.s.y + v.y * i);
 				ctx.lineTo( p.x + v.x + getRandom(-dr, dr), p.y + v.y + getRandom(-dr, dr) );
 			}
 			if (onion) ctx.strokeStyle = col;
-			else ctx.strokeStyle= "#"+col;
-      		ctx.stroke();
+			else {
+				if (ctxStrokeColor != col) {
+					ctx.strokeStyle = "#"+col;
+					ctxStrokeColor = col;
+				}
+			}
 		}
-	}				
+	}	
+	ctx.stroke();			
 }
 
 /*  DRAW  */
@@ -345,10 +351,10 @@ function draw() {
 			}
 		}
 	}
-	window.requestAnimationFrame(draw);
+	window.requestAnimFrame(draw);
 }
 
-window.requestAnimationFrame(draw);
+window.requestAnimFrame(draw);
 
 const framesPanel = document.querySelector("#frames");
 const plusFrame = document.querySelector(".plusframe"); /* plus frame is unsaved drawing frame */
