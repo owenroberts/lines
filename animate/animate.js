@@ -46,6 +46,12 @@ var lineInterval = 1000/fps;
 var timer = performance.now();
 var intervalRatio = lineInterval / (1000 / fps);
 
+$('#fps').on('change', function() {
+	fps = this.value;
+	intervalRatio = lineInterval / (1000 / fps);
+	this.blur();
+});
+
 var onionskin = 0;
 var moves = 0;
 
@@ -56,21 +62,6 @@ var numRange = $('#num')[0].value;
 var diffRange = $('#diff')[0].value;
 $('#num-range').text(numRange);
 $('#diff-range').text(diffRange);
-
-var mousetime = 30;
-var mousetimer = 0;
-$('#mouse-range').text(mousetime);
-$('#mouse').on('change', function() {
-	mousetime = Number(this.value);
-	$('#mouse-range').text(mousetime);
-});
-
-$('#fps').on('change', function() {
-	fps = this.value;
-	intervalRatio = lineInterval / (1000 / fps);
-	this.blur();
-});
-
 $('#num').on('change', function() {
 	numRange = this.value;
 	$('#num-range').text(numRange);
@@ -78,6 +69,15 @@ $('#num').on('change', function() {
 $('#diff').on('change', function() {
 	diffRange = this.value;
 	$('#diff-range').text(diffRange);
+});
+
+
+var mousetime = 30;
+var mousetimer = 0;
+$('#mouse-range').text(mousetime);
+$('#mouse').on('change', function() {
+	mousetime = Number(this.value);
+	$('#mouse-range').text(mousetime);
 });
 
 /* COLOR STUFF */
@@ -202,7 +202,7 @@ bkgS.addEventListener("input", function() {
 /* DRAWING EVENTS */
 /* outside of canvas */
 function outSideLines(ev) {
-	if (ev.toElement.id != "canvas") {
+	if (ev.toElement != c) {
 		if (drawOn) saveLines();
 		drawOn = false;
 		if (moves%2==1) {
@@ -214,7 +214,7 @@ function outSideLines(ev) {
 		if (ev.which == 3) {
 			ev.preventDefault();
 			const elem = document.elementFromPoint(ev.clientX, ev.clientY);
-			const frm = elem.id.split("fr")[1];
+			const frm = elem.dataset.index;
 			if (elem.classList.contains("frame")) {
 				if (!elem.classList.contains("copy")){
 		 			elem.classList.add("copy")
@@ -369,6 +369,7 @@ function updateFrames() {
 			const frmElem = document.createElement("div");
 			frmElem.classList.add("frame");
 			frmElem.id = "fr" + i;
+			frmElem.dataset.index = i;
 			frmElem.textContent = i;
 			/* 
 			add drawing nums, do this later after figuring out lines/frames/drawings 
