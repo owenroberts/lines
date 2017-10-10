@@ -46,9 +46,38 @@ function DrawingEvents(lines) {
 			if (ev.which == 3) {
 				ev.preventDefault();
 				const elem = document.elementFromPoint(ev.clientX, ev.clientY);
-				const frm = elem.id.split("fr")[1];
-				
+				const frameIndex = elem.dataset.index;
+				if (elem.classList.contains("frame")) {
+					if (!elem.classList.contains("copy")){
+			 			elem.classList.add("copy")
+			 			lines.copyFrames.push( Number(frameIndex) );
+			 		}
+				}
 			}
 		}
+	};
+
+	this.drawUpdate = function(ev) {
+		if (performance.now() > self.mouseInterval + self.mouseTimer) {
+			self.mouseTimer = performance.now();
+			if (self.isDrawing && (lines.frames[currentFrame] == undefined || self.addLinesToFrame))
+				lines.addLines(ev.offsetX, ev.offsetY);
+		}
+	};
+
+	this.drawStart = function(ev) {
+		if (ev.which == 1) {
+			self.isDrawing = true;
+			self.mouseTimer = performance.now();
+		}
+	};
+
+	this.drawEnd = function(ev) {
+		if (ev.which == 1) self.isDrawing = false;
+		if (self.moves % 2 == 1) lines.lines.splice(-1, 1);
+		if (lines.lines.length > 0)
+			if (!lines.lines[lines.lines.length - 1].e) lines.lines.pop(); // remove lines with s and no e
+		self.moves = 0;
 	}
+
 }
