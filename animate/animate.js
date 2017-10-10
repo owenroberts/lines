@@ -32,7 +32,6 @@ var copyFrames = [];
 
 var lines = [];  // the lines currently being drawn
 var copy = [];
-var linesCopy = [];
 var drawings = []; // save drawings here and reference them
 
 var numSaveStates = 10;

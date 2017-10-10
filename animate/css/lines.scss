@@ -41,11 +41,6 @@ canvas {
 }
 
 #keys {
-/* 	float:left;
-	clear:left;
-	cursor:pointer;
-	padding:1em 0;
-	max-width:500px; */
 	width: auto;
 	position: relative;
 	ul { list-style:none; padding: 0;}
@@ -86,7 +81,6 @@ canvas {
 
 
 .menu-panel {
-	
 	width:150px;
 	margin-right:0.5em;
 	margin-top:0.5em;
@@ -94,14 +88,11 @@ canvas {
 	border-left:1px solid lightgray;
 	border-right:1px solid lightgray;
 	padding:0.5em;
-
 	overflow:hidden;
-	
 	/* background: linear-gradient(to right, #ffffff 97%,#d2d2d2 100%); */
 	box-shadow: 2px 2px 1px lightgray;
-
 	position:relative;
-	height:25px;
+	/* height:25px; */
 
 	.row {
 		margin: 1em 0;

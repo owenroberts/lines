@@ -1,0 +1,54 @@
+function DrawingEvents(lines) {
+	const self = this;
+	this.moves = 0; // number of events recorded/lines added, maybe just lines.length?
+	this.isDrawing = false;
+	this.addLinesToFrame = false; // for frames with drawings already recorded
+
+	/*
+	need to think about how to set up interface.... 
+	this seems mad dumb.... 
+	maybe do this http://jsfiddle.net/tAs6V/29/
+	*/
+
+	// divide lines into this many segments
+	this.segNumRangeElem = document.getElementById("num");
+	this.segNumRangeDisplay = document.getElementById("num-range");
+	this.segmentNumRange = this.segNumRangeDisplay.textContent = Number(this.segNumRangeElem.value);
+	this.segNumRangeElem.addEventListener("change", function() {
+		self.segmentNumRange = self.segNumRangeDisplay.textContent = Number(this.value);
+	});
+	
+	// how far the lines jiggle
+	this.jiggleRangeElem = document.getElementById("jiggle"); 
+	this.jiggleRangeDisplay = document.getElementById("jiggle-range"); 
+	this.jiggleRange = this.jiggleRangeDisplay.textContent = Number(this.jiggleRangeElem.value);
+	this.jiggleRangeElem.addEventListener("change", function() {
+		self.jiggleRange = self.jiggleRangeDisplay.textContent = Number(this.value);
+	});
+
+	// how often the mousemove records, default 30ms
+	this.mouseTimer = performance.now();  // this is independent of draw timer (??)
+	this.mouseIntervalElem = document.getElementById("mouse");
+	this.mouseIntervalDisplay = document.getElementById("mouse-range");
+	this.mouseIntervalDisplay.textContent = this.mouseInterval = this.mouseIntervalElem.value;
+	this.mouseIntervalElem.addEventListener("change", function() {
+		self.mouseInterval = self.mouseIntervalDisplay.textContent = Number(this.value);
+	});
+
+	this.outSideCanvas = function(ev) {
+		if (ev.toElement.id != lines.canvas.canvas) { 
+			if (self.isDrawing) lines.saveLines();
+			self.isDrawing = false;
+			if (self.moves % 2 == 1) lines.linse.splice(-1,1);
+			self.moves = 0;
+
+			/* pointer context click on frames for copy frames */
+			if (ev.which == 3) {
+				ev.preventDefault();
+				const elem = document.elementFromPoint(ev.clientX, ev.clientY);
+				const frm = elem.id.split("fr")[1];
+				
+			}
+		}
+	}
+}

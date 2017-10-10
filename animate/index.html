@@ -11,7 +11,7 @@
 <body>
 <div id="container">
 <!-- some changes for future penis, maybe make a branch? -->
-	<canvas id="canvas" class="draw" width="1024" height="768" ></canvas>
+	<canvas id="canvas" class="draw"></canvas>
 	<div id="tools">
 
 		<div id="nav">
@@ -109,12 +109,12 @@
 			</div>
 			
 			<div class="row">Jiggle range 
-				<span id="diff-range"></span>
-				<input type="range" id="diff" min="0" max="10" value="1" />
+				<span id="jiggle-range"></span>
+				<input type="range" id="jiggle" min="0" max="10" value="1" />
 			</div>
 			<div class="row">Mouse time
 				<span id="mouse-range"></span>
-				<input type="range" id="mouse" min="0" max="100" value="25" />
+				<input type="range" id="mouse" min="0" max="100" value="30" />
 			</div>
 		</div>
 
@@ -122,8 +122,8 @@
 			<div class="panel-toggle">v</div>
 			<div class="panel-title">Canvas</div> 
 			<div class="row">
-				Width: <input type="text" id="canvas-width" placeholder="1024" >
-				Height: <input type="text" id="canvas-height" placeholder="768" >
+				Width: <input type="text" id="canvas-width" placeholder="1024" value="1024">
+				Height: <input type="text" id="canvas-height" placeholder="768" value="768">
 			</div>
 			<div class="row">
 				Bkg: <input type="text" id="bkg-img" placeholder="url" ><br>
@@ -180,7 +180,11 @@
 <script type="text/javascript" src="../lib/cool.js"></script>
 <script type="text/javascript" src="../lib/Blob.js"></script>
 <script type="text/javascript" src="../lib/FileSaver.min.js"></script>
-<script type="text/javascript" src="animate.js"></script>
+<script type="text/javascript" src="canvas.js"></script>
+<script type="text/javascript" src="background.js"></script>
+<script type="text/javascript" src="drawingEvents.js"></script>
+<script type="text/javascript" src="color.js"></script>
+<script type="text/javascript" src="lines.js"></script>
 
 </body>
 </html>
