@@ -350,7 +350,6 @@ function draw() {
 	}
 	window.requestAnimFrame(draw);
 }
-
 window.requestAnimFrame(draw);
 
 const framesPanel = document.querySelector("#frames");
@@ -429,6 +428,7 @@ function playToggle() {
 	updateFrameNum();
 }
 
+/* data stuff */
 function saveLines() {
 	if ((frames[currentFrame] == undefined || addlines) && lines.length > 0  ) {
 		if (frames[currentFrame] == undefined) frames[currentFrame] = [];

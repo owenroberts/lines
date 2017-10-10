@@ -2,12 +2,17 @@ function DrawingEvents(lines) {
 	const self = this;
 	this.moves = 0; // number of events recorded/lines added, maybe just lines.length?
 	this.isDrawing = false;
-	this.addLinesToFrame = false; // for frames with drawings already recorded
+	this.addToFrame = false; // for frames with drawings already recorded
 
 	/*
 	need to think about how to set up interface.... 
 	this seems mad dumb.... 
 	maybe do this http://jsfiddle.net/tAs6V/29/
+	*/
+
+	/*
+		these should be in interface
+		have a class for an interface element
 	*/
 
 	// divide lines into this many segments
@@ -60,9 +65,19 @@ function DrawingEvents(lines) {
 	this.drawUpdate = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
-			if (self.isDrawing && (lines.frames[currentFrame] == undefined || self.addLinesToFrame))
-				lines.addLines(ev.offsetX, ev.offsetY);
+			if (self.isDrawing && (lines.frames[currentFrame] == undefined || self.addToFrame))
+				lines.addLine(ev.offsetX, ev.offsetY);
 		}
+	};
+
+	this.addLine = function(x, y) {
+		/* end of last line */
+		if (selfmoves > 0) lines.lines[lines.lines.length - 1].e = new Vector(x, y);
+		/*start of new line */
+		lines.lines.push({
+			s:  new Vector(x, y)
+		});
+		self.moves++;
 	};
 
 	this.drawStart = function(ev) {

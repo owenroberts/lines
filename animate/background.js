@@ -5,14 +5,14 @@ function Background() {
 	this.xRange = document.getElementById("bkg-x");
 	this.yRange = document.getElementById("bkg-y");
 	this.sizeRange = document.getElementById("bkg-size");
-	this.showBkg = true;
+	this.show = true;
 
 	/* background could be a module */
 	this.img = new Image();
 	this.x = Number(this.xRange.value);
 	this.y = Number(this.yRange.value);
 	this.size = Number(this.sizeRange.value);
-	this.sizeRatio = 1;
+	this.ratio = 1;
 	/* this is the only sprite-like thing in here
 	game engine version might need sprite module... */
 
@@ -25,7 +25,7 @@ function Background() {
 				self.xRange.max = self.img.width;
 				self.yRange.max = self.img.height;
 				self.sizeRange = self.img.width;
-				self.sizeRatio = self.img.width / self.img.height;
+				self.ratio = self.img.width / self.img.height;
 				self.sizeRange.min = self.img.width / 10;
 				self.sizeRange.max = self.img.width * 2;
 				self.sizeRange.value = self.img.width;
@@ -36,7 +36,7 @@ function Background() {
 	this.imageInput.addEventListener("keyup", self.loadImage);
 
 	this.toggle = function() {
-		self.showBkg = !self.showBkg;
+		self.show = !self.show;
 	}
 
 	this.xRange.addEventListener("input", function() {
