@@ -80,4 +80,14 @@ function DrawingEvents(lines) {
 		self.moves = 0;
 	}
 
+	if (window.PointerEvent) {
+		lines.canvas.canvas.addEventListener('pointermove', self.drawUpdate);
+		lines.canvas.canvas.addEventListener('pointerdown', self.drawStart);
+		lines.canvas.canvas.addEventListener('pointerup', self.drawEnd);
+	} else {	
+		lines.canvas.canvas.addEventListener('mousemove', self.drawUpdate);
+		lines.canvas.canvas.addEventListener('mousedown', self.drawStart);
+		lines.canvas.canvas.addEventListener('mouseup', self.drawEnd);
+	}
+	document.addEventListener('mousemove', self.outSideLines);
 }
