@@ -227,7 +227,6 @@ function outSideLines(ev) {
 
 // move on canvas
 function drawUpdate(event) {
-	console.log(event);
 	if (performance.now() > mousetime + mousetimer) {
 		mousetimer = performance.now();
 		if (drawOn && (frames[currentFrame] == undefined || addlines)) 
