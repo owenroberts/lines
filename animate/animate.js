@@ -263,14 +263,13 @@ if (window.PointerEvent) {
 document.addEventListener('mousemove', outSideLines);
 
 /* LINES */
-function addLine(mx, my) {
+function addLine(x, y) {
 	/* end of last line */
-	if (moves > 0) lines[lines.length - 1].e = new Vector(event.offsetX, event.offsetY);
-	/*start of new pine */
+	if (moves > 0) lines[lines.length - 1].e = new Vector(x, y);
+	/*start of new line */
 	lines.push({
-		s:  new Vector(event.offsetX, event.offsetY)
+		s:  new Vector(x, y)
 	});
-	
 	moves++;
 }
 
