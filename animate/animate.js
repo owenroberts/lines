@@ -220,7 +220,6 @@ function outSideLines(ev) {
 		 			elem.classList.add("copy")
 		 			copyFrames.push(Number(frm));
 		 		}
-		 		
 			}
 		} 
 	}
@@ -228,6 +227,7 @@ function outSideLines(ev) {
 
 // move on canvas
 function drawUpdate(event) {
+	console.log(event);
 	if (performance.now() > mousetime + mousetimer) {
 		mousetimer = performance.now();
 		if (drawOn && (frames[currentFrame] == undefined || addlines)) 
@@ -253,15 +253,15 @@ function drawEnd(event) {
 }
 
 if (window.PointerEvent) {
-	c.addEventListener('pointermove', function(ev) { drawUpdate(ev) });
-	c.addEventListener('pointerdown', function(ev) { drawStart(ev) });
-	c.addEventListener('pointerup', function(ev) { drawEnd(ev) });
+	c.addEventListener('pointermove', drawUpdate);
+	c.addEventListener('pointerdown', drawStart);
+	c.addEventListener('pointerup', drawEnd);
 } else {	
-	c.addEventListener('mousemove', function(ev) { drawUpdate(ev) });
-	c.addEventListener('mousedown', function(ev) { drawStart(ev) });
-	c.addEventListener('mouseup', function(ev) { drawEnd(ev) });
+	c.addEventListener('mousemove', drawUpdate);
+	c.addEventListener('mousedown', drawStart);
+	c.addEventListener('mouseup', drawEnd);
 }
-document.addEventListener('mousemove', function(ev) { outSideLines(ev) });
+document.addEventListener('mousemove', outSideLines);
 
 /* LINES */
 function addLine(mx, my) {
