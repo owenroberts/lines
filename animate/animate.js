@@ -451,10 +451,11 @@ function saveLines() {
 	}	
 	if (addlines) {
 		addlines = false;
-		$('#add-frame').removeClass("sel");
+		$('#add-frame').removeClass("sel"); // not sure this does anything??
 	}
 	lines = [];
 
+	/* does this actually happen? */
 	if (saveStates.length == numSaveStates) {
 		for (var i = 0; i < saveStates.length - 1; i++) {
 			saveStates[i].d = saveStates[i+1].d.slice(0);
@@ -480,6 +481,7 @@ function saveLines() {
 	}
 }
 
+/* is this interface or drawing... */
 function nextFrame() {
 	drawOn = false;
 	saveLines();
@@ -495,7 +497,7 @@ function prevFrame() {
 }
 
 function copyFrame(e) {
-	// this is maybe to copy multiple frame but idk if it works
+	// add pink copy frames to the end
 	if (e && e.shiftKey) {
 		for (var i = 0; i < copyFrames.length; i++) {
 			if (frames[currentFrame] == undefined) frames[currentFrame] = [];
@@ -511,7 +513,7 @@ function copyFrame(e) {
 			copy = [];
 			for (var i = 0; i < frames[currentFrame].length; i++) {
 				// using extend to clone, replace with lodash?
-				copy.push($.extend(true,{},frames[currentFrame][i]));
+				copy.push(_.cloneDeep(frames[currentFrame][i]));
 			}
 		}
 	}

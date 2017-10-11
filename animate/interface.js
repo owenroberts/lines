@@ -78,6 +78,19 @@ function Interface(app) {
 		else this.plusFrame.classList.add("current");
 	};
 
-	
+	/* is this interface or drawing... 
+	i guess things that reference everything can be interface */
+	this.nextFrame = function() {
+		app.drawingEvents.isDrawing = false;
+		app.data.saveLines();
+		if (app.draw.currentFrame < app.data.frames.length) app.draw.currentFrame++;
+		self.updateFrames();
+	};
 
+	this.prevFrame = function() {
+		app.drawingEvents.isDrawing = false;
+		app.data.saveLines();
+		if (app.draw.currentFrame > 0) app.draw.currentFrame++;
+		self.updateFrames();
+	};
 }

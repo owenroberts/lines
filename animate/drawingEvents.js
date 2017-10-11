@@ -1,4 +1,5 @@
-function DrawingEvents(lines) {
+/* rename pointer events (PointerEvent is taken) */
+function DrawingEvents(app) {
 	const self = this;
 	this.moves = 0; // number of events recorded/lines added, maybe just lines.length?
 	this.isDrawing = false;
@@ -18,9 +19,9 @@ function DrawingEvents(lines) {
 	// divide lines into this many segments
 	this.segNumRangeElem = document.getElementById("num");
 	this.segNumRangeDisplay = document.getElementById("num-range");
-	this.segmentNumRange = this.segNumRangeDisplay.textContent = Number(this.segNumRangeElem.value);
+	this.segNumRange = this.segNumRangeDisplay.textContent = Number(this.segNumRangeElem.value);
 	this.segNumRangeElem.addEventListener("change", function() {
-		self.segmentNumRange = self.segNumRangeDisplay.textContent = Number(this.value);
+		self.segNumRange = self.segNumRangeDisplay.textContent = Number(this.value);
 	});
 	
 	// how far the lines jiggle
@@ -41,10 +42,10 @@ function DrawingEvents(lines) {
 	});
 
 	this.outSideCanvas = function(ev) {
-		if (ev.toElement.id != lines.canvas.canvas) { 
-			if (self.isDrawing) lines.saveLines();
+		if (ev.toElement.id != app.canvas.canvas) { 
+			if (self.isDrawing) app.data.saveLines();
 			self.isDrawing = false;
-			if (self.moves % 2 == 1) lines.linse.splice(-1,1);
+			if (self.moves % 2 == 1) app.data.linse.splice(-1,1);
 			self.moves = 0;
 
 			/* pointer context click on frames for copy frames */
@@ -55,7 +56,7 @@ function DrawingEvents(lines) {
 				if (elem.classList.contains("frame")) {
 					if (!elem.classList.contains("copy")){
 			 			elem.classList.add("copy")
-			 			lines.copyFrames.push( Number(frameIndex) );
+			 			app.data.copyFrames.push( Number(frameIndex) );
 			 		}
 				}
 			}
@@ -65,16 +66,16 @@ function DrawingEvents(lines) {
 	this.drawUpdate = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
-			if (self.isDrawing && (lines.frames[currentFrame] == undefined || self.addToFrame))
-				lines.addLine(ev.offsetX, ev.offsetY);
+			if (self.isDrawing && (app.data.frames[currentFrame] == undefined || self.addToFrame))
+				app.data.addLine(ev.offsetX, ev.offsetY);
 		}
 	};
 
 	this.addLine = function(x, y) {
 		/* end of last line */
-		if (selfmoves > 0) lines.lines[lines.lines.length - 1].e = new Vector(x, y);
+		if (selfmoves > 0) app.data.lines[app.data.lines.length - 1].e = new Vector(x, y);
 		/*start of new line */
-		lines.lines.push({
+		app.data.lines.push({
 			s:  new Vector(x, y)
 		});
 		self.moves++;
@@ -89,20 +90,20 @@ function DrawingEvents(lines) {
 
 	this.drawEnd = function(ev) {
 		if (ev.which == 1) self.isDrawing = false;
-		if (self.moves % 2 == 1) lines.lines.splice(-1, 1);
-		if (lines.lines.length > 0)
-			if (!lines.lines[lines.lines.length - 1].e) lines.lines.pop(); // remove lines with s and no e
+		if (self.moves % 2 == 1) app.data.lines.splice(-1, 1);
+		if (app.data.lines.length > 0)
+			if (!app.data.lines[app.data.lines.length - 1].e) app.data.lines.pop(); // remove lines with s and no e
 		self.moves = 0;
 	}
 
 	if (window.PointerEvent) {
-		lines.canvas.canvas.addEventListener('pointermove', self.drawUpdate);
-		lines.canvas.canvas.addEventListener('pointerdown', self.drawStart);
-		lines.canvas.canvas.addEventListener('pointerup', self.drawEnd);
+		app.canvas.canvas.addEventListener('pointermove', self.drawUpdate);
+		app.canvas.canvas.addEventListener('pointerdown', self.drawStart);
+		app.canvas.canvas.addEventListener('pointerup', self.drawEnd);
 	} else {	
-		lines.canvas.canvas.addEventListener('mousemove', self.drawUpdate);
-		lines.canvas.canvas.addEventListener('mousedown', self.drawStart);
-		lines.canvas.canvas.addEventListener('mouseup', self.drawEnd);
+		app.canvas.canvas.addEventListener('mousemove', self.drawUpdate);
+		app.canvas.canvas.addEventListener('mousedown', self.drawStart);
+		app.canvas.canvas.addEventListener('mouseup', self.drawEnd);
 	}
 	document.addEventListener('mousemove', self.outSideLines);
 }

@@ -102,7 +102,7 @@ function Draw(lines) {
 
 			/* draws current lines */
 			if (lines.data.frames[this.currentFrame] == undefined || lines.drawingEvents.addToFrame) {
-				drawLines(lines.lines, 0, lines.lines.length, lines.drawingEvents.segmentNumRange, lines.drawingEvents.jiggleRange, color);
+				drawLines(lines.lines, 0, lines.lines.length, lines.drawingEvents.segNumRange, lines.drawingEvents.jiggleRange, color);
 			}
 
 			/* draws onionskin */
