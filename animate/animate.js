@@ -647,51 +647,37 @@ function addMultipleCopies() {
 /* ah god - no key commands here... */
 function explode(follow, over) {
 	if (frames[currentFrame] == undefined) saveLines();
-	var linenum = Number(prompt("Enter line num: "));
+	const linenum = Number(prompt("Enter line num: "));
 	if (linenum > 0) {
-		var temp = frames[currentFrame].slice(0); 
+		const tempFrames = _.cloneDeep(frames[currentFrame]); 
 		frames.splice(currentFrame, 1);
-		for (var h = temp.length - 1; h >= 0; h--) {
-			var tl = drawings[temp[h].d];
+		for (let h = tempFrames.length - 1; h >= 0; h--) {
+			const tempLines = drawings[tempFrames[h].d];
 			if (over) {
-				for (var i = 0; i < tl.l.length - 1; i += linenum) {
+				for (let i = 0; i < tempLines.l.length - 1; i += linenum) {
 					if (!frames[currentFrame]) frames[currentFrame] = [];
 					else addToFrame();
-					if (follow) {
-						frames[currentFrame].push({
-							d: temp[h].d,
-							i: i,
-							e: i + linenum
-						});
-					} else {
-						frames[currentFrame].push({
-							d: temp[h].d,
-							i: 0,
-							e: i + linenum
-						});
-					}
+					frames[currentFrame].push({
+						d: tempFrames[h].d,
+						i: i,
+						e: i + linenum
+					});
 					currentFrame++;
 				}
 			} else {
-				for (var i = tl.l.length - 1 - linenum; i >= 0; i -= linenum) {
+				for (let i = tempLines.l.length - 1 - linenum; i >= 0; i -= linenum) {
 					insertFrame();
 					if (!frames[currentFrame]) frames[currentFrame] = [];
-					if (follow) {
-						frames[currentFrame].push({
-							d: temp[h].d,
-							i: i,
-							e: i + linenum
-						});
-					} else {
-						for (var j = 0; j < h; j++) {
-							frames[currentFrame].push(temp[j]);
+					if (!follow) {
+						for (let j = 0; j < h; j++) {
+							frames[currentFrame].push(tempFrames[j]);
 						}
-						frames[currentFrame].push({
-							d: temp[h].d,
-							i: 0,
-							e: i + linenum
-						});
 					}
+					frames[currentFrame].push({
+						d: tempFrames[h].d,
+						i: 0,
+						e: i + linenum
+					});
 				}
 			}
 		}
@@ -740,6 +726,7 @@ $('#follow-over').on('click', function() {
 	explode(true, true);
 });
 
+/* canvas ? */
 function screenCapture() {
 	var cap = c.toDataURL("image/png").replace("image/png", "image/octet-stream");
 	window.location.href = cap;
