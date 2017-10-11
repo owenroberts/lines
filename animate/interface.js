@@ -17,6 +17,26 @@ function Interface(app) {
 	this.frameNumDisplay = document.getElementById("frame");
 	this.frameElems = document.getElementsByClassName("frame");
 
+	this.explodeButton = document.getElementById("explode");
+	this.pauseButton.addEventListener("click", function() {
+		app.data.explode(false, false);
+	});
+
+	this.followButton = document.getElementById("follow");
+	this.followButton.addEventListener("click", function() {
+		app.data.explode(true, false);
+	});
+
+	this.explodeOverButton = document.getElementById("explode-over");
+	this.explodeOverButton.addEventListener("click", function() {
+		app.data.explode(false, true);
+	});
+
+	this.followOverButton = document.getElementById("follow-over");
+	this.followOverButton.addEventListener("click", function() {
+		app.data.explode(true, true);
+	});
+
 	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
 	this.updateFramesPanel = function() {
 		let numFrames = frameElems.length;

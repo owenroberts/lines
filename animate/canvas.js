@@ -11,10 +11,12 @@ function Canvas() {
 
 	/* change width and height */
 	this.setWidth = function() {
-		this.width = this.canvas.width = Number(this.widthInput.value);
+		self.width = self.canvas.width = self.widthInput.placeholder = Number(self.widthInput.value);
+		self.widthInput.value = ""; // remove value after input 
 	}
 	this.setHeight = function() {
-		this.height = this.canvas.height = Number(this.heightInput.value);
+		self.height = self.canvas.height = self.heightInput.placeholder = Number(self.heightInput.value);
+		self.heightInput.value = "";
 	}
 	this.setWidth();
 	this.setHeight();
@@ -22,12 +24,12 @@ function Canvas() {
 	this.widthInput.addEventListener("keyup", function(ev) {
 		if (ev.which == 13) self.setWidth();
 	});
-	this.widthInput.addEventListener("blur", self.setHeight);
+	this.widthInput.addEventListener("blur", self.setWidth);
 	
 	this.heightInput.addEventListener("keyup", function(ev) {
 		if (ev.which == 13) self.setHeight();
 	});
-	this.heightInput.addEventListener("blur", self.setWidth);
+	this.heightInput.addEventListener("blur", self.setHeight);
 
 
 	/* background could be a module */

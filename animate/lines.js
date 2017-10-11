@@ -1,7 +1,7 @@
 /* global Lines object */
 function Lines() {
-	/*  save states never really implemented  */
-
+	/*  save states never really implemented 
+	no longer the case !! */
 	this.canvas = new Canvas();
 	this.drawingEvents = new DrawingEvents(this);
 	this.color = new Color();

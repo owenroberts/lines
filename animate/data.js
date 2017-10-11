@@ -140,6 +140,8 @@ function Data(app) {
 
 	/* z key */
 	this.cutLastSegment = function() {
+		/* should text this for these functions */
+		console.log(this);
 		if (self.lines.length > 0) self.lines.pop();
 	};
 
@@ -159,7 +161,7 @@ function Data(app) {
 			drawings = _.cloneDeep(saveStates[saveStates.length - 1].d);
 		}*/
 		/* almost working now but need to figure out frame updates, need interface for this too */
-		// updateFrames();
+		// updateFramesPanel();
 		//cutting already drawn line?? maybe later
 		//else if (frames[currentFrame].length > 0) frames[currentFrame].pop();
 	};
@@ -182,6 +184,50 @@ function Data(app) {
 				app.interface.nextFrame();
 				self.pasteFrames();
 			}
+		}
+	};
+
+	/* animate a drawing segment by segment (or multiple) 
+		follow means they don't accumulate to form drawing at the end
+		over means go over/add to subsequent frames
+		no key command - q t y u p a j l n available */
+	this.explode = function(follow, over) {
+		if (self.frames[app.draw.currentFrame] == undefined) self.saveLines();
+		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
+		if (segmentsPerFrame > 0) {
+			const tempFrames = _.cloneDeep(self.frames[app.draw.currentFrame]);
+			self.frames.splice(app.draw.currentFrame, 1);
+			for (let h = tempFrames.length - 1; h >= 0; h--) {
+				const tempLines = self.drawings[tempFrames[h].d];
+				if (over) {
+					for (let i = 0; i < tempLines.l.length - 1; i += segmentsPerFrame) {
+						if (!self.frames[app.draw.currentFrame]) self.frames[app.draw.currentFrame] = [];
+						else self.addToFrame();
+						self.frames[app.draw.currentFrame].push({
+							d: tempFrames[h].d,
+							i: i,
+							e: i + segmentsPerFrame
+						});
+						currentFrame++;
+					}
+				} else {
+					for (var i = tempLines.l.length - 1 - segmentsPerFrame; i >= 0; i -= segmentsPerFrame) {
+						self.insertFrame();
+						if (!self.frames[app.draw.currentFrame]) self.frames[app.draw.currentFrame] = [];
+						if (!follow) {
+							for (let j = 0; j < h; j++) {
+								self.frames[app.draw.currentFrame].push(tempFrames[j]);
+							}
+						}
+						self.frames[app.draw.currentFrame].push({
+							d: tempFrames[h].d,
+							i: i,
+							e: i + segmentsPerFrame
+						});
+					}
+				}
+			}
+			app.interface.updateFramesPanel();
 		}
 	};
 
