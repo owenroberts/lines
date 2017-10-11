@@ -356,10 +356,11 @@ window.requestAnimFrame(draw);
 
 const framesPanel = document.querySelector("#frames");
 const plusFrame = document.querySelector(".plusframe"); /* plus frame is unsaved drawing frame */
+const frameElems = document.getElementsByClassName("frame");
 
 /* updates the frame panel representation of frames, sets current frame, sets copy frames */
 function updateFrames() {
-	let framenum = document.getElementsByClassName("frame").length;
+	let framenum = frameElems.length;
 	/* this creates frames that don't already exist
 	loop from the num of already made html frames to frames.length */
 	if (frames.length > framenum) {
@@ -434,9 +435,6 @@ function saveLines() {
 	if ((frames[currentFrame] == undefined || addlines) && lines.length > 0  ) {
 		if (frames[currentFrame] == undefined) frames[currentFrame] = [];
 		
-		// this should get rid of any lines with only s vector but doesn't?
-		if (lines[lines.length - 1].e == undefined) lines.pop();
-		
 		frames[currentFrame].push({
 			d:drawings.length, 
 			i:0, 
@@ -452,7 +450,6 @@ function saveLines() {
 	}	
 	if (addlines) {
 		addlines = false;
-		$('#add-frame').removeClass("sel");
 	}
 	lines = [];
 
@@ -481,6 +478,7 @@ function saveLines() {
 	}
 }
 
+/* e key */
 function nextFrame() {
 	drawOn = false;
 	saveLines();
@@ -488,6 +486,7 @@ function nextFrame() {
 	updateFrames();
 }
 
+/* w key */
 function prevFrame() {
 	drawOn = false;
 	saveLines();
@@ -495,13 +494,16 @@ function prevFrame() {
 	updateFrameNum();
 }
 
-function copyFrame(e) {
-	// this is maybe to copy multiple frame but idk if it works
-	if (e && e.shiftKey) {
+/* c key */
+function copyFrame() {
+	// this seems to just add extra frames to the end
+	if (copyFrames.length > 0) {
 		for (var i = 0; i < copyFrames.length; i++) {
+			console.log(i);
 			if (frames[currentFrame] == undefined) frames[currentFrame] = [];
 			for (var h = 0; h < frames[copyFrames[i]].length; h++) {
-				frames[currentFrame].push(frames[copyFrames[i]][h]);
+				console.log(frames[copyFrames[i]][h]);
+				frames[currentFrame].push(_.cloneDeep(frames[copyFrames[i]][h]));
 			}
 			saveLines();
 			nextFrame();
@@ -512,13 +514,14 @@ function copyFrame(e) {
 			copy = [];
 			for (var i = 0; i < frames[currentFrame].length; i++) {
 				// using extend to clone, replace with lodash?
-				copy.push($.extend(true,{},frames[currentFrame][i]));
+				copy.push(_.cloneDeep(frames[currentFrame][i]));
 			}
 		}
 	}
 }
 
 // duplicating drawings to change offset (need to rewrite with drawing indexes)
+/* g key */
 function duplicate() {
 	if (lines.length > 0) saveLines();
 	if (frames[currentFrame]) {
@@ -535,6 +538,7 @@ function duplicate() {
 	}
 }
 
+/* ctrl v */
 function clearCopyFrames() {
 	copyFrames = [];
 	var copyFrameElems = document.getElementsByClassName("copy");
@@ -543,13 +547,12 @@ function clearCopyFrames() {
 	}
 }
 
+/* v key */
 function pasteFrame(e) {
-	if (e && e.ctrlKey) {
-		clearCopyFrames();
-	} else if (copyFrames.length > 0) {
+	if (copyFrames.length > 0) {
 		for (var h = 0; h < copyFrames.length; h++) {
 			for (var i = 0; i < copy.length; i++) {
-				frames[copyFrames[h]].push($.extend(true,{},copy[i]));
+				frames[copyFrames[h]].push(_.cloneDeep(copy[i]));
 			}
 		}
 		clearCopyFrames();
@@ -558,24 +561,25 @@ function pasteFrame(e) {
 			if (lines.length > 0) saveLines();
 			else frames[currentFrame] = [];
 			for (var i = 0; i < copy.length; i++) {
-				frames[currentFrame].push($.extend(true,{},copy[i]));
+				frames[currentFrame].push(_.cloneDeep(copy[i]));
 			}
 		} else if (addlines) {
 			for (var i = 0; i < copy.length; i++) {
-				frames[currentFrame].push($.extend(true,{},copy[i]));
+				frames[currentFrame].push(_.cloneDeep(copy[i]));
 			}
 			addlines = false;
-			$('#add-frame').removeClass("sel");
 		}
 	}
 }
 
+/* x key */
 function clearFrame() {
 	if (frames[currentFrame]) 
 		frames[currentFrame] = undefined;
 	lines = [];
 }
 
+/* d key */
 function deleteFrame() {
 	var ftemp = currentFrame;
 	if (currentFrame > 0) prevFrame();
@@ -585,39 +589,51 @@ function deleteFrame() {
 	updateFrames();
 }
 
+/* r key */
 function addToFrame() {
 	saveLines();
 	if (frames[currentFrame]) 
 		addlines = true;
 }
-function cutLastLine(e) {
+
+/* z key */
+function cutLastSegment() {
+	if (lines.length > 0) lines.pop();
+}
+
+/* shift z */
+function cutLastDrawing() {
 	// get rid of current lines or last add drawing in frame
-	if (e && e.shiftKey && frames[currentFrame]) {
+	if (frames[currentFrame]) {
 		saveLines();
 		frames[currentFrame].pop(); // pop last drawing
 	}
-	else if (lines.length > 0) {
-		
-		lines.pop();
+}
+
+/* ctrl z */
+function undo() {
+	if (saveStates.length > 1) {
+		saveStates.pop();
+		frames = _.cloneDeep(saveStates[saveStates.length - 1].f);
+		drawings = _.cloneDeep(saveStates[saveStates.length - 1].d);
 	}
-	if (e && e.ctrlKey) {
-		if (saveStates.length > 1) {
-			saveStates.pop();
-			frames = saveStates[saveStates.length - 1].f.slice();
-			drawings = saveStates[saveStates.length - 1].d.slice();			
-		}
-	}
+	/* almost working now but need to figure out frame updates, need interface for this too */
+	updateFrames();
 	//cutting already drawn line?? maybe later
 	//else if (frames[currentFrame].length > 0) frames[currentFrame].pop();
 }
 
+/* i key */
 function insertFrame() {
 	saveLines();
 	frames.insert(currentFrame, []);
 	updateFrames();
 }
 
+/* m key */
 function addMultipleCopies() {
+	copyFrames = [];
+	clearCopyFrames();
 	var n = prompt("Number of copies: ");
 	if (Number(n)) {
 		for (var i = 0; i < n; i++) {
@@ -628,6 +644,7 @@ function addMultipleCopies() {
 	}
 }
 
+/* ah god - no key commands here... */
 function explode(follow, over) {
 	if (frames[currentFrame] == undefined) saveLines();
 	var linenum = Number(prompt("Enter line num: "));
@@ -709,7 +726,7 @@ $('#copy').on('click', function(e) {
 	copyFrame(e);
 });
 $('#paste').on('click', pasteFrame);
-$('#cut-line').on('click', cutLastLine);
+$('#cut-line').on('click', cutLastSegment);
 $('#explode').on('click', function() {
 	explode(false, false);
 });
@@ -732,18 +749,25 @@ function keyDown(ev) {
 	if (document.activeElement.nodeName != "INPUT") {
 		if (keys[ev.which] == "e") nextFrame();
 		if (keys[ev.which] == "w") prevFrame();
-		if (keys[ev.which] == "c") copyFrame(ev);
-		if (keys[ev.which] == "v") pasteFrame(ev);
+		if (keys[ev.which] == "c") copyFrame();
+		if (keys[ev.which] == "v") {
+			if (ev.ctrlKey) clearCopyFrames();
+			else pasteFrame();
+		}
 		if (keys[ev.which] == "x") clearFrame();
 		if (keys[ev.which] == "r") addToFrame();
-		if (keys[ev.which] == "z") cutLastLine(ev);
+		if (keys[ev.which] == "z") {
+			if (ev.shiftKey) cutLastDrawing();
+			else if (ev.ctrlKey) undo();
+			else cutLastSegment();
+		}
 		if (keys[ev.which] == "s") saveFramesToFile(ev);
 		if (keys[ev.which] == "o") loadFramesFromFile();
 		if (keys[ev.which] == "i") insertFrame();
 		if (keys[ev.which] == "d") deleteFrame();
 		if (keys[ev.which] == "f") fitCanvasToDrawing();
 		if (keys[ev.which] == "space") {
-			evs.preventDefault();
+			ev.preventDefault();
 			playToggle();
 		}
 		if (keys[ev.which] == "m") addMultipleCopies();
