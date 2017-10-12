@@ -137,28 +137,26 @@ function addColorBtn(_color) {
 }
 
 /* change width and height */
-var widthInput = document.querySelector("#canvas-width");
+const widthInput = document.querySelector("#canvas-width");
+const heightInput = document.querySelector("#canvas-height");
+
+function setWidth() {
+	w = c.width = widthInput.placeholder = Number(widthInput.value);
+	widthInput.value = "";
+}
 widthInput.addEventListener("keyup", function(ev) {
-	if (ev.which == 13) {
-		w = widthInput.value;
-		c.width = w;
-	}
+	if (ev.which == 13) setWidth();
 });
-widthInput.addEventListener("blur", function(ev) {
-	w = widthInput.value;
-	c.width = w;
-});
-var heightInput = document.querySelector("#canvas-height");
+widthInput.addEventListener("blur", setWidth);
+
+function setHeight() {
+	h = c.height = heightInput.placeholder = Number(heightInput.value);
+	heightInput.value = "";
+}
 heightInput.addEventListener("keyup", function(ev) {
-	if (ev.which == 13) {
-		h = heightInput.value;
-		c.height = h;
-	}
+	if (ev.which == 13) setHeight();
 });
-heightInput.addEventListener("blur", function(ev) {
-	h = heightInput.value;
-	c.height = h;
-});
+heightInput.addEventListener("blur", setHeight);
 
 /* set background */
 var bkgImage = document.querySelector("#bkg-img");
