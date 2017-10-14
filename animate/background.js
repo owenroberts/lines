@@ -17,6 +17,7 @@ function Background() {
 	game engine version might need sprite module... */
 
 	this.loadImage = function(ev) {
+
 		if (ev.which == 13) {
 			self.img.src = this.value;
 			self.img.onload = function() {
@@ -24,10 +25,10 @@ function Background() {
 				self.yRange.min = -self.img.height;
 				self.xRange.max = self.img.width;
 				self.yRange.max = self.img.height;
-				self.sizeRange = self.img.width;
+				self.size = self.img.width;
 				self.ratio = self.img.width / self.img.height;
-				self.sizeRange.min = self.img.width / 10;
-				self.sizeRange.max = self.img.width * 2;
+				self.sizeRange.min = self.img.width / 4;
+				self.sizeRange.max = self.img.width * 4;
 				self.sizeRange.value = self.img.width;
 			}
 		}

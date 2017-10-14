@@ -46,7 +46,7 @@ function Color() {
 	});
 
 	this.addColorBtn = function(newColor) {
-		if ( self.colors.indexOf(newColor) == -1 ) {
+		if (self.colors.indexOf(newColor) == -1) {
 			self.colors.push(newColor);
 			const colorBtn = document.createElement('button');
 			colorBtn.innerHTML =  newColor;
@@ -54,7 +54,7 @@ function Color() {
 			colorBtn.onclick = function() {
 				self.color = this.innerHTML;
 				self.colorPreview.style.backgroundColor = "#" + self.color;
-				updatePckrs();
+				self.updatePckrs();
 			}
 			document.getElementById('colorways').appendChild( colorBtn );
 		}

@@ -1,14 +1,46 @@
 function Interface(app) {
 	let self = this;
 
+	this.panelToggles = document.getElementsByClassName("panel-toggle");
+	this.togglePanel = function() {
+		const parent = this.parentNode;
+		if (parent.clientHeight <= 25) {
+			parent.style.height = "auto";
+			parent.style.flex = "2 50%";
+			this.innerHTML = "^";
+		} else {
+			parent.style.height = 25 + "px";
+			parent.style.flex = "1 25%";
+			this.innerHTML = "v";
+		}
+	}
+	for (let i = 0; i < this.panelToggles.length; i++) {
+		this.panelToggles[i].addEventListener("click", self.togglePanel);
+	}
+
+	this.saveButton = document.getElementById("save");
+	this.saveButton.addEventListener("click", function() {
+		app.data.saveFramesToFile(false)
+	});
+
+	this.saveFrameButton = document.getElementById("save-frame");
+	this.saveFrameButton.addEventListener("click", function() {
+		app.data.saveFramesToFile(true)
+	});
+
+	this.openButton = document.getElementById("open");
+	this.openButton.addEventListener("click", app.data.loadFramesFromFile);
+
+	this.title = document.getElementById("title");
+	
 	this.playButton = document.getElementById("play");
 	this.playButton.addEventListener("click", function() {
-		app.draw.playing = true;
+		app.draw.isPlaying = true;
 	});
 
 	this.pauseButton = document.getElementById("pause");
 	this.pauseButton.addEventListener("click", function() {
-		app.draw.playing = false;
+		app.draw.isPlaying = false;
 		self.updateFrameNum();
 	});
 
@@ -18,7 +50,7 @@ function Interface(app) {
 	this.frameElems = document.getElementsByClassName("frame");
 
 	this.explodeButton = document.getElementById("explode");
-	this.pauseButton.addEventListener("click", function() {
+	this.explodeButton.addEventListener("click", function() {
 		app.data.explode(false, false);
 	});
 
@@ -39,7 +71,7 @@ function Interface(app) {
 
 	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
 	this.updateFramesPanel = function() {
-		let numFrames = frameElems.length;
+		let numFrames = self.frameElems.length;
 		/* this creates frames that don't already exist
 		loop from the num of already made html frames to frames.length */
 		if (app.data.frames.length > numFrames) {
@@ -66,21 +98,21 @@ function Interface(app) {
 				frmElem.oncontextmenu = function(ev) {
 					ev.preventDefault();
 					if (!this.classList.toggle("copy")){
-						app.data.copyFrames.splice(app.data.copyFrames.indexOf(i), 1);
+						app.data.framesToCopy.splice(app.data.framesToCopy.indexOf(i), 1);
 					} else {
 						this.classList.add("copy");
-						app.data.copyFrames.push(i);
+						app.data.framesToCopy.push(i);
 					}
 				};
-				this.framesPanel.insertBefore(frmElem, plusFrame);
+				this.framesPanel.insertBefore(frmElem, self.plusFrame);
 			}
 		} else {
 			/* if there are same number of less then frames than frame divs */
 			/* this seems to only happen when deleting the current frame so i'm confused.... 
 			delete frame should always be the current frame, is there another way to delete frames */
-			for (let i = numFrames - 1; i > app.data.frames.length; i--){
+			for (let i = numFrames; i > app.data.frames.length; i--){
 				/* remove html frame, make the plus frame the current frame */
-				let removeFrame = document.getElementById("fr" + i);
+				let removeFrame = document.getElementById("fr" + (i - 1));
 				/* check if deleted frame is the current frame */
 				if (removeFrame.classList.contains("current")) this.plusFrame.classList.add("current");
 				removeFrame.remove();
@@ -104,13 +136,13 @@ function Interface(app) {
 		app.drawingEvents.isDrawing = false;
 		app.data.saveLines();
 		if (app.draw.currentFrame < app.data.frames.length) app.draw.currentFrame++;
-		self.updateFrames();
+		self.updateFramesPanel();
 	};
 
 	this.prevFrame = function() {
 		app.drawingEvents.isDrawing = false;
 		app.data.saveLines();
-		if (app.draw.currentFrame > 0) app.draw.currentFrame++;
-		self.updateFrames();
+		if (app.draw.currentFrame > 0) app.draw.currentFrame--;
+		self.updateFramesPanel();
 	};
 }

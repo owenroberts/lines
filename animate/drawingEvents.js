@@ -36,13 +36,14 @@ function DrawingEvents(app) {
 	this.mouseTimer = performance.now();  // this is independent of draw timer (??)
 	this.mouseIntervalElem = document.getElementById("mouse");
 	this.mouseIntervalDisplay = document.getElementById("mouse-range");
-	this.mouseIntervalDisplay.textContent = this.mouseInterval = this.mouseIntervalElem.value;
+	this.mouseIntervalDisplay.textContent = this.mouseInterval = Number(this.mouseIntervalElem.value);
 	this.mouseIntervalElem.addEventListener("change", function() {
 		self.mouseInterval = self.mouseIntervalDisplay.textContent = Number(this.value);
 	});
 
 	this.outSideCanvas = function(ev) {
-		if (ev.toElement.id != app.canvas.canvas) { 
+		//console.log(ev.toElement)
+		if (ev.toElement != app.canvas.canvas) { 
 			if (self.isDrawing) app.data.saveLines();
 			self.isDrawing = false;
 			if (self.moves % 2 == 1) app.data.linse.splice(-1,1);
@@ -56,7 +57,7 @@ function DrawingEvents(app) {
 				if (elem.classList.contains("frame")) {
 					if (!elem.classList.contains("copy")){
 			 			elem.classList.add("copy")
-			 			app.data.copyFrames.push( Number(frameIndex) );
+			 			app.data.framesToCopy.push( Number(frameIndex) );
 			 		}
 				}
 			}
@@ -66,14 +67,15 @@ function DrawingEvents(app) {
 	this.drawUpdate = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
-			if (self.isDrawing && (app.data.frames[currentFrame] == undefined || self.addToFrame))
-				app.data.addLine(ev.offsetX, ev.offsetY);
+			if (self.isDrawing && (app.data.frames[app.draw.currentFrame] == undefined || self.addToFrame)) {
+				self.addLine(ev.offsetX, ev.offsetY);
+			}
 		}
 	};
 
 	this.addLine = function(x, y) {
 		/* end of last line */
-		if (selfmoves > 0) app.data.lines[app.data.lines.length - 1].e = new Vector(x, y);
+		if (self.moves > 0) app.data.lines[app.data.lines.length - 1].e = new Vector(x, y);
 		/*start of new line */
 		app.data.lines.push({
 			s:  new Vector(x, y)
@@ -105,5 +107,5 @@ function DrawingEvents(app) {
 		app.canvas.canvas.addEventListener('mousedown', self.drawStart);
 		app.canvas.canvas.addEventListener('mouseup', self.drawEnd);
 	}
-	document.addEventListener('mousemove', self.outSideLines);
+	document.addEventListener('mousemove', self.outSideCanvas);
 }
