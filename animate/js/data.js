@@ -8,7 +8,7 @@ function Data(app) {
 	this.drawings = []; // saved drawings
 
 	this.saveLines = function() {
-		if ((this.frames[app.draw.currentFrame] == undefined || app.drawingEvents.addToFrame) && this.lines.length > 0) {
+		if ((this.frames[app.draw.currentFrame] == undefined || app.mouse.addToFrame) && this.lines.length > 0) {
 			if (this.frames[app.draw.currentFrame] == undefined) this.frames[app.draw.currentFrame] = [];
 
 			/* add drawing ref to frames data */
@@ -22,13 +22,13 @@ function Data(app) {
 			this.drawings.push({
 				l: this.lines,
 				c: app.color.color,
-				n: app.drawingEvents.segNumRange,
-				r: app.drawingEvents.jiggleRange
+				n: app.mouse.segNumRange,
+				r: app.mouse.jiggleRange
 			});
 			app.color.addColorBtn(app.color.color);
 
-			if (app.drawingEvents.addToFrame) {
-				app.drawingEvents.addToFrame = false;
+			if (app.mouse.addToFrame) {
+				app.mouse.addToFrame = false;
 			}
 			this.lines = [];
 
@@ -105,11 +105,11 @@ function Data(app) {
 				for (let i = 0; i < self.framesCopy.length; i++) {
 					self.frames[app.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
-			} else if (app.drawingEvents.addToFrame) {
+			} else if (app.mouse.addToFrame) {
 				for (var i = 0; i <  self.framesCopy.length; i++) {
 					self.frames[app.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
-				app.drawingEvents.addToFrame = false;
+				app.mouse.addToFrame = false;
 			}
 		}
 	};
@@ -135,13 +135,12 @@ function Data(app) {
 	this.addToFrame = function() {
 		self.saveLines();
 		if (self.frames[app.draw.currentFrame]) 
-			app.drawingEvents.addToFrame = true;
+			app.mouse.addToFrame = true;
 	};
 
 	/* z key */
 	this.cutLastSegment = function() {
 		/* should text this for these functions */
-		console.log(this);
 		if (self.lines.length > 0) self.lines.pop();
 	};
 
@@ -193,6 +192,7 @@ function Data(app) {
 		no key command - t y u p j l n available */
 	/* a: explode, shift a: follow */
 	this.explode = function(follow, over) {
+		console.log("hello")
 		if (self.frames[app.draw.currentFrame] == undefined) self.saveLines();
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
@@ -289,7 +289,7 @@ function Data(app) {
 			}
 		}
 
-		app.canvas.canvas.width = app.canvas.widthInput.placeholder = app.canvas.width = (maxx - minx) + tolerance * 2;
+		app.canvas.canvas.width  = app.canvas.widthInput.placeholder = app.canvas.width = (maxx - minx) + tolerance * 2;
 		app.canvas.canvas.height = app.canvas.widthInput.placeholder = app.canvas.height = (maxy - miny) + tolerance * 2;
 
 		for (let i = 0; i < self.drawings.length; i++) {
@@ -368,8 +368,8 @@ function Data(app) {
 			for (let i = 0; i < self.drawings.length; i++) {
 				if (self.drawings[i] != 'x') app.color.addColorBtn( self.drawings[i].c );
 			}
-			app.canvas.width = app.canvas.canvas.width = data.w;
-			app.canvas.height = app.canvas.canvas.height = data.h;
+			app.canvas.width  = app.canvas.widthInput.placeholder = app.canvas.canvas.width = data.w;
+			app.canvas.height = app.canvas.widthInput.placeholder = app.canvas.canvas.height = data.h;
 			app.draw.fps = data.fps;
 			app.draw.fpsElem.value = app.draw.fps;
 			app.draw.intervalRatio = app.draw.interval / (1000 / app.draw.fps);

@@ -4,13 +4,13 @@ function Lines() {
 	/*  save states never really implemented 
 	no longer the case !! */
 	this.canvas = new Canvas();
-	this.drawingEvents = new DrawingEvents(this);
 	this.color = new Color();
 	this.background = new Background();
 	this.draw = new Draw(this);
 	this.data = new Data(this);
 	this.interface = new Interface(this);
 	this.keyboard = new Keyboard(this);
+	this.mouse = new Mouse(this);
 	this.draw.start();
 }
 window.addEventListener("load", function() {

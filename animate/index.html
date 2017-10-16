@@ -4,14 +4,13 @@
 	<title>lines animate</title>
 	<meta charset="utf-8" />
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<link href="css/lines.css" rel="stylesheet" type="text/css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
 <div id="container">
 	<div id="draw" class="section">
-		<canvas id="canvas"></canvas>
+		<canvas id="canvas" style="background: lightgray;"></canvas>
 	</div>
 	<div id="tools" class="section">
 
@@ -98,13 +97,13 @@
 					<div id="color-gradient"></div>
 				</div>
 				<div class="row">
-					H: <input type="range" class="pckr" id="hue" min="0" max="360" value="1" />
+					H: <input type="range" class="pckr" id="hue" min="0" max="360" value="0" />
 				</div>
 				<div class="row">
-					S: <input type="range" class="pckr" id="saturation" min="0" max="100" value="1" />
+					S: <input type="range" class="pckr" id="saturation" min="0" max="100" value="0" />
 				</div>
 				<div class="row">
-					L: <input type="range" class="pckr" id="lightness" min="0" max="100" value="1" />
+					L: <input type="range" class="pckr" id="lightness" min="0" max="100" value="0" />
 				</div>
 				<div class="row">
 					HTML: <input type="text" id="html-color" placeholder="#" value="000000" />
@@ -198,7 +197,6 @@
 			</div>
 		</div>
 	</div>
-	
 </div>
 
 <script type="text/javascript" src="../lib/jquery.min.js"></script>
@@ -206,15 +204,15 @@
 <script type="text/javascript" src="../lib/cool.js"></script>
 <script type="text/javascript" src="../lib/Blob.js"></script>
 <script type="text/javascript" src="../lib/FileSaver.min.js"></script>
-<script type="text/javascript" src="canvas.js"></script>
-<script type="text/javascript" src="background.js"></script>
-<script type="text/javascript" src="drawingEvents.js"></script>
-<script type="text/javascript" src="keyboard.js"></script>
-<script type="text/javascript" src="color.js"></script>
-<script type="text/javascript" src="draw.js"></script>
-<script type="text/javascript" src="data.js"></script>
-<script type="text/javascript" src="interface.js"></script>
-<script type="text/javascript" src="lines.js"></script>
+<script type="text/javascript" src="js/canvas.js"></script>
+<script type="text/javascript" src="js/background.js"></script>
+<script type="text/javascript" src="js/mouse.js"></script>
+<script type="text/javascript" src="js/keyboard.js"></script>
+<script type="text/javascript" src="js/color.js"></script>
+<script type="text/javascript" src="js/draw.js"></script>
+<script type="text/javascript" src="js/data.js"></script>
+<script type="text/javascript" src="js/interface.js"></script>
+<script type="text/javascript" src="js/lines.js"></script>
 
 </body>
 </html>

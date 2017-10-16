@@ -1,5 +1,5 @@
 /* rename pointer events (PointerEvent is taken) */
-function DrawingEvents(app) {
+function Mouse(app) {
 	const self = this;
 	this.moves = 0; // number of events recorded/lines added, maybe just lines.length?
 	this.isDrawing = false;
@@ -46,7 +46,7 @@ function DrawingEvents(app) {
 		if (ev.toElement != app.canvas.canvas) { 
 			if (self.isDrawing) app.data.saveLines();
 			self.isDrawing = false;
-			if (self.moves % 2 == 1) app.data.linse.splice(-1,1);
+			if (self.moves % 2 == 1) app.data.lines.splice(-1,1);
 			self.moves = 0;
 
 			/* pointer context click on frames for copy frames */

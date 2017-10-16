@@ -11,7 +11,7 @@ function Keyboard(app) {
 				ev.preventDefault();
 				app.draw.toggle();
 			}
-			if (keys[ev.which] == "b") {
+			if (keys[ev.which] == "a") {
 				if (ev.shiftKey) app.data.explode(true, false);
 				else  app.data.explode(false, false);
 			}
