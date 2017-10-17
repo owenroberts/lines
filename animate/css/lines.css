@@ -9,6 +9,9 @@ body {
 * {
   box-sizing: border-box; }
 
+button:focus {
+  outline: none; }
+
 #splash {
   font-size: 18px;
   width: 600px;
@@ -16,46 +19,36 @@ body {
 
 #container {
   min-width: 720px;
-  position: relative;
-  width: 100%;
-  display: table; }
-
-canvas {
-  display: table-cell;
-  vertical-align: top;
-  display: inline-block;
-  vertical-align: top;
+  display: flex;
+  flex-wrap: wrap;
+  /* grid-auto-flow: column;
+  grid-gap: 1em; */
   margin: 1em; }
-  canvas.draw {
-    border: 1px solid gray; }
-    canvas.draw:active, canvas.draw:hover {
-      cursor: crosshair; }
+
+#draw {
+  /* margin:1em; */
+  flex: 0;
+  padding-right: 1em; }
 
 #tools {
-  display: table-cell;
-  vertical-align: top;
-  text-align: left;
-  width: 100%;
-  padding-top: 1em; }
+  /* padding-top:1em; */
+  flex: 1; }
 
-#keys {
-  /* 	float:left;
-  	clear:left;
-  	cursor:pointer;
-  	padding:1em 0;
-  	max-width:500px; */
-  width: auto;
-  position: relative; }
-  #keys ul {
-    list-style: none;
-    padding: 0; }
-  #keys li {
-    vertical-align: middle;
-    display: inline-block;
-    margin: 0.25em; }
+#canvas {
+  border: 1px solid gray; }
+  #canvas:active, #canvas:hover {
+    cursor: crosshair; }
 
-#nav h2 {
-  display: inline; }
+#nav #title {
+  border: none;
+  font-size: 1.5em;
+  display: block;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid transparent;
+  width: 100%; }
+  #nav #title:focus {
+    outline: none;
+    border-bottom: 1px solid black; }
 #nav .btn {
   border: 1px solid gray;
   padding: 0.25em;
@@ -77,21 +70,32 @@ canvas {
   font-size: 14px;
   font-weight: 100; }
 
+/* https://codepen.io/abbeyjfitzgerald/pen/vgjwVN?editors=1100 */
+.panels {
+  display: flex;
+  flex-wrap: wrap;
+  flex-flow: row wrap;
+  margin-top: 0.5em; }
+  .panels .menu-panel {
+    /* max-width:150px; */
+    flex: 1 25%;
+    margin: 0;
+    max-width: 180px;
+    min-width: 130px; }
+
 .menu-panel {
-  width: 150px;
   margin-right: 0.5em;
-  margin-top: 0.5em;
+  /* margin-top:0.5em; */
   border-top: 1px solid lightgray;
-  border-left: 1px solid lightgray;
+  /* border-left:1px solid lightgray; */
   border-right: 1px solid lightgray;
   padding: 0.5em;
   overflow: hidden;
-  /* background: linear-gradient(to right, #ffffff 97%,#d2d2d2 100%); */
-  box-shadow: 2px 2px 1px lightgray;
+  /* box-shadow: 2px 2px 1px lightgray; */
   position: relative;
   height: 25px; }
   .menu-panel .row {
-    margin: 1em 0;
+    margin-top: 1em;
     display: block; }
     .menu-panel .row:first-child {
       margin-top: 3px; }
@@ -106,7 +110,7 @@ canvas {
 
 #colormenu input, #canvasmenu input {
   display: inline-block;
-  /* width:100px; */ }
+  width: 100px; }
 #colormenu #html-color, #colormenu #bkg-img, #colormenu #bkg-x, #colormenu #bkg-y, #colormenu #bkg-size, #canvasmenu #html-color, #canvasmenu #bkg-img, #canvasmenu #bkg-x, #canvasmenu #bkg-y, #canvasmenu #bkg-size {
   width: 80px; }
 #colormenu #colorways, #canvasmenu #colorways {
@@ -127,7 +131,8 @@ canvas {
   height: auto;
   padding: 0.5em;
   width: auto;
-  /*  idk?  */ }
+  /*  idk?  */
+  min-width: 100%; }
   #frames .frame, #frames .plusframe {
     /* width:30px;
     height:30px; */
@@ -142,5 +147,17 @@ canvas {
     background-color: lightblue; }
   #frames .copy {
     background-color: pink; }
+
+#keys {
+  width: auto;
+  min-width: 100%;
+  position: relative; }
+  #keys ul {
+    list-style: none;
+    padding: 0; }
+  #keys li {
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0.25em; }
 
 /*# sourceMappingURL=lines.css.map */

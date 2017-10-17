@@ -4,135 +4,160 @@
 	<title>lines animate</title>
 	<meta charset="utf-8" />
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<link href="css/lines.css" rel="stylesheet" type="text/css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
 <div id="container">
-<!-- some changes for future penis, maybe make a branch? -->
-	<canvas id="canvas" class="draw" width="1024" height="768" ></canvas>
-	<div id="tools">
+	<div id="draw" class="section">
+		<canvas id="canvas" style="background: lightgray;"></canvas>
+	</div>
+	<div id="tools" class="section">
 
 		<div id="nav">
-			<span class="btn" id="save">Save</span>
+			<input id="title" placeholder="title" type="text">
 			<span class="btn" id="open">Open</span>
-			<h2 id="title">Title</h2>
+			<span class="btn" id="save">Save</span>
+			<span class="btn" id="save-frame">Save frame</span>
+			
 		</div>
 		
-		<div id="animatemenu" class="menu-panel">
-			<div class="panel-toggle">v</div>
-			<div class="panel-title">Animation</div> 
+		<div class="panels">
+			<div id="animatemenu" class="menu-panel">
+				<div class="panel-toggle">v</div>
+				<div class="panel-title">Animation</div> 
 
-			<div class="row">
-				<span class="btn" id="play">Play</span>
-				<span class="btn" id="stop">Stop</span>
-				<span class="btn" id="prev-frame"><<</span>
-				<span class="btn" id="next-frame">>></span>
+				<div class="row">
+					<span class="btn" id="play">Play</span>
+					<span class="btn" id="pause">Pause</span>
+				</div>
+				<div class="row">
+					Frame: <span id="frame">0</span>
+				</div>
+				<div class="row">Onion 
+					<select id="onion-skin">
+						<option>0</option>
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>7</option>
+						<option>8</option>
+						<option>9</option>
+						<option>10</option>
+					</select>
+				</div>
+				<div class="row">FPS 
+					<select id="fps">
+						<option>1</option>
+						<option>2</option>
+						<option>5</option>
+						<option selected>10</option>
+						<option>12</option>
+						<option>15</option>
+						<option>24</option>
+						<option>30</option>
+						<option>60</option>
+					</select>
+				</div>
 
-			</div>
-			<div class="row">
-				Frame: <span id="frame">0</span>
-			</div>
-			<div class="row">	
-				<span class="btn" id="add-frame">+</span>
-				<span class="btn" id="insert-frame">i</span>
-				<span class="btn" id="delete-frame">d</span>
-				<span class="btn" id="clear-frame">X</span>
-				<span class="btn" id="cut-line">zcut</span>
-			</div>
-			<div class="row">
-				
-				<span class="btn" id="copy">Copy</span>
-				<span class="btn" id="paste">Paste</span>
-			</div>
-			<div class="row">Onion 
-				<select id="onion-skin">
-					<option>0</option>
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-					<option>5</option>
-					<option>6</option>
-					<option>7</option>
-					<option>8</option>
-					<option>9</option>
-					<option>10</option>
-				</select>
-			</div>
-			<div class="row">FPS 
-				<select id="fps">
-					<option>1</option>
-					<option>2</option>
-					<option>5</option>
-					<option selected>10</option>
-					<option>12</option>
-					<option>15</option>
-					<option>24</option>
-					<option>30</option>
-					<option>60</option>
-				</select>
-			</div>
+				<div class="row">LinesPS 
+					<select id="lps">
+						<option>1</option>
+						<option>2</option>
+						<option>5</option>
+						<option selected>10</option>
+						<option>12</option>
+						<option>15</option>
+						<option>24</option>
+						<option>30</option>
+						<option>60</option>
+					</select>
+				</div>
 
-			<div class="row">
-				<span class="btn" id="explode">Explode</span>
-				<span class="btn" id="explode-over">Ex Over</span>
-			</div>
-			<div class="row">
-				<span class="btn" id="follow">Follow</span>
-				<span class="btn" id="follow-over">Fol Over</span>
-			</div>
-		</div>
-		
-		<div id="colormenu" class="menu-panel">
-			<div class="panel-toggle">v</div>
-			<div class="panel-title">Color</div> 
-
-			<div class="row">
-				<div id="color"></div>
-				<div id="color-gradient"></div>
-				H: <input type="range" class="pckr" id="hue" min="0" max="360" value="1" />
-				S: <input type="range" class="pckr" id="saturation" min="0" max="100" value="1" />
-				L: <input type="range" class="pckr" id="lightness" min="0" max="100" value="1" />
-				HTML: <input type="text" id="html-color" placeholder="#" value="000000" />
-				<div id="colorways"></div>
-			</div>
-		</div>
-
-		<div id="drawmenu" class="menu-panel">
-			<div class="panel-toggle">v</div>
-			<div class="panel-title">Lines</div> 
-			<div class="row">Segment number	 
-				<span id="num-range"></span>
-				<input type="range" id="num" min="1" max="20" value="2" />
+				<div class="row">
+					<span class="btn" id="explode">Explode</span>
+					<span class="btn" id="explode-over">Ex Over</span>
+				</div>
+				<div class="row">
+					<span class="btn" id="follow">Follow</span>
+					<span class="btn" id="follow-over">Fol Over</span>
+				</div>
 			</div>
 			
-			<div class="row">Jiggle range 
-				<span id="diff-range"></span>
-				<input type="range" id="diff" min="0" max="10" value="1" />
+			<div id="colormenu" class="menu-panel">
+				<div class="panel-toggle">v</div>
+				<div class="panel-title">Color</div> 
+				<div class="row">
+					<div id="color"></div>
+				</div>
+				<div class="row">
+					<div id="color-gradient"></div>
+				</div>
+				<div class="row">
+					H: <input type="range" class="pckr" id="hue" min="0" max="360" value="0" />
+				</div>
+				<div class="row">
+					S: <input type="range" class="pckr" id="saturation" min="0" max="100" value="0" />
+				</div>
+				<div class="row">
+					L: <input type="range" class="pckr" id="lightness" min="0" max="100" value="0" />
+				</div>
+				<div class="row">
+					HTML: <input type="text" id="html-color" placeholder="#" value="000000" />
+				</div>
+				<div class="row">
+					<div id="colorways"></div>
+				</div>
 			</div>
-			<div class="row">Mouse time
-				<span id="mouse-range"></span>
-				<input type="range" id="mouse" min="0" max="100" value="25" />
-			</div>
-		</div>
 
-		<div id="canvasmenu" class="menu-panel">
-			<div class="panel-toggle">v</div>
-			<div class="panel-title">Canvas</div> 
-			<div class="row">
-				Width: <input type="text" id="canvas-width" placeholder="1024" >
-				Height: <input type="text" id="canvas-height" placeholder="768" >
-			</div>
-			<div class="row">
-				Bkg: <input type="text" id="bkg-img" placeholder="url" ><br>
+			<div id="drawmenu" class="menu-panel">
+				<div class="panel-toggle">v</div>
+				<div class="panel-title">Lines</div> 
+				<div class="row">Segment number	 
+					<span id="num-range"></span>
+					<br>
+					<input type="range" id="num" min="1" max="20" value="2" />
+				</div>
 				
-				X: <input type="range" id="bkg-x" value="0" /><br>
-				Y: <input type="range" id="bkg-y" value="0" /><br>
-				Size: <input type="range" id="bkg-size" value="0" />
+				<div class="row">Jiggle range 
+					<span id="jiggle-range"></span>
+					<br>
+					<input type="range" id="jiggle" min="0" max="10" value="1" />
+				</div>
+				<div class="row">Mouse time
+					<span id="mouse-range"></span>
+					<br>
+					<input type="range" id="mouse" min="0" max="100" value="30" />
+				</div>
+			</div>
+
+			<div id="canvasmenu" class="menu-panel">
+				<div class="panel-toggle">v</div>
+				<div class="panel-title">Canvas</div> 
+				<div class="row">
+					Width: <input type="text" id="canvas-width" placeholder="1024" value="1024">
+				</div>
+				<div class="row">
+					Height: <input type="text" id="canvas-height" placeholder="768" value="768">
+				</div>
+				<div class="row">
+					Bkg: <input type="text" id="bkg-img" placeholder="url" >
+				</div>
+				<div class="row">
+					X: <input type="range" id="bkg-x" value="0" />
+				</div>
+				<div class="row">
+					Y: <input type="range" id="bkg-y" value="0" />
+				</div>
+				<div class="row">
+					Size: <input type="range" id="bkg-size" value="0" />
+				</div>
 			</div>
 		</div>
+		
 
 		<div id="frames" class="menu-panel">
 			Frames
@@ -172,7 +197,6 @@
 			</div>
 		</div>
 	</div>
-	
 </div>
 
 <script type="text/javascript" src="../lib/jquery.min.js"></script>
@@ -180,7 +204,15 @@
 <script type="text/javascript" src="../lib/cool.js"></script>
 <script type="text/javascript" src="../lib/Blob.js"></script>
 <script type="text/javascript" src="../lib/FileSaver.min.js"></script>
-<script type="text/javascript" src="animate.js"></script>
+<script type="text/javascript" src="js/canvas.js"></script>
+<script type="text/javascript" src="js/background.js"></script>
+<script type="text/javascript" src="js/mouse.js"></script>
+<script type="text/javascript" src="js/keyboard.js"></script>
+<script type="text/javascript" src="js/color.js"></script>
+<script type="text/javascript" src="js/draw.js"></script>
+<script type="text/javascript" src="js/data.js"></script>
+<script type="text/javascript" src="js/interface.js"></script>
+<script type="text/javascript" src="js/lines.js"></script>
 
 </body>
 </html>

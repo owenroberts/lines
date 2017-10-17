@@ -7,6 +7,7 @@ body {
 	user-select: none;
 }
 * {box-sizing: border-box; }
+button:focus { outline: none; }
 #splash {
 	font-size: 18px;
 	width: 600px;
@@ -14,50 +15,43 @@ body {
 }
 #container {
 	min-width:720px;
-	position:relative;
-	width:100%;
-	display:table;
-}
-canvas {
-	display:table-cell;
-	vertical-align:top;
-	display:inline-block;
-	vertical-align:top;
+	display:flex;
+	flex-wrap: wrap;
+	/* grid-auto-flow: column;
+	grid-gap: 1em; */
 	margin:1em;
-	&.draw {
-		border:1px solid gray;
-		&:active, &:hover {
-			cursor: crosshair;
-		}
-	}
+}
+#draw {
+	/* margin:1em; */
+	flex: 0;
+	padding-right:1em;
 }
 
 #tools {
-	display:table-cell;
-	vertical-align:top;
-	text-align: left;
-	width:100%;
-	padding-top:1em;
+	/* padding-top:1em; */
+	flex: 1;
 }
 
-#keys {
-/* 	float:left;
-	clear:left;
-	cursor:pointer;
-	padding:1em 0;
-	max-width:500px; */
-	width: auto;
-	position: relative;
-	ul { list-style:none; padding: 0;}
-	li { 
-		vertical-align:middle; 
-		display:inline-block;
-		margin:0.25em;
+#canvas {
+	border:1px solid gray;
+	&:active, &:hover {
+		cursor: crosshair;
 	}
 }
 
 #nav {
-	h2 {display:inline;}
+	#title {
+		border:none;
+		font-size:1.5em;
+		display:block;
+		margin-bottom: 0.5em;
+		border-bottom: 1px solid transparent;
+		width:100%;
+		&:focus {
+			outline:none;
+			border-bottom: 1px solid black;
+		}
+	}
 	.btn {
 		border: 1px solid gray;
 		padding:0.25em;
@@ -83,28 +77,36 @@ canvas {
 	font-weight: 100;
 }
 
+/* https://codepen.io/abbeyjfitzgerald/pen/vgjwVN?editors=1100 */
+.panels {
+	display:flex;
+	flex-wrap:wrap;
+	flex-flow: row wrap;
+	margin-top:0.5em;
 
+	.menu-panel {
+		/* max-width:150px; */
+		flex: 1 25%;
+		margin:0;
+		max-width: 180px;
+		min-width:130px;
+	}
+}
 
 .menu-panel {
-	
-	width:150px;
 	margin-right:0.5em;
-	margin-top:0.5em;
+	/* margin-top:0.5em; */
 	border-top:1px solid lightgray;
-	border-left:1px solid lightgray;
+	/* border-left:1px solid lightgray; */
 	border-right:1px solid lightgray;
 	padding:0.5em;
-
 	overflow:hidden;
-	
-	/* background: linear-gradient(to right, #ffffff 97%,#d2d2d2 100%); */
-	box-shadow: 2px 2px 1px lightgray;
-
+	/* box-shadow: 2px 2px 1px lightgray; */
 	position:relative;
 	height:25px;
 
 	.row {
-		margin: 1em 0;
+		margin-top:1em;
 		display:block;
 		&:first-child {
 			margin-top: 3px;
@@ -125,7 +127,7 @@ canvas {
 #colormenu, #canvasmenu {
 	input {
 		display:inline-block;
-		/* width:100px; */
+		width:100px;
 	}
 	#html-color, #bkg-img, #bkg-x, #bkg-y, #bkg-size { width:80px; }
 	#colorways {
@@ -149,6 +151,7 @@ canvas {
 	height:auto;
 	padding: 0.5em;
 	width: auto; /*  idk?  */
+	min-width: 100%;
 	.frame, .plusframe {
 		/* width:30px;
 		height:30px; */
@@ -163,4 +166,16 @@ canvas {
 	}
 	.current { background-color: lightblue; }
 	.copy { background-color: pink; }
+}
+
+#keys {
+	width: auto;
+	min-width:100%;
+	position: relative;
+	ul { list-style:none; padding: 0;}
+	li { 
+		vertical-align:middle; 
+		display:inline-block;
+		margin:0.25em;
+	}
 }
