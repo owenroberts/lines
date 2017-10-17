@@ -94,6 +94,14 @@ function Animation(src) {
 			}
 		}
 	};
+
+	this.stop = function() {
+		this.frameCount = this.frameCountRounded = 0;
+	};
+
+	this.start = function() {
+		this.frameCount = this.frameCountRounded = -1;
+	};
 	
 	let count = 0;
 	this.drawTwo = function(other) {
