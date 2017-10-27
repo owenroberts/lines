@@ -99,7 +99,6 @@ function Draw(app) {
 				app.interface.updateFrameNum();
 
 			app.canvas.ctx.clearRect(0, 0, app.canvas.width, app.canvas.height);
-			// console.log(app.background.img, app.background.x, app.background.y, app.background.size, app.background.size/app.background.ratio)
 			if (app.background.img.src && app.background.show)
 				app.canvas.ctx.drawImage(app.background.img, app.background.x, app.background.y, app.background.size, app.background.size/app.background.ratio);
 
@@ -136,6 +135,7 @@ function Draw(app) {
 		window.requestAnimFrame(self.draw);
 	}
 	
+	/* starts drawing, is this necessary ? */
 	this.start = function() {
 		window.requestAnimFrame(self.draw);
 	}
