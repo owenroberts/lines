@@ -1,4 +1,5 @@
 .DS_Store
+*.gsheet
 lines/
 doc/
 audio/

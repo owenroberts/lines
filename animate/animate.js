@@ -141,8 +141,10 @@ const widthInput = document.querySelector("#canvas-width");
 const heightInput = document.querySelector("#canvas-height");
 
 function setWidth() {
-	w = c.width = widthInput.placeholder = Number(widthInput.value);
-	widthInput.value = "";
+	if (widthInput.value) {
+		w = c.width = widthInput.placeholder = Number(widthInput.value);
+		widthInput.value = "";
+	}
 }
 widthInput.addEventListener("keyup", function(ev) {
 	if (ev.which == 13) setWidth();
@@ -150,8 +152,10 @@ widthInput.addEventListener("keyup", function(ev) {
 widthInput.addEventListener("blur", setWidth);
 
 function setHeight() {
-	h = c.height = heightInput.placeholder = Number(heightInput.value);
-	heightInput.value = "";
+	if (heightInput.value) {
+		h = c.height = heightInput.placeholder = Number(heightInput.value);
+		heightInput.value = "";
+	}
 }
 heightInput.addEventListener("keyup", function(ev) {
 	if (ev.which == 13) setHeight();
@@ -397,9 +401,9 @@ function updateFrames() {
 		/* if there are same number of less then frames than frame divs */
 		/* this seems to only happen when deleting the current frame so i'm confused.... 
 		delete frame should always be the current frame, is there another way to delete frames */
-		for (let i = framenum - 1; i > frames.length; i--){
+		for (let i = framenum; i > frames.length; i--){
 			/* remove html frame, make the plus frame the current frame */
-			let removeFrame = document.getElementById( "fr" + i);
+			let removeFrame = document.getElementById( "fr" + (i-1));
 			/* check if deleted frame is the current frame */
 			if (removeFrame.classList.contains("current")) plusFrame.classList.add("current");
 			removeFrame.remove();
@@ -432,7 +436,6 @@ function playToggle() {
 function saveLines() {
 	if ((frames[currentFrame] == undefined || addlines) && lines.length > 0  ) {
 		if (frames[currentFrame] == undefined) frames[currentFrame] = [];
-		
 		frames[currentFrame].push({
 			d:drawings.length, 
 			i:0, 
@@ -497,10 +500,8 @@ function copyFrame() {
 	// this seems to just add extra frames to the end
 	if (copyFrames.length > 0) {
 		for (var i = 0; i < copyFrames.length; i++) {
-			console.log(i);
 			if (frames[currentFrame] == undefined) frames[currentFrame] = [];
 			for (var h = 0; h < frames[copyFrames[i]].length; h++) {
-				console.log(frames[copyFrames[i]][h]);
 				frames[currentFrame].push(_.cloneDeep(frames[copyFrames[i]][h]));
 			}
 			saveLines();
@@ -657,7 +658,7 @@ function explode(follow, over) {
 					else addToFrame();
 					frames[currentFrame].push({
 						d: tempFrames[h].d,
-						i: i,
+						i: follow ? i : 0,
 						e: i + linenum
 					});
 					currentFrame++;
@@ -673,7 +674,7 @@ function explode(follow, over) {
 					}
 					frames[currentFrame].push({
 						d: tempFrames[h].d,
-						i: 0,
+						i: follow ? i : 0,
 						e: i + linenum
 					});
 				}
@@ -774,17 +775,17 @@ $('.panel-toggle').on('click', function() {
 	}
 });
 
-
+/* data? */
 if (window.File && window.FileReader && window.FileList && window.Blob) {
 	console.log("%c Save file enabled ", "color:lightgreen;background:black;");
 }
 
+/* interface? */
 $(window).on('beforeunload', function() {
 	return 'Did you save dumbhole?';
 });
 
-// offset by vector
-
+// offset by vector - no key 
 function offsetDrawing(offset) {
 	for (let i = 0; i < frames[currentFrame].length; i++) {
 		var d = drawings[frames[currentFrame][i].d];
@@ -801,6 +802,7 @@ function offsetDrawing(offset) {
 	}
 }
 
+/* f key */
 function fitCanvasToDrawing() {
 	saveLines();
 	
@@ -849,6 +851,7 @@ function fitCanvasToDrawing() {
 	}
 }
 
+/* s key */
 function saveFramesToFile(ev) {
 	console.log(ev.shiftKey);
 	saveLines();
