@@ -14,17 +14,18 @@ function Sprite(x, y, w, h) {
 	this.debug = false;
 	this.frameCount = -1;	
 	this.wiggleAmount = -1;
+	this.bkg = false; /* draw a filled in outline */
 
-	this.addAnimation = function(src, naturalSize) {
+	this.addAnimation = function(src) {
 		var that = this;
 		this.animation = new Animation(src);
-		if (naturalSize) {
+		if (!this.size.w) {
+			/* load animation size */
 			this.animation.load(true, function(w, h) {
 				that.size.x = that.collider.size.x = w;
 				that.size.y = that.collider.size.y = h;
 			});
-		} else 
-			this.animation.load(this.size);
+		} else this.animation.load(this.size);
 		if (this.debug) this.animation.debug = true;
 		
 	};
@@ -61,11 +62,12 @@ function Sprite(x, y, w, h) {
 					this.collider.size.x, 
 					this.collider.size.y
 				);
-				ctx.strokeStyle = "#00ffbb";
+				if (ctx.strokeStyle != "#00ffbb") ctx.strokeStyle = "#00ffbb";
 				ctx.stroke();
 			}
 			if (this.animation && this.animation.loaded && this.frameCount != 0) {
-				this.animation.draw(this.position.x, this.position.y);
+				if (this.bkg) this.animation.drawBkg(this.position.x, this.position.y);
+				else this.animation.draw(this.position.x, this.position.y);
 				if (this.frameCount > 0) this.frameCount--;
 			}
 		}
