@@ -192,7 +192,6 @@ function Data(app) {
 		no key command - t y u p j l n available */
 	/* a: explode, shift a: follow */
 	this.explode = function(follow, over) {
-		console.log("hello")
 		if (self.frames[app.draw.currentFrame] == undefined) self.saveLines();
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
