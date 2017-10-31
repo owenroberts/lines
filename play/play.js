@@ -13,7 +13,7 @@ dr.c is color of all lines in drawing
 this.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
 */
 
-const c = document.querySelector('canvas');
+const c = document.querySelector('#lines');
 const ctx = c.getContext('2d');
 ctx.miterLimit = 1;
 let w, h; // w h of drawing, not canvas
