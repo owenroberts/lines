@@ -1,5 +1,8 @@
 function Animation(src) {
 	const self = this;
+	const ctx = Game.ctx;
+
+	const mixedColors = Game.mixedColors;
 	this.debug = false;
 	this.loaded = false;
 	this.play = true;
@@ -8,8 +11,10 @@ function Animation(src) {
 	this.drawings = [];
 	this.currentFrame = 0; 
 	this.currentFrameRounded = 0; 
-	this.widthRatioRatio = 0;
-	this.heightRatioRatio = 0;
+	this.width = 0;
+	this.height = 0;
+	this.widthRatio = 1;
+	this.heightRatio = 1;
 	this.frameCount = -1;
 	this.frameCountRounded = -1; 
 	this.loop = true;
@@ -17,34 +22,37 @@ function Animation(src) {
 	this.intervalRatio = 1;
 	this.jiggle = 1;
 	this.segNum = 2;
+	this.mirror = false;
 
 	this.load = function(animSize, callback) {
-		var that = this;
 		$.getJSON(this.src, function(data) {
-			that.loaded = true;
-			that.frames = data.f;
-			that.drawings = data.d;
-			if (!that.drawings.every(item => item == "x")) {
+			self.loaded = true;
+			self.frames = data.f;
+			self.drawings = data.d;
+			if (!self.drawings.every(item => item == "x")) {
 				let found = false;
 				let count = 0;
 				while(!found) {
-					if (that.drawings[count].r && that.drawings[count].n) {
-						that.jiggle = that.drawings[count].r;
-						that.segNum = that.drawings[count].n;
+					if (self.drawings[count].r && self.drawings[count].n) {
+						self.jiggle = self.drawings[count].r;
+						self.segNum = self.drawings[count].n;
 						found = true;
 					}
 					count++;
 				}
 			}
 			if (animSize === true) {
-				that.widthRatio = 1;
-				that.heightRatio = 1;
+				self.widthRatio = 1;
+				self.heightRatio = 1;
 				if (callback) callback(data.w, data.h);
 			} else {
-				that.widthRatio = size.x / data.w;
-				that.heightRatio = size.y / data.h;
+				self.width = animSize.x;
+				self.height = animSize.y;
+				self.widthRatio = animSize.x / data.w;
+				self.heightRatio = animSize.y / data.h;
 			}
-			that.intervalRatio = lineInterval / (1000/data.fps);
+			self.intervalRatio = Game.lineInterval / (1000/data.fps);
+
 		});
 	};
 
@@ -72,8 +80,14 @@ function Animation(src) {
 		
 		if (this.loaded && this.play) {
 			//if (this.debug) console.log(this.currentFrame);
+			if (this.mirror) {
+				ctx.save();
+				//ctx.translate(this.width, 0);
+				//ctx.scale(-1,1);
+			}
 			if (this.frames[this.currentFrameRounded]) {
 				if (!mixedColors) ctx.beginPath();
+
 				for (let i = 0; i < this.frames[this.currentFrameRounded].length; i++) {
 					const frm = this.frames[this.currentFrameRounded][i];
 					const drw = this.drawings[frm.d];
@@ -104,6 +118,7 @@ function Animation(src) {
 				}
 				if (!mixedColors) ctx.stroke();
 			}
+			if (this.mirror) ctx.restore();
 		}
 	};
 

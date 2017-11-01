@@ -102,21 +102,7 @@ function Draw(app) {
 			if (app.background.img.src && app.background.show)
 				app.canvas.ctx.drawImage(app.background.img, app.background.x, app.background.y, app.background.size, app.background.size/app.background.ratio);
 
-			/* draws saved frames */
-			if (app.data.frames[self.currentFrame]) {
-				for (let i = 0; i < app.data.frames[self.currentFrame].length; i++) {
-					const fr = app.data.frames[self.currentFrame][i];
-					const dr = app.data.drawings[fr.d];
-					self.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
-				}
-			}
-
-			/* draws current lines */
-			if (app.data.frames[self.currentFrame] == undefined || app.mouse.addToFrame) {
-				self.drawLines(app.data.lines, 0, app.data.lines.length, app.mouse.segNumRange, app.mouse.jiggleRange, app.color.color);
-			}
-
-			/* draws onionskin */
+			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
 					const frameNumber = self.currentFrame - o;
@@ -131,6 +117,22 @@ function Draw(app) {
 					}
 				}
 			}
+
+			/* draws saved frames */
+			if (app.data.frames[self.currentFrame]) {
+				for (let i = 0; i < app.data.frames[self.currentFrame].length; i++) {
+					const fr = app.data.frames[self.currentFrame][i];
+					const dr = app.data.drawings[fr.d];
+					self.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
+				}
+			}
+
+			/* draws current lines */
+			if (app.data.frames[self.currentFrame] == undefined || app.mouse.addToFrame) {
+				self.drawLines(app.data.lines, 0, app.data.lines.length, app.mouse.segNumRange, app.mouse.jiggleRange, app.color.color);
+			}
+
+			
 		}
 		window.requestAnimFrame(self.draw);
 	}

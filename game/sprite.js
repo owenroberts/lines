@@ -1,5 +1,8 @@
 function Sprite(x, y, w, h) {
+	var self = this;
+	ctx = Game.ctx;
 	this.position = new Vector(x, y);
+	/* just use fucking width and height */
 	this.size = new Vector(w, h);
 	this.collider = {
 		position: new Vector(0, 0),
@@ -17,17 +20,15 @@ function Sprite(x, y, w, h) {
 	this.bkg = false; /* draw a filled in outline */
 
 	this.addAnimation = function(src) {
-		var that = this;
-		this.animation = new Animation(src);
-		if (!this.size.w) {
+		self.animation = new Animation(src);
+		if (!self.size.x) {
 			/* load animation size */
-			this.animation.load(true, function(w, h) {
-				that.size.x = that.collider.size.x = w;
-				that.size.y = that.collider.size.y = h;
+			self.animation.load(true, function(w, h) {
+				self.size.x = self.collider.size.x = w;
+				self.size.y = self.collider.size.y = h;
 			});
-		} else this.animation.load(this.size);
-		if (this.debug) this.animation.debug = true;
-		
+		} else self.animation.load(this.size);
+		if (this.debug) self.animation.debug = true;
 	};
 	this.setCollider = function(x, y, w, h) {
 		this.collider.position.x = x;
@@ -35,6 +36,17 @@ function Sprite(x, y, w, h) {
 		this.collider.size.x = w;
 		this.collider.size.y = h;
 	};
+	this.scale = function(n) {
+		/* need to wait for animation to load, do this later */
+		this.animation.widthRatio = this.size.x / (this.width*n);
+		this.animation.heightRatio = this.size.y / (this.height*n);
+		// console.log(this.size.x);
+		this.size.x *= n;
+		// console.log(this.size.x);
+		this.size.y *= n;
+		this.collider.size.x *= n;
+		this.collider.size.y *= n;
+	}
 	this.update = function() {
 		if (this.alive) {
 			if (this.jumpAmount != 0) {
