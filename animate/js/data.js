@@ -288,8 +288,8 @@ function Data(app) {
 			}
 		}
 
-		app.canvas.canvas.width  = app.canvas.widthInput.placeholder = app.canvas.width = (maxx - minx) + tolerance * 2;
-		app.canvas.canvas.height = app.canvas.widthInput.placeholder = app.canvas.height = (maxy - miny) + tolerance * 2;
+		app.canvas.setWidth((maxx - minx) + tolerance * 2);
+		app.canvas.setHeight((maxy - miny) + tolerance * 2);
 
 		for (let i = 0; i < self.drawings.length; i++) {
 			if (self.drawings[i] != "x"){
@@ -367,11 +367,12 @@ function Data(app) {
 			for (let i = 0; i < self.drawings.length; i++) {
 				if (self.drawings[i] != 'x') app.color.addColorBtn( self.drawings[i].c );
 			}
-			app.canvas.width  = app.canvas.widthInput.placeholder = app.canvas.canvas.width = data.w;
-			app.canvas.height = app.canvas.widthInput.placeholder = app.canvas.canvas.height = data.h;
+			app.canvas.setWidth(data.w);
+			app.canvas.setHeight(data.h);
 			app.draw.fps = data.fps;
 			app.draw.fpsElem.value = app.draw.fps;
 			app.draw.intervalRatio = app.draw.interval / (1000 / app.draw.fps);
+			app.canvas.ctx.miterLimit = 1;
 			app.interface.updateFramesPanel();
 		}).error(function(error) {
 	        console.error("Loading error:", error.statusText, error);

@@ -15,7 +15,7 @@ function Keyboard(app) {
 				if (ev.shiftKey) app.data.explode(true, false);
 				else  app.data.explode(false, false);
 			}
-			if (keys[ev.which] == "b") app.background.toggle();
+			if (keys[ev.which] == "b") app.draw.background.toggle();
 			if (keys[ev.which] == "c") app.data.copyFrames();
 			if (keys[ev.which] == "d") app.data.deleteFrame();
 			if (keys[ev.which] == "e") app.interface.nextFrame();

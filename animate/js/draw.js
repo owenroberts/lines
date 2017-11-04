@@ -15,6 +15,7 @@ this.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
 
 function Draw(app) {
 	const self = this;
+	this.background = new Background();
 
 	/* can this be a module?  timeline? */
 	this.currentFrame = 0;
@@ -99,8 +100,8 @@ function Draw(app) {
 				app.interface.updateFrameNum();
 
 			app.canvas.ctx.clearRect(0, 0, app.canvas.width, app.canvas.height);
-			if (app.background.img.src && app.background.show)
-				app.canvas.ctx.drawImage(app.background.img, app.background.x, app.background.y, app.background.size, app.background.size/app.background.ratio);
+			if (self.background.img.src && self.background.show)
+				app.canvas.ctx.drawImage(self.background.img, self.background.x, self.background.y, self.background.size, self.background.size/self.background.ratio);
 
 			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0) {

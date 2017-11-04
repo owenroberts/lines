@@ -10,17 +10,20 @@ function Canvas() {
 	this.ctxStrokeColor = "000000"; // should be whatever color is?
 
 	/* change width and height */
-	this.setWidth = function() {
-		if (self.widthInput.value) {
-			self.width = self.canvas.width = self.widthInput.placeholder = Number(self.widthInput.value);
-			self.widthInput.value = ""; // remove value after input 
-		}
+	this.setWidth = function(width) {
+		if (width == undefined && self.widthInput.value) 
+			width = Number(self.widthInput.value);
+		else console.error("No width value set?");
+		self.width = self.canvas.width = self.widthInput.placeholder = width;
+		self.widthInput.value = ""; // remove value after input 
 	}
-	this.setHeight = function() {
-		if (self.heightInput.value) {
-			self.height = self.canvas.height = self.heightInput.placeholder = Number(self.heightInput.value);
-			self.heightInput.value = "";
-		}
+	this.setHeight = function(height) {
+		if (height == undefined && self.heightInput.value)
+			height = Number(self.heightInput.value);
+		else console.error("No width value set?");
+		
+		self.height = self.canvas.height = self.heightInput.placeholder = height;
+		self.heightInput.value = "";
 	}
 	this.setWidth();
 	this.setHeight();

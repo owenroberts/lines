@@ -5,7 +5,6 @@ function Lines() {
 	no longer the case !! */
 	this.canvas = new Canvas();
 	this.color = new Color();
-	this.background = new Background();
 	this.draw = new Draw(this);
 	this.data = new Data(this);
 	this.interface = new Interface(this);
