@@ -7,7 +7,6 @@ function Background() {
 	this.sizeRange = document.getElementById("bkg-size");
 	this.show = true;
 
-	/* background could be a module */
 	this.img = new Image();
 	this.x = Number(this.xRange.value);
 	this.y = Number(this.yRange.value);
