@@ -7,9 +7,13 @@ function Data(app) {
 	this.lines = []; // lines currently being drawn
 	this.drawings = []; // saved drawings
 
+	/* r key - save lines and add new lines 
+	 also used a lot for other things */
 	this.saveLines = function() {
-		if ((this.frames[app.draw.currentFrame] == undefined || app.mouse.addToFrame) && this.lines.length > 0) {
-			if (this.frames[app.draw.currentFrame] == undefined) this.frames[app.draw.currentFrame] = [];
+		if (this.lines.length > 0) {
+			
+			if (this.frames[app.draw.currentFrame] == undefined) 
+				this.frames[app.draw.currentFrame] = [];
 
 			/* add drawing ref to frames data */
 			this.frames[app.draw.currentFrame].push({
@@ -25,11 +29,12 @@ function Data(app) {
 				n: app.mouse.segNumRange,
 				r: app.mouse.jiggleRange
 			});
+
+			/* add current color to color choices 
+			 is color.current better than color.color? */
 			app.color.addColorBtn(app.color.color);
 
-			if (app.mouse.addToFrame) {
-				app.mouse.addToFrame = false;
-			}
+			/* lines are saved, stop drawing? */
 			this.lines = [];
 
 			/* ignoring save states 
@@ -42,6 +47,9 @@ function Data(app) {
 	/* c key  */
 	this.copyFrames = function() {
 		/* if copy frames selected ... */
+		/* this seems to automatically add these frames to end which is not ideal
+			should be when plus frame is selected 
+			selecting frames to copy vs paste should be different states */
 		if (self.framesToCopy.length > 0) {
 			for (let i = 0; i < self.framesToCopy.length; i++) {
 				if (self.frames[app.draw.currentFrame] == undefined) self.frames[app.draw.currentFrame] = [];
@@ -56,6 +64,7 @@ function Data(app) {
 			if (self.lines.length > 0) self.saveLines();
 			if (self.frames[app.draw.currentFrame]) {
 				self.framesCopy = [];
+				/* clone all of the drawings in current frame */
 				for (let i = 0; i < self.frames[app.draw.currentFrame].length; i++) {
 					self.framesCopy.push(_.cloneDeep(self.frames[app.draw.currentFrame][i]));
 				}
@@ -91,6 +100,7 @@ function Data(app) {
 
 	/* v key */
 	this.pasteFrames = function() {
+		/* copy one frame onto multiple */
 		if (self.framesToCopy.length > 0) {
 			for (var h = 0; h < self.framesToCopy.length; h++) {
 				for (var i = 0; i < self.framesCopy.length; i++) {
@@ -105,11 +115,11 @@ function Data(app) {
 				for (let i = 0; i < self.framesCopy.length; i++) {
 					self.frames[app.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
-			} else if (app.mouse.addToFrame) {
+			} else {
+				/* took out addToFrame here, not really necessary? */
 				for (var i = 0; i <  self.framesCopy.length; i++) {
 					self.frames[app.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
-				app.mouse.addToFrame = false;
 			}
 		}
 	};
@@ -131,12 +141,8 @@ function Data(app) {
 		app.interface.updateFramesPanel();
 	};
 
-	/* r key */
-	this.addToFrame = function() {
-		self.saveLines();
-		if (self.frames[app.draw.currentFrame]) 
-			app.mouse.addToFrame = true;
-	};
+	
+
 
 	/* z key */
 	this.cutLastSegment = function() {
@@ -202,7 +208,7 @@ function Data(app) {
 				if (over) {
 					for (let i = 0; i < tempLines.l.length - 1; i += segmentsPerFrame) {
 						if (!self.frames[app.draw.currentFrame]) self.frames[app.draw.currentFrame] = [];
-						else self.addToFrame();
+						else self.newLines();
 						self.frames[app.draw.currentFrame].push({
 							d: tempFrames[h].d,
 							i: follow ? i : 0,
@@ -358,9 +364,9 @@ function Data(app) {
 
 	/* o key */
 	this.loadFramesFromFile = function() {
-		app.draw.currentFrame = app.draw.currentFrameCounter = 0;
+		
 		const filename = prompt("Open file:");
-		app.interface.title.value =  filename.split("/").pop();
+		app.interface.setTitle(filename.split("/").pop());
 		$.getJSON(filename + ".json", function(data) {
 			self.frames =  data.f;
 			self.drawings = data.d;
@@ -369,11 +375,8 @@ function Data(app) {
 			}
 			app.canvas.setWidth(data.w);
 			app.canvas.setHeight(data.h);
-			app.draw.fps = data.fps;
-			app.draw.fpsElem.value = app.draw.fps;
-			app.draw.intervalRatio = app.draw.interval / (1000 / app.draw.fps);
-			app.canvas.ctx.miterLimit = 1;
-			app.interface.updateFramesPanel();
+			app.draw.setFps(data.fps);
+			app.draw.reset();
 		}).error(function(error) {
 	        console.error("Loading error:", error.statusText, error);
 	    });
