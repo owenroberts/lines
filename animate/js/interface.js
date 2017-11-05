@@ -32,6 +32,9 @@ function Interface(app) {
 	this.openButton.addEventListener("click", app.data.loadFramesFromFile);
 
 	this.title = document.getElementById("title");
+	this.setTitle = function(text) {
+		self.title.value = text;
+	}
 	
 	this.playButton = document.getElementById("play");
 	this.playButton.addEventListener("click", function() {
@@ -131,18 +134,20 @@ function Interface(app) {
 	};
 
 	/* is this interface or drawing... 
-	i guess things that reference everything can be interface */
+		i guess things that reference everything can be interface */
 	this.nextFrame = function() {
 		app.mouse.isDrawing = false;
 		app.data.saveLines();
-		if (app.draw.currentFrame < app.data.frames.length) app.draw.currentFrame++;
+		if (app.draw.currentFrame < app.data.frames.length) 
+			app.draw.currentFrame++;
 		self.updateFramesPanel();
 	};
 
 	this.prevFrame = function() {
 		app.mouse.isDrawing = false;
 		app.data.saveLines();
-		if (app.draw.currentFrame > 0) app.draw.currentFrame--;
+		if (app.draw.currentFrame > 0) 
+			app.draw.currentFrame--;
 		self.updateFramesPanel();
 	};
 }
