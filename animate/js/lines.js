@@ -1,18 +1,13 @@
 /* global Lines object */
-let lines;
-function Lines() {
-	/*  save states never really implemented 
-	no longer the case !! */
-	this.canvas = new Canvas();
-	this.color = new Color();
-	this.draw = new Draw(this);
-	this.data = new Data(this);
-	this.interface = new Interface(this);
-	this.keyboard = new Keyboard(this);
-	this.mouse = new Mouse(this);
-	this.draw.start();
-}
 window.addEventListener("load", function() {
 	/* maybe lines is just app */
-	lines = new Lines();
+	Lines = {};
+	Lines.canvas = new Canvas();
+	Lines.color = new Color();
+	Lines.draw = new Draw(Lines);
+	Lines.data = new Data(Lines);
+	Lines.interface = new Interface(Lines);
+	Lines.keyboard = new Keyboard(Lines);
+	Lines.mouse = new Mouse(Lines);
+	Lines.draw.start();
 });
