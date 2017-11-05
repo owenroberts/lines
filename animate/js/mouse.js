@@ -2,8 +2,7 @@
 function Mouse(app) {
 	const self = this;
 	this.moves = 0; // number of events recorded/lines added, maybe just lines.length?
-	this.isDrawing = false;
-	this.addToFrame = false; // for frames with drawings already recorded
+	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 
 	/*
 	need to think about how to set up interface.... 
@@ -67,7 +66,8 @@ function Mouse(app) {
 	this.drawUpdate = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
-			if (self.isDrawing && (app.data.frames[app.draw.currentFrame] == undefined || self.addToFrame)) {
+			/* does it need to stop? */
+			if (self.isDrawing) {
 				self.addLine(ev.offsetX, ev.offsetY);
 			}
 		}
@@ -93,8 +93,8 @@ function Mouse(app) {
 	this.drawEnd = function(ev) {
 		if (ev.which == 1) self.isDrawing = false;
 		if (self.moves % 2 == 1) app.data.lines.splice(-1, 1);
-		if (app.data.lines.length > 0)
-			if (!app.data.lines[app.data.lines.length - 1].e) app.data.lines.pop(); // remove lines with s and no e
+		if (app.data.lines.length > 0 && !app.data.lines[app.data.lines.length - 1].e) 
+			app.data.lines.pop(); // remove lines with s and no e
 		self.moves = 0;
 	}
 
