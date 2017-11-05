@@ -26,7 +26,7 @@ function Keyboard(app) {
 			if (keys[ev.which] == "m") app.data.addMultipleCopies();
 			if (keys[ev.which] == "o") app.data.loadFramesFromFile();
 			if (keys[ev.which] == "q") app.data.offsetDrawing();
-			if (keys[ev.which] == "r") app.data.addToFrame();
+			if (keys[ev.which] == "r") app.data.saveLines(); // makes new drawing
 			if (keys[ev.which] == "s") {
 				if (ev.shiftKey) app.data.saveFramesToFile(true);
 				else app.data.saveFramesToFile(false);
