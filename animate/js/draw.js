@@ -143,7 +143,7 @@ function Draw(app) {
 			}
 
 			/* draws current lines */
-			if (app.data.frames[self.currentFrame] == undefined || app.mouse.addToFrame) {
+			if (app.data.lines.length > 0) {
 				self.drawLines(app.data.lines, 0, app.data.lines.length, app.mouse.segNumRange, app.mouse.jiggleRange, app.color.color);
 			}
 
