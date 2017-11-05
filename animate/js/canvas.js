@@ -42,7 +42,4 @@ function Canvas() {
 		const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 		window.location.href = cap;
 	}
-
-	/* background could be a module of canvas ?? */
-
 }

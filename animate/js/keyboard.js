@@ -12,7 +12,7 @@ function Keyboard(app) {
 				app.draw.toggle();
 			}
 			if (keys[ev.which] == "a") {
-				if (ev.shiftKey) app.data.explode(true, false);
+				if (ev.shiftKey) app.data.explode(false, true);
 				else  app.data.explode(false, false);
 			}
 			if (keys[ev.which] == "b") app.draw.background.toggle();
@@ -33,7 +33,7 @@ function Keyboard(app) {
 			}
 			if (keys[ev.which] == "x") app.data.clearFrame();
 			if (keys[ev.which] == "v") {
-				if (ev.ctrlKey) app.data.clearFramesToCopy();
+				if (ev.ctrlKey) app.data.clearFramesToCopy(); // maybe this should be shift-c?
 				else app.data.pasteFrames();
 			}
 			if (keys[ev.which] == "w") app.interface.prevFrame();

@@ -126,6 +126,15 @@ function Data(app) {
 
 	/* x key */
 	this.clearFrame = function() {
+		if (self.frames[app.draw.currentFrame]) {
+			for (let i = 0; i < self.frames[app.draw.currentFrame].length; i++) {
+				/* can't splice drawings until we figure out indexing 
+					actually don't want to do this in case drawing is on other frame
+					delete drawings in file i/o already happening i think */
+				// self.drawings[self.frames[app.draw.currentFrame][i].d] = "x"; // fuck this stupid x
+			}
+		}
+		
 		if (self.frames[app.draw.currentFrame])
 			self.frames[app.draw.currentFrame] = undefined;
 		self.lines = [];
@@ -133,6 +142,7 @@ function Data(app) {
 
 	/* d key */
 	this.deleteFrame = function() {
+		/* also here, should drawings (not used elsewhere) be deleted? */
 		const ftemp = app.draw.currentFrame;
 		if (app.draw.currentFrame > 0) app.interface.prevFrame();
 		if (self.frames[ftemp] && self.frames.length > 0) self.frames.splice(ftemp, 1);
@@ -198,6 +208,7 @@ function Data(app) {
 		no key command - t y u p j l n available */
 	/* a: explode, shift a: follow */
 	this.explode = function(follow, over) {
+		console.log(follow, over);
 		if (self.frames[app.draw.currentFrame] == undefined) self.saveLines();
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
@@ -208,13 +219,13 @@ function Data(app) {
 				if (over) {
 					for (let i = 0; i < tempLines.l.length - 1; i += segmentsPerFrame) {
 						if (!self.frames[app.draw.currentFrame]) self.frames[app.draw.currentFrame] = [];
-						else self.newLines();
+						else self.saveLines();
 						self.frames[app.draw.currentFrame].push({
 							d: tempFrames[h].d,
 							i: follow ? i : 0,
 							e: i + segmentsPerFrame
 						});
-						currentFrame++;
+						app.draw.currentFrame++;
 					}
 				} else {
 					for (let i = tempLines.l.length - 1 - segmentsPerFrame; i >= 0; i -= segmentsPerFrame) {
