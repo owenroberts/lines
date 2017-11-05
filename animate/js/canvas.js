@@ -7,7 +7,11 @@ function Canvas() {
 	this.canvas = document.getElementById("canvas");
 	this.width, this.height; // are these part of the drawing? or data??
 	this.ctx = this.canvas.getContext('2d');
-	this.ctxStrokeColor = "000000"; // should be whatever color is?
+	this.ctx.strokeStyle = "000000"; // should be whatever color is?
+
+	this.setStrokeColor = function(color) {
+		this.ctx.strokeStyle = "#" + color;
+	}
 
 	/* change width and height */
 	this.setWidth = function(width) {

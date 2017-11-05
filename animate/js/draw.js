@@ -89,8 +89,7 @@ function Draw(app) {
 				else {
 					/* this doesnt work w onion, try to figure it out */
 					if (app.canvas.ctx.strokeStyle != "#" + color) {
-						app.canvas.ctx.strokeStyle = "#" + color;
-						app.canvas.ctxStrokeColor = color;
+						app.canvas.setStrokeColor(color);
 					}
 				}
 			}
