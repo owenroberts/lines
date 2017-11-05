@@ -30,6 +30,12 @@ function Draw(app) {
 	this.timer = performance.now(); 
 	this.intervalRatio = this.interval / (1000/this.fps);  // this starts same as lineInterval, written out to show math
 
+	this.setFps = function(fps) {
+		self.fps = self.fpsElem.value = fps;
+		self.intervalRatio = self.interval / (1000/fps);
+
+	}
+
 	this.fpsElem.addEventListener("change", function() {
 		self.fps = Number(this.value);
 		self.intervalRatio = self.interval / (1000/self.fps);
@@ -51,6 +57,14 @@ function Draw(app) {
 		self.onionSkinNum = Number(this.value);
 		this.blur();
 	});
+
+	/* just set drawing back to 0 but might do other things */
+	this.reset = function() {
+		self.currentFrame = self.currentFrameCounter = 0;
+		self.isPlaying = false;
+		app.canvas.ctx.miterLimit = 1;
+		app.interface.updateFramesPanel();
+	}
 
 	this.toggle = function() {
 		if (!this.isPlaying) app.data.saveLines();
