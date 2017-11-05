@@ -13,14 +13,14 @@ function Canvas() {
 	this.setWidth = function(width) {
 		if (width == undefined && self.widthInput.value) 
 			width = Number(self.widthInput.value);
-		else console.error("No width value set?");
+		else if (width == undefined) console.error("No width value set?");
 		self.width = self.canvas.width = self.widthInput.placeholder = width;
 		self.widthInput.value = ""; // remove value after input 
 	}
 	this.setHeight = function(height) {
 		if (height == undefined && self.heightInput.value)
 			height = Number(self.heightInput.value);
-		else console.error("No width value set?");
+		else if (height == undefined) console.error("No height value set?");
 		
 		self.height = self.canvas.height = self.heightInput.placeholder = height;
 		self.heightInput.value = "";
