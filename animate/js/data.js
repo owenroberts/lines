@@ -151,9 +151,6 @@ function Data(app) {
 		app.interface.updateFramesPanel();
 	};
 
-	
-
-
 	/* z key */
 	this.cutLastSegment = function() {
 		/* should text this for these functions */

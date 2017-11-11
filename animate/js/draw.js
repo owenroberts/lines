@@ -146,6 +146,7 @@ function Draw(app) {
 				self.drawLines(app.data.lines, 0, app.data.lines.length, app.mouse.segNumRange, app.mouse.jiggleRange, app.color.color);
 			}
 
+			/* write something to capture frames here */
 			
 		}
 		window.requestAnimFrame(self.draw);

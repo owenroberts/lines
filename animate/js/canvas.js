@@ -15,19 +15,26 @@ function Canvas() {
 
 	/* change width and height */
 	this.setWidth = function(width) {
-		if (width == undefined && self.widthInput.value) 
-			width = Number(self.widthInput.value);
-		else if (width == undefined) console.error("No width value set?");
-		self.width = self.canvas.width = self.widthInput.placeholder = width;
+		if (Number(width)) {
+			self.width = self.canvas.width = self.widthInput.placeholder = width;
+		} else {
+			if (self.widthInput.value) 
+				self.width = self.canvas.width = self.widthInput.placeholder = Number(self.widthInput.value);
+			else if (!self.width)
+				console.error("No width value set?");
+		}
 		self.widthInput.value = ""; // remove value after input 
 	}
 	this.setHeight = function(height) {
-		if (height == undefined && self.heightInput.value)
-			height = Number(self.heightInput.value);
-		else if (height == undefined) console.error("No height value set?");
-		
-		self.height = self.canvas.height = self.heightInput.placeholder = height;
-		self.heightInput.value = "";
+		if (Number(height)) {
+			self.height = self.canvas.height = self.heightInput.placeholder = height;
+		} else {
+			if (self.heightInput.value) 
+				self.height = self.canvas.height = self.heightInput.placeholder = Number(self.heightInput.value);
+			else if (!self.height)
+				console.error("No height value set?");
+		}
+		self.heightInput.value = ""; // remove value after input 
 	}
 	this.setWidth();
 	this.setHeight();

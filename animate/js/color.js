@@ -23,7 +23,7 @@ function Color() {
 		self.colorPreview.style.backgroundColor = "#" + self.color;
 		self.colorGradient.style.backgroundImage = "linear-gradient(to right, hsl(0,"+self.sat.value+"%,"+self.light.value+"%),hsl(60,"+self.sat.value+"%,"+self.light.value+"%), hsl(120,"+self.sat.value+"%,"+self.light.value+"%), hsl(180,"+self.sat.value+"%,"+self.light.value+"%), hsl(240,"+self.sat.value+"%,"+self.light.value+"%),hsl(300,"+self.sat.value+"%,"+self.light.value+"%) 100%)";
 	};
-	this.updateColor();
+	//this.updateColor();
 
 	for (let i = 0; i < this.pckrs.length; i++) {
 		this.pckrs[i].addEventListener("input", this.updateColor);
