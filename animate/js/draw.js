@@ -30,6 +30,8 @@ function Draw(app) {
 	this.timer = performance.now(); 
 	this.intervalRatio = this.interval / (1000/this.fps);  // this starts same as lineInterval, written out to show math
 
+	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
+
 	this.setFps = function(fps) {
 		self.fps = self.fpsElem.value = fps;
 		self.intervalRatio = self.interval / (1000/fps);
@@ -147,9 +149,17 @@ function Draw(app) {
 			}
 
 			/* write something to capture frames here */
+			if (self.captureFrames > 0) {
+				app.canvas.capture();
+				self.captureFrames--;
+			}
 			
 		}
 		window.requestAnimFrame(self.draw);
+	}
+
+	this.captureMultiple = function() {
+		self.captureFrames = prompt("How many frames?");
 	}
 	
 	/* starts drawing, is this necessary ? */

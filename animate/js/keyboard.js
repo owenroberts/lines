@@ -22,7 +22,10 @@ function Keyboard(app) {
 			if (keys[ev.which] == "f") app.data.fitCanvasToDrawing();
 			if (keys[ev.which] == "g") app.data.duplicate();
 			if (keys[ev.which] == "i") app.data.insertFrame();
-			if (keys[ev.which] == "k") app.canvas.capture();
+			if (keys[ev.which] == "k") {
+				if (ev.shiftKey) app.draw.captureMultiple();
+				else app.canvas.capture();
+			}
 			if (keys[ev.which] == "m") app.data.addMultipleCopies();
 			if (keys[ev.which] == "o") app.data.loadFramesFromFile();
 			if (keys[ev.which] == "q") app.data.offsetDrawing();
