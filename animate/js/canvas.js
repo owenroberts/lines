@@ -7,6 +7,7 @@ function Canvas() {
 	this.canvas = document.getElementById("canvas");
 	this.width, this.height; // are these part of the drawing? or data??
 	this.ctx = this.canvas.getContext('2d');
+	this.ctx.miterLimit = 1;
 	this.ctx.strokeStyle = "000000"; // should be whatever color is?
 
 	this.setStrokeColor = function(color) {
@@ -24,6 +25,7 @@ function Canvas() {
 				console.error("No width value set?");
 		}
 		self.widthInput.value = ""; // remove value after input 
+		this.ctx.miterLimit = 1;
 	}
 	this.setHeight = function(height) {
 		if (Number(height)) {
@@ -35,6 +37,7 @@ function Canvas() {
 				console.error("No height value set?");
 		}
 		self.heightInput.value = ""; // remove value after input 
+		this.ctx.miterLimit = 1;
 	}
 	this.setWidth();
 	this.setHeight();
