@@ -6,11 +6,22 @@ function Keyboard(app) {
 		//console.log(ev.which);
 		// if (ev.which == 9) ev.preventDefault(); // tab
 		if (document.activeElement.nodeName != "INPUT") {
-			if (keys[ev.which] == "space") {
-				/* also update buttons?? */
+
+			var k = keys[ev.which];
+			if (ev.shiftKey) k = "shift-" + k;
+
+			if (app.interface.interfaces[k]) {
+				app.interface.interfaces[k].callback();
+				if (app.interface.interfaces[k].toggleText) {
+					app.interface.interfaces[k].toggleText();
+				}
+			}
+
+			/*if (keys[ev.which] == "space") {
+				 also update buttons?? 
 				ev.preventDefault();
 				app.draw.toggle();
-			}
+			}*/
 			if (keys[ev.which] == "a") {
 				if (ev.shiftKey) app.data.explode(false, true);
 				else  app.data.explode(false, false);
@@ -27,13 +38,13 @@ function Keyboard(app) {
 				else app.canvas.capture();
 			}
 			if (keys[ev.which] == "m") app.data.addMultipleCopies();
-			if (keys[ev.which] == "o") app.data.loadFramesFromFile();
+			//if (keys[ev.which] == "o") app.data.loadFramesFromFile();
 			if (keys[ev.which] == "q") app.data.offsetDrawing();
 			if (keys[ev.which] == "r") app.data.saveLines(); // makes new drawing
-			if (keys[ev.which] == "s") {
+			/*if (keys[ev.which] == "s") {
 				if (ev.shiftKey) app.data.saveFramesToFile(true);
 				else app.data.saveFramesToFile(false);
-			}
+			}*/
 			if (keys[ev.which] == "x") app.data.clearFrame();
 			if (keys[ev.which] == "v") {
 				if (ev.ctrlKey) app.data.clearFramesToCopy(); // maybe this should be shift-c?

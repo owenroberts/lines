@@ -334,9 +334,10 @@ function Data(app) {
 		json.d = [];
 		let drawingsIndexes = [];
 
+		/* don't save stuff with nothing in it .... */
+
 		/* save current frame */  
-		/* this didn't work start here next */
-		if (single) {
+		if (single && self.frames[app.draw.currentFrame]) {
 			json.f.push( self.frames[app.draw.currentFrame] );
 			for (let j = 0; j < self.frames[app.draw.currentFrame].length; j++) {
 				if ( drawingsIndexes.indexOf(self.frames[app.draw.currentFrame][j].d) == -1 ) 
@@ -352,6 +353,7 @@ function Data(app) {
 				}
 			}
 		}
+
 		for (let i = 0; i < self.drawings.length; i++) {
 			if ( drawingsIndexes.indexOf(i) != -1 ) 
 				json.d.push( self.drawings[i] );
@@ -368,26 +370,28 @@ function Data(app) {
 			const blob = new Blob([jsonfile], {type:"application/x-download;charset=utf-8"});
 			saveAs(blob, filename+".json");
 		}
+
 	};
 
 	/* o key */
 	this.loadFramesFromFile = function() {
-		
 		const filename = prompt("Open file:");
-		app.interface.setTitle(filename.split("/").pop());
-		$.getJSON(filename + ".json", function(data) {
-			self.frames =  data.f;
-			self.drawings = data.d;
-			for (let i = 0; i < self.drawings.length; i++) {
-				if (self.drawings[i] != 'x') app.color.addColorBtn( self.drawings[i].c );
-			}
-			app.canvas.setWidth(data.w);
-			app.canvas.setHeight(data.h);
-			app.draw.setFps(data.fps);
-			app.draw.reset();
-		}).error(function(error) {
-	        console.error("Loading error:", error.statusText, error);
-	    });
+		if (filename) {
+			app.interface.title.setValue(filename.split("/").pop());
+			$.getJSON(filename + ".json", function(data) {
+				self.frames =  data.f;
+				self.drawings = data.d;
+				for (let i = 0; i < self.drawings.length; i++) {
+					if (self.drawings[i] != 'x') app.color.addColorBtn( self.drawings[i].c );
+				}
+				app.canvas.setWidth(data.w);
+				app.canvas.setHeight(data.h);
+				app.draw.setFps(data.fps);
+				app.draw.reset();
+			}).error(function(error) {
+				console.error("Loading error:", error.statusText, error);
+			});
+		}
 	};
 
 

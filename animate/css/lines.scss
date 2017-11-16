@@ -152,7 +152,7 @@ button:focus { outline: none; }
 	padding: 0.5em;
 	width: auto; /*  idk?  */
 	min-width: 100%;
-	.frame, .plusframe {
+	.frame, #plus {
 		/* width:30px;
 		height:30px; */
 		display:inline-block;
@@ -164,8 +164,8 @@ button:focus { outline: none; }
 			background-color:gray;
 		}
 	}
-	.current { background-color: lightblue; }
-	.copy { background-color: pink; }
+	.current { background-color: lightblue !important; }
+	.copy { background-color: pink !important; }
 }
 
 #keys {

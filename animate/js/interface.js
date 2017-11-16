@@ -18,38 +18,26 @@ function Interface(app) {
 		this.panelToggles[i].addEventListener("click", self.togglePanel);
 	}
 
-	this.saveButton = document.getElementById("save");
-	this.saveButton.addEventListener("click", function() {
-		app.data.saveFramesToFile(false)
+	this.interfaces = {};
+
+	this.interfaces["s"] = new UI("save", "click", function() {
+		app.data.saveFramesToFile(false);
 	});
 
-	this.saveFrameButton = document.getElementById("save-frame");
-	this.saveFrameButton.addEventListener("click", function() {
-		app.data.saveFramesToFile(true)
+	this.interfaces["shift-s"] = new UI("save-frame", "click", function() {
+		app.data.saveFramesToFile(true);
 	});
 
-	this.openButton = document.getElementById("open");
-	this.openButton.addEventListener("click", app.data.loadFramesFromFile);
+	this.interfaces["o"] = new UI("open", "click", app.data.loadFramesFromFile);
 
-	this.title = document.getElementById("title");
-	this.setTitle = function(text) {
-		self.title.value = text;
-	}
-	
-	this.playButton = document.getElementById("play");
-	this.playButton.addEventListener("click", function() {
-		app.draw.isPlaying = true;
-	});
+	this.title = new UIInput("title");
 
-	this.pauseButton = document.getElementById("pause");
-	this.pauseButton.addEventListener("click", function() {
-		app.draw.isPlaying = false;
-		self.updateFrameNum();
-	});
+	this.interfaces["space"] = new UIToggleButton("play", "click", app.draw.toggle, "Play", "Pause");
 
-	this.framesPanel = document.getElementById("frames");
-	this.plusFrame = document.getElementsByClassName("plusframe")[0]; /* plus frame is unsaved drawing frame */
-	this.frameNumDisplay = document.getElementById("frame");
+
+	this.framesPanel = new UI("frames");
+	this.plusFrame = new UI("plus"); /* plus frame is unsaved drawing frame */
+	this.frameNumDisplay = new UI("frame");
 	this.frameElems = document.getElementsByClassName("frame");
 
 	this.explodeButton = document.getElementById("explode");
@@ -107,7 +95,7 @@ function Interface(app) {
 						app.data.framesToCopy.push(i);
 					}
 				};
-				this.framesPanel.insertBefore(frmElem, self.plusFrame);
+				this.framesPanel.el.insertBefore(frmElem, self.plusFrame.el);
 			}
 		} else {
 			/* if there are same number of less then frames than frame divs */
@@ -117,7 +105,7 @@ function Interface(app) {
 				/* remove html frame, make the plus frame the current frame */
 				let removeFrame = document.getElementById("fr" + (i - 1));
 				/* check if deleted frame is the current frame */
-				if (removeFrame.classList.contains("current")) this.plusFrame.classList.add("current");
+				if (removeFrame.classList.contains("current")) this.plusFrame.addClass("current");
 				removeFrame.remove();
 			}
 		}
@@ -130,7 +118,7 @@ function Interface(app) {
 		currentElem.classList.remove("current");
 		const newElem = document.querySelector('#fr' + app.draw.currentFrame);
 		if (newElem != null) newElem.classList.add("current");
-		else this.plusFrame.classList.add("current");
+		else this.plusFrame.addClass("current");
 	};
 
 	/* is this interface or drawing... 

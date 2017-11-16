@@ -69,8 +69,8 @@ function Draw(app) {
 	}
 
 	this.toggle = function() {
-		if (!this.isPlaying) app.data.saveLines();
-		this.isPlaying = !this.isPlaying;
+		if (!self.isPlaying) app.data.saveLines();
+		self.isPlaying = !self.isPlaying;
 		app.interface.updateFrameNum();
 	}
 
