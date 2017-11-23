@@ -4,7 +4,7 @@ window.addEventListener("load", function() {
 	Lines = {};
 	Lines.canvas = new Canvas();
 	Lines.color = new Color();
-	Lines.draw = new Draw(Lines);
+	Lines.draw = new Draw(Lines); /* could just ref Lines of this.app = Lines*/
 	Lines.data = new Data(Lines);
 	Lines.interface = new Interface(Lines);
 	Lines.keyboard = new Keyboard(Lines);

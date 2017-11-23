@@ -9,6 +9,8 @@ function Keyboard(app) {
 
 			var k = keys[ev.which];
 			if (ev.shiftKey) k = "shift-" + k;
+			if (ev.ctrlKey) k = "ctrl-" + k;
+			if (ev.altKey) k = "alt-" + k;
 
 			if (app.interface.interfaces[k]) {
 				app.interface.interfaces[k].callback();
@@ -17,15 +19,6 @@ function Keyboard(app) {
 				}
 			}
 
-			/*if (keys[ev.which] == "space") {
-				 also update buttons?? 
-				ev.preventDefault();
-				app.draw.toggle();
-			}*/
-			if (keys[ev.which] == "a") {
-				if (ev.shiftKey) app.data.explode(false, true);
-				else  app.data.explode(false, false);
-			}
 			if (keys[ev.which] == "b") app.draw.background.toggle();
 			if (keys[ev.which] == "c") app.data.copyFrames();
 			if (keys[ev.which] == "d") app.data.deleteFrame();

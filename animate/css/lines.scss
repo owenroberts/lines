@@ -152,7 +152,7 @@ button:focus { outline: none; }
 	padding: 0.5em;
 	width: auto; /*  idk?  */
 	min-width: 100%;
-	.frame, #plus {
+	.frame, .plus, #current {
 		/* width:30px;
 		height:30px; */
 		display:inline-block;
@@ -164,7 +164,7 @@ button:focus { outline: none; }
 			background-color:gray;
 		}
 	}
-	.current { background-color: lightblue !important; }
+	#current { background-color: lightblue !important; }
 	.copy { background-color: pink !important; }
 }
 

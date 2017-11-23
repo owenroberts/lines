@@ -133,7 +133,7 @@ button:focus {
   width: auto;
   /*  idk?  */
   min-width: 100%; }
-  #frames .frame, #frames #plus {
+  #frames .frame, #frames .plus, #frames #current {
     /* width:30px;
     height:30px; */
     display: inline-block;
@@ -141,9 +141,9 @@ button:focus {
     margin-right: 1px;
     margin-top: 1px;
     padding: 0.5em; }
-    #frames .frame:hover, #frames #plus:hover {
+    #frames .frame:hover, #frames .plus:hover, #frames #current:hover {
       background-color: gray; }
-  #frames .current {
+  #frames #current {
     background-color: lightblue !important; }
   #frames .copy {
     background-color: pink !important; }

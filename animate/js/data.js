@@ -144,10 +144,14 @@ function Data(app) {
 	this.deleteFrame = function() {
 		/* also here, should drawings (not used elsewhere) be deleted? */
 		const ftemp = app.draw.currentFrame;
-		if (app.draw.currentFrame > 0) app.interface.prevFrame();
-		if (self.frames[ftemp] && self.frames.length > 0) self.frames.splice(ftemp, 1);
-		else if (self.frame[ftemp]) self.clearFrame();
-		else self.lines = [];
+		if (app.draw.currentFrame > 0) 
+			app.interface.prevFrame();
+		if (self.frames[ftemp] && self.frames.length > 0) 
+			self.frames.splice(ftemp, 1);
+		else if (self.frame[ftemp]) 
+			self.clearFrame();
+		else 
+			self.lines = [];
 		app.interface.updateFramesPanel();
 	};
 
@@ -203,10 +207,11 @@ function Data(app) {
 		follow means they don't accumulate to form drawing at the end
 		over means go over/add to subsequent frames
 		no key command - t y u p j l n available */
-	/* a: explode, shift a: follow */
+	/* a: explode, shift a: follow, ctrl a: explode over, alt a: follow over */
+	/* over states get fucked up with two drawings, need to figure
+		out after adding drawing nums to frames in v2 */
 	this.explode = function(follow, over) {
-		console.log(follow, over);
-		if (self.frames[app.draw.currentFrame] == undefined) self.saveLines();
+		self.saveLines();
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(self.frames[app.draw.currentFrame]);
