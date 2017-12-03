@@ -25,7 +25,7 @@ function Canvas() {
 				console.error("No width value set?");
 		}
 		self.widthInput.value = ""; // remove value after input 
-		this.ctx.miterLimit = 1;
+		self.ctx.miterLimit = 1;
 	}
 	this.setHeight = function(height) {
 		if (Number(height)) {
@@ -37,7 +37,7 @@ function Canvas() {
 				console.error("No height value set?");
 		}
 		self.heightInput.value = ""; // remove value after input 
-		this.ctx.miterLimit = 1;
+		self.ctx.miterLimit = 1;
 	}
 	this.setWidth();
 	this.setHeight();
