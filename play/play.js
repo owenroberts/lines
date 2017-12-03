@@ -90,6 +90,7 @@ function loadAnimation(src, callback) {
 		h = data.h;
 		c.width = w;
 		c.height = h;
+		ctxStrokeColor = undefined;
 		// note setting canvas width resets the color
 		requestAnimFrame(draw);
 		if (callback)
