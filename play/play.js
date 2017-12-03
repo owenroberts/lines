@@ -88,6 +88,8 @@ function loadAnimation(src, callback) {
 		currentFrame = currentFrameCounter = 0;
 		w = data.w;
 		h = data.h;
+		c.width = w;
+		c.height = h;
 		// note setting canvas width resets the color
 		requestAnimFrame(draw);
 		if (callback)
