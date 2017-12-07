@@ -247,7 +247,7 @@ function Data(app) {
 
 	/* q key */
 	this.offsetDrawing = function(offset) {
-		if (!self.frames[app.draw.currentFrame]) self.saveLines();
+		self.saveLines();
 		if (!offset) {
 			const x = Number(prompt("x"));
 			const y = Number(prompt("y"));
