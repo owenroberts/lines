@@ -13,7 +13,8 @@ function Interface(app) {
 			parent.style.flex = "1 25%";
 			this.innerHTML = "v";
 		}
-	}
+	};
+
 	for (let i = 0; i < this.panelToggles.length; i++) {
 		this.panelToggles[i].addEventListener("click", self.togglePanel);
 	}
@@ -58,6 +59,19 @@ function Interface(app) {
 	this.interfaces["alt-a"] = new UI("follow-over", "click", function() {
 		app.data.explode(true, true);
 	});
+
+	/* background */
+	this.panels = {};
+	this.panels["background"] = new Panel("background", this);
+	/* this doesn't really need key command bc have copy/paste anyway */
+	this.imageInput = new UIText("bkg-img", "keyup", app.draw.background.loadImage);
+	this.panels["background"].add(this.imageInput);
+	this.panels["background"].addRow();
+	this.interfaces["b"] = new UI("bkg-toggle", "click", function() {
+		app.draw.background.toggle();
+	});
+	this.panels["background"].add(this.interfaces["b"]);
+
 
 	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
 	this.updateFramesPanel = function() {
@@ -114,7 +128,6 @@ function Interface(app) {
 		else 
 			this.plusFrame.setId("current");
 	};
-
 	/* is this interface or drawing... 
 		i guess things that reference everything can be interface */
 	this.nextFrame = function() {

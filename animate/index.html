@@ -10,7 +10,7 @@
 <body>
 <div id="container">
 	<div id="draw" class="section">
-		<canvas id="canvas" style="background:lightgray;"></canvas>
+		<canvas id="canvas"></canvas>
 	</div>
 	<div id="tools" class="section">
 
@@ -19,14 +19,12 @@
 			<span class="btn" id="open">Open</span>
 			<span class="btn" id="save">Save</span>
 			<span class="btn" id="save-frame">Save frame</span>
-			
 		</div>
 		
-		<div class="panels">
+		<div id="panels">
 			<div id="animatemenu" class="menu-panel">
 				<div class="panel-toggle">v</div>
 				<div class="panel-title">Animation</div> 
-
 				<div class="row">
 					<span class="btn" id="play">Play</span>
 					Frame: <span id="frame">0</span>
@@ -103,7 +101,7 @@
 					L: <input type="range" class="pckr" id="lightness" min="0" max="100" value="0" />
 				</div>
 				<div class="row">
-					HTML: <input type="text" id="html-color" placeholder="#" value="ffffff" />
+					HTML: <input type="text" id="html-color" placeholder="#" value="000000" />
 				</div>
 				<div class="row">
 					<div id="colorways"></div>
@@ -139,9 +137,6 @@
 				</div>
 				<div class="row">
 					Height: <input type="text" id="canvas-height" value="512">
-				</div>
-				<div class="row">
-					Bkg: <input type="text" id="bkg-img" placeholder="url" >
 				</div>
 				<div class="row">
 					X: <input type="range" id="bkg-x" value="0" />

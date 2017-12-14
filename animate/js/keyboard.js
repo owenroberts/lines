@@ -18,8 +18,6 @@ function Keyboard(app) {
 					app.interface.interfaces[k].toggleText();
 				}
 			}
-
-			if (keys[ev.which] == "b") app.draw.background.toggle();
 			if (keys[ev.which] == "c") app.data.copyFrames();
 			if (keys[ev.which] == "d") app.data.deleteFrame();
 			if (keys[ev.which] == "e") app.interface.nextFrame();

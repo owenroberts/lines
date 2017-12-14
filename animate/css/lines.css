@@ -71,12 +71,12 @@ button:focus {
   font-weight: 100; }
 
 /* https://codepen.io/abbeyjfitzgerald/pen/vgjwVN?editors=1100 */
-.panels {
+#panels {
   display: flex;
   flex-wrap: wrap;
   flex-flow: row wrap;
   margin-top: 0.5em; }
-  .panels .menu-panel {
+  #panels .menu-panel {
     /* max-width:150px; */
     flex: 1 25%;
     margin: 0;

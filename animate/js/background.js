@@ -23,9 +23,6 @@ function Background() {
 			}
 		}
 	};
-
-	/* this doesn't really need key command bc have copy/paste anyway */
-	this.imageInput = new UI("bkg-img", "keyup", self.loadImage);
 	
 	this.xRange = new UIRange("bkg-x", "input", function() {
 		self.x = this.value;
