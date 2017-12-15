@@ -96,9 +96,13 @@ button:focus {
   height: 25px; }
   .menu-panel .row {
     margin-top: 1em;
-    display: block; }
+    display: flex; }
     .menu-panel .row:first-child {
       margin-top: 3px; }
+    .menu-panel .row span {
+      vertical-align: top;
+      line-height: 2;
+      padding: 0 0.5em; }
   .menu-panel .btn {
     border: 1px solid gray;
     padding: 0.25em;

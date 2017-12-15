@@ -107,9 +107,14 @@ button:focus { outline: none; }
 
 	.row {
 		margin-top:1em;
-		display:block;
+		display:flex;
 		&:first-child {
 			margin-top: 3px;
+		}
+		span {
+			vertical-align: top;
+    		line-height: 2;
+    		padding: 0 0.5em;
 		}
 	}
 	.btn {

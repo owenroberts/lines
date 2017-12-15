@@ -1,6 +1,10 @@
 function Interface(app) {
 	let self = this;
 
+	this.panels = {};
+	this.interfaces = {}; /* better name for interfaces ?? */
+
+	/* this gets cut */
 	this.panelToggles = document.getElementsByClassName("panel-toggle");
 	this.togglePanel = function() {
 		const parent = this.parentNode;
@@ -19,8 +23,6 @@ function Interface(app) {
 		this.panelToggles[i].addEventListener("click", self.togglePanel);
 	}
 
-	this.interfaces = {};
-
 	/* using key command as key for interfaces object,
 		this seems specific not extensible?? */
 	this.interfaces["s"] = new UI("save", "click", function() {
@@ -35,7 +37,7 @@ function Interface(app) {
 
 	this.title = new UIInput("title");
 
-	this.interfaces["space"] = new UIToggleButton("play", "click", app.draw.toggle, "Play", "Pause");
+	// this.interfaces["space"] = new UIToggleButton("play", "click", app.draw.toggle, "Play", "Pause");
 
 
 	this.framesPanel = new UI("frames");
@@ -59,19 +61,6 @@ function Interface(app) {
 	this.interfaces["alt-a"] = new UI("follow-over", "click", function() {
 		app.data.explode(true, true);
 	});
-
-	/* background */
-	this.panels = {};
-	this.panels["background"] = new Panel("background", this);
-	/* this doesn't really need key command bc have copy/paste anyway */
-	this.imageInput = new UIText("bkg-img", "keyup", app.draw.background.loadImage);
-	this.panels["background"].add(this.imageInput);
-	this.panels["background"].addRow();
-	this.interfaces["b"] = new UI("bkg-toggle", "click", function() {
-		app.draw.background.toggle();
-	});
-	this.panels["background"].add(this.interfaces["b"]);
-
 
 	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
 	this.updateFramesPanel = function() {

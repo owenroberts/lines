@@ -1,13 +1,17 @@
 class UI {
-	constructor(id, event, callback) {
+	constructor(id, event, callback, type, key) {
+		/* this may be useless if all are created ... */
 		this.el = document.getElementById(id);
 		if (!this.el) {
-			this.el = document.createElement("span");
-			this.el.classList.add("btn");
+			if (type) this.el = document.createElement(type);
+			else this.el = document.createElement("div");
 			this.el.id = id;
-			this.el.textContent = id;
 		}
-		/* should this be button specific? */
+		this.listen(event, callback);
+		if (key) Lines.interface.interfaces[key] = this;
+	}
+
+	listen(event, callback) {
 		if (event && callback)
 			this.el.addEventListener(event, callback);
 		if (callback) this.callback = callback;
@@ -27,21 +31,32 @@ function capitalize(string) {
 }
 /* does this extend UI? */
 class Panel {
-	constructor(id, finterace) {
+	constructor(id) {
 		this.el = document.createElement("div");
 		this.el.id = id;
 		this.el.classList.add("menu-panel");
-		const toggle = document.createElement("div");
-		toggle.classList.add("panel-toggle");
-		toggle.textContent = "v";
-		toggle.addEventListener("click", finterace.togglePanel);
+		this.toggleBtn = document.createElement("div");
+		this.toggleBtn.classList.add("panel-toggle");
+		this.toggleBtn.textContent = "v";
+		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
 		const title = document.createElement("div");
 		title.textContent = capitalize(id);
-		this.el.appendChild(toggle);
+		this.el.appendChild(this.toggleBtn);
 		this.el.appendChild(title);
 		document.getElementById("panels").appendChild(this.el);
 		this.rows = [];
 		this.addRow();
+	}
+	toggle() {
+		if (this.el.clientHeight <= 25) {
+			this.el.style.height = "auto";
+			this.el.style.flex = "2 50%";
+			this.toggleBtn.innerHTML = "^";
+		} else {
+			this.el.style.height = 25 + "px";
+			this.el.style.flex = "1 25%";
+			this.toggleBtn.innerHTML = "v";
+		}
 	}
 	addRow() {
 		const row = document.createElement("row");
@@ -51,22 +66,25 @@ class Panel {
 	}
 	add(component) {
 		this.rows[this.rows.length - 1].appendChild(component.el);
+		if (component.label) {
+			component.addLabel();
+		}
 	}
 }
 
-
+class UIButton extends UI {
+	constructor(id, title, event, callback, key) {
+		super(id, event, callback, "span", key);
+		this.el.classList.add("btn");
+		this.el.textContent = title;
+	}
+}
 
 class UIText extends UI {
-	constructor(id, event, callback) {
-		super(id);
-		this.el = document.createElement("input");
+	constructor(id, title, event, callback) {
+		super(id, event, callback, "input");
 		this.el.type = "text";
-		this.el.id = id;
-		this.el.placeholder = id;
-		/* this is dumb ... */
-		if (event && callback)
-			this.el.addEventListener(event, callback);
-		if (callback) this.callback = callback;
+		this.el.placeholder = title;
 	}
 }
 
@@ -77,9 +95,25 @@ class UIDisplay extends UI {
 }
 
 class UIRange extends UI {
+	constructor(id, event, label, callback) {
+		super(id, event, callback, "input");
+		this.el.type = "range";
+		this.label = label;
+	}
+	addLabel() {
+		const label = document.createElement("span");
+		label.textContent = this.label;
+		this.el.parentNode.insertBefore(label, this.el);
+	}
 	setRange(min, max) {
 		this.el.min = min;
 		this.el.max = max;	
+	}
+	setValue(value) {
+		this.el.value = value;
+	}
+	getValue(other) {
+		other = this.el.value;
 	}
 }
 
@@ -90,8 +124,10 @@ class UIInput extends UI {
 }
 
 class UIToggleButton extends UI {
-	constructor(id, event, callback, on, off) {
-		super(id, event, callback);
+	constructor(id, event, callback, key, on, off) {
+		super(id, event, callback, "span", key);
+		this.el.classList.add("btn");
+		this.el.textContent = on;
 		this.isOn = true;
 		this.on = on;
 		this.off = off;
