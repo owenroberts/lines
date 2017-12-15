@@ -86,9 +86,7 @@ function LinesPlayer(src, canvas, callback) {
 			self.ctx.miterLimit = 1;
 			requestAnimFrame(self.draw.bind(self));
 			
-			/* why a callback */
-			if (callback)
-				callback();
+			if (callback) callback(); // callback to do something after drawing loads
 		});
 	}
 
