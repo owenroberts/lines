@@ -25,20 +25,6 @@ function Interface(app) {
 
 	/* using key command as key for interfaces object,
 		this seems specific not extensible?? */
-	this.interfaces["s"] = new UI("save", "click", function() {
-		app.data.saveFramesToFile(false);
-	});
-
-	this.interfaces["shift-s"] = new UI("save-frame", "click", function() {
-		app.data.saveFramesToFile(true);
-	});
-
-	this.interfaces["o"] = new UI("open", "click", app.data.loadFramesFromFile);
-
-	this.title = new UIInput("title");
-
-	// this.interfaces["space"] = new UIToggleButton("play", "click", app.draw.toggle, "Play", "Pause");
-
 
 	this.framesPanel = new UI("frames");
 	this.plusFrame = new UI("current"); /* plus frame is unsaved drawing frame */

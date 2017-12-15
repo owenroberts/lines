@@ -166,4 +166,11 @@ function Draw(app) {
 	this.start = function() {
 		window.requestAnimFrame(self.draw);
 	}
+
+
+	/* interfaces */
+	const panel = new Panel("draw");
+	Lines.interface.panels["draw"] = panel;
+
+	panel.add( new UIToggleButton("play", "click", self.toggle, "space", "Play", "Pause") );
 }

@@ -1,5 +1,5 @@
 class UI {
-	constructor(id, event, callback, type, key) {
+	constructor(id, event, callback, key, type) {
 		/* this may be useless if all are created ... */
 		this.el = document.getElementById(id);
 		if (!this.el) {
@@ -23,6 +23,14 @@ class UI {
 
 	setId(id) {
 		this.el.id = id;
+	}
+
+	setValue(value) {
+		this.el.value = value;
+	}
+
+	getValue() {
+		return this.el.value;
 	}
 }
 
@@ -74,7 +82,7 @@ class Panel {
 
 class UIButton extends UI {
 	constructor(id, title, event, callback, key) {
-		super(id, event, callback, "span", key);
+		super(id, event, callback, key, "span");
 		this.el.classList.add("btn");
 		this.el.textContent = title;
 	}
@@ -82,7 +90,7 @@ class UIButton extends UI {
 
 class UIText extends UI {
 	constructor(id, title, event, callback) {
-		super(id, event, callback, "input");
+		super(id, event, callback, null, "input");
 		this.el.type = "text";
 		this.el.placeholder = title;
 	}
@@ -109,23 +117,15 @@ class UIRange extends UI {
 		this.el.min = min;
 		this.el.max = max;	
 	}
-	setValue(value) {
-		this.el.value = value;
-	}
-	getValue(other) {
-		other = this.el.value;
-	}
 }
 
 class UIInput extends UI {
-	setValue(value) {
-		this.el.value = value;
-	}
+	
 }
 
 class UIToggleButton extends UI {
 	constructor(id, event, callback, key, on, off) {
-		super(id, event, callback, "span", key);
+		super(id, event, callback, key, "span");
 		this.el.classList.add("btn");
 		this.el.textContent = on;
 		this.isOn = true;

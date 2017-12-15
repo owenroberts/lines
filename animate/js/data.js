@@ -365,11 +365,11 @@ function Data(app) {
 			else json.d.push( 'x' ); // this shouldn't really be necessary if this is written right
 		}
 		const jsonfile = JSON.stringify(json);
-		let filename = app.interface.title.value;
+		let filename = self.title.getValue();
 
 		if (!filename) {
 			filename = prompt("Name this file:");
-			app.interface.title.value =  filename;
+			self.title.setValue(filename);
 		}
 		if (filename) {
 			const blob = new Blob([jsonfile], {type:"application/x-download;charset=utf-8"});
@@ -382,7 +382,7 @@ function Data(app) {
 	this.loadFramesFromFile = function() {
 		const filename = prompt("Open file:");
 		if (filename) {
-			app.interface.title.setValue(filename.split("/").pop());
+			self.title.setValue(filename.split("/").pop());
 			$.getJSON(filename + ".json", function(data) {
 				self.frames =  data.f;
 				self.drawings = data.d;
@@ -398,6 +398,22 @@ function Data(app) {
 			});
 		}
 	};
+
+
+	/* interfaces */
+	const save = new UI("save", "click", function() {
+		self.saveFramesToFile(false);
+	}, "s");
+
+	const saveFrame = new UI("save-frame",  "click", function() {
+		self.saveFramesToFile(true);
+	}, "shift-s");
+
+	const open = new UI("open", "click", self.loadFramesFromFile, "o");
+	this.title = new UI("title");
+
+	//const panel = new Panel("data");
+	//Lines.interface.panels["data"] = panel;
 
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
