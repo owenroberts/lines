@@ -172,5 +172,12 @@ function Draw(app) {
 	const panel = new Panel("draw");
 	Lines.interface.panels["draw"] = panel;
 
-	panel.add( new UIToggleButton("play", "click", self.toggle, "space", "Play", "Pause") );
+	panel.add( new UIToggleButton({
+		id:"play", 
+		event: "click",  /* maybe add in sub class? */
+		callback: self.toggle, 
+		key: "space", 
+		on: "Play", 
+		off: "Pause"
+	}) );
 }

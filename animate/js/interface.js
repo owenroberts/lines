@@ -4,55 +4,44 @@ function Interface(app) {
 	this.panels = {};
 	this.interfaces = {}; /* better name for interfaces ?? */
 
-	/* this gets cut */
-	this.panelToggles = document.getElementsByClassName("panel-toggle");
-	this.togglePanel = function() {
-		const parent = this.parentNode;
-		if (parent.clientHeight <= 25) {
-			parent.style.height = "auto";
-			parent.style.flex = "2 50%";
-			this.innerHTML = "^";
-		} else {
-			parent.style.height = 25 + "px";
-			parent.style.flex = "1 25%";
-			this.innerHTML = "v";
-		}
-	};
-
-	for (let i = 0; i < this.panelToggles.length; i++) {
-		this.panelToggles[i].addEventListener("click", self.togglePanel);
-	}
-
-	/* using key command as key for interfaces object,
-		this seems specific not extensible?? */
-
-	this.framesPanel = new UI("frames");
-	this.plusFrame = new UI("current"); /* plus frame is unsaved drawing frame */
-	this.frameNumDisplay = new UIDisplay("frame");
-	this.frameElems = new UIList("frame");
+	this.framesPanel = new UI({id:"frames"});
+	this.plusFrame = new UI({id:"current"}); /* plus frame is unsaved drawing frame */
+	this.frameNumDisplay = new UIDisplay({id:"frame"});
+	this.frameElems = new UIList({id:"frame"});
 
 	this.interfaces["a"] = new UI("explode", "click", function() {
 		app.data.explode(false, false);
 	});
 
-	this.interfaces["shift-a"] = new UI("follow", "click", function() {
-		app.data.explode(true, false);
+	this.interfaces["shift-a"] = new UI({
+		id:"follow", 
+		event: "click", 
+		callback: function() {
+			app.data.explode(true, false);
+		}
 	});
 
-	/* this maybe just doesn't work?? */
-	this.interfaces["ctrl-a"] = new UI("explode-over", "click", function() {
-		app.data.explode(false, true);
+	this.interfaces["ctrl-a"] = new UI({
+		id:"explode-over",
+		event:"click", 
+		callback: function() {
+			app.data.explode(false, true);
+		}
 	});
 
-	this.interfaces["alt-a"] = new UI("follow-over", "click", function() {
-		app.data.explode(true, true);
+	this.interfaces["alt-a"] = new UI({
+		id:"follow-over", 
+		event: "click", 
+		callback: function() {
+			app.data.explode(true, true);
+		}
 	});
 
 	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
 	this.updateFramesPanel = function() {
 		const numFrames = self.frameElems.getLength();
 		/* this creates frames that don't already exist
-		loop from the num of already made html frames to frames.length */
+			loop from the num of already made html frames to frames.length */
 		if (app.data.frames.length > numFrames) {
 			for (let i = numFrames; i < app.data.frames.length; i++) {
 				const frmElem = document.createElement("div");
@@ -82,6 +71,7 @@ function Interface(app) {
 				};
 				/* this is probably only happening here ... */
 				this.framesPanel.el.insertBefore(frmElem, self.plusFrame.el);
+				/* not updating length of frame elems, shouldnt that reference still work?  */
 			}
 		} else {
 			/* if there are same number of less then frames than frame divs */

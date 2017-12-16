@@ -37,25 +37,53 @@ function Background() {
 	Lines.interface.panels["background"] = panel;
 
 	/* this doesn't really need key command bc have copy/paste anyway */
-	panel.add( new UIText("bkg-img", "Add image URL hit enter", "keyup", this.loadImage) );
-	panel.addRow();
-	panel.add( new UIToggleButton("bkg-toggle", "click", this.toggle, "b", "Hide", "Show") );
+	panel.add( new UIText({
+		id:"bkg-img", 
+		title: "Add image URL hit enter",
+		event: "keyup",
+		callback: this.loadImage
+	}) );
 	
 	panel.addRow();
-	this.xRange = new UIRange("bkg-x", "input", "X", function() {
-		self.x = this.value;
+	panel.add( new UIToggleButton({
+		id:"bkg-toggle",
+		event: "click", 
+		callback: this.toggle, 
+		key: "b", 
+		on: "Hide", 
+		off: "Show" 
+	}) );
+	
+	panel.addRow();
+	this.xRange = new UIRange({
+		id: "bkg-x", 
+		event: "input", 
+		label: "X", 
+		callback: function() {
+			self.x = this.value;
+		}
 	});
 	panel.add(this.xRange);
 	
 	panel.addRow();
-	this.yRange = new UIRange("bkg-y", "input", "Y", function() {
-		self.y = this.value;
+	this.yRange = new UIRange({
+		id:"bkg-y", 
+		event:"input", 
+		label: "Y", 
+		callback: function() {
+			self.y = this.value;
+		}
 	});
 	panel.add(this.yRange);
 	
 	panel.addRow();
-	this.sizeRange = new UIRange("bkg-size", "input", "Size", function() {
-		self.size = this.value;
+	this.sizeRange = new UIRange({
+		id: "bkg-size", 
+		event: "input", 
+		label: "Size", 
+		callback: function() {
+			self.size = this.value;
+		}
 	});
 	panel.add(this.sizeRange);
 	

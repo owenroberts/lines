@@ -1,14 +1,14 @@
 class UI {
-	constructor(id, event, callback, key, type) {
+	constructor(params) {
 		/* this may be useless if all are created ... */
-		this.el = document.getElementById(id);
+		this.el = document.getElementById(params.id);
 		if (!this.el) {
-			if (type) this.el = document.createElement(type);
+			if (params.type) this.el = document.createElement(params.type);
 			else this.el = document.createElement("div");
-			this.el.id = id;
+			this.el.id = params.id;
 		}
-		this.listen(event, callback);
-		if (key) Lines.interface.interfaces[key] = this;
+		this.listen(params.event, params.callback);
+		if (params.key) Lines.interface.interfaces[params.key] = this;
 	}
 
 	listen(event, callback) {
@@ -81,16 +81,18 @@ class Panel {
 }
 
 class UIButton extends UI {
-	constructor(id, title, event, callback, key) {
-		super(id, event, callback, key, "span");
+	constructor(params) {
+		params.type = "span";
+		super(params);
 		this.el.classList.add("btn");
 		this.el.textContent = title;
 	}
 }
 
 class UIText extends UI {
-	constructor(id, title, event, callback) {
-		super(id, event, callback, null, "input");
+	constructor(params) {
+		params.type = "input";
+		super(params);
 		this.el.type = "text";
 		this.el.placeholder = title;
 	}
@@ -103,10 +105,11 @@ class UIDisplay extends UI {
 }
 
 class UIRange extends UI {
-	constructor(id, event, label, callback) {
-		super(id, event, callback, "input");
+	constructor(params) {
+		params.type = "input";
+		super(params);
 		this.el.type = "range";
-		this.label = label;
+		this.label = params.label;
 	}
 	addLabel() {
 		const label = document.createElement("span");
@@ -124,13 +127,13 @@ class UIInput extends UI {
 }
 
 class UIToggleButton extends UI {
-	constructor(id, event, callback, key, on, off) {
-		super(id, event, callback, key, "span");
+	constructor(params) {
+		params.type = "span";
+		super(params);
 		this.el.classList.add("btn");
-		this.el.textContent = on;
+		this.el.textContent = this.on = params.on;
 		this.isOn = true;
-		this.on = on;
-		this.off = off;
+		this.off = params.off;
 		this.el.addEventListener(event, this.toggleText.bind(this));
 	}
 	toggleText() {
