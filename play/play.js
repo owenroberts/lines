@@ -1,6 +1,6 @@
 /* play module */
 
-function LinesPlayer(src, canvas, callback) {
+function LinesPlayer(canvas, src, callback) {
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
@@ -79,7 +79,7 @@ function LinesPlayer(src, canvas, callback) {
 			self.drawings = data.d;
 			self.fps = data.fps;
 			self.intervalRatio = self.lineInterval / (1000 / self.fps);
-			self.currentFrame = this.currentFrameCounter = 0;
+			self.currentFrame = self.currentFrameCounter = 0;
 			self.width = self.canvas.width = data.w;
 			self.height = self.canvas.height = data.h;
 			self.ctxStrokeColor = undefined; // note setting canvas width resets the color
@@ -90,11 +90,11 @@ function LinesPlayer(src, canvas, callback) {
 		});
 	}
 
-	this.loadAnimation(src, callback);
+	if (src) this.loadAnimation(src, callback);
 }
 
 function loadAnimation(src, canvas, callback) {
-	const player = new LinesPlayer(src, canvas, callback);
+	const player = new LinesPlayer(canvas, src, callback);
 }
 
 /* should have something load all canvas elems w data-src??? */
