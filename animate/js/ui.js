@@ -32,6 +32,12 @@ class UI {
 	getValue() {
 		return this.el.value;
 	}
+
+	addLabel() {
+		const label = document.createElement("span");
+		label.textContent = this.label;
+		this.el.parentNode.insertBefore(label, this.el);
+	}
 }
 
 function capitalize(string) {
@@ -54,6 +60,7 @@ class Panel {
 		document.getElementById("panels").appendChild(this.el);
 		this.rows = [];
 		this.addRow();
+		this.toggle();
 	}
 	toggle() {
 		if (this.el.clientHeight <= 25) {
@@ -94,11 +101,17 @@ class UIText extends UI {
 		params.type = "input";
 		super(params);
 		this.el.type = "text";
-		this.el.placeholder = title;
+		this.el.placeholder = params.title;
 	}
 }
 
 class UIDisplay extends UI {
+	constructor(params) {
+		params.type = "span";
+		super(params);
+		this.el.textContent = params.initial;
+		this.label = params.label;
+	}
 	set(text) {
 		this.el.textContent = text;
 	}
@@ -111,19 +124,25 @@ class UIRange extends UI {
 		this.el.type = "range";
 		this.label = params.label;
 	}
-	addLabel() {
-		const label = document.createElement("span");
-		label.textContent = this.label;
-		this.el.parentNode.insertBefore(label, this.el);
-	}
+	
 	setRange(min, max) {
 		this.el.min = min;
 		this.el.max = max;	
 	}
 }
 
-class UIInput extends UI {
-	
+class UISelect extends UI {
+	constructor(params) {
+		params.type = "select";
+		super(params);
+		for (let i = 0; i < params.options.length; i++) {
+			const opt = document.createElement("option");
+			opt.value = opt.textContent = params.options[i];
+
+			this.el.appendChild(opt);
+		}
+		this.label = params.label;
+	}
 }
 
 class UIToggleButton extends UI {
@@ -134,7 +153,7 @@ class UIToggleButton extends UI {
 		this.el.textContent = this.on = params.on;
 		this.isOn = true;
 		this.off = params.off;
-		this.el.addEventListener(event, this.toggleText.bind(this));
+		this.el.addEventListener(params.event, this.toggleText.bind(this));
 	}
 	toggleText() {
 		if (this.isOn) this.el.textContent = this.off;
@@ -143,10 +162,10 @@ class UIToggleButton extends UI {
 	}
 }
 
-/* for classes, not useful right now */
+/* now sure how necessary this is? basically just for framesPanel */
 class UIList {
-	constructor(clas) {
-		this.els = document.getElementsByClassName(clas);
+	constructor(params) {
+		this.els = document.getElementsByClassName(params.class);
 	}
 	getLength() {
 		return this.els.length;
@@ -154,7 +173,6 @@ class UIList {
 	setId(id, index) {
 		if (index != undefined) {
 			this.els[index].setAttribute('id', id);
-			/* this is saving a "current" key in the array object for some reason... */
 		}
 	}
 	remove(index) {

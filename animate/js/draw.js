@@ -52,14 +52,6 @@ function Draw(app) {
 		this.blur();
 	});
 
-	this.onionSkinElem = document.getElementById("onion-skin");
-	this.onionSkinNum = Number(this.onionSkinElem.value); // number of onion skin frames
-	this.onionSkinElem.addEventListener("change", function() {
-	//	console.log(self.onionSkinNum, )
-		self.onionSkinNum = Number(this.value);
-		this.blur();
-	});
-
 	/* just set drawing back to 0 but might do other things */
 	this.reset = function() {
 		self.currentFrame = self.currentFrameCounter = 0;
@@ -153,7 +145,6 @@ function Draw(app) {
 				app.canvas.capture();
 				self.captureFrames--;
 			}
-			
 		}
 		window.requestAnimFrame(self.draw);
 	}
@@ -167,7 +158,6 @@ function Draw(app) {
 		window.requestAnimFrame(self.draw);
 	}
 
-
 	/* interfaces */
 	const panel = new Panel("draw");
 	Lines.interface.panels["draw"] = panel;
@@ -180,4 +170,30 @@ function Draw(app) {
 		on: "Play", 
 		off: "Pause"
 	}) );
+
+	this.frameNumDisplay = new UIDisplay({id:"frame", label:"Frame: ", initial:"0"});
+	panel.add(this.frameNumDisplay); 
+
+
+	panel.addRow();
+
+	panel.add( new UISelect({
+		id: "onion-skin",
+		options: [0,1,2,3,4,5,6,7,8,9,10],
+		event: "change",
+		label: "Onion Skin",
+		callback: function() {
+			/* should UI this be bound to callback? */
+			self.onionSkinNum = Number(this.value);
+			this.blur();
+		}
+	}));
+
+	this.onionSkinElem = document.getElementById("onion-skin");
+	this.onionSkinNum = Number(this.onionSkinElem.value); // number of onion skin frames
+	this.onionSkinElem.addEventListener("change", function() {
+	//	console.log(self.onionSkinNum, )
+		self.onionSkinNum = Number(this.value);
+		this.blur();
+	});
 }

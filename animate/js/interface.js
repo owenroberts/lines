@@ -6,8 +6,8 @@ function Interface(app) {
 
 	this.framesPanel = new UI({id:"frames"});
 	this.plusFrame = new UI({id:"current"}); /* plus frame is unsaved drawing frame */
-	this.frameNumDisplay = new UIDisplay({id:"frame"});
-	this.frameElems = new UIList({id:"frame"});
+	
+	this.frameElems = new UIList({class:"frame"});
 
 	this.interfaces["a"] = new UI("explode", "click", function() {
 		app.data.explode(false, false);
@@ -86,12 +86,12 @@ function Interface(app) {
 	};
 
 	this.updateFrameNum = function() {
-		this.frameNumDisplay.set(app.draw.currentFrame);
+		app.draw.frameNumDisplay.set(app.draw.currentFrame);
 		document.getElementById("current").removeAttribute("id"); /* fine for now... */
 		if (self.frameElems.els[app.draw.currentFrame])
 			self.frameElems.setId("current", app.draw.currentFrame);
 		else 
-			this.plusFrame.setId("current");
+			self.plusFrame.setId("current");
 	};
 	/* is this interface or drawing... 
 		i guess things that reference everything can be interface */

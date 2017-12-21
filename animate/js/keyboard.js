@@ -15,7 +15,7 @@ function Keyboard(app) {
 			if (app.interface.interfaces[k]) {
 				app.interface.interfaces[k].callback();
 				if (app.interface.interfaces[k].toggleText) {
-					app.interface.interfaces[k].toggleText();
+					//app.interface.interfaces[k].toggleText();
 				}
 			}
 			if (keys[ev.which] == "c") app.data.copyFrames();
