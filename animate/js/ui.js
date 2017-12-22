@@ -9,6 +9,8 @@ class UI {
 		}
 		this.listen(params.event, params.callback);
 		if (params.key) Lines.interface.interfaces[params.key] = this;
+		if (params.label) this.label = params.label;
+		if (params.value != undefined) this.el.value = params.value;
 	}
 
 	listen(event, callback) {
@@ -26,6 +28,7 @@ class UI {
 	}
 
 	setValue(value) {
+		console.log(value);
 		this.el.value = value;
 	}
 
@@ -40,12 +43,9 @@ class UI {
 	}
 }
 
-function capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
 /* does this extend UI? */
 class Panel {
-	constructor(id) {
+	constructor(id, label) {
 		this.el = document.createElement("div");
 		this.el.id = id;
 		this.el.classList.add("menu-panel");
@@ -54,7 +54,7 @@ class Panel {
 		this.toggleBtn.textContent = "v";
 		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
 		const title = document.createElement("div");
-		title.textContent = capitalize(id);
+		title.textContent = label;
 		this.el.appendChild(this.toggleBtn);
 		this.el.appendChild(title);
 		document.getElementById("panels").appendChild(this.el);
@@ -74,7 +74,7 @@ class Panel {
 		}
 	}
 	addRow() {
-		const row = document.createElement("row");
+		const row = document.createElement("div");
 		row.classList.add("row");
 		this.el.appendChild(row);
 		this.rows.push(row);
@@ -92,7 +92,7 @@ class UIButton extends UI {
 		params.type = "span";
 		super(params);
 		this.el.classList.add("btn");
-		this.el.textContent = title;
+		this.el.textContent = params.title;
 	}
 }
 
@@ -110,10 +110,23 @@ class UIDisplay extends UI {
 		params.type = "span";
 		super(params);
 		this.el.textContent = params.initial;
-		this.label = params.label;
 	}
 	set(text) {
 		this.el.textContent = text;
+	}
+}
+
+class UIColor extends UI {
+	constructor(params) {
+		super(params);
+		this.el.style.backgroundColor = "#" + params.color;
+		this.el.classList.add("ui-color");
+	}
+	setColor(color) {
+		this.el.style.backgroundColor = "#" + color;
+	}
+	setBkg(bkg) {
+		this.el.style.backgroundImage = bkg;
 	}
 }
 
@@ -122,7 +135,7 @@ class UIRange extends UI {
 		params.type = "input";
 		super(params);
 		this.el.type = "range";
-		this.label = params.label;
+		this.setRange(params.min, params.max);
 	}
 	
 	setRange(min, max) {
@@ -138,10 +151,9 @@ class UISelect extends UI {
 		for (let i = 0; i < params.options.length; i++) {
 			const opt = document.createElement("option");
 			opt.value = opt.textContent = params.options[i];
-
+			if (opt.value == params.selected) opt.selected = "selected";
 			this.el.appendChild(opt);
 		}
-		this.label = params.label;
 	}
 }
 
@@ -179,4 +191,3 @@ class UIList {
 		this.els[index].remove();
 	}
 }
-

@@ -22,10 +22,9 @@ function Draw(app) {
 	this.currentFrameCounter = 0; // for when line fps is different from anim fps, counts with floats
 	this.isPlaying = false;
 
-	this.fpsElem = document.getElementById("fps");
-	this.fps = Number(this.fpsElem.value); // 10 is default but maybe should be 15, how many frames play per second, will skip frames if higher than lps
-	this.lpsElem = document.getElementById("lps"); // lines per second, how often is draws
-	this.lps = Number(this.lpsElem.value); // 10 is default but maybe should be 15
+	this.fps = 10; // not coming from html because there is no HTML, where to set?
+	this.lps = 10; // same, 10 is default but maybe should be 15
+	
 	this.interval = 1000/this.lps;  // fps per one second, the line interval
 	this.timer = performance.now(); 
 	this.intervalRatio = this.interval / (1000/this.fps);  // this starts same as lineInterval, written out to show math
@@ -33,24 +32,9 @@ function Draw(app) {
 	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
 
 	this.setFps = function(fps) {
-		self.fps = self.fpsElem.value = fps;
+		self.fps  = fps;
 		self.intervalRatio = self.interval / (1000/fps);
-
 	}
-
-	this.fpsElem.addEventListener("change", function() {
-		self.fps = Number(this.value);
-		self.intervalRatio = self.interval / (1000/self.fps);
-		this.blur();
-	});
-
-	/* don't use this for < v1 drawings... */
-	this.lpsElem.addEventListener("change", function() {
-		self.lps = Number(this.value);
-		self.interval = 1000/self.lps;
-		self.intervalRatio = self.interval / (1000/self.fps);
-		this.blur();
-	});
 
 	/* just set drawing back to 0 but might do other things */
 	this.reset = function() {
@@ -159,7 +143,7 @@ function Draw(app) {
 	}
 
 	/* interfaces */
-	const panel = new Panel("draw");
+	const panel = new Panel("draw", "Draw");
 	Lines.interface.panels["draw"] = panel;
 
 	panel.add( new UIToggleButton({
@@ -176,10 +160,10 @@ function Draw(app) {
 
 
 	panel.addRow();
-
 	panel.add( new UISelect({
 		id: "onion-skin",
 		options: [0,1,2,3,4,5,6,7,8,9,10],
+		selected: 0,
 		event: "change",
 		label: "Onion Skin",
 		callback: function() {
@@ -187,13 +171,36 @@ function Draw(app) {
 			self.onionSkinNum = Number(this.value);
 			this.blur();
 		}
+		/* key press and prompt? */
 	}));
 
-	this.onionSkinElem = document.getElementById("onion-skin");
-	this.onionSkinNum = Number(this.onionSkinElem.value); // number of onion skin frames
-	this.onionSkinElem.addEventListener("change", function() {
-	//	console.log(self.onionSkinNum, )
-		self.onionSkinNum = Number(this.value);
-		this.blur();
-	});
+	panel.addRow();
+	panel.add( new UISelect({
+		id: "fps",
+		event: "change",
+		label: "FPS",
+		options: [1,2,5,10,12,15,24,30,60],
+		selected: 10,
+		callback: function() {
+			self.fps = Number(this.value);
+			self.intervalRatio = self.interval / (1000/self.fps);
+			this.blur();
+		}
+	}));
+
+	panel.addRow();
+	/* don't use this for < v1 drawings... */
+	panel.add( new UISelect({
+		id: "lps",
+		event: "change",
+		label: "Lines/Second",
+		options: [1,2,5,10,12,15,24,30,60],
+		selected: 10,
+		callback: function() {
+			self.lps = Number(this.value);
+			self.interval = 1000/self.lps;
+			self.intervalRatio = self.interval / (1000/self.fps);
+			this.blur();
+		}
+	}) );
 }

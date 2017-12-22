@@ -375,7 +375,6 @@ function Data(app) {
 			const blob = new Blob([jsonfile], {type:"application/x-download;charset=utf-8"});
 			saveAs(blob, filename+".json");
 		}
-
 	};
 
 	/* o key */
@@ -399,21 +398,76 @@ function Data(app) {
 		}
 	};
 
-
 	/* interfaces */
-	const save = new UI("save", "click", function() {
-		self.saveFramesToFile(false);
-	}, "s");
+	const save = new UI({
+		id:"save", 
+		event: "click",  // do types all have same events ?
+		callback: function() {
+			self.saveFramesToFile(false);
+		}, 
+		key: "s"
+	});
 
-	const saveFrame = new UI("save-frame",  "click", function() {
-		self.saveFramesToFile(true);
-	}, "shift-s");
+	const saveFrame = new UI({
+		id:"save-frame",  
+		event: "click", 
+		callback: function() {
+			self.saveFramesToFile(true);
+		}, 
+		key: "shift-s"
+	});
 
-	const open = new UI("open", "click", self.loadFramesFromFile, "o");
-	this.title = new UI("title");
+	const open = new UI({
+		id: "open",
+		event: "click",
+		callback: self.loadFramesFromFile,
+		key: "o"
+	})
+	this.title = new UI({id:"title"});
 
-	//const panel = new Panel("data");
-	//Lines.interface.panels["data"] = panel;
+	const panel = new Panel("data", "Data");
+	Lines.interface.panels["data"] = panel;
+
+	panel.add( new UIButton({
+		id:"explode", 
+		event:"click",
+		title: "Explode",
+		callback: function() {
+			self.explode(false, false);
+		},
+		key: "a"
+	}) );
+	
+	panel.add( new UIButton({
+		id:"explode-over", 
+		event: "click",
+		title: "Explode Over",
+		callback: function() {
+			self.explode(true, false);
+		},
+		key: "shift-a"
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		id:"follow",
+		event:"click",
+		title: "Follow",
+		callback: function() {
+			self.explode(false, true);
+		},
+		key: "ctrl-a"
+	}) );
+
+	panel.add( new UIButton({
+		id:"follow-over", 
+		event: "click", 
+		title: "Follow Over",
+		callback: function() {
+			self.explode(true, true);
+		},
+		key: "alt-a"
+	}) );
 
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {

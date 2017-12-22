@@ -6,36 +6,9 @@ function Interface(app) {
 
 	this.framesPanel = new UI({id:"frames"});
 	this.plusFrame = new UI({id:"current"}); /* plus frame is unsaved drawing frame */
-	
 	this.frameElems = new UIList({class:"frame"});
 
-	this.interfaces["a"] = new UI("explode", "click", function() {
-		app.data.explode(false, false);
-	});
-
-	this.interfaces["shift-a"] = new UI({
-		id:"follow", 
-		event: "click", 
-		callback: function() {
-			app.data.explode(true, false);
-		}
-	});
-
-	this.interfaces["ctrl-a"] = new UI({
-		id:"explode-over",
-		event:"click", 
-		callback: function() {
-			app.data.explode(false, true);
-		}
-	});
-
-	this.interfaces["alt-a"] = new UI({
-		id:"follow-over", 
-		event: "click", 
-		callback: function() {
-			app.data.explode(true, true);
-		}
-	});
+	
 
 	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
 	this.updateFramesPanel = function() {

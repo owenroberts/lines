@@ -33,7 +33,7 @@ function Background() {
 	}
 
 	/* interface  */
-	const panel = new Panel("background");
+	const panel = new Panel("background", "Background");
 	Lines.interface.panels["background"] = panel;
 
 	/* this doesn't really need key command bc have copy/paste anyway */
