@@ -13,7 +13,7 @@ dr.c is color of all lines in drawing
 this.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
 */
 
-function Draw(app) {
+function Draw() {
 	const self = this;
 
 	/* can this be a module?  timeline? */
@@ -39,59 +39,59 @@ function Draw(app) {
 	this.reset = function() {
 		self.currentFrame = self.currentFrameCounter = 0;
 		self.isPlaying = false;
-		app.canvas.ctx.miterLimit = 1;
-		app.interface.updateFramesPanel();
+		Lines.canvas.ctx.miterLimit = 1;
+		Lines.interface.updateFramesPanel();
 	}
 
 	this.toggle = function() {
-		if (!self.isPlaying) app.data.saveLines();
+		if (!self.isPlaying) Lines.data.saveLines();
 		self.isPlaying = !self.isPlaying;
-		app.interface.updateFrameNum();
+		Lines.interface.updateFrameNum();
 	}
 
 	this.drawLines = function(lns, index, end, segNum, jiggle, color, onion) {
-		app.canvas.ctx.beginPath();
+		Lines.canvas.ctx.beginPath();
 		for (let h = index; h < end; h++) {
 			const line = lns[h];
 			if (line && line.e) {
 				let v = new Vector(line.e.x, line.e.y);
 				v.subtract(line.s);
 				v.divide(segNum);
-				app.canvas.ctx.moveTo( line.s.x + getRandom(-jiggle, jiggle), line.s.y + getRandom(-jiggle, jiggle) );
+				Lines.canvas.ctx.moveTo( line.s.x + getRandom(-jiggle, jiggle), line.s.y + getRandom(-jiggle, jiggle) );
 				for (var i = 0; i < segNum; i++) {
 					const p = new Vector(line.s.x + v.x * i, line.s.y + v.y * i); /* midpoint of segment */
-					app.canvas.ctx.lineTo( p.x + v.x + getRandom(-jiggle, jiggle), p.y + v.y + getRandom(-jiggle, jiggle) );
+					Lines.canvas.ctx.lineTo( p.x + v.x + getRandom(-jiggle, jiggle), p.y + v.y + getRandom(-jiggle, jiggle) );
 				}
-				if (onion) app.canvas.ctx.strokeStyle = color;
+				if (onion) Lines.canvas.ctx.strokeStyle = color;
 				else {
 					/* this doesnt work w onion, try to figure it out */
-					if (app.canvas.ctx.strokeStyle != "#" + color) {
-						app.canvas.setStrokeColor(color);
+					if (Lines.canvas.ctx.strokeStyle != "#" + color) {
+						Lines.canvas.setStrokeColor(color);
 					}
 				}
 			}
 		}	
-		app.canvas.ctx.stroke();			
+		Lines.canvas.ctx.stroke();			
 	};
 
 	this.draw = function() {
 		if (performance.now() > self.interval + self.timer) {
 			self.timer = performance.now();
-			if (self.isPlaying && self.currentFrameCounter < app.data.frames.length) {
+			if (self.isPlaying && self.currentFrameCounter < Lines.data.frames.length) {
 				self.currentFrameCounter += self.intervalRatio;
 				self.currentFrame = Math.floor(self.currentFrameCounter);
 			}
-			if (self.isPlaying && self.currentFrameCounter >= app.data.frames.length) {
+			if (self.isPlaying && self.currentFrameCounter >= Lines.data.frames.length) {
 				self.currentFrame = self.currentFrameCounter = 0;
 			}
 
 			/* update the anim frame number */
 			if (self.isPlaying) 
-				app.interface.updateFrameNum();
+				Lines.interface.updateFrameNum();
 
-			app.canvas.ctx.clearRect(0, 0, app.canvas.width, app.canvas.height);
+			Lines.canvas.ctx.clearRect(0, 0, Lines.canvas.width, Lines.canvas.height);
 			if (self.background.img.src && self.background.show)
-				app.canvas.ctx.drawImage(self.background.img, self.background.x, self.background.y, self.background.size, self.background.size/self.background.ratio);
+				Lines.canvas.ctx.drawImage(self.background.img, self.background.x, self.background.y, self.background.size, self.background.size/self.background.ratio);
 
 			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0) {
@@ -100,9 +100,9 @@ function Draw(app) {
 					if (frameNumber >= 0) {
 						const onionColor = 1.1 - (o / self.onionSkinNum); // number for color
 						const color = "rgba(105,150,255," + onionColor + ")";
-						for (var i = 0; i < app.data.frames[frameNumber].length; i++) {
-							const fr = app.data.frames[frameNumber][i];
-							const dr = app.data.drawings[fr.d];
+						for (var i = 0; i < Lines.data.frames[frameNumber].length; i++) {
+							const fr = Lines.data.frames[frameNumber][i];
+							const dr = Lines.data.drawings[fr.d];
 							self.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, color, true);
 						}
 					}
@@ -110,22 +110,22 @@ function Draw(app) {
 			}
 
 			/* draws saved frames */
-			if (app.data.frames[self.currentFrame]) {
-				for (let i = 0; i < app.data.frames[self.currentFrame].length; i++) {
-					const fr = app.data.frames[self.currentFrame][i];
-					const dr = app.data.drawings[fr.d];
+			if (Lines.data.frames[self.currentFrame]) {
+				for (let i = 0; i < Lines.data.frames[self.currentFrame].length; i++) {
+					const fr = Lines.data.frames[self.currentFrame][i];
+					const dr = Lines.data.drawings[fr.d];
 					self.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
 				}
 			}
 
 			/* draws current lines */
-			if (app.data.lines.length > 0) {
-				self.drawLines(app.data.lines, 0, app.data.lines.length, app.mouse.segNumRange, app.mouse.jiggleRange, app.color.color);
+			if (Lines.data.lines.length > 0) {
+				self.drawLines(Lines.data.lines, 0, Lines.data.lines.length, Lines.mouse.segNumRange, Lines.mouse.jiggleRange, Lines.color.color);
 			}
 
 			/* write something to capture frames here */
 			if (self.captureFrames > 0) {
-				app.canvas.capture();
+				Lines.canvas.capture();
 				self.captureFrames--;
 			}
 		}

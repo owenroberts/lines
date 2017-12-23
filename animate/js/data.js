@@ -1,4 +1,4 @@
-function Data(app) {
+function Data() {
 	const self = this;
 
 	this.frames = [];
@@ -12,11 +12,11 @@ function Data(app) {
 	this.saveLines = function() {
 		if (self.lines.length > 0) {
 			
-			if (self.frames[app.draw.currentFrame] == undefined) 
-				self.frames[app.draw.currentFrame] = [];
+			if (self.frames[Lines.draw.currentFrame] == undefined) 
+				self.frames[Lines.draw.currentFrame] = [];
 
 			/* add drawing ref to frames data */
-			self.frames[app.draw.currentFrame].push({
+			self.frames[Lines.draw.currentFrame].push({
 				d:self.drawings.length, 
 				i:0, 
 				e:self.lines.length
@@ -25,14 +25,14 @@ function Data(app) {
 			/* add current lines to drawing data */
 			self.drawings.push({
 				l: self.lines,
-				c: app.color.color,
-				n: app.mouse.segNumRange,
-				r: app.mouse.jiggleRange
+				c: Lines.color.color,
+				n: Lines.mouse.segNumRange,
+				r: Lines.mouse.jiggleRange
 			});
 
 			/* add current color to color choices 
 			 is color.current better than color.color? */
-			app.color.addColorBtn(app.color.color);
+			Lines.color.addColorBtn(Lines.color.color);
 
 			/* lines are saved, stop drawing? */
 			self.lines = [];
@@ -52,21 +52,21 @@ function Data(app) {
 			selecting frames to copy vs paste should be different states */
 		if (self.framesToCopy.length > 0) {
 			for (let i = 0; i < self.framesToCopy.length; i++) {
-				if (self.frames[app.draw.currentFrame] == undefined) self.frames[app.draw.currentFrame] = [];
+				if (self.frames[Lines.draw.currentFrame] == undefined) self.frames[Lines.draw.currentFrame] = [];
 				for (let h = 0; h < self.frames[self.framesToCopy[i]].length; h++) {
-					self.frames[app.draw.currentFrame].push(self.frames[self.framesToCopy[i]][h]);
+					self.frames[Lines.draw.currentFrame].push(self.frames[self.framesToCopy[i]][h]);
 				}
 				self.saveLines();
-				app.interface.nextFrame();
+				Lines.interface.nextFrame();
 			}
 		} else {
 			/* copy current frame */
 			if (self.lines.length > 0) self.saveLines();
-			if (self.frames[app.draw.currentFrame]) {
+			if (self.frames[Lines.draw.currentFrame]) {
 				self.framesCopy = [];
 				/* clone all of the drawings in current frame */
-				for (let i = 0; i < self.frames[app.draw.currentFrame].length; i++) {
-					self.framesCopy.push(_.cloneDeep(self.frames[app.draw.currentFrame][i]));
+				for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
+					self.framesCopy.push(_.cloneDeep(self.frames[Lines.draw.currentFrame][i]));
 				}
 			}
 		}
@@ -75,15 +75,15 @@ function Data(app) {
 	/* g key - duplicate drawing to change offset, color, etc. */
 	this.duplicate = function() {
 		if (self.lines.length > 0) self.saveLines();
-		if (self.frames[app.draw.currentFrame]) {
+		if (self.frames[Lines.draw.currentFrame]) {
 			self.framesCopy = [];
 			const drawingIndexOffset = self.drawings.length - 1;
-			for (let i = 0; i < self.frames[app.draw.currentFrame].length; i++) {
-				self.drawings.push( _.cloneDeep(self.drawings[self.frames[app.draw.currentFrame][i].d]) );
+			for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
+				self.drawings.push( _.cloneDeep(self.drawings[self.frames[Lines.draw.currentFrame][i].d]) );
 				self.framesCopy.push({
 					d: self.drawings.length - 1,
-					i: self.frames[app.draw.currentFrame][i].i,
-					e: self.frames[app.draw.currentFrame][i].e
+					i: self.frames[Lines.draw.currentFrame][i].i,
+					e: self.frames[Lines.draw.currentFrame][i].e
 				});
 			}
 		}
@@ -109,16 +109,16 @@ function Data(app) {
 			}
 			self.clearFramesToCopy();
 		} else {
-			if (self.frames[app.draw.currentFrame] == undefined) {
+			if (self.frames[Lines.draw.currentFrame] == undefined) {
 				if (self.lines.length > 0) self.saveLines();
-				else self.frames[app.draw.currentFrame] = [];
+				else self.frames[Lines.draw.currentFrame] = [];
 				for (let i = 0; i < self.framesCopy.length; i++) {
-					self.frames[app.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
+					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			} else {
 				/* took out addToFrame here, not really necessary? */
 				for (var i = 0; i <  self.framesCopy.length; i++) {
-					self.frames[app.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
+					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			}
 		}
@@ -126,33 +126,33 @@ function Data(app) {
 
 	/* x key */
 	this.clearFrame = function() {
-		if (self.frames[app.draw.currentFrame]) {
-			for (let i = 0; i < self.frames[app.draw.currentFrame].length; i++) {
+		if (self.frames[Lines.draw.currentFrame]) {
+			for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
 				/* can't splice drawings until we figure out indexing 
 					actually don't want to do this in case drawing is on other frame
 					delete drawings in file i/o already happening i think */
-				// self.drawings[self.frames[app.draw.currentFrame][i].d] = "x"; // fuck this stupid x
+				// self.drawings[self.frames[Lines.draw.currentFrame][i].d] = "x"; // fuck this stupid x
 			}
 		}
 		
-		if (self.frames[app.draw.currentFrame])
-			self.frames[app.draw.currentFrame] = undefined;
+		if (self.frames[Lines.draw.currentFrame])
+			self.frames[Lines.draw.currentFrame] = undefined;
 		self.lines = [];
 	};
 
 	/* d key */
 	this.deleteFrame = function() {
 		/* also here, should drawings (not used elsewhere) be deleted? */
-		const ftemp = app.draw.currentFrame;
-		if (app.draw.currentFrame > 0) 
-			app.interface.prevFrame();
+		const ftemp = Lines.draw.currentFrame;
+		if (Lines.draw.currentFrame > 0) 
+			Lines.interface.prevFrame();
 		if (self.frames[ftemp] && self.frames.length > 0) 
 			self.frames.splice(ftemp, 1);
 		else if (self.frame[ftemp]) 
 			self.clearFrame();
 		else 
 			self.lines = [];
-		app.interface.updateFramesPanel();
+		Lines.interface.updateFramesPanel();
 	};
 
 	/* z key */
@@ -163,9 +163,9 @@ function Data(app) {
 
 	/* shift z (does this make more sense as x... ) */
 	this.cutLastDrawing = function() {
-		if (self.frames[app.draw.currentFrame]) {
+		if (self.frames[Lines.draw.currentFrame]) {
 			self.saveLines();
-			self.frames[app.draw.currentFrame].pop(); // pop last drawing
+			self.frames[Lines.draw.currentFrame].pop(); // pop last drawing
 		}
 	};
 
@@ -185,8 +185,8 @@ function Data(app) {
 	/* i key */
 	this.insertFrame = function() {
 		self.saveLines();
-		self.frames.insert(app.draw.currentFrame, []);
-		app.interface.updateFramesPanel();
+		self.frames.insert(Lines.draw.currentFrame, []);
+		Lines.interface.updateFramesPanel();
 	};
 
 	/* m key - should work with one copy, can imagine issues */
@@ -197,7 +197,7 @@ function Data(app) {
 		if (Number(n)) {
 			for (let i = 0; i < n; i++) {
 				self.copyFrames();
-				app.interface.nextFrame();
+				Lines.interface.nextFrame();
 				self.pasteFrames();
 			}
 		}
@@ -213,31 +213,31 @@ function Data(app) {
 		self.saveLines();
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
-			const tempFrames = _.cloneDeep(self.frames[app.draw.currentFrame]);
-			self.frames.splice(app.draw.currentFrame, 1);
+			const tempFrames = _.cloneDeep(self.frames[Lines.draw.currentFrame]);
+			self.frames.splice(Lines.draw.currentFrame, 1);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = self.drawings[tempFrames[h].d];
 				if (over) {
 					for (let i = 0; i < tempLines.l.length - 1; i += segmentsPerFrame) {
-						if (!self.frames[app.draw.currentFrame]) self.frames[app.draw.currentFrame] = [];
+						if (!self.frames[Lines.draw.currentFrame]) self.frames[Lines.draw.currentFrame] = [];
 						else self.saveLines();
-						self.frames[app.draw.currentFrame].push({
+						self.frames[Lines.draw.currentFrame].push({
 							d: tempFrames[h].d,
 							i: follow ? i : 0,
 							e: i + segmentsPerFrame
 						});
-						app.draw.currentFrame++;
+						Lines.draw.currentFrame++;
 					}
 				} else {
 					for (let i = tempLines.l.length - 1 - segmentsPerFrame; i >= 0; i -= segmentsPerFrame) {
 						self.insertFrame();
-						if (!self.frames[app.draw.currentFrame]) self.frames[app.draw.currentFrame] = [];
+						if (!self.frames[Lines.draw.currentFrame]) self.frames[Lines.draw.currentFrame] = [];
 						if (!follow) {
 							for (let j = 0; j < h; j++) {
-								self.frames[app.draw.currentFrame].push(tempFrames[j]);
+								self.frames[Lines.draw.currentFrame].push(tempFrames[j]);
 							}
 						}
-						self.frames[app.draw.currentFrame].push({
+						self.frames[Lines.draw.currentFrame].push({
 							d: tempFrames[h].d,
 							i: follow ? i : 0,
 							e: i + segmentsPerFrame
@@ -245,7 +245,7 @@ function Data(app) {
 					}
 				}
 			}
-			app.interface.updateFramesPanel();
+			Lines.interface.updateFramesPanel();
 		}
 	};
 
@@ -258,8 +258,8 @@ function Data(app) {
 			offset = new Vector(x,y);
 		}
 		if (offset) {
-			for (let i = 0; i < self.frames[app.draw.currentFrame].length; i++) {
-				const d = self.drawings[self.frames[app.draw.currentFrame][i].d];
+			for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
+				const d = self.drawings[self.frames[Lines.draw.currentFrame][i].d];
 				if (d != "x"){
 					for (let j = 0; j < d.l.length; j++) {
 						if (d.l[j].e && d.l[j].s) {
@@ -306,8 +306,8 @@ function Data(app) {
 			}
 		}
 
-		app.canvas.setWidth((maxx - minx) + tolerance * 2);
-		app.canvas.setHeight((maxy - miny) + tolerance * 2);
+		Lines.canvas.setWidth((maxx - minx) + tolerance * 2);
+		Lines.canvas.setHeight((maxy - miny) + tolerance * 2);
 
 		for (let i = 0; i < self.drawings.length; i++) {
 			if (self.drawings[i] != "x"){
@@ -331,19 +331,19 @@ function Data(app) {
 		const end = frames.length * ( 1000 / Number(fps) );
 		if (end > 1000) Math.ceil( json.end = end + 1000 );
 		else json.end = 1000;
-		json.w = app.canvas.width;
-		json.h = app.canvas.height;
-		json.fps = Number( app.draw.fps );
+		json.w = Lines.canvas.width;
+		json.h = Lines.canvas.height;
+		json.fps = Number( Lines.draw.fps );
 		json.f = [];
 		json.d = [];
 		let drawingsIndexes = [];
 
 		/* save current frame */  
-		if (single && self.frames[app.draw.currentFrame]) {
-			json.f.push( self.frames[app.draw.currentFrame] );
-			for (let j = 0; j < self.frames[app.draw.currentFrame].length; j++) {
-				if ( drawingsIndexes.indexOf(self.frames[app.draw.currentFrame][j].d) == -1 ) 
-					drawingsIndexes.push( self.frames[app.draw.currentFrame][j].d );
+		if (single && self.frames[Lines.draw.currentFrame]) {
+			json.f.push( self.frames[Lines.draw.currentFrame] );
+			for (let j = 0; j < self.frames[Lines.draw.currentFrame].length; j++) {
+				if ( drawingsIndexes.indexOf(self.frames[Lines.draw.currentFrame][j].d) == -1 ) 
+					drawingsIndexes.push( self.frames[Lines.draw.currentFrame][j].d );
 			}
 		} else {
 			/* save fall frames */
@@ -383,12 +383,12 @@ function Data(app) {
 				self.frames =  data.f;
 				self.drawings = data.d;
 				for (let i = 0; i < self.drawings.length; i++) {
-					if (self.drawings[i] != 'x') app.color.addColorBtn( self.drawings[i].c );
+					if (self.drawings[i] != 'x') Lines.color.addColorBtn( self.drawings[i].c );
 				}
-				app.canvas.setWidth(data.w);
-				app.canvas.setHeight(data.h);
-				app.draw.setFps(data.fps);
-				app.draw.reset();
+				Lines.canvas.setWidth(data.w);
+				Lines.canvas.setHeight(data.h);
+				Lines.draw.setFps(data.fps);
+				Lines.draw.reset();
 			}).error(function(error) {
 				console.error("Loading error:", error.statusText, error);
 			});

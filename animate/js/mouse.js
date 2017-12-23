@@ -1,15 +1,15 @@
 /* rename pointer events (PointerEvent is taken) */
-function Mouse(app) {
+function Mouse() {
 	const self = this;
 	this.moves = 0; // number of events recorded/lines added, maybe just lines.length?
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 
 	this.outSideCanvas = function(ev) {
 		//console.log(ev.toElement)
-		if (ev.toElement != app.canvas.canvas) { 
-			if (self.isDrawing) app.data.saveLines();
+		if (ev.toElement != Lines.canvas.canvas) { 
+			if (self.isDrawing) Lines.data.saveLines();
 			self.isDrawing = false;
-			if (self.moves % 2 == 1) app.data.lines.splice(-1,1);
+			if (self.moves % 2 == 1) Lines.data.lines.splice(-1,1);
 			self.moves = 0;
 
 			/* pointer context click on frames for copy frames */
@@ -20,7 +20,7 @@ function Mouse(app) {
 				if (elem.classList.contains("frame")) {
 					if (!elem.classList.contains("copy")){
 			 			elem.classList.add("copy")
-			 			app.data.framesToCopy.push( Number(frameIndex) );
+			 			Lines.data.framesToCopy.push( Number(frameIndex) );
 			 		}
 				}
 			}
@@ -39,9 +39,9 @@ function Mouse(app) {
 
 	this.addLine = function(x, y) {
 		/* end of last line */
-		if (self.moves > 0) app.data.lines[app.data.lines.length - 1].e = new Vector(x, y);
+		if (self.moves > 0) Lines.data.lines[Lines.data.lines.length - 1].e = new Vector(x, y);
 		/*start of new line */
-		app.data.lines.push({
+		Lines.data.lines.push({
 			s:  new Vector(x, y)
 		});
 		self.moves++;
@@ -56,20 +56,20 @@ function Mouse(app) {
 
 	this.drawEnd = function(ev) {
 		if (ev.which == 1) self.isDrawing = false;
-		if (self.moves % 2 == 1) app.data.lines.splice(-1, 1);
-		if (app.data.lines.length > 0 && !app.data.lines[app.data.lines.length - 1].e) 
-			app.data.lines.pop(); // remove lines with s and no e
+		if (self.moves % 2 == 1) Lines.data.lines.splice(-1, 1);
+		if (Lines.data.lines.length > 0 && !Lines.data.lines[Lines.data.lines.length - 1].e) 
+			Lines.data.lines.pop(); // remove lines with s and no e
 		self.moves = 0;
 	}
 
 	if (window.PointerEvent) {
-		app.canvas.canvas.addEventListener('pointermove', self.drawUpdate);
-		app.canvas.canvas.addEventListener('pointerdown', self.drawStart);
-		app.canvas.canvas.addEventListener('pointerup', self.drawEnd);
+		Lines.canvas.canvas.addEventListener('pointermove', self.drawUpdate);
+		Lines.canvas.canvas.addEventListener('pointerdown', self.drawStart);
+		Lines.canvas.canvas.addEventListener('pointerup', self.drawEnd);
 	} else {	
-		app.canvas.canvas.addEventListener('mousemove', self.drawUpdate);
-		app.canvas.canvas.addEventListener('mousedown', self.drawStart);
-		app.canvas.canvas.addEventListener('mouseup', self.drawEnd);
+		Lines.canvas.canvas.addEventListener('mousemove', self.drawUpdate);
+		Lines.canvas.canvas.addEventListener('mousedown', self.drawStart);
+		Lines.canvas.canvas.addEventListener('mouseup', self.drawEnd);
 	}
 	document.addEventListener('mousemove', self.outSideCanvas);
 
