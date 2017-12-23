@@ -1,4 +1,4 @@
-function Interface(app) {
+function Interface() {
 	let self = this;
 
 	this.panels = {};
