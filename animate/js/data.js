@@ -10,21 +10,21 @@ function Data(app) {
 	/* r key - save lines and add new lines 
 	 also used a lot for other things */
 	this.saveLines = function() {
-		if (this.lines.length > 0) {
+		if (self.lines.length > 0) {
 			
-			if (this.frames[app.draw.currentFrame] == undefined) 
-				this.frames[app.draw.currentFrame] = [];
+			if (self.frames[app.draw.currentFrame] == undefined) 
+				self.frames[app.draw.currentFrame] = [];
 
 			/* add drawing ref to frames data */
-			this.frames[app.draw.currentFrame].push({
-				d:this.drawings.length, 
+			self.frames[app.draw.currentFrame].push({
+				d:self.drawings.length, 
 				i:0, 
-				e:this.lines.length
+				e:self.lines.length
 			});
 			
 			/* add current lines to drawing data */
-			this.drawings.push({
-				l: this.lines,
+			self.drawings.push({
+				l: self.lines,
 				c: app.color.color,
 				n: app.mouse.segNumRange,
 				r: app.mouse.jiggleRange
@@ -35,7 +35,7 @@ function Data(app) {
 			app.color.addColorBtn(app.color.color);
 
 			/* lines are saved, stop drawing? */
-			this.lines = [];
+			self.lines = [];
 
 			/* ignoring save states 
 			or maybe figuring it out.... 
@@ -205,8 +205,7 @@ function Data(app) {
 
 	/* animate a drawing segment by segment (or multiple) 
 		follow means they don't accumulate to form drawing at the end
-		over means go over/add to subsequent frames
-		no key command - t y u p j l n available */
+		over means go over/add to subsequent frames */
 	/* a: explode, shift a: follow, ctrl a: explode over, alt a: follow over */
 	/* over states get fucked up with two drawings, need to figure
 		out after adding drawing nums to frames in v2 */
@@ -339,8 +338,6 @@ function Data(app) {
 		json.d = [];
 		let drawingsIndexes = [];
 
-		/* don't save stuff with nothing in it .... */
-
 		/* save current frame */  
 		if (single && self.frames[app.draw.currentFrame]) {
 			json.f.push( self.frames[app.draw.currentFrame] );
@@ -399,38 +396,37 @@ function Data(app) {
 	};
 
 	/* interfaces */
-	const save = new UI({
-		id:"save", 
-		event: "click",  // do types all have same events ?
+	const save = new UIButton({
+		id:"save",
+		title: "Save",
 		callback: function() {
 			self.saveFramesToFile(false);
 		}, 
 		key: "s"
 	});
 
-	const saveFrame = new UI({
+	const saveFrame = new UIButton({
 		id:"save-frame",  
-		event: "click", 
+		title: "Save Frame",
 		callback: function() {
 			self.saveFramesToFile(true);
 		}, 
 		key: "shift-s"
 	});
 
-	const open = new UI({
+	const open = new UIButton({
 		id: "open",
-		event: "click",
+		title: "Open",
 		callback: self.loadFramesFromFile,
 		key: "o"
-	})
+	});
+	
 	this.title = new UI({id:"title"});
 
 	const panel = new Panel("data", "Data");
 	Lines.interface.panels["data"] = panel;
 
 	panel.add( new UIButton({
-		id:"explode", 
-		event:"click",
 		title: "Explode",
 		callback: function() {
 			self.explode(false, false);
@@ -439,8 +435,6 @@ function Data(app) {
 	}) );
 	
 	panel.add( new UIButton({
-		id:"explode-over", 
-		event: "click",
 		title: "Explode Over",
 		callback: function() {
 			self.explode(true, false);
@@ -450,8 +444,6 @@ function Data(app) {
 
 	panel.addRow();
 	panel.add( new UIButton({
-		id:"follow",
-		event:"click",
 		title: "Follow",
 		callback: function() {
 			self.explode(false, true);
@@ -460,14 +452,109 @@ function Data(app) {
 	}) );
 
 	panel.add( new UIButton({
-		id:"follow-over", 
-		event: "click", 
 		title: "Follow Over",
 		callback: function() {
 			self.explode(true, true);
 		},
 		key: "alt-a"
 	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Copy",
+		callback: self.copyFrames,
+		key: "c"
+	}) );
+
+	panel.add( new UIButton({
+		title: "Delete Frame",
+		callback: self.deleteFrame,
+		key: "d"
+	}));
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Fit Canvas to Drawing",
+		callback: self.fitCanvasToDrawing,
+		key: "f"
+	}) );
+
+	panel.addRow();
+	/* duplicate with be unnecessary when frames/drawings are fixed */
+	panel.add( new UIButton({
+		title: "Duplicate",
+		callback: self.duplicate,
+		key: "g"
+	}) );
+
+	panel.add( new UIButton({
+		title: "Insert",
+		callback: self.insertFrame,
+		key: "i"
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Multi Copies",
+		callback: self.addMultipleCopies,
+		key: "m"
+	}) );
+
+	panel.add( new UIButton({
+		title: "Offset",
+		callback: self.offsetDrawing,
+		key: "q"
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Save Lines",
+		key:"r",
+		callback: self.saveLines
+	}))
+
+
+	panel.add( new UIButton({
+		title: "Clear Frame",
+		key:"x",
+		callback: self.clearFrame
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Paste Frames",
+		key: "v",
+		callback: self.pasteFrames
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Clear Frames to Copy",
+		key: "ctrl-v",
+		callback: self.clearFramesToCopy
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Cut Last Drawing",
+		key: "shift-z",
+		callback: self.cutLastDrawing
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Undo",
+		key: "ctrl-z",
+		callback: self.undo
+	}) );
+
+	panel.add( new UIButton({
+		title: "Cut Line",
+		key: "z",
+		callback: self.cutLastSegment
+	}))
+
+
 
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {

@@ -114,17 +114,24 @@ button:focus { outline: none; }
 		span {
 			vertical-align: top;
     		line-height: 2;
-    		padding: 0 0.5em;
+    		padding-right: 0.5em;
     		flex: 1;
-			flex: wrap;
+    		white-space: nowrap;
+			&.btn {
+				/* padding:0.25em; */
+			}
+		}
+		input {
+			width: 100%;
 		}
 		.btn {
 			flex: none;
+			padding: 0 0.25em;
 		}
 	}
 	.btn {
 		border: 1px solid gray;
-		padding:0.25em;
+		padding: 0 0.25em;
 		margin: .25em 0;
 		border-radius:3px;
 		cursor:pointer;
@@ -183,10 +190,6 @@ button:focus { outline: none; }
 	width: auto;
 	min-width:100%;
 	position: relative;
-	ul { list-style:none; padding: 0;}
-	li { 
-		vertical-align:middle; 
-		display:inline-block;
-		margin:0.25em;
-	}
+	column-count:3;
+
 }

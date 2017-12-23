@@ -8,8 +8,6 @@ function Interface(app) {
 	this.plusFrame = new UI({id:"current"}); /* plus frame is unsaved drawing frame */
 	this.frameElems = new UIList({class:"frame"});
 
-	
-
 	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
 	this.updateFramesPanel = function() {
 		const numFrames = self.frameElems.getLength();
@@ -83,4 +81,29 @@ function Interface(app) {
 			app.draw.currentFrame--;
 		self.updateFramesPanel();
 	};
+
+	/* keyboard events and handlers */
+	this.keyDown = function(ev) {
+		//console.log(ev.which);
+		// if (ev.which == 9) ev.preventDefault(); // tab
+		if (document.activeElement.nodeName != "INPUT") {
+
+			var k = keys[ev.which];
+			if (ev.shiftKey) k = "shift-" + k;
+			if (ev.ctrlKey) k = "ctrl-" + k;
+			if (ev.altKey) k = "alt-" + k;
+
+			if (app.interface.interfaces[k]) {
+				app.interface.interfaces[k].callback();
+				if (app.interface.interfaces[k].toggleText) {
+					//app.interface.interfaces[k].toggleText();
+				}
+			}
+		}
+	}
+	document.addEventListener("keydown", self.keyDown, false);
+
+	const panel = new Panel("keys", "Key commands");
+	this.panels["keys"] = panel;
+
 }

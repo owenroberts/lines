@@ -6,7 +6,6 @@ function Color() {
 	this.colors = []; // all the colors used
 
 	this.updateColor = function() {
-		console.log(self.hue.getValue())
 		const h = self.hue.getValue();
 		const s = self.sat.getValue();
 		const l = self.light.getValue();
@@ -64,7 +63,6 @@ function Color() {
 	panel.addRow();
 	this.hue = new UIRange({
 		id: "hue",
-		event: "input",
 		label: "Hue",
 		min: 0,
 		max: 360,
@@ -76,7 +74,6 @@ function Color() {
 	panel.addRow();
 	this.sat = new UIRange({
 		id: "saturation",
-		event: "input",
 		label: "Sat",
 		min: 0,
 		max: 100,
@@ -87,8 +84,7 @@ function Color() {
 
 	panel.addRow();
 	this.light = new UIRange({
-		id: "lighness",
-		event: "input",
+		id: "lightness",
 		label: "Light",
 		min: 0,
 		max: 100,
@@ -100,7 +96,6 @@ function Color() {
 	panel.addRow();
 	this.htmlColor = new UIText({
 		id:"html-color",
-		event: "keyup",
 		label: "HTML",
 		title: "HTML",
 		value: this.color,

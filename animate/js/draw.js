@@ -15,7 +15,6 @@ this.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
 
 function Draw(app) {
 	const self = this;
-	this.background = new Background();
 
 	/* can this be a module?  timeline? */
 	this.currentFrame = 0;
@@ -143,12 +142,11 @@ function Draw(app) {
 	}
 
 	/* interfaces */
-	const panel = new Panel("draw", "Draw");
+	const panel = new Panel("drawmenu", "Draw");
 	Lines.interface.panels["draw"] = panel;
 
 	panel.add( new UIToggleButton({
 		id:"play", 
-		event: "click",  /* maybe add in sub class? */
 		callback: self.toggle, 
 		key: "space", 
 		on: "Play", 
@@ -158,13 +156,26 @@ function Draw(app) {
 	this.frameNumDisplay = new UIDisplay({id:"frame", label:"Frame: ", initial:"0"});
 	panel.add(this.frameNumDisplay); 
 
+	panel.addRow();
+	panel.add( new UIButton({
+		id: "prev-frame",
+		title: "Prev Frame",
+		callback: Lines.interface.prevFrame,
+		key: "w"
+	}) );
+	panel.add( new UIButton({
+		id: "next-frame",
+		title: "Next Frame",
+		callback: Lines.interface.nextFrame,
+		key: "e"
+	}) );
+
 
 	panel.addRow();
 	panel.add( new UISelect({
 		id: "onion-skin",
 		options: [0,1,2,3,4,5,6,7,8,9,10],
 		selected: 0,
-		event: "change",
 		label: "Onion Skin",
 		callback: function() {
 			/* should UI this be bound to callback? */
@@ -177,7 +188,6 @@ function Draw(app) {
 	panel.addRow();
 	panel.add( new UISelect({
 		id: "fps",
-		event: "change",
 		label: "FPS",
 		options: [1,2,5,10,12,15,24,30,60],
 		selected: 10,
@@ -192,7 +202,6 @@ function Draw(app) {
 	/* don't use this for < v1 drawings... */
 	panel.add( new UISelect({
 		id: "lps",
-		event: "change",
 		label: "Lines/Second",
 		options: [1,2,5,10,12,15,24,30,60],
 		selected: 10,
@@ -203,4 +212,22 @@ function Draw(app) {
 			this.blur();
 		}
 	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		id: "capture",
+		title: "Capture Frame",
+		callback: Lines.canvas.capture,
+		key: "k"
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		id: "capture-multi",
+		title: "Capture Multiple Frames",
+		callback: self.captureMultiple,
+		key: "shift-k"
+	}) );
+
+	this.background = new Background();
 }
