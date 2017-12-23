@@ -56,6 +56,10 @@ class UI {
 		label.textContent = this.label;
 		this.el.parentNode.insertBefore(label, this.el);
 	}
+
+	append(elem) {
+		this.el.appendChild(elem);
+	}
 }
 
 /* does this extend UI? */

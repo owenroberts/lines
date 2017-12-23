@@ -7,7 +7,6 @@ function Background() {
 	this.y = 0;
 	this.size = 0;
 	this.ratio = 1;
-
 	/* this is the only sprite-like thing in here
 	game engine version might need sprite module... */
 
@@ -38,14 +37,12 @@ function Background() {
 
 	/* this doesn't really need key command bc have copy/paste anyway */
 	panel.add( new UIText({
-		id:"bkg-img", 
 		title: "Add image URL hit enter",
 		callback: this.loadImage
 	}) );
 	
 	panel.addRow();
 	panel.add( new UIToggleButton({
-		id:"bkg-toggle",
 		callback: this.toggle, 
 		key: "b", 
 		on: "Hide", 
@@ -54,7 +51,6 @@ function Background() {
 	
 	panel.addRow();
 	this.xRange = new UIRange({
-		id: "bkg-x", 
 		label: "X", 
 		callback: function() {
 			self.x = this.value;
@@ -64,7 +60,6 @@ function Background() {
 	
 	panel.addRow();
 	this.yRange = new UIRange({
-		id:"bkg-y", 
 		label: "Y", 
 		callback: function() {
 			self.y = this.value;
@@ -74,7 +69,6 @@ function Background() {
 	
 	panel.addRow();
 	this.sizeRange = new UIRange({
-		id: "bkg-size", 
 		label: "Size", 
 		callback: function() {
 			self.size = this.value;

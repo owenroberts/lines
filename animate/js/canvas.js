@@ -1,13 +1,21 @@
-function Canvas() {
+function Canvas(width, height, color) {
 	const self = this;
 
-	this.width = 512; // invoke canvas with width & height?
-	this.height = 512;
+	this.width = width; // invoke canvas with width & height?
+	this.height = width;
 	this.canvas = document.getElementById("canvas");
 	
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 	this.ctx.strokeStyle = "000000"; // should be whatever color is?
+
+	this.color = new Color("canvas-color", "Canvas Color", function(color) {
+		self.canvas.style.backgroundColor = "#" + color;
+	});
+	if (color) {
+		self.color.color = color;
+		self.canvas.style.backgroundColor = "#" + color;
+	}
 
 	this.setStrokeColor = function(color) {
 		this.ctx.strokeStyle = "#" + color;
