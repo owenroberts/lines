@@ -48,7 +48,7 @@ function Mouse() {
 	};
 
 	this.drawStart = function(ev) {
-		if (ev.which == 1) {
+		if (ev.which == 1 && !Lines.draw.isPlaying) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
 		}
