@@ -135,6 +135,15 @@ function Draw() {
 	this.captureMultiple = function() {
 		self.captureFrames = prompt("How many frames?");
 	}
+
+	/* captures current frame first ... */
+	this.captureCycle = function() {
+		Lines.data.saveLines();
+		/* set animation to last frame because it updates frames before draw */
+		self.currentFrame = self.currentFrameCounter =  Lines.data.frames.length; 
+		self.isPlaying = true;
+		self.captureFrames = Lines.data.frames.length;
+	}
 	
 	/* starts drawing, is this necessary ? */
 	this.start = function() {
@@ -227,6 +236,14 @@ function Draw() {
 		title: "Capture Multiple Frames",
 		callback: self.captureMultiple,
 		key: "shift-k"
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		id: "capture-cycle",
+		title: "Capture Cycle",
+		callback: self.captureCycle,
+		key: "ctrl-k"
 	}) );
 
 	this.background = new Background();
