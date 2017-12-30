@@ -7,5 +7,6 @@ window.addEventListener("load", function() {
 	Lines.data = new Data();
 	Lines.color = new Color("color", "Line Color"); // set Lines.color.color to hex for different line color
 	Lines.mouse = new Mouse();
+	Lines.fio = new Files_IO();
 	Lines.draw.start();
 });
