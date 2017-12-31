@@ -13,22 +13,20 @@ button:focus { outline: none; }
 	width: 600px;
 	margin:2em auto;
 }
+
 #container {
 	min-width:720px;
 	display:flex;
 	flex-wrap: wrap;
-	/* grid-auto-flow: column;
-	grid-gap: 1em; */
 	margin:1em;
 }
+
 #draw {
-	/* margin:1em; */
 	flex: 0;
 	padding-right:1em;
 }
 
 #tools {
-	/* padding-top:1em; */
 	flex: 1;
 }
 
@@ -85,7 +83,6 @@ button:focus { outline: none; }
 	margin-top:0.5em;
 
 	.menu-panel {
-		/* max-width:150px; */
 		flex: 1 25%;
 		margin:0;
 		max-width: 180px;
@@ -95,16 +92,12 @@ button:focus { outline: none; }
 
 .menu-panel {
 	margin-right:0.5em;
-	/* margin-top:0.5em; */
 	border-top:1px solid lightgray;
-	/* border-left:1px solid lightgray; */
 	border-right:1px solid lightgray;
 	padding:0.5em;
 	overflow:hidden;
-	/* box-shadow: 2px 2px 1px lightgray; */
 	position:relative;
 	height:25px;
-
 	.row {
 		margin-top:1em;
 		display:flex;
@@ -117,9 +110,6 @@ button:focus { outline: none; }
     		padding-right: 0.5em;
     		flex: 1;
     		white-space: nowrap;
-			&.btn {
-				/* padding:0.25em; */
-			}
 		}
 		input {
 			width: 100%;
@@ -191,5 +181,4 @@ button:focus { outline: none; }
 	min-width:100%;
 	position: relative;
 	column-count:3;
-
 }

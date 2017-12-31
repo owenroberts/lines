@@ -1,11 +1,10 @@
 /* rename pointer events (PointerEvent is taken) */
 function Mouse() {
 	const self = this;
-	this.moves = 0; // number of events recorded/lines added, maybe just lines.length?
+	this.moves = 0; // number of events recorded
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 
 	this.outSideCanvas = function(ev) {
-		//console.log(ev.toElement)
 		if (ev.toElement != Lines.canvas.canvas) { 
 			if (self.isDrawing) Lines.data.saveLines();
 			self.isDrawing = false;
@@ -30,7 +29,6 @@ function Mouse() {
 	this.drawUpdate = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
-			/* does it need to stop? */
 			if (self.isDrawing) {
 				self.addLine(ev.offsetX, ev.offsetY);
 			}
@@ -39,10 +37,11 @@ function Mouse() {
 
 	this.addLine = function(x, y) {
 		/* end of last line */
-		if (self.moves > 0) Lines.data.lines[Lines.data.lines.length - 1].e = new Vector(x, y);
-		/*start of new line */
+		if (self.moves > 0) 
+			Lines.data.lines[Lines.data.lines.length - 1].e = new Cool.Vector(x, y);
+		/* start of new line */
 		Lines.data.lines.push({
-			s:  new Vector(x, y)
+			s:  new Cool.Vector(x, y)
 		});
 		self.moves++;
 	};
@@ -78,46 +77,68 @@ function Mouse() {
 	Lines.interface.panels["mouse"] = panel;
 
 	this.segNumRange = 2;
-	panel.add( new UIRange({
-		id: "num",
+	this.segNumElem = new UIRange({
 		label: "Segments",
 		value: this.segNumRange,
 		display: "num-range",
 		min: 1,
 		max: 20,
-		callback: function() {
-			self.segNumRange = Number(this.value);
-		}
-	}) );
+		callback: function(ev) {
+			/* this is not DRY */
+			if (ev.type == "input") {
+				self.segNumRange = Number(this.value);
+			} else if (ev.type == "keydown") {
+				const n = prompt("Segment num?");
+				self.segNumRange = Number(n);
+			}
+			self.segNumElem.setValue(self.segNumRange);
+		},
+		key: "h"
+	});
+	panel.add(this.segNumElem);
 
 	panel.addRow();
 	this.jiggleRange = 1;
-	panel.add( new UIRange({
-		id: "jiggle",
-		display: "jiggle-range",
+	this.jiggleElem = new UIRange({
 		label: "Jiggle",
 		value: this.jiggleRange,
 		min: 0,
 		max: 10,
-		callback: function() {
-			self.jiggleRange = Number(this.value);
-		}
-	}) );
+		display: "jiggle-range",
+		callback: function(ev) {
+			if (ev.type == "input") {
+				self.jiggleRange = Number(this.value);
+			} else if (ev.type == "keydown") {
+				const n = prompt("Jiggle num?");
+				self.jiggleRange = Number(n);
+			}
+			self.jiggleElem.setValue(self.jiggleRange);
+		},
+		key: "j"
+	});
+	panel.add(this.jiggleElem);
 
 	
 	// how often the mousemove records, default 30ms
 	this.mouseTimer = performance.now();  //  independent of draw timer 
 	this.mouseInterval = 30;
 	panel.addRow();
-	panel.add( new UIRange({
-		id: "mouse-timer",
-		display: "mouse-range",
+	this.mouseElem = new UIRange({
 		label: "Mouse Time",
 		value: 30,
 		min: 0,
 		max: 100,
-		callback: function() {
-			self.mouseInterval = Number(this.value);
-		}
-	}) );
+		display: "mouse-range",
+		callback: function(ev) {
+			if (ev.type == "input") {
+				self.mouseInterval = Number(this.value);
+			} else if (ev.type == "keydown") {
+				const n = prompt("Mouse move?");
+				self.mouseInterval = Number(n);
+			}
+			self.mouseElem.setValue(self.mouseInterval);
+		},
+		key: "u"
+	});
+	panel.add(this.mouseElem);
 }

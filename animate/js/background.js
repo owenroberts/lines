@@ -7,8 +7,6 @@ function Background() {
 	this.y = 0;
 	this.size = 0;
 	this.ratio = 1;
-	/* this is the only sprite-like thing in here
-	game engine version might need sprite module... */
 
 	this.loadImage = function(ev) {
 		if (ev.which == 13) {
@@ -75,5 +73,4 @@ function Background() {
 		}
 	});
 	panel.add(this.sizeRange);
-	
 }

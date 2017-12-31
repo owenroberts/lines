@@ -7,7 +7,7 @@ function Canvas(width, height, color) {
 	
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
-	this.ctx.strokeStyle = "000000"; // should be whatever color is?
+	this.ctx.strokeStyle = "000000"; // doesn't matter, color managed by color module
 
 	this.color = new Color("canvas-color", "Canvas Color", function(color) {
 		self.canvas.style.backgroundColor = "#" + color;

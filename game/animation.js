@@ -1,3 +1,4 @@
+/* animation is the lines playing module, child of sprite obj */
 function Animation(src) {
 	const self = this;
 	const ctx = Game.ctx;
@@ -95,18 +96,18 @@ function Animation(src) {
 					for (let h = frm.i; h < frm.e; h++) {
 						const line = drw.l[h]; // line data
 						if (line && line.e) {
-							const v = new Vector(line.e.x, line.e.y);
+							const v = new Cool.Vector(line.e.x, line.e.y);
 							v.subtract(line.s);
 							v.divide(this.segNum); // line num
 							ctx.moveTo(
-								x + this.widthRatio * (line.s.x + getRandom(-this.jiggle, this.jiggle)), 
-								y + this.heightRatio * (line.s.y + getRandom(-this.jiggle, this.jiggle)) 
+								x + this.widthRatio * (line.s.x + Cool.random(-this.jiggle, this.jiggle)), 
+								y + this.heightRatio * (line.s.y + Cool.random(-this.jiggle, this.jiggle)) 
 							);
 							for (let j = 0; j < this.segNum; j++) {
-								const p = new Vector(line.s.x + v.x * j, line.s.y + v.y * j);
+								const p = new Cool.Vector(line.s.x + v.x * j, line.s.y + v.y * j);
 								ctx.lineTo( 
-									x + this.widthRatio * (p.x + v.x + getRandom(-this.jiggle, this.jiggle)), 
-									y + this.heightRatio * ( p.y + v.y + getRandom(-this.jiggle, this.jiggle)) 
+									x + this.widthRatio * (p.x + v.x + Cool.random(-this.jiggle, this.jiggle)), 
+									y + this.heightRatio * ( p.y + v.y + Cool.random(-this.jiggle, this.jiggle)) 
 								);
 							}
 							if (ctx.strokeStyle.replace("#","") != drw.c) {
@@ -156,10 +157,10 @@ function Animation(src) {
 					for (let h = frm.i; h < frm.e; h++) {
 						const line = drw.l[h]; // line data
 						if (line && line.e) {
-							const v = new Vector(line.e.x, line.e.y);
+							const v = new Cool.Vector(line.e.x, line.e.y);
 							ctx.lineTo(
-								x + this.widthRatio * (line.s.x + getRandom(-this.jiggle, this.jiggle)), 
-								y + this.heightRatio * (line.s.y + getRandom(-this.jiggle, this.jiggle)) 
+								x + this.widthRatio * (line.s.x + Cool.random(-this.jiggle, this.jiggle)), 
+								y + this.heightRatio * (line.s.y + Cool.random(-this.jiggle, this.jiggle)) 
 							);
 							
 							if (ctx.fillStyle.replace("#","") != drw.c) {
@@ -209,22 +210,22 @@ function Animation(src) {
 						if (line && line.e && line0 && line0.e) {
 							let v;
 							if (h > count) {
-								v = new Vector(line.e.x, line.e.y);
+								v = new Cool.Vector(line.e.x, line.e.y);
 							} else {
-								v = new Vector(line0.e.x, line0.e.y);
+								v = new Cool.Vector(line0.e.x, line0.e.y);
 							}
 
 							v.subtract(line.s);
 							v.divide(drw.n); // line num
 							ctx.moveTo(
-								line.s.x + getRandom(-drw.r, drw.r), 
-								line.s.y + getRandom(-drw.r, drw.r) 
+								line.s.x + Cool.random(-drw.r, drw.r), 
+								line.s.y + Cool.random(-drw.r, drw.r) 
 							);
 							for (let j = 0; j < drw.n; j++) {
-								const p = new Vector(line.s.x + v.x * j, line.s.y + v.y * j);
+								const p = new Cool.Vector(line.s.x + v.x * j, line.s.y + v.y * j);
 								ctx.lineTo( 
-									p.x + v.x + getRandom(-drw.r, drw.r), 
-									p.y + v.y + getRandom(-drw.r, drw.r) 
+									p.x + v.x + Cool.random(-drw.r, drw.r), 
+									p.y + v.y + Cool.random(-drw.r, drw.r) 
 								);
 							}
 							if (ctx.strokeStyle.replace("#","") != drw.c) {

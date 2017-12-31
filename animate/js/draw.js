@@ -16,7 +16,6 @@ this.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
 function Draw() {
 	const self = this;
 
-	/* can this be a module?  timeline? */
 	this.currentFrame = 0;
 	this.currentFrameCounter = 0; // for when line fps is different from anim fps, counts with floats
 	this.isPlaying = false;
@@ -31,7 +30,7 @@ function Draw() {
 	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
 
 	this.setFps = function(fps) {
-		self.fps  = fps;
+		self.fps = fps;
 		self.intervalRatio = self.interval / (1000/fps);
 	}
 
@@ -43,6 +42,7 @@ function Draw() {
 		Lines.interface.updateFramesPanel();
 	}
 
+	/* toggle play animation */
 	this.toggle = function() {
 		if (!self.isPlaying) Lines.data.saveLines();
 		self.isPlaying = !self.isPlaying;
@@ -54,17 +54,16 @@ function Draw() {
 		for (let h = index; h < end; h++) {
 			const line = lns[h];
 			if (line && line.e) {
-				let v = new Vector(line.e.x, line.e.y);
+				let v = new Cool.Vector(line.e.x, line.e.y);
 				v.subtract(line.s);
 				v.divide(segNum);
-				Lines.canvas.ctx.moveTo( line.s.x + getRandom(-jiggle, jiggle), line.s.y + getRandom(-jiggle, jiggle) );
+				Lines.canvas.ctx.moveTo( line.s.x + Cool.random(-jiggle, jiggle), line.s.y + Cool.random(-jiggle, jiggle) );
 				for (var i = 0; i < segNum; i++) {
-					const p = new Vector(line.s.x + v.x * i, line.s.y + v.y * i); /* midpoint of segment */
-					Lines.canvas.ctx.lineTo( p.x + v.x + getRandom(-jiggle, jiggle), p.y + v.y + getRandom(-jiggle, jiggle) );
+					const p = new Cool.Vector(line.s.x + v.x * i, line.s.y + v.y * i); /* midpoint of segment */
+					Lines.canvas.ctx.lineTo( p.x + v.x + Cool.random(-jiggle, jiggle), p.y + v.y + Cool.random(-jiggle, jiggle) );
 				}
 				if (onion) Lines.canvas.ctx.strokeStyle = color;
 				else {
-					/* this doesnt work w onion, try to figure it out */
 					if (Lines.canvas.ctx.strokeStyle != "#" + color) {
 						Lines.canvas.setStrokeColor(color);
 					}
@@ -90,6 +89,7 @@ function Draw() {
 				Lines.interface.updateFrameNum();
 
 			Lines.canvas.ctx.clearRect(0, 0, Lines.canvas.width, Lines.canvas.height);
+
 			if (self.background.img.src && self.background.show)
 				Lines.canvas.ctx.drawImage(self.background.img, self.background.x, self.background.y, self.background.size, self.background.size/self.background.ratio);
 
@@ -123,7 +123,7 @@ function Draw() {
 				self.drawLines(Lines.data.lines, 0, Lines.data.lines.length, Lines.mouse.segNumRange, Lines.mouse.jiggleRange, Lines.color.color);
 			}
 
-			/* write something to capture frames here */
+			/* capture frames, have to click ok on each */
 			if (self.captureFrames > 0) {
 				Lines.canvas.capture();
 				self.captureFrames--;
@@ -136,7 +136,6 @@ function Draw() {
 		self.captureFrames = prompt("How many frames?");
 	}
 
-	/* captures current frame first ... */
 	this.captureCycle = function() {
 		Lines.data.saveLines();
 		/* set animation to last frame because it updates frames before draw */
@@ -167,13 +166,11 @@ function Draw() {
 
 	panel.addRow();
 	panel.add( new UIButton({
-		id: "prev-frame",
 		title: "Prev Frame",
 		callback: Lines.interface.prevFrame,
 		key: "w"
 	}) );
 	panel.add( new UIButton({
-		id: "next-frame",
 		title: "Next Frame",
 		callback: Lines.interface.nextFrame,
 		key: "e"
@@ -181,50 +178,68 @@ function Draw() {
 
 
 	panel.addRow();
-	panel.add( new UISelect({
-		id: "onion-skin",
+	this.onionSkinSelect = new UISelect({
 		options: [0,1,2,3,4,5,6,7,8,9,10],
 		selected: 0,
 		label: "Onion Skin",
-		callback: function() {
-			/* should UI this be bound to callback? */
-			self.onionSkinNum = Number(this.value);
-			this.blur();
-		}
-		/* key press and prompt? */
-	}));
+		callback: function(ev) {
+			if (ev.type == "change") {
+				self.onionSkinNum = Number(this.value);
+				this.blur();
+			} else if (ev.type == "keydown") {
+				const n = prompt("How many frames?");
+				self.onionSkinNum = Number(n);
+				self.onionSkinSelect.setValue(self.onionSkinNum);
+			}
+		},
+		key: "l"
+	});
+	panel.add(this.onionSkinSelect);
 
 	panel.addRow();
-	panel.add( new UISelect({
-		id: "fps",
+	this.fpsSelect = new UISelect({
 		label: "FPS",
 		options: [1,2,5,10,12,15,24,30,60],
 		selected: 10,
-		callback: function() {
-			self.fps = Number(this.value);
+		callback: function(ev) {
+			if (ev.type == "change") {
+				self.fps = Number(this.value);
+				this.blur();
+			} else if (ev.type == "keydown") {
+				const n = prompt("FPS?");
+				self.fps = Number(n);
+				self.fpsSelect.setValue(self.fps);
+			}
 			self.intervalRatio = self.interval / (1000/self.fps);
-			this.blur();
-		}
-	}));
+		},
+		key: ";"
+	})
+	panel.add(this.fpsSelect);
 
 	panel.addRow();
 	/* don't use this for < v1 drawings... */
-	panel.add( new UISelect({
-		id: "lps",
+	this.lpsSelect = new UISelect({
 		label: "Lines/Second",
 		options: [1,2,5,10,12,15,24,30,60],
 		selected: 10,
-		callback: function() {
-			self.lps = Number(this.value);
+		callback: function(ev) {
+			if (ev.type == "change") {
+				self.lps = Number(this.value);
+				this.blur();
+			} else {
+				const n = prompt("Lines per second?");
+				self.lps = Number(n);
+				self.lpsSelect.setValue(self.lps);
+			}
 			self.interval = 1000/self.lps;
 			self.intervalRatio = self.interval / (1000/self.fps);
-			this.blur();
-		}
-	}) );
+		},
+		key: "'"
+	});
+	panel.add(this.lpsSelect);
 
 	panel.addRow();
 	panel.add( new UIButton({
-		id: "capture",
 		title: "Capture Frame",
 		callback: Lines.canvas.capture,
 		key: "k"
@@ -232,7 +247,6 @@ function Draw() {
 
 	panel.addRow();
 	panel.add( new UIButton({
-		id: "capture-multi",
 		title: "Capture Multiple Frames",
 		callback: self.captureMultiple,
 		key: "shift-k"
@@ -240,7 +254,6 @@ function Draw() {
 
 	panel.addRow();
 	panel.add( new UIButton({
-		id: "capture-cycle",
 		title: "Capture Cycle",
 		callback: self.captureCycle,
 		key: "ctrl-k"

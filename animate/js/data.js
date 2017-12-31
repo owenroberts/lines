@@ -2,13 +2,13 @@ function Data() {
 	const self = this;
 
 	this.frames = [];
-	this.framesCopy = []; // not sure? this probably doesn't need to be global ....
-	this.framesToCopy = [];
 	this.lines = []; // lines currently being drawn
 	this.drawings = []; // saved drawings
 
-	/* r key - save lines and add new lines 
-	 also used a lot for other things */
+	this.framesCopy = []; // not sure? this probably doesn't need to be global ....
+	this.framesToCopy = [];
+
+	/* r key - save lines and add new lines */
 	this.saveLines = function() {
 		if (self.lines.length > 0) {
 			
@@ -30,8 +30,7 @@ function Data() {
 				r: Lines.mouse.jiggleRange
 			});
 
-			/* add current color to color choices 
-			 is color.current better than color.color? */
+			/* add current color to color choices */
 			Lines.color.addColorBtn(Lines.color.color);
 
 			/* lines are saved, stop drawing? */
@@ -40,7 +39,6 @@ function Data() {
 			/* ignoring save states 
 			or maybe figuring it out.... 
 			should be module anyway */
-
 		}
 	};
 	
@@ -116,7 +114,6 @@ function Data() {
 					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			} else {
-				/* took out addToFrame here, not really necessary? */
 				for (var i = 0; i <  self.framesCopy.length; i++) {
 					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
@@ -126,14 +123,14 @@ function Data() {
 
 	/* x key */
 	this.clearFrame = function() {
-		if (self.frames[Lines.draw.currentFrame]) {
-			for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
+		
+		// if (self.frames[Lines.draw.currentFrame]) {
+			// for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
 				/* can't splice drawings until we figure out indexing 
 					actually don't want to do this in case drawing is on other frame
 					delete drawings in file i/o already happening i think */
-				// self.drawings[self.frames[Lines.draw.currentFrame][i].d] = "x"; // fuck this stupid x
-			}
-		}
+			// }
+		// }
 		
 		if (self.frames[Lines.draw.currentFrame])
 			self.frames[Lines.draw.currentFrame] = undefined;
@@ -142,7 +139,7 @@ function Data() {
 
 	/* d key */
 	this.deleteFrame = function() {
-		/* also here, should drawings (not used elsewhere) be deleted? */
+		/* when updated drawing indexes, delete unused drawings here? (have to not be used anywhere) */
 		const ftemp = Lines.draw.currentFrame;
 		if (Lines.draw.currentFrame > 0) 
 			Lines.interface.prevFrame();
@@ -263,7 +260,7 @@ function Data() {
 		if (!offset) {
 			const x = Number(prompt("x"));
 			const y = Number(prompt("y"));
-			offset = new Vector(x,y);
+			offset = new Cool.Vector(x,y);
 		}
 		if (offset) {
 			for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
@@ -464,10 +461,11 @@ function Data() {
 		callback: self.cutLastSegmentNum
 	}) );
 
-	panel.addRow();
-	panel.add( new UIButton({
-		title: "Undo",
-		key: "ctrl-z",
-		callback: self.undo
-	}) );
+	/* leave out until/if undo is actually implemented */
+	// panel.addRow();
+	// panel.add( new UIButton({
+	// 	title: "Undo",
+	// 	key: "ctrl-z",
+	// 	callback: self.undo
+	// }) );
 }

@@ -1,5 +1,4 @@
 /* play module */
-
 function LinesPlayer(canvas, src, callback) {
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
@@ -49,13 +48,13 @@ function LinesPlayer(canvas, src, callback) {
 					for (let h = fr.i; h < fr.e; h++) {
 						let line = dr.l[h];
 						if (line && line.e) {
-							let v = new Vector(line.e.x, line.e.y);
+							let v = new Cool.Vector(line.e.x, line.e.y);
 							v.subtract(line.s);
 							v.divide(dr.n);
-							this.ctx.moveTo( line.s.x + getRandom(-dr.r, dr.r), line.s.y + getRandom(-dr.r, dr.r) );
+							this.ctx.moveTo( line.s.x + Cool.random(-dr.r, dr.r), line.s.y + Cool.random(-dr.r, dr.r) );
 							for (let j = 0; j < dr.n; j++) {
-								let p = new Vector(line.s.x + v.x * j, line.s.y + v.y * j);
-								this.ctx.lineTo( p.x + v.x + getRandom(-dr.r, dr.r), p.y + v.y + getRandom(-dr.r, dr.r) );
+								let p = new Cool.Vector(line.s.x + v.x * j, line.s.y + v.y * j);
+								this.ctx.lineTo( p.x + v.x + Cool.random(-dr.r, dr.r), p.y + v.y + Cool.random(-dr.r, dr.r) );
 							}
 							if (this.ctxStrokeColor != dr.c) {
 								this.ctxStrokeColor = dr.c;
@@ -96,5 +95,3 @@ function LinesPlayer(canvas, src, callback) {
 function loadAnimation(src, canvas, callback) {
 	const player = new LinesPlayer(canvas, src, callback);
 }
-
-/* should have something load all canvas elems w data-src??? */

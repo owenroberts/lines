@@ -45,9 +45,8 @@ function Interface() {
 				/* not updating length of frame elems, shouldnt that reference still work?  */
 			}
 		} else {
-			/* if there are same number of less then frames than frame divs */
-			/* this seems to only happen when deleting the current frame so i'm confused.... 
-			delete frame should always be the current frame, is there another way to delete frames?  */
+			/* if there are same number of less then frames than frame divs
+				delete current frame, is there another way to delete frames?  */
 			for (let i = numFrames; i > Lines.data.frames.length; i--){
 				/* remove html frame */
 				this.frameElems.remove(i-1);
@@ -64,8 +63,7 @@ function Interface() {
 		else 
 			self.plusFrame.setId("current");
 	};
-	/* is this interface or drawing... 
-		i guess things that reference everything can be interface */
+	
 	this.nextFrame = function() {
 		Lines.mouse.isDrawing = false;
 		Lines.data.saveLines();
@@ -88,15 +86,15 @@ function Interface() {
 		// if (ev.which == 9) ev.preventDefault(); // tab
 		if (document.activeElement.nodeName != "INPUT") {
 
-			var k = keys[ev.which];
+			var k = Cool.keys[ev.which];
 			if (ev.shiftKey) k = "shift-" + k;
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
 			if (Lines.interface.interfaces[k]) {
-				Lines.interface.interfaces[k].callback();
+				Lines.interface.interfaces[k].callback(ev);
 				if (Lines.interface.interfaces[k].toggleText) {
-					//Lines.interface.interfaces[k].toggleText();
+					Lines.interface.interfaces[k].toggleText();
 				}
 			}
 		}

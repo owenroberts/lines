@@ -1,6 +1,5 @@
 class UI {
 	constructor(params) {
-		/* this may be useless if all are created ... */
 		this.el = document.getElementById(params.id);
 		if (!this.el) {
 			if (params.type) this.el = document.createElement(params.type);
@@ -10,8 +9,12 @@ class UI {
 		if (params.event && params.callback)
 			this.el.addEventListener(params.event, params.callback);
 		if (params.callback) this.callback = params.callback;
+		if (params.label) this.label = params.label;
+		if (params.value != undefined) this.el.value = params.value;
+		
 		if (params.key) {
 			Lines.interface.interfaces[params.key] = this;
+			/* adding key commands to interface */
 			const key = document.createElement("span");
 			key.classList.add("key");
 			if (params.key == "space")
@@ -26,13 +29,11 @@ class UI {
 			} else
 				key.textContent = params.key;
 			const dek = document.createElement("span");
-			dek.textContent = params.title || params.id;
+			dek.textContent = params.title || params.id || params.label;
 			Lines.interface.panels["keys"].el.appendChild(key);
 			Lines.interface.panels["keys"].el.appendChild(dek);
 			Lines.interface.panels["keys"].el.appendChild(document.createElement("br"));
 		}
-		if (params.label) this.label = params.label;
-		if (params.value != undefined) this.el.value = params.value;
 	}
 
 	addClass(clas) {
@@ -58,11 +59,10 @@ class UI {
 	}
 
 	append(elem) {
-		this.el.appendChild(elem);
+		this.el.appendChild(elem);  /* only used for color ways? */
 	}
 }
 
-/* does this extend UI? */
 class Panel {
 	constructor(id, label) {
 		this.el = document.getElementById(id);
@@ -80,11 +80,8 @@ class Panel {
 		title.textContent = label;
 		this.el.appendChild(title);
 		this.el.appendChild(this.toggleBtn);
-		
-		
 		this.rows = [];
-		this.addRow();
-		//this.toggle();
+		this.addRow(); /* not super into this ... */
 	}
 	toggle() {
 		if (this.el.clientHeight <= 25) {
@@ -176,12 +173,15 @@ class UIRange extends UI {
 		super(params);
 		this.el.type = "range";
 		this.setRange(params.min, params.max);
-		if (params.display) {
+		if (params.display)
 			this.display = new UIDisplay({id:params.display,  initial:params.value});
-			this.el.addEventListener(params.event, function() {
-				this.display.set( this.getValue() );
-			}.bind(this));
-		}
+	}
+
+	setValue(value) {
+		this.el.value = value;
+		if (this.display)
+			this.display.set(value);
+		this.el.blur();
 	}
 	
 	setRange(min, max) {
@@ -222,7 +222,7 @@ class UIToggleButton extends UI {
 	}
 }
 
-/* now sure how necessary this is? basically just for framesPanel */
+/* basically just for framesPanel */
 class UIList {
 	constructor(params) {
 		this.els = document.getElementsByClassName(params.class);

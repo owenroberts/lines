@@ -1,17 +1,17 @@
 function Sprite(x, y, w, h) {
 	var self = this;
 	ctx = Game.ctx;
-	this.position = new Vector(x, y);
+	this.position = new Cool.Vector(x, y);
 	/* just use fucking width and height */
-	this.size = new Vector(w, h);
+	this.size = new Cool.Vector(w, h);
 	this.collider = {
-		position: new Vector(0, 0),
-		size: new Vector(w, h)
+		position: new Cool.Vector(0, 0),
+		size: new Cool.Vector(w, h)
 	}
 	this.jumpAmount = 0;
-	this.velocity = new Vector(0,0);
+	this.velocity = new Cool.Vector(0,0);
 	this.alive = true;
-	this.bounceAmount = new Vector(0,0);
+	this.bounceAmount = new Cool.Vector(0,0);
 	this.bounce = false;
 	this.animation = null;
 	this.debug = false;
@@ -59,7 +59,7 @@ function Sprite(x, y, w, h) {
 			this.position.add( this.velocity );
 			if (!this.bounceAmount.zero()) {
 				this.velocity.add( this.bouncAmount );
-				this.bounceAmount = new Vector(0,0);
+				this.bounceAmount = new Cool.Vector(0,0);
 			}
 		}
 	};
@@ -113,7 +113,7 @@ function Sprite(x, y, w, h) {
 				return true;
 			} else if (this.bounce) {
 				// check next frame
-				var nextpos = new Vector(this.position.x, this.position.y);
+				var nextpos = new Cool.Vector(this.position.x, this.position.y);
 				nextpos.add(this.velocity);
 				if (nextpos.x < other.position.x + other.size.x &&
 				nextpos.x + this.size.x > other.position.x  && 
@@ -125,7 +125,7 @@ function Sprite(x, y, w, h) {
 						this.position.x = other.position.x - this.size.x;
 					} else {
 						this.position.y = other.position.y - this.size.y;
-						this.bounceAmount.add( new Vector(0, yoff/2) );
+						this.bounceAmount.add( new Cool.Vector(0, yoff/2) );
 					}
 					if (callback) callback(this);				
 					return true;
@@ -159,11 +159,11 @@ function Sprite(x, y, w, h) {
 		var p = this;
 		setTimeout( function() {
 			//p.alive = true;
-			//p.pos = new Vector(10, 20);
+			//p.pos = new Cool.Vector(10, 20);
 		}, 1000);
 	};
 	this.reset = function(widhtMin, widthMax, heightMin, heightMax) {
-		this.position.x = randomInt(widhtMin, widthMax - this.size.x);
-		this.position.y = randomInt(heightMin, heightMax);
+		this.position.x = Cool.randomInt(widhtMin, widthMax - this.size.x);
+		this.position.y = Cool.randomInt(heightMin, heightMax);
 	};
 }
