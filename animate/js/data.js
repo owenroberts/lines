@@ -157,8 +157,16 @@ function Data() {
 
 	/* z key */
 	this.cutLastSegment = function() {
-		/* should text this for these functions */
 		if (self.lines.length > 0) self.lines.pop();
+	};
+
+	/* alt z */
+	this.cutLastSegmentNum = function() {
+		let num = prompt("How many segments?");
+		while (self.lines.length > 0 && num > 0) {
+			self.lines.pop();
+			num--;
+		}
 	};
 
 	/* shift z (does this make more sense as x... ) */
@@ -445,14 +453,21 @@ function Data() {
 
 	panel.addRow();
 	panel.add( new UIButton({
+		title: "Cut Line",
+		key: "z",
+		callback: self.cutLastSegment
+	}) );
+
+	panel.add( new UIButton({
+		title: "Cut Segment Num",
+		key: "alt-z",
+		callback: self.cutLastSegmentNum
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
 		title: "Undo",
 		key: "ctrl-z",
 		callback: self.undo
 	}) );
-
-	panel.add( new UIButton({
-		title: "Cut Line",
-		key: "z",
-		callback: self.cutLastSegment
-	}))
 }
