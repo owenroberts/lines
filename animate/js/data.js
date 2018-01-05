@@ -219,7 +219,7 @@ function Data() {
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(self.frames[Lines.draw.currentFrame]);
-			self.frames.splice(Lines.draw.currentFrame, 1);
+			// self.frames.splice(Lines.draw.currentFrame, 1);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = self.drawings[tempFrames[h].d];
 				if (over) {
@@ -344,7 +344,7 @@ function Data() {
 	panel.add( new UIButton({
 		title: "Explode Over",
 		callback: function() {
-			self.explode(true, false);
+			self.explode(false, true);
 		},
 		key: "shift-a"
 	}) );
@@ -353,7 +353,7 @@ function Data() {
 	panel.add( new UIButton({
 		title: "Follow",
 		callback: function() {
-			self.explode(false, true);
+			self.explode(true, false);
 		},
 		key: "ctrl-a"
 	}) );

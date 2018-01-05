@@ -6,7 +6,7 @@ function Files_IO() {
 		Lines.data.saveLines();
 		const json = {};
 		/* this one second end is kind of specific, maybe to bc?? */
-		const end = frames.length * ( 1000 / Number(fps) );
+		const end = frames.length * ( 1000 / Number(Lines.draw.fps) );
 		if (end > 1000) Math.ceil( json.end = end + 1000 );
 		else json.end = 1000;
 		json.w = Lines.canvas.width;
