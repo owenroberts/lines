@@ -18,6 +18,7 @@ function Interface() {
 				const frmElem = document.createElement("div");
 				frmElem.classList.add("frame");
 				frmElem.textContent = i;
+				frmElem.dataset.index = i;
 				/* 
 				add drawing nums, do this later after figuring out lines/frames/drawings 
 				frmElem.innerHTML = i + "<br>";

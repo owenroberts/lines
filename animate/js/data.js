@@ -100,8 +100,8 @@ function Data() {
 	this.pasteFrames = function() {
 		/* copy one frame onto multiple */
 		if (self.framesToCopy.length > 0) {
-			for (var h = 0; h < self.framesToCopy.length; h++) {
-				for (var i = 0; i < self.framesCopy.length; i++) {
+			for (let h = 0; h < self.framesToCopy.length; h++) {
+				for (let i = 0; i < self.framesCopy.length; i++) {
 					self.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			}
@@ -114,7 +114,7 @@ function Data() {
 					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			} else {
-				for (var i = 0; i <  self.framesCopy.length; i++) {
+				for (let i = 0; i <  self.framesCopy.length; i++) {
 					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			}

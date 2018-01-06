@@ -18,7 +18,7 @@ function Mouse() {
 				const frameIndex = elem.dataset.index;
 				if (elem.classList.contains("frame")) {
 					if (!elem.classList.contains("copy")){
-			 			elem.classList.add("copy")
+			 			elem.classList.add("copy");
 			 			Lines.data.framesToCopy.push( Number(frameIndex) );
 			 		}
 				}
