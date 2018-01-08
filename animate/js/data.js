@@ -257,7 +257,7 @@ function Data() {
 	/* q key */
 	this.offsetDrawing = function(offset) {
 		self.saveLines();
-		if (!offset) {
+		if (!offset.x && !offset.y) {
 			const x = Number(prompt("x"));
 			const y = Number(prompt("y"));
 			offset = new Cool.Vector(x,y);
