@@ -2,7 +2,7 @@ function Canvas(width, height, color) {
 	const self = this;
 
 	this.width = width; // invoke canvas with width & height?
-	this.height = width;
+	this.height = height;
 	this.canvas = document.getElementById("canvas");
 	
 	this.ctx = this.canvas.getContext('2d');
@@ -46,7 +46,7 @@ function Canvas(width, height, color) {
 		label: "Height",
 		blur: true,
 		callback: function(ev) {
-			if (ev.which == 13) {
+			if (ev.which == 13 || ev.type == "blur") {
 				self.setHeight();
 				self.heightInput.reset(self.height);
 			}
