@@ -100,8 +100,8 @@ function Data() {
 	this.pasteFrames = function() {
 		/* copy one frame onto multiple */
 		if (self.framesToCopy.length > 0) {
-			for (var h = 0; h < self.framesToCopy.length; h++) {
-				for (var i = 0; i < self.framesCopy.length; i++) {
+			for (let h = 0; h < self.framesToCopy.length; h++) {
+				for (let i = 0; i < self.framesCopy.length; i++) {
 					self.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			}
@@ -114,7 +114,7 @@ function Data() {
 					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			} else {
-				for (var i = 0; i <  self.framesCopy.length; i++) {
+				for (let i = 0; i <  self.framesCopy.length; i++) {
 					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			}
@@ -216,7 +216,7 @@ function Data() {
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(self.frames[Lines.draw.currentFrame]);
-			self.frames.splice(Lines.draw.currentFrame, 1);
+			// self.frames.splice(Lines.draw.currentFrame, 1);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = self.drawings[tempFrames[h].d];
 				if (over) {
@@ -254,7 +254,7 @@ function Data() {
 	/* q key */
 	this.offsetDrawing = function(offset) {
 		self.saveLines();
-		if (!offset) {
+		if (!offset.x && !offset.y) {
 			const x = Number(prompt("x"));
 			const y = Number(prompt("y"));
 			offset = new Cool.Vector(x,y);
@@ -341,7 +341,7 @@ function Data() {
 	panel.add( new UIButton({
 		title: "Explode Over",
 		callback: function() {
-			self.explode(true, false);
+			self.explode(false, true);
 		},
 		key: "shift-a"
 	}) );
@@ -350,7 +350,7 @@ function Data() {
 	panel.add( new UIButton({
 		title: "Follow",
 		callback: function() {
-			self.explode(false, true);
+			self.explode(true, false);
 		},
 		key: "ctrl-a"
 	}) );
