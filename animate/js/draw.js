@@ -133,7 +133,7 @@ function Draw() {
 	}
 
 	this.captureMultiple = function() {
-		self.captureFrames = prompt("How many frames?");
+		self.captureFrames = prompt("Capture how many frames?");
 	}
 
 	this.captureCycle = function() {
@@ -187,7 +187,7 @@ function Draw() {
 				self.onionSkinNum = Number(this.value);
 				this.blur();
 			} else if (ev.type == "keydown") {
-				const n = prompt("How many frames?");
+				const n = prompt("How many onion skin frames?");
 				self.onionSkinNum = Number(n);
 				self.onionSkinSelect.setValue(self.onionSkinNum);
 			}
