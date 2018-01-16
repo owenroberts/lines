@@ -58,7 +58,8 @@ function Interface() {
 
 	this.updateFrameNum = function() {
 		Lines.draw.frameNumDisplay.set(Lines.draw.currentFrame);
-		document.getElementById("current").removeAttribute("id"); /* fine for now... */
+		if (document.getElementById("current"))
+			document.getElementById("current").removeAttribute("id"); /* fine for now... */
 		if (self.frameElems.els[Lines.draw.currentFrame])
 			self.frameElems.setId("current", Lines.draw.currentFrame);
 		else 
