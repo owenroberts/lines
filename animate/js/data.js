@@ -141,11 +141,12 @@ function Data() {
 	this.deleteFrame = function() {
 		/* when updated drawing indexes, delete unused drawings here? (have to not be used anywhere) */
 		const ftemp = Lines.draw.currentFrame;
-		if (Lines.draw.currentFrame > 0) {
+		if (Lines.draw.currentFrame > 0 || Lines.data.frames.length > 1) {
 			Lines.interface.prevFrame();
 			self.frames.splice(ftemp, 1);
-		} else 
+		} else {
 			self.lines = [];
+		}
 		Lines.interface.updateFramesPanel();
 	};
 
