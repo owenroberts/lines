@@ -1,5 +1,5 @@
 /* play module */
-function LinesPlayer(canvas, src, callback) {
+function LinesPlayer(canvas, src, lps, callback) {
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
@@ -16,10 +16,13 @@ function LinesPlayer(canvas, src, callback) {
 	this.currentFrameCounter = 0; // uses intervalRatio, so it's a float
 	this.playing = true;
 	
-	this.fps = 15;
-	this.lineInterval = 1000/this.fps;
+	if (lps) this.lps = lps; // lines per second
+	else this.lps = 15;
+	this.lineInterval = 1000/this.lps;
 	this.timer = performance.now();
-	this.intervalRatio = this.lineInterval / (1000 / this.fps);  // initialize to one but this is the math
+	this.intervalRatio = 1;
+	// initialize to one but this is the math
+	// this.lineInterval / (1000 / this.lps);  
 	this.frames = [];
 	this.drawings = [];
 	this.ctxStrokeColor;
@@ -33,7 +36,7 @@ function LinesPlayer(canvas, src, callback) {
 				this.currentFrameCounter += this.intervalRatio;
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 			}
-			if (this.playing && this.currentFrame == this.frames.length) {
+			if (this.playing && this.currentFrame >= this.frames.length) {
 				this.currentFrame = this.currentFrameCounter = 0;
 			}
 			this.ctx.clearRect(0, 0, this.width, this.height);
@@ -69,25 +72,53 @@ function LinesPlayer(canvas, src, callback) {
 					this.ctx.stroke();
 			}
 		}
-	}
+	};
+
+	this.sizeCanvas = function() {
+		const padding = 8; 
+		const top = canvas.getBoundingClientRect().top;
+
+		if (window.innerWidth - padding * 2 < this.width)
+			this.scale = (window.innerWidth - padding * 2) / this.width;
+		else if ((window.innerHeight - top - padding * 2) < this.height)
+			this.scale = (window.innerHeight - top - padding * 2) / this.height;
+		else
+			this.scale = 1;
+
+		if (this.scale != 1) {
+
+			if (this.scale * this.width / (window.innerHeight - top) > this.width/this.height) {
+				this.canvas.height = window.innerHeight;
+				this.canvas.width = this.canvas.height * (this.width / this.height);
+				this.scale = this.canvas.height / this.height;
+			} else {
+				this.canvas.width = Math.min(this.width * this.scale, this.width);
+				this.canvas.height = Math.min(this.height * this.scale, this.height);
+			}
+			this.ctx.scale(this.scale, this.scale);
+		}
+
+		this.ctxStrokeColor = undefined;
+	};
+
+	window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 
 	this.loadAnimation = function(src, callback) {
 		const self = this;
 		$.getJSON(src, function(data) {
 			self.frames =  data.f;
 			self.drawings = data.d;
-			self.fps = data.fps;
-			self.intervalRatio = self.lineInterval / (1000 / self.fps);
+			self.intervalRatio = self.lineInterval / (1000 / data.fps);
 			self.currentFrame = self.currentFrameCounter = 0;
 			self.width = self.canvas.width = data.w;
 			self.height = self.canvas.height = data.h;
 			self.ctxStrokeColor = undefined; // note setting canvas width resets the color
 			self.ctx.miterLimit = 1;
 			requestAnimFrame(self.draw.bind(self));
-			
+			self.sizeCanvas();
 			if (callback) callback(); // callback to do something after drawing loads
 		});
-	}
+	};
 
 	if (src) this.loadAnimation(src, callback);
 }
