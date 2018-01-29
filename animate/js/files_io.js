@@ -9,8 +9,8 @@ function Files_IO() {
 		const end = frames.length * ( 1000 / Number(Lines.draw.fps) );
 		if (end > 1000) Math.ceil( json.end = end + 1000 );
 		else json.end = 1000;
-		json.w = Lines.canvas.width;
-		json.h = Lines.canvas.height;
+		json.w = Number( Lines.canvas.width );
+		json.h = Number( Lines.canvas.height );
 		json.fps = Number( Lines.draw.fps );
 		json.f = [];
 		json.d = [];
