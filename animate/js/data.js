@@ -172,6 +172,14 @@ function Data() {
 		}
 	};
 
+	/* ctrl z (does this make more sense as x... ) */
+	this.cutFirstDrawing = function() {
+		if (self.frames[Lines.draw.currentFrame]) {
+			self.saveLines();
+			self.frames[Lines.draw.currentFrame].shift(); // pop last drawing
+		}
+	};
+
 	/* ctrl z - unimplemented save states */
 	this.undo = function() {
 		/*if (saveStates.length > 1) {
@@ -444,6 +452,12 @@ function Data() {
 		title: "Cut Last Drawing",
 		key: "shift-z",
 		callback: self.cutLastDrawing
+	}) );
+
+	panel.add( new UIButton({
+		title: "Cut First Drawing",
+		key: "ctrl-z",
+		callback: self.cutFirstDrawing
 	}) );
 
 	panel.addRow();
