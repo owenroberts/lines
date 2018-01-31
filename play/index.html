@@ -10,7 +10,6 @@
 <body>
 	<h1>Play example</h1>
 	<p><a href="../">Back</a></p>
-
 	<canvas id="lines" data-src="ex.json"></canvas>
 	<!-- data src thing is for multiple instances 
 		but this is not really working -->
@@ -20,7 +19,7 @@
 	<script type="text/javascript">
 		window.onload = function() {
 			// loadAnimation(document.querySelector('.draw').dataset.src); // fallback
-			const p = new LinesPlayer(document.getElementById("lines"), "ex.json");
+			const p = new LinesPlayer(document.getElementById("lines"), "/bg_color_test.json");
 		}
 	</script>
 </body>

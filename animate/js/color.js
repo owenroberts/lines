@@ -51,6 +51,7 @@ function Color(id, title, callback) {
 		self.htmlColor.setValue(hex);
 		self.colorPreview.setColor(self.color);
 		self.updatePckrs();
+		if (callback) callback(self.color); // for canvas
 	};
 
 	/* interfaces */

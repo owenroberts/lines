@@ -114,9 +114,12 @@ function LinesPlayer(canvas, src, lps, callback) {
 			self.height = self.canvas.height = data.h;
 			self.ctxStrokeColor = undefined; // note setting canvas width resets the color
 			self.ctx.miterLimit = 1;
+			if (data.bg)
+				self.canvas.style.backgroundColor = '#' + data.bg;
 			requestAnimFrame(self.draw.bind(self));
 			self.sizeCanvas();
 			if (callback) callback(); // callback to do something after drawing loads
+
 		});
 	};
 
