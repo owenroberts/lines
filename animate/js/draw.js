@@ -28,6 +28,7 @@ function Draw() {
 	this.intervalRatio = this.interval / (1000/this.fps);  // this starts same as lineInterval, written out to show math
 
 	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
+	this.captureWithBackground = false;
 
 	this.setFps = function(fps) {
 		self.fps = fps;
@@ -89,6 +90,12 @@ function Draw() {
 				Lines.interface.updateFrameNum();
 
 			Lines.canvas.ctx.clearRect(0, 0, Lines.canvas.width, Lines.canvas.height);
+			
+			if (self.captureWithBackground && self.captureFrames > 0) {
+				Lines.canvas.ctx.rect(0, 0, Lines.canvas.width, Lines.canvas.height);
+				Lines.canvas.ctx.fillStyle = '#' + Lines.canvas.color.color;
+				Lines.canvas.ctx.fill();
+			}
 
 			if (self.background.img.src && self.background.show)
 				Lines.canvas.ctx.drawImage(self.background.img, self.background.x, self.background.y, self.background.size, self.background.size/self.background.ratio);
@@ -243,6 +250,16 @@ function Draw() {
 		title: "Capture Frame",
 		callback: Lines.canvas.capture,
 		key: "k"
+	}) );
+
+	panel.addRow();
+	panel.add( new UIToggleButton({
+		on: "Click to Capture BG",
+		off: "Click to Leave Transparent",
+		callback: function() {
+			self.captureWithBackground = !self.captureWithBackground
+		},
+		key: "n"
 	}) );
 
 	panel.addRow();
