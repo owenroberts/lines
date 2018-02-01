@@ -35,6 +35,10 @@ function Data() {
 			/* ignoring save states 
 			or maybe figuring it out.... 
 			should be module anyway */
+
+			// kinda dump way to update the frame interface
+			Lines.interface.nextFrame();
+			Lines.interface.prevFrame();
 		}
 	};
 	
@@ -258,6 +262,42 @@ function Data() {
 		}
 	};
 
+	this.reverse = function(simultaneous) {
+		self.saveLines();
+		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
+		if (segmentsPerFrame > 0) {
+			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
+			const totalSegments = Lines.frames[Lines.currentFrame]
+									.map((f) => { return f.e} )
+									.reduce((x,y) => { return x + y });
+			for (let i = 0; i < totalSegments; i += segmentsPerFrame) {
+				let indexMod = 0;
+				Lines.interface.nextFrame();
+				if (!Lines.frames[Lines.currentFrame]) 
+					Lines.frames[Lines.currentFrame] = [];
+				let framesAdded = false;
+				for (let j = 0; j < tempFrames.length; j++) {
+					const drawingIndex = tempFrames[j].d;
+					const drawingEnd = tempFrames[j].e;
+					const drawingStart = tempFrames[j].i;
+					const tempLines = Lines.drawings[drawingIndex].l;
+					if (i <= drawingEnd + (simultaneous ? 0 : indexMod)) {
+						Lines.frames[Lines.currentFrame].push({
+							d: drawingIndex,
+							i: simultaneous ? i : i - indexMod,
+							e: drawingEnd
+						});
+						framesAdded = true;
+					}
+					indexMod += drawingEnd;
+				}
+				if (!framesAdded)
+					self.deleteFrame();
+			}
+			Lines.interface.updateFramesPanel();
+		}
+	}
+
 	/* q key */
 	this.offsetDrawing = function(offset) {
 		self.saveLines();
@@ -368,6 +408,21 @@ function Data() {
 			self.explode(true, true);
 		},
 		key: "alt-a"
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Reverse Draw",
+		callback: function() {
+			self.reverse(false);
+		}
+	}) );
+
+	panel.add( new UIButton({
+		title: "Reverse Multi",
+		callback: function() {
+			self.reverse(true);
+		}
 	}) );
 
 	panel.addRow();
