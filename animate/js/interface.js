@@ -13,8 +13,8 @@ function Interface() {
 		const numFrames = self.frameElems.getLength();
 		/* this creates frames that don't already exist
 			loop from the num of already made html frames to frames.length */
-		if (Lines.data.frames.length > numFrames) {
-			for (let i = numFrames; i < Lines.data.frames.length; i++) {
+		if (Lines.frames.length > numFrames) {
+			for (let i = numFrames; i < Lines.frames.length; i++) {
 				const frmElem = document.createElement("div");
 				frmElem.classList.add("frame");
 				frmElem.textContent = i;
@@ -28,7 +28,7 @@ function Interface() {
 				*/
 				/* click on frame, set the current frame */
 				frmElem.onclick = function(ev) {
-					Lines.draw.currentFrame = Lines.draw.currentFrameCounter = i;
+					Lines.currentFrame = Lines.draw.currentFrameCounter = i;
 					self.updateFrameNum();
 				};
 				/* right click, add/remove from copy frames */
@@ -48,7 +48,7 @@ function Interface() {
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame, is there another way to delete frames?  */
-			for (let i = numFrames; i > Lines.data.frames.length; i--){
+			for (let i = numFrames; i > Lines.frames.length; i--){
 				/* remove html frame */
 				this.frameElems.remove(i-1);
 			}
@@ -57,11 +57,11 @@ function Interface() {
 	};
 
 	this.updateFrameNum = function() {
-		Lines.draw.frameNumDisplay.set(Lines.draw.currentFrame);
+		Lines.draw.frameNumDisplay.set(Lines.currentFrame);
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id"); /* fine for now... */
-		if (self.frameElems.els[Lines.draw.currentFrame])
-			self.frameElems.setId("current", Lines.draw.currentFrame);
+		if (self.frameElems.els[Lines.currentFrame])
+			self.frameElems.setId("current", Lines.currentFrame);
 		else 
 			self.plusFrame.setId("current");
 	};
@@ -69,16 +69,16 @@ function Interface() {
 	this.nextFrame = function() {
 		Lines.mouse.isDrawing = false;
 		Lines.data.saveLines();
-		if (Lines.draw.currentFrame < Lines.data.frames.length) 
-			Lines.draw.currentFrame++;
+		if (Lines.currentFrame < Lines.frames.length) 
+			Lines.currentFrame++;
 		self.updateFramesPanel();
 	};
 
 	this.prevFrame = function() {
 		Lines.mouse.isDrawing = false;
 		Lines.data.saveLines();
-		if (Lines.draw.currentFrame > 0) 
-			Lines.draw.currentFrame--;
+		if (Lines.currentFrame > 0) 
+			Lines.currentFrame--;
 		self.updateFramesPanel();
 	};
 

@@ -6,7 +6,7 @@ function Files_IO() {
 		Lines.data.saveLines();
 		const json = {};
 		/* this one second end is kind of specific, maybe to bc?? */
-		const end = frames.length * ( 1000 / Number(Lines.draw.fps) );
+		const end = Lines.frames.length * ( 1000 / Number(Lines.draw.fps) );
 		if (end > 1000) Math.ceil( json.end = end + 1000 );
 		else json.end = 1000;
 		json.w = Number( Lines.canvas.width );
@@ -18,26 +18,26 @@ function Files_IO() {
 		let drawingsIndexes = [];
 
 		/* save current frame */  
-		if (single && Lines.data.frames[Lines.draw.currentFrame]) {
-			json.f.push( Lines.data.frames[Lines.draw.currentFrame] );
-			for (let j = 0; j < Lines.data.frames[Lines.draw.currentFrame].length; j++) {
-				if ( drawingsIndexes.indexOf(Lines.data.frames[Lines.draw.currentFrame][j].d) == -1 ) 
-					drawingsIndexes.push( Lines.data.frames[Lines.draw.currentFrame][j].d );
+		if (single && Lines.frames[Lines.currentFrame]) {
+			json.f.push( Lines.frames[Lines.currentFrame] );
+			for (let j = 0; j < Lines.frames[Lines.currentFrame].length; j++) {
+				if ( drawingsIndexes.indexOf(Lines.frames[Lines.currentFrame][j].d) == -1 ) 
+					drawingsIndexes.push( Lines.frames[Lines.currentFrame][j].d );
 			}
 		} else {
 			/* save fall frames */
-			json.f = Lines.data.frames;
-			for (let i = 0; i < Lines.data.frames.length; i++) {
-				for (let j = 0; j < Lines.data.frames[i].length; j++) {
-					if ( drawingsIndexes.indexOf(Lines.data.frames[i][j].d) == -1 ) 
-						drawingsIndexes.push( Lines.data.frames[i][j].d );
+			json.f = Lines.frames;
+			for (let i = 0; i < Lines.frames.length; i++) {
+				for (let j = 0; j < Lines.frames[i].length; j++) {
+					if ( drawingsIndexes.indexOf(Lines.frames[i][j].d) == -1 ) 
+						drawingsIndexes.push( Lines.frames[i][j].d );
 				}
 			}
 		}
 
-		for (let i = 0; i < Lines.data.drawings.length; i++) {
+		for (let i = 0; i < Lines.drawings.length; i++) {
 			if ( drawingsIndexes.indexOf(i) != -1 ) 
-				json.d.push( Lines.data.drawings[i] );
+				json.d.push( Lines.drawings[i] );
 			else json.d.push( 'x' ); // this shouldn't really be necessary if this is written right
 		}
 		const jsonfile = JSON.stringify(json);
@@ -59,10 +59,10 @@ function Files_IO() {
 		if (filename) {
 			self.title.setValue(filename.split("/").pop());
 			$.getJSON(filename + ".json", function(data) {
-				Lines.data.frames =  data.f;
-				Lines.data.drawings = data.d;
-				for (let i = 0; i < Lines.data.drawings.length; i++) {
-					if (Lines.data.drawings[i] != 'x') Lines.color.addColorBtn( Lines.data.drawings[i].c );
+				Lines.frames =  data.f;
+				Lines.drawings = data.d;
+				for (let i = 0; i < Lines.drawings.length; i++) {
+					if (Lines.drawings[i] != 'x') Lines.color.addColorBtn( Lines.drawings[i].c );
 				}
 				Lines.canvas.setWidth(data.w);
 				Lines.canvas.setHeight(data.h);

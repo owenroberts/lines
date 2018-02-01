@@ -1,30 +1,26 @@
 function Data() {
 	const self = this;
 
-	this.frames = [];
-	this.lines = []; // lines currently being drawn
-	this.drawings = []; // saved drawings
-
-	this.framesCopy = []; // not sure? this probably doesn't need to be global ....
+	this.framesCopy = []; // copied frame(s)
 	this.framesToCopy = [];
 
 	/* r key - save lines and add new lines */
 	this.saveLines = function() {
-		if (self.lines.length > 0) {
+		if (Lines.lines.length > 0) {
 			
-			if (self.frames[Lines.draw.currentFrame] == undefined) 
-				self.frames[Lines.draw.currentFrame] = [];
+			if (Lines.frames[Lines.currentFrame] == undefined) 
+				Lines.frames[Lines.currentFrame] = [];
 
 			/* add drawing ref to frames data */
-			self.frames[Lines.draw.currentFrame].push({
-				d:self.drawings.length, 
+			Lines.frames[Lines.currentFrame].push({
+				d:Lines.drawings.length, 
 				i:0, 
-				e:self.lines.length
+				e:Lines.lines.length
 			});
 			
 			/* add current lines to drawing data */
-			self.drawings.push({
-				l: self.lines,
+			Lines.drawings.push({
+				l: Lines.lines,
 				c: Lines.color.color,
 				n: Lines.mouse.segNumRange,
 				r: Lines.mouse.jiggleRange
@@ -34,7 +30,7 @@ function Data() {
 			Lines.color.addColorBtn(Lines.color.color);
 
 			/* lines are saved, stop drawing? */
-			self.lines = [];
+			Lines.lines = [];
 
 			/* ignoring save states 
 			or maybe figuring it out.... 
@@ -50,21 +46,21 @@ function Data() {
 			selecting frames to copy vs paste should be different states */
 		if (self.framesToCopy.length > 0) {
 			for (let i = 0; i < self.framesToCopy.length; i++) {
-				if (self.frames[Lines.draw.currentFrame] == undefined) self.frames[Lines.draw.currentFrame] = [];
-				for (let h = 0; h < self.frames[self.framesToCopy[i]].length; h++) {
-					self.frames[Lines.draw.currentFrame].push(self.frames[self.framesToCopy[i]][h]);
+				if (Lines.frames[Lines.currentFrame] == undefined) Lines.frames[Lines.currentFrame] = [];
+				for (let h = 0; h < Lines.frames[self.framesToCopy[i]].length; h++) {
+					Lines.frames[Lines.currentFrame].push(Lines.frames[self.framesToCopy[i]][h]);
 				}
 				self.saveLines();
 				Lines.interface.nextFrame();
 			}
 		} else {
 			/* copy current frame */
-			if (self.lines.length > 0) self.saveLines();
-			if (self.frames[Lines.draw.currentFrame]) {
+			if (Lines.lines.length > 0) self.saveLines();
+			if (Lines.frames[Lines.currentFrame]) {
 				self.framesCopy = [];
 				/* clone all of the drawings in current frame */
-				for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
-					self.framesCopy.push(_.cloneDeep(self.frames[Lines.draw.currentFrame][i]));
+				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
+					self.framesCopy.push(_.cloneDeep(Lines.frames[Lines.currentFrame][i]));
 				}
 			}
 		}
@@ -72,16 +68,18 @@ function Data() {
 
 	/* g key - duplicate drawing to change offset, color, etc. */
 	this.duplicate = function() {
-		if (self.lines.length > 0) self.saveLines();
-		if (self.frames[Lines.draw.currentFrame]) {
+		if (Lines.lines.length > 0) self.saveLines();
+		if (Lines.frames[Lines.currentFrame]) {
 			self.framesCopy = [];
-			const drawingIndexOffset = self.drawings.length - 1;
-			for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
-				self.drawings.push( _.cloneDeep(self.drawings[self.frames[Lines.draw.currentFrame][i].d]) );
+			const drawingIndexOffset = Lines.drawings.length - 1;
+			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
+				Lines.drawings.push( 
+					_.cloneDeep(Lines.drawings[Lines.frames[Lines.currentFrame][i].d]) 
+				);
 				self.framesCopy.push({
-					d: self.drawings.length - 1,
-					i: self.frames[Lines.draw.currentFrame][i].i,
-					e: self.frames[Lines.draw.currentFrame][i].e
+					d: Lines.drawings.length - 1,
+					i: Lines.frames[Lines.currentFrame][i].i,
+					e: Lines.frames[Lines.currentFrame][i].e
 				});
 			}
 		}
@@ -102,20 +100,20 @@ function Data() {
 		if (self.framesToCopy.length > 0) {
 			for (let h = 0; h < self.framesToCopy.length; h++) {
 				for (let i = 0; i < self.framesCopy.length; i++) {
-					self.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[i]) );
+					Lines.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			}
 			self.clearFramesToCopy();
 		} else {
-			if (self.frames[Lines.draw.currentFrame] == undefined) {
-				if (self.lines.length > 0) self.saveLines();
-				else self.frames[Lines.draw.currentFrame] = [];
+			if (Lines.frames[Lines.currentFrame] == undefined) {
+				if (Lines.lines.length > 0) self.saveLines();
+				else Lines.frames[Lines.currentFrame] = [];
 				for (let i = 0; i < self.framesCopy.length; i++) {
-					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
+					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			} else {
 				for (let i = 0; i <  self.framesCopy.length; i++) {
-					self.frames[Lines.draw.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
+					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			}
 		}
@@ -124,59 +122,59 @@ function Data() {
 	/* x key */
 	this.clearFrame = function() {
 		
-		// if (self.frames[Lines.draw.currentFrame]) {
-			// for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
+		// if (self.frames[Lines.currentFrame]) {
+			// for (let i = 0; i < self.frames[Lines.currentFrame].length; i++) {
 				/* can't splice drawings until we figure out indexing 
 					actually don't want to do this in case drawing is on other frame
 					delete drawings in file i/o already happening i think */
 			// }
 		// }
 		
-		if (self.frames[Lines.draw.currentFrame])
-			self.frames[Lines.draw.currentFrame] = undefined;
-		self.lines = [];
+		if (Lines.frames[Lines.currentFrame])
+			Lines.frames[Lines.currentFrame] = undefined;
+		Lines.lines = [];
 	};
 
 	/* d key */
 	this.deleteFrame = function() {
 		/* when updated drawing indexes, delete unused drawings here? (have to not be used anywhere) */
-		const ftemp = Lines.draw.currentFrame;
-		if (Lines.draw.currentFrame > 0 || Lines.data.frames.length > 1) {
+		const ftemp = Lines.currentFrame;
+		if (Lines.currentFrame > 0 || Lines.frames.length > 1) {
 			Lines.interface.prevFrame();
-			self.frames.splice(ftemp, 1);
+			Lines.frames.splice(ftemp, 1);
 		} else {
-			self.lines = [];
+			Lines.lines = [];
 		}
 		Lines.interface.updateFramesPanel();
 	};
 
 	/* z key */
 	this.cutLastSegment = function() {
-		if (self.lines.length > 0) self.lines.pop();
+		if (Lines.lines.length > 0) Lines.lines.pop();
 	};
 
 	/* alt z */
 	this.cutLastSegmentNum = function() {
 		let num = prompt("How many segments?");
-		while (self.lines.length > 0 && num > 0) {
-			self.lines.pop();
+		while (Lines.lines.length > 0 && num > 0) {
+			Lines.lines.pop();
 			num--;
 		}
 	};
 
 	/* shift z (does this make more sense as x... ) */
 	this.cutLastDrawing = function() {
-		if (self.frames[Lines.draw.currentFrame]) {
+		if (Lines.frames[Lines.currentFrame]) {
 			self.saveLines();
-			self.frames[Lines.draw.currentFrame].pop(); // pop last drawing
+			Lines.frames[Lines.currentFrame].pop(); // pop last drawing
 		}
 	};
 
 	/* ctrl z (does this make more sense as x... ) */
 	this.cutFirstDrawing = function() {
-		if (self.frames[Lines.draw.currentFrame]) {
+		if (Lines.frames[Lines.currentFrame]) {
 			self.saveLines();
-			self.frames[Lines.draw.currentFrame].shift(); // pop last drawing
+			Lines.frames[Lines.currentFrame].shift(); // pop last drawing
 		}
 	};
 
@@ -196,7 +194,7 @@ function Data() {
 	/* i key */
 	this.insertFrame = function() {
 		self.saveLines();
-		self.frames.insert(Lines.draw.currentFrame, []);
+		Lines.frames.insert(Lines.currentFrame, []);
 		Lines.interface.updateFramesPanel();
 	};
 
@@ -224,31 +222,31 @@ function Data() {
 		self.saveLines();
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
-			const tempFrames = _.cloneDeep(self.frames[Lines.draw.currentFrame]);
-			// self.frames.splice(Lines.draw.currentFrame, 1);
+			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
+			// Lines.frames.splice(Lines.currentFrame, 1);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
-				const tempLines = self.drawings[tempFrames[h].d];
+				const tempLines = Lines.drawings[tempFrames[h].d];
 				if (over) {
 					for (let i = 0; i < tempLines.l.length - 1; i += segmentsPerFrame) {
-						if (!self.frames[Lines.draw.currentFrame]) self.frames[Lines.draw.currentFrame] = [];
+						if (!Lines.frames[Lines.currentFrame]) Lines.frames[Lines.currentFrame] = [];
 						else self.saveLines();
-						self.frames[Lines.draw.currentFrame].push({
+						Lines.frames[Lines.currentFrame].push({
 							d: tempFrames[h].d,
 							i: follow ? i : 0,
 							e: i + segmentsPerFrame
 						});
-						Lines.draw.currentFrame++;
+						Lines.currentFrame++;
 					}
 				} else {
 					for (let i = tempLines.l.length - 1 - segmentsPerFrame; i >= 0; i -= segmentsPerFrame) {
 						self.insertFrame();
-						if (!self.frames[Lines.draw.currentFrame]) self.frames[Lines.draw.currentFrame] = [];
+						if (!Lines.frames[Lines.currentFrame]) Lines.frames[Lines.currentFrame] = [];
 						if (!follow) {
 							for (let j = 0; j < h; j++) {
-								self.frames[Lines.draw.currentFrame].push(tempFrames[j]);
+								Lines.frames[Lines.currentFrame].push(tempFrames[j]);
 							}
 						}
-						self.frames[Lines.draw.currentFrame].push({
+						Lines.frames[Lines.currentFrame].push({
 							d: tempFrames[h].d,
 							i: follow ? i : 0,
 							e: i + segmentsPerFrame
@@ -269,8 +267,8 @@ function Data() {
 			offset = new Cool.Vector(x,y);
 		}
 		if (offset) {
-			for (let i = 0; i < self.frames[Lines.draw.currentFrame].length; i++) {
-				const d = self.drawings[self.frames[Lines.draw.currentFrame][i].d];
+			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
+				const d = Lines.drawings[Lines.frames[Lines.currentFrame][i].d];
 				if (d != "x"){
 					for (let j = 0; j < d.l.length; j++) {
 						if (d.l[j].e && d.l[j].s) {
@@ -295,22 +293,22 @@ function Data() {
 		let miny = 10000;
 		let maxy = 0;
 
-		for (let i = 0; i < self.drawings.length; i++) {
-			if (self.drawings[i] != "x"){
-				for (let j = 0; j < self.drawings[i].l.length; j++) {
-					if (self.drawings[i].l[j].e && self.drawings[i].l[j].s) {
+		for (let i = 0; i < Lines.drawings.length; i++) {
+			if (Lines.drawings[i] != "x"){
+				for (let j = 0; j < Lines.drawings[i].l.length; j++) {
+					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
 
-						tolerance = Math.max( tolerance, self.drawings[i].r * 4 );
+						tolerance = Math.max( tolerance, Lines.drawings[i].r * 4 );
 
-						minx = Math.min( minx, self.drawings[i].l[j].e.x );
-						miny = Math.min( miny, self.drawings[i].l[j].e.y );
-						minx = Math.min( minx, self.drawings[i].l[j].s.x );
-						miny = Math.min( miny, self.drawings[i].l[j].s.y );
+						minx = Math.min( minx, Lines.drawings[i].l[j].e.x );
+						miny = Math.min( miny, Lines.drawings[i].l[j].e.y );
+						minx = Math.min( minx, Lines.drawings[i].l[j].s.x );
+						miny = Math.min( miny, Lines.drawings[i].l[j].s.y );
 
-						maxx = Math.max( maxx, self.drawings[i].l[j].e.x );
-						maxy = Math.max( maxy, self.drawings[i].l[j].e.y );
-						maxx = Math.max( maxx, self.drawings[i].l[j].s.x );
-						maxy = Math.max( maxy, self.drawings[i].l[j].s.y );
+						maxx = Math.max( maxx, Lines.drawings[i].l[j].e.x );
+						maxy = Math.max( maxy, Lines.drawings[i].l[j].e.y );
+						maxx = Math.max( maxx, Lines.drawings[i].l[j].s.x );
+						maxy = Math.max( maxy, Lines.drawings[i].l[j].s.y );
 
 					}	
 				}
@@ -320,14 +318,14 @@ function Data() {
 		Lines.canvas.setWidth((maxx - minx) + tolerance * 2);
 		Lines.canvas.setHeight((maxy - miny) + tolerance * 2);
 
-		for (let i = 0; i < self.drawings.length; i++) {
-			if (self.drawings[i] != "x"){
-				for (var j = 0; j < self.drawings[i].l.length; j++) {
-					if (self.drawings[i].l[j].e && self.drawings[i].l[j].s) {
-						self.drawings[i].l[j].e.x -= minx - tolerance;
-						self.drawings[i].l[j].e.y -= miny - tolerance;
-						self.drawings[i].l[j].s.x -= minx - tolerance;
-						self.drawings[i].l[j].s.y -= miny - tolerance;
+		for (let i = 0; i < Lines.drawings.length; i++) {
+			if (Lines.drawings[i] != "x"){
+				for (var j = 0; j < Lines.drawings[i].l.length; j++) {
+					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
+						Lines.drawings[i].l[j].e.x -= minx - tolerance;
+						Lines.drawings[i].l[j].e.y -= miny - tolerance;
+						Lines.drawings[i].l[j].s.x -= minx - tolerance;
+						Lines.drawings[i].l[j].s.y -= miny - tolerance;
 					}	
 				}
 			}

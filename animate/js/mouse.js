@@ -8,7 +8,7 @@ function Mouse() {
 		if (ev.toElement != Lines.canvas.canvas) { 
 			if (self.isDrawing) Lines.data.saveLines();
 			self.isDrawing = false;
-			if (self.moves % 2 == 1) Lines.data.lines.splice(-1,1);
+			if (self.moves % 2 == 1) Lines.lines.splice(-1,1);
 			self.moves = 0;
 
 			/* pointer context click on frames for copy frames */
@@ -38,9 +38,9 @@ function Mouse() {
 	this.addLine = function(x, y) {
 		/* end of last line */
 		if (self.moves > 0) 
-			Lines.data.lines[Lines.data.lines.length - 1].e = new Cool.Vector(x, y);
+			Lines.lines[Lines.lines.length - 1].e = new Cool.Vector(x, y);
 		/* start of new line */
-		Lines.data.lines.push({
+		Lines.lines.push({
 			s:  new Cool.Vector(x, y)
 		});
 		self.moves++;
@@ -55,9 +55,9 @@ function Mouse() {
 
 	this.drawEnd = function(ev) {
 		if (ev.which == 1) self.isDrawing = false;
-		if (self.moves % 2 == 1) Lines.data.lines.splice(-1, 1);
-		if (Lines.data.lines.length > 0 && !Lines.data.lines[Lines.data.lines.length - 1].e) 
-			Lines.data.lines.pop(); // remove lines with s and no e
+		if (self.moves % 2 == 1) Lines.lines.splice(-1, 1);
+		if (Lines.lines.length > 0 && !Lines.lines[Lines.lines.length - 1].e) 
+			Lines.lines.pop(); // remove lines with s and no e
 		self.moves = 0;
 	}
 

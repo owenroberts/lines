@@ -16,7 +16,6 @@ this.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
 function Draw() {
 	const self = this;
 
-	this.currentFrame = 0;
 	this.currentFrameCounter = 0; // for when line fps is different from anim fps, counts with floats
 	this.isPlaying = false;
 
@@ -37,7 +36,7 @@ function Draw() {
 
 	/* just set drawing back to 0 but might do other things */
 	this.reset = function() {
-		self.currentFrame = self.currentFrameCounter = 0;
+		Lines.currentFrame = self.currentFrameCounter = 0;
 		self.isPlaying = false;
 		Lines.canvas.ctx.miterLimit = 1;
 		Lines.interface.updateFramesPanel();
@@ -77,12 +76,12 @@ function Draw() {
 	this.draw = function() {
 		if (performance.now() > self.interval + self.timer) {
 			self.timer = performance.now();
-			if (self.isPlaying && self.currentFrameCounter < Lines.data.frames.length) {
+			if (self.isPlaying && self.currentFrameCounter < Lines.frames.length) {
 				self.currentFrameCounter += self.intervalRatio;
-				self.currentFrame = Math.floor(self.currentFrameCounter);
+				Lines.currentFrame = Math.floor(self.currentFrameCounter);
 			}
-			if (self.isPlaying && self.currentFrameCounter >= Lines.data.frames.length) {
-				self.currentFrame = self.currentFrameCounter = 0;
+			if (self.isPlaying && self.currentFrameCounter >= Lines.frames.length) {
+				Lines.currentFrame = self.currentFrameCounter = 0;
 			}
 
 			/* update the anim frame number */
@@ -103,13 +102,13 @@ function Draw() {
 			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
-					const frameNumber = self.currentFrame - o;
+					const frameNumber = Lines.currentFrame - o;
 					if (frameNumber >= 0) {
 						const onionColor = 1.1 - (o / self.onionSkinNum); // number for color
 						const color = "rgba(105,150,255," + onionColor + ")";
-						for (var i = 0; i < Lines.data.frames[frameNumber].length; i++) {
-							const fr = Lines.data.frames[frameNumber][i];
-							const dr = Lines.data.drawings[fr.d];
+						for (var i = 0; i < Lines.frames[frameNumber].length; i++) {
+							const fr = Lines.frames[frameNumber][i];
+							const dr = Lines.drawings[fr.d];
 							self.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, color, true);
 						}
 					}
@@ -117,17 +116,17 @@ function Draw() {
 			}
 
 			/* draws saved frames */
-			if (Lines.data.frames[self.currentFrame]) {
-				for (let i = 0; i < Lines.data.frames[self.currentFrame].length; i++) {
-					const fr = Lines.data.frames[self.currentFrame][i];
-					const dr = Lines.data.drawings[fr.d];
+			if (Lines.frames[Lines.currentFrame]) {
+				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
+					const fr = Lines.frames[Lines.currentFrame][i];
+					const dr = Lines.drawings[fr.d];
 					self.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
 				}
 			}
 
 			/* draws current lines */
-			if (Lines.data.lines.length > 0) {
-				self.drawLines(Lines.data.lines, 0, Lines.data.lines.length, Lines.mouse.segNumRange, Lines.mouse.jiggleRange, Lines.color.color);
+			if (Lines.lines.length > 0) {
+				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.mouse.segNumRange, Lines.mouse.jiggleRange, Lines.color.color);
 			}
 
 			/* capture frames, have to click ok on each */
@@ -146,9 +145,9 @@ function Draw() {
 	this.captureCycle = function() {
 		Lines.data.saveLines();
 		/* set animation to last frame because it updates frames before draw */
-		self.currentFrame = self.currentFrameCounter =  Lines.data.frames.length; 
+		Lines.currentFrame = self.currentFrameCounter =  Lines.frames.length; 
 		self.isPlaying = true;
-		self.captureFrames = Lines.data.frames.length;
+		self.captureFrames = Lines.frames.length;
 	}
 	
 	/* starts drawing, is this necessary ? */
