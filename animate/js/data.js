@@ -4,6 +4,13 @@ function Data() {
 	this.framesCopy = []; // copied frame(s)
 	this.framesToCopy = [];
 
+	this.addFrameToCopy = function(elem) {
+		if (!elem.classList.contains("copy")){
+ 			elem.classList.add("copy");
+ 			self.framesToCopy.push( Number(elem.dataset.index) );
+ 		}
+	};
+
 	/* r key - save lines and add new lines */
 	this.saveLines = function() {
 		if (Lines.lines.length > 0) {
@@ -495,6 +502,17 @@ function Data() {
 		title: "Paste Frames",
 		key: "v",
 		callback: self.pasteFrames
+	}) );
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Select All Frames",
+		key: "shift-v",
+		callback: function() {
+			Lines.interface.frameElems.looper((elem) => {
+				self.addFrameToCopy(elem);
+			});
+		}
 	}) );
 
 	panel.addRow();

@@ -14,12 +14,8 @@ function DrawEvents() {
 			if (ev.which == 3) {
 				ev.preventDefault();
 				const elem = document.elementFromPoint(ev.clientX, ev.clientY);
-				const frameIndex = elem.dataset.index;
 				if (elem.classList.contains("frame")) {
-					if (!elem.classList.contains("copy")){
-			 			elem.classList.add("copy");
-			 			Lines.data.framesToCopy.push( Number(frameIndex) );
-			 		}
+					Lines.data.addFrameToCopy(elem);
 				}
 			}
 		}

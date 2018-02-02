@@ -230,6 +230,14 @@ class UIList {
 	getLength() {
 		return this.els.length;
 	}
+	addClass(clas) {
+		for (let i = 0; i < this.els.length; i++) {
+			const elem = this.els[i];
+			if (!elem.classList.contains(clas)){
+ 				elem.classList.add(clas);
+ 			}
+		}
+	}
 	setId(id, index) {
 		if (index != undefined) {
 			this.els[index].setAttribute('id', id);
@@ -237,5 +245,11 @@ class UIList {
 	}
 	remove(index) {
 		this.els[index].remove();
+	}
+	looper(callback) {
+		for (let i = 0; i < this.els.length; i++) {
+			const elem = this.els[i];
+			callback(elem);
+		}
 	}
 }
