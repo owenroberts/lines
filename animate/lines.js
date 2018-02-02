@@ -14,7 +14,7 @@ window.addEventListener("load", function() {
 	Lines.data = new Data();
 	Lines.color = new Color("color", "Line Color"); 
 	// Lines.color.setColor("ff00ff");
-	Lines.mouse = new Mouse();
+	Lines.drawEvents = new DrawEvents();
 	Lines.fio = new Files_IO();
 	Lines.draw.start();
 });

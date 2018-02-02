@@ -22,8 +22,8 @@ function Data() {
 			Lines.drawings.push({
 				l: Lines.lines,
 				c: Lines.color.color,
-				n: Lines.mouse.segNumRange,
-				r: Lines.mouse.jiggleRange
+				n: Lines.drawEvents.segNumRange,
+				r: Lines.drawEvents.jiggleRange
 			});
 
 			/* add current color to color choices */

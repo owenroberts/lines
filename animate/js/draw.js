@@ -126,7 +126,7 @@ function Draw() {
 
 			/* draws current lines */
 			if (Lines.lines.length > 0) {
-				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.mouse.segNumRange, Lines.mouse.jiggleRange, Lines.color.color);
+				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.color.color);
 			}
 
 			/* capture frames, have to click ok on each */

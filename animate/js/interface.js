@@ -67,7 +67,7 @@ function Interface() {
 	};
 	
 	this.nextFrame = function() {
-		Lines.mouse.isDrawing = false;
+		Lines.drawEvents.isDrawing = false;
 		Lines.data.saveLines();
 		if (Lines.currentFrame < Lines.frames.length) 
 			Lines.currentFrame++;
@@ -75,7 +75,7 @@ function Interface() {
 	};
 
 	this.prevFrame = function() {
-		Lines.mouse.isDrawing = false;
+		Lines.drawEvents.isDrawing = false;
 		Lines.data.saveLines();
 		if (Lines.currentFrame > 0) 
 			Lines.currentFrame--;

@@ -1,5 +1,4 @@
-/* rename pointer events (PointerEvent is taken) */
-function Mouse() {
+function DrawEvents() {
 	const self = this;
 	this.moves = 0; // number of events recorded
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
