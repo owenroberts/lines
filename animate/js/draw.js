@@ -247,7 +247,9 @@ function Draw() {
 	panel.addRow();
 	panel.add( new UIButton({
 		title: "Capture Frame",
-		callback: Lines.canvas.capture,
+		callback: function() {
+			self.captureFrames = 1;
+		},
 		key: "k"
 	}) );
 

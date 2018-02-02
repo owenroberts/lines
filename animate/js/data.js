@@ -47,16 +47,20 @@ function Data() {
 		/* if copy frames selected ... */
 		/* this seems to automatically add these frames to end which is not ideal
 			should be when plus frame is selected 
-			selecting frames to copy vs paste should be different states */
+			selecting frames to copy vs paste should be different states
+			just automatically goes  */
 		if (self.framesToCopy.length > 0) {
 			for (let i = 0; i < self.framesToCopy.length; i++) {
-				if (Lines.frames[Lines.currentFrame] == undefined) Lines.frames[Lines.currentFrame] = [];
+				if (Lines.frames[Lines.currentFrame] == undefined) 
+					Lines.frames[Lines.currentFrame] = [];
 				for (let h = 0; h < Lines.frames[self.framesToCopy[i]].length; h++) {
 					Lines.frames[Lines.currentFrame].push(Lines.frames[self.framesToCopy[i]][h]);
 				}
 				self.saveLines();
 				Lines.interface.nextFrame();
 			}
+			self.clearFramesToCopy();
+			Lines.interface.updateFramesPanel();
 		} else {
 			/* copy current frame */
 			if (Lines.lines.length > 0) self.saveLines();
