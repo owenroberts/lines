@@ -1,5 +1,6 @@
 function Files_IO() {
 	const self = this;
+	this.saveFilesEnabled = false;
 
 	/* s key */
 	this.saveFramesToFile = function(single) {
@@ -105,6 +106,7 @@ function Files_IO() {
 	this.title = new UI({id:"title"});
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
+		self.saveFilesEnabled = true;
 		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
 	}
 
