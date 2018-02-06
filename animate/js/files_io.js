@@ -36,10 +36,12 @@ function Files_IO() {
 			}
 		}
 
+		console.log(drawingsIndexes);
+
 		for (let i = 0; i < Lines.drawings.length; i++) {
 			if ( drawingsIndexes.indexOf(i) != -1 ) 
-				json.d.push( Lines.drawings[i] );
-			else json.d.push( 'x' ); // this shouldn't really be necessary if this is written right
+				json.d[i] = Lines.drawings[i]; // preserve index
+			//else json.d.push( 'x' ); // this shouldn't really be necessary if this is written right
 		}
 		const jsonfile = JSON.stringify(json);
 		let filename = self.title.getValue();
@@ -63,7 +65,8 @@ function Files_IO() {
 				Lines.frames =  data.f;
 				Lines.drawings = data.d;
 				for (let i = 0; i < Lines.drawings.length; i++) {
-					if (Lines.drawings[i] != 'x') Lines.color.addColorBtn( Lines.drawings[i].c );
+					if (Lines.drawings[i]) // unused drawings are null, this is okay, not looped
+						Lines.color.addColorBtn( Lines.drawings[i].c );
 				}
 				Lines.canvas.setWidth(data.w);
 				Lines.canvas.setHeight(data.h);

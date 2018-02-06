@@ -129,7 +129,7 @@ function Draw() {
 				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.color.color);
 			}
 
-			/* capture frames, have to click ok on each */
+			/* capture frames */
 			if (self.captureFrames > 0) {
 				Lines.canvas.capture();
 				self.captureFrames--;
