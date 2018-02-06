@@ -34,6 +34,7 @@ function Canvas(width, height, color) {
 			if (ev.which == 13 || ev.type == "blur") { 
 				self.setWidth();
 				self.widthInput.reset(self.width);
+				this.blur();
 			}
 		}
 	});
@@ -49,6 +50,7 @@ function Canvas(width, height, color) {
 			if (ev.which == 13 || ev.type == "blur") {
 				self.setHeight();
 				self.heightInput.reset(self.height);
+				this.blur();
 			}
 		}
 	});
