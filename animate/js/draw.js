@@ -32,6 +32,7 @@ function Draw() {
 	this.setFps = function(fps) {
 		self.fps = fps;
 		self.intervalRatio = self.interval / (1000/fps);
+		self.fpsSelect.setValue(fps);
 	}
 
 	/* just set drawing back to 0 but might do other things */
@@ -83,6 +84,8 @@ function Draw() {
 			if (self.isPlaying && self.currentFrameCounter >= Lines.frames.length) {
 				Lines.currentFrame = self.currentFrameCounter = 0;
 			}
+
+			// console.log(Lines.currentFrame, self.currentFrameCounter);
 
 			/* update the anim frame number */
 			if (self.isPlaying) 
