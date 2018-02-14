@@ -86,9 +86,11 @@ function Interface() {
 	this.keyDown = function(ev) {
 		//console.log(ev.which);
 		// if (ev.which == 9) ev.preventDefault(); // tab
+		let k = Cool.keys[ev.which];
+		if (k == "space") 
+			ev.preventDefault();
 		if (document.activeElement.nodeName != "INPUT") {
-
-			var k = Cool.keys[ev.which];
+			
 			if (ev.shiftKey) k = "shift-" + k;
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
