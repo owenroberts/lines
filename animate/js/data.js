@@ -55,18 +55,23 @@ function Data() {
 		/* this seems to automatically add these frames to end which is not ideal
 			should be when plus frame is selected 
 			selecting frames to copy vs paste should be different states
-			just automatically goes  */
+			just automatically goes  
+			maybe its ok ...
+			select frame, choose plus frame (or anywhere), hit c, clear frames
+			have to select IN ORDER! */
 		if (self.framesToCopy.length > 0) {
 			for (let i = 0; i < self.framesToCopy.length; i++) {
+				const frmIndex = self.framesToCopy[i];
 				if (Lines.frames[Lines.currentFrame] == undefined) 
 					Lines.frames[Lines.currentFrame] = [];
-				for (let h = 0; h < Lines.frames[self.framesToCopy[i]].length; h++) {
-					Lines.frames[Lines.currentFrame].push(Lines.frames[self.framesToCopy[i]][h]);
+				const len = Lines.frames[frmIndex].length;
+				for (let h = 0; h < len; h++) {
+					Lines.frames[Lines.currentFrame].push(Lines.frames[frmIndex][h]);
 				}
 				self.saveLines();
 				Lines.interface.nextFrame();
 			}
-			self.clearFramesToCopy();
+			// self.clearFramesToCopy(); do it yourself ctrl v
 			Lines.interface.updateFramesPanel();
 		} else {
 			/* copy current frame */
@@ -243,19 +248,21 @@ function Data() {
 				const tempLines = Lines.drawings[tempFrames[h].d];
 				if (over) {
 					for (let i = 0; i < tempLines.l.length - 1; i += segmentsPerFrame) {
-						if (!Lines.frames[Lines.currentFrame]) Lines.frames[Lines.currentFrame] = [];
+						if (!Lines.frames[Lines.currentFrame]) 
+							Lines.frames[Lines.currentFrame] = [];
 						else self.saveLines();
 						Lines.frames[Lines.currentFrame].push({
 							d: tempFrames[h].d,
 							i: follow ? i : 0,
 							e: i + segmentsPerFrame
 						});
-						Lines.currentFrame++;
+						Lines.interface.nextFrame();
 					}
 				} else {
 					for (let i = tempLines.l.length - 1 - segmentsPerFrame; i >= 0; i -= segmentsPerFrame) {
 						self.insertFrame();
-						if (!Lines.frames[Lines.currentFrame]) Lines.frames[Lines.currentFrame] = [];
+						if (!Lines.frames[Lines.currentFrame]) 
+							Lines.frames[Lines.currentFrame] = [];
 						if (!follow) {
 							for (let j = 0; j < h; j++) {
 								Lines.frames[Lines.currentFrame].push(tempFrames[j]);
