@@ -101,7 +101,7 @@ function LinesPlayer(canvas, src, lps, callback) {
 		this.ctxStrokeColor = undefined;
 	};
 
-	window.addEventListener('resize', this.sizeCanvas.bind(this), false);
+	// window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 
 	this.loadAnimation = function(src, callback) {
 		const self = this;
@@ -119,9 +119,8 @@ function LinesPlayer(canvas, src, lps, callback) {
 			if (data.bg)
 				self.canvas.style.backgroundColor = '#' + data.bg;
 			requestAnimFrame(self.draw.bind(self));
-			self.sizeCanvas();
+			// self.sizeCanvas();
 			if (callback) callback(); // callback to do something after drawing loads
-
 		});
 	};
 
