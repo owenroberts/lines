@@ -150,13 +150,7 @@ function Data() {
 	/* x key */
 	this.clearFrame = function() {
 		
-		// if (self.frames[Lines.currentFrame]) {
-			// for (let i = 0; i < self.frames[Lines.currentFrame].length; i++) {
-				/* can't splice drawings until we figure out indexing 
-					actually don't want to do this in case drawing is on other frame
-					delete drawings in file i/o already happening i think */
-			// }
-		// }
+		self.saveState();
 		
 		if (Lines.frames[Lines.currentFrame])
 			Lines.frames[Lines.currentFrame] = undefined;
