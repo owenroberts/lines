@@ -169,8 +169,9 @@ button:focus { outline: none; }
 }
 
 #keys {
-	width: auto;
-	min-width:100%;
+	/* width: auto;
+	min-width:100%; */
 	position: relative;
-	/* column-count:3; */
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }

@@ -15,6 +15,8 @@ class UI {
 		if (params.key) {
 			Lines.interface.interfaces[params.key] = this;
 			/* adding key commands to interface */
+			const keyContainer = document.createElement("div");
+			keyContainer.classList.add("key-container");
 			const key = document.createElement("span");
 			key.classList.add("key");
 			if (params.key == "space")
@@ -30,9 +32,10 @@ class UI {
 				key.textContent = params.key;
 			const dek = document.createElement("span");
 			dek.textContent = params.title || params.id || params.label;
-			Lines.interface.panels["keys"].el.appendChild(key);
-			Lines.interface.panels["keys"].el.appendChild(dek);
-			Lines.interface.panels["keys"].el.appendChild(document.createElement("br"));
+			keyContainer.appendChild(key);
+			keyContainer.appendChild(dek);
+			Lines.interface.panels["keys"].rows[0].remove();  // def wack
+			Lines.interface.panels["keys"].el.appendChild(keyContainer);
 		}
 	}
 
@@ -86,11 +89,11 @@ class Panel {
 	toggle() {
 		if (this.el.clientHeight <= 25) {
 			this.el.style.height = "auto";
-			this.el.style.flex = "2 50%";
+			/*this.el.style.flex = "2 50%";*/ // i fucking don't understand flex
 			this.toggleBtn.innerHTML = "^";
 		} else {
 			this.el.style.height = 25 + "px";
-			this.el.style.flex = "1 25%";
+			/*this.el.style.flex = "1 25%";*/ 
 			this.toggleBtn.innerHTML = "v";
 		}
 	}
