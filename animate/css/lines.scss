@@ -15,18 +15,20 @@ button:focus { outline: none; }
 }
 
 #container {
-	min-width:720px;
+/* 	min-width:720px; */
 	margin:1em;
-	display: grid;
-  	grid-template-columns: auto 1fr;
+	display: flex;
+	flex-wrap: wrap;
 	#draw {
 		padding-right:1em;
 	}
 	#tools {
+		flex-grow: 1;
 		#panels {
 			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
+			grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
 			margin-top:0.5em;
+
 		}
 	}
 }
@@ -79,11 +81,11 @@ button:focus { outline: none; }
 
 
 .menu-panel {
-	border-top:1px solid lightgray;
-	border-right:1px solid lightgray;
-	padding:0.5em;
-	overflow:hidden;
-	position:relative;
+	border-top: 1px solid lightgray;
+	border-right: 1px solid lightgray;
+	padding: 0.5em;
+	overflow: hidden;
+	position: relative;
 	height:25px;
 	.row {
 		margin-top:1em;
@@ -95,7 +97,7 @@ button:focus { outline: none; }
 			vertical-align: top;
 			line-height: 2;
 			padding-right: 0.5em;
-			flex: 1;
+			/* flex: 1; */
 			white-space: nowrap;
 		}
 		input {
@@ -109,8 +111,8 @@ button:focus { outline: none; }
 		border: 1px solid gray;
 		padding: 0 0.25em;
 		margin: .25em 0;
-		cursor:pointer;
-		margin-right:3px;
+		cursor: pointer;
+		margin-right: 3px;
 		&:hover {
 			background:lightgray;
 		}
@@ -120,7 +122,7 @@ button:focus { outline: none; }
 #colormenu, #canvasmenu {
 	input {
 		display:inline-block;
-		width:100px;
+		/* width:100px; */
 	}
 	#html-color, #bkg-img, #bkg-x, #bkg-y, #bkg-size { width:80px; }
 	#colorways {
@@ -163,5 +165,5 @@ button:focus { outline: none; }
 	width: auto;
 	min-width:100%;
 	position: relative;
-	column-count:3;
+	/* column-count:3; */
 }
