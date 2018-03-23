@@ -2,7 +2,7 @@ function Data() {
 	const self = this;
 
 	this.framesCopy = []; // copied frame(s)
-	this.framesToCopy = [];
+	this.framesToCopy = []; // selected frames to copy
 
 	this.addFrameToCopy = function(elem) {
 		if (!elem.classList.contains("copy")){
@@ -52,35 +52,59 @@ function Data() {
 	/* c key  */
 	this.copyFrames = function() {
 		/* if copy frames selected ... */
-		/* this seems to automatically add these frames to end which is not ideal
-			should be when plus frame is selected 
-			selecting frames to copy vs paste should be different states
-			just automatically goes  
-			maybe its ok ...
-			select frame, choose plus frame (or anywhere), hit c, clear frames
-			have to select IN ORDER! */
 		if (self.framesToCopy.length > 0) {
+			self.framesCopy = [];
 			for (let i = 0; i < self.framesToCopy.length; i++) {
 				const frmIndex = self.framesToCopy[i];
-				if (Lines.frames[Lines.currentFrame] == undefined) 
-					Lines.frames[Lines.currentFrame] = [];
-				const len = Lines.frames[frmIndex].length;
-				for (let h = 0; h < len; h++) {
-					Lines.frames[Lines.currentFrame].push(Lines.frames[frmIndex][h]);
+				const frm = Lines.frames[frmIndex];
+				self.framesCopy[i] = [];
+				for (let h = 0; h < frm.length; h++) {
+					self.framesCopy[i].push(_.cloneDeep(frm[h]));
 				}
-				self.saveLines();
-				Lines.interface.nextFrame();
 			}
-			// self.clearFramesToCopy(); do it yourself ctrl v
-			Lines.interface.updateFramesPanel();
-		} else {
-			/* copy current frame */
+		} else { /* copy current frame */
 			if (Lines.lines.length > 0) self.saveLines();
 			if (Lines.frames[Lines.currentFrame]) {
 				self.framesCopy = [];
 				/* clone all of the drawings in current frame */
 				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
 					self.framesCopy.push(_.cloneDeep(Lines.frames[Lines.currentFrame][i]));
+				}
+			}
+		}
+	};
+
+	/* v key */
+	this.pasteFrames = function() {
+		if (self.framesCopy.length > 1) { /* copy multiple to multiple */
+			for (let i = 0; i < self.framesCopy.length; i++) {
+				if (Lines.frames[Lines.currentFrame] == undefined) 
+					Lines.frames[Lines.currentFrame] = [];
+				const len = self.framesCopy[i].length;
+				for (let h = 0; h < len; h++) {
+					Lines.frames[Lines.currentFrame].push(self.framesCopy[i][h]);
+				}
+				self.saveLines();
+				Lines.interface.nextFrame();
+			}
+			Lines.interface.updateFramesPanel();
+		} else if (self.framesToCopy.length > 0) { /* copy one frame onto multiple */
+			for (let h = 0; h < self.framesToCopy.length; h++) {
+				for (let i = 0; i < self.framesCopy.length; i++) {
+					Lines.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[i]) );
+				}
+			}
+			self.clearFramesToCopy();
+		} else {
+			if (Lines.frames[Lines.currentFrame] == undefined) {
+				if (Lines.lines.length > 0) self.saveLines();
+				else Lines.frames[Lines.currentFrame] = [];
+				for (let i = 0; i < self.framesCopy.length; i++) {
+					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
+				}
+			} else {
+				for (let i = 0; i <  self.framesCopy.length; i++) {
+					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
 				}
 			}
 		}
@@ -111,31 +135,6 @@ function Data() {
 		const copyFrameElems = document.getElementsByClassName("copy");
 		for (let i = copyFrameElems.length - 1; i >= 0; i--) {
 			copyFrameElems[i].classList.remove("copy");
-		}
-	};
-
-	/* v key */
-	this.pasteFrames = function() {
-		/* copy one frame onto multiple */
-		if (self.framesToCopy.length > 0) {
-			for (let h = 0; h < self.framesToCopy.length; h++) {
-				for (let i = 0; i < self.framesCopy.length; i++) {
-					Lines.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[i]) );
-				}
-			}
-			self.clearFramesToCopy();
-		} else {
-			if (Lines.frames[Lines.currentFrame] == undefined) {
-				if (Lines.lines.length > 0) self.saveLines();
-				else Lines.frames[Lines.currentFrame] = [];
-				for (let i = 0; i < self.framesCopy.length; i++) {
-					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
-				}
-			} else {
-				for (let i = 0; i <  self.framesCopy.length; i++) {
-					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
-				}
-			}
 		}
 	};
 
