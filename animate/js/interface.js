@@ -1,3 +1,4 @@
+
 function Interface() {
 	let self = this;
 
@@ -5,7 +6,14 @@ function Interface() {
 	this.interfaces = {}; /* better name for interfaces ?? */
 
 	this.framesPanel = new UI({id:"frames"});
-	this.plusFrame = new UI({id:"current"}); /* plus frame is unsaved drawing frame */
+	this.plusFrame = new UI({
+		id:"current",
+		event: "click",
+		callback: function() {
+			Lines.currentFrame = Lines.frames.length;
+			self.updateFrameNum();
+		}
+	}); /* plus frame is unsaved drawing frame */
 	this.frameElems = new UIList({class:"frame"});
 
 	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
