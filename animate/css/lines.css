@@ -121,7 +121,13 @@ button:focus {
   height: auto;
   padding: 0.5em;
   width: auto;
-  width: 100%; }
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 24px);
+  grid-template-rows: max-content max-content; }
+  #frames p {
+    margin: 0;
+    grid-column: 1/ span 2; }
   #frames .frame, #frames .plus, #frames #current {
     display: inline-block;
     background-color: lightgray;
