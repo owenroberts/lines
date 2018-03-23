@@ -19,20 +19,15 @@ button:focus {
 
 #container {
   min-width: 720px;
-  display: flex;
-  flex-wrap: wrap;
-  /* grid-auto-flow: column;
-  grid-gap: 1em; */
-  margin: 1em; }
-
-#draw {
-  /* margin:1em; */
-  flex: 0;
-  padding-right: 1em; }
-
-#tools {
-  /* padding-top:1em; */
-  flex: 1; }
+  margin: 1em;
+  display: grid;
+  grid-template-columns: auto 1fr; }
+  #container #draw {
+    padding-right: 1em; }
+  #container #tools #panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
+    margin-top: 0.5em; }
 
 #canvas {
   border: 1px solid gray; }
@@ -70,33 +65,16 @@ button:focus {
   font-size: 14px;
   font-weight: 100; }
 
-/* https://codepen.io/abbeyjfitzgerald/pen/vgjwVN?editors=1100 */
-#panels {
-  display: flex;
-  flex-wrap: wrap;
-  flex-flow: row wrap;
-  margin-top: 0.5em; }
-  #panels .menu-panel {
-    /* max-width:150px; */
-    flex: 1 25%;
-    margin: 0;
-    max-width: 180px;
-    min-width: 130px; }
-
 .menu-panel {
-  margin-right: 0.5em;
-  /* margin-top:0.5em; */
   border-top: 1px solid lightgray;
-  /* border-left:1px solid lightgray; */
   border-right: 1px solid lightgray;
   padding: 0.5em;
   overflow: hidden;
-  /* box-shadow: 2px 2px 1px lightgray; */
   position: relative;
   height: 25px; }
   .menu-panel .row {
     margin-top: 1em;
-    display: flex; }
+    /* display:flex; */ }
     .menu-panel .row:first-child {
       margin-top: 3px; }
     .menu-panel .row span {
@@ -105,18 +83,14 @@ button:focus {
       padding-right: 0.5em;
       flex: 1;
       white-space: nowrap; }
-      .menu-panel .row span.btn {
-        /* padding:0.25em; */ }
     .menu-panel .row input {
       width: 100%; }
     .menu-panel .row .btn {
-      flex: none;
       padding: 0 0.25em; }
   .menu-panel .btn {
     border: 1px solid gray;
     padding: 0 0.25em;
     margin: .25em 0;
-    border-radius: 3px;
     cursor: pointer;
     margin-right: 3px; }
     .menu-panel .btn:hover {
@@ -145,11 +119,8 @@ button:focus {
   height: auto;
   padding: 0.5em;
   width: auto;
-  /*  idk?  */
-  min-width: 100%; }
+  width: 100%; }
   #frames .frame, #frames .plus, #frames #current {
-    /* width:30px;
-    height:30px; */
     display: inline-block;
     background-color: lightgray;
     margin-right: 1px;

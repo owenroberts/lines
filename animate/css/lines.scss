@@ -16,18 +16,19 @@ button:focus { outline: none; }
 
 #container {
 	min-width:720px;
-	display:flex;
-	flex-wrap: wrap;
 	margin:1em;
-}
-
-#draw {
-	flex: 0;
-	padding-right:1em;
-}
-
-#tools {
-	flex: 1;
+	display: grid;
+  	grid-template-columns: auto 1fr;
+	#draw {
+		padding-right:1em;
+	}
+	#tools {
+		#panels {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
+			margin-top:0.5em;
+		}
+	}
 }
 
 #canvas {
@@ -75,23 +76,9 @@ button:focus { outline: none; }
 	font-weight: 100;
 }
 
-/* https://codepen.io/abbeyjfitzgerald/pen/vgjwVN?editors=1100 */
-#panels {
-	display:flex;
-	flex-wrap:wrap;
-	flex-flow: row wrap;
-	margin-top:0.5em;
 
-	.menu-panel {
-		flex: 1 25%;
-		margin:0;
-		max-width: 180px;
-		min-width:130px;
-	}
-}
 
 .menu-panel {
-	margin-right:0.5em;
 	border-top:1px solid lightgray;
 	border-right:1px solid lightgray;
 	padding:0.5em;
@@ -100,22 +87,21 @@ button:focus { outline: none; }
 	height:25px;
 	.row {
 		margin-top:1em;
-		display:flex;
+		/* display:flex; */
 		&:first-child {
 			margin-top: 3px;
 		}
 		span {
 			vertical-align: top;
-    		line-height: 2;
-    		padding-right: 0.5em;
-    		flex: 1;
-    		white-space: nowrap;
+			line-height: 2;
+			padding-right: 0.5em;
+			flex: 1;
+			white-space: nowrap;
 		}
 		input {
 			width: 100%;
 		}
 		.btn {
-			flex: none;
 			padding: 0 0.25em;
 		}
 	}
@@ -123,7 +109,6 @@ button:focus { outline: none; }
 		border: 1px solid gray;
 		padding: 0 0.25em;
 		margin: .25em 0;
-		border-radius:3px;
 		cursor:pointer;
 		margin-right:3px;
 		&:hover {
@@ -158,11 +143,9 @@ button:focus { outline: none; }
 #frames {
 	height:auto;
 	padding: 0.5em;
-	width: auto; /*  idk?  */
-	min-width: 100%;
+	width: auto;
+	width: 100%;
 	.frame, .plus, #current {
-		/* width:30px;
-		height:30px; */
 		display:inline-block;
 		background-color:lightgray;
 		margin-right:1px;
