@@ -4,6 +4,17 @@ function Data() {
 	this.framesCopy = []; // copied frame(s)
 	this.framesToCopy = []; // selected frames to copy
 
+	this.saveStates = {
+		current: {
+			drawings: undefined,
+			frames: undefined
+		},
+		prev: {
+			drawings: undefined,
+			frames: undefined
+		}
+	};
+
 	this.addFrameToCopy = function(elem) {
 		if (!elem.classList.contains("copy")){
  			elem.classList.add("copy");
@@ -39,9 +50,7 @@ function Data() {
 			/* lines are saved, stop drawing? */
 			Lines.lines = [];
 
-			/* ignoring save states 
-			or maybe figuring it out.... 
-			should be module anyway */
+			self.saveState();
 
 			// kinda dump way to update the frame interface
 			Lines.interface.nextFrame();
@@ -197,18 +206,39 @@ function Data() {
 		}
 	};
 
+	this.saveState = function() {
+
+		if (self.saveStates.current.drawings) {
+			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
+			self.saveStates.prev.frames = _.cloneDeep(self.saveStates.current.frames);
+		} else {
+			self.saveStates.prev.drawings = _.cloneDeep(Lines.drawings);
+			self.saveStates.prev.frames = _.cloneDeep(Lines.frames);
+		}
+
+		self.saveStates.current.drawings = _.cloneDeep(Lines.drawings);
+		self.saveStates.current.frames = _.cloneDeep(Lines.frames);
+	};
+
 	/* ctrl z - unimplemented save states */
 	this.undo = function() {
-		/*if (saveStates.length > 1) {
-			saveStates.pop();
-			frames = _.cloneDeep(saveStates[saveStates.length - 1].f);
-			drawings = _.cloneDeep(saveStates[saveStates.length - 1].d);
-		}*/
-		/* almost working now but need to figure out frame updates, need interface for this too */
-		// updateFramesPanel();
-		//cutting already drawn line?? maybe later
-		//else if (frames[currentFrame].length > 0) frames[currentFrame].pop();
+		if (self.saveStates.prev.drawings) {
+			Lines.drawings = _.cloneDeep(self.saveStates.prev.drawings);
+			Lines.frames = _.cloneDeep(self.saveStates.prev.frames);
+
+			self.saveStates.current.drawings = _.cloneDeep(self.saveStates.prev.drawings);
+			self.saveStates.current.frames = _.cloneDeep(self.saveStates.prev.frames);
+
+			self.saveStates.prev.drawings = undefined;
+			self.saveStates.prev.frames = undefined;
+			
+		} else {
+			console.log("%c Can't undo ", "color:lightblue;background:gray;");
+		}
+		Lines.interface.updateFramesPanel();
 	};
+
+	
 
 	/* i key */
 	this.insertFrame = function() {
@@ -556,10 +586,10 @@ function Data() {
 	}) );
 
 	/* leave out until/if undo is actually implemented */
-	// panel.addRow();
-	// panel.add( new UIButton({
-	// 	title: "Undo",
-	// 	key: "ctrl-z",
-	// 	callback: self.undo
-	// }) );
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Undo",
+		key: "ctrl-z",
+		callback: self.undo
+	}) );
 }

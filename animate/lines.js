@@ -7,6 +7,8 @@ window.addEventListener("load", function() {
 	Lines.lines = []; // lines currently being drawn
 	Lines.drawings = []; // saved drawings
 	Lines.currentFrame = 0;
+	
+	
 	Lines.interface = new Interface();
 	Lines.canvas = new Canvas(512, 512, "000000"); // width height color, def color is 000000/black
 	Lines.draw = new Draw();
