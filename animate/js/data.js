@@ -218,14 +218,15 @@ function Data() {
 		Lines.interface.updateFramesPanel();
 	};
 
-	/* m key - should work with one copy, can imagine issues */
+	/* m key - should work with one copy, can imagine issues 
+		will copy all drawings in frame, use insert */
 	this.addMultipleCopies = function() {
 		self.framesCopy = [];
 		self.clearFramesToCopy();
 		let n = prompt("Number of copies: ");
+		self.copyFrames();
 		if (Number(n)) {
 			for (let i = 0; i < n; i++) {
-				self.copyFrames();
 				Lines.interface.nextFrame();
 				self.pasteFrames();
 			}
