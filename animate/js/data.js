@@ -72,12 +72,14 @@ function Data() {
 				}
 			}
 		} else { /* copy current frame */
-			if (Lines.lines.length > 0) self.saveLines();
+			if (Lines.lines.length > 0) 
+				self.saveLines();
 			if (Lines.frames[Lines.currentFrame]) {
 				self.framesCopy = [];
+				self.framesCopy.push([]);
 				/* clone all of the drawings in current frame */
 				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-					self.framesCopy.push(_.cloneDeep(Lines.frames[Lines.currentFrame][i]));
+					self.framesCopy[0].push(_.cloneDeep(Lines.frames[Lines.currentFrame][i]));
 				}
 			}
 		}
@@ -99,8 +101,8 @@ function Data() {
 			Lines.interface.updateFramesPanel();
 		} else if (self.framesToCopy.length > 0) { /* copy one frame onto multiple */
 			for (let h = 0; h < self.framesToCopy.length; h++) {
-				for (let i = 0; i < self.framesCopy.length; i++) {
-					Lines.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[i]) );
+				for (let i = 0; i < self.framesCopy[0].length; i++) {
+					Lines.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[0][i]) );
 				}
 			}
 			self.clearFramesToCopy();
@@ -108,13 +110,9 @@ function Data() {
 			if (Lines.frames[Lines.currentFrame] == undefined) {
 				if (Lines.lines.length > 0) self.saveLines();
 				else Lines.frames[Lines.currentFrame] = [];
-				for (let i = 0; i < self.framesCopy.length; i++) {
-					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
-				}
-			} else {
-				for (let i = 0; i <  self.framesCopy.length; i++) {
-					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[i]) );
-				}
+			}
+			for (let i = 0; i <  self.framesCopy[0].length; i++) {
+				Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[0][i]) );
 			}
 		}
 	};
