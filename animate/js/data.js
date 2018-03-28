@@ -230,8 +230,6 @@ function Data() {
 		Lines.interface.updateFramesPanel();
 	};
 
-	
-
 	/* i key */
 	this.insertFrame = function() {
 		self.saveLines();
@@ -265,7 +263,8 @@ function Data() {
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
-			// Lines.frames.splice(Lines.currentFrame, 1);
+			// Lines.frames.splice(Lines.currentFrame, 1); // remove original drawing 
+			console.log(tempFrames);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = Lines.drawings[tempFrames[h].d];
 				if (over) {
@@ -486,7 +485,7 @@ function Data() {
 	}) );
 
 	panel.addRow();
-	/* duplicate with be unnecessary when frames/drawings are fixed */
+	/* duplicate will be unnecessary when frames/drawings are fixed */
 	panel.add( new UIButton({
 		title: "Duplicate",
 		callback: self.duplicate,
@@ -517,21 +516,21 @@ function Data() {
 		title: "Save Lines",
 		key:"r",
 		callback: self.saveLines
-	}))
+	}));
 
 
 	panel.add( new UIButton({
 		title: "Clear Frame",
 		key:"x",
 		callback: self.clearFrame
-	}) );
+	}));
 
 	panel.addRow();
 	panel.add( new UIButton({
 		title: "Paste Frames",
 		key: "v",
 		callback: self.pasteFrames
-	}) );
+	}));
 
 	panel.addRow();
 	panel.add( new UIButton({
@@ -542,7 +541,20 @@ function Data() {
 				self.addFrameToCopy(elem);
 			});
 		}
-	}) );
+	}));
+
+	panel.addRow();
+	panel.add( new UIButton({
+		title: "Select Some Frames",
+		key: "alt-v",
+		callback: function() {
+			const start = prompt("Start frame:");
+			const end = prompt("end frame:");
+			Lines.interface.frameElems.looper((elem) => {
+				self.addFrameToCopy(elem);
+			}, start, end);
+		}
+	}));
 
 	panel.addRow();
 	panel.add( new UIButton({

@@ -249,8 +249,9 @@ class UIList {
 	remove(index) {
 		this.els[index].remove();
 	}
-	looper(callback) {
-		for (let i = 0; i < this.els.length; i++) {
+	looper(callback, start, end) {
+		const len = end || this.els.length;
+		for (let i = start || 0; i < len; i++) {
 			const elem = this.els[i];
 			callback(elem);
 		}
