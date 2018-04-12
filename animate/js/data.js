@@ -157,7 +157,6 @@ function Data() {
 
 	/* d key */
 	this.deleteFrame = function() {
-		/* when updated drawing indexes, delete unused drawings here? (have to not be used anywhere) */
 		const ftemp = Lines.currentFrame;
 		if (Lines.currentFrame > 0 || Lines.frames.length > 1) {
 			Lines.interface.prevFrame();
@@ -165,6 +164,19 @@ function Data() {
 		} else {
 			Lines.lines = [];
 		}
+		Lines.interface.updateFramesPanel();
+	};
+
+	/* shift-d */
+	this.deleteFrameRange = function() {
+		const startFrame = +prompt("Start frame:");
+		const endFrame = +prompt("End frame:");
+		if (startFrame > 0) {
+			Lines.currentFrame = startFrame - 1;
+		} else {
+			Lines.currentFrame = 0;
+		}
+		Lines.frames.splice(startFrame, endFrame - startFrame + 1);
 		Lines.interface.updateFramesPanel();
 	};
 
@@ -475,6 +487,12 @@ function Data() {
 		title: "Delete Frame",
 		callback: self.deleteFrame,
 		key: "d"
+	}));
+
+	panel.add( new UIButton({
+		title: "Delete Frame Range",
+		callback: self.deleteFrameRange,
+		key: "shift-d"
 	}));
 
 	panel.addRow();
