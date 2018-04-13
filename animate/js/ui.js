@@ -34,33 +34,27 @@ class UI {
 			dek.textContent = params.title || params.id || params.label;
 			keyContainer.appendChild(key);
 			keyContainer.appendChild(dek);
-			Lines.interface.panels["keys"].rows[0].remove();  // def wack
+			// Lines.interface.panels["keys"].rows[0].remove();  // def wack
 			Lines.interface.panels["keys"].el.appendChild(keyContainer);
 		}
 	}
-
 	addClass(clas) {
 		this.el.classList.add(clas);
 	}
-
 	setId(id) {
 		this.el.id = id;
 	}
-
 	setValue(value) {
 		this.el.value = value;
 	}
-
 	getValue() {
 		return this.el.value;
 	}
-
 	addLabel() {
 		const label = document.createElement("span");
 		label.textContent = this.label;
 		this.el.parentNode.insertBefore(label, this.el);
 	}
-
 	append(elem) {
 		this.el.appendChild(elem);  /* only used for color ways? */
 	}
@@ -69,6 +63,7 @@ class UI {
 class Panel {
 	constructor(id, label) {
 		this.el = document.getElementById(id);
+		//Lines.interface.panels[id] = this;
 		if (!this.el) {
 			this.el = document.createElement("div");
 			this.el.id = id;
@@ -81,10 +76,10 @@ class Panel {
 		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
 		const title = document.createElement("div");
 		title.textContent = label;
+		title.classList.add("panel-title");
 		this.el.appendChild(title);
 		this.el.appendChild(this.toggleBtn);
 		this.rows = [];
-		this.addRow(); /* not super into this ... */
 	}
 	toggle() {
 		if (this.el.clientHeight <= 25) {
@@ -102,9 +97,11 @@ class Panel {
 		row.classList.add("row");
 		this.el.appendChild(row);
 		this.rows.push(row);
+		return row;
 	}
 	add(component) {
-		this.rows[this.rows.length - 1].appendChild(component.el);
+		const row = this.addRow();
+		row.appendChild(component.el);
 		if (component.label) {
 			component.addLabel();
 		}

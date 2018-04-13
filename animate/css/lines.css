@@ -74,21 +74,20 @@ button:focus {
   overflow: hidden;
   position: relative;
   height: 25px; }
+  .menu-panel .panel-title {
+    margin-bottom: 1em; }
   .menu-panel .row {
-    margin-top: 1em;
-    /* display:flex; */ }
-    .menu-panel .row:first-child {
-      margin-top: 3px; }
+    margin-bottom: 2px;
+    display: flex; }
     .menu-panel .row span {
       vertical-align: top;
       line-height: 2;
-      padding-right: 0.5em;
-      /* flex: 1; */
-      white-space: nowrap; }
+      white-space: nowrap;
+      margin-right: 0.25em; }
     .menu-panel .row input {
       width: 100%; }
     .menu-panel .row .btn {
-      padding: 0 0.25em; }
+      padding: 0 3px; }
   .menu-panel .btn {
     border: 1px solid gray;
     padding: 0 0.25em;
@@ -97,6 +96,8 @@ button:focus {
     margin-right: 3px; }
     .menu-panel .btn:hover {
       background: lightgray; }
+  .menu-panel input {
+    /* max-width: 80px; */ }
 
 #colormenu input, #canvasmenu input {
   display: inline-block;

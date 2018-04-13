@@ -87,24 +87,23 @@ button:focus { outline: none; }
 	overflow: hidden;
 	position: relative;
 	height:25px;
+	.panel-title {
+		margin-bottom: 1em;
+	}
 	.row {
-		margin-top:1em;
-		/* display:flex; */
-		&:first-child {
-			margin-top: 3px;
-		}
+		margin-bottom: 2px;
+		display: flex;
 		span {
 			vertical-align: top;
 			line-height: 2;
-			padding-right: 0.5em;
-			/* flex: 1; */
 			white-space: nowrap;
+			margin-right: 0.25em;
 		}
 		input {
 			width: 100%;
 		}
 		.btn {
-			padding: 0 0.25em;
+			padding: 0 3px;
 		}
 	}
 	.btn {
@@ -117,6 +116,9 @@ button:focus { outline: none; }
 			background:lightgray;
 		}
 	}
+	input {
+		/* max-width: 80px; */
+	}
 }
 
 #colormenu, #canvasmenu {
@@ -124,7 +126,7 @@ button:focus { outline: none; }
 		display:inline-block;
 		/* width:100px; */
 	}
-	#html-color, #bkg-img, #bkg-x, #bkg-y, #bkg-size { width:80px; }
+	#html-color, #bkg-img, #bkg-x, #bkg-y, #bkg-size { width: 80px; }
 	#colorways {
 		margin-top: 0.5em;
 		button {

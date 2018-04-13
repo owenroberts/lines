@@ -160,7 +160,6 @@ function Draw() {
 
 	/* interfaces */
 	const panel = new Panel("drawmenu", "Draw");
-	Lines.interface.panels["draw"] = panel;
 
 	panel.add( new UIToggleButton({
 		id:"play", 
@@ -173,7 +172,6 @@ function Draw() {
 	this.frameNumDisplay = new UIDisplay({id:"frame", label:"Frame: ", initial:"0"});
 	panel.add(this.frameNumDisplay); 
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Prev Frame",
 		callback: Lines.interface.prevFrame,
@@ -185,8 +183,6 @@ function Draw() {
 		key: "e"
 	}) );
 
-
-	panel.addRow();
 	this.onionSkinSelect = new UISelect({
 		options: [0,1,2,3,4,5,6,7,8,9,10],
 		selected: 0,
@@ -205,7 +201,6 @@ function Draw() {
 	});
 	panel.add(this.onionSkinSelect);
 
-	panel.addRow();
 	this.fpsSelect = new UISelect({
 		label: "FPS",
 		options: [1,2,5,10,12,15,24,30,60],
@@ -225,7 +220,6 @@ function Draw() {
 	})
 	panel.add(this.fpsSelect);
 
-	panel.addRow();
 	/* don't use this for < v1 drawings... */
 	this.lpsSelect = new UISelect({
 		label: "Lines/Second",
@@ -247,7 +241,6 @@ function Draw() {
 	});
 	panel.add(this.lpsSelect);
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Capture Frame",
 		callback: function() {
@@ -256,7 +249,6 @@ function Draw() {
 		key: "k"
 	}) );
 
-	panel.addRow();
 	panel.add( new UIToggleButton({
 		on: "Click to Capture BG",
 		off: "Click to Leave Transparent",
@@ -266,19 +258,27 @@ function Draw() {
 		key: "n"
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Capture Multiple Frames",
 		callback: self.captureMultiple,
 		key: "shift-k"
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Capture Cycle",
 		callback: self.captureCycle,
 		key: "ctrl-k"
 	}) );
+
+	panel.add( new UIButton({
+		title: "Go To Frame",
+		callback: function() {
+			const f = prompt("Frame:");
+			Lines.currentFrame = f;
+			Lines.interface.updateFramesPanel();
+		},
+		key: "f"
+	}))
 
 	this.background = new Background();
 }

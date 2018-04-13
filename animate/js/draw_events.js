@@ -69,7 +69,6 @@ function DrawEvents() {
 
 	/* interface */
 	const panel = new Panel("mouse", "Mouse");
-	Lines.interface.panels["mouse"] = panel;
 
 	this.segNumRange = 2;
 	this.segNumElem = new UIRange({
@@ -92,7 +91,6 @@ function DrawEvents() {
 	});
 	panel.add(this.segNumElem);
 
-	panel.addRow();
 	this.jiggleRange = 1;
 	this.jiggleElem = new UIRange({
 		label: "Jiggle",
@@ -117,7 +115,6 @@ function DrawEvents() {
 	// how often the mousemove records, default 30ms
 	this.mouseTimer = performance.now();  //  independent of draw timer 
 	this.mouseInterval = 30;
-	panel.addRow();
 	this.mouseElem = new UIRange({
 		label: "Mouse Time",
 		value: 30,

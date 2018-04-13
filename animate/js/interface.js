@@ -1,4 +1,3 @@
-
 function Interface() {
 	let self = this;
 
@@ -95,7 +94,7 @@ function Interface() {
 		//console.log(ev.which);
 		// if (ev.which == 9) ev.preventDefault(); // tab
 		let k = Cool.keys[ev.which];
-		if (k == "space") 
+		if (k == "space" || k == "tab") 
 			ev.preventDefault();
 		if (document.activeElement.nodeName != "INPUT") {
 			
@@ -113,7 +112,5 @@ function Interface() {
 	}
 	document.addEventListener("keydown", self.keyDown, false);
 
-	const panel = new Panel("keys", "Key commands");
-	this.panels["keys"] = panel;
-
+	this.panels["keys"] = new Panel("keys", "Key commands");
 }

@@ -56,20 +56,17 @@ function Color(id, title, callback) {
 
 	/* interfaces */
 	const panel = new Panel(id, title);
-	Lines.interface.panels[id] = panel;
 
 	this.colorPreview = new UIColor({
 		color: this.color,
 	});
 	panel.add(this.colorPreview);
 
-	panel.addRow();
 	this.colorGradient = new UIColor({
 		color: this.color
 	})
 	panel.add(this.colorGradient);
 
-	panel.addRow();
 	this.hue = new UIRange({
 		label: "Hue",
 		min: 0,
@@ -79,7 +76,6 @@ function Color(id, title, callback) {
 	})
 	panel.add(this.hue);
 
-	panel.addRow();
 	this.sat = new UIRange({
 		label: "Sat",
 		min: 0,
@@ -89,7 +85,6 @@ function Color(id, title, callback) {
 	})
 	panel.add(this.sat);
 
-	panel.addRow();
 	this.light = new UIRange({
 		label: "Light",
 		min: 0,
@@ -99,7 +94,6 @@ function Color(id, title, callback) {
 	})
 	panel.add(this.light);
 
-	panel.addRow();
 	this.htmlColor = new UIText({
 		label: "HTML",
 		value: this.color,
@@ -109,7 +103,6 @@ function Color(id, title, callback) {
 	});
 	panel.add(this.htmlColor);
 
-	panel.addRow();
 	this.colorWays = new UI({id:id + "-colorways"});
 	panel.add(this.colorWays);
 }

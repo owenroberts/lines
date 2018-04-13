@@ -31,7 +31,6 @@ function Background() {
 
 	/* interface  */
 	const panel = new Panel("background", "Background Image");
-	Lines.interface.panels["background"] = panel;
 
 	/* this doesn't really need key command bc have copy/paste anyway */
 	panel.add( new UIText({
@@ -39,7 +38,6 @@ function Background() {
 		callback: this.loadImage
 	}) );
 	
-	panel.addRow();
 	panel.add( new UIToggleButton({
 		callback: this.toggle, 
 		key: "b", 
@@ -47,7 +45,6 @@ function Background() {
 		off: "Show" 
 	}) );
 	
-	panel.addRow();
 	this.xRange = new UIRange({
 		label: "X", 
 		callback: function() {
@@ -56,7 +53,6 @@ function Background() {
 	});
 	panel.add(this.xRange);
 	
-	panel.addRow();
 	this.yRange = new UIRange({
 		label: "Y", 
 		callback: function() {
@@ -65,7 +61,6 @@ function Background() {
 	});
 	panel.add(this.yRange);
 	
-	panel.addRow();
 	this.sizeRange = new UIRange({
 		label: "Size", 
 		callback: function() {

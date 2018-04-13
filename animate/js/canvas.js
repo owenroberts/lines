@@ -23,7 +23,6 @@ function Canvas(width, height, color) {
 
 	/* interface */
 	const panel = new Panel("canvasmenu", "Canvas");
-	Lines.interface.panels["canvas"] = panel;
 
 	this.widthInput = new UIText({
 		id: "canvas-width",
@@ -39,8 +38,7 @@ function Canvas(width, height, color) {
 		}
 	});
 	panel.add(this.widthInput);
-
-	panel.addRow();
+	
 	this.heightInput = new UIText({
 		id: "canvas-height",
 		placeholder: this.height,

@@ -426,7 +426,6 @@ function Data() {
 
 	/* interfaces */
 	const panel = new Panel("data", "Data");
-	Lines.interface.panels["data"] = panel;
 
 	panel.add( new UIButton({
 		title: "Explode",
@@ -444,7 +443,6 @@ function Data() {
 		key: "shift-a"
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Follow",
 		callback: function() {
@@ -461,7 +459,6 @@ function Data() {
 		key: "alt-a"
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Reverse Draw",
 		callback: function() {
@@ -476,7 +473,6 @@ function Data() {
 		}
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Copy",
 		callback: self.copyFrames,
@@ -495,14 +491,12 @@ function Data() {
 		key: "shift-d"
 	}));
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Fit Canvas to Drawing",
 		callback: self.fitCanvasToDrawing,
-		key: "f"
+		key: "shift-f"
 	}) );
 
-	panel.addRow();
 	/* duplicate will be unnecessary when frames/drawings are fixed */
 	panel.add( new UIButton({
 		title: "Duplicate",
@@ -516,7 +510,6 @@ function Data() {
 		key: "i"
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Multi Copies",
 		callback: self.addMultipleCopies,
@@ -529,7 +522,6 @@ function Data() {
 		key: "q"
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Save Lines",
 		key:"r",
@@ -543,14 +535,12 @@ function Data() {
 		callback: self.clearFrame
 	}));
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Paste Frames",
 		key: "v",
 		callback: self.pasteFrames
 	}));
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Select All Frames",
 		key: "shift-v",
@@ -561,7 +551,6 @@ function Data() {
 		}
 	}));
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Select Some Frames",
 		key: "alt-v",
@@ -574,14 +563,12 @@ function Data() {
 		}
 	}));
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Clear Frames to Copy",
 		key: "ctrl-v",
 		callback: self.clearFramesToCopy
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Cut Last Drawing",
 		key: "shift-z",
@@ -594,7 +581,6 @@ function Data() {
 		callback: self.cutFirstDrawing
 	}) );
 
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Cut Line",
 		key: "z",
@@ -607,8 +593,6 @@ function Data() {
 		callback: self.cutLastSegmentNum
 	}) );
 
-	/* leave out until/if undo is actually implemented */
-	panel.addRow();
 	panel.add( new UIButton({
 		title: "Undo",
 		key: "ctrl-z",
