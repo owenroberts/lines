@@ -86,24 +86,13 @@ function Canvas(width, height, color) {
 	this.setHeight(this.height);
 
 	this.capture = function() {
-		//const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-		//window.location.href = cap;
 		if (Lines.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
-				saveAs(blob, Lines.fio.title.getValue() + "-" + pad(Lines.currentFrame, 3) + ".png");
+				saveAs(blob, Lines.fio.title.getValue() + "-" + Cool.padNumber(Lines.currentFrame, 3) + ".png");
 			});
 		} else {
 			const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 			window.location.href = cap;
 		}
-	}
-
-	/* add to cool? */
-	function pad(number, length) {
-		var my_string = '' + number;
-		while (my_string.length < length) {
-			my_string = '0' + my_string;
-		}
-		return my_string;
 	}
 }
