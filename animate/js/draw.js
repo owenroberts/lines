@@ -63,12 +63,10 @@ function Draw() {
 					const p = new Cool.Vector(line.s.x + v.x * i, line.s.y + v.y * i); /* midpoint of segment */
 					Lines.canvas.ctx.lineTo( p.x + v.x + Cool.random(-jiggle, jiggle), p.y + v.y + Cool.random(-jiggle, jiggle) );
 				}
-				if (onion) Lines.canvas.ctx.strokeStyle = color;
-				else {
-					if (Lines.canvas.ctx.strokeStyle != "#" + color) {
-						Lines.canvas.setStrokeColor(color);
-					}
-				}
+				if (onion) 
+					Lines.canvas.ctx.strokeStyle = color;
+				else if (Lines.canvas.ctx.strokeStyle != "#" + color)
+					Lines.canvas.setStrokeColor(color);
 			}
 		}	
 		Lines.canvas.ctx.stroke();			
