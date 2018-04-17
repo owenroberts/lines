@@ -15,6 +15,8 @@ function Data() {
 		}
 	};
 
+	/* right click drag or shift v 
+		add frame num to the list of frames to copy */
 	this.addFrameToCopy = function(elem) {
 		if (!elem.classList.contains("copy")){
  			elem.classList.add("copy");
@@ -31,9 +33,9 @@ function Data() {
 
 			/* add drawing ref to frames data */
 			Lines.frames[Lines.currentFrame].push({
-				d:Lines.drawings.length, 
-				i:0, 
-				e:Lines.lines.length
+				d: Lines.drawings.length, 
+				i: 0, 
+				e: Lines.lines.length
 			});
 			
 			/* add current lines to drawing data */
@@ -50,11 +52,11 @@ function Data() {
 			/* lines are saved, stop drawing? */
 			Lines.lines = [];
 
+			/* save current state - one undo currently*/
 			self.saveState();
 
-			// kinda dump way to update the frame interface
-			Lines.interface.nextFrame();
-			Lines.interface.prevFrame();
+			/* update interface */
+			Lines.interface.updateFramesPanel();
 		}
 	};
 	
@@ -117,7 +119,8 @@ function Data() {
 		}
 	};
 
-	/* g key - duplicate drawing to change offset, color, etc. */
+	/* g key - duplicate drawing to change offset, color, etc. 
+		should be deprecated for v 2 */
 	this.duplicate = function() {
 		if (Lines.lines.length > 0) self.saveLines();
 		if (Lines.frames[Lines.currentFrame]) {
@@ -147,9 +150,7 @@ function Data() {
 
 	/* x key */
 	this.clearFrame = function() {
-		
 		self.saveState();
-		
 		if (Lines.frames[Lines.currentFrame])
 			Lines.frames[Lines.currentFrame] = undefined;
 		Lines.lines = [];
@@ -185,7 +186,7 @@ function Data() {
 		if (Lines.lines.length > 0) Lines.lines.pop();
 	};
 
-	/* alt z */
+	/* shift z */
 	this.cutLastSegmentNum = function() {
 		let num = prompt("How many segments?");
 		while (Lines.lines.length > 0 && num > 0) {
@@ -194,7 +195,7 @@ function Data() {
 		}
 	};
 
-	/* shift z (does this make more sense as x... ) */
+	/* shift x  */
 	this.cutLastDrawing = function() {
 		if (Lines.frames[Lines.currentFrame]) {
 			self.saveLines();
@@ -202,7 +203,7 @@ function Data() {
 		}
 	};
 
-	/* ctrl z (does this make more sense as x... ) */
+	/* ctrl x  */
 	this.cutFirstDrawing = function() {
 		if (Lines.frames[Lines.currentFrame]) {
 			self.saveLines();
@@ -210,8 +211,8 @@ function Data() {
 		}
 	};
 
+	/* save current state of frames and drawing - one undo */
 	this.saveState = function() {
-
 		if (self.saveStates.current.drawings) {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
 			self.saveStates.prev.frames = _.cloneDeep(self.saveStates.current.frames);
@@ -224,7 +225,9 @@ function Data() {
 		self.saveStates.current.frames = _.cloneDeep(Lines.frames);
 	};
 
-	/* ctrl z - unimplemented save states */
+	/* ctrl z - unimplemented save states 
+		currently only works in some cases: after removing an drawing
+		actually super buggy */
 	this.undo = function() {
 		if (self.saveStates.prev.drawings) {
 			Lines.drawings = _.cloneDeep(self.saveStates.prev.drawings);
@@ -249,8 +252,8 @@ function Data() {
 		Lines.interface.updateFramesPanel();
 	};
 
-	/* m key - should work with one copy, can imagine issues 
-		will copy all drawings in frame, use insert */
+	/* m key - copies all drawings in frame and pastes in multiple frames after
+		either into current frame or makes new one	 */
 	this.addMultipleCopies = function() {
 		self.framesCopy = [];
 		self.clearFramesToCopy();
@@ -275,7 +278,6 @@ function Data() {
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
-			// Lines.frames.splice(Lines.currentFrame, 1); // remove original drawing 
 			console.log(tempFrames);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = Lines.drawings[tempFrames[h].d];
@@ -313,6 +315,9 @@ function Data() {
 		}
 	};
 
+	/* reverse of explode - no key 
+		could be same function but then maybe my head would explode? 
+		simultaneous draw multi drawings at one  (multi) */
 	this.reverse = function(simultaneous) {
 		self.saveLines();
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
@@ -349,7 +354,8 @@ function Data() {
 		}
 	}
 
-	/* q key */
+	/* q key - all drawings in current frames, moved in each other frame
+		in v2, x y for frame layers */
 	this.offsetDrawing = function(offset) {
 		self.saveLines();
 		if (!offset.x && !offset.y) {
@@ -374,7 +380,7 @@ function Data() {
 		}
 	};
 
-	/* f key */
+	/* shift-f key */
 	this.fitCanvasToDrawing = function() {
 		self.saveLines();
 		
@@ -385,7 +391,8 @@ function Data() {
 		let maxy = 0;
 
 		for (let i = 0; i < Lines.drawings.length; i++) {
-			if (Lines.drawings[i] != "x"){
+			/* remove all "x" stuff in v2 */
+			if (Lines.drawings[i] != "x") {
 				for (let j = 0; j < Lines.drawings[i].l.length; j++) {
 					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
 
@@ -425,6 +432,11 @@ function Data() {
 
 
 	/* interfaces */
+	/* should interfaces be spread throughout? 
+		should data be broken into multiple modules?
+		explode and reverse could be transformations? 
+		removing, adding, changing frames 
+		offset and canvas size */
 	const panel = new Panel("data", "Data");
 
 	panel.add( new UIButton({
@@ -571,13 +583,13 @@ function Data() {
 
 	panel.add( new UIButton({
 		title: "Cut Last Drawing",
-		key: "shift-z",
+		key: "shift-x",
 		callback: self.cutLastDrawing
 	}) );
 
 	panel.add( new UIButton({
 		title: "Cut First Drawing",
-		key: "ctrl-z",
+		key: "ctrl-x",
 		callback: self.cutFirstDrawing
 	}) );
 
@@ -589,7 +601,7 @@ function Data() {
 
 	panel.add( new UIButton({
 		title: "Cut Segment Num",
-		key: "alt-z",
+		key: "shift-z",
 		callback: self.cutLastSegmentNum
 	}) );
 
