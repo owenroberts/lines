@@ -8,6 +8,16 @@ class UI {
 		}
 		if (params.event && params.callback)
 			this.el.addEventListener(params.event, params.callback);
+		if (params.observe && params.callback) {
+			const observer = new MutationObserver(function(list) {
+				for (var mut of list) {
+					if (mut.type == "attributes") {
+						params.callback();
+					}
+				}
+			});
+			observer.observe(params.observe, { attributes: true });
+		}
 		if (params.callback) this.callback = params.callback;
 		if (params.label) this.label = params.label;
 		if (params.value != undefined) this.el.value = params.value;

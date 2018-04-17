@@ -29,15 +29,16 @@ function Background() {
 		self.show = !self.show;
 	}
 
-	/* interface  */
+	/* interface */
 	const panel = new Panel("background", "Background Image");
 
-	/* this doesn't really need key command bc have copy/paste anyway */
+	/* copy/paste url, no key */
 	panel.add( new UIText({
 		title: "Add image URL hit enter",
 		callback: this.loadImage
 	}) );
 	
+	/* toggle visibility of bkg */
 	panel.add( new UIToggleButton({
 		callback: this.toggle, 
 		key: "b", 
@@ -45,6 +46,7 @@ function Background() {
 		off: "Show" 
 	}) );
 	
+	/* update x position */
 	this.xRange = new UIRange({
 		label: "X", 
 		callback: function() {
@@ -53,6 +55,7 @@ function Background() {
 	});
 	panel.add(this.xRange);
 	
+	/* update y position */
 	this.yRange = new UIRange({
 		label: "Y", 
 		callback: function() {
@@ -61,6 +64,7 @@ function Background() {
 	});
 	panel.add(this.yRange);
 	
+	/* update size */
 	this.sizeRange = new UIRange({
 		label: "Size", 
 		callback: function() {

@@ -1,17 +1,18 @@
 function Canvas(width, height, color) {
 	const self = this;
 
-	this.width = width; // invoke canvas with width & height?
+	this.width = width;
 	this.height = height;
-	this.canvas = document.getElementById("canvas");
+	this.canvas = document.getElementById("canvas"); // Lines.canvas.canvas is html elem
 	
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
-	this.ctx.strokeStyle = "000000"; // doesn't matter, color managed by color module
 
 	this.color = new Color("canvas-color", "Canvas Color", function(color) {
 		self.canvas.style.backgroundColor = "#" + color;
 	});
+
+	// bg color
 	if (color) {
 		self.color.color = color;
 		self.canvas.style.backgroundColor = "#" + color;
@@ -21,41 +22,7 @@ function Canvas(width, height, color) {
 		this.ctx.strokeStyle = "#" + color;
 	}
 
-	/* interface */
-	const panel = new Panel("canvasmenu", "Canvas");
-
-	this.widthInput = new UIText({
-		id: "canvas-width",
-		placeholder: this.width,
-		label: "Width",
-		blur: true,
-		callback: function(ev) {
-			if (ev.which == 13 || ev.type == "blur") { 
-				self.setWidth();
-				self.widthInput.reset(self.width);
-				this.blur();
-			}
-		}
-	});
-	panel.add(this.widthInput);
-	
-	this.heightInput = new UIText({
-		id: "canvas-height",
-		placeholder: this.height,
-		label: "Height",
-		blur: true,
-		callback: function(ev) {
-			if (ev.which == 13 || ev.type == "blur") {
-				self.setHeight();
-				self.heightInput.reset(self.height);
-				this.blur();
-			}
-		}
-	});
-	panel.add(this.heightInput);
-
-
-	/* change width and height */
+	/* update canvas width */
 	this.setWidth = function(width) {
 		if (Number(width)) {
 			self.width = self.canvas.width = width;
@@ -65,10 +32,10 @@ function Canvas(width, height, color) {
 			else if (!self.width)
 				console.error("No width value set?");
 		}
-		self.widthInput.reset(self.width);
 		self.ctx.miterLimit = 1;
 	}
 
+	/* update canvas height */
 	this.setHeight = function(height) {
 		if (Number(height)) {
 			self.height = self.canvas.height = height;
@@ -78,10 +45,10 @@ function Canvas(width, height, color) {
 			else if (!self.height)
 				console.error("No height value set?");
 		}
-		self.heightInput.reset(self.height);
 		self.ctx.miterLimit = 1;
 	}
 	
+	/* set initial width and height */
 	this.setWidth(this.width);
 	this.setHeight(this.height);
 
@@ -95,4 +62,51 @@ function Canvas(width, height, color) {
 			window.location.href = cap;
 		}
 	}
+
+	/* interface */
+	const panel = new Panel("canvasmenu", "Canvas");
+
+	/* update canvas width */
+	this.widthInput = new UIText({
+		id: "canvas-width",
+		placeholder: this.width,
+		label: "Width",
+		blur: true,
+		observe: self.canvas,
+		callback: function(ev) {
+			if (ev) {
+				if (ev.which == 13) {
+					self.setWidth();
+					self.widthInput.reset(self.width);
+					this.blur();
+				}
+			} else { // observer
+				self.widthInput.reset(Lines.canvas.canvas.width);
+			}
+		}
+	});
+	panel.add(this.widthInput);
+	
+	/* update canvas height */
+	this.heightInput = new UIText({
+		id: "canvas-height",
+		placeholder: this.height,
+		label: "Height",
+		blur: true,
+		observe: self.canvas,
+		callback: function(ev) {
+			if (ev) {
+				if (ev.which == 13) {
+					self.setHeight();
+					self.heightInput.reset(self.height);
+					this.blur();
+				}
+			} else { // observer 
+				self.heightInput.reset(Lines.canvas.canvas.height);
+			}
+		}
+	});
+	panel.add(this.heightInput);
+
+
 }
