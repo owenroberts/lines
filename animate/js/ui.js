@@ -11,12 +11,11 @@ class UI {
 		if (params.observe && params.callback) {
 			const observer = new MutationObserver(function(list) {
 				for (var mut of list) {
-					if (mut.type == "attributes") {
+					if (mut.type == "attributes" && mut.attributeName == params.observe.attribute)
 						params.callback();
-					}
 				}
 			});
-			observer.observe(params.observe, { attributes: true });
+			observer.observe(params.observe.elem, { attributes: true });
 		}
 		if (params.callback) this.callback = params.callback;
 		if (params.label) this.label = params.label;

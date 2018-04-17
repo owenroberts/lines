@@ -8,16 +8,17 @@ function Canvas(width, height, color) {
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 
-	this.color = new Color("canvas-color", "Canvas Color", function(color) {
+	this.bgColor = new Color("canvas-color", "Canvas Color", function(color) {
 		self.canvas.style.backgroundColor = "#" + color;
 	});
 
-	// bg color
+	/* canvas bg color */
 	if (color) {
-		self.color.color = color;
+		self.bgColor.color = color;
 		self.canvas.style.backgroundColor = "#" + color;
 	}
 
+	/* set line color */
 	this.setStrokeColor = function(color) {
 		this.ctx.strokeStyle = "#" + color;
 	}
@@ -72,8 +73,12 @@ function Canvas(width, height, color) {
 		placeholder: this.width,
 		label: "Width",
 		blur: true,
-		observe: self.canvas,
+		observe: {
+			elem: self.canvas,
+			attribute: "width"
+		},
 		callback: function(ev) {
+			// console.log(this);
 			if (ev) {
 				if (ev.which == 13) {
 					self.setWidth();
@@ -93,7 +98,10 @@ function Canvas(width, height, color) {
 		placeholder: this.height,
 		label: "Height",
 		blur: true,
-		observe: self.canvas,
+		observe: {
+			elem: self.canvas,
+			attribute: "height"
+		},
 		callback: function(ev) {
 			if (ev) {
 				if (ev.which == 13) {
@@ -107,6 +115,4 @@ function Canvas(width, height, color) {
 		}
 	});
 	panel.add(this.heightInput);
-
-
 }

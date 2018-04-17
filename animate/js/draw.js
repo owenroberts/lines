@@ -93,7 +93,7 @@ function Draw() {
 			
 			if (self.captureWithBackground && self.captureFrames > 0) {
 				Lines.canvas.ctx.rect(0, 0, Lines.canvas.width, Lines.canvas.height);
-				Lines.canvas.ctx.fillStyle = '#' + Lines.canvas.color.color;
+				Lines.canvas.ctx.fillStyle = '#' + Lines.canvas.bgColor.color;
 				Lines.canvas.ctx.fill();
 			}
 
@@ -127,7 +127,7 @@ function Draw() {
 
 			/* draws current lines */
 			if (Lines.lines.length > 0) {
-				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.color.color);
+				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.lineColor.color);
 			}
 
 			/* capture frames */

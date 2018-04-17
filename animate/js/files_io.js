@@ -13,7 +13,7 @@ function Files_IO() {
 		json.w = Number( Lines.canvas.width );
 		json.h = Number( Lines.canvas.height );
 		json.fps = Number( Lines.draw.fps );
-		json.bg = Lines.canvas.color.color;
+		json.bg = Lines.canvas.bgColor.color;
 		json.f = [];
 		json.d = [];
 		let drawingsIndexes = [];
@@ -66,13 +66,13 @@ function Files_IO() {
 					// unused drawings are null, this is okay, not looped
 					// x for legacy compatibility
 					if (Lines.drawings[i] && Lines.drawings[i] != 'x')
-						Lines.color.addColorBtn( Lines.drawings[i].c );
+						Lines.lineColor.addColorBtn( Lines.drawings[i].c );
 				}
 				Lines.canvas.setWidth(data.w);
 				Lines.canvas.setHeight(data.h);
 				Lines.draw.setFps(data.fps);
 				if (data.bg)  // legacy compatible
-					Lines.canvas.color.setColor(data.bg);
+					Lines.canvas.bgColor.setColor(data.bg);
 				Lines.draw.reset();
 			}).error(function(error) {
 				console.error("Loading error:", error.statusText, error);

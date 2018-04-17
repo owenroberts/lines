@@ -39,13 +39,13 @@ function Data() {
 			/* add current lines to drawing data */
 			Lines.drawings.push({
 				l: Lines.lines,
-				c: Lines.color.color,
+				c: Lines.lineColor.color,
 				n: Lines.drawEvents.segNumRange,
 				r: Lines.drawEvents.jiggleRange
 			});
 
 			/* add current color to color choices */
-			Lines.color.addColorBtn(Lines.color.color);
+			Lines.lineColor.addColorBtn(Lines.lineColor.color);
 
 			/* lines are saved, stop drawing? */
 			Lines.lines = [];
