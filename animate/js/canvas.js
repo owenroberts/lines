@@ -78,8 +78,7 @@ function Canvas(width, height, color) {
 			attribute: "width"
 		},
 		callback: function(ev) {
-			// console.log(this);
-			if (ev) {
+			if (ev) { // key input
 				if (ev.which == 13) {
 					self.setWidth();
 					self.widthInput.reset(self.width);
@@ -103,7 +102,7 @@ function Canvas(width, height, color) {
 			attribute: "height"
 		},
 		callback: function(ev) {
-			if (ev) {
+			if (ev) { // key input
 				if (ev.which == 13) {
 					self.setHeight();
 					self.heightInput.reset(self.height);

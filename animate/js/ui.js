@@ -21,9 +21,8 @@ class UI {
 		if (params.label) this.label = params.label;
 		if (params.value != undefined) this.el.value = params.value;
 		
-		if (params.key) {
-			Lines.interface.interfaces[params.key] = this;
-			/* adding key commands to interface */
+		if (params.key) { // adding key commands to interface
+			Lines.interface.faces[params.key] = this;
 			const keyContainer = document.createElement("div");
 			keyContainer.classList.add("key-container");
 			const key = document.createElement("span");
@@ -43,7 +42,6 @@ class UI {
 			dek.textContent = params.title || params.id || params.label;
 			keyContainer.appendChild(key);
 			keyContainer.appendChild(dek);
-			// Lines.interface.panels["keys"].rows[0].remove();  // def wack
 			Lines.interface.panels["keys"].el.appendChild(keyContainer);
 		}
 	}
@@ -72,7 +70,6 @@ class UI {
 class Panel {
 	constructor(id, label) {
 		this.el = document.getElementById(id);
-		//Lines.interface.panels[id] = this;
 		if (!this.el) {
 			this.el = document.createElement("div");
 			this.el.id = id;
@@ -261,5 +258,8 @@ class UIList {
 			const elem = this.els[i];
 			callback(elem);
 		}
+	}
+	append(elem) {
+		this.el.appendChild(elem);
 	}
 }

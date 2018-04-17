@@ -1,10 +1,11 @@
 function Interface() {
 	let self = this;
 
-	this.panels = {};
-	this.interfaces = {}; /* better name for interfaces ?? */
+	this.panels = {}; 
+	this.faces = {}; /* parts of the interface? */
 
 	this.framesPanel = new UI({id:"frames"});
+	/* plus frame is unsaved drawing frame */
 	this.plusFrame = new UI({
 		id:"current",
 		event: "click",
@@ -12,10 +13,12 @@ function Interface() {
 			Lines.currentFrame = Lines.frames.length;
 			self.updateFrameNum();
 		}
-	}); /* plus frame is unsaved drawing frame */
+	}); 
 	this.frameElems = new UIList({class:"frame"});
 
-	/* updates the frame panel representation of frames, sets current frame, sets copy frames */
+	/* updates the frame panel representation of frames, 
+		sets current frame, 
+		sets copy frames */
 	this.updateFramesPanel = function() {
 		const numFrames = self.frameElems.getLength();
 		/* this creates frames that don't already exist
@@ -27,11 +30,9 @@ function Interface() {
 				frmElem.textContent = i;
 				frmElem.dataset.index = i;
 				/* 
-				add drawing nums, do this later after figuring out lines/frames/drawings 
-				frmElem.innerHTML = i + "<br>";
-				for (let d = 0; d < frames[i].length; d++) {
-					frmElem.innerHTML += frames[i][d].d;
-				}
+					add drawing nums, 
+					do this later 
+					after figuring out lines/frames/drawings 
 				*/
 				/* click on frame, set the current frame */
 				frmElem.onclick = function(ev) {
@@ -48,13 +49,12 @@ function Interface() {
 						Lines.data.framesToCopy.push(i);
 					}
 				};
-				/* this is probably only happening here ... */
+				/* this is one time un-ui thing */
 				this.framesPanel.el.insertBefore(frmElem, self.plusFrame.el);
-				/* not updating length of frame elems, shouldnt that reference still work?  */
 			}
 		} else {
 			/* if there are same number of less then frames than frame divs
-				delete current frame, is there another way to delete frames?  */
+				delete current frame */
 			for (let i = numFrames; i > Lines.frames.length; i--){
 				/* remove html frame */
 				this.frameElems.remove(i-1);
@@ -63,16 +63,18 @@ function Interface() {
 		this.updateFrameNum();
 	};
 
+	/* update frame display and current frame */
 	this.updateFrameNum = function() {
 		Lines.draw.frameNumDisplay.set(Lines.currentFrame);
 		if (document.getElementById("current"))
-			document.getElementById("current").removeAttribute("id"); /* fine for now... */
-		if (self.frameElems.els[Lines.currentFrame])
+			document.getElementById("current").removeAttribute("id");
+		if (self.frameElems.els[Lines.currentFrame]) // also un-ui
 			self.frameElems.setId("current", Lines.currentFrame);
 		else 
 			self.plusFrame.setId("current");
 	};
 	
+	/* e key - go to next frame */
 	this.nextFrame = function() {
 		Lines.drawEvents.isDrawing = false;
 		Lines.data.saveLines();
@@ -81,6 +83,7 @@ function Interface() {
 		self.updateFramesPanel();
 	};
 
+	/* w key - got to previous frame */
 	this.prevFrame = function() {
 		Lines.drawEvents.isDrawing = false;
 		Lines.data.saveLines();
@@ -91,8 +94,6 @@ function Interface() {
 
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
-		//console.log(ev.which);
-		// if (ev.which == 9) ev.preventDefault(); // tab
 		let k = Cool.keys[ev.which];
 		if (k == "space" || k == "tab") 
 			ev.preventDefault();
@@ -102,10 +103,10 @@ function Interface() {
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
-			if (Lines.interface.interfaces[k]) {
-				Lines.interface.interfaces[k].callback(ev);
-				if (Lines.interface.interfaces[k].toggleText) {
-					Lines.interface.interfaces[k].toggleText();
+			if (self.faces[k]) {
+				self.faces[k].callback(ev);
+				if (self.faces[k].toggleText) {
+					self.faces[k].toggleText();
 				}
 			}
 		}

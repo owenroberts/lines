@@ -4,7 +4,7 @@ function Color(id, title, callback) {
 
 	/* interface elements */
 	this.color = "000000"; // this.htmlColor.value;
-	this.colors = []; // all the colors used
+	this.colors = []; // all the colors used // is this more of an interface thing?
 
 	/* using hsl ranges */
 	this.updateColor = function() {
@@ -20,6 +20,7 @@ function Color(id, title, callback) {
 		self.colorGradient.setBkg(bkgGrad);
 	};
 
+	/* update color interface values */
 	this.updatePckrs = function() {
 		let hsl = Cool.rgbToHsl(Cool.hexToRgb(self.color));
 		self.hue.setValue(hsl[0]);
@@ -31,6 +32,7 @@ function Color(id, title, callback) {
 		self.colorGradient.setBkg(bkgGrad);
 	};
 
+	/* add new color button only used by lines */
 	this.addColorBtn = function(newColor) {
 		if (self.colors.indexOf(newColor) == -1) {
 			self.colors.push(newColor);
@@ -46,6 +48,7 @@ function Color(id, title, callback) {
 		}
 	};
 
+	/* set current color */
 	this.setColor = function(hex) {
 		self.color = hex;
 		self.htmlColor.setValue(hex);
@@ -64,7 +67,7 @@ function Color(id, title, callback) {
 
 	this.colorGradient = new UIColor({
 		color: this.color
-	})
+	});
 	panel.add(this.colorGradient);
 
 	this.hue = new UIRange({
@@ -73,7 +76,7 @@ function Color(id, title, callback) {
 		max: 360,
 		value: 0,
 		callback: this.updateColor
-	})
+	});
 	panel.add(this.hue);
 
 	this.sat = new UIRange({
@@ -82,7 +85,7 @@ function Color(id, title, callback) {
 		max: 100,
 		value: 0,
 		callback: this.updateColor
-	})
+	});
 	panel.add(this.sat);
 
 	this.light = new UIRange({
@@ -91,7 +94,7 @@ function Color(id, title, callback) {
 		max: 100,
 		value: 0,
 		callback: this.updateColor
-	})
+	});
 	panel.add(this.light);
 
 	this.htmlColor = new UIText({
