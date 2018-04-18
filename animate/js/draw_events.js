@@ -1,5 +1,6 @@
 function DrawEvents() {
 	const self = this;
+
 	this.moves = 0; // number of events recorded
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 
@@ -30,6 +31,7 @@ function DrawEvents() {
 		}
 	};
 
+	/* v2 this has to change! saving every point twice?? are you an idiot */
 	this.addLine = function(x, y) {
 		/* end of last line */
 		if (self.moves > 0) 
@@ -49,8 +51,10 @@ function DrawEvents() {
 	};
 
 	this.drawEnd = function(ev) {
-		if (ev.which == 1) self.isDrawing = false;
-		if (self.moves % 2 == 1) Lines.lines.splice(-1, 1);
+		if (ev.which == 1) 
+			self.isDrawing = false;
+		if (self.moves % 2 == 1) 
+			Lines.lines.splice(-1, 1);
 		if (Lines.lines.length > 0 && !Lines.lines[Lines.lines.length - 1].e) 
 			Lines.lines.pop(); // remove lines with s and no e
 		self.moves = 0;
