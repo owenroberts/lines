@@ -7,9 +7,3 @@ I might write a documentation at some point for people to use it.
 It's sort of straight forward if you look at the key commands and play around with it.
 
 Try it here: http://owenroberts.github.io/lines/
-
-Version 1.1
-	- animate modules
-	- game "engine"
-	- play updated/optimized
-Version 1.0
