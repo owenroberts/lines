@@ -6,7 +6,7 @@ dr.l[0].e is vector for beinning of line
 fr.d is drawing index
 fr.i is start index for lines of drawing
 fr.e is end index of lines of drawing
-dr.n is segment n
+dr.n is segment number
 dr.r is randomness of wiggle
 dr.c is color of all lines in drawing
 
@@ -19,8 +19,8 @@ function Draw() {
 	this.currentFrameCounter = 0; // for when line fps is different from anim fps, counts with floats
 	this.isPlaying = false;
 
-	this.fps = 10; // not coming from html because there is no HTML, where to set?
-	this.lps = 10; // same, 10 is default but maybe should be 15
+	this.fps = 10; // frames per second when playing
+	this.lps = 10; // lines per second all the time
 	
 	this.interval = 1000/this.lps;  // fps per one second, the line interval
 	this.timer = performance.now(); 
@@ -51,6 +51,7 @@ function Draw() {
 	}
 
 	this.drawLines = function(lns, index, end, segNum, jiggle, color, onion) {
+		/* mixed color?  - assume always mixed? - care about performance? */
 		Lines.canvas.ctx.beginPath();
 		for (let h = index; h < end; h++) {
 			const line = lns[h];
@@ -75,6 +76,7 @@ function Draw() {
 	this.draw = function() {
 		if (performance.now() > self.interval + self.timer) {
 			self.timer = performance.now();
+			/* calc current frame to draw */
 			if (self.isPlaying && self.currentFrameCounter < Lines.frames.length) {
 				self.currentFrameCounter += self.intervalRatio;
 				Lines.currentFrame = Math.floor(self.currentFrameCounter);
@@ -82,8 +84,6 @@ function Draw() {
 			if (self.isPlaying && self.currentFrameCounter >= Lines.frames.length) {
 				Lines.currentFrame = self.currentFrameCounter = 0;
 			}
-
-			// console.log(Lines.currentFrame, self.currentFrameCounter);
 
 			/* update the anim frame number */
 			if (self.isPlaying) 
@@ -139,35 +139,40 @@ function Draw() {
 		window.requestAnimFrame(self.draw);
 	}
 
-	this.captureMultiple = function() {
-		self.captureFrames = prompt("Capture how many frames?");
-	}
-
+	/* ctrl-k - start at beginning and capture one of every frame */
 	this.captureCycle = function() {
 		Lines.data.saveLines();
 		/* set animation to last frame because it updates frames before draw */
 		Lines.currentFrame = self.currentFrameCounter =  Lines.frames.length; 
 		self.isPlaying = true;
-		self.captureFrames = Lines.frames.length;
+		// capture as many frames as necessary for lines ratio or 1 of every frame 
+		self.captureFrames = Lines.frames.length * Math.max(1, self.lps / self.fps);
 	}
 	
-	/* starts drawing, is this necessary ? */
+	/* starts drawing  */
 	this.start = function() {
 		window.requestAnimFrame(self.draw);
 	}
 
+	/* add background image module */
+	this.background = new Background();
+
 	/* interfaces */
 	const panel = new Panel("drawmenu", "Draw");
 
-	panel.add( new UIToggleButton({
+	panel.add(new UIToggleButton({
 		id:"play", 
 		callback: self.toggle, 
 		key: "space", 
 		on: "Play", 
 		off: "Pause"
-	}) );
+	}));
 
-	this.frameNumDisplay = new UIDisplay({id:"frame", label:"Frame: ", initial:"0"});
+	this.frameNumDisplay = new UIDisplay({
+		id:"frame", 
+		label:"Frame: ", 
+		initial:"0"
+	});
 	panel.add(this.frameNumDisplay); 
 
 	panel.add( new UIButton({
@@ -175,13 +180,14 @@ function Draw() {
 		callback: Lines.interface.prevFrame,
 		key: "w"
 	}) );
+
 	panel.add( new UIButton({
 		title: "Next Frame",
 		callback: Lines.interface.nextFrame,
 		key: "e"
 	}) );
 
-	this.onionSkinSelect = new UISelect({
+	panel.add( new UISelect({
 		options: [0,1,2,3,4,5,6,7,8,9,10],
 		selected: 0,
 		label: "Onion Skin",
@@ -192,12 +198,11 @@ function Draw() {
 			} else if (ev.type == "keydown") {
 				const n = prompt("How many onion skin frames?");
 				self.onionSkinNum = Number(n);
-				self.onionSkinSelect.setValue(self.onionSkinNum);
+				this.setValue(self.onionSkinNum);
 			}
 		},
 		key: "l"
-	});
-	panel.add(this.onionSkinSelect);
+	}));
 
 	this.fpsSelect = new UISelect({
 		label: "FPS",
@@ -219,7 +224,7 @@ function Draw() {
 	panel.add(this.fpsSelect);
 
 	/* don't use this for < v1 drawings... */
-	this.lpsSelect = new UISelect({
+	panel.add( new UISelect({
 		label: "Lines/Second",
 		options: [1,2,5,10,12,15,24,30,60],
 		selected: 10,
@@ -230,15 +235,31 @@ function Draw() {
 			} else {
 				const n = prompt("Lines per second?");
 				self.lps = Number(n);
-				self.lpsSelect.setValue(self.lps);
+				this.setValue(self.lps);
 			}
 			self.interval = 1000/self.lps;
 			self.intervalRatio = self.interval / (1000/self.fps);
 		},
 		key: "'"
-	});
-	panel.add(this.lpsSelect);
+	}) );
 
+	panel.add( new UIButton({
+		title: "Capture Cycle",
+		callback: self.captureCycle,
+		key: "ctrl-k"
+	}) );
+
+	panel.add( new UIButton({
+		title: "Go To Frame",
+		callback: function() {
+			const f = prompt("Frame:");
+			Lines.currentFrame = f;
+			Lines.interface.updateFramesPanel();
+		},
+		key: "f"
+	}))
+
+	/* capture frames with no functions */
 	panel.add( new UIButton({
 		title: "Capture Frame",
 		callback: function() {
@@ -258,25 +279,9 @@ function Draw() {
 
 	panel.add( new UIButton({
 		title: "Capture Multiple Frames",
-		callback: self.captureMultiple,
+		callback: function() {
+			self.captureFrames = prompt("Capture how many frames?");
+		},
 		key: "shift-k"
 	}) );
-
-	panel.add( new UIButton({
-		title: "Capture Cycle",
-		callback: self.captureCycle,
-		key: "ctrl-k"
-	}) );
-
-	panel.add( new UIButton({
-		title: "Go To Frame",
-		callback: function() {
-			const f = prompt("Frame:");
-			Lines.currentFrame = f;
-			Lines.interface.updateFramesPanel();
-		},
-		key: "f"
-	}))
-
-	this.background = new Background();
 }

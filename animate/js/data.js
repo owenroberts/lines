@@ -28,6 +28,7 @@ function Data() {
 	this.saveLines = function() {
 		if (Lines.lines.length > 0) {
 			
+			/* save current lines in new frame */
 			if (Lines.frames[Lines.currentFrame] == undefined) 
 				Lines.frames[Lines.currentFrame] = [];
 
@@ -52,12 +53,11 @@ function Data() {
 			/* lines are saved, stop drawing? */
 			Lines.lines = [];
 
-			/* save current state - one undo currently*/
-			self.saveState();
-
 			/* update interface */
 			Lines.interface.updateFramesPanel();
 		}
+		/* save current state - one undo currently*/
+		self.saveState();
 	};
 	
 	/* c key  */
@@ -89,6 +89,7 @@ function Data() {
 
 	/* v key */
 	this.pasteFrames = function() {
+		self.saveState();
 		if (self.framesCopy.length > 1) { /* copy multiple to multiple */
 			for (let i = 0; i < self.framesCopy.length; i++) {
 				if (Lines.frames[Lines.currentFrame] == undefined) 
@@ -158,6 +159,7 @@ function Data() {
 
 	/* d key */
 	this.deleteFrame = function() {
+		self.saveState();
 		const ftemp = Lines.currentFrame;
 		if (Lines.currentFrame > 0 || Lines.frames.length > 1) {
 			Lines.interface.prevFrame();
@@ -170,6 +172,7 @@ function Data() {
 
 	/* shift-d */
 	this.deleteFrameRange = function() {
+		self.saveState();
 		const startFrame = +prompt("Start frame:");
 		const endFrame = +prompt("End frame:");
 		if (startFrame > 0) {
@@ -183,7 +186,8 @@ function Data() {
 
 	/* z key */
 	this.cutLastSegment = function() {
-		if (Lines.lines.length > 0) Lines.lines.pop();
+		if (Lines.lines.length > 0) 
+			Lines.lines.pop();
 	};
 
 	/* shift z */
@@ -197,6 +201,7 @@ function Data() {
 
 	/* shift x  */
 	this.cutLastDrawing = function() {
+		self.saveState();
 		if (Lines.frames[Lines.currentFrame]) {
 			self.saveLines();
 			Lines.frames[Lines.currentFrame].pop(); // pop last drawing
@@ -205,6 +210,7 @@ function Data() {
 
 	/* ctrl x  */
 	this.cutFirstDrawing = function() {
+		self.saveState();
 		if (Lines.frames[Lines.currentFrame]) {
 			self.saveLines();
 			Lines.frames[Lines.currentFrame].shift(); // pop last drawing
@@ -255,6 +261,7 @@ function Data() {
 	/* m key - copies all drawings in frame and pastes in multiple frames after
 		either into current frame or makes new one	 */
 	this.addMultipleCopies = function() {
+		/* can't save state, saves multiple times */
 		self.framesCopy = [];
 		self.clearFramesToCopy();
 		let n = prompt("Number of copies: ");
@@ -275,10 +282,10 @@ function Data() {
 		out after adding drawing nums to frames in v2 */
 	this.explode = function(follow, over) {
 		self.saveLines();
+		/* can't undo multiple saves */
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
-			console.log(tempFrames);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = Lines.drawings[tempFrames[h].d];
 				if (over) {
@@ -352,12 +359,13 @@ function Data() {
 			}
 			Lines.interface.updateFramesPanel();
 		}
-	}
+	};
 
 	/* q key - all drawings in current frames, moved in each other frame
 		in v2, x y for frame layers */
 	this.offsetDrawing = function(offset) {
 		self.saveLines();
+		self.saveState();
 		if (!offset.x && !offset.y) {
 			const x = Number(prompt("x"));
 			const y = Number(prompt("y"));
@@ -379,57 +387,6 @@ function Data() {
 			}
 		}
 	};
-
-	/* shift-f key */
-	this.fitCanvasToDrawing = function() {
-		self.saveLines();
-		
-		let tolerance = 0;
-		let minx = 10000;
-		let maxx = 0;
-		let miny = 10000;
-		let maxy = 0;
-
-		for (let i = 0; i < Lines.drawings.length; i++) {
-			/* remove all "x" stuff in v2 */
-			if (Lines.drawings[i] != "x") {
-				for (let j = 0; j < Lines.drawings[i].l.length; j++) {
-					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
-
-						tolerance = Math.max( tolerance, Lines.drawings[i].r * 4 );
-
-						minx = Math.min( minx, Lines.drawings[i].l[j].e.x );
-						miny = Math.min( miny, Lines.drawings[i].l[j].e.y );
-						minx = Math.min( minx, Lines.drawings[i].l[j].s.x );
-						miny = Math.min( miny, Lines.drawings[i].l[j].s.y );
-
-						maxx = Math.max( maxx, Lines.drawings[i].l[j].e.x );
-						maxy = Math.max( maxy, Lines.drawings[i].l[j].e.y );
-						maxx = Math.max( maxx, Lines.drawings[i].l[j].s.x );
-						maxy = Math.max( maxy, Lines.drawings[i].l[j].s.y );
-
-					}	
-				}
-			}
-		}
-
-		Lines.canvas.setWidth((maxx - minx) + tolerance * 2);
-		Lines.canvas.setHeight((maxy - miny) + tolerance * 2);
-
-		for (let i = 0; i < Lines.drawings.length; i++) {
-			if (Lines.drawings[i] != "x"){
-				for (var j = 0; j < Lines.drawings[i].l.length; j++) {
-					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
-						Lines.drawings[i].l[j].e.x -= minx - tolerance;
-						Lines.drawings[i].l[j].e.y -= miny - tolerance;
-						Lines.drawings[i].l[j].s.x -= minx - tolerance;
-						Lines.drawings[i].l[j].s.y -= miny - tolerance;
-					}	
-				}
-			}
-		}
-	};
-
 
 	/* interfaces */
 	/* should interfaces be spread throughout? 
@@ -503,12 +460,6 @@ function Data() {
 		key: "shift-d"
 	}));
 
-	panel.add( new UIButton({
-		title: "Fit Canvas to Drawing",
-		callback: self.fitCanvasToDrawing,
-		key: "shift-f"
-	}) );
-
 	/* duplicate will be unnecessary when frames/drawings are fixed */
 	panel.add( new UIButton({
 		title: "Duplicate",
@@ -539,7 +490,6 @@ function Data() {
 		key:"r",
 		callback: self.saveLines
 	}));
-
 
 	panel.add( new UIButton({
 		title: "Clear Frame",

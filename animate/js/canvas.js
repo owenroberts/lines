@@ -21,7 +21,7 @@ function Canvas(width, height, color) {
 	/* set line color */
 	this.setStrokeColor = function(color) {
 		this.ctx.strokeStyle = "#" + color;
-	}
+	};
 
 	/* update canvas width */
 	this.setWidth = function(width) {
@@ -34,7 +34,7 @@ function Canvas(width, height, color) {
 				console.error("No width value set?");
 		}
 		self.ctx.miterLimit = 1;
-	}
+	};
 
 	/* update canvas height */
 	this.setHeight = function(height) {
@@ -47,7 +47,7 @@ function Canvas(width, height, color) {
 				console.error("No height value set?");
 		}
 		self.ctx.miterLimit = 1;
-	}
+	};
 	
 	/* set initial width and height */
 	this.setWidth(this.width);
@@ -62,7 +62,56 @@ function Canvas(width, height, color) {
 			const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 			window.location.href = cap;
 		}
-	}
+	};
+
+	/* shift-f key */
+	this.fitCanvasToDrawing = function() {
+		Lines.data.saveLines();
+		
+		let tolerance = 0;
+		let minx = 10000;
+		let maxx = 0;
+		let miny = 10000;
+		let maxy = 0;
+
+		for (let i = 0; i < Lines.drawings.length; i++) {
+			if (Lines.drawings[i] != "x") { /* remove all "x" stuff in v2 */
+				for (let j = 0; j < Lines.drawings[i].l.length; j++) {
+					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
+
+						tolerance = Math.max( tolerance, Lines.drawings[i].r * 4 );
+
+						minx = Math.min( minx, Lines.drawings[i].l[j].e.x );
+						miny = Math.min( miny, Lines.drawings[i].l[j].e.y );
+						minx = Math.min( minx, Lines.drawings[i].l[j].s.x );
+						miny = Math.min( miny, Lines.drawings[i].l[j].s.y );
+
+						maxx = Math.max( maxx, Lines.drawings[i].l[j].e.x );
+						maxy = Math.max( maxy, Lines.drawings[i].l[j].e.y );
+						maxx = Math.max( maxx, Lines.drawings[i].l[j].s.x );
+						maxy = Math.max( maxy, Lines.drawings[i].l[j].s.y );
+
+					}	
+				}
+			}
+		}
+
+		self.setWidth((maxx - minx) + tolerance * 2);
+		self.setHeight((maxy - miny) + tolerance * 2);
+
+		for (let i = 0; i < Lines.drawings.length; i++) {
+			if (Lines.drawings[i] != "x"){
+				for (var j = 0; j < Lines.drawings[i].l.length; j++) {
+					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
+						Lines.drawings[i].l[j].e.x -= minx - tolerance;
+						Lines.drawings[i].l[j].e.y -= miny - tolerance;
+						Lines.drawings[i].l[j].s.x -= minx - tolerance;
+						Lines.drawings[i].l[j].s.y -= miny - tolerance;
+					}	
+				}
+			}
+		}
+	};
 
 	/* interface */
 	const panel = new Panel("canvasmenu", "Canvas");
@@ -114,4 +163,10 @@ function Canvas(width, height, color) {
 		}
 	});
 	panel.add(this.heightInput);
+
+	panel.add( new UIButton({
+		title: "Fit Canvas to Drawing",
+		callback: self.fitCanvasToDrawing,
+		key: "shift-f"
+	}) );
 }
