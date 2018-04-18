@@ -1,7 +1,12 @@
+/*
+	generic ui class
+	params for id, type, key (keyboard command key), event, callback, label, value, observe
+	el is html element
+*/
 class UI {
 	constructor(params) {
-		this.el = document.getElementById(params.id);
-		if (!this.el) {
+		this.el = document.getElementById(params.id); // attempt to find elem in html
+		if (!this.el) { // if not in html create it
 			if (params.type) this.el = document.createElement(params.type);
 			else this.el = document.createElement("div");
 			if (params.id) this.el.id = params.id;
@@ -17,11 +22,15 @@ class UI {
 			});
 			observer.observe(params.observe.elem, { attributes: true });
 		}
-		if (params.callback) this.callback = params.callback;
-		if (params.label) this.label = params.label;
-		if (params.value != undefined) this.el.value = params.value;
+		if (params.callback) 
+			this.callback = params.callback;
+		if (params.label) 
+			this.label = params.label;
+		if (params.value != undefined) 
+			this.el.value = params.value;
 		
-		if (params.key) { // adding key commands to interface
+		/* adding key commands to panel */
+		if (params.key) { 
 			Lines.interface.faces[params.key] = this;
 			const keyContainer = document.createElement("div");
 			keyContainer.classList.add("key-container");
@@ -63,10 +72,13 @@ class UI {
 		this.el.parentNode.insertBefore(label, this.el);
 	}
 	append(elem) {
-		this.el.appendChild(elem);  /* only used for color ways? */
+		this.el.appendChild(elem);
 	}
 }
 
+/*
+	ui panels add ui components organized by module
+*/
 class Panel {
 	constructor(id, label) {
 		this.el = document.getElementById(id);
@@ -90,11 +102,9 @@ class Panel {
 	toggle() {
 		if (this.el.clientHeight <= 25) {
 			this.el.style.height = "auto";
-			/*this.el.style.flex = "2 50%";*/ // i fucking don't understand flex
 			this.toggleBtn.innerHTML = "^";
 		} else {
 			this.el.style.height = 25 + "px";
-			/*this.el.style.flex = "1 25%";*/ 
 			this.toggleBtn.innerHTML = "v";
 		}
 	}
@@ -108,15 +118,16 @@ class Panel {
 	add(component) {
 		const row = this.addRow();
 		row.appendChild(component.el);
-		if (component.label) {
+		if (component.label)
 			component.addLabel();
-		}
-		if (component.display) {
+		if (component.display)
 			this.rows[this.rows.length - 1].insertBefore(component.display.el, component.el);
-		}
 	}
 }
 
+/*
+	sub classes for specific types
+*/
 class UIButton extends UI {
 	constructor(params) {
 		params.type = "span";
@@ -133,11 +144,10 @@ class UIText extends UI {
 		params.event = "keyup";
 		super(params);
 		this.el.type = "text";
-		if (params.placeholder) {
+		if (params.placeholder)
 			this.el.placeholder = params.placeholder;
-		} else {
+		else
 			this.el.placeholder = params.title;
-		}
 		if (params.blur)
 			this.el.addEventListener("blur", params.callback);
 	}
@@ -167,6 +177,7 @@ class UIColor extends UI {
 	setColor(color) {
 		this.el.style.backgroundColor = "#" + color;
 	}
+	/* for color gradients */
 	setBkg(bkg) {
 		this.el.style.backgroundImage = bkg;
 	}
@@ -204,7 +215,8 @@ class UISelect extends UI {
 		for (let i = 0; i < params.options.length; i++) {
 			const opt = document.createElement("option");
 			opt.value = opt.textContent = params.options[i];
-			if (opt.value == params.selected) opt.selected = "selected";
+			if (opt.value == params.selected) 
+				opt.selected = "selected";
 			this.el.appendChild(opt);
 		}
 	}
@@ -222,8 +234,10 @@ class UIToggleButton extends UI {
 		this.el.addEventListener(params.event, this.toggleText.bind(this));
 	}
 	toggleText() {
-		if (this.isOn) this.el.textContent = this.off;
-		else this.el.textContent = this.on;
+		if (this.isOn) 
+			this.el.textContent = this.off;
+		else 
+			this.el.textContent = this.on;
 		this.isOn = !this.isOn;
 	}
 }

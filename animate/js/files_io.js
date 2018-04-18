@@ -1,15 +1,13 @@
 function Files_IO() {
 	const self = this;
+
 	this.saveFilesEnabled = false;
 
-	/* s key */
+	/* s key - shif-s for single */
 	this.saveFramesToFile = function(single) {
 		Lines.data.saveLines();
+
 		const json = {};
-		/* this one second end is kind of specific, maybe to bc?? */
-		const end = Lines.frames.length * ( 1000 / Number(Lines.draw.fps) );
-		if (end > 1000) Math.ceil( json.end = end + 1000 );
-		else json.end = 1000;
 		json.w = Number( Lines.canvas.width );
 		json.h = Number( Lines.canvas.height );
 		json.fps = Number( Lines.draw.fps );
@@ -39,7 +37,6 @@ function Files_IO() {
 		for (let i = 0; i < Lines.drawings.length; i++) {
 			if ( drawingsIndexes.indexOf(i) != -1 ) 
 				json.d[i] = Lines.drawings[i]; // preserve index
-			//else json.d.push( 'x' ); // this shouldn't really be necessary if this is written right
 		}
 		const jsonfile = JSON.stringify(json);
 		let filename = self.title.getValue();
@@ -63,8 +60,8 @@ function Files_IO() {
 				Lines.frames =  data.f;
 				Lines.drawings = data.d;
 				for (let i = 0; i < Lines.drawings.length; i++) {
-					// unused drawings are null, this is okay, not looped
-					// x for legacy compatibility
+					/* unused drawings are null, this is okay, not looped
+					 	x for legacy compatibility */
 					if (Lines.drawings[i] && Lines.drawings[i] != 'x')
 						Lines.lineColor.addColorBtn( Lines.drawings[i].c );
 				}
