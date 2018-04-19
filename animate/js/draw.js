@@ -50,29 +50,6 @@ function Draw() {
 		Lines.interface.updateFrameNum();
 	}
 
-	this.drawLines = function(lns, index, end, segNum, jiggle, color, onion) {
-		/* mixed color?  - assume always mixed? - care about performance? */
-		Lines.canvas.ctx.beginPath();
-		for (let h = index; h < end; h++) {
-			const line = lns[h];
-			if (line && line.e) {
-				let v = new Cool.Vector(line.e.x, line.e.y);
-				v.subtract(line.s);
-				v.divide(segNum);
-				Lines.canvas.ctx.moveTo( line.s.x + Cool.random(-jiggle, jiggle), line.s.y + Cool.random(-jiggle, jiggle) );
-				for (var i = 0; i < segNum; i++) {
-					const p = new Cool.Vector(line.s.x + v.x * i, line.s.y + v.y * i); /* midpoint of segment */
-					Lines.canvas.ctx.lineTo( p.x + v.x + Cool.random(-jiggle, jiggle), p.y + v.y + Cool.random(-jiggle, jiggle) );
-				}
-				if (onion) 
-					Lines.canvas.ctx.strokeStyle = color;
-				else if (Lines.canvas.ctx.strokeStyle != "#" + color)
-					Lines.canvas.setStrokeColor(color);
-			}
-		}	
-		Lines.canvas.ctx.stroke();			
-	};
-
 	this.draw = function() {
 		if (performance.now() > self.interval + self.timer) {
 			self.timer = performance.now();
@@ -110,7 +87,7 @@ function Draw() {
 						for (var i = 0; i < Lines.frames[frameNumber].length; i++) {
 							const fr = Lines.frames[frameNumber][i];
 							const dr = Lines.drawings[fr.d];
-							self.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, color, true);
+							self.drawLines(dr.l, fr.s, fr.e, dr.n, dr.r, color, true);
 						}
 					}
 				}
@@ -121,7 +98,7 @@ function Draw() {
 				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
 					const fr = Lines.frames[Lines.currentFrame][i];
 					const dr = Lines.drawings[fr.d];
-					self.drawLines(dr.l, fr.i, fr.e, dr.n, dr.r, dr.c);
+					self.drawLines(dr.l, fr.s, fr.e, dr.n, dr.r, dr.c);
 				}
 			}
 
@@ -138,6 +115,37 @@ function Draw() {
 		}
 		window.requestAnimFrame(self.draw);
 	}
+
+	/* jig = jiggle amount, seg = num segments */
+	this.drawLines = function(lines, start, end, seg, jig, color, onion) {
+		/* mixed color?  - assume always mixed? - care about performance? */
+		let totalSegments = 0;
+		Lines.canvas.ctx.beginPath();
+		for (let j = 0; j < lines.length; j++) {
+			const line = lines[j];
+			totalSegments += line.length;
+			if (start < totalSegments) {
+				for (let h = 0; h < line.length - 1; h++) {
+					const s = line[h];
+					const e = line[h + 1];
+					let v = new Cool.Vector(e.x, e.y);
+					v.subtract(s);
+					v.divide(seg);
+					Lines.canvas.ctx.moveTo(s.x + Cool.random(-jig, jig), s.y + Cool.random(-jig, jig));
+					for (let i = 0; i < seg; i++) {
+						/* midpoint(s) of segment */
+						const p = new Cool.Vector(s.x + v.x * i, s.y + v.y * i); 
+						Lines.canvas.ctx.lineTo( p.x + v.x + Cool.random(-jig, jig), p.y + v.y + Cool.random(-jig, jig) );
+					}
+					if (onion) 
+						Lines.canvas.ctx.strokeStyle = color;
+					else if (Lines.canvas.ctx.strokeStyle != "#" + color)
+						Lines.canvas.setStrokeColor(color);
+				}
+			}
+		}
+		Lines.canvas.ctx.stroke();
+	};
 
 	/* ctrl-k - start at beginning and capture one of every frame */
 	this.captureCycle = function() {
