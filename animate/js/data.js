@@ -33,10 +33,14 @@ function Data() {
 				Lines.frames[Lines.currentFrame] = [];
 
 			/* add drawing ref to frames data */
+			const totalSegments = Lines.lines
+				.map((line) => { return line.length })
+				.reduce((total, len) => { return total + len });
+			
 			Lines.frames[Lines.currentFrame].push({
 				d: Lines.drawings.length, 
-				i: 0, 
-				e: Lines.lines.length
+				s: 0, 
+				e: totalSegments
 			});
 			
 			/* add current lines to drawing data */
@@ -292,6 +296,7 @@ function Data() {
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
+			console.log(tempFrames);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = Lines.drawings[tempFrames[h].d].l;
 				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
@@ -328,7 +333,7 @@ function Data() {
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			const totalSegments = Lines.frames[Lines.currentFrame]
-									.map((f) => { return f.e} )
+									.map((f) => { return f.e } )
 									.reduce((x,y) => { return x + y });
 			for (let i = 0; i < totalSegments; i += segmentsPerFrame) {
 				let indexMod = 0;
