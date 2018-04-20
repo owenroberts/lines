@@ -252,9 +252,15 @@ function Data() {
 	};
 
 	/* i key */
-	this.insertFrame = function() {
+	this.insertFrameBefore = function() {
 		self.saveLines();
 		Lines.frames.insert(Lines.currentFrame, []);
+		Lines.interface.updateFramesPanel();
+	};
+	/* shift-i key */
+	this.insertFrameAfter = function() {
+		self.saveLines();
+		Lines.frames.insert(Lines.currentFrame + 1, []);
 		Lines.interface.updateFramesPanel();
 	};
 
@@ -277,7 +283,7 @@ function Data() {
 	/* animate a drawing segment by segment (or multiple) 
 		follow means they don't accumulate to form drawing at the end
 		over means go over/add to subsequent frames */
-	/* a: explode, shift a: follow, ctrl a: explode over, alt a: follow over */
+	/* a: explode, ctrl a: follow, shift a: explode over, alt a: follow over */
 	/* over states get fucked up with two drawings, need to figure
 		out after adding drawing nums to frames in v2 */
 	this.explode = function(follow, over) {
@@ -287,35 +293,26 @@ function Data() {
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
-				const tempLines = Lines.drawings[tempFrames[h].d];
-				if (over) {
-					for (let i = 0; i < tempLines.l.length - 1; i += segmentsPerFrame) {
-						if (!Lines.frames[Lines.currentFrame]) 
-							Lines.frames[Lines.currentFrame] = [];
-						else self.saveLines();
-						Lines.frames[Lines.currentFrame].push({
-							d: tempFrames[h].d,
-							i: follow ? i : 0,
-							e: i + segmentsPerFrame
-						});
+				const tempLines = Lines.drawings[tempFrames[h].d].l;
+				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
+					if (!over) {
+						self.insertFrameAfter();
 						Lines.interface.nextFrame();
 					}
-				} else {
-					for (let i = tempLines.l.length - 1 - segmentsPerFrame; i >= 0; i -= segmentsPerFrame) {
-						self.insertFrame();
-						if (!Lines.frames[Lines.currentFrame]) 
-							Lines.frames[Lines.currentFrame] = [];
-						if (!follow) {
-							for (let j = 0; j < h; j++) {
-								Lines.frames[Lines.currentFrame].push(tempFrames[j]);
-							}
-						}
-						Lines.frames[Lines.currentFrame].push({
-							d: tempFrames[h].d,
-							i: follow ? i : 0,
-							e: i + segmentsPerFrame
-						});
-					}
+					
+					if (!Lines.frames[Lines.currentFrame]) 
+						Lines.frames[Lines.currentFrame] = [];
+					else if (!over) 
+						self.saveLines();
+
+					Lines.frames[Lines.currentFrame].push({
+						d: tempFrames[h].d,
+						i: follow ? i : 0,
+						e: i + segmentsPerFrame
+					});
+
+					if (over)
+						Lines.interface.nextFrame();
 				}
 			}
 			Lines.interface.updateFramesPanel();
@@ -469,8 +466,14 @@ function Data() {
 
 	panel.add( new UIButton({
 		title: "Insert",
-		callback: self.insertFrame,
+		callback: self.insertFrameBefore,
 		key: "i"
+	}) );
+
+	panel.add( new UIButton({
+		title: "Insert",
+		callback: self.insertFrameAfter,
+		key: "shift-i"
 	}) );
 
 	panel.add( new UIButton({
