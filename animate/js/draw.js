@@ -119,15 +119,16 @@ function Draw() {
 	/* jig = jiggle amount, seg = num segments */
 	this.drawLines = function(lines, start, end, seg, jig, color, onion) {
 		/* mixed color?  - assume always mixed? - care about performance? */
-		let totalSegments = 0;
+		let drawnSegments = 0;
 		Lines.canvas.ctx.beginPath();
 		for (let j = 0; j < lines.length; j++) {
 			const line = lines[j];
-			totalSegments += line.length;
-			if (start < totalSegments) {
-				for (let h = 0; h < line.length - 1; h++) {
+			if (start < line.length + drawnSegments) {
+				let index = Math.max(0, start - drawnSegments);
+				for (let h = index; h < line.length - 1; h++) {
 					const s = line[h];
 					const e = line[h + 1];
+					// console.log(s, e);
 					let v = new Cool.Vector(e.x, e.y);
 					v.subtract(s);
 					v.divide(seg);
@@ -143,6 +144,7 @@ function Draw() {
 						Lines.canvas.setStrokeColor(color);
 				}
 			}
+			drawnSegments += line.length;
 		}
 		Lines.canvas.ctx.stroke();
 	};
