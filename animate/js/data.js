@@ -261,6 +261,7 @@ function Data() {
 		Lines.frames.insert(Lines.currentFrame, []);
 		Lines.interface.updateFramesPanel();
 	};
+
 	/* shift-i key */
 	this.insertFrameAfter = function() {
 		self.saveLines();
@@ -296,28 +297,36 @@ function Data() {
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
-			console.log(tempFrames);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = Lines.drawings[tempFrames[h].d].l;
-				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
-					if (!over) {
-						self.insertFrameAfter();
-						Lines.interface.nextFrame();
+				// let drawnSegments = 0;
+				for (let j = 0; j < tempLines.length; j++) {
+					const line = tempLines[j];
+					console.log(line);
+					// let index = Math.max(0, line.length - drawnSegments);
+					// console.log(index);
+					for (let i = 0; i < line.length - 1; i += segmentsPerFrame) {
+						console.log(i);
+						if (!over) {
+							self.insertFrameAfter();
+							Lines.interface.nextFrame();
+						}
+						
+						if (!Lines.frames[Lines.currentFrame]) 
+							Lines.frames[Lines.currentFrame] = [];
+						else if (!over) 
+							self.saveLines();
+
+						Lines.frames[Lines.currentFrame].push({
+							d: tempFrames[h].d,
+							s: follow ? i : 0,
+							e: i + segmentsPerFrame
+						});
+
+						if (over)
+							Lines.interface.nextFrame();
 					}
-					
-					if (!Lines.frames[Lines.currentFrame]) 
-						Lines.frames[Lines.currentFrame] = [];
-					else if (!over) 
-						self.saveLines();
-
-					Lines.frames[Lines.currentFrame].push({
-						d: tempFrames[h].d,
-						i: follow ? i : 0,
-						e: i + segmentsPerFrame
-					});
-
-					if (over)
-						Lines.interface.nextFrame();
+					// drawnSegments += line.length;
 				}
 			}
 			Lines.interface.updateFramesPanel();
@@ -470,13 +479,13 @@ function Data() {
 	}) );
 
 	panel.add( new UIButton({
-		title: "Insert",
+		title: "Insert Before",
 		callback: self.insertFrameBefore,
 		key: "i"
 	}) );
 
 	panel.add( new UIButton({
-		title: "Insert",
+		title: "Insert After",
 		callback: self.insertFrameAfter,
 		key: "shift-i"
 	}) );
