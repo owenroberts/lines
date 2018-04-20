@@ -104,7 +104,10 @@ function Draw() {
 
 			/* draws current lines */
 			if (Lines.lines.length > 0) {
-				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.lineColor.color);
+				const end = Lines.lines
+					.map((line) => { return line.length })
+					.reduce((total, len) => { return total + len });
+				self.drawLines(Lines.lines, 0, end, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.lineColor.color);
 			}
 
 			/* capture frames */
@@ -123,12 +126,12 @@ function Draw() {
 		Lines.canvas.ctx.beginPath();
 		for (let j = 0; j < lines.length; j++) {
 			const line = lines[j];
-			if (start < line.length + drawnSegments) {
+			if (start < line.length + drawnSegments && end > drawnSegments) {
 				let index = Math.max(0, start - drawnSegments);
-				for (let h = index; h < line.length - 1; h++) {
+				let ending = Math.min(end - drawnSegments, line.length);
+				for (let h = index; h < ending - 1; h++) {
 					const s = line[h];
 					const e = line[h + 1];
-					// console.log(s, e);
 					let v = new Cool.Vector(e.x, e.y);
 					v.subtract(s);
 					v.divide(seg);

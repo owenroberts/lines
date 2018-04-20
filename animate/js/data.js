@@ -299,14 +299,12 @@ function Data() {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = Lines.drawings[tempFrames[h].d].l;
-				// let drawnSegments = 0;
+				let drawnSegments = 0;
 				for (let j = 0; j < tempLines.length; j++) {
 					const line = tempLines[j];
-					console.log(line);
-					// let index = Math.max(0, line.length - drawnSegments);
-					// console.log(index);
-					for (let i = 0; i < line.length - 1; i += segmentsPerFrame) {
-						console.log(i);
+					let index = Math.max(0, drawnSegments - line.length);
+					let ending = Math.min(tempFrames[h].e - drawnSegments, line.length);
+					for (let i = index; i < ending; i += segmentsPerFrame) {
 						if (!over) {
 							self.insertFrameAfter();
 							Lines.interface.nextFrame();
@@ -319,14 +317,14 @@ function Data() {
 
 						Lines.frames[Lines.currentFrame].push({
 							d: tempFrames[h].d,
-							s: follow ? i : 0,
-							e: i + segmentsPerFrame
+							s: follow ? i + drawnSegments : 0,
+							e: drawnSegments + i + segmentsPerFrame
 						});
 
 						if (over)
 							Lines.interface.nextFrame();
 					}
-					// drawnSegments += line.length;
+					drawnSegments += line.length;
 				}
 			}
 			Lines.interface.updateFramesPanel();
