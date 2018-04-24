@@ -120,7 +120,7 @@ function Draw() {
 	this.drawLines = function(lines, start, end, seg, jig, color, onion) {
 		/* mixed color?  - assume always mixed? - care about performance? */
 		Lines.canvas.ctx.beginPath();
-		for (let h = 0; h < lines.length - 1; h++) {
+		for (let h = start; h < end - 1; h++) {
 			if (lines[h] != "end") {
 				const s = lines[h];
 				const e = lines[h + 1];
