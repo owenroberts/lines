@@ -33,14 +33,10 @@ function Data() {
 				Lines.frames[Lines.currentFrame] = [];
 
 			/* add drawing ref to frames data */
-			const totalSegments = Lines.lines
-				.map((line) => { return line.length })
-				.reduce((total, len) => { return total + len });
-			
 			Lines.frames[Lines.currentFrame].push({
 				d: Lines.drawings.length, 
-				s: 0, 
-				e: totalSegments
+				i: 0, 
+				e: Lines.lines.length
 			});
 			
 			/* add current lines to drawing data */
@@ -261,7 +257,6 @@ function Data() {
 		Lines.frames.insert(Lines.currentFrame, []);
 		Lines.interface.updateFramesPanel();
 	};
-
 	/* shift-i key */
 	this.insertFrameAfter = function() {
 		self.saveLines();
@@ -299,32 +294,25 @@ function Data() {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
 				const tempLines = Lines.drawings[tempFrames[h].d].l;
-				let drawnSegments = 0;
-				for (let j = 0; j < tempLines.length; j++) {
-					const line = tempLines[j];
-					let index = Math.max(0, drawnSegments - line.length);
-					let ending = Math.min(tempFrames[h].e - drawnSegments, line.length);
-					for (let i = index; i < ending; i += segmentsPerFrame) {
-						if (!over) {
-							self.insertFrameAfter();
-							Lines.interface.nextFrame();
-						}
-						
-						if (!Lines.frames[Lines.currentFrame]) 
-							Lines.frames[Lines.currentFrame] = [];
-						else if (!over) 
-							self.saveLines();
-
-						Lines.frames[Lines.currentFrame].push({
-							d: tempFrames[h].d,
-							s: follow ? i + drawnSegments : 0,
-							e: drawnSegments + i + segmentsPerFrame
-						});
-
-						if (over)
-							Lines.interface.nextFrame();
+				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
+					if (!over) {
+						self.insertFrameAfter();
+						Lines.interface.nextFrame();
 					}
-					drawnSegments += line.length;
+					
+					if (!Lines.frames[Lines.currentFrame]) 
+						Lines.frames[Lines.currentFrame] = [];
+					else if (!over) 
+						self.saveLines();
+
+					Lines.frames[Lines.currentFrame].push({
+						d: tempFrames[h].d,
+						i: follow ? i : 0,
+						e: i + segmentsPerFrame
+					});
+
+					if (over)
+						Lines.interface.nextFrame();
 				}
 			}
 			Lines.interface.updateFramesPanel();
@@ -340,7 +328,7 @@ function Data() {
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			const totalSegments = Lines.frames[Lines.currentFrame]
-									.map((f) => { return f.e } )
+									.map((f) => { return f.e} )
 									.reduce((x,y) => { return x + y });
 			for (let i = 0; i < totalSegments; i += segmentsPerFrame) {
 				let indexMod = 0;
@@ -477,13 +465,13 @@ function Data() {
 	}) );
 
 	panel.add( new UIButton({
-		title: "Insert Before",
+		title: "Insert",
 		callback: self.insertFrameBefore,
 		key: "i"
 	}) );
 
 	panel.add( new UIButton({
-		title: "Insert After",
+		title: "Insert",
 		callback: self.insertFrameAfter,
 		key: "shift-i"
 	}) );

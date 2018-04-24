@@ -32,21 +32,21 @@ function DrawEvents() {
 
 	/* add a point */
 	this.addLine = function(x, y) {
-		Lines.lines[Lines.lines.length - 1].push( new Cool.Vector(x, y) );
-		self.moves++;
+		Lines.lines.push( new Cool.Vector(x, y) );
 	};
 
 	this.drawStart = function(ev) {
 		if (ev.which == 1 && !Lines.draw.isPlaying) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
-			Lines.lines.push([]);
 		}
 	};
 
 	this.drawEnd = function(ev) {
 		if (ev.which == 1) 
 			self.isDrawing = false;
+		Lines.lines.push("end");
+
 	}
 
 	if (window.PointerEvent) {
