@@ -104,10 +104,7 @@ function Draw() {
 
 			/* draws current lines */
 			if (Lines.lines.length > 0) {
-				const end = Lines.lines
-					.map((line) => { return line.length })
-					.reduce((total, len) => { return total + len });
-				self.drawLines(Lines.lines, 0, end, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.lineColor.color);
+				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.lineColor.color);
 			}
 
 			/* capture frames */
@@ -122,32 +119,25 @@ function Draw() {
 	/* jig = jiggle amount, seg = num segments */
 	this.drawLines = function(lines, start, end, seg, jig, color, onion) {
 		/* mixed color?  - assume always mixed? - care about performance? */
-		let drawnSegments = 0;
 		Lines.canvas.ctx.beginPath();
-		for (let j = 0; j < lines.length; j++) {
-			const line = lines[j];
-			if (start < line.length + drawnSegments && end > drawnSegments) {
-				let index = Math.max(0, start - drawnSegments);
-				let ending = Math.min(end - drawnSegments, line.length);
-				for (let h = index; h < ending - 1; h++) {
-					const s = line[h];
-					const e = line[h + 1];
-					let v = new Cool.Vector(e.x, e.y);
-					v.subtract(s);
-					v.divide(seg);
-					Lines.canvas.ctx.moveTo(s.x + Cool.random(-jig, jig), s.y + Cool.random(-jig, jig));
-					for (let i = 0; i < seg; i++) {
-						/* midpoint(s) of segment */
-						const p = new Cool.Vector(s.x + v.x * i, s.y + v.y * i); 
-						Lines.canvas.ctx.lineTo( p.x + v.x + Cool.random(-jig, jig), p.y + v.y + Cool.random(-jig, jig) );
-					}
-					if (onion) 
-						Lines.canvas.ctx.strokeStyle = color;
-					else if (Lines.canvas.ctx.strokeStyle != "#" + color)
-						Lines.canvas.setStrokeColor(color);
+		for (let h = 0; h < lines.length - 1; h++) {
+			if (lines[h] != "end") {
+				const s = lines[h];
+				const e = lines[h + 1];
+				let v = new Cool.Vector(e.x, e.y);
+				v.subtract(s);
+				v.divide(seg);
+				Lines.canvas.ctx.moveTo(s.x + Cool.random(-jig, jig), s.y + Cool.random(-jig, jig));
+				for (let i = 0; i < seg; i++) {
+					/* midpoint(s) of segment */
+					const p = new Cool.Vector(s.x + v.x * i, s.y + v.y * i); 
+					Lines.canvas.ctx.lineTo( p.x + v.x + Cool.random(-jig, jig), p.y + v.y + Cool.random(-jig	, jig) );
 				}
+				if (onion) 
+					Lines.canvas.ctx.strokeStyle = color;
+				else if (Lines.canvas.ctx.strokeStyle != "#" + color)
+					Lines.canvas.setStrokeColor(color);
 			}
-			drawnSegments += line.length;
 		}
 		Lines.canvas.ctx.stroke();
 	};
