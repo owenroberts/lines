@@ -35,7 +35,7 @@ function Data() {
 			/* add drawing ref to frames data */
 			Lines.frames[Lines.currentFrame].push({
 				d: Lines.drawings.length, 
-				i: 0, 
+				s: 0, 
 				e: Lines.lines.length
 			});
 			
@@ -307,7 +307,7 @@ function Data() {
 
 					Lines.frames[Lines.currentFrame].push({
 						d: tempFrames[h].d,
-						i: follow ? i : 0,
+						s: follow ? i : 0,
 						e: i + segmentsPerFrame
 					});
 
