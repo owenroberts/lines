@@ -21,8 +21,6 @@ function Animation(src) {
 	this.loop = true;
 	this.playOnce = false;
 	this.intervalRatio = 1;
-	this.jiggle = 1;
-	this.segNum = 2;
 	this.mirror = false;
 
 	this.load = function(animSize, callback) {
@@ -30,22 +28,11 @@ function Animation(src) {
 			self.loaded = true;
 			self.frames = data.f;
 			self.drawings = data.d;
-			if (!self.drawings.every(item => item == "x")) {
-				let found = false;
-				let count = 0;
-				while(!found) {
-					if (self.drawings[count].r && self.drawings[count].n) {
-						self.jiggle = self.drawings[count].r;
-						self.segNum = self.drawings[count].n;
-						found = true;
-					}
-					count++;
-				}
-			}
 			if (animSize === true) {
 				self.widthRatio = 1;
 				self.heightRatio = 1;
-				if (callback) callback(data.w, data.h);
+				if (callback) 
+					callback(data.w, data.h);
 			} else {
 				self.width = animSize.x;
 				self.height = animSize.y;
@@ -53,7 +40,6 @@ function Animation(src) {
 				self.heightRatio = animSize.y / data.h;
 			}
 			self.intervalRatio = Game.lineInterval / (1000/data.fps);
-
 		});
 	};
 
@@ -80,39 +66,40 @@ function Animation(src) {
 		}
 		
 		if (this.loaded && this.play) {
-			//if (this.debug) console.log(this.currentFrame);
 			if (this.mirror) {
 				ctx.save();
 				//ctx.translate(this.width, 0);
 				//ctx.scale(-1,1);
 			}
 			if (this.frames[this.currentFrameRounded]) {
-				if (!mixedColors) ctx.beginPath();
-
+				if (!mixedColors) 
+					ctx.beginPath();
 				for (let i = 0; i < this.frames[this.currentFrameRounded].length; i++) {
-					const frm = this.frames[this.currentFrameRounded][i];
-					const drw = this.drawings[frm.d];
-					if (mixedColors) ctx.beginPath();
-					for (let h = frm.i; h < frm.e; h++) {
-						const line = drw.l[h]; // line data
-						if (line && line.e) {
-							const v = new Cool.Vector(line.e.x, line.e.y);
-							v.subtract(line.s);
-							v.divide(this.segNum); // line num
-							ctx.moveTo(
-								x + this.widthRatio * (line.s.x + Cool.random(-this.jiggle, this.jiggle)), 
-								y + this.heightRatio * (line.s.y + Cool.random(-this.jiggle, this.jiggle)) 
+					const fr = this.frames[this.currentFrameRounded][i];
+					const jig = +fr.r;
+					const seg = +fr.n;
+					const dr = this.drawings[fr.d];
+					if (mixedColors) 
+						ctx.beginPath();
+					for (let h = fr.s; h < fr.e - 1; h++) {
+						const s = dr[h]; // line data
+						const e = dr[h + 1];
+						let v = new Cool.Vector(e.x, e.y);
+						v.subtract(s);
+						v.divide(seg); // line num
+						ctx.moveTo(
+							x + this.widthRatio * (fr.x + s.x + Cool.random(-jig, jig)), 
+							y + this.heightRatio * (fr.y + s.y + Cool.random(-jig, jig)) 
+						);
+						for (let j = 0; j < seg; j++) {
+							const p = new Cool.Vector(s.x + v.x * j, s.y + v.y * j);
+							ctx.lineTo( 
+								x + this.widthRatio * (fr.x + p.x + v.x + Cool.random(-jig, jig)), 
+								y + this.heightRatio * (fr.y +  p.y + v.y + Cool.random(-jig, jig)) 
 							);
-							for (let j = 0; j < this.segNum; j++) {
-								const p = new Cool.Vector(line.s.x + v.x * j, line.s.y + v.y * j);
-								ctx.lineTo( 
-									x + this.widthRatio * (p.x + v.x + Cool.random(-this.jiggle, this.jiggle)), 
-									y + this.heightRatio * ( p.y + v.y + Cool.random(-this.jiggle, this.jiggle)) 
-								);
-							}
-							if (ctx.strokeStyle.replace("#","") != drw.c) {
-								ctx.strokeStyle= "#" + drw.c;
-							}
+						}
+						if (ctx.strokeStyle.replace("#","") != fr.c) {
+							ctx.strokeStyle= "#" + fr.c;
 						}
 					}
 					if (mixedColors) ctx.stroke();
@@ -188,58 +175,4 @@ function Animation(src) {
 		self.play = true;
 	};
 	
-	let count = 0;
-	this.drawTwo = function(other) {
-		count++;
-		if (this.loaded && this.play) {
-			if (this.frames[this.currentFrameRounded]) {
-				if (!mixedColors)
-					ctx.beginPath();
-				for (let i = 0; i < this.frames[0].length; i++) {
-					const frm = this.frames[0][0];
-					const drw = this.drawings[frm.d];
-					const frm0 = other.frames[0][0];
-					const drw0 = other.drawings[frm.d];
-					//console.log(frm0, drw0);
-					if (mixedColors)
-						ctx.beginPath();
-					const end = frm.e > frm0.e ? frm0.e : frm.e;
-					for (let h = 0; h < end; h++) {
-						const line = drw.l[h]; // line data
-						const line0 = drw0.l[h];
-						if (line && line.e && line0 && line0.e) {
-							let v;
-							if (h > count) {
-								v = new Cool.Vector(line.e.x, line.e.y);
-							} else {
-								v = new Cool.Vector(line0.e.x, line0.e.y);
-							}
-
-							v.subtract(line.s);
-							v.divide(drw.n); // line num
-							ctx.moveTo(
-								line.s.x + Cool.random(-drw.r, drw.r), 
-								line.s.y + Cool.random(-drw.r, drw.r) 
-							);
-							for (let j = 0; j < drw.n; j++) {
-								const p = new Cool.Vector(line.s.x + v.x * j, line.s.y + v.y * j);
-								ctx.lineTo( 
-									p.x + v.x + Cool.random(-drw.r, drw.r), 
-									p.y + v.y + Cool.random(-drw.r, drw.r) 
-								);
-							}
-							if (ctx.strokeStyle.replace("#","") != drw.c) {
-								ctx.strokeStyle= "#" + drw.c;
-							}
-						}
-					}
-					if (mixedColors)
-						ctx.stroke();
-					
-				}
-				if (!mixedColors)
-					ctx.stroke();
-			}
-		}
-	}
 }
