@@ -8,6 +8,7 @@ function Files_IO() {
 		Lines.data.saveLines();
 
 		const json = {};
+		json.v = "2.0";
 		json.w = Number( Lines.canvas.width );
 		json.h = Number( Lines.canvas.height );
 		json.fps = Number( Lines.draw.fps );
