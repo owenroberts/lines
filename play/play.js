@@ -17,7 +17,7 @@ function LinesPlayer(canvas, src, lps, callback) {
 	this.playing = true;
 	
 	if (lps) this.lps = lps; // lines per second
-	else this.lps = 15;
+	else this.lps = 10;
 	this.lineInterval = 1000/this.lps;
 	this.timer = performance.now();
 	this.intervalRatio = 1;
@@ -45,25 +45,32 @@ function LinesPlayer(canvas, src, lps, callback) {
 					this.ctx.beginPath();
 				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
 					const fr = this.frames[this.currentFrame][i];
+					const jig = +fr.r;
+					const seg = +fr.n;
 					const dr = this.drawings[fr.d];
 					if (this.mixedColors)
 						this.ctx.beginPath();
-					for (let h = fr.i; h < fr.e; h++) {
-						let line = dr.l[h];
-						if (line && line.e) {
-							let v = new Cool.Vector(line.e.x, line.e.y);
-							v.subtract(line.s);
-							v.divide(dr.n);
-							this.ctx.moveTo( line.s.x + Cool.random(-dr.r, dr.r), line.s.y + Cool.random(-dr.r, dr.r) );
-							for (let j = 0; j < dr.n; j++) {
-								let p = new Cool.Vector(line.s.x + v.x * j, line.s.y + v.y * j);
-								this.ctx.lineTo( p.x + v.x + Cool.random(-dr.r, dr.r), p.y + v.y + Cool.random(-dr.r, dr.r) );
-							}
-							if (this.ctxStrokeColor != dr.c) {
-								this.ctxStrokeColor = dr.c;
-								this.ctx.strokeStyle= "#" + this.ctxStrokeColor;
-							}
-						}			
+					for (let h = fr.s; h < fr.e - 1; h++) {
+						const s = dr[h];
+						const e = dr[h + 1];
+						let v = new Cool.Vector(e.x, e.y);
+						v.subtract(s);
+						v.divide(seg);
+						this.ctx.moveTo( 
+							fr.x + s.x + Cool.random(-jig, jig), 
+							fr.y + s.y + Cool.random(-jig, jig) 
+						);
+						for (let j = 0; j < seg; j++) {
+							let p = new Cool.Vector(s.x + v.x * j, s.y + v.y * j);
+							this.ctx.lineTo( 
+								fr.x + p.x + v.x + Cool.random(-jig, jig), 
+								fr.y + p.y + v.y + Cool.random(-jig, jig) 
+							);
+						}
+						if (this.ctxStrokeColor != fr.c) {
+							this.ctxStrokeColor = fr.c;
+							this.ctx.strokeStyle= "#" + this.ctxStrokeColor;
+						}
 					}
 					if (this.mixedColors)
 						this.ctx.stroke();
@@ -121,7 +128,7 @@ function LinesPlayer(canvas, src, lps, callback) {
 			requestAnimFrame(self.draw.bind(self));
 			self.sizeCanvas();
 			if (callback) callback(); // callback to do something after drawing loads
-
+			console.log(self);
 		});
 	};
 
