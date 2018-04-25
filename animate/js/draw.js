@@ -120,14 +120,11 @@ function Draw() {
 	this.drawLines = function(lines, start, end, seg, jig, x, y, color, onion) {
 		/* mixed color?  - assume always mixed? - care about performance? */
 		Lines.canvas.ctx.beginPath();
-		console.log(lines.length, end);
 		for (let h = start; h < end - 1; h++) {
 			if (lines[h] != "end") {
-
 				const s = lines[h];
 				const e = lines[h + 1];
 				let v = new Cool.Vector(e.x, e.y);
-				//console.log(v);
 				v.subtract(s);
 				v.divide(seg);
 				Lines.canvas.ctx.moveTo(
