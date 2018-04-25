@@ -5,10 +5,9 @@ function DrawEvents() {
 
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != Lines.canvas.canvas) { 
-			if (self.isDrawing) Lines.data.saveLines();
+			if (self.isDrawing) 
+				Lines.data.saveLines();
 			self.isDrawing = false;
-			if (self.moves % 2 == 1) Lines.lines.splice(-1,1);
-			self.moves = 0;
 
 			/* pointer context click on frames for copy frames */
 			if (ev.which == 3) {
@@ -24,9 +23,8 @@ function DrawEvents() {
 	this.drawUpdate = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
-			if (self.isDrawing) {
+			if (self.isDrawing)
 				self.addLine(ev.offsetX, ev.offsetY);
-			}
 		}
 	};
 
@@ -46,7 +44,6 @@ function DrawEvents() {
 		if (ev.which == 1) 
 			self.isDrawing = false;
 		Lines.lines.push("end");
-
 	}
 
 	if (window.PointerEvent) {

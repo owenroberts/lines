@@ -34,18 +34,18 @@ function Data() {
 
 			/* add drawing ref to frames data */
 			Lines.frames[Lines.currentFrame].push({
-				d: Lines.drawings.length, 
-				s: 0, 
-				e: Lines.lines.length
+				d: Lines.drawings.length, // drawing index
+				s: 0, // start point
+				e: Lines.lines.length, // end point
+				c: Lines.lineColor.color, // color
+				n: Lines.drawEvents.segNumRange, // segment number
+				r: Lines.drawEvents.jiggleRange, // jiggle ammount
+				x: 0, // default x and y
+				y: 0
 			});
 			
 			/* add current lines to drawing data */
-			Lines.drawings.push({
-				l: Lines.lines,
-				c: Lines.lineColor.color,
-				n: Lines.drawEvents.segNumRange,
-				r: Lines.drawEvents.jiggleRange
-			});
+			Lines.drawings.push(Lines.lines);
 
 			/* add current color to color choices */
 			Lines.lineColor.addColorBtn(Lines.lineColor.color);
@@ -116,26 +116,6 @@ function Data() {
 			}
 			for (let i = 0; i <  self.framesCopy[0].length; i++) {
 				Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[0][i]) );
-			}
-		}
-	};
-
-	/* g key - duplicate drawing to change offset, color, etc. 
-		should be deprecated for v 2 */
-	this.duplicate = function() {
-		if (Lines.lines.length > 0) self.saveLines();
-		if (Lines.frames[Lines.currentFrame]) {
-			self.framesCopy = [];
-			const drawingIndexOffset = Lines.drawings.length - 1;
-			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-				Lines.drawings.push( 
-					_.cloneDeep(Lines.drawings[Lines.frames[Lines.currentFrame][i].d]) 
-				);
-				self.framesCopy.push({
-					d: Lines.drawings.length - 1,
-					i: Lines.frames[Lines.currentFrame][i].i,
-					e: Lines.frames[Lines.currentFrame][i].e
-				});
 			}
 		}
 	};
@@ -257,6 +237,7 @@ function Data() {
 		Lines.frames.insert(Lines.currentFrame, []);
 		Lines.interface.updateFramesPanel();
 	};
+
 	/* shift-i key */
 	this.insertFrameAfter = function() {
 		self.saveLines();
@@ -293,7 +274,7 @@ function Data() {
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			for (let h = tempFrames.length - 1; h >= 0; h--) {
-				const tempLines = Lines.drawings[tempFrames[h].d].l;
+				const tempLines = Lines.drawings[tempFrames[h].d];
 				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
 					if (!over) {
 						self.insertFrameAfter();
@@ -308,7 +289,12 @@ function Data() {
 					Lines.frames[Lines.currentFrame].push({
 						d: tempFrames[h].d,
 						s: follow ? i : 0,
-						e: i + segmentsPerFrame
+						e: i + segmentsPerFrame,
+						c: tempFrames[h].c,
+						n: tempFrames[h].n,
+						r: tempFrames[h].r,
+						x: tempFrames[h].x,
+						y: tempFrames[h].y
 					});
 
 					if (over)
@@ -319,7 +305,7 @@ function Data() {
 		}
 	};
 
-	/* reverse of explode - no key 
+	/* reverse of explode - shift-r - multi alt-r
 		could be same function but then maybe my head would explode? 
 		simultaneous draw multi drawings at one  (multi) */
 	this.reverse = function(simultaneous) {
@@ -339,13 +325,18 @@ function Data() {
 				for (let j = 0; j < tempFrames.length; j++) {
 					const drawingIndex = tempFrames[j].d;
 					const drawingEnd = tempFrames[j].e;
-					const drawingStart = tempFrames[j].i;
+					const drawingStart = tempFrames[j].s;
 					const tempLines = Lines.drawings[drawingIndex].l;
 					if (i <= drawingEnd + (simultaneous ? 0 : indexMod)) {
 						Lines.frames[Lines.currentFrame].push({
 							d: drawingIndex,
-							i: simultaneous ? i : i - indexMod,
-							e: drawingEnd
+							s: simultaneous ? i : i - indexMod,
+							e: drawingEnd,
+							c: tempFrames[j].c,
+							n: tempFrames[j].n,
+							r: tempFrames[j].r,
+							x: tempFrames[j].x,
+							y: tempFrames[j].y
 						});
 						framesAdded = true;
 					}
@@ -370,17 +361,9 @@ function Data() {
 		}
 		if (offset) {
 			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-				const d = Lines.drawings[Lines.frames[Lines.currentFrame][i].d];
-				if (d != "x"){
-					for (let j = 0; j < d.l.length; j++) {
-						if (d.l[j].e && d.l[j].s) {
-							d.l[j].e.y += offset.y;
-							d.l[j].s.y += offset.y;
-							d.l[j].e.x += offset.x;
-							d.l[j].s.x += offset.x;
-						}	
-					}
-				}
+				const fr = Lines.frames[Lines.currentFrame][i];
+				fr.x = offset.x;
+				fr.y = offset.y;
 			}
 		}
 	};
@@ -429,14 +412,16 @@ function Data() {
 		title: "Reverse Draw",
 		callback: function() {
 			self.reverse(false);
-		}
+		},
+		key: "shift-r"
 	}) );
 
 	panel.add( new UIButton({
 		title: "Reverse Multi",
 		callback: function() {
 			self.reverse(true);
-		}
+		},
+		key: "alt-r"
 	}) );
 
 	panel.add( new UIButton({

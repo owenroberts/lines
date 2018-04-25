@@ -2,8 +2,8 @@
 window.addEventListener("load", function() {
 	Lines = {};
 	// global parts used everywhere
-	Lines.frames = [];
 	Lines.lines = []; // lines currently being drawn
+	Lines.frames = [];
 	Lines.drawings = []; // saved drawings
 	Lines.currentFrame = 0;
 	

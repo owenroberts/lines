@@ -87,7 +87,7 @@ function Draw() {
 						for (var i = 0; i < Lines.frames[frameNumber].length; i++) {
 							const fr = Lines.frames[frameNumber][i];
 							const dr = Lines.drawings[fr.d];
-							self.drawLines(dr.l, fr.s, fr.e, dr.n, dr.r, color, true);
+							self.drawLines(dr, fr.s, fr.e, fr.n, fr.r, fr.x, fr.y, color, true);
 						}
 					}
 				}
@@ -98,13 +98,13 @@ function Draw() {
 				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
 					const fr = Lines.frames[Lines.currentFrame][i];
 					const dr = Lines.drawings[fr.d];
-					self.drawLines(dr.l, fr.s, fr.e, dr.n, dr.r, dr.c);
+					self.drawLines(dr, fr.s, fr.e, fr.n, fr.r, fr.x, fr.y, fr.c);
 				}
 			}
 
 			/* draws current lines */
 			if (Lines.lines.length > 0) {
-				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, Lines.lineColor.color);
+				self.drawLines(Lines.lines, 0, Lines.lines.length, Lines.drawEvents.segNumRange, Lines.drawEvents.jiggleRange, 0, 0, Lines.lineColor.color);
 			}
 
 			/* capture frames */
@@ -117,21 +117,30 @@ function Draw() {
 	}
 
 	/* jig = jiggle amount, seg = num segments */
-	this.drawLines = function(lines, start, end, seg, jig, color, onion) {
+	this.drawLines = function(lines, start, end, seg, jig, x, y, color, onion) {
 		/* mixed color?  - assume always mixed? - care about performance? */
 		Lines.canvas.ctx.beginPath();
+		console.log(lines.length, end);
 		for (let h = start; h < end - 1; h++) {
 			if (lines[h] != "end") {
+
 				const s = lines[h];
 				const e = lines[h + 1];
 				let v = new Cool.Vector(e.x, e.y);
+				//console.log(v);
 				v.subtract(s);
 				v.divide(seg);
-				Lines.canvas.ctx.moveTo(s.x + Cool.random(-jig, jig), s.y + Cool.random(-jig, jig));
+				Lines.canvas.ctx.moveTo(
+					x + s.x + Cool.random(-jig, jig), 
+					y + s.y + Cool.random(-jig, jig)
+				);
 				for (let i = 0; i < seg; i++) {
 					/* midpoint(s) of segment */
 					const p = new Cool.Vector(s.x + v.x * i, s.y + v.y * i); 
-					Lines.canvas.ctx.lineTo( p.x + v.x + Cool.random(-jig, jig), p.y + v.y + Cool.random(-jig	, jig) );
+					Lines.canvas.ctx.lineTo( 
+						x + p.x + v.x + Cool.random(-jig, jig), 
+						y + p.y + v.y + Cool.random(-jig, jig) 
+					);
 				}
 				if (onion) 
 					Lines.canvas.ctx.strokeStyle = color;

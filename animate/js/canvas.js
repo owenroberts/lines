@@ -74,23 +74,18 @@ function Canvas(width, height, color) {
 		let miny = 10000;
 		let maxy = 0;
 
-		for (let i = 0; i < Lines.drawings.length; i++) {
-			if (Lines.drawings[i] != "x") { /* remove all "x" stuff in v2 */
-				for (let j = 0; j < Lines.drawings[i].l.length; j++) {
-					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
-
-						tolerance = Math.max( tolerance, Lines.drawings[i].r * 4 );
-
-						minx = Math.min( minx, Lines.drawings[i].l[j].e.x );
-						miny = Math.min( miny, Lines.drawings[i].l[j].e.y );
-						minx = Math.min( minx, Lines.drawings[i].l[j].s.x );
-						miny = Math.min( miny, Lines.drawings[i].l[j].s.y );
-
-						maxx = Math.max( maxx, Lines.drawings[i].l[j].e.x );
-						maxy = Math.max( maxy, Lines.drawings[i].l[j].e.y );
-						maxx = Math.max( maxx, Lines.drawings[i].l[j].s.x );
-						maxy = Math.max( maxy, Lines.drawings[i].l[j].s.y );
-
+		for (let i = 0; i < Lines.frames.length; i++) {
+			const fr = Lines.frames[i];
+			for (let h = 0; h < fr.length; h++) {
+				const layer = fr[h];
+				for (let j = 0; j < Lines.drawings[layer.d].length; j++) {
+					const dr = Lines.drawings[layer.d][j];
+					if (dr != "end") {
+						tolerance = Math.max( tolerance, layer.r * 4 );
+						minx = Math.min( minx, dr.x );
+						miny = Math.min( miny, dr.y );
+						maxx = Math.max( maxx, dr.x );
+						maxy = Math.max( maxy, dr.y );
 					}	
 				}
 			}
@@ -99,16 +94,12 @@ function Canvas(width, height, color) {
 		self.setWidth((maxx - minx) + tolerance * 2);
 		self.setHeight((maxy - miny) + tolerance * 2);
 
-		for (let i = 0; i < Lines.drawings.length; i++) {
-			if (Lines.drawings[i] != "x"){
-				for (var j = 0; j < Lines.drawings[i].l.length; j++) {
-					if (Lines.drawings[i].l[j].e && Lines.drawings[i].l[j].s) {
-						Lines.drawings[i].l[j].e.x -= minx - tolerance;
-						Lines.drawings[i].l[j].e.y -= miny - tolerance;
-						Lines.drawings[i].l[j].s.x -= minx - tolerance;
-						Lines.drawings[i].l[j].s.y -= miny - tolerance;
-					}	
-				}
+		for (let h = 0; h < Lines.frames.length; h++) {
+			const fr = Lines.frames[h];
+			for (let h = 0; h < fr.length; h++) {
+				const layer = fr[h];
+				layer.x -= minx - tolerance;
+				layer.y -= miny - tolerance;
 			}
 		}
 	};
