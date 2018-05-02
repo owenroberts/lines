@@ -78,7 +78,7 @@ function Draw() {
 				Lines.canvas.ctx.drawImage(self.background.img, self.background.x, self.background.y, self.background.size, self.background.size/self.background.ratio);
 
 			/* draws onionskin this is first so its under main lines */
-			if (self.onionSkinNum > 0) {
+			if (self.onionSkinNum > 0 && self.onionSkinOn) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
 					const frameNumber = Lines.currentFrame - o;
 					if (frameNumber >= 0) {
@@ -196,6 +196,7 @@ function Draw() {
 		key: "e"
 	}) );
 
+	/* l key - onion skin num */
 	panel.add( new UISelect({
 		options: [0,1,2,3,4,5,6,7,8,9,10],
 		selected: 0,
@@ -211,6 +212,16 @@ function Draw() {
 			}
 		},
 		key: "l"
+	}));
+
+	this.onionSkinOn = true;
+	panel.add( new UIToggleButton({
+		on: "Hide Onion",
+		off: "Show Onion",
+		callback: function() {
+			self.onionSkinOn = !self.onionSkinOn;
+		},
+		key: "shift-l"
 	}));
 
 	this.fpsSelect = new UISelect({
