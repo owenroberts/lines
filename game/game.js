@@ -1,6 +1,7 @@
 var Game = {
 	init: function(width, height, lps) {
 		this.canvas = document.getElementById("lines");
+		// update audio new chrome
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.audioCtx = new AudioContext();
 		
@@ -59,11 +60,11 @@ var Game = {
 		}, false);
 
 		document.addEventListener('keydown', function(ev) {
-			if (typeof keyDown === "function") 
+			if (typeof keyDown === "function" && ev.target.tagName != "INPUT") 
 				keyDown(Cool.keys[ev.which]);
 		});
 		document.addEventListener('keyup', function(ev) {
-			if (typeof keyUp === "function") 
+			if (typeof keyUp === "function" && ev.target.tagName != "INPUT") 
 				keyUp(Cool.keys[ev.which]);
 		});
 
