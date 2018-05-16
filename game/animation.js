@@ -11,57 +11,71 @@ function Animation(src) {
 	this.frames = [];
 	this.drawings = [];
 	this.currentFrame = 0; 
-	this.currentFrameRounded = 0; 
+	this.currentFrameCounter = 0;  // floats
 	this.width = 0;
 	this.height = 0;
 	this.widthRatio = 1;
 	this.heightRatio = 1;
 	this.frameCount = -1;
-	this.frameCountRounded = -1; 
+	this.frameCountCounter = -1;  // floats
 	this.loop = true;
 	this.playOnce = false;
 	this.intervalRatio = 1;
 	this.mirror = false;
+	this.states = {
+		'default': {start: 0, end: 0 }
+	}
+	this.state = 'default';
 
 	this.load = function(animSize, callback) {
 		$.getJSON(this.src, function(data) {
 			self.loaded = true;
 			self.frames = data.f;
 			self.drawings = data.d;
+			if (self.states.default)
+				self.states.default.end = self.frames.length;
 			if (animSize === true) {
 				self.widthRatio = 1;
 				self.heightRatio = 1;
 				if (callback) 
 					callback(data.w, data.h);
 			} else {
-				self.width = animSize.x;
-				self.height = animSize.y;
-				self.widthRatio = animSize.x / data.w;
-				self.heightRatio = animSize.y / data.h;
+				self.width = animSize.w;
+				self.height = animSize.h;
+				self.widthRatio = animSize.w / data.w;
+				self.heightRatio = animSize.h / data.h;
 			}
 			self.intervalRatio = Game.lineInterval / (1000/data.fps);
 		});
 	};
 
 	this.draw = function(x, y) {
+		/* play once */
 		if (this.frameCount > -1) {
-			if (this.playOnce && this.frameCountRounded < this.frames.length) {
-				this.frameCount += this.intervalRatio;
-				this.frameCountRounded = Math.floor(this.frameCount);
+			if (this.playOnce && this.frameCount < this.states[this.state].end) {
+				this.frameCountCounter += this.intervalRatio;
+				this.frameCount = Math.floor(this.frameCountCounter);
 			}
-			if (this.frameCountRounded >= this.frames.length) {
+			if (this.frameCount >= this.states[this.state].end) {
 				this.playOnce = false;
-				this.frameCount = this.frameCountRounded = 0;
+				this.frameCount = this.frameCountCounter = this.states[this.state].start;
 			}
-			this.currentFrame = this.currentFrameRounded = this.frameCountRounded;
+			this.currentFrame = this.currentFrameCounter = this.frameCount;
 		} else {
-			if (this.currentFrameRounded < this.frames.length) {
-				this.currentFrame  += this.intervalRatio;
-				this.currentFrameRounded = Math.floor(this.currentFrame);
+			/* default */
+			if (this.debug) {
+				// console.log(this.state, this.states[this.state])
+				// console.log(this.currentFrame, this.currentFrameCounter);
 			}
-			if (this.currentFrameRounded >= this.frames.length) {
-				if (this.loop) this.currentFrame = this.currentFrameRounded = 0;
-				else this.currentFrame = this.currentFrameRounded = this.frames.length - 1;
+			if (this.currentFrame < this.states[this.state].end + 1) {
+				this.currentFrameCounter += this.intervalRatio;
+				this.currentFrame = Math.floor(this.currentFrameCounter);
+			}
+			if (this.currentFrame >= this.states[this.state].end + 1) {
+				if (this.loop) 
+					this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
+				else 
+					this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
 			}
 		}
 		
@@ -71,11 +85,11 @@ function Animation(src) {
 				//ctx.translate(this.width, 0);
 				//ctx.scale(-1,1);
 			}
-			if (this.frames[this.currentFrameRounded]) {
+			if (this.frames[this.currentFrame]) {
 				if (!mixedColors) 
 					ctx.beginPath();
-				for (let i = 0; i < this.frames[this.currentFrameRounded].length; i++) {
-					const fr = this.frames[this.currentFrameRounded][i];
+				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
+					const fr = this.frames[this.currentFrame][i];
 					const jig = +fr.r;
 					const seg = +fr.n;
 					const dr = this.drawings[fr.d];
@@ -109,6 +123,13 @@ function Animation(src) {
 			if (this.mirror) ctx.restore();
 		}
 	};
+
+	this.changeState = function(state) {
+		if (this.state != state) {
+			this.state = state;
+			this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
+		}
+	}
 
 	this.drawBkg = function(x, y) {
 		if (this.frameCount > -1) {
@@ -174,5 +195,5 @@ function Animation(src) {
 	this.start = function() {
 		self.play = true;
 	};
-	
+
 }
