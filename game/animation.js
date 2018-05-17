@@ -50,19 +50,7 @@ function Animation(src) {
 	};
 
 	this.draw = function(x, y) {
-		/* play once */
-		if (this.frameCount > -1) {
-			if (this.playOnce && this.frameCount < this.states[this.state].end) {
-				this.frameCountCounter += this.intervalRatio;
-				this.frameCount = Math.floor(this.frameCountCounter);
-			}
-			if (this.frameCount >= this.states[this.state].end) {
-				this.playOnce = false;
-				this.frameCount = this.frameCountCounter = this.states[this.state].start;
-			}
-			this.currentFrame = this.currentFrameCounter = this.frameCount;
-		} else {
-			/* default */
+		if (this.frameCount == -1) { /* frameCount -1 is default, means its looping */
 			if (this.debug) {
 				// console.log(this.state, this.states[this.state])
 				// console.log(this.currentFrame, this.currentFrameCounter);
@@ -77,6 +65,19 @@ function Animation(src) {
 				else 
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
 			}
+			if (this.currentFrame < this.states[this.state].start)
+				this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
+		} else {
+			/* play once */
+			if (this.playOnce && this.frameCount < this.states[this.state].end) {
+				this.frameCountCounter += this.intervalRatio;
+				this.frameCount = Math.floor(this.frameCountCounter);
+			}
+			if (this.frameCount >= this.states[this.state].end) {
+				this.playOnce = false;
+				this.frameCount = this.frameCountCounter = this.states[this.state].start;
+			}
+			this.currentFrame = this.currentFrameCounter = this.frameCount;
 		}
 		
 		if (this.loaded && this.play) {
