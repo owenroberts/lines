@@ -54,6 +54,11 @@ function Canvas(width, height, color) {
 	this.setHeight(this.height);
 
 	this.capture = function() {
+		if (Lines.draw.background.img.src) {
+			console.log(Lines.draw.background.img.src)
+			Lines.draw.background.img.src = "";
+			console.log(Lines.draw.background.img.src)
+		}
 		if (Lines.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
 				saveAs(blob, Lines.fio.title.getValue() + "-" + Cool.padNumber(Lines.currentFrame, 3) + ".png");
