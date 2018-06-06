@@ -55,11 +55,11 @@ function Animation(src) {
 				// console.log(this.state, this.states[this.state])
 				// console.log(this.currentFrame, this.currentFrameCounter);
 			}
-			if (this.currentFrame < this.states[this.state].end + 1) {
+			if (this.currentFrame < this.states[this.state].end) {
 				this.currentFrameCounter += this.intervalRatio;
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 			}
-			if (this.currentFrame >= this.states[this.state].end + 1) {
+			if (this.currentFrame >= this.states[this.state].end) {
 				if (this.loop) 
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 				else 

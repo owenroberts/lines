@@ -36,12 +36,14 @@ function Sprite(x, y, w, h) {
 		if (this.debug) 
 			self.animation.debug = true;
 	};
+
 	this.setCollider = function(x, y, w, h) {
 		this.collider.position.x = x;
 		this.collider.position.y = y;
 		this.collider.width = w;
 		this.collider.height = h;
 	};
+
 	this.scale = function(n) {
 		/* need to wait for animation to load, do this later */
 		this.animation.widthRatio = this.width / (this.width*n);
@@ -50,7 +52,8 @@ function Sprite(x, y, w, h) {
 		this.height *= n;
 		this.collider.width *= n;
 		this.collider.height *= n;
-	}
+	};
+
 	this.update = function() {
 		if (this.alive) {
 			if (this.jumpAmount != 0) {
@@ -67,6 +70,7 @@ function Sprite(x, y, w, h) {
 			}
 		}
 	};
+
 	this.display = function() {
 		if (this.alive) {
 			if (this.debug) {
@@ -92,6 +96,7 @@ function Sprite(x, y, w, h) {
 			}
 		}
 	};
+
 	this.displayTwo = function(other) {
 		if (this.alive) {
 			if (this.animation && this.animation.loaded && this.frameCount != 0) {
@@ -99,10 +104,12 @@ function Sprite(x, y, w, h) {
 				if (this.frameCount > 0) this.frameCount--;
 			}
 		}
-	}
+	};
+
 	this.jump = function(amount) {
 		this.jumpAmount += Math.min(-amount / 25, 10);
 	};
+
 	this.tap = function(x, y) {
 		if (x > this.position.x + this.collider.position.x &&
 			x < this.position.x + this.collider.position.x + this.collider.width && 
@@ -110,7 +117,8 @@ function Sprite(x, y, w, h) {
 			y < this.position.y + this.collider.position.y + this.collider.height) {
 			return true;
 		} else return false;
-	}
+	};
+
 	this.collide = function(other, callback) {
 		if (this.alive && other.alive) {
 			if (this.position.x + this.collider.position.x < other.position.x + other.collider.position.x + other.collider.width &&
@@ -147,6 +155,7 @@ function Sprite(x, y, w, h) {
 			return false;
 		}
 	};
+
 	this.outside = function(other) {
 		var next = this.position.copy();
 		var nextCollider = this.collider.position.copy();
@@ -162,6 +171,7 @@ function Sprite(x, y, w, h) {
 			return false;
 		}
 	};
+
 	this.dies = function() {
 		this.alive = false;
 		this.animation.play = false;
@@ -171,10 +181,12 @@ function Sprite(x, y, w, h) {
 			//p.pos = new Cool.Vector(10, 20);
 		}, 1000);
 	};
+
 	this.reset = function(widhtMin, widthMax, heightMin, heightMax) {
 		this.position.x = Cool.randomInt(widhtMin, widthMax - this.width);
 		this.position.y = Cool.randomInt(heightMin, heightMax);
 	};
+	
 	this.center = function() {
 		this.position.x -= this.width / 2;
 		this.position.y -= this.height / 2;
