@@ -2,7 +2,6 @@
 function Animation(src) {
 	const self = this;
 	const ctx = Game.ctx;
-
 	const mixedColors = Game.mixedColors;
 	this.debug = false;
 	this.loaded = false;
@@ -28,26 +27,38 @@ function Animation(src) {
 	this.state = 'default';
 
 	this.load = function(animSize, callback) {
-		$.getJSON(this.src, function(data) {
-			self.loaded = true;
-			self.frames = data.f;
-			self.drawings = data.d;
-			if (self.states.default)
-				self.states.default.end = self.frames.length;
-			if (animSize === true) {
-				self.widthRatio = 1;
-				self.heightRatio = 1;
-				if (callback) 
-					callback(data.w, data.h);
-			} else {
-				self.width = animSize.w;
-				self.height = animSize.h;
-				self.widthRatio = animSize.w / data.w;
-				self.heightRatio = animSize.h / data.h;
-			}
-			self.intervalRatio = Game.lineInterval / (1000/data.fps);
-		});
+		fetch(this.src)
+			.then(response => { return response.json() })
+			.then(data => {
+				self.loaded = true;
+				self.frames = data.f;
+				self.drawings = data.d;
+				if (self.states.default)
+					self.states.default.end = self.frames.length;
+				if (animSize === true) {
+					self.widthRatio = 1;
+					self.heightRatio = 1;
+					if (callback) 
+						callback(data.w, data.h);
+				} else {
+					self.width = animSize.w;
+					self.height = animSize.h;
+					self.widthRatio = animSize.w / data.w;
+					self.heightRatio = animSize.h / data.h;
+				}
+				self.intervalRatio = Game.lineInterval / (1000/data.fps);
+			});
 	};
+
+	this.setNewState = function(label, start, end) {
+		if (!this.states[label]) {
+			this.states[label] = {
+				start: start,
+				end: end
+			}
+		}
+		this.state = label;
+	}
 
 	this.draw = function(x, y) {
 		if (this.frameCount == -1) { /* frameCount -1 is default, means its looping */
@@ -80,6 +91,7 @@ function Animation(src) {
 			this.currentFrame = this.currentFrameCounter = this.frameCount;
 		}
 		
+
 		if (this.loaded && this.play) {
 			if (this.mirror) {
 				ctx.save();
