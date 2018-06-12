@@ -63,7 +63,7 @@ function Animation(src) {
 	this.draw = function(x, y) {
 		if (this.frameCount == -1) { /* frameCount -1 is default, means its looping */
 			if (this.debug) {
-				// console.log(this.state, this.states[this.state])
+				console.log(this.state, this.states[this.state])
 				// console.log(this.currentFrame, this.currentFrameCounter);
 			}
 			if (this.currentFrame < this.states[this.state].end) {
