@@ -15,10 +15,10 @@ function Animation(src) {
 	this.height = 0;
 	this.widthRatio = 1;
 	this.heightRatio = 1;
-	this.frameCount = -1;
+	this.frameCount = -1; // i guess this is set at beginning? set to 0 so it doesn't go through
 	this.frameCountCounter = -1;  // floats
 	this.loop = true;
-	this.playOnce = false;
+	this.playOnce = false; // this is a trigger?  should probably be a method?
 	this.intervalRatio = 1;
 	this.mirror = false;
 	this.states = {
@@ -63,7 +63,7 @@ function Animation(src) {
 	this.draw = function(x, y) {
 		if (this.frameCount == -1) { /* frameCount -1 is default, means its looping */
 			if (this.debug) {
-				console.log(this.state, this.states[this.state])
+				// console.log(this.state, this.states[this.state])
 				// console.log(this.currentFrame, this.currentFrameCounter);
 			}
 			if (this.currentFrame < this.states[this.state].end) {
@@ -86,6 +86,8 @@ function Animation(src) {
 			}
 			if (this.frameCount >= this.states[this.state].end) {
 				this.playOnce = false;
+				if (this.playOnceCallback)
+					this.playOnceCallback();
 				this.frameCount = this.frameCountCounter = this.states[this.state].start;
 			}
 			this.currentFrame = this.currentFrameCounter = this.frameCount;
