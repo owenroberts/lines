@@ -15,10 +15,13 @@ function Animation(src) {
 	this.height = 0;
 	this.widthRatio = 1;
 	this.heightRatio = 1;
+	this.loop = true;
+	
 	this.frameCount = -1; // i guess this is set at beginning? set to 0 so it doesn't go through
 	this.frameCountCounter = -1;  // floats
-	this.loop = true;
-	this.playOnce = false; // this is a trigger?  should probably be a method?
+	
+	// this.playOnce = false; // this is a trigger?  should probably be a method?
+	
 	this.intervalRatio = 1;
 	this.mirror = false;
 	this.states = {
@@ -50,7 +53,7 @@ function Animation(src) {
 			});
 	};
 
-	this.setNewState = function(label, start, end) {
+	this.createNewState = function(label, start, end) {
 		if (!this.states[label]) {
 			this.states[label] = {
 				start: start,
@@ -58,6 +61,18 @@ function Animation(src) {
 			}
 		}
 		this.state = label;
+	}
+
+	this.playOnce = function(callback) {
+		if (this.debug) console.log(this.state, this.states[this.state].start)
+		this.frameCount = this.states[this.state].start;
+		this.frameCountCounter = this.states[this.state].start;
+		this.playOnceCallback = callback;
+	}
+
+	this.endPlayOnce = function() {
+		this.frameCount = -1;
+		this.frameCountCounter = -1;
 	}
 
 	this.draw = function(x, y) {
@@ -80,19 +95,20 @@ function Animation(src) {
 				this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 		} else {
 			/* play once */
-			if (this.playOnce && this.frameCount < this.states[this.state].end) {
+			if (this.frameCount < this.states[this.state].end) {
 				this.frameCountCounter += this.intervalRatio;
 				this.frameCount = Math.floor(this.frameCountCounter);
+				// if (this.debug) console.log(this.intervalRatio, this.frameCountCounter, this.frameCount)
+				this.currentFrame = this.currentFrameCounter = this.frameCount;
 			}
+
 			if (this.frameCount >= this.states[this.state].end) {
-				this.playOnce = false;
+				this.frameCount = this.frameCountCounter = this.states[this.state].start;
+				this.endPlayOnce();
 				if (this.playOnceCallback)
 					this.playOnceCallback();
-				this.frameCount = this.frameCountCounter = this.states[this.state].start;
 			}
-			this.currentFrame = this.currentFrameCounter = this.frameCount;
 		}
-		
 
 		if (this.loaded && this.play) {
 			if (this.mirror) {
@@ -139,7 +155,8 @@ function Animation(src) {
 		}
 	};
 
-	this.changeState = function(state) {
+	this.setState = function(state) {
+		if (this.debug) console.log(state);
 		if (this.state != state) {
 			this.state = state;
 			this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
