@@ -11,8 +11,6 @@ function Animation(src) {
 	this.drawings = [];
 	this.currentFrame = 0; 
 	this.currentFrameCounter = 0;  // floats
-	this.width = 0;
-	this.height = 0;
 	this.widthRatio = 1;
 	this.heightRatio = 1;
 	this.loop = true;
@@ -29,7 +27,7 @@ function Animation(src) {
 	}
 	this.state = 'default';
 
-	this.load = function(animSize, callback) {
+	this.load = function(setAnimSize, callback) {
 		fetch(this.src)
 			.then(response => { return response.json() })
 			.then(data => {
@@ -38,16 +36,12 @@ function Animation(src) {
 				self.drawings = data.d;
 				if (self.states.default)
 					self.states.default.end = self.frames.length;
-				if (animSize === true) {
-					self.widthRatio = 1;
-					self.heightRatio = 1;
+				if (!setAnimSize) {
 					if (callback) 
 						callback(data.w, data.h);
 				} else {
-					self.width = animSize.w;
-					self.height = animSize.h;
-					self.widthRatio = animSize.w / data.w;
-					self.heightRatio = animSize.h / data.h;
+					self.widthRatio = setAnimSize.w / data.w;
+					self.heightRatio = setAnimSize.h / data.h;
 				}
 				self.intervalRatio = Game.lineInterval / (1000/data.fps);
 			});
