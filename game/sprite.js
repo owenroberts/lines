@@ -1,50 +1,58 @@
-function Sprite(x, y, w, h) {
-	var self = this;
-	ctx = Game.ctx;
-	this.position = new Cool.Vector(x, y);
-	this.width = w;
-	this.height = h;
-	this.collider = {
-		position: new Cool.Vector(0, 0),
-		width: w,
-		height: h
+class Sprite() {
+	constructor(x, y, w, h) {
+		this.position = new Cool.Vector(x, y);
+		this.width = w;
+		this.height = h;
+		this.ctx = Game.ctx; /* should ctx be an argument? */
+		this.debug = false; /* argument? */
+		
+		this.frameCount = -1; /* better name for this*/
+		this.initPhysics();
 	}
-	this.jumpAmount = 0;
-	this.velocity = new Cool.Vector(0,0);
-	this.alive = true;
-	this.bounceAmount = new Cool.Vector(0,0);
-	this.bounce = false;
-	this.animation = null;
-	this.debug = false;
-	this.frameCount = -1;	
-	this.wiggleAmount = -1;
-	this.bkg = false; /* draw a filled in outline */
+	// this.bkg = false; /* draw a filled in outline */
 
-	this.addAnimation = function(src, callback) {
-		self.animation = new Animation(src);
-		if (!self.width) {
-			/* load size from animation data and set sprite size */
-			self.animation.load(true, function(w, h) {
+	/* make a physics class? */
+	initPhysics() {
+		this.collider = {
+			position: new Cool.Vector(0, 0),
+			width: this.width,
+			height: this.height
+		};
+		this.jumpAmount = 0;
+		this.velocity = new Cool.Vector(0,0);
+		this.alive = true;
+		this.bounceAmount = new Cool.Vector(0,0);
+		this.bounce = false;
+		this.wiggleAmount = -1;
+	}
+	
+	addAnimation(src, callback) {
+		// var self = this;
+		this.animation = new Animation(src);
+		if (!this.width) {
+			/* load size from animation data */
+			this.animation.load(false, (w, h) => {
 				self.width = self.collider.width = w;
 				self.height = self.collider.height = h;
 				if (callback)
 					callback();
 			});
 		} else {
-			self.animation.load({w: this.width, h: this.height});
+			/* size determined by sprite */
+			this.animation.load({w: this.width, h: this.height});
 		}
 		if (this.debug) 
-			self.animation.debug = true;
-	};
+			this.animation.debug = true;
+	}
 
-	this.setCollider = function(x, y, w, h) {
+	setCollider(x, y, w, h) {
 		this.collider.position.x = x;
 		this.collider.position.y = y;
 		this.collider.width = w;
 		this.collider.height = h;
-	};
+	}
 
-	this.scale = function(n) {
+	scale(n) {
 		/* need to wait for animation to load, do this later */
 		this.animation.widthRatio = this.width / (this.width*n);
 		this.animation.heightRatio = this.height / (this.height*n);
@@ -52,9 +60,9 @@ function Sprite(x, y, w, h) {
 		this.height *= n;
 		this.collider.width *= n;
 		this.collider.height *= n;
-	};
+	}
 
-	this.update = function() {
+	update() {
 		if (this.alive) {
 			if (this.jumpAmount != 0) {
 				this.velocity.y += this.jumpAmount;
@@ -69,9 +77,9 @@ function Sprite(x, y, w, h) {
 				this.bounceAmount = new Cool.Vector(0,0);
 			}
 		}
-	};
+	}
 
-	this.display = function() {
+	display() {
 		if (this.alive) {
 			if (this.debug) {
 				ctx.beginPath();
@@ -95,31 +103,32 @@ function Sprite(x, y, w, h) {
 					this.frameCount--;
 			}
 		}
-	};
+	}
+	/* deprecating display two for now */
 
-	this.displayTwo = function(other) {
-		if (this.alive) {
-			if (this.animation && this.animation.loaded && this.frameCount != 0) {
-				this.animation.drawTwo(other.animation);
-				if (this.frameCount > 0) this.frameCount--;
-			}
-		}
-	};
+	center() {
+		this.position.x -= this.width / 2;
+		this.position.y -= this.height / 2;
+	}
 
-	this.jump = function(amount) {
-		this.jumpAmount += Math.min(-amount / 25, 10);
-	};
-
-	this.tap = function(x, y) {
+	/* better name for this? collide */
+	tap(x, y) {
 		if (x > this.position.x + this.collider.position.x &&
 			x < this.position.x + this.collider.position.x + this.collider.width && 
 			y > this.position.y + this.collider.position.y && 
 			y < this.position.y + this.collider.position.y + this.collider.height) {
 			return true;
-		} else return false;
-	};
+		} else 
+			return false;
+	}
 
-	this.collide = function(other, callback) {
+	/* physics stuff .... */
+	jump(amount) {
+		this.jumpAmount += Math.min(-amount / 25, 10);
+	}
+
+	/* nm this is collide*/
+	collide(other, callback) {
 		if (this.alive && other.alive) {
 			if (this.position.x + this.collider.position.x < other.position.x + other.collider.position.x + other.collider.width &&
 				this.position.x + this.collider.position.x + this.collider.width > other.position.x + other.collider.position.x && 
@@ -154,9 +163,10 @@ function Sprite(x, y, w, h) {
 		} else {
 			return false;
 		}
-	};
+	}
 
-	this.outside = function(other) {
+	/* not totally sure what this is used for ... */
+	outside(other) {
 		var next = this.position.copy();
 		var nextCollider = this.collider.position.copy();
 		next.add(nextCollider);
@@ -170,9 +180,9 @@ function Sprite(x, y, w, h) {
 		} else {
 			return false;
 		}
-	};
+	}
 
-	this.dies = function() {
+	dies() {
 		this.alive = false;
 		this.animation.play = false;
 		var p = this;
@@ -180,15 +190,12 @@ function Sprite(x, y, w, h) {
 			//p.alive = true;
 			//p.pos = new Cool.Vector(10, 20);
 		}, 1000);
-	};
+	}
 
-	this.reset = function(widhtMin, widthMax, heightMin, heightMax) {
-		this.position.x = Cool.randomInt(widhtMin, widthMax - this.width);
+	reset(widthMin, widthMax, heightMin, heightMax) {
+		this.position.x = Cool.randomInt(widthMin, widthMax - this.width);
 		this.position.y = Cool.randomInt(heightMin, heightMax);
-	};
+	}
 	
-	this.center = function() {
-		this.position.x -= this.width / 2;
-		this.position.y -= this.height / 2;
-	};
+	
 }
