@@ -1,12 +1,12 @@
-class Sprite() {
+class Sprite {
 	constructor(x, y, w, h) {
 		this.position = new Cool.Vector(x, y);
 		this.width = w;
 		this.height = h;
 		this.ctx = Game.ctx; /* should ctx be an argument? */
 		this.debug = false; /* argument? */
-		
-		this.frameCount = -1; /* better name for this*/
+		this.debugColor = "#00ffbb";
+		this.drawBackground = false;
 		this.initPhysics();
 	}
 	// this.bkg = false; /* draw a filled in outline */
@@ -27,13 +27,12 @@ class Sprite() {
 	}
 	
 	addAnimation(src, callback) {
-		// var self = this;
 		this.animation = new Animation(src);
 		if (!this.width) {
 			/* load size from animation data */
 			this.animation.load(false, (w, h) => {
-				self.width = self.collider.width = w;
-				self.height = self.collider.height = h;
+				this.width = this.collider.width = w;
+				this.height = this.collider.height = h;
 				if (callback)
 					callback();
 			});
@@ -43,6 +42,8 @@ class Sprite() {
 		}
 		if (this.debug) 
 			this.animation.debug = true;
+		if (this.drawBackground)
+			this.animation.drawBackground = true;
 	}
 
 	setCollider(x, y, w, h) {
@@ -82,25 +83,23 @@ class Sprite() {
 	display() {
 		if (this.alive) {
 			if (this.debug) {
-				ctx.beginPath();
-				ctx.lineWidth = 1;
-				ctx.rect(
+				this.ctx.beginPath();
+				this.ctx.lineWidth = 1;
+				this.ctx.rect(
 					this.position.x + this.collider.position.x, 
 					this.position.y + this.collider.position.y, 
 					this.collider.width, 
 					this.collider.height
 				);
-				if (ctx.strokeStyle != "#00ffbb") 
-					ctx.strokeStyle = "#00ffbb";
-				ctx.stroke();
+				if (this.ctx.strokeStyle != this.debugColor) 
+					this.ctx.strokeStyle = this.debugColor;
+				this.ctx.stroke();
 			}
-			if (this.animation && this.animation.loaded && this.frameCount != 0) {
+			if (this.animation && this.animation.loaded) {
 				if (this.bkg) 
 					this.animation.drawBkg(this.position.x, this.position.y);
 				else 
 					this.animation.draw(this.position.x, this.position.y);
-				if (this.frameCount > 0) 
-					this.frameCount--;
 			}
 		}
 	}
