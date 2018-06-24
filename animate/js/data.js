@@ -153,7 +153,7 @@ function Data() {
 	this.clearFrame = function() {
 		self.saveState();
 		if (Lines.frames[Lines.currentFrame])
-			Lines.frames[Lines.currentFrame] = undefined;
+			Lines.frames[Lines.currentFrame] = [];
 		Lines.lines = [];
 	};
 

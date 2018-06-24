@@ -1,9 +1,0 @@
-5.25.2018
-Uncaught DOMException: Failed to execute 'toBlob' on 'HTMLCanvasElement': Tainted canvases may not be exported.
-    at Canvas.capture (http://localhost:8080/lines/animate/js/canvas.js:58:11)
-    at Draw.draw (http://localhost:8080/lines/animate/js/draw.js:135:18)
-- happening at some point when trying to export
-- maybe bkg image?
-- yes
-- https://stackoverflow.com/questions/22710627/tainted-canvases-may-not-be-exported
-- tried img.crossOrigin = "anonymous" - image won't load then
