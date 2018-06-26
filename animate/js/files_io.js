@@ -57,24 +57,26 @@ function Files_IO() {
 		const filename = prompt("Open file:");
 		if (filename) {
 			self.title.setValue(filename.split("/").pop());
-			$.getJSON(filename + ".json", function(data) {
-				Lines.frames =  data.f;
-				Lines.drawings = data.d;
-				for (let i = 0; i < Lines.drawings.length; i++) {
-					/* unused drawings are null, this is okay, not looped
-					 	x for legacy compatibility */
-					if (Lines.drawings[i] && Lines.drawings[i] != 'x')
-						Lines.lineColor.addColorBtn( Lines.drawings[i].c );
-				}
-				Lines.canvas.setWidth(data.w);
-				Lines.canvas.setHeight(data.h);
-				Lines.draw.setFps(data.fps);
-				if (data.bg)  // legacy compatible
-					Lines.canvas.bgColor.setColor(data.bg);
-				Lines.draw.reset();
-			}).error(function(error) {
-				console.error("Loading error:", error.statusText, error);
-			});
+			fetch(filename + '.json')
+				.then(response => { return response.json() })
+
+				.then(data => {
+					Lines.frames =  data.f;
+					Lines.drawings = data.d;
+					for (let i = 0; i < Lines.drawings.length; i++) {
+						/* unused drawings are null, this is okay, not looped
+						 	x for legacy compatibility */
+						if (Lines.drawings[i] && Lines.drawings[i] != 'x')
+							Lines.lineColor.addColorBtn( Lines.drawings[i].c );
+					}
+					Lines.canvas.setWidth(data.w);
+					Lines.canvas.setHeight(data.h);
+					Lines.draw.setFps(data.fps);
+					if (data.bg)  // legacy compatible
+						Lines.canvas.bgColor.setColor(data.bg);
+					Lines.draw.reset();
+				})
+				.catch(error => { console.log(error.message) });
 		}
 	};
 
