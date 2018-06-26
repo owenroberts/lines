@@ -69,10 +69,14 @@ function Canvas(width, height, color) {
 		Lines.data.saveLines();
 		
 		let tolerance = 0;
-		let minx = 10000;
-		let maxx = 0;
-		let miny = 10000;
-		let maxy = 0;
+		let min = {
+			x: 10000,
+			y: 10000
+		};
+		let max = {
+			x: 0,
+			y: 0
+		}
 
 		for (let i = 0; i < Lines.frames.length; i++) {
 			const fr = Lines.frames[i];
@@ -80,26 +84,32 @@ function Canvas(width, height, color) {
 				const layer = fr[h];
 				for (let j = 0; j < Lines.drawings[layer.d].length; j++) {
 					const dr = Lines.drawings[layer.d][j];
-					if (dr != "end") {
+					if (dr != "end") { /* v2.0 segments divided w end*/
 						tolerance = Math.max( tolerance, layer.r * 4 );
-						minx = Math.min( minx, dr.x );
-						miny = Math.min( miny, dr.y );
-						maxx = Math.max( maxx, dr.x );
-						maxy = Math.max( maxy, dr.y );
+						min.x = Math.min( min.x, dr.x );
+						min.y = Math.min( min.y, dr.y );
+						max.x = Math.max( max.x, dr.x );
+						max.y = Math.max( max.y, dr.y );
 					}	
 				}
 			}
 		}
 
-		self.setWidth((maxx - minx) + tolerance * 2);
-		self.setHeight((maxy - miny) + tolerance * 2);
+		self.setWidth((max.x - min.x) + tolerance * 2);
+		self.setHeight((max.y - min.y) + tolerance * 2);
 
 		for (let h = 0; h < Lines.frames.length; h++) {
 			const fr = Lines.frames[h];
 			for (let h = 0; h < fr.length; h++) {
 				const layer = fr[h];
-				layer.x -= minx - tolerance;
-				layer.y -= miny - tolerance;
+				const diff = {
+					x: layer.x + (min.x - tolerance),
+					y: layer.y + (min.y - tolerance)
+				};
+				if (diff.x > 0)
+					layer.x -= diff.x;
+				if (diff.y > 0)
+					layer.y -= diff.y;
 			}
 		}
 	};
