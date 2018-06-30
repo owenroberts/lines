@@ -27,7 +27,7 @@ class Sprite {
 	}
 	
 	addAnimation(src, callback) {
-		this.animation = new Animation(src);
+		this.animation = new Animation(src, this.debug);
 		if (!this.width) {
 			/* load size from animation data */
 			this.animation.load(false, (w, h) => {
