@@ -1,10 +1,10 @@
 /* animation is the lines playing module, child of sprite obj */
 class Animation {
-	constructor(src) {
+	constructor(src, debug) {
 		this.src = src;
 		this.ctx = Game.ctx;
 		this.mixedColors = Game.mixedColors;
-		this.debug = false;
+		this.debug = debug;
 		this.loaded = false;
 		this.drawBackground = false;
 
@@ -39,7 +39,7 @@ class Animation {
 				this.frames = data.f;
 				this.drawings = data.d;
 				if (this.states.default)
-					this.states.default.end = this.frames.length;
+					this.states.default.end = this.frames.length - 1;
 				if (!setAnimSize) {
 					if (callback) 
 						callback(data.w, data.h);
@@ -48,7 +48,8 @@ class Animation {
 					this.heightRatio = setAnimSize.h / data.h;
 				}
 				this.intervalRatio = Game.lineInterval / (1000/data.fps);
-			});
+			})
+			.catch(error => { console.error(error) });
 	}
 
 	createNewState(label, start, end) {
@@ -64,7 +65,8 @@ class Animation {
 	setState(state) {
 		if (this.state != state) {
 			this.state = state;
-			this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
+			if (this.states[this.state]) // catch for laoding error for now
+				this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 		}
 	}
 
@@ -100,8 +102,9 @@ class Animation {
 				else 
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
 			}
-			if (this.currentFrame < this.states[this.state].start)
-				this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
+			// fucks up non-loop
+			// if (this.currentFrame < this.states[this.state].start)
+				// this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 		} else {
 			/* play once */
 			if (this.frameCount < this.states[this.state].end) {
