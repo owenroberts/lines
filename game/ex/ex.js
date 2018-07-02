@@ -16,7 +16,7 @@ class Character extends Sprite {
 	update() {
 		this.position.x += this.speed.x;
 		this.position.y += this.speed.y;
-	}
+	} /* should be part of sprite already ? */
 }
 
 const char = new Character(300, 300);

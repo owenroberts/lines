@@ -30,7 +30,7 @@ function Background() {
 	}
 
 	/* interface */
-	const panel = new Panel("background", "Background Image");
+	const panel = new Panel("background-menu", "Background Image");
 
 	/* copy/paste url, no key */
 	panel.add( new UIText({
@@ -39,12 +39,12 @@ function Background() {
 	}) );
 	
 	/* toggle visibility of bkg */
-	panel.add( new UIToggleButton({
+	panel.add(new UIToggleButton({
 		callback: this.toggle, 
 		key: "b", 
 		on: "Hide", 
 		off: "Show" 
-	}) );
+	}));
 	
 	/* update x position */
 	this.xRange = new UIRange({

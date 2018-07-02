@@ -81,6 +81,7 @@ function Interface() {
 		if (Lines.currentFrame < Lines.frames.length) 
 			Lines.currentFrame++;
 		self.updateFramesPanel();
+		Lines.draw.resetLayers();
 	};
 
 	/* w key - got to previous frame */
@@ -90,6 +91,7 @@ function Interface() {
 		if (Lines.currentFrame > 0) 
 			Lines.currentFrame--;
 		self.updateFramesPanel();
+		Lines.draw.resetLayers();
 	};
 
 	/* keyboard events and handlers */

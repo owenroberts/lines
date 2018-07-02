@@ -115,13 +115,23 @@ class Panel {
 		this.rows.push(row);
 		return row;
 	}
-	add(component) {
-		const row = this.addRow();
+	add(component, _row) {
+		let row = _row;
+		if (!row)
+			row = this.addRow();
 		row.appendChild(component.el);
 		if (component.label)
 			component.addLabel();
 		if (component.display)
 			this.rows[this.rows.length - 1].insertBefore(component.display.el, component.el);
+	}
+
+	clearComponents(row) {
+		if (row) {
+			while (row.firstChild) {
+				row.removeChild(row.firstChild);
+			}
+		}
 	}
 }
 
@@ -190,8 +200,12 @@ class UIRange extends UI {
 		super(params);
 		this.el.type = "range";
 		this.setRange(params.min, params.max);
-		if (params.display)
+		if (params.display) {
 			this.display = new UIDisplay({id:params.display,  initial:params.value});
+			this.el.addEventListener('input', () => {
+				this.display.set(this.getValue());
+			});
+		}
 		if (params.step)
 			this.setStep(params.step);
 	}
@@ -240,10 +254,13 @@ class UIToggleButton extends UI {
 		this.el.addEventListener(params.event, this.toggleText.bind(this));
 	}
 	toggleText() {
-		if (this.isOn) 
+		if (this.isOn) {
 			this.el.textContent = this.off;
-		else 
+			this.el.style.backgroundColor = "gray";
+		} else {
 			this.el.textContent = this.on;
+			this.el.style.backgroundColor = "white";
+		}
 		this.isOn = !this.isOn;
 	}
 }

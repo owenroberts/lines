@@ -384,124 +384,142 @@ function Data() {
 		explode and reverse could be transformations? 
 		removing, adding, changing frames 
 		offset and canvas size */
-	const panel = new Panel("data", "Data");
+	const editPanel = new Panel("data-menu", "Edit");
+	const explodePanel = new Panel("explode-menu", "Explode");
 
-	panel.add( new UIButton({
+	/* explode */
+	explodePanel.add(new UIButton({
 		title: "Explode",
 		callback: function() {
 			self.explode(false, false);
 		},
 		key: "a"
-	}) );
+	}));
 	
-	panel.add( new UIButton({
+	/* explode over */
+	explodePanel.add(new UIButton({
 		title: "Explode Over",
 		callback: function() {
 			self.explode(false, true);
 		},
 		key: "shift-a"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* follow */
+	explodePanel.add(new UIButton({
 		title: "Follow",
 		callback: function() {
 			self.explode(true, false);
 		},
 		key: "ctrl-a"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* follow over */
+	explodePanel.add(new UIButton({
 		title: "Follow Over",
 		callback: function() {
 			self.explode(true, true);
 		},
 		key: "alt-a"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* reverse draw */
+	explodePanel.add(new UIButton({
 		title: "Reverse Draw",
 		callback: function() {
 			self.reverse(false);
 		},
 		key: "shift-r"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* reverse multi  */
+	explodePanel.add(new UIButton({
 		title: "Reverse Multi",
 		callback: function() {
 			self.reverse(true);
 		},
 		key: "alt-r"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* copy */
+	editPanel.add(new UIButton({
 		title: "Copy",
 		callback: self.copyFrames,
 		key: "c"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* delete frame */
+	editPanel.add(new UIButton({
 		title: "Delete Frame",
 		callback: self.deleteFrame,
 		key: "d"
 	}));
 
-	panel.add( new UIButton({
+	/* delete frame range */
+	editPanel.add(new UIButton({
 		title: "Delete Frame Range",
 		callback: self.deleteFrameRange,
 		key: "shift-d"
 	}));
 
 	/* duplicate will be unnecessary when frames/drawings are fixed */
-	panel.add( new UIButton({
+	editPanel.add(new UIButton({
 		title: "Duplicate",
 		callback: self.duplicate,
 		key: "g"
-	}) );
+	}));
 
-	panel.add( new UIButton({
-		title: "Insert",
+	/* insert before */
+	editPanel.add(new UIButton({
+		title: "Insert Before",
 		callback: self.insertFrameBefore,
 		key: "i"
-	}) );
+	}));
 
-	panel.add( new UIButton({
-		title: "Insert",
+	/* insert after */
+	editPanel.add(new UIButton({
+		title: "Insert After ",
 		callback: self.insertFrameAfter,
 		key: "shift-i"
 	}) );
 
-	panel.add( new UIButton({
+	/* multi copies */
+	editPanel.add( new UIButton({
 		title: "Multi Copies",
 		callback: self.addMultipleCopies,
 		key: "m"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* offset */
+	editPanel.add(new UIButton({
 		title: "Offset",
 		callback: self.offsetDrawing,
 		key: "q"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* save lines */
+	editPanel.add(new UIButton({
 		title: "Save Lines",
 		key:"r",
 		callback: self.saveLines
 	}));
 
-	panel.add( new UIButton({
+	/* clear frame */
+	editPanel.add(new UIButton({
 		title: "Clear Frame",
 		key:"x",
 		callback: self.clearFrame
 	}));
 
-	panel.add( new UIButton({
+	/* paste frames */
+	editPanel.add(new UIButton({
 		title: "Paste Frames",
 		key: "v",
 		callback: self.pasteFrames
 	}));
 
-	panel.add( new UIButton({
+	/* select all frames */
+	editPanel.add(new UIButton({
 		title: "Select All Frames",
 		key: "shift-v",
 		callback: function() {
@@ -511,7 +529,8 @@ function Data() {
 		}
 	}));
 
-	panel.add( new UIButton({
+	/* select frame range */
+	editPanel.add(new UIButton({
 		title: "Select Some Frames",
 		key: "alt-v",
 		callback: function() {
@@ -523,39 +542,45 @@ function Data() {
 		}
 	}));
 
-	panel.add( new UIButton({
+	/* clear selected frames  */
+	editPanel.add(new UIButton({
 		title: "Clear Frames to Copy",
 		key: "ctrl-v",
 		callback: self.clearFramesToCopy
-	}) );
+	}));
 
-	panel.add( new UIButton({
-		title: "Cut Last Drawing",
+	/* cut last layer */
+	editPanel.add(new UIButton({
+		title: "Cut Last Layer",
 		key: "shift-x",
 		callback: self.cutLastDrawing
-	}) );
+	}));
 
-	panel.add( new UIButton({
-		title: "Cut First Drawing",
+	/* cut first layer */
+	editPanel.add(new UIButton({
+		title: "Cut First Layer",
 		key: "ctrl-x",
 		callback: self.cutFirstDrawing
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* cut line */
+	editPanel.add(new UIButton({
 		title: "Cut Line",
 		key: "z",
 		callback: self.cutLastSegment
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* cut range of segments */
+	editPanel.add(new UIButton({
 		title: "Cut Segment Num",
 		key: "shift-z",
 		callback: self.cutLastSegmentNum
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* undo */
+	editPanel.add(new UIButton({
 		title: "Undo",
 		key: "ctrl-z",
 		callback: self.undo
-	}) );
+	}));
 }
