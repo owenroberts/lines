@@ -57,7 +57,7 @@ function DrawEvents() {
 	document.addEventListener('mousemove', self.outSideCanvas);
 
 	/* interface */
-	const panel = new Panel("mouse", "Mouse");
+	const panel = new Panel("mouse-menu", "Mouse");
 
 	this.segNumRange = 2; /* default 2*/
 	this.segNumElem = new UIRange({
@@ -74,7 +74,6 @@ function DrawEvents() {
 				const n = prompt("Segment num?");
 				self.segNumRange = Number(n);
 			}
-			self.segNumElem.setValue(self.segNumRange);
 		},
 		key: "h"
 	});
@@ -94,7 +93,6 @@ function DrawEvents() {
 				const n = prompt("Jiggle num?");
 				self.jiggleRange = Number(n);
 			}
-			self.jiggleElem.setValue(self.jiggleRange);
 		},
 		key: "j"
 	});
@@ -109,7 +107,6 @@ function DrawEvents() {
 		display: "wiggle-range",
 		callback: function(ev) {
 			self.wiggleRange = Number(this.value);
-			self.wiggleElem.setValue(self.wiggleRange);
 		}
 	});
 	panel.add(this.wiggleElem);
@@ -124,7 +121,6 @@ function DrawEvents() {
 		display: "wiggle-speed-range",
 		callback: function(ev) {
 			self.wiggleSpeed = Number(this.value);
-			self.wiggleSpeedElem.setValue(self.wiggleSpeed);
 		}
 	});
 	panel.add(this.wiggleSpeedElem);
@@ -146,7 +142,6 @@ function DrawEvents() {
 				const n = prompt("Mouse move?");
 				self.mouseInterval = Number(n);
 			}
-			self.mouseElem.setValue(self.mouseInterval);
 		},
 		key: "u"
 	});

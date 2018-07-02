@@ -115,7 +115,7 @@ function Canvas(width, height, color) {
 	};
 
 	/* interface */
-	const panel = new Panel("canvasmenu", "Canvas");
+	const panel = new Panel("canvas-menu", "Canvas");
 
 	/* update canvas width */
 	this.widthInput = new UIText({
