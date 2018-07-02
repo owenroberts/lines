@@ -10,7 +10,7 @@ function Character(x, y) {
 	this.speed = new Cool.Vector(0, 0);
 	this.sprite = new Sprite(x, y, 50, 200);
 	// this.sprite.debug = true;
-	this.sprite.addAnimation('char.json');
+	this.sprite.addAnimation('wiggle_char.json');
 	this.display = function() {
 		this.sprite.display();
 	};
@@ -44,7 +44,6 @@ function update() {
 /* events */
 document.addEventListener("keydown", function(event) {
 	const key = Cool.keys[event.which];
-	console.log(key);
 	switch (key) {
 		case 'a':
 			char.speed.x = -5;
