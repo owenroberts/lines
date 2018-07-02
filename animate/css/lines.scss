@@ -93,6 +93,8 @@ button:focus { outline: none; }
 	.row {
 		margin-bottom: 2px;
 		display: flex;
+		flex-direction: row;
+    	flex-wrap: wrap;
 		span {
 			vertical-align: top;
 			line-height: 2;

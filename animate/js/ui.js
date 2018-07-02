@@ -192,6 +192,8 @@ class UIRange extends UI {
 		this.setRange(params.min, params.max);
 		if (params.display)
 			this.display = new UIDisplay({id:params.display,  initial:params.value});
+		if (params.step)
+			this.setStep(params.step);
 	}
 
 	setValue(value) {
@@ -204,6 +206,10 @@ class UIRange extends UI {
 	setRange(min, max) {
 		this.el.min = min;
 		this.el.max = max;	
+	}
+
+	setStep(step) {
+		this.el.step = step;
 	}
 }
 

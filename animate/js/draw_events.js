@@ -28,7 +28,6 @@ function DrawEvents() {
 		}
 	};
 
-	/* add a point */
 	this.addLine = function(x, y) {
 		Lines.lines.push( new Cool.Vector(x, y) );
 	};
@@ -60,7 +59,7 @@ function DrawEvents() {
 	/* interface */
 	const panel = new Panel("mouse", "Mouse");
 
-	this.segNumRange = 2;
+	this.segNumRange = 2; /* default 2*/
 	this.segNumElem = new UIRange({
 		label: "Segments",
 		value: this.segNumRange,
@@ -81,7 +80,7 @@ function DrawEvents() {
 	});
 	panel.add(this.segNumElem);
 
-	this.jiggleRange = 1;
+	this.jiggleRange = 1; /* default 1 */
 	this.jiggleElem = new UIRange({
 		label: "Jiggle",
 		value: this.jiggleRange,
@@ -100,6 +99,35 @@ function DrawEvents() {
 		key: "j"
 	});
 	panel.add(this.jiggleElem);
+
+	this.wiggleRange = 0; /* 2 is good */
+	this.wiggleElem = new UIRange({
+		label: "Wiggle",
+		value: this.wiggleRange,
+		min: 0,
+		max: 5,
+		display: "wiggle-range",
+		callback: function(ev) {
+			self.wiggleRange = Number(this.value);
+			self.wiggleElem.setValue(self.wiggleRange);
+		}
+	});
+	panel.add(this.wiggleElem);
+
+	this.wiggleSpeed = 0; /* 0.1 good */
+	this.wiggleSpeedElem = new UIRange({
+		label: "Wiggle Speed",
+		value: this.wiggleSpeed,
+		min: 0,
+		max: 1,
+		step: 0.05,
+		display: "wiggle-speed-range",
+		callback: function(ev) {
+			self.wiggleSpeed = Number(this.value);
+			self.wiggleSpeedElem.setValue(self.wiggleSpeed);
+		}
+	});
+	panel.add(this.wiggleSpeedElem);
 
 	
 	// how often the mousemove records, default 30ms

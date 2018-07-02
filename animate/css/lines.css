@@ -78,7 +78,9 @@ button:focus {
     margin-bottom: 1em; }
   .menu-panel .row {
     margin-bottom: 2px;
-    display: flex; }
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; }
     .menu-panel .row span {
       vertical-align: top;
       line-height: 2;

@@ -42,6 +42,8 @@ function Data() {
 				c: Lines.lineColor.color, // color
 				n: Lines.drawEvents.segNumRange, // segment number
 				r: Lines.drawEvents.jiggleRange, // jiggle ammount
+				w: Lines.drawEvents.wiggleRange, // wiggle amount
+				v: Lines.drawEvents.wiggleSpeed, // wiggle change speed (v for velocity i guess)
 				x: 0, // default x and y
 				y: 0
 			});
