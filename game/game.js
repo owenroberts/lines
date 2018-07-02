@@ -34,44 +34,6 @@ var Game = {
 			if (this.stats)
 				this.initStats();
 		}
-
-		/* events */
-		this.canvas.addEventListener('click', function(ev) {
-			ev.preventDefault();
-			if (typeof mouseClicked === "function") 
-				mouseClicked(ev.offsetX, ev.offsetY);
-		}, false);
-
-		this.canvas.addEventListener('mousedown', function(ev) {
-			ev.preventDefault();
-			if (typeof mouseDown === "function") 
-				mouseDown(ev.offsetX, ev.offsetY);
-		}, false);
-
-		this.canvas.addEventListener('mouseup', function(ev) {
-			ev.preventDefault();
-			if (typeof mouseUp === "function") 
-				mouseUp(ev.offsetX, ev.offsetY);
-		}, false);
-
-		this.canvas.addEventListener('mousemove', function(ev) {
-			if (typeof mouseMoved === "function") 
-				mouseMoved(ev.offsetX, ev.offsetY);
-		}, false);
-
-		document.addEventListener('keydown', function(ev) {
-			if (typeof keyDown === "function" && ev.target.tagName != "INPUT") 
-				keyDown(Cool.keys[ev.which]);
-		});
-		document.addEventListener('keyup', function(ev) {
-			if (typeof keyUp === "function" && ev.target.tagName != "INPUT") 
-				keyUp(Cool.keys[ev.which]);
-		});
-
-		window.addEventListener('resize', function(ev) {
-			if (typeof sizeCanvas === "function") 
-				sizeCanvas();
-		}, false);
 	},
 	gDraw: function() {
 		const time = performance.now();
