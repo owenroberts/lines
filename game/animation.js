@@ -136,6 +136,14 @@ class Animation {
 					const jig = +fr.r;
 					const seg = +fr.n;
 					const dr = this.drawings[fr.d];
+					const wig = +fr.w || 0; // or zero for older drawings for now 
+					const wigSpeed = +fr.v || 0;
+					const off = {
+						x: Cool.random(0, wig),
+						xSpeed: Cool.random(-wigSpeed, wigSpeed),
+						y: Cool.random(0, wig),
+						ySpeed: Cool.random(-wigSpeed, wigSpeed)
+					};
 					if (this.mixedColors) 
 						this.ctx.beginPath();
 					for (let h = fr.s; h < fr.e - 1; h++) {
@@ -145,23 +153,32 @@ class Animation {
 						v.subtract(s);
 						v.divide(seg); // line num
 						this.ctx.moveTo(
-							x + this.widthRatio * (fr.x + s.x + Cool.random(-jig, jig)), 
-							y + this.heightRatio * (fr.y + s.y + Cool.random(-jig, jig)) 
+							x + this.widthRatio * (fr.x + s.x + Cool.random(-jig, jig)) + off.x, 
+							y + this.heightRatio * (fr.y + s.y + Cool.random(-jig, jig)) + off.y 
 						);
 						for (let j = 0; j < seg; j++) {
 							const p = new Cool.Vector(s.x + v.x * j, s.y + v.y * j);
 							this.ctx.lineTo( 
-								x + this.widthRatio * (fr.x + p.x + v.x + Cool.random(-jig, jig)), 
-								y + this.heightRatio * (fr.y +  p.y + v.y + Cool.random(-jig, jig)) 
+								x + this.widthRatio * (fr.x + p.x + v.x + Cool.random(-jig, jig)) + off.x, 
+								y + this.heightRatio * (fr.y +  p.y + v.y + Cool.random(-jig, jig)) + off.y
 							);
 						}
-						if (this.ctx.strokeStyle.replace("#","") != fr.c) {
+						if (this.ctx.strokeStyle.replace("#","") != fr.c)
 							this.ctx.strokeStyle= "#" + fr.c;
-						}
 					}
-					if (this.mixedColors) this.ctx.stroke();
+					if (this.mixedColors) 
+						this.ctx.stroke();
+
+					off.x += off.xSpeed;
+					if (off.x >= wig || off.x <= -wig)
+						off.xSpeed *= -1;
+
+					off.y += off.ySpeed;
+					if (off.y >= wig || off.y <= -wig)
+						off.ySpeed *= -1;
 				}
-				if (!this.mixedColors) this.ctx.stroke();
+				if (!this.mixedColors) 
+					this.ctx.stroke();
 				if (this.drawBackground)
 					this.drawBkg(x, y);
 			}
