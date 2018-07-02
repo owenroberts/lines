@@ -43,11 +43,20 @@ function LinesPlayer(canvas, src, lps, callback) {
 			if (this.frames[this.currentFrame]) {
 				if (!this.mixedColors)
 					this.ctx.beginPath();
+				
 				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
 					const fr = this.frames[this.currentFrame][i];
 					const jig = +fr.r;
 					const seg = +fr.n;
 					const dr = this.drawings[fr.d];
+					const wig = +fr.w || 0; // or zero for older drawings for now 
+					const wigSpeed = +fr.v || 0;
+					const off = {
+						x: Cool.random(0, wig),
+						xSpeed: Cool.random(-wigSpeed, wigSpeed),
+						y: Cool.random(0, wig),
+						ySpeed: Cool.random(-wigSpeed, wigSpeed)
+					};
 					if (this.mixedColors)
 						this.ctx.beginPath();
 					for (let h = fr.s; h < fr.e - 1; h++) {
@@ -57,14 +66,14 @@ function LinesPlayer(canvas, src, lps, callback) {
 						v.subtract(s);
 						v.divide(seg);
 						this.ctx.moveTo( 
-							fr.x + s.x + Cool.random(-jig, jig), 
-							fr.y + s.y + Cool.random(-jig, jig) 
+							fr.x + s.x + Cool.random(-jig, jig) + off.x, 
+							fr.y + s.y + Cool.random(-jig, jig) + off.y
 						);
 						for (let j = 0; j < seg; j++) {
 							let p = new Cool.Vector(s.x + v.x * j, s.y + v.y * j);
 							this.ctx.lineTo( 
-								fr.x + p.x + v.x + Cool.random(-jig, jig), 
-								fr.y + p.y + v.y + Cool.random(-jig, jig) 
+								fr.x + p.x + v.x + Cool.random(-jig, jig) + off.x, 
+								fr.y + p.y + v.y + Cool.random(-jig, jig) + off.y
 							);
 						}
 						if (this.ctxStrokeColor != fr.c) {
@@ -72,6 +81,15 @@ function LinesPlayer(canvas, src, lps, callback) {
 							this.ctx.strokeStyle= "#" + this.ctxStrokeColor;
 						}
 					}
+
+					off.x += off.xSpeed;
+					if (off.x >= wig || off.x <= -wig)
+						off.xSpeed *= -1;
+
+					off.y += off.ySpeed;
+					if (off.y >= wig || off.y <= -wig)
+						off.ySpeed *= -1;
+
 					if (this.mixedColors)
 						this.ctx.stroke();
 				}
