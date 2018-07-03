@@ -304,7 +304,9 @@ function Data() {
 						n: tempFrames[h].n,
 						r: tempFrames[h].r,
 						x: tempFrames[h].x,
-						y: tempFrames[h].y
+						y: tempFrames[h].y,
+						w: tempFrames[h].w,
+						v: tempFrames[h].v
 					});
 
 					if (over)
@@ -346,7 +348,9 @@ function Data() {
 							n: tempFrames[j].n,
 							r: tempFrames[j].r,
 							x: tempFrames[j].x,
-							y: tempFrames[j].y
+							y: tempFrames[j].y,
+							w: tempFrames[j].w,
+							v: tempFrames[j].v,
 						});
 						framesAdded = true;
 					}
