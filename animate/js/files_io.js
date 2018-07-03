@@ -75,6 +75,18 @@ function Files_IO() {
 					if (data.bg)  // legacy compatible
 						Lines.canvas.bgColor.setColor(data.bg);
 					Lines.draw.reset();
+
+					/* add wiggle params to old files */
+					for (let i = 0; i < Lines.frames.length; i++) {
+						const frame = Lines.frames[i];
+						for (let j = 0; j < frame.length; j++) {
+							const layer = frame[j];
+							if (!layer.w)
+								layer.w = 0;
+							if (!layer.v)
+								layer.v = 0;
+						}
+					}
 				})
 				.catch(error => { console.log(error.message) });
 		}

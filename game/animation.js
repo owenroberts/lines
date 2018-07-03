@@ -30,7 +30,6 @@ class Animation {
 		// this.mirror = false; /* not implemented */
 	}
 
-
 	load(setAnimSize, callback) {
 		fetch(this.src)
 			.then(response => { return response.json() })
@@ -39,7 +38,7 @@ class Animation {
 				this.frames = data.f;
 				this.drawings = data.d;
 				if (this.states.default)
-					this.states.default.end = this.frames.length - 1;
+					this.states.default.end = this.frames.length;
 				if (!setAnimSize) {
 					if (callback) 
 						callback(data.w, data.h);
