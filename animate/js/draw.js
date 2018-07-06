@@ -82,7 +82,7 @@ function Draw() {
 								wigSpeed: fr.v,
 								x: fr.x, 
 								y: fr.y, 
-								color: fr.c,
+								color: color,
 								onion: true
 							});
 						}
@@ -153,6 +153,8 @@ function Draw() {
 			if (params.lines[h] != "end") {
 				const s = params.lines[h];
 				const e = params.lines[h + 1];
+				if (!e)
+					console.log(e, h + 1, params.end - 1, params.lines);
 				let v = new Cool.Vector(e.x, e.y);
 				v.subtract(s);
 				v.divide(params.segNum);
@@ -168,7 +170,7 @@ function Draw() {
 						params.y + p.y + v.y + Cool.random(-params.jig, params.jig) + off.y 
 					);
 				}
-				if (params.onion) 
+				if (params.onion)
 					Lines.canvas.ctx.strokeStyle = params.color;
 				else if (Lines.canvas.ctx.strokeStyle != "#" + params.color)
 					Lines.canvas.setStrokeColor(params.color);
@@ -352,6 +354,7 @@ function Draw() {
 	}));
 
 	/* layer editor */
+	// layer module ? 
 	this.layerPanel = new Panel("layermenu", "Layer");
 	this.frameRow = this.layerPanel.addRow();
 	this.layers = [];
@@ -450,7 +453,7 @@ function Draw() {
 		value: 0,
 		min: 0,
 		max: 1,
-		step: 0.05,
+		step: 0.005,
 		display: "layer-wiggle-speed-range",
 		callback: function(ev) {
 			for (let i = 0; i < self.layers.length; i++) {

@@ -117,7 +117,7 @@ function DrawEvents() {
 		value: this.wiggleSpeed,
 		min: 0,
 		max: 1,
-		step: 0.05,
+		step: 0.005,
 		display: "wiggle-speed-range",
 		callback: function(ev) {
 			self.wiggleSpeed = Number(this.value);
