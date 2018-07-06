@@ -1,5 +1,5 @@
 var Game = {
-	init: function(width, height, lps) {
+	init: function(width, height, lps, stats) {
 		this.canvas = document.getElementById("lines");
 		// update audio new chrome
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -14,7 +14,7 @@ var Game = {
 		this.updateTime = performance.now();
 		this.updateInterval = 1000 / 60; // 60 fps
 		this.drawTime = performance.now();
-		this.stats = true;
+		this.stats = stats;
 
 		this.mixedColors = true;
 

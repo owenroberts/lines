@@ -296,10 +296,11 @@ function Data() {
 					else if (!over) 
 						self.saveLines();
 
+					// console.log(tempLines.length, i, segmentsPerFrame);
 					Lines.frames[Lines.currentFrame].push({
 						d: tempFrames[h].d,
 						s: follow ? i : 0,
-						e: i + segmentsPerFrame,
+						e: Math.min(tempLines.length, i + segmentsPerFrame), /* maybe fix error */
 						c: tempFrames[h].c,
 						n: tempFrames[h].n,
 						r: tempFrames[h].r,

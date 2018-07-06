@@ -25,12 +25,24 @@ function Files_IO() {
 					drawingsIndexes.push( Lines.frames[Lines.currentFrame][j].d );
 			}
 		} else {
-			/* save fall frames */
+			/* save all frames */
 			json.f = Lines.frames;
 			for (let i = 0; i < Lines.frames.length; i++) {
 				for (let j = 0; j < Lines.frames[i].length; j++) {
 					if ( drawingsIndexes.indexOf(Lines.frames[i][j].d) == -1 ) 
 						drawingsIndexes.push( Lines.frames[i][j].d );
+				}
+
+				/* get rid of layer info */
+				for (let j = 0; j < Lines.frames[i].length; j++) {
+					const layer = Lines.frames[i][j];
+					if (layer.prevColor) {
+						if (layer.c != layer.prevColor) {
+							layer.c = layer.prevColor
+						}
+						delete layer.prevColor;
+					}
+					delete layer.toggled;
 				}
 			}
 		}
