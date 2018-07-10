@@ -40,6 +40,7 @@ function Background() {
 	
 	/* toggle visibility of bkg */
 	panel.add(new UIToggleButton({
+		title: "Hide Background",
 		callback: this.toggle, 
 		key: "b", 
 		on: "Hide", 

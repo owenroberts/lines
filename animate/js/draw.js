@@ -336,6 +336,7 @@ function Draw() {
 
 	/* capture bg */
 	capturePanel.add(new UIToggleButton({
+		title: "Capture BG Color",
 		on: "Capture BG",
 		off: "Capture BG",
 		callback: function() {
