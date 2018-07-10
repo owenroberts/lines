@@ -125,12 +125,14 @@ class Panel {
 		if (component.display)
 			this.rows[this.rows.length - 1].insertBefore(component.display.el, component.el);
 	}
-
 	clearComponents(row) {
 		if (row) {
 			while (row.firstChild) {
 				row.removeChild(row.firstChild);
 			}
+		} else {
+			console.log(this);
+			console.log(this.rows);
 		}
 	}
 }
