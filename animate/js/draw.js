@@ -493,22 +493,39 @@ function Draw() {
 	this.drawingPanel.add(new UIButton({
 		title: "Update Drawings",
 		callback: function() {
+			for (let i = 1; i < self.drawingPanel.rows.length; i++) {
+				self.drawingPanel.clearComponents( self.drawingPanel.rows[i] );
+				self.drawingPanel.removeRow( self.drawingPanel.rows[i] );
+			}
 			for (let i = 0; i < Lines.drawings.length; i++) {
-				const drawing = Lines.drawings[i];
+				let layer;
+				/* check if layer is in frame already */
+				for (let j = 0; j < Lines.frames.length; j++) {
+					const frame = Lines.frames[j];
+					for (let k = 0; k < frame.length; k++) {
+						if (i == frame[k].d)
+							layer = frame[k];
+					}
+				}
+				if (!layer) {
+					const drawing = Lines.drawings[i];
+					if (drawing != null) {
+						layer = {
+							d: i,
+							s: 0,
+							e: drawing.length,
+							c: '000000',
+							n: 2,
+							r: 1,
+							w: 0,
+							v: 0,
+							x: 0,
+							y: 0
+						}; /* defaults, maybe grab from existing layer? */
+					}
+				}
 				const row = self.drawingPanel.addRow();
-				const layer = {
-					d: i,
-					s: 0,
-					e: drawing.length,
-					c: '000000',
-					n: 2,
-					r: 1,
-					w: 0,
-					v: 0,
-					x: 0,
-					y: 0
-				}; /* defaults, maybe grab from existing layer? */
-				
+					
 				self.drawingPanel.add(new UIToggleButton({
 					title: i,
 					on: i,
@@ -539,6 +556,7 @@ function Draw() {
 						}
 					}
 				}), row);
+				
 			}
 		}
 	}));

@@ -115,6 +115,11 @@ class Panel {
 		this.rows.push(row);
 		return row;
 	}
+	removeRow(row) {
+		const index = this.rows.indexOf(row);
+		this.rows.splice(index, 1);
+		this.el.removeChild(row);
+	}
 	add(component, _row) {
 		let row = _row;
 		if (!row)
@@ -130,9 +135,6 @@ class Panel {
 			while (row.firstChild) {
 				row.removeChild(row.firstChild);
 			}
-		} else {
-			console.log(this);
-			console.log(this.rows);
 		}
 	}
 }
