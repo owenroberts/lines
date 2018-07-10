@@ -568,7 +568,7 @@ function Data() {
 		callback: self.cutFirstDrawing
 	}));
 
-	/* cut line */
+	/* cut line segment */
 	editPanel.add(new UIButton({
 		title: "Cut Line",
 		key: "z",

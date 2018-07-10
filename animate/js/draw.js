@@ -356,7 +356,7 @@ function Draw() {
 
 	/* layer editor */
 	// layer module ? 
-	this.layerPanel = new Panel("layermenu", "Layer");
+	this.layerPanel = new Panel("layer-menu", "Layer");
 	this.frameRow = this.layerPanel.addRow();
 	this.layers = [];
 
@@ -369,6 +369,16 @@ function Draw() {
 		self.layers = [];
 	}
 
+	this.layerToggle = function(layer) {
+		if (!layer.toggled) {
+			layer.prevColor = layer.c;
+			layer.c = "00CC96";
+		} else {
+			layer.c = layer.prevColor;
+		}
+		layer.toggled = !layer.toggled;
+	};
+
 	this.displayLayers = function() {
 		self.layerPanel.clearComponents(self.frameRow);
 		self.layers = [];
@@ -377,19 +387,12 @@ function Draw() {
 				const layer = Lines.frames[Lines.currentFrame][i];
 				self.layers.push(layer);
 				layer.toggled = false;
-				layer.toggle = function() {
-					if (!layer.toggled) {
-						layer.prevColor = layer.c;
-						layer.c = "00CC96";
-					} else {
-						layer.c = layer.prevColor;
-					}
-					layer.toggled = !layer.toggled;
-				}
 				const toggleLayer = new UIToggleButton({
 					on: layer.d,
 					off: layer.d,
-					callback: layer.toggle
+					callback: function() {
+						self.layerToggle(layer);
+					}
 				});
 				self.layerPanel.add(toggleLayer, self.frameRow);
 			}
@@ -465,6 +468,76 @@ function Draw() {
 	});
 	this.layerPanel.add(this.wigSpeed);
 
+	this.layerPanel.add(new UIButton({
+		"title": "Cut Selected Segment",
+		key: "alt-z",
+		callback: function() {
+			for (let i = 0; i < self.layers.length; i++) {
+				const layer = self.layers[i];
+				const drawing = Lines.drawings[layer.d];
+				drawing.pop(); /* remove "end" */
+				drawing.pop(); /* remove segment */
+				drawing.push('end'); /* new end */
+				layer.e = drawing.length; /* update layer end num */
+			}
+		}
+	}));
+
+	/* drawing panel */
+	this.drawingPanel = new Panel("drawing-menu", "Drawings");
+
+	this.drawingPanel.add(new UIButton({
+		title: "Update Drawings",
+		callback: function() {
+			for (let i = 0; i < Lines.drawings.length; i++) {
+				const drawing = Lines.drawings[i];
+				const row = self.drawingPanel.addRow();
+				const layer = {
+					d: i,
+					s: 0,
+					e: drawing.length,
+					c: '000000',
+					n: 2,
+					r: 1,
+					w: 0,
+					v: 0,
+					x: 0,
+					y: 0
+				}; /* defaults, maybe grab from existing layer? */
+				
+				self.drawingPanel.add(new UIToggleButton({
+					title: i,
+					on: i,
+					off: i,
+					callback: function() {
+						self.layerToggle(layer);
+					}
+				}), row);
+
+				self.drawingPanel.add(new UIButton({
+					title: "+",
+					callback: function() {
+						Lines.data.saveLines();
+						if (Lines.frames[Lines.currentFrame] == undefined) 
+							Lines.frames[Lines.currentFrame] = [];
+						Lines.frames[Lines.currentFrame].push(layer);
+					}
+				}), row);
+
+				self.drawingPanel.add(new UIButton({
+					title: "-",
+					callback: function() {
+						Lines.data.saveLines();
+						if (Lines.frames[Lines.currentFrame]) {
+							const index = Lines.frames[Lines.currentFrame].indexOf(layer);
+							if (index != -1)
+								Lines.frames[Lines.currentFrame].splice(index, 1);
+						}
+					}
+				}), row);
+			}
+		}
+	}));
 }
 
 /*
