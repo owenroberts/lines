@@ -165,9 +165,10 @@ function Canvas(width, height, color) {
 	});
 	panel.add(this.heightInput);
 
-	panel.add( new UIButton({
+	/* fit canvas to drawing */
+	panel.add(new UIButton({
 		title: "Fit Canvas to Drawing",
 		callback: self.fitCanvasToDrawing,
 		key: "shift-f"
-	}) );
+	}));
 }

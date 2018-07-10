@@ -99,7 +99,7 @@ function Interface() {
 		let k = Cool.keys[ev.which];
 		if (k == "space" || k == "tab") 
 			ev.preventDefault();
-		if (document.activeElement.nodeName != "INPUT") {
+		if (document.activeElement.type != "text") {
 			
 			if (ev.shiftKey) k = "shift-" + k;
 			if (ev.ctrlKey) k = "ctrl-" + k;
