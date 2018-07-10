@@ -184,6 +184,7 @@ function Draw() {
 			off.y += off.ySpeed;
 			if (off.y >= params.wig || off.y <= -params.wig)
 				off.ySpeed *= -1;
+
 		}
 		Lines.canvas.ctx.stroke();
 	};
@@ -376,7 +377,8 @@ function Draw() {
 		} else {
 			layer.c = layer.prevColor;
 			const index = self.layers.indexOf(layer);
-			self.layers.splice(index, 1);
+			if (index != -1)
+				self.layers.splice(index, 1);
 		}
 		layer.toggled = !layer.toggled;
 	};
@@ -442,7 +444,7 @@ function Draw() {
 		value: this.wiggleRange,
 		value: 0,
 		min: 0,
-		max: 5,
+		max: 15,
 		display: "layer-wiggle-range",
 		callback: function(ev) {
 			for (let i = 0; i < self.layers.length; i++) {
@@ -458,7 +460,7 @@ function Draw() {
 		value: this.wiggleSpeed,
 		value: 0,
 		min: 0,
-		max: 1,
+		max: 10,
 		step: 0.005,
 		display: "layer-wiggle-speed-range",
 		callback: function(ev) {
