@@ -375,6 +375,8 @@ function Draw() {
 			layer.c = "00CC96";
 		} else {
 			layer.c = layer.prevColor;
+			const index = self.layers.indexOf(layer);
+			self.layers.splice(index, 1);
 		}
 		layer.toggled = !layer.toggled;
 	};
