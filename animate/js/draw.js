@@ -460,7 +460,7 @@ function Draw() {
 		value: this.wiggleSpeed,
 		value: 0,
 		min: 0,
-		max: 10,
+		max: 5,
 		step: 0.005,
 		display: "layer-wiggle-speed-range",
 		callback: function(ev) {
