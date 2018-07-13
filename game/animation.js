@@ -81,7 +81,7 @@ class Animation {
 	playOnce(callback) {
 		this.frameCount = this.states[this.state].start;
 		this.frameCountCounter = this.states[this.state].start;
-		this.playOnceCallback = callback;
+		this.onPlayedOnce = callback;
 	}
 
 	/* playOnce should end itself */
@@ -105,8 +105,8 @@ class Animation {
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 				else {
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
-					if (this.playStateCallback)
-						this.playStateCallback();
+					if (this.onPlayedState)
+						this.onPlayedState();
 				}
 			}
 			// fucks up non-loop
@@ -123,8 +123,8 @@ class Animation {
 			if (this.frameCount >= this.states[this.state].end) {
 				this.frameCount = this.frameCountCounter = this.states[this.state].start;
 				this.endPlayOnce();
-				if (this.playOnceCallback)
-					this.playOnceCallback();
+				if (this.onPlayedOnce)
+					this.onPlayedOnce();
 			}
 		}
 
