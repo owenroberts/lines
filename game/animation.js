@@ -66,6 +66,11 @@ class Animation {
 			this.state = state;
 			if (this.states[this.state]) // catch for laoding error for now
 				this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
+			
+			/* bad temp fix for play once call back triggering
+				after state changed, means have to call playOnce after 
+				setState if intending to play once */
+			this.frameCount = -1;  
 		}
 	}
 
@@ -98,8 +103,11 @@ class Animation {
 			if (this.currentFrame >= this.states[this.state].end) {
 				if (this.loop) 
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
-				else 
+				else {
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
+					if (this.playStateCallback)
+						this.playStateCallback();
+				}
 			}
 			// fucks up non-loop
 			// if (this.currentFrame < this.states[this.state].start)
@@ -109,7 +117,6 @@ class Animation {
 			if (this.frameCount < this.states[this.state].end) {
 				this.frameCountCounter += this.intervalRatio;
 				this.frameCount = Math.floor(this.frameCountCounter);
-				// if (this.debug) console.log(this.intervalRatio, this.frameCountCounter, this.frameCount)
 				this.currentFrame = this.currentFrameCounter = this.frameCount;
 			}
 
