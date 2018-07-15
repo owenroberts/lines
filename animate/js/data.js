@@ -377,8 +377,8 @@ function Data() {
 		if (offset) {
 			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
 				const fr = Lines.frames[Lines.currentFrame][i];
-				fr.x = offset.x;
-				fr.y = offset.y;
+				fr.x += offset.x;
+				fr.y += offset.y;
 			}
 		}
 	};
