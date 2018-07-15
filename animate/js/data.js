@@ -48,20 +48,12 @@ function Data() {
 				y: 0
 			});
 			
-			/* add current lines to drawing data */
-			Lines.drawings.push(Lines.lines);
-
-			/* add current color to color choices */
-			Lines.lineColor.addColorBtn(Lines.lineColor.color);
-
-			/* lines are saved, stop drawing? */
-			Lines.lines = [];
-
-			/* update interface */
-			Lines.interface.updateFramesPanel();
+			Lines.drawings.push(Lines.lines); /* add current lines to drawing data */
+			Lines.lineColor.addColorBtn(Lines.lineColor.color); /* add current color to color choices */
+			Lines.lines = []; /* lines are saved, stop drawing? */
+			Lines.interface.updateFramesPanel(); /* update interface */
 		}
-		/* save current state - one undo currently*/
-		self.saveState();
+		self.saveState(); /* save current state - one undo currently */
 	};
 	
 	/* c key  */
