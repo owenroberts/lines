@@ -108,9 +108,11 @@ class Panel {
 			this.toggleBtn.innerHTML = "v";
 		}
 	}
-	addRow() {
+	addRow(id) {
 		const row = document.createElement("div");
 		row.classList.add("row");
+		if (id)
+			row.id = id;
 		this.el.appendChild(row);
 		this.rows.push(row);
 		return row;

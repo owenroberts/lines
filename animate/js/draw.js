@@ -493,70 +493,67 @@ function Draw() {
 	this.drawingPanel.add(new UIButton({
 		title: "Update Drawings",
 		callback: function() {
-			for (let i = 1; i < self.drawingPanel.rows.length; i++) {
-				self.drawingPanel.clearComponents( self.drawingPanel.rows[i] );
-				self.drawingPanel.removeRow( self.drawingPanel.rows[i] );
-			}
 			for (let i = 0; i < Lines.drawings.length; i++) {
-				let layer;
-				/* check if layer is in frame already */
-				for (let j = 0; j < Lines.frames.length; j++) {
-					const frame = Lines.frames[j];
-					for (let k = 0; k < frame.length; k++) {
-						if (i == frame[k].d)
-							layer = frame[k];
-					}
-				}
-				if (!layer) {
-					const drawing = Lines.drawings[i];
-					if (drawing != null) {
-						layer = {
-							d: i,
-							s: 0,
-							e: drawing.length,
-							c: '000000',
-							n: 2,
-							r: 1,
-							w: 0,
-							v: 0,
-							x: 0,
-							y: 0
-						}; /* defaults, maybe grab from existing layer? */
-					}
-				}
-				const row = self.drawingPanel.addRow();
-					
-				self.drawingPanel.add(new UIToggleButton({
-					title: i,
-					on: i,
-					off: i,
-					callback: function() {
-						self.layerToggle(layer);
-					}
-				}), row);
-
-				self.drawingPanel.add(new UIButton({
-					title: "+",
-					callback: function() {
-						Lines.data.saveLines();
-						if (Lines.frames[Lines.currentFrame] == undefined) 
-							Lines.frames[Lines.currentFrame] = [];
-						Lines.frames[Lines.currentFrame].push(layer);
-					}
-				}), row);
-
-				self.drawingPanel.add(new UIButton({
-					title: "-",
-					callback: function() {
-						Lines.data.saveLines();
-						if (Lines.frames[Lines.currentFrame]) {
-							const index = Lines.frames[Lines.currentFrame].indexOf(layer);
-							if (index != -1)
-								Lines.frames[Lines.currentFrame].splice(index, 1);
+				/* check if row is already there */
+				if (!document.getElementById(i + '-drawing-row')) {
+					let layer; /* check if layer is in frame already */
+					for (let j = 0; j < Lines.frames.length; j++) {
+						const frame = Lines.frames[j];
+						for (let k = 0; k < frame.length; k++) {
+							if (i == frame[k].d)
+								layer = frame[k];
 						}
 					}
-				}), row);
-				
+					if (!layer) {
+						const drawing = Lines.drawings[i];
+						if (drawing != null) {
+							layer = {
+								d: i,
+								s: 0,
+								e: drawing.length,
+								c: '000000',
+								n: 2,
+								r: 1,
+								w: 0,
+								v: 0,
+								x: 0,
+								y: 0
+							}; /* defaults, maybe grab from existing layer? */
+						}
+					}
+					const row = self.drawingPanel.addRow(i + '-drawing-row');
+						
+					self.drawingPanel.add(new UIToggleButton({
+						title: i,
+						on: i,
+						off: i,
+						callback: function() {
+							self.layerToggle(layer);
+						}
+					}), row);
+
+					self.drawingPanel.add(new UIButton({
+						title: "+",
+						callback: function() {
+							Lines.data.saveLines();
+							if (Lines.frames[Lines.currentFrame] == undefined) 
+								Lines.frames[Lines.currentFrame] = [];
+							Lines.frames[Lines.currentFrame].push(layer);
+						}
+					}), row);
+
+					self.drawingPanel.add(new UIButton({
+						title: "-",
+						callback: function() {
+							Lines.data.saveLines();
+							if (Lines.frames[Lines.currentFrame]) {
+								const index = Lines.frames[Lines.currentFrame].indexOf(layer);
+								if (index != -1)
+									Lines.frames[Lines.currentFrame].splice(index, 1);
+							}
+						}
+					}), row);
+				}
 			}
 		}
 	}));
