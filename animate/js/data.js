@@ -106,12 +106,14 @@ function Data() {
 			}
 			self.clearFramesToCopy();
 		} else {
-			if (Lines.frames[Lines.currentFrame] == undefined) {
-				if (Lines.lines.length > 0) self.saveLines();
-				else Lines.frames[Lines.currentFrame] = [];
-			}
-			for (let i = 0; i <  self.framesCopy[0].length; i++) {
-				Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[0][i]) );
+			if (self.framesCopy[0]) {
+				if (Lines.frames[Lines.currentFrame] == undefined) {
+					if (Lines.lines.length > 0) self.saveLines();
+					else Lines.frames[Lines.currentFrame] = [];
+				}
+				for (let i = 0; i <  self.framesCopy[0].length; i++) {
+					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[0][i]) );
+				}
 			}
 		}
 	};
