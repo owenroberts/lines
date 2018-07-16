@@ -82,6 +82,7 @@ function Interface() {
 			Lines.currentFrame++;
 		self.updateFramesPanel();
 		Lines.draw.resetLayers();
+		Lines.draw.resetDrawingsPanel();
 	};
 
 	/* w key - got to previous frame */
@@ -92,6 +93,7 @@ function Interface() {
 			Lines.currentFrame--;
 		self.updateFramesPanel();
 		Lines.draw.resetLayers();
+		Lines.draw.resetDrawingsPanel();
 	};
 
 	/* keyboard events and handlers */
