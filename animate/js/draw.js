@@ -503,9 +503,23 @@ function Draw() {
 			self.resetDrawingsPanel();
 			for (let i = 0; i < Lines.drawings.length; i++) {
 				let layer; /* check if layer is in frame already */
-				for (let k = 0; k < Lines.frames[Lines.currentFrame].length; k++) {
-					if (i == Lines.frames[Lines.currentFrame][k].d)
-						layer = Lines.frames[Lines.currentFrame][k];
+				if (Lines.frames[Lines.currentFrame]) {
+					for (let k = 0; k < Lines.frames[Lines.currentFrame].length; k++) {
+						if (i == Lines.frames[Lines.currentFrame][k].d)
+							layer = Lines.frames[Lines.currentFrame][k];
+					}
+				}
+				if (!layer) {
+					/* check all the frames */
+					for (let j = 0; j < Lines.frames.length; j++) {
+						const frame = Lines.frames[j];
+						for (let k = 0; k < frame.length; k++) {
+							if (i == frame[k].d) {
+								layer = frame[k];
+								break;
+							}
+						}
+					}
 				}
 				if (!layer) {
 					const drawing = Lines.drawings[i];

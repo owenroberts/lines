@@ -131,6 +131,7 @@ function Files_IO() {
 	});
 	
 	this.title = new UI({id:"title"});
+	/* save with enter? */
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		self.saveFilesEnabled = true;
