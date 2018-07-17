@@ -364,7 +364,7 @@ function Draw() {
 	this.resetLayers = function() {
 		for (let i = 0; i < self.layers.length; i++) {
 			if (self.layers[i].toggled)
-				self.layers[i].toggle();
+				self.layerToggle(self.layers[i]);
 		}
 		self.layerPanel.clearComponents(self.frameRow);
 		self.layers = [];
@@ -545,7 +545,8 @@ function Draw() {
 					on: i,
 					off: i,
 					callback: function() {
-						self.layerToggle(layer);
+						if (layer)
+							self.layerToggle(layer);
 					}
 				}), row);
 
