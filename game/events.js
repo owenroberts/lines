@@ -14,7 +14,7 @@ var Events = {
 		canvas.addEventListener('mousedown', function(ev) {
 			ev.preventDefault();
 			if (typeof mouseDown === "function") 
-				mouseDown(ev.offsetX, ev.offsetY);
+				mouseDown(ev.offsetX, ev.offsetY, ev.which);
 			if (typeof startDrag === "function") {
 				dragOffset = startDrag(ev.offsetX, ev.offsetY);
 				if (dragOffset) 
@@ -25,14 +25,14 @@ var Events = {
 		canvas.addEventListener('mouseup', function(ev) {
 			ev.preventDefault();
 			if (typeof mouseUp === "function") 
-				mouseUp(ev.offsetX, ev.offsetY);
+				mouseUp(ev.offsetX, ev.offsetY, ev.which);
 			if (dragStarted)
 				dragStarted = false;
 		}, false);
 
 		canvas.addEventListener('mousemove', function(ev) {
 			if (typeof mouseMoved === "function") 
-				mouseMoved(ev.offsetX, ev.offsetY);
+				mouseMoved(ev.offsetX, ev.offsetY, ev.which);
 			if (dragStarted) 
 				drag(ev.offsetX, ev.offsetY, dragOffset);
 		}, false);

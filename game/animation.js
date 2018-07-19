@@ -170,7 +170,7 @@ class Animation {
 							);
 						}
 						if (this.ctx.strokeStyle.replace("#","") != fr.c)
-							this.ctx.strokeStyle= "#" + fr.c;
+							this.ctx.strokeStyle = "#" + fr.c;
 					}
 					if (this.mixedColors) 
 						this.ctx.stroke();
