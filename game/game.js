@@ -41,8 +41,10 @@ var Game = {
 			Game.ctx.clearRect(0, 0, Game.width, Game.height);
 			draw(); // draw defined in each game js file
 			if (Game.stats) {
-				const fps = 1000 / (time - Game.drawTime);
-				Game.drawStat('d: ' + Math.round(fps), Game.width - 50, 25);
+				Game.drawFrameRates.push( 1000 / (time - Game.drawTime) );
+				Game.drawStat('d: ' + Math.round( Game.drawFrameRates.reduce((n,s) => n + s) / Game.drawFrameRates.length ), Game.width - 50, 25);
+				if (Game.drawFrameRates.length > 20)
+					Game.drawFrameRates.shift();
 			}
 			Game.drawTime = time;
 		}
@@ -54,7 +56,7 @@ var Game = {
 			update(); // update defined in each game js file
 			if (Game.stats) {
 				const fps = 1000 / (time - Game.updateTime);
-				Game.drawStat('g: ' + Math.round(fps), Game.width - 50, 0);
+				Game.drawStat('u: ' + Math.round(fps), Game.width - 50, 0);
 			}
 			Game.updateTime = time;
 		}
@@ -62,6 +64,8 @@ var Game = {
 	},
 	initStats: function() {
 		Game.ctx.font = '16px sans-serif';
+		Game.updateFrameRates = [];
+		Game.drawFrameRates = [];
 	},
 	drawStat: function(s, x, y) {
 		Game.ctx.clearRect(x, y, 50, 25);
