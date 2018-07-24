@@ -369,6 +369,7 @@ function Data() {
 			offset = new Cool.Vector(x,y);
 		}
 		if (offset) {
+			/* ERROR if there are zero layers ... */
 			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
 				const fr = Lines.frames[Lines.currentFrame][i];
 				fr.x += offset.x;
