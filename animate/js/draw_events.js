@@ -2,6 +2,8 @@ function DrawEvents() {
 	const self = this;
 
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
+	this.startDots = false;
+
 
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != Lines.canvas.canvas) { 
@@ -33,16 +35,42 @@ function DrawEvents() {
 	};
 
 	this.drawStart = function(ev) {
-		if (ev.which == 1 && !Lines.draw.isPlaying) {
+		if (ev.which == 1 && !Lines.draw.isPlaying && !ev.altKey) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
+			/* add line? */
+		} else if (ev.altKey) {
+			self.startDots = new Cool.Vector(ev.offsetX, ev.offsetY);
 		}
 	};
 
 	this.drawEnd = function(ev) {
-		if (ev.which == 1) 
+		if (self.startDots) {
+			const n = prompt('Number of dots: ');
+			const w = Math.abs(self.startDots.x - ev.offsetX);
+			const h = Math.abs(self.startDots.y - ev.offsetY);
+			const ratio =  w / h;
+			const c = w / (ratio * n/2);
+			const r = h / (1/ratio * n/2);
+			for (let x = self.startDots.x; x < ev.offsetX; x += c) {
+				for (let y = self.startDots.y; y < ev.offsetY; y += r) {
+					const points = Cool.randomInt(2,4);
+					const _x = x + Cool.randomInt(-c/2, c/2);
+					const _y = y + Cool.randomInt(-r/2, r/2);
+					for (let i = 0; i < points; i ++) {
+						Lines.lines.push(new Cool.Vector(
+							_x + Cool.random(-1, 1), 
+							_y + Cool.random(-1, 1)
+						));
+					}
+					Lines.lines.push('end');
+				}
+			}
+			self.startDots = false;
+		} else if (ev.which == 1) {
 			self.isDrawing = false;
-		Lines.lines.push("end");
+			Lines.lines.push("end");
+		}
 	}
 
 	if (window.PointerEvent) {
