@@ -113,6 +113,10 @@ function Interface() {
 					self.faces[k].toggleText();
 				}
 			}
+		} else if (document.activeElement.id == 'title') {
+			if (k == 'enter') {
+				Lines.fio.saveFramesToFile();
+			}
 		}
 	}
 	document.addEventListener("keydown", self.keyDown, false);
