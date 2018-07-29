@@ -1,11 +1,18 @@
-function Files_IO() {
+function Files_IO(params) {
 	const self = this;
 
 	this.saveFilesEnabled = false;
 
-	/* s key - shif-s for single */
+	/* s key - shift-s for single */
 	this.saveFramesToFile = function(single) {
 		Lines.data.saveLines();
+
+		if (params.fit) {
+			const fit = confirm("Fit canvas?");
+			if (fit)
+				Lines.canvas.fitCanvasToDrawing();
+		}
+		
 
 		const json = {};
 		json.v = "2.1";
