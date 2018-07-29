@@ -10,7 +10,7 @@ window.addEventListener("load", function() {
 	// modules 
 	Lines.interface = new Interface();
 	// width height color, def color is black 000000
-	Lines.canvas = new Canvas(1024, 768 , "ffffff" ); 
+	Lines.canvas = new Canvas(512, 512, "ffffff" ); 
 	Lines.draw = new Draw();
 	Lines.data = new Data();
 	Lines.lineColor = new Color("color", "Line Color"); 
