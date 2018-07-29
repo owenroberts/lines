@@ -27,6 +27,8 @@ class Animation {
 		this.state = 'default';
 		this.states = { 'default': {start: 0, end: 0 } }
 
+		this.randomFrames = false; /* play random frames */
+
 		// this.mirror = false; /* not implemented */
 	}
 
@@ -91,6 +93,11 @@ class Animation {
 	}
 
 	draw(x, y) {
+				
+		// 
+		if (this.randomFrames) {
+			
+		}
 		if (this.frameCount == -1) { /* frameCount -1 is default, means it plays from beginning */
 			if (this.debug) {
 				// console.log(this.state, this.states[this.state])
@@ -98,7 +105,14 @@ class Animation {
 			}
 			if (this.currentFrame < this.states[this.state].end) {
 				this.currentFrameCounter += this.intervalRatio;
-				this.currentFrame = Math.floor(this.currentFrameCounter);
+				if (this.debug)
+					console.log(this.currentFrame, Math.floor(this.currentFrameCounter), this.currentFrameCounter);
+				if (this.currentFrame != Math.floor(this.currentFrameCounter) && this.randomFrames)
+					this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
+				else
+					this.currentFrame = Math.floor(this.currentFrameCounter);
+				if (this.debug)
+					console.log('random', this.currentFrame);
 			}
 			if (this.currentFrame >= this.states[this.state].end) {
 				if (this.loop) 
