@@ -2,8 +2,7 @@ function DrawEvents() {
 	const self = this;
 
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
-	this.startDots = false;
-
+	
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != Lines.canvas.canvas) { 
 			if (self.isDrawing) 
@@ -25,38 +24,43 @@ function DrawEvents() {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
 			if (self.isDrawing)
-				self.addLine(ev.offsetX, ev.offsetY);
+				if (self.brush <= 0)
+					self.addLine(ev.offsetX, ev.offsetY);
+				else
+					self.addBrush(ev.offsetX, ev.offsetY);
 		}
 	};
 
-	this.addLine = function(x, y) {
-		if (self.brush <= 0) {
-			Lines.lines.push(new Cool.Vector(x, y));
-		} else {
-			const b = self.brush * 5;
-			let origin = new Cool.Vector(x, y);
-			for (let i = 0; i < self.brush; i++) {
-				let point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
-				while (point.dist(origin) > b){
-					point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
-				}
-				Lines.lines.push(point);
-				const points = Cool.randomInt(2,4);
-				for (let i = 0; i < points; i ++) {
-					Lines.lines.push(new Cool.Vector(
-						point.x + Cool.random(-1, 1), 
-						point.y + Cool.random(-1, 1)
-					));
-				}
-				Lines.lines.push('end');
+	this.addBrush = function(x, y) {
+		const b = self.brush * self.brush;
+		let origin = new Cool.Vector(x, y);
+		for (let i = 0; i < self.brush; i++) {
+			let point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
+			while (point.dist(origin) > b){
+				point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
 			}
+			Lines.lines.push(point);
+			const points = Cool.randomInt(1,3);
+			for (let i = 0; i < points; i ++) {
+				Lines.lines.push(new Cool.Vector(
+					point.x + Cool.random(-1, 1), 
+					point.y + Cool.random(-1, 1)
+				));
+			}
+			Lines.lines.push('end');
 		}
+	}
+
+	this.addLine = function(x, y) {
+		Lines.lines.push(new Cool.Vector(x, y));
 	};
 
 	this.drawStart = function(ev) {
 		if (ev.which == 1 && !Lines.draw.isPlaying && !ev.altKey) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
+			if (self.brush > 0)
+				self.addBrush(ev.offsetX, ev.offsetY);
 			/* add line? */
 		} else if (ev.altKey) {
 			self.startDots = new Cool.Vector(ev.offsetX, ev.offsetY);
@@ -65,17 +69,18 @@ function DrawEvents() {
 
 	this.drawEnd = function(ev) {
 		if (self.startDots) {
-			const n = prompt('Number of dots: ');
 			const w = Math.abs(self.startDots.x - ev.offsetX);
 			const h = Math.abs(self.startDots.y - ev.offsetY);
 			const ratio =  w / h;
-			const c = w / (ratio * n/2);
-			const r = h / (1/ratio * n/2);
-			for (let x = self.startDots.x; x < ev.offsetX; x += c) {
-				for (let y = self.startDots.y; y < ev.offsetY; y += r) {
-					const points = Cool.randomInt(2,4);
-					const _x = x + Cool.randomInt(-c/2, c/2);
-					const _y = y + Cool.randomInt(-r/2, r/2);
+			const c = w / (ratio * self.dots/2);
+			const r = h / (1/ratio * self.dots/2);
+			let [startX, endX] = self.startDots.x < ev.offsetX ? [self.startDots.x, ev.offsetX] : [ev.offsetX, self.startDots.x];
+			let [startY, endY] = self.startDots.y < ev.offsetY ? [self.startDots.y, ev.offsetY] : [ev.offsetY, self.startDots.y];
+			for (let x = startX; x < endX; x += c) {
+				for (let y = startY; y < endY; y += r) {
+					const _x = x + Cool.randomInt(-c/4, c/4);
+					const _y = y + Cool.randomInt(-r/4, r/4);
+					const points = Cool.randomInt(1,4);
 					for (let i = 0; i < points; i ++) {
 						Lines.lines.push(new Cool.Vector(
 							_x + Cool.random(-1, 1), 
@@ -160,7 +165,7 @@ function DrawEvents() {
 
 	this.wiggleSpeed = 0; /* 0.1 good */
 	this.wiggleSpeedElem = new UIRange({
-		label: "Wiggle Speed",
+		label: "Wiggle Amt",
 		value: this.wiggleSpeed,
 		min: 0,
 		max: 5,
@@ -203,6 +208,19 @@ function DrawEvents() {
 		display: "brush-range",
 		callback: function(ev) {
 			self.brush = Number(this.value);
+		}
+	}));
+
+	this.startDots = false;
+	this.dots = 10;
+	panel.add(new UIRange({
+		label: "Dots",
+		value: 10,
+		min: 1,
+		max: 20,
+		display: "dots-range",
+		callback: function(ev) {
+			self.dots = Number(this.value);
 		}
 	}));
 
