@@ -4,7 +4,6 @@ function DrawEvents() {
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 	this.startDots = false;
 
-
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != Lines.canvas.canvas) { 
 			if (self.isDrawing) 
@@ -31,7 +30,27 @@ function DrawEvents() {
 	};
 
 	this.addLine = function(x, y) {
-		Lines.lines.push( new Cool.Vector(x, y) );
+		if (self.brush <= 0) {
+			Lines.lines.push(new Cool.Vector(x, y));
+		} else {
+			const b = self.brush * 5;
+			let origin = new Cool.Vector(x, y);
+			for (let i = 0; i < self.brush; i++) {
+				let point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
+				while (point.dist(origin) > b){
+					point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
+				}
+				Lines.lines.push(point);
+				const points = Cool.randomInt(2,4);
+				for (let i = 0; i < points; i ++) {
+					Lines.lines.push(new Cool.Vector(
+						point.x + Cool.random(-1, 1), 
+						point.y + Cool.random(-1, 1)
+					));
+				}
+				Lines.lines.push('end');
+			}
+		}
 	};
 
 	this.drawStart = function(ev) {
@@ -174,4 +193,17 @@ function DrawEvents() {
 		key: "u"
 	});
 	panel.add(this.mouseElem);
+
+	this.brush = 0;
+	panel.add(new UIRange({
+		label: "Brush",
+		value: 0,
+		min: 0,
+		max: 10,
+		display: "brush-range",
+		callback: function(ev) {
+			self.brush = Number(this.value);
+		}
+	}));
+
 }
