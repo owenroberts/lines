@@ -456,7 +456,7 @@ function Draw() {
 	this.layerPanel.add(this.wigNum);
 
 	this.wigSpeed = new UIRange({
-		label: "Wiggle Speed",
+		label: "Wiggle Amt",
 		value: this.wiggleSpeed,
 		value: 0,
 		min: 0,
@@ -574,6 +574,21 @@ function Draw() {
 			}
 		}
 	}));
+
+	/* this should be in interface but interfaces has a problem 
+		where ui references interfaces 
+		key command has blackslash written out */
+	this.back = new UI({
+		id: 'back',
+		callback: function() {
+			Lines.currentFrame = self.currentFrameCounter = 0;
+			Lines.interface.updateFramesPanel();
+			Lines.interface.updateFramesPanel();
+			self.resetLayers();
+			self.resetDrawingsPanel();
+		},
+		key: 'backslash'
+	});
 }
 
 /*

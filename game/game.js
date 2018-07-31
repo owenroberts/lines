@@ -16,7 +16,7 @@ var Game = {
 		this.drawTime = performance.now();
 		this.stats = stats;
 
-		this.mixedColors = true;
+		this.mixedColors = false; /* param? */
 
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
@@ -55,8 +55,10 @@ var Game = {
 		if (time > Game.updateTime + Game.updateInterval) {
 			update(); // update defined in each game js file
 			if (Game.stats) {
-				const fps = 1000 / (time - Game.updateTime);
-				Game.drawStat('u: ' + Math.round(fps), Game.width - 50, 0);
+				Game.updateFrameRates.push( 1000 / (time - Game.updateTime) );
+				Game.drawStat('u: ' + Math.round( Game.updateFrameRates.reduce((n,s) => n + s) / Game.updateFrameRates.length ), Game.width - 50, 0);
+				if (Game.updateFrameRates.length > 20)
+					Game.updateFrameRates.shift();
 			}
 			Game.updateTime = time;
 		}
