@@ -16,6 +16,8 @@ function Interface() {
 	}); 
 	this.frameElems = new UIList({class:"frame"});
 
+	
+
 	/* updates the frame panel representation of frames, 
 		sets current frame, 
 		sets copy frames */

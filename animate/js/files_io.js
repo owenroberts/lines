@@ -16,8 +16,8 @@ function Files_IO(params) {
 
 		const json = {};
 		json.v = "2.1";
-		json.w = Number( Lines.canvas.width );
-		json.h = Number( Lines.canvas.height );
+		json.w = Math.floor( Number( Lines.canvas.width ));
+		json.h = Math.floor( Number( Lines.canvas.height ));
 		json.fps = Number( Lines.draw.fps );
 		json.bg = Lines.canvas.bgColor.color;
 		json.f = [];

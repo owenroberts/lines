@@ -30,7 +30,9 @@ class UI {
 			this.el.value = params.value;
 		
 		/* adding key commands to panel */
-		if (params.key) { 
+		/* this is fucked because Lines.interface can't reference this 
+			this has to exist before Lines.interface? */
+		if (params.key) {
 			Lines.interface.faces[params.key] = this;
 			const keyContainer = document.createElement("div");
 			keyContainer.classList.add("key-container");

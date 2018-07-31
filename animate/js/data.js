@@ -277,7 +277,9 @@ function Data() {
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
-			for (let h = tempFrames.length - 1; h >= 0; h--) {
+			/* why is this backward? */
+			// for (let h = tempFrames.length - 1; h >= 0; h--) {
+			for (let h = 0; h < tempFrames.length; h++) {
 				const tempLines = Lines.drawings[tempFrames[h].d];
 				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
 					if (!over) {
@@ -290,7 +292,26 @@ function Data() {
 					else if (!over) 
 						self.saveLines();
 
-					// console.log(tempLines.length, i, segmentsPerFrame);
+					/* add previous drawings 
+						add another parameter for separating drawings? 
+						i think that exists in reverse draw? */
+					if (!follow) {
+						for (let j = 0; j < h; j++) {
+							Lines.frames[Lines.currentFrame].push({
+								d: tempFrames[j].d,
+								s: 0,
+								e: Lines.drawings[tempFrames[j].d].length,
+								c: tempFrames[j].c,
+								n: tempFrames[j].n,
+								r: tempFrames[j].r,
+								x: tempFrames[j].x,
+								y: tempFrames[j].y,
+								w: tempFrames[j].w,
+								v: tempFrames[j].v
+							});
+						}
+					}
+					
 					Lines.frames[Lines.currentFrame].push({
 						d: tempFrames[h].d,
 						s: follow ? i : 0,
@@ -307,6 +328,7 @@ function Data() {
 					if (over)
 						Lines.interface.nextFrame();
 				}
+
 			}
 			Lines.interface.updateFramesPanel();
 		}
