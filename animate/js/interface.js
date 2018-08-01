@@ -118,6 +118,8 @@ function Interface() {
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
 				Lines.fio.saveFramesToFile();
+				document.activeElement.blur();
+				
 			}
 		}
 	}
