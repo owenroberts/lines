@@ -59,9 +59,10 @@ function DrawEvents() {
 		if (ev.which == 1 && !Lines.draw.isPlaying && !ev.altKey) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
-			if (self.brush > 0)
+			if (self.brush <= 0)
+				self.addLine(ev.offsetX, ev.offsetY);
+			else
 				self.addBrush(ev.offsetX, ev.offsetY);
-			/* add line? */
 		} else if (ev.altKey) {
 			self.startDots = new Cool.Vector(ev.offsetX, ev.offsetY);
 		}
@@ -79,7 +80,7 @@ function DrawEvents() {
 			for (let x = startX; x < endX; x += c) {
 				for (let y = startY; y < endY; y += r) {
 					const _x = x + Cool.randomInt(-c/4, c/4);
-					const _y = y + Cool.randomInt(-r/4, r/4);
+					const _y = y + Cool.randomInt(-r/2, r/2);
 					const points = Cool.randomInt(1,4);
 					for (let i = 0; i < points; i ++) {
 						Lines.lines.push(new Cool.Vector(
