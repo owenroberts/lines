@@ -17,7 +17,7 @@ window.addEventListener("load", function() {
 	/*Lines.lineColor.setColor("ffffff");*/
 	Lines.drawEvents = new DrawEvents();
 	Lines.fio = new Files_IO({
-		fit: false
+		fit: true
 	});
 	
 	// start, for some reason

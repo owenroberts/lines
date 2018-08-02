@@ -28,8 +28,10 @@ var Game = {
 
 			/* draw and update are separates functions 
 				because lines draw at relatively slow rate (10fps) */
-			if (typeof draw === "function") requestAnimFrame(Game.gDraw);
-			if (typeof update === "function") requestAnimFrame(Game.gUpdate);
+			if (typeof draw === "function") 
+				requestAnimFrame(Game.gDraw);
+			if (typeof update === "function") 
+				requestAnimFrame(Game.gUpdate);
 			Events.init(Game.canvas);
 			if (this.stats)
 				this.initStats();

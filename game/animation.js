@@ -97,7 +97,7 @@ class Animation {
 		if (this.frameCount == -1) { /* frameCount -1 is default, means it plays from beginning */
 			if (this.debug) {
 				// console.log(this.state, this.states[this.state])
-				// console.log(this.currentFrame, this.currentFrameCounter);
+				// console.log(this.currentFrame, this.currentFrameCounter, this.states[this.state].end);
 			}
 			if (this.currentFrame < this.states[this.state].end) {
 				this.currentFrameCounter += this.intervalRatio;
@@ -111,9 +111,9 @@ class Animation {
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 				else {
 					this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
-					if (this.onPlayedState)
-						this.onPlayedState();
 				}
+				if (this.onPlayedState)
+					this.onPlayedState();
 			}
 			// fucks up non-loop
 			// if (this.currentFrame < this.states[this.state].start)
