@@ -77,18 +77,36 @@ function LinesPlayer(canvas, src, lps, callback) {
 	this.sizeCanvas = function() {
 		const padding = 8; 
 		const top = canvas.getBoundingClientRect().top;
+		const [width, height] = mobilecheck() ? [screen.width, screen.height] : [window.innerWidth, window.innerHeight];
 
-		if (window.innerWidth - padding * 2 < this.width)
-			this.scale = (window.innerWidth - padding * 2) / this.width;
-		else if ((window.innerHeight - top - padding * 2) < this.height)
-			this.scale = (window.innerHeight - top - padding * 2) / this.height;
+		/*
+			this logic is semi-fucked?
+			if the window width - padding 8px/side is less than width (canvas doesn't fit horizontal)
+				the scale is width - padding / canvas width (scale horizontally)
+			else if the window height - top - padding is less than the canvas height (canvas doesn't fit vertical)
+				scale vertically
+
+			then
+
+			if the scaled ratio is greater than natural ratio
+				height is window heigh (?)
+				width is scaled based on height
+				scale is based on height
+			else 
+				width is smaller of width or scaled width
+				height is same
+		*/
+
+		if (width - padding * 2 < this.width)
+			this.scale = (width - padding * 2) / this.width;
+		else if ((height - top - padding * 2) < this.height)
+			this.scale = (height - top - padding * 2) / this.height;
 		else
 			this.scale = 1;
 
 		if (this.scale != 1) {
-
-			if (this.scale * this.width / (window.innerHeight - top) > this.width/this.height) {
-				this.canvas.height = window.innerHeight;
+			if (this.scale * this.width / (height - top) > this.width/this.height) {
+				this.canvas.height = height;
 				this.canvas.width = this.canvas.height * (this.width / this.height);
 				this.scale = this.canvas.height / this.height;
 			} else {
@@ -120,12 +138,14 @@ function LinesPlayer(canvas, src, lps, callback) {
 				self.canvas.style.backgroundColor = '#' + data.bg;
 			requestAnimFrame(self.draw.bind(self));
 			self.sizeCanvas();
-			if (callback) callback(); // callback to do something after drawing loads
+			if (callback) 
+				callback(); // callback to do something after drawing loads
 
 		});
 	};
 
-	if (src) this.loadAnimation(src, callback);
+	if (src) 
+		this.loadAnimation(src, callback);
 }
 
 function loadAnimation(src, canvas, callback) {
