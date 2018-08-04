@@ -77,7 +77,7 @@ function LinesPlayer(canvas, src, lps, callback) {
 	this.sizeCanvas = function() {
 		const padding = 8; 
 		const top = canvas.getBoundingClientRect().top;
-		const [width, height] = mobilecheck() ? [screen.width, screen.height] : [window.innerWidth, window.innerHeight];
+		const [width, height] = Cool.mobilecheck() ? [screen.width, screen.height] : [window.innerWidth, window.innerHeight];
 
 		/*
 			this logic is semi-fucked?
