@@ -2,7 +2,6 @@
 class Animation {
 	constructor(src, debug) {
 		this.src = src;
-		this.ctx = Game.ctx;
 		this.mixedColors = Game.mixedColors;
 		this.debug = debug;
 		this.loaded = false;
@@ -136,13 +135,13 @@ class Animation {
 
 		if (this.loaded && this.isPlaying) {
 			if (this.mirror) {
-				// this.ctx.save();
-				// ctx.translate(this.width, 0);
-				// ctx.scale(-1,1);
+				// Game.ctx.save();
+				// Game.ctx.translate(this.width, 0);
+				// Game.ctx.scale(-1,1);
 			}
 			if (this.frames[this.currentFrame]) {
 				if (!this.mixedColors) 
-					this.ctx.beginPath();
+					Game.ctx.beginPath();
 				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
 					const fr = this.frames[this.currentFrame][i];
 					const jig = +fr.r;
@@ -157,29 +156,29 @@ class Animation {
 						ySpeed: Cool.random(-wigSpeed, wigSpeed)
 					};
 					if (this.mixedColors) 
-						this.ctx.beginPath();
+						Game.ctx.beginPath();
 					for (let h = fr.s; h < fr.e - 1; h++) {
 						const s = dr[h]; // line data
 						const e = dr[h + 1];
 						let v = new Cool.Vector(e.x, e.y);
 						v.subtract(s);
 						v.divide(seg); // line num
-						this.ctx.moveTo(
+						Game.ctx.moveTo(
 							x + this.widthRatio * (fr.x + s.x + Cool.random(-jig, jig)) + off.x, 
 							y + this.heightRatio * (fr.y + s.y + Cool.random(-jig, jig)) + off.y 
 						);
 						for (let j = 0; j < seg; j++) {
 							const p = new Cool.Vector(s.x + v.x * j, s.y + v.y * j);
-							this.ctx.lineTo( 
+							Game.ctx.lineTo( 
 								x + this.widthRatio * (fr.x + p.x + v.x + Cool.random(-jig, jig)) + off.x, 
 								y + this.heightRatio * (fr.y +  p.y + v.y + Cool.random(-jig, jig)) + off.y
 							);
 						}
-						if (this.ctx.strokeStyle.replace("#","") != fr.c)
-							this.ctx.strokeStyle = "#" + fr.c;
+						// if (Game.ctx.strokeStyle.replace("#","") != fr.c)
+							// Game.ctx.strokeStyle = "#" + fr.c;
 					}
 					if (this.mixedColors) 
-						this.ctx.stroke();
+						Game.ctx.stroke();
 
 					off.x += off.xSpeed;
 					if (off.x >= wig || off.x <= -wig)
@@ -190,42 +189,42 @@ class Animation {
 						off.ySpeed *= -1;
 				}
 				if (!this.mixedColors) 
-					this.ctx.stroke();
+					Game.ctx.stroke();
 				if (this.drawBackground)
 					this.drawBkg(x, y);
 			}
-			// if (this.mirror) this.ctx.restore();
+			// if (this.mirror) Game.ctx.restore();
 		}
 	}
 
 	drawBkg(x, y) {
 		if (!this.mixedColors)
-			this.ctx.beginPath();
+			Game.ctx.beginPath();
 		for (let i = 0; i < this.frames[this.currentFrameRounded].length; i++) {
 			const frm = this.frames[this.currentFrameRounded][i];
 			const drw = this.drawings[frm.d];
 			if (mixedColors)
-				this.ctx.beginPath();
+				Game.ctx.beginPath();
 			for (let h = frm.i; h < frm.e; h++) {
 				const line = drw.l[h]; // line data
 				if (line && line.e) {
 					const v = new Cool.Vector(line.e.x, line.e.y);
-					this.ctx.lineTo(
+					Game.ctx.lineTo(
 						x + this.widthRatio * (line.s.x + Cool.random(-this.jiggle, this.jiggle)), 
 						y + this.heightRatio * (line.s.y + Cool.random(-this.jiggle, this.jiggle)) 
 					);
-					if (this.ctx.fillStyle.replace("#","") != drw.c) {
-						this.ctx.fillStyle = "#" + drw.c;
+					if (Game.ctx.fillStyle.replace("#","") != drw.c) {
+						Game.ctx.fillStyle = "#" + drw.c;
 					}
 				}
 			}
 			if (this.mixedColors) {
-				this.ctx.closePath();
-				this.ctx.fill();
+				Game.ctx.closePath();
+				Game.ctx.fill();
 			}
 		}
 		if (!this.mixedColors)
-			this.ctx.fill();
+			Game.ctx.fill();
 	}
 
 	stop() {
