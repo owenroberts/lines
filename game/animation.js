@@ -80,6 +80,8 @@ class Animation {
 		in other scenarios is should play and stick ...
 		but that should be loop */
 	playOnce(callback) {
+		if (!this.isPlaying)
+			this.isPlaying = true;
 		this.frameCount = this.states[this.state].start;
 		this.frameCountCounter = this.states[this.state].start;
 		this.onPlayedOnce = callback;
@@ -128,8 +130,11 @@ class Animation {
 			if (this.frameCount >= this.states[this.state].end) {
 				this.frameCount = this.frameCountCounter = this.states[this.state].start;
 				this.endPlayOnce();
-				if (this.onPlayedOnce)
+				if (this.onPlayedOnce) {
+					if (this.isPlaying)
+						this.isPlaying = false;
 					this.onPlayedOnce();
+				}
 			}
 		}
 
