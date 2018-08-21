@@ -2,7 +2,6 @@
 class Animation {
 	constructor(src, debug) {
 		this.src = src;
-		this.mixedColors = Game.mixedColors;
 		this.debug = debug;
 		this.loaded = false;
 		this.drawBackground = false;
@@ -20,6 +19,7 @@ class Animation {
 		this.intervalRatio = 1;
 
 		/* figure this out now, with states this is very different */
+		this.onePlay = false;
 		this.frameCount = -1; // i guess this is set at beginning? set to 0 so it doesn't go through
 		this.frameCountCounter = -1;  // floats
 
@@ -75,69 +75,16 @@ class Animation {
 		}
 	}
 
-	/* need to work on this
-		in drummer game it plays and then disappears
-		in other scenarios is should play and stick ...
-		but that should be loop */
 	playOnce(callback) {
 		if (!this.isPlaying)
 			this.isPlaying = true;
-		this.frameCount = this.states[this.state].start;
-		this.frameCountCounter = this.states[this.state].start;
+		this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 		this.onPlayedOnce = callback;
-	}
-
-	/* playOnce should end itself */
-	endPlayOnce() {
-		this.frameCount = -1; /* this is stupid */
-		this.frameCountCounter = -1;
+		this.onePlay = true;
+		// this.randomFrames = false;  /* need this? */
 	}
 
 	draw(x, y) {
-				
-		if (this.frameCount == -1) { /* frameCount -1 is default, means it plays from beginning */
-			if (this.debug) {
-				// console.log(this.state, this.states[this.state])
-				// console.log(this.currentFrame, this.currentFrameCounter, this.states[this.state].end);
-			}
-			if (this.currentFrame < this.states[this.state].end) {
-				this.currentFrameCounter += this.intervalRatio;
-				if (this.currentFrame != Math.floor(this.currentFrameCounter) && this.randomFrames)
-					this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
-				else
-					this.currentFrame = Math.floor(this.currentFrameCounter);
-			}
-			if (this.currentFrame >= this.states[this.state].end) {
-				if (this.loop) 
-					this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
-				else {
-					this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
-				}
-				if (this.onPlayedState)
-					this.onPlayedState();
-			}
-			// fucks up non-loop
-			// if (this.currentFrame < this.states[this.state].start)
-				// this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
-		} else {
-			/* play once */
-			if (this.frameCount < this.states[this.state].end) {
-				this.frameCountCounter += this.intervalRatio;
-				this.frameCount = Math.floor(this.frameCountCounter);
-				this.currentFrame = this.currentFrameCounter = this.frameCount;
-			}
-
-			if (this.frameCount >= this.states[this.state].end) {
-				this.frameCount = this.frameCountCounter = this.states[this.state].start;
-				this.endPlayOnce();
-				if (this.onPlayedOnce) {
-					if (this.isPlaying)
-						this.isPlaying = false;
-					this.onPlayedOnce();
-				}
-			}
-		}
-
 		if (this.loaded && this.isPlaying) {
 			if (this.mirror) {
 				// Game.ctx.save();
@@ -145,7 +92,7 @@ class Animation {
 				// Game.ctx.scale(-1,1);
 			}
 			if (this.frames[this.currentFrame]) {
-				if (!this.mixedColors) 
+				if (!Game.mixedColors) 
 					Game.ctx.beginPath();
 				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
 					const fr = this.frames[this.currentFrame][i];
@@ -160,7 +107,7 @@ class Animation {
 						y: Cool.random(0, wig),
 						ySpeed: Cool.random(-wigSpeed, wigSpeed)
 					};
-					if (this.mixedColors) 
+					if (Game.mixedColors || Game.debug || this.debug) 
 						Game.ctx.beginPath();
 					for (let h = fr.s; h < fr.e - 1; h++) {
 						const s = dr[h]; // line data
@@ -179,10 +126,14 @@ class Animation {
 								y + this.heightRatio * (fr.y +  p.y + v.y + Cool.random(-jig, jig)) + off.y
 							);
 						}
-						// if (Game.ctx.strokeStyle.replace("#","") != fr.c)
-							// Game.ctx.strokeStyle = "#" + fr.c;
+
+						if (Game.mixedColors || Game.debug) {
+							if (Game.ctx.strokeStyle.replace("#","") != fr.c)
+								Game.ctx.strokeStyle = "#" + fr.c;
+						}
+						
 					}
-					if (this.mixedColors) 
+					if (Game.mixedColors || Game.debug || this.debug)
 						Game.ctx.stroke();
 
 					off.x += off.xSpeed;
@@ -199,6 +150,45 @@ class Animation {
 					this.drawBkg(x, y);
 			}
 			// if (this.mirror) Game.ctx.restore();
+		}
+		this.updateFrame();
+	}
+
+	updateFrame() {
+		/* this should all happen after it draws right? wtf */
+		if (this.debug) {
+			// console.log(this.state, this.states[this.state])
+			// console.log(this.currentFrame, this.currentFrameCounter, this.states[this.state].end);
+		}
+
+		if (this.currentFrame < this.states[this.state].end) {
+			this.currentFrameCounter += this.intervalRatio;
+			if (this.randomFrames && this.currentFrame != Math.floor(this.currentFrameCounter)) {
+				this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
+			} else {
+				this.currentFrame = Math.floor(this.currentFrameCounter);
+			}
+		}
+
+		if (this.currentFrameCounter >= this.states[this.state].end) {
+			if (this.loop) {
+				this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
+			} else {
+				this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
+			}
+			if (this.onePlay) {
+				this.onePlay = false;
+				if (this.isPlaying) {
+					this.isPlaying = false;
+				}
+				if (this.onPlayedOnce) {
+					this.onPlayedOnce();
+				}
+			} else {
+				if (this.onPlayedState) {
+					this.onPlayedState();
+				}
+			}
 		}
 	}
 
