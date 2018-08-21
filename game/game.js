@@ -1,22 +1,23 @@
 var Game = {
-	init: function(width, height, lps, stats) {
+	init: function(params) {
 		this.canvas = document.getElementById("lines");
 		// update audio new chrome
 		window.AudioContext = window.AudioContext || window.webkitAudioContext;
 		this.audioCtx = new AudioContext();
 		
 		/* some kind of setup for this? */
-		this.width = width;
-		this.height = height;
-		this.lineInterval = 1000/lps;
+		this.width = params.width;
+		this.height = params.height;
+		this.lineInterval = 1000/params.lps;
 		this.currentScene = 0;
 
 		this.updateTime = performance.now();
 		this.updateInterval = 1000 / 60; // 60 fps
 		this.drawTime = performance.now();
-		this.stats = stats;
+		this.stats = params.stats || false;
 
-		this.mixedColors = false; /* param? */
+		this.mixedColors = params.mixedColors || false; /* param? */
+		this.debug = params.debug || false;
 
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
