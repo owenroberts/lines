@@ -84,6 +84,10 @@ class Animation {
 		// this.randomFrames = false;  /* need this? */
 	}
 
+	overrideProperty(prop, value) {
+		this[prop] = value;
+	}
+
 	draw(x, y) {
 		if (this.loaded && this.isPlaying) {
 			if (this.mirror) {
@@ -96,11 +100,11 @@ class Animation {
 					Game.ctx.beginPath();
 				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
 					const fr = this.frames[this.currentFrame][i];
-					const jig = +fr.r;
-					const seg = +fr.n;
 					const dr = this.drawings[fr.d];
-					const wig = +fr.w || 0; // or zero for older drawings for now 
-					const wigSpeed = +fr.v || 0;
+					const jig = this.jig || +fr.r;
+					const seg = this.seg || +fr.n;
+					const wig = this.wig || +fr.w || 0; // or zero for older drawings for now 
+					const wigSpeed = this.wigSpeed || +fr.v || 0;
 					const off = {
 						x: Cool.random(0, wig),
 						xSpeed: Cool.random(-wigSpeed, wigSpeed),
