@@ -12,7 +12,6 @@ function Files_IO(params) {
 			if (fit)
 				Lines.canvas.fitCanvasToDrawing();
 		}
-		
 
 		const json = {};
 		json.v = "2.1";
@@ -20,8 +19,10 @@ function Files_IO(params) {
 		json.h = Math.floor( Number( Lines.canvas.height ));
 		json.fps = Number( Lines.draw.fps );
 		json.bg = Lines.canvas.bgColor.color;
+		json.mc = Lines.lineColor.colors.length > 1 ? true : false;
 		json.f = [];
 		json.d = [];
+
 		let drawingsIndexes = [];
 
 		/* save current frame */  

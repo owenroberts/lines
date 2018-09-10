@@ -199,7 +199,6 @@ function DrawEvents() {
 		}
 	});
 	panel.add(this.wiggleSpeedElem);
-
 	
 	// how often the mousemove records, default 30ms
 	this.mouseTimer = performance.now();  //  independent of draw timer 
@@ -226,6 +225,25 @@ function DrawEvents() {
 		key: "u"
 	});
 	panel.add(this.mouseElem);
+
+	this.lineWidth = new UIRange({
+		label: "Line Width",
+		value: 1,
+		min: 1,
+		max: 4,
+		step: 0.25,
+		input: "line-width-range",
+		callback: function(ev) {
+			if (ev.type == 'keyup') {
+				Lines.canvas.ctx.lineWidth = +ev.target.value;
+				this.lineWidth.setValue(+ev.target.value);
+			} else { 
+				Lines.canvas.ctx.lineWidth = +this.value;
+			}
+
+		}
+	});
+	panel.add(this.lineWidth);
 
 	/* brush menu */
 	const brushPanel = new Panel("brush-menu", "Brush");
