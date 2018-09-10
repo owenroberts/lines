@@ -33,10 +33,10 @@ function Background() {
 	const panel = new Panel("background-menu", "Background Image");
 
 	/* copy/paste url, no key */
-	panel.add( new UIText({
+	panel.add(new UIText({
 		title: "Add image URL hit enter",
 		callback: this.loadImage
-	}) );
+	}));
 	
 	/* toggle visibility of bkg */
 	panel.add(new UIToggleButton({
