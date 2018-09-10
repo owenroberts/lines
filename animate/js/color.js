@@ -74,7 +74,7 @@ function Color(id, title, callback) {
 
 	this.hue = new UIRange({
 		label: "Hue",
-		display: title + "-hue",
+		display: id + "-hue",
 		min: 0,
 		max: 360,
 		value: 0,
@@ -84,7 +84,7 @@ function Color(id, title, callback) {
 
 	this.sat = new UIRange({
 		label: "Sat",
-		display: title + "-saturation",
+		display: id + "-saturation",
 		min: 0,
 		max: 100,
 		value: 0,
@@ -94,7 +94,7 @@ function Color(id, title, callback) {
 
 	this.light = new UIRange({
 		label: "Light",
-		display: title + "-lightness",
+		display: id + "-lightness",
 		min: 0,
 		max: 100,
 		value: 0,

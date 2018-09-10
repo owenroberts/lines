@@ -2,9 +2,10 @@ function Interface() {
 	let self = this;
 
 	this.panels = {}; 
-	this.faces = {}; /* parts of the interface? */
+	this.keyCommands = {}; /* parts of the interface? */
 
 	this.framesPanel = new UI({id:"frames"});
+	this.frameElems = new UIList({class:"frame"});
 	/* plus frame is unsaved drawing frame */
 	this.plusFrame = new UI({
 		id:"current",
@@ -13,10 +14,20 @@ function Interface() {
 			Lines.currentFrame = Lines.frames.length;
 			self.updateFrameNum();
 		}
-	}); 
-	this.frameElems = new UIList({class:"frame"});
+	});
+	this.keyCommands['p'] = this.plusFrame; /* can't add key command bc this module doesn't exist yet */
 
-	
+	this.back = new UI({
+		id: 'back',
+		callback: function() {
+			Lines.currentFrame = self.currentFrameCounter = 0;
+			Lines.interface.updateFramesPanel();
+			Lines.interface.updateFramesPanel();
+			Lines.layer.resetLayers();
+			Lines.draw.resetDrawingsPanel();
+		}
+	});
+	this.keyCommands['backslash'] = this.back;
 
 	/* updates the frame panel representation of frames, 
 		sets current frame, 
@@ -83,7 +94,7 @@ function Interface() {
 		if (Lines.currentFrame < Lines.frames.length) 
 			Lines.currentFrame++;
 		self.updateFramesPanel();
-		Lines.draw.resetLayers();
+		Lines.layer.resetLayers();
 		Lines.draw.resetDrawingsPanel();
 	};
 
@@ -94,7 +105,7 @@ function Interface() {
 		if (Lines.currentFrame > 0) 
 			Lines.currentFrame--;
 		self.updateFramesPanel();
-		Lines.draw.resetLayers();
+		Lines.layer.resetLayers();
 		Lines.draw.resetDrawingsPanel();
 	};
 
@@ -109,10 +120,11 @@ function Interface() {
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
-			if (self.faces[k]) {
-				self.faces[k].callback(ev);
-				if (self.faces[k].toggleText) {
-					self.faces[k].toggleText();
+			if (self.keyCommands[k]) {
+				self.keyCommands[k].callback(ev);
+				//  self.keyCommands[k].addClass('key-down'); show key presses?
+				if (self.keyCommands[k].toggleText) {
+					self.keyCommands[k].toggleText();
 				}
 			}
 		} else if (document.activeElement.id == 'title') {
@@ -124,6 +136,4 @@ function Interface() {
 		}
 	}
 	document.addEventListener("keydown", self.keyDown, false);
-
-	this.panels["keys"] = new Panel("keys", "Key commands");
 }

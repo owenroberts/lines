@@ -110,17 +110,21 @@ function DrawEvents() {
 	document.addEventListener('mousemove', self.outSideCanvas);
 
 	/* interface */
-	const panel = new Panel("mouse-menu", "Mouse");
+	const panel = new Panel("mouse-menu", "Lines");
 
 	this.segNumRange = 2; /* default 2*/
 	this.segNumElem = new UIRange({
 		label: "Segments",
 		value: this.segNumRange,
-		display: "num-range",
+		input: "num-range",
 		min: 1,
 		max: 20,
 		callback: function(ev) {
 			/* this is not DRY */
+			if (ev.type == 'keyup') {
+				self.segNumElem.setValue(Number(ev.target.value));
+				self.segNumRange = Number(ev.target.value);
+			}
 			if (ev.type == "input") {
 				self.segNumRange = Number(this.value);
 			} else if (ev.type == "keydown") {
@@ -138,8 +142,13 @@ function DrawEvents() {
 		value: this.jiggleRange,
 		min: 0,
 		max: 10,
-		display: "jiggle-range",
+		input: "jiggle-range",
 		callback: function(ev) {
+			/* not dry */
+			if (ev.type == 'keyup') {
+				self.jiggleRange = Number(ev.target.value);
+				self.jiggleElem.setValue(Number(ev.target.value));
+			}
 			if (ev.type == "input") {
 				self.jiggleRange = Number(this.value);
 			} else if (ev.type == "keydown") {
@@ -157,9 +166,16 @@ function DrawEvents() {
 		value: this.wiggleRange,
 		min: 0,
 		max: 15,
-		display: "wiggle-range",
+		input: "wiggle-range",
 		callback: function(ev) {
-			self.wiggleRange = Number(this.value);
+			/* not dry */
+			if (ev.type == 'keyup') {
+				self.wiggleElem.setValue(Number(ev.target.value));
+				self.wiggleRange = Number(ev.target.value);
+			} else {
+				self.wiggleRange = Number(this.value);
+			}
+			
 		}
 	});
 	panel.add(this.wiggleElem);
@@ -171,9 +187,15 @@ function DrawEvents() {
 		min: 0,
 		max: 5,
 		step: 0.005,
-		display: "wiggle-speed-range",
+		input: "wiggle-speed-range",
 		callback: function(ev) {
-			self.wiggleSpeed = Number(this.value);
+			/* not dry */
+			if (ev.type == 'keyup') {
+				self.wiggleSpeed = Number(ev.target.value);
+				self.wiggleSpeedElem.setValue(Number(ev.target.value));
+			} else {
+				self.wiggleSpeed = Number(this.value);
+			}
 		}
 	});
 	panel.add(this.wiggleSpeedElem);
@@ -187,8 +209,13 @@ function DrawEvents() {
 		value: 30,
 		min: 0,
 		max: 100,
-		display: "mouse-range",
+		input: "mouse-range",
 		callback: function(ev) {
+			/* not dry */
+			if (ev.type == 'keyup') {
+				self.mouseInterval = Number(ev.target.value);
+				self.mouseElem.setValue(Number(ev.target.value));
+			}
 			if (ev.type == "input") {
 				self.mouseInterval = Number(this.value);
 			} else if (ev.type == "keydown") {
@@ -201,28 +228,42 @@ function DrawEvents() {
 	panel.add(this.mouseElem);
 
 	this.brush = 0;
-	panel.add(new UIRange({
+	this.brushElem = new UIRange({
 		label: "Brush",
 		value: 0,
 		min: 0,
 		max: 10,
-		display: "brush-range",
+		input: "brush-range",
 		callback: function(ev) {
-			self.brush = Number(this.value);
+			/* not dry */
+			if (ev.type == 'keyup') {
+				self.brushElem.setValue(Number(ev.target.value));
+				self.brush = Number(ev.target.value);
+			} else {
+				self.brush = Number(this.value);
+			}
 		}
-	}));
+	});
+	panel.add(this.brushElem);
 
 	this.startDots = false;
 	this.dots = 10;
-	panel.add(new UIRange({
+	this.dotsElem = new UIRange({
 		label: "Dots",
 		value: 10,
-		min: 1,
-		max: 20,
-		display: "dots-range",
+		min: 10,
+		max: 50,
+		input: "dots-range",
 		callback: function(ev) {
-			self.dots = Number(this.value);
+			/* not dry */
+			if (ev.type == 'keyup') {
+				self.dotsElem.setValue(Number(ev.target.value));
+				self.dots = Number(ev.target.value);
+			} else {
+				self.dots = Number(this.value);
+			}
 		}
-	}));
+	});
+	panel.add(this.dotsElem);
 
 }

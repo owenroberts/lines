@@ -78,8 +78,6 @@ button:focus { outline: none; }
 	font-weight: 100;
 }
 
-
-
 .menu-panel {
 	border-top: 1px solid lightgray;
 	border-right: 1px solid lightgray;
@@ -104,6 +102,10 @@ button:focus { outline: none; }
 		input {
 			width: 100%;
 		}
+		input.display {
+			width: 20px;
+			margin-left: 5px;
+		}
 		.btn {
 			padding: 0 3px;
 		}
@@ -120,6 +122,17 @@ button:focus { outline: none; }
 	}
 	input {
 		/* max-width: 80px; */
+	}
+	*[title]:hover:after, .key-down:after {
+		content: attr(title);
+		position: fixed;
+		top: 20px;
+		right: 20px;
+		background: lightblue;
+		border: 1px dashed blue;
+		border-radius: 2px;
+		padding: 1px 3px;
+		color: black;
 	}
 }
 
@@ -140,10 +153,10 @@ button:focus { outline: none; }
 }
 
 .ui-color {
-	width:100%;
+	width: 100%;
 	height: 2em;
-	border:1px solid gray;
-	margin-bottom:1em;
+	border: 1px solid gray;
+	margin-bottom: 1em;
 }
 
 #frames {
@@ -170,12 +183,4 @@ button:focus { outline: none; }
 	}
 	#current { background-color: lightblue !important; }
 	.copy { background-color: pink !important; }
-}
-
-#keys {
-	/* width: auto;
-	min-width:100%; */
-	position: relative;
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }

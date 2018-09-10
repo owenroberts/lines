@@ -17,8 +17,9 @@ window.addEventListener("load", function() {
 	/*Lines.lineColor.setColor("ffffff");*/
 	Lines.drawEvents = new DrawEvents();
 	Lines.fio = new Files_IO({
-		fit: false
+		fit: false /* fit to canvas when saving */
 	});
+	Lines.layer = new Layer();
 	
 	// start, for some reason
 	Lines.draw.start();
