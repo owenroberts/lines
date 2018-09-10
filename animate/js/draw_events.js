@@ -32,7 +32,7 @@ function DrawEvents() {
 	};
 
 	this.addBrush = function(x, y) {
-		const b = self.brush * self.brush;
+		const b = self.brush * self.brush * self.brushSpread;
 		let origin = new Cool.Vector(x, y);
 		for (let i = 0; i < self.brush; i++) {
 			let point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
@@ -79,7 +79,7 @@ function DrawEvents() {
 			let [startY, endY] = self.startDots.y < ev.offsetY ? [self.startDots.y, ev.offsetY] : [ev.offsetY, self.startDots.y];
 			for (let x = startX; x < endX; x += c) {
 				for (let y = startY; y < endY; y += r) {
-					const _x = x + Cool.randomInt(-c/4, c/4);
+					const _x = x + Cool.randomInt(-c/2, c/2);
 					const _y = y + Cool.randomInt(-r/2, r/2);
 					const points = Cool.randomInt(1,4);
 					for (let i = 0; i < points; i ++) {
@@ -227,6 +227,9 @@ function DrawEvents() {
 	});
 	panel.add(this.mouseElem);
 
+	/* brush menu */
+	const brushPanel = new Panel("brush-menu", "Brush");
+
 	this.brush = 0;
 	this.brushElem = new UIRange({
 		label: "Brush",
@@ -244,7 +247,26 @@ function DrawEvents() {
 			}
 		}
 	});
-	panel.add(this.brushElem);
+	brushPanel.add(this.brushElem);
+
+	this.brushSpread = 1;
+	this.brushSpreadElem = new UIRange({
+		label: "Brush Spread",
+		value: 1,
+		min: 1,
+		max: 5,
+		input: "brush-spread-range",
+		callback: function(ev) {
+			/* not dry */
+			if (ev.type == 'keyup') {
+				self.brushElem.setValue(Number(ev.target.value));
+				self.brushSpreadElem = Number(ev.target.value);
+			} else {
+				self.brushSpread = Number(this.value);
+			}
+		}
+	});
+	brushPanel.add(this.brushSpreadElem);
 
 	this.startDots = false;
 	this.dots = 10;
@@ -264,6 +286,6 @@ function DrawEvents() {
 			}
 		}
 	});
-	panel.add(this.dotsElem);
+	brushPanel.add(this.dotsElem);
 
 }
