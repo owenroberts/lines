@@ -89,7 +89,7 @@ button:focus {
     .menu-panel .row input {
       width: 100%; }
     .menu-panel .row input.display {
-      width: 20px;
+      width: 30px;
       margin-left: 5px; }
     .menu-panel .row .btn {
       padding: 0 3px; }
