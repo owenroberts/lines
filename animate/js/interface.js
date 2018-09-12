@@ -23,8 +23,8 @@ function Interface() {
 			Lines.currentFrame = self.currentFrameCounter = 0;
 			Lines.interface.updateFramesPanel();
 			Lines.interface.updateFramesPanel();
-			Lines.layer.resetLayers();
-			Lines.draw.resetDrawingsPanel();
+			Lines.drawingInterface.resetLayers();
+			Lines.drawingInterface.resetDrawingsPanel();
 		}
 	});
 	this.keyCommands['backslash'] = this.back;
@@ -78,7 +78,7 @@ function Interface() {
 
 	/* update frame display and current frame */
 	this.updateFrameNum = function() {
-		Lines.draw.frameNumDisplay.set(Lines.currentFrame);
+		Lines.drawingInterface.frameNumDisplay.set(Lines.currentFrame);
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[Lines.currentFrame]) // also un-ui
@@ -94,8 +94,8 @@ function Interface() {
 		if (Lines.currentFrame < Lines.frames.length) 
 			Lines.currentFrame++;
 		self.updateFramesPanel();
-		Lines.layer.resetLayers();
-		Lines.draw.resetDrawingsPanel();
+		Lines.drawingInterface.resetLayers();
+		Lines.drawingInterface.resetDrawingsPanel();
 	};
 
 	/* w key - got to previous frame */
@@ -105,8 +105,8 @@ function Interface() {
 		if (Lines.currentFrame > 0) 
 			Lines.currentFrame--;
 		self.updateFramesPanel();
-		Lines.layer.resetLayers();
-		Lines.draw.resetDrawingsPanel();
+		Lines.drawingInterface.resetLayers();
+		Lines.drawingInterface.resetDrawingsPanel();
 	};
 
 	/* keyboard events and handlers */

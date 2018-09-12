@@ -11,14 +11,21 @@ function Draw() {
 	this.timer = performance.now(); 
 	this.intervalRatio = this.interval / (1000/this.fps);  // this starts same as lineInterval, written out to show math
 
+	this.onionSkinIsVisible = true;
+
 	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
 	this.captureWithBackground = false;
 
 	this.setFps = function(fps) {
 		self.fps = fps;
-		self.intervalRatio = self.interval / (1000/fps);
-		self.fpsSelect.setValue(fps);
-	}
+		self.intervalRatio = self.interval / (1000 / self.fps);
+	};
+
+	this.setLps = function(lps) {
+		self.lps = lps;
+		self.interval = 1000 / self.lps;
+		self.intervalRatio = self.interval / (1000 / self.fps);
+	};
 
 	/* just set drawing back to 0 but might do other things */
 	this.reset = function() {
@@ -63,7 +70,7 @@ function Draw() {
 				Lines.canvas.ctx.drawImage(self.background.img, self.background.x, self.background.y, self.background.size, self.background.size/self.background.ratio);
 
 			/* draws onionskin this is first so its under main lines */
-			if (self.onionSkinNum > 0 && self.onionSkinOn) {
+			if (self.onionSkinNum > 0 && self.onionSkinIsVisible) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
 					const frameNumber = Lines.currentFrame - o;
 					if (frameNumber >= 0) {
@@ -206,242 +213,6 @@ function Draw() {
 
 	/* add background image module */
 	this.background = new Background();
-
-	/* interfaces */
-	const panel = new Panel("draw-menu", "Draw");
-	const capturePanel = new Panel("capture-menu", "Capture");
-
-	/* play */
-	panel.add(new UIToggleButton({
-		id:"play", 
-		callback: self.toggle, 
-		key: "space", 
-		on: "Play", 
-		off: "Pause"
-	}));
-
-	this.frameNumDisplay = new UIDisplay({
-		id:"frame", 
-		label:"Frame: ", 
-		initial:"0"
-	});
-	panel.add(this.frameNumDisplay); 
-
-	/* prev frame */
-	panel.add(new UIButton({
-		title: "Prev Frame",
-		callback: Lines.interface.prevFrame,
-		key: "w"
-	}));
-
-	/* next frame */
-	panel.add(new UIButton({
-		title: "Next Frame",
-		callback: Lines.interface.nextFrame,
-		key: "e"
-	}));
-
-	/* l key - onion skin num */
-	panel.add(new UISelect({
-		options: [0,1,2,3,4,5,6,7,8,9,10],
-		selected: 0,
-		label: "Onion Skin",
-		callback: function(ev) {
-			if (ev.type == "change") {
-				self.onionSkinNum = Number(this.value);
-				this.blur();
-			} else if (ev.type == "keydown") {
-				const n = prompt("How many onion skin frames?");
-				self.onionSkinNum = Number(n);
-				this.setValue(self.onionSkinNum);
-			}
-		},
-		key: "l"
-	}));
-
-	this.onionSkinOn = true;
-	panel.add(new UIToggleButton({
-		on: "Hide Onion",
-		off: "Show Onion",
-		callback: function() {
-			self.onionSkinOn = !self.onionSkinOn;
-		},
-		key: "shift-l"
-	}));
-
-	this.fpsSelect = new UISelect({
-		label: "FPS",
-		options: [1,2,5,10,12,15,24,30,60],
-		selected: 10,
-		callback: function(ev) {
-			if (ev.type == "change") {
-				self.fps = Number(this.value);
-				this.blur();
-			} else if (ev.type == "keydown") {
-				const n = prompt("FPS?");
-				self.fps = Number(n);
-				self.fpsSelect.setValue(self.fps);
-			}
-			self.intervalRatio = self.interval / (1000/self.fps);
-		},
-		key: ";"
-	});
-	panel.add(this.fpsSelect);
-
-	/* lines per second */
-	panel.add(new UISelect({
-		label: "Lines/Second",
-		options: [1,2,5,10,12,15,24,30,60],
-		selected: 10,
-		callback: function(ev) {
-			if (ev.type == "change") {
-				self.lps = Number(this.value);
-				this.blur();
-			} else {
-				const n = prompt("Lines per second?");
-				self.lps = Number(n);
-				this.setValue(self.lps);
-			}
-			self.interval = 1000/self.lps;
-			self.intervalRatio = self.interval / (1000/self.fps);
-		},
-		key: "'"
-	}));
-
-	/* f - go to frame */
-	panel.add(new UIButton({
-		title: "Go To Frame",
-		callback: function() {
-			const f = prompt("Frame:");
-			Lines.currentFrame = f;
-			Lines.interface.updateFramesPanel();
-		},
-		key: "f"
-	}));
-
-	/* capture cycle */
-	capturePanel.add(new UIButton({
-		title: "Capture Cycle",
-		callback: self.captureCycle,
-		key: "ctrl-k"
-	}));
-
-	/* capture frames with no functions */
-	capturePanel.add(new UIButton({
-		title: "Capture Frame",
-		callback: function() {
-			self.captureFrames = 1;
-		},
-		key: "k"
-	}));
-
-	/* capture bg */
-	capturePanel.add(new UIToggleButton({
-		title: "Capture BG Color",
-		on: "Capture BG",
-		off: "Capture BG",
-		callback: function() {
-			self.captureWithBackground = !self.captureWithBackground
-		},
-		key: "n"
-	}));
-
-	/* capture multiple frames */
-	capturePanel.add(new UIButton({
-		title: "Capture Multiple Frames",
-		callback: function() {
-			self.captureFrames = prompt("Capture how many frames?");
-		},
-		key: "shift-k"
-	}));
-
-	/* drawing panel */
-	this.drawingPanel = new Panel("drawing-menu", "Drawings");
-
-	this.resetDrawingsPanel = function() {
-		while (self.drawingPanel.rows.length > 1) {
-			self.drawingPanel.removeRow( self.drawingPanel.rows[self.drawingPanel.rows.length - 1] );
-		}
-	}
-
-	this.drawingPanel.add(new UIButton({
-		title: "Update Drawings",
-		callback: function() {
-			/* have to regenerate this stuff to work with other frames */
-			self.resetDrawingsPanel();
-			for (let i = 0; i < Lines.drawings.length; i++) {
-				let layer; /* check if layer is in frame already */
-				if (Lines.frames[Lines.currentFrame]) {
-					for (let k = 0; k < Lines.frames[Lines.currentFrame].length; k++) {
-						if (i == Lines.frames[Lines.currentFrame][k].d)
-							layer = Lines.frames[Lines.currentFrame][k];
-					}
-				}
-				if (!layer) {
-					/* check all the frames */
-					for (let j = 0; j < Lines.frames.length; j++) {
-						const frame = Lines.frames[j];
-						for (let k = 0; k < frame.length; k++) {
-							if (i == frame[k].d) {
-								layer = frame[k];
-								break;
-							}
-						}
-					}
-				}
-				if (!layer) {
-					const drawing = Lines.drawings[i];
-					if (drawing != null) {
-						layer = {
-							d: i,
-							s: 0,
-							e: drawing.length,
-							c: '000000',
-							n: 2,
-							r: 1,
-							w: 0,
-							v: 0,
-							x: 0,
-							y: 0
-						}; /* defaults, maybe grab from existing layer? */
-					}
-				}
-				const row = self.drawingPanel.addRow(i + '-drawing-row');
-					
-				self.drawingPanel.add(new UIToggleButton({
-					title: i,
-					on: i,
-					off: i,
-					callback: function() {
-						if (layer)
-							self.layerToggle(layer);
-					}
-				}), row);
-
-				self.drawingPanel.add(new UIButton({
-					title: "+",
-					callback: function() {
-						Lines.data.saveLines();
-						if (Lines.frames[Lines.currentFrame] == undefined) 
-							Lines.frames[Lines.currentFrame] = [];
-						Lines.frames[Lines.currentFrame].push(layer);
-					}
-				}), row);
-
-				self.drawingPanel.add(new UIButton({
-					title: "-",
-					callback: function() {
-						Lines.data.saveLines();
-						if (Lines.frames[Lines.currentFrame]) {
-							const index = Lines.frames[Lines.currentFrame].indexOf(layer);
-							if (index != -1)
-								Lines.frames[Lines.currentFrame].splice(index, 1);
-						}
-					}
-				}), row);
-			}
-		}
-	}));
 }
 
 /*
@@ -457,5 +228,4 @@ function Draw() {
 	x: fr.x, 
 	y: fr.y, 
 	color: fr.c
-
 */

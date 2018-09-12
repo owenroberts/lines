@@ -106,7 +106,8 @@ function Color(id, title, callback) {
 		label: "HTML",
 		value: this.color,
 		callback: function(ev) {
-			if (ev.which == 13) self.setColor(this.value);
+			if (ev.which == 13) 
+				self.setColor(this.value);
 		}
 	});
 	panel.add(this.htmlColor);
