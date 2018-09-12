@@ -8,51 +8,51 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
-<div id="container">
-	<div id="draw" class="section">
-		<canvas id="canvas"></canvas>
+	<div id="container">
+		<div id="draw" class="section">
+			<canvas id="canvas"></canvas>
+		</div>
+		<div id="tools" class="section">
+
+			<div id="nav">
+				<input id="title" placeholder="title" type="text">
+				<span class="btn" id="open">Open</span>
+				<span class="btn" id="save">Save</span>
+				<span class="btn" id="save-frame">Save frame</span>
+			</div>
+			
+			<div id="panels">
+			</div>
+
+			<div id="frames" class="menu-panel">
+				<p>Frames</p>
+				<div id="current" class="plus">+</div>
+			</div>
+		</div>
 	</div>
-	<div id="tools" class="section">
 
-		<div id="nav">
-			<input id="title" placeholder="title" type="text">
-			<span class="btn" id="open">Open</span>
-			<span class="btn" id="save">Save</span>
-			<span class="btn" id="save-frame">Save frame</span>
-		</div>
-		
-		<div id="panels">
-		</div>
+	<!-- libraries -->
+	<script type="text/javascript" src="../lib/cool/cool.js"></script>
+	<script type="text/javascript" src="../lib/lodash.js"></script>
+	<script type="text/javascript" src="../lib/Blob.js"></script>
+	<script type="text/javascript" src="../lib/FileSaver.min.js"></script>
 
-		<div id="frames" class="menu-panel">
-			<p>Frames</p>
-			<div id="current" class="plus">+</div>
-		</div>
-	</div>
-</div>
+	<!-- modules -->
+	<script type="text/javascript" src="js/ui.js"></script>
+	<script type="text/javascript" src="js/canvas.js"></script>
+	<script type="text/javascript" src="js/background.js"></script>
+	<script type="text/javascript" src="js/draw_events.js"></script>
+	<script type="text/javascript" src="js/color.js"></script>
+	<script type="text/javascript" src="js/draw.js"></script>
+	<script type="text/javascript" src="js/data.js"></script>
+	<script type="text/javascript" src="js/files_io.js"></script>
 
-<!-- libraries -->
-<script type="text/javascript" src="../lib/cool/cool.js"></script>
-<script type="text/javascript" src="../lib/lodash.js"></script>
-<script type="text/javascript" src="../lib/Blob.js"></script>
-<script type="text/javascript" src="../lib/FileSaver.min.js"></script>
+	<!-- interfaces -->
+	<script type="text/javascript" src="js/interface.js"></script>
+	<script type="text/javascript" src="js/drawing_interface.js"></script>
 
-<!-- modules -->
-<script type="text/javascript" src="js/ui.js"></script>
-<script type="text/javascript" src="js/canvas.js"></script>
-<script type="text/javascript" src="js/background.js"></script>
-<script type="text/javascript" src="js/draw_events.js"></script>
-<script type="text/javascript" src="js/color.js"></script>
-<script type="text/javascript" src="js/draw.js"></script>
-<script type="text/javascript" src="js/data.js"></script>
-<script type="text/javascript" src="js/files_io.js"></script>
-
-<!-- interfaces -->
-<script type="text/javascript" src="js/interface.js"></script>
-<script type="text/javascript" src="js/drawing_interface.js"></script>
-
-
-<script type="text/javascript" src="lines.js"></script>
+	<!-- build the lines -->
+	<script type="text/javascript" src="lines.js"></script>
 
 </body>
 </html>
