@@ -1,4 +1,4 @@
-var Events = {
+const Events = {
 	init: function(canvas) {
 
 		var startX, startY, endX, endY, startTime;

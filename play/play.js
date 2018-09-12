@@ -1,7 +1,8 @@
 /* play module */
 function LinesPlayer(canvas, src, lps, callback) {
 	this.canvas = canvas;
-	if (!this.canvas) this.canvas = document.getElementById('lines');
+	if (!this.canvas) 
+		this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
 		this.canvas = document.createElement("canvas");
 		document.body.appendChild(this.canvas);
@@ -17,12 +18,13 @@ function LinesPlayer(canvas, src, lps, callback) {
 	this.playing = true;
 	
 	if (lps) this.lps = lps; // lines per second
-	else this.lps = 10;
-	this.lineInterval = 1000/this.lps;
+	else this.lps = 10; // default
+	this.lineInterval = 1000 / this.lps;
 	this.timer = performance.now();
 	this.intervalRatio = 1;
-	// initialize to one but this is the math
-	// this.lineInterval / (1000 / this.lps);  
+	/* 	initialize to one but this is the math
+	 this.lineInterval / (1000 / this.lps);    */
+
 	this.frames = [];
 	this.drawings = [];
 	this.ctxStrokeColor;
@@ -111,7 +113,6 @@ function LinesPlayer(canvas, src, lps, callback) {
 			this.scale = 1;
 
 		if (this.scale != 1) {
-
 			if (this.scale * this.width / (window.innerHeight - top) > this.width/this.height) {
 				this.canvas.height = window.innerHeight;
 				this.canvas.width = this.canvas.height * (this.width / this.height);
@@ -122,8 +123,7 @@ function LinesPlayer(canvas, src, lps, callback) {
 			}
 			this.ctx.scale(this.scale, this.scale);
 		}
-
-		this.ctxStrokeColor = undefined;
+		this.ctxStrokeColor = undefined; // color gets f*ed when resetting canvas
 	};
 
 	window.addEventListener('resize', this.sizeCanvas.bind(this), false);
@@ -132,7 +132,7 @@ function LinesPlayer(canvas, src, lps, callback) {
 		fetch(src)
 			.then(response => { return response.json() })
 			.then(data => {
-				this.frames =  data.f;
+				this.frames = data.f;
 				this.drawings = data.d;
 				this.intervalRatio = this.lineInterval / (1000 / data.fps);
 				this.currentFrame = this.currentFrameCounter = 0;
@@ -140,8 +140,8 @@ function LinesPlayer(canvas, src, lps, callback) {
 				this.height = this.canvas.height = data.h;
 				this.ctxStrokeColor = undefined; // note setting canvas width resets the color
 				this.ctx.miterLimit = 1;
-				if (data.mix)
-					this.mixedColors = data.mix;
+				if (data.mc)
+					this.mixedColors = data.mc;
 				if (data.bg)
 					this.canvas.style.backgroundColor = '#' + data.bg;
 				requestAnimFrame(this.draw.bind(this));
@@ -151,7 +151,8 @@ function LinesPlayer(canvas, src, lps, callback) {
 			});
 	};
 
-	if (src) this.loadAnimation(src, callback);
+	if (src) 
+		this.loadAnimation(src, callback);
 }
 
 function loadAnimation(src, canvas, callback) {

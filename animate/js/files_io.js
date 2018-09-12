@@ -19,6 +19,7 @@ function Files_IO(params) {
 		json.h = Math.floor( Number( Lines.canvas.height ));
 		json.fps = Number( Lines.draw.fps );
 		json.bg = Lines.canvas.bgColor.color;
+		console.log(Lines.lineColor.colors.length);
 		json.mc = Lines.lineColor.colors.length > 1 ? true : false;
 		json.f = [];
 		json.d = [];
@@ -79,15 +80,15 @@ function Files_IO(params) {
 			self.title.setValue(filename.split("/").pop());
 			fetch(filename + '.json')
 				.then(response => { return response.json() })
-
 				.then(data => {
+					console.log(data);
 					Lines.frames =  data.f;
 					Lines.drawings = data.d;
-					for (let i = 0; i < Lines.drawings.length; i++) {
-						/* unused drawings are null, this is okay, not looped
-						 	x for legacy compatibility */
-						if (Lines.drawings[i] && Lines.drawings[i] != 'x')
-							Lines.lineColor.addColorBtn( Lines.drawings[i].c );
+					for (let i = 0; i < Lines.frames.length; i++) {
+						const fr = Lines.frames[i];
+						for (let j = 0; j < fr.length; j++) {
+							Lines.lineColor.addColorBtn(fr[j].c);
+						}
 					}
 					Lines.canvas.setWidth(data.w);
 					Lines.canvas.setHeight(data.h);

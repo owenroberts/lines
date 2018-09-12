@@ -66,6 +66,7 @@ function Data() {
 				const frm = Lines.frames[frmIndex];
 				self.framesCopy[i] = [];
 				for (let h = 0; h < frm.length; h++) {
+					console.log(frm[h])
 					self.framesCopy[i].push(_.cloneDeep(frm[h]));
 				}
 			}
@@ -77,6 +78,7 @@ function Data() {
 				self.framesCopy.push([]);
 				/* clone all of the drawings in current frame */
 				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
+					console.log(Lines.frames[Lines.currentFrame][i])
 					self.framesCopy[0].push(_.cloneDeep(Lines.frames[Lines.currentFrame][i]));
 				}
 			}
@@ -197,6 +199,11 @@ function Data() {
 
 	/* save current state of frames and drawing - one undo */
 	this.saveState = function() {
+		/*
+			if save state already exists, save current to previous state
+			if not save previous to new
+			always save current to new 
+		*/
 		if (self.saveStates.current.drawings) {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
 			self.saveStates.prev.frames = _.cloneDeep(self.saveStates.current.frames);
@@ -212,7 +219,7 @@ function Data() {
 		self.saveStates.current.lines = _.cloneDeep(Lines.lines);
 	};
 
-	/* ctrl z - unimplemented save states 
+	/* ctrl z - undo one save state  
 		currently only works in some cases: after removing an drawing
 		actually super buggy */
 	this.undo = function() {
@@ -277,8 +284,6 @@ function Data() {
 		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
-			/* why is this backward? */
-			// for (let h = tempFrames.length - 1; h >= 0; h--) {
 			for (let h = 0; h < tempFrames.length; h++) {
 				const tempLines = Lines.drawings[tempFrames[h].d];
 				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
