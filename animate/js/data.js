@@ -553,7 +553,7 @@ function Data() {
 
 	/* select frame range */
 	editPanel.add(new UIButton({
-		title: "Select Some Frames",
+		title: "Select Frame Range",
 		key: "alt-v",
 		callback: function() {
 			const start = prompt("Start frame:");

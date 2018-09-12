@@ -1,6 +1,8 @@
 /* global Lines object */
 window.addEventListener("load", function() {
-	Lines = {};
+	
+	Lines = {}; // L ? 
+
 	// global parts used everywhere
 	Lines.lines = []; // lines currently being drawn
 	Lines.frames = [];
@@ -9,18 +11,23 @@ window.addEventListener("load", function() {
 	
 	// modules 
 	Lines.interface = new Interface();
-	// width height color, def color is black 000000
-	Lines.canvas = new Canvas(375, 667, "ffffff" ); 
+	Lines.canvas = new Canvas(375, 667, "ffffff" ); // width height color, default 000000
 	Lines.draw = new Draw();
 	Lines.data = new Data();
 	Lines.lineColor = new Color("color", "Line Color"); 
-	/*Lines.lineColor.setColor("ffffff");*/
-	Lines.drawEvents = new DrawEvents();
+	/* Lines.lineColor.setColor("ffffff"); */
+	Lines.drawEvents = new DrawEvents({
+		n: 2,
+		r: 1,
+		w: 0,
+		v: 0
+	});
 	Lines.fio = new Files_IO({
 		fit: false /* fit to canvas when saving */
 	});
-	Lines.layer = new Layer();
+
+	// interfaces 
+	Lines.drawingInterface = new DrawingInterface();
 	
-	// start, for some reason
-	Lines.draw.start();
+	Lines.draw.start(); // necessary ? 
 });

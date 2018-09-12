@@ -36,8 +36,8 @@ class UI {
 			observer.observe(params.observe.elem, { attributes: true });
 		}
 	}
-	addClass(clas) {
-		this.el.classList.add(clas);
+	addClass(c) {
+		this.el.classList.add(c);
 	}
 	setId(id) {
 		this.el.id = id;
@@ -228,6 +228,8 @@ class UIRange extends UI {
 		this.el.value = value;
 		if (this.display)
 			this.display.set(value);
+		if (this.input)
+			this.input.set(value);
 		this.el.blur();
 	}
 	
