@@ -30,21 +30,22 @@ function Background() {
 	}
 
 	/* interface */
-	const panel = new Panel("background", "Background Image");
+	const panel = new Panel("background-menu", "Background Image");
 
-	/* copy/paste url, no key */
-	panel.add( new UIText({
+	/* copy/paste url */
+	panel.add(new UIText({
 		title: "Add image URL hit enter",
 		callback: this.loadImage
-	}) );
+	}));
 	
-	/* toggle visibility of bkg */
-	panel.add( new UIToggleButton({
+	/* b - toggle visibility of bkg */
+	panel.add(new UIToggleButton({
+		title: "Hide Background",
 		callback: this.toggle, 
 		key: "b", 
 		on: "Hide", 
 		off: "Show" 
-	}) );
+	}));
 	
 	/* update x position */
 	this.xRange = new UIRange({

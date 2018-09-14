@@ -13,7 +13,8 @@ function Color(id, title, callback) {
 		const l = self.light.getValue();
 		let newColor = "hsl(" + h + "," + s + "%," + l + "%)";
 		self.color = Cool.hslToHex(newColor);
-		if (callback) callback(self.color); // for canvas
+		if (callback) 
+			callback(self.color); // for canvas
 		self.htmlColor.setValue(self.color);
 		self.colorPreview.setColor(self.color);
 		const bkgGrad = "linear-gradient(to right, hsl(0,"+s+"%,"+l+"%),hsl(60,"+s+"%,"+l+"%), hsl(120,"+s+"%,"+l+"%), hsl(180,"+s+"%,"+l+"%), hsl(240,"+s+"%,"+l+"%),hsl(300,"+s+"%,"+l+"%) 100%)";
@@ -54,11 +55,12 @@ function Color(id, title, callback) {
 		self.htmlColor.setValue(hex);
 		self.colorPreview.setColor(self.color);
 		self.updatePckrs();
-		if (callback) callback(self.color); // for canvas
+		if (callback) 
+			callback(self.color); // for canvas
 	};
 
 	/* interfaces */
-	const panel = new Panel(id, title);
+	const panel = new Panel(id + "-menu", title);
 
 	this.colorPreview = new UIColor({
 		color: this.color,
@@ -72,6 +74,7 @@ function Color(id, title, callback) {
 
 	this.hue = new UIRange({
 		label: "Hue",
+		display: id + "-hue",
 		min: 0,
 		max: 360,
 		value: 0,
@@ -81,6 +84,7 @@ function Color(id, title, callback) {
 
 	this.sat = new UIRange({
 		label: "Sat",
+		display: id + "-saturation",
 		min: 0,
 		max: 100,
 		value: 0,
@@ -90,6 +94,7 @@ function Color(id, title, callback) {
 
 	this.light = new UIRange({
 		label: "Light",
+		display: id + "-lightness",
 		min: 0,
 		max: 100,
 		value: 0,
@@ -101,7 +106,8 @@ function Color(id, title, callback) {
 		label: "HTML",
 		value: this.color,
 		callback: function(ev) {
-			if (ev.which == 13) self.setColor(this.value);
+			if (ev.which == 13) 
+				self.setColor(this.value);
 		}
 	});
 	panel.add(this.htmlColor);

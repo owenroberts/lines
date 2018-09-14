@@ -8,8 +8,8 @@ class Sprite {
 		this.debugColor = "#00ffbb";
 		this.drawBackground = false;
 		this.initPhysics();
+		// this.bkg = false; /* draw a filled in outline */
 	}
-	// this.bkg = false; /* draw a filled in outline */
 
 	/* make a physics class? */
 	initPhysics() {
@@ -81,7 +81,7 @@ class Sprite {
 	}
 
 	display() {
-		if (this.alive) {
+		if (this.alive && this.isOnScreen()) {
 			if (this.debug) {
 				this.ctx.beginPath();
 				this.ctx.lineWidth = 1;
@@ -103,7 +103,16 @@ class Sprite {
 			}
 		}
 	}
-	/* deprecating display two for now */
+
+	isOnScreen() {
+		if (this.position.x + this.width > 0 && 
+			this.position.y + this.height > 0 &&
+			this.position.x < Game.width &&
+			this.position.y < Game.height)
+			return true;
+		else
+			return false;
+	} /* from idtio item class */
 
 	center() {
 		this.position.x -= this.width / 2;
@@ -195,6 +204,4 @@ class Sprite {
 		this.position.x = Cool.randomInt(widthMin, widthMax - this.width);
 		this.position.y = Cool.randomInt(heightMin, heightMax);
 	}
-	
-	
 }

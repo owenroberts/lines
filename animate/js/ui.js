@@ -13,6 +13,19 @@ class UI {
 		}
 		if (params.event && params.callback)
 			this.el.addEventListener(params.event, params.callback);
+		
+		if (params.callback) 
+			this.callback = params.callback;
+		if (params.label) 
+			this.label = params.label;
+		if (params.value != undefined) 
+			this.el.value = params.value;
+
+		if (params.key) {
+			this.el.title = params.key; // hover title key text
+			Lines.interface.keyCommands[params.key] = this;
+		}
+
 		if (params.observe && params.callback) {
 			const observer = new MutationObserver(function(list) {
 				for (var mut of list) {
@@ -22,40 +35,9 @@ class UI {
 			});
 			observer.observe(params.observe.elem, { attributes: true });
 		}
-		if (params.callback) 
-			this.callback = params.callback;
-		if (params.label) 
-			this.label = params.label;
-		if (params.value != undefined) 
-			this.el.value = params.value;
-		
-		/* adding key commands to panel */
-		if (params.key) { 
-			Lines.interface.faces[params.key] = this;
-			const keyContainer = document.createElement("div");
-			keyContainer.classList.add("key-container");
-			const key = document.createElement("span");
-			key.classList.add("key");
-			if (params.key == "space")
-				key.textContent = "X";
-			else if (params.key.split("-").length > 1) {
-				const mod = {
-					"ctrl": "V",
-					"alt": "A",
-					"shift": "S"
-				}
-				key.textContent = mod[params.key.split("-")[0]] + params.key.split("-")[1]
-			} else
-				key.textContent = params.key;
-			const dek = document.createElement("span");
-			dek.textContent = params.title || params.id || params.label;
-			keyContainer.appendChild(key);
-			keyContainer.appendChild(dek);
-			Lines.interface.panels["keys"].el.appendChild(keyContainer);
-		}
 	}
-	addClass(clas) {
-		this.el.classList.add(clas);
+	addClass(c) {
+		this.el.classList.add(c);
 	}
 	setId(id) {
 		this.el.id = id;
@@ -66,9 +48,11 @@ class UI {
 	getValue() {
 		return this.el.value;
 	}
-	addLabel() {
+	addLabel(key) {
 		const label = document.createElement("span");
 		label.textContent = this.label;
+		if (this.el.title)
+			label.title = this.el.title;
 		this.el.parentNode.insertBefore(label, this.el);
 	}
 	append(elem) {
@@ -108,20 +92,38 @@ class Panel {
 			this.toggleBtn.innerHTML = "v";
 		}
 	}
-	addRow() {
+	addRow(id) {
 		const row = document.createElement("div");
 		row.classList.add("row");
+		if (id)
+			row.id = id;
 		this.el.appendChild(row);
 		this.rows.push(row);
 		return row;
 	}
-	add(component) {
-		const row = this.addRow();
+	removeRow(row) {
+		const index = this.rows.indexOf(row);
+		this.rows.splice(index, 1);
+		this.el.removeChild(row);
+	}
+	add(component, _row) {
+		let row = _row;
+		if (!row)
+			row = this.addRow();
 		row.appendChild(component.el);
 		if (component.label)
 			component.addLabel();
 		if (component.display)
 			this.rows[this.rows.length - 1].insertBefore(component.display.el, component.el);
+		if (component.input)
+			this.rows[this.rows.length - 1].insertBefore(component.input.el, component.el);
+	}
+	clearComponents(row) {
+		if (row) {
+			while (row.firstChild) {
+				row.removeChild(row.firstChild);
+			}
+		}
 	}
 }
 
@@ -154,6 +156,9 @@ class UIText extends UI {
 	reset(value) {
 		this.el.value = "";
 		this.el.placeholder = value;
+	}
+	set(value) {
+		this.el.value = value;
 	}
 }
 
@@ -190,20 +195,51 @@ class UIRange extends UI {
 		super(params);
 		this.el.type = "range";
 		this.setRange(params.min, params.max);
-		if (params.display)
+		if (params.input) {
+			this.input = new UIText({
+				id: params.display, 
+				value: params.value,
+				label: params.label,
+				placeholder: params.value,
+				blur: true,
+				callback: function (ev) {
+					if (ev.which == 13) {
+						params.callback(ev);
+						this.blur();
+					}
+				}
+			});
+			this.input.addClass('display');
+			this.el.addEventListener('input', () => {
+				this.input.set(this.getValue());
+			});
+		}
+		if (params.display) {
 			this.display = new UIDisplay({id:params.display,  initial:params.value});
+			this.el.addEventListener('input', () => {
+				this.display.set(this.getValue());
+			});
+		}
+		if (params.step)
+			this.setStep(params.step);
 	}
 
 	setValue(value) {
 		this.el.value = value;
 		if (this.display)
 			this.display.set(value);
+		if (this.input)
+			this.input.set(value);
 		this.el.blur();
 	}
 	
 	setRange(min, max) {
 		this.el.min = min;
 		this.el.max = max;	
+	}
+
+	setStep(step) {
+		this.el.step = step;
 	}
 }
 
@@ -234,10 +270,13 @@ class UIToggleButton extends UI {
 		this.el.addEventListener(params.event, this.toggleText.bind(this));
 	}
 	toggleText() {
-		if (this.isOn) 
+		if (this.isOn) {
 			this.el.textContent = this.off;
-		else 
+			this.el.style.backgroundColor = "gray";
+		} else {
 			this.el.textContent = this.on;
+			this.el.style.backgroundColor = "white";
+		}
 		this.isOn = !this.isOn;
 	}
 }
