@@ -7,11 +7,13 @@ function Data() {
 	this.saveStates = {
 		current: {
 			drawings: undefined,
-			frames: undefined
+			frames: undefined,
+			lines: undefined
 		},
 		prev: {
 			drawings: undefined,
-			frames: undefined
+			frames: undefined,
+			lines: undefined
 		}
 	};
 
@@ -133,7 +135,7 @@ function Data() {
 	this.clearFrame = function() {
 		self.saveState();
 		if (Lines.frames[Lines.currentFrame])
-			Lines.frames[Lines.currentFrame] = undefined;
+			Lines.frames[Lines.currentFrame] = [];
 		Lines.lines = [];
 	};
 
@@ -202,13 +204,16 @@ function Data() {
 		if (self.saveStates.current.drawings) {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
 			self.saveStates.prev.frames = _.cloneDeep(self.saveStates.current.frames);
+			self.saveStates.prev.lines = _.cloneDeep(self.saveStates.current.lines);
 		} else {
 			self.saveStates.prev.drawings = _.cloneDeep(Lines.drawings);
 			self.saveStates.prev.frames = _.cloneDeep(Lines.frames);
+			self.saveStates.prev.lines = _.cloneDeep(Lines.lines);
 		}
 
 		self.saveStates.current.drawings = _.cloneDeep(Lines.drawings);
 		self.saveStates.current.frames = _.cloneDeep(Lines.frames);
+		self.saveStates.current.lines = _.cloneDeep(Lines.lines);
 	};
 
 	/* ctrl z - unimplemented save states 
@@ -218,12 +223,15 @@ function Data() {
 		if (self.saveStates.prev.drawings) {
 			Lines.drawings = _.cloneDeep(self.saveStates.prev.drawings);
 			Lines.frames = _.cloneDeep(self.saveStates.prev.frames);
+			Lines.lines = _.cloneDeep(self.saveStates.prev.lines);
 
 			self.saveStates.current.drawings = _.cloneDeep(self.saveStates.prev.drawings);
 			self.saveStates.current.frames = _.cloneDeep(self.saveStates.prev.frames);
+			self.saveStates.current.lines = _.cloneDeep(self.saveStates.prev.lines);
 
 			self.saveStates.prev.drawings = undefined;
 			self.saveStates.prev.frames = undefined;
+			self.saveStates.prev.lines = undefined;
 			
 		} else {
 			console.log("%c Can't undo ", "color:lightblue;background:gray;");
