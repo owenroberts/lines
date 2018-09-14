@@ -159,7 +159,6 @@ class Animation {
 	}
 
 	updateFrame() {
-		/* this should all happen after it draws right? wtf */
 		if (this.debug) {
 			// console.log(this.state, this.states[this.state])
 			// console.log(this.currentFrame, this.currentFrameCounter, this.states[this.state].end);
