@@ -15,7 +15,6 @@ button:focus { outline: none; }
 }
 
 #container {
-/* 	min-width:720px; */
 	margin:1em;
 	display: flex;
 	flex-wrap: wrap;
@@ -119,9 +118,6 @@ button:focus { outline: none; }
 		&:hover {
 			background:lightgray;
 		}
-	}
-	input {
-		/* max-width: 80px; */
 	}
 	*[title]:hover:after, .key-down:after {
 		content: attr(title);

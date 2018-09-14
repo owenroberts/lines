@@ -42,16 +42,13 @@ function Interface() {
 				frmElem.classList.add("frame");
 				frmElem.textContent = i;
 				frmElem.dataset.index = i;
-				/* 
-					add drawing nums, 
-					do this later 
-					after figuring out lines/frames/drawings 
-				*/
+
 				/* click on frame, set the current frame */
 				frmElem.onclick = function(ev) {
 					Lines.currentFrame = Lines.draw.currentFrameCounter = i;
 					self.updateFrameNum();
 				};
+
 				/* right click, add/remove from copy frames */
 				frmElem.oncontextmenu = function(ev) {
 					ev.preventDefault();
@@ -62,6 +59,7 @@ function Interface() {
 						Lines.data.framesToCopy.push(i);
 					}
 				};
+
 				/* this is one time un-ui thing */
 				this.framesPanel.el.insertBefore(frmElem, self.plusFrame.el);
 			}
@@ -69,8 +67,7 @@ function Interface() {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
 			for (let i = numFrames; i > Lines.frames.length; i--){
-				/* remove html frame */
-				this.frameElems.remove(i-1);
+				this.frameElems.remove(i-1); /* remove html frame */
 			}
 		}
 		this.updateFrameNum();

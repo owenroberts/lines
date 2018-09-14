@@ -15,7 +15,7 @@ window.addEventListener("load", function() {
 	Lines.draw = new Draw();
 	Lines.data = new Data();
 	Lines.lineColor = new Color("color", "Line Color"); 
-	/* Lines.lineColor.setColor("ffffff"); */
+	/* Lines.lineColor.setColor("ffffff"); */ // set line color white
 	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 0, v: 0 }); // defaults
 	Lines.fio = new Files_IO({
 		fit: false /* fit to canvas when saving */
