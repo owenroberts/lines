@@ -111,25 +111,26 @@ function LinesPlayer(canvas, src, lps, callback) {
 	window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 
 	this.loadAnimation = function(src, callback) {
-		const self = this;
-		$.getJSON(src, function(data) {
-			self.frames =  data.f;
-			self.drawings = data.d;
-			self.intervalRatio = self.lineInterval / (1000 / data.fps);
-			self.currentFrame = self.currentFrameCounter = 0;
-			self.width = self.canvas.width = data.w;
-			self.height = self.canvas.height = data.h;
-			self.ctxStrokeColor = undefined; // note setting canvas width resets the color
-			self.ctx.miterLimit = 1;
-			if (data.mix)
-				self.mixedColors = data.mix;
-			if (data.bg)
-				self.canvas.style.backgroundColor = '#' + data.bg;
-			requestAnimFrame(self.draw.bind(self));
-			self.sizeCanvas();
-			if (callback) callback(); // callback to do something after drawing loads
-			console.log(self);
-		});
+		fetch(src)
+			.then(response => { return response.json() })
+			.then(data => {
+				this.frames =  data.f;
+				this.drawings = data.d;
+				this.intervalRatio = this.lineInterval / (1000 / data.fps);
+				this.currentFrame = this.currentFrameCounter = 0;
+				this.width = this.canvas.width = data.w;
+				this.height = this.canvas.height = data.h;
+				this.ctxStrokeColor = undefined; // note setting canvas width resets the color
+				this.ctx.miterLimit = 1;
+				if (data.mix)
+					this.mixedColors = data.mix;
+				if (data.bg)
+					this.canvas.style.backgroundColor = '#' + data.bg;
+				requestAnimFrame(this.draw.bind(this));
+				this.sizeCanvas();
+				if (callback) 
+					callback(); // callback to do something after drawing loads
+			});
 	};
 
 	if (src) this.loadAnimation(src, callback);
