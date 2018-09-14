@@ -25,7 +25,7 @@ function Canvas(width, height, color) {
 
 	/* update canvas width */
 	this.setWidth = function(width) {
-		if (Number(width)) {
+		if (+width) {
 			self.width = self.canvas.width = width;
 		} else {
 			if (self.widthInput.getValue()) 
@@ -38,7 +38,7 @@ function Canvas(width, height, color) {
 
 	/* update canvas height */
 	this.setHeight = function(height) {
-		if (Number(height)) {
+		if (+height) {
 			self.height = self.canvas.height = height;
 		} else {
 			if (self.heightInput.getValue()) 
@@ -115,7 +115,7 @@ function Canvas(width, height, color) {
 	};
 
 	/* interface */
-	const panel = new Panel("canvasmenu", "Canvas");
+	const panel = new Panel("canvas-menu", "Canvas");
 
 	/* update canvas width */
 	this.widthInput = new UIText({
@@ -165,9 +165,10 @@ function Canvas(width, height, color) {
 	});
 	panel.add(this.heightInput);
 
-	panel.add( new UIButton({
+	/* fit canvas to drawing */
+	panel.add(new UIButton({
 		title: "Fit Canvas to Drawing",
 		callback: self.fitCanvasToDrawing,
 		key: "shift-f"
-	}) );
+	}));
 }

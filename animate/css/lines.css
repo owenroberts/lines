@@ -78,7 +78,9 @@ button:focus {
     margin-bottom: 1em; }
   .menu-panel .row {
     margin-bottom: 2px;
-    display: flex; }
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap; }
     .menu-panel .row span {
       vertical-align: top;
       line-height: 2;
@@ -86,6 +88,9 @@ button:focus {
       margin-right: 0.25em; }
     .menu-panel .row input {
       width: 100%; }
+    .menu-panel .row input.display {
+      width: 30px;
+      margin-left: 5px; }
     .menu-panel .row .btn {
       padding: 0 3px; }
   .menu-panel .btn {
@@ -98,18 +103,28 @@ button:focus {
       background: lightgray; }
   .menu-panel input {
     /* max-width: 80px; */ }
+  .menu-panel *[title]:hover:after, .menu-panel .key-down:after {
+    content: attr(title);
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: lightblue;
+    border: 1px dashed blue;
+    border-radius: 2px;
+    padding: 1px 3px;
+    color: black; }
 
-#colormenu input, #canvasmenu input {
+#color-menu input, #canvas-menu input {
   display: inline-block;
   /* width:100px; */ }
-#colormenu #html-color, #colormenu #bkg-img, #colormenu #bkg-x, #colormenu #bkg-y, #colormenu #bkg-size, #canvasmenu #html-color, #canvasmenu #bkg-img, #canvasmenu #bkg-x, #canvasmenu #bkg-y, #canvasmenu #bkg-size {
+#color-menu #html-color, #color-menu #bkg-img, #color-menu #bkg-x, #color-menu #bkg-y, #color-menu #bkg-size, #canvas-menu #html-color, #canvas-menu #bkg-img, #canvas-menu #bkg-x, #canvas-menu #bkg-y, #canvas-menu #bkg-size {
   width: 80px; }
-#colormenu #colorways, #canvasmenu #colorways {
+#color-menu #colorways, #canvas-menu #colorways {
   margin-top: 0.5em; }
-  #colormenu #colorways button, #canvasmenu #colorways button {
+  #color-menu #colorways button, #canvas-menu #colorways button {
     padding: 2px;
     border: 1px solid lightgray; }
-    #colormenu #colorways button:hover, #canvasmenu #colorways button:hover {
+    #color-menu #colorways button:hover, #canvas-menu #colorways button:hover {
       cursor: pointer; }
 
 .ui-color {
@@ -141,12 +156,5 @@ button:focus {
     background-color: lightblue !important; }
   #frames .copy {
     background-color: pink !important; }
-
-#keys {
-  /* width: auto;
-  min-width:100%; */
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
 
 /*# sourceMappingURL=lines.css.map */

@@ -1,20 +1,28 @@
-function Files_IO() {
+function Files_IO(params) {
 	const self = this;
 
 	this.saveFilesEnabled = false;
 
-	/* s key - shif-s for single */
+	/* s key - shift-s for single */
 	this.saveFramesToFile = function(single) {
 		Lines.data.saveLines();
 
+		if (params.fit) {
+			const fit = confirm("Fit canvas?");
+			if (fit)
+				Lines.canvas.fitCanvasToDrawing();
+		}
+
 		const json = {};
-		json.v = "2.0";
-		json.w = Number( Lines.canvas.width );
-		json.h = Number( Lines.canvas.height );
-		json.fps = Number( Lines.draw.fps );
+		json.v = "2.1";
+		json.w = Math.floor(+Lines.canvas.width);
+		json.h = Math.floor(+Lines.canvas.height);
+		json.fps = +Lines.draw.fps;
 		json.bg = Lines.canvas.bgColor.color;
+		json.mc = Lines.lineColor.colors.length > 1 ? true : false;
 		json.f = [];
 		json.d = [];
+
 		let drawingsIndexes = [];
 
 		/* save current frame */  
@@ -25,12 +33,24 @@ function Files_IO() {
 					drawingsIndexes.push( Lines.frames[Lines.currentFrame][j].d );
 			}
 		} else {
-			/* save fall frames */
+			/* save all frames */
 			json.f = Lines.frames;
 			for (let i = 0; i < Lines.frames.length; i++) {
 				for (let j = 0; j < Lines.frames[i].length; j++) {
 					if ( drawingsIndexes.indexOf(Lines.frames[i][j].d) == -1 ) 
 						drawingsIndexes.push( Lines.frames[i][j].d );
+				}
+
+				/* get rid of layer info */
+				for (let j = 0; j < Lines.frames[i].length; j++) {
+					const layer = Lines.frames[i][j];
+					if (layer.prevColor) {
+						if (layer.c != layer.prevColor) {
+							layer.c = layer.prevColor
+						}
+						delete layer.prevColor;
+					}
+					delete layer.toggled;
 				}
 			}
 		}
@@ -59,15 +79,15 @@ function Files_IO() {
 			self.title.setValue(filename.split("/").pop());
 			fetch(filename + '.json')
 				.then(response => { return response.json() })
-
 				.then(data => {
+					console.log(data);
 					Lines.frames =  data.f;
 					Lines.drawings = data.d;
-					for (let i = 0; i < Lines.drawings.length; i++) {
-						/* unused drawings are null, this is okay, not looped
-						 	x for legacy compatibility */
-						if (Lines.drawings[i] && Lines.drawings[i] != 'x')
-							Lines.lineColor.addColorBtn( Lines.drawings[i].c );
+					for (let i = 0; i < Lines.frames.length; i++) {
+						const fr = Lines.frames[i];
+						for (let j = 0; j < fr.length; j++) {
+							Lines.lineColor.addColorBtn(fr[j].c);
+						}
 					}
 					Lines.canvas.setWidth(data.w);
 					Lines.canvas.setHeight(data.h);
@@ -75,6 +95,18 @@ function Files_IO() {
 					if (data.bg)  // legacy compatible
 						Lines.canvas.bgColor.setColor(data.bg);
 					Lines.draw.reset();
+
+					/* add wiggle params to old files */
+					for (let i = 0; i < Lines.frames.length; i++) {
+						const frame = Lines.frames[i];
+						for (let j = 0; j < frame.length; j++) {
+							const layer = frame[j];
+							if (!layer.w)
+								layer.w = 0;
+							if (!layer.v)
+								layer.v = 0;
+						}
+					}
 				})
 				.catch(error => { console.log(error.message) });
 		}
@@ -107,6 +139,7 @@ function Files_IO() {
 	});
 	
 	this.title = new UI({id:"title"});
+	/* save with enter? */
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		self.saveFilesEnabled = true;

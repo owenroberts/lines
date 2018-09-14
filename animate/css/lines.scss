@@ -15,7 +15,6 @@ button:focus { outline: none; }
 }
 
 #container {
-/* 	min-width:720px; */
 	margin:1em;
 	display: flex;
 	flex-wrap: wrap;
@@ -78,8 +77,6 @@ button:focus { outline: none; }
 	font-weight: 100;
 }
 
-
-
 .menu-panel {
 	border-top: 1px solid lightgray;
 	border-right: 1px solid lightgray;
@@ -93,6 +90,8 @@ button:focus { outline: none; }
 	.row {
 		margin-bottom: 2px;
 		display: flex;
+		flex-direction: row;
+    	flex-wrap: wrap;
 		span {
 			vertical-align: top;
 			line-height: 2;
@@ -101,6 +100,10 @@ button:focus { outline: none; }
 		}
 		input {
 			width: 100%;
+		}
+		input.display {
+			width: 30px;
+			margin-left: 5px;
 		}
 		.btn {
 			padding: 0 3px;
@@ -116,12 +119,20 @@ button:focus { outline: none; }
 			background:lightgray;
 		}
 	}
-	input {
-		/* max-width: 80px; */
+	*[title]:hover:after, .key-down:after {
+		content: attr(title);
+		position: fixed;
+		top: 20px;
+		right: 20px;
+		background: lightblue;
+		border: 1px dashed blue;
+		border-radius: 2px;
+		padding: 1px 3px;
+		color: black;
 	}
 }
 
-#colormenu, #canvasmenu {
+#color-menu, #canvas-menu {
 	input {
 		display:inline-block;
 		/* width:100px; */
@@ -138,10 +149,10 @@ button:focus { outline: none; }
 }
 
 .ui-color {
-	width:100%;
+	width: 100%;
 	height: 2em;
-	border:1px solid gray;
-	margin-bottom:1em;
+	border: 1px solid gray;
+	margin-bottom: 1em;
 }
 
 #frames {
@@ -168,12 +179,4 @@ button:focus { outline: none; }
 	}
 	#current { background-color: lightblue !important; }
 	.copy { background-color: pink !important; }
-}
-
-#keys {
-	/* width: auto;
-	min-width:100%; */
-	position: relative;
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
 }

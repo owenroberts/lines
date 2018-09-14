@@ -2,9 +2,10 @@ function Interface() {
 	let self = this;
 
 	this.panels = {}; 
-	this.faces = {}; /* parts of the interface? */
+	this.keyCommands = {}; /* parts of the interface? */
 
 	this.framesPanel = new UI({id:"frames"});
+	this.frameElems = new UIList({class:"frame"});
 	/* plus frame is unsaved drawing frame */
 	this.plusFrame = new UI({
 		id:"current",
@@ -13,8 +14,20 @@ function Interface() {
 			Lines.currentFrame = Lines.frames.length;
 			self.updateFrameNum();
 		}
-	}); 
-	this.frameElems = new UIList({class:"frame"});
+	});
+	this.keyCommands['p'] = this.plusFrame; /* can't add key command bc this module doesn't exist yet */
+
+	this.back = new UI({
+		id: 'back',
+		callback: function() {
+			Lines.currentFrame = self.currentFrameCounter = 0;
+			Lines.interface.updateFramesPanel();
+			Lines.interface.updateFramesPanel();
+			Lines.drawingInterface.resetLayers();
+			Lines.drawingInterface.resetDrawingsPanel();
+		}
+	});
+	this.keyCommands['backslash'] = this.back;
 
 	/* updates the frame panel representation of frames, 
 		sets current frame, 
@@ -29,16 +42,13 @@ function Interface() {
 				frmElem.classList.add("frame");
 				frmElem.textContent = i;
 				frmElem.dataset.index = i;
-				/* 
-					add drawing nums, 
-					do this later 
-					after figuring out lines/frames/drawings 
-				*/
+
 				/* click on frame, set the current frame */
 				frmElem.onclick = function(ev) {
 					Lines.currentFrame = Lines.draw.currentFrameCounter = i;
 					self.updateFrameNum();
 				};
+
 				/* right click, add/remove from copy frames */
 				frmElem.oncontextmenu = function(ev) {
 					ev.preventDefault();
@@ -49,6 +59,7 @@ function Interface() {
 						Lines.data.framesToCopy.push(i);
 					}
 				};
+
 				/* this is one time un-ui thing */
 				this.framesPanel.el.insertBefore(frmElem, self.plusFrame.el);
 			}
@@ -56,8 +67,7 @@ function Interface() {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
 			for (let i = numFrames; i > Lines.frames.length; i--){
-				/* remove html frame */
-				this.frameElems.remove(i-1);
+				this.frameElems.remove(i-1); /* remove html frame */
 			}
 		}
 		this.updateFrameNum();
@@ -65,7 +75,7 @@ function Interface() {
 
 	/* update frame display and current frame */
 	this.updateFrameNum = function() {
-		Lines.draw.frameNumDisplay.set(Lines.currentFrame);
+		Lines.drawingInterface.frameNumDisplay.set(Lines.currentFrame);
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[Lines.currentFrame]) // also un-ui
@@ -81,6 +91,8 @@ function Interface() {
 		if (Lines.currentFrame < Lines.frames.length) 
 			Lines.currentFrame++;
 		self.updateFramesPanel();
+		Lines.drawingInterface.resetLayers();
+		Lines.drawingInterface.resetDrawingsPanel();
 	};
 
 	/* w key - got to previous frame */
@@ -90,6 +102,8 @@ function Interface() {
 		if (Lines.currentFrame > 0) 
 			Lines.currentFrame--;
 		self.updateFramesPanel();
+		Lines.drawingInterface.resetLayers();
+		Lines.drawingInterface.resetDrawingsPanel();
 	};
 
 	/* keyboard events and handlers */
@@ -97,21 +111,26 @@ function Interface() {
 		let k = Cool.keys[ev.which];
 		if (k == "space" || k == "tab") 
 			ev.preventDefault();
-		if (document.activeElement.nodeName != "INPUT") {
+		if (document.activeElement.type != "text") {
 			
 			if (ev.shiftKey) k = "shift-" + k;
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
-			if (self.faces[k]) {
-				self.faces[k].callback(ev);
-				if (self.faces[k].toggleText) {
-					self.faces[k].toggleText();
+			if (self.keyCommands[k]) {
+				self.keyCommands[k].callback(ev);
+				//  self.keyCommands[k].addClass('key-down'); show key presses?
+				if (self.keyCommands[k].toggleText) {
+					self.keyCommands[k].toggleText();
 				}
+			}
+		} else if (document.activeElement.id == 'title') {
+			if (k == 'enter') {
+				Lines.fio.saveFramesToFile();
+				document.activeElement.blur();
+				
 			}
 		}
 	}
 	document.addEventListener("keydown", self.keyDown, false);
-
-	this.panels["keys"] = new Panel("keys", "Key commands");
 }

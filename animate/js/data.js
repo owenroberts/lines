@@ -20,9 +20,9 @@ function Data() {
 	/* right click drag or shift v 
 		add frame num to the list of frames to copy */
 	this.addFrameToCopy = function(elem) {
-		if (!elem.classList.contains("copy")){
+		if (!elem.classList.contains("copy")) {
  			elem.classList.add("copy");
- 			self.framesToCopy.push( Number(elem.dataset.index) );
+ 			self.framesToCopy.push(+elem.dataset.index);
  		}
 	};
 
@@ -42,24 +42,18 @@ function Data() {
 				c: Lines.lineColor.color, // color
 				n: Lines.drawEvents.segNumRange, // segment number
 				r: Lines.drawEvents.jiggleRange, // jiggle ammount
+				w: Lines.drawEvents.wiggleRange, // wiggle amount
+				v: Lines.drawEvents.wiggleSpeed, // wiggle change speed (v for velocity i guess)
 				x: 0, // default x and y
 				y: 0
 			});
 			
-			/* add current lines to drawing data */
-			Lines.drawings.push(Lines.lines);
-
-			/* add current color to color choices */
-			Lines.lineColor.addColorBtn(Lines.lineColor.color);
-
-			/* lines are saved, stop drawing? */
-			Lines.lines = [];
-
-			/* update interface */
-			Lines.interface.updateFramesPanel();
+			Lines.drawings.push(Lines.lines); /* add current lines to drawing data */
+			Lines.lineColor.addColorBtn(Lines.lineColor.color); /* add current color to color choices */
+			Lines.lines = []; /* lines are saved, stop drawing? */
+			Lines.interface.updateFramesPanel(); /* update interface */
 		}
-		/* save current state - one undo currently*/
-		self.saveState();
+		self.saveState(); /* save current state - one undo currently */
 	};
 	
 	/* c key  */
@@ -72,6 +66,7 @@ function Data() {
 				const frm = Lines.frames[frmIndex];
 				self.framesCopy[i] = [];
 				for (let h = 0; h < frm.length; h++) {
+					console.log(frm[h])
 					self.framesCopy[i].push(_.cloneDeep(frm[h]));
 				}
 			}
@@ -83,6 +78,7 @@ function Data() {
 				self.framesCopy.push([]);
 				/* clone all of the drawings in current frame */
 				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
+					console.log(Lines.frames[Lines.currentFrame][i])
 					self.framesCopy[0].push(_.cloneDeep(Lines.frames[Lines.currentFrame][i]));
 				}
 			}
@@ -112,12 +108,14 @@ function Data() {
 			}
 			self.clearFramesToCopy();
 		} else {
-			if (Lines.frames[Lines.currentFrame] == undefined) {
-				if (Lines.lines.length > 0) self.saveLines();
-				else Lines.frames[Lines.currentFrame] = [];
-			}
-			for (let i = 0; i <  self.framesCopy[0].length; i++) {
-				Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[0][i]) );
+			if (self.framesCopy[0]) {
+				if (Lines.frames[Lines.currentFrame] == undefined) {
+					if (Lines.lines.length > 0) self.saveLines();
+					else Lines.frames[Lines.currentFrame] = [];
+				}
+				for (let i = 0; i <  self.framesCopy[0].length; i++) {
+					Lines.frames[Lines.currentFrame].push( _.cloneDeep(self.framesCopy[0][i]) );
+				}
 			}
 		}
 	};
@@ -201,6 +199,11 @@ function Data() {
 
 	/* save current state of frames and drawing - one undo */
 	this.saveState = function() {
+		/*
+			if save state already exists, save current to previous state
+			if not save previous to new
+			always save current to new 
+		*/
 		if (self.saveStates.current.drawings) {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
 			self.saveStates.prev.frames = _.cloneDeep(self.saveStates.current.frames);
@@ -216,7 +219,7 @@ function Data() {
 		self.saveStates.current.lines = _.cloneDeep(Lines.lines);
 	};
 
-	/* ctrl z - unimplemented save states 
+	/* ctrl z - undo one save state  
 		currently only works in some cases: after removing an drawing
 		actually super buggy */
 	this.undo = function() {
@@ -259,9 +262,9 @@ function Data() {
 		/* can't save state, saves multiple times */
 		self.framesCopy = [];
 		self.clearFramesToCopy();
-		let n = prompt("Number of copies: ");
+		let n = +prompt("Number of copies: ");
 		self.copyFrames();
-		if (Number(n)) {
+		if (n) {
 			for (let i = 0; i < n; i++) {
 				Lines.interface.nextFrame();
 				self.pasteFrames();
@@ -278,10 +281,10 @@ function Data() {
 	this.explode = function(follow, over) {
 		self.saveLines();
 		/* can't undo multiple saves */
-		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
+		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
-			for (let h = tempFrames.length - 1; h >= 0; h--) {
+			for (let h = 0; h < tempFrames.length; h++) {
 				const tempLines = Lines.drawings[tempFrames[h].d];
 				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
 					if (!over) {
@@ -294,20 +297,43 @@ function Data() {
 					else if (!over) 
 						self.saveLines();
 
+					/* add previous drawings 
+						add another parameter for separating drawings? 
+						i think that exists in reverse draw? */
+					if (!follow) {
+						for (let j = 0; j < h; j++) {
+							Lines.frames[Lines.currentFrame].push({
+								d: tempFrames[j].d,
+								s: 0,
+								e: Lines.drawings[tempFrames[j].d].length,
+								c: tempFrames[j].c,
+								n: tempFrames[j].n,
+								r: tempFrames[j].r,
+								x: tempFrames[j].x,
+								y: tempFrames[j].y,
+								w: tempFrames[j].w,
+								v: tempFrames[j].v
+							});
+						}
+					}
+					
 					Lines.frames[Lines.currentFrame].push({
 						d: tempFrames[h].d,
 						s: follow ? i : 0,
-						e: i + segmentsPerFrame,
+						e: Math.min(tempLines.length, i + segmentsPerFrame), /* maybe fix error */
 						c: tempFrames[h].c,
 						n: tempFrames[h].n,
 						r: tempFrames[h].r,
 						x: tempFrames[h].x,
-						y: tempFrames[h].y
+						y: tempFrames[h].y,
+						w: tempFrames[h].w,
+						v: tempFrames[h].v
 					});
 
 					if (over)
 						Lines.interface.nextFrame();
 				}
+
 			}
 			Lines.interface.updateFramesPanel();
 		}
@@ -318,7 +344,7 @@ function Data() {
 		simultaneous draw multi drawings at one  (multi) */
 	this.reverse = function(simultaneous) {
 		self.saveLines();
-		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
+		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			const totalSegments = Lines.frames[Lines.currentFrame]
@@ -344,7 +370,9 @@ function Data() {
 							n: tempFrames[j].n,
 							r: tempFrames[j].r,
 							x: tempFrames[j].x,
-							y: tempFrames[j].y
+							y: tempFrames[j].y,
+							w: tempFrames[j].w,
+							v: tempFrames[j].v,
 						});
 						framesAdded = true;
 					}
@@ -363,15 +391,16 @@ function Data() {
 		self.saveLines();
 		self.saveState();
 		if (!offset.x && !offset.y) {
-			const x = Number(prompt("x"));
-			const y = Number(prompt("y"));
+			const x = +prompt("x");
+			const y = +prompt("y");
 			offset = new Cool.Vector(x,y);
 		}
 		if (offset) {
+			/* ERROR if there are zero layers ... */
 			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
 				const fr = Lines.frames[Lines.currentFrame][i];
-				fr.x = offset.x;
-				fr.y = offset.y;
+				fr.x += offset.x;
+				fr.y += offset.y;
 			}
 		}
 	};
@@ -382,124 +411,142 @@ function Data() {
 		explode and reverse could be transformations? 
 		removing, adding, changing frames 
 		offset and canvas size */
-	const panel = new Panel("data", "Data");
+	const editPanel = new Panel("data-menu", "Edit");
+	const explodePanel = new Panel("explode-menu", "Explode");
 
-	panel.add( new UIButton({
+	/* explode */
+	explodePanel.add(new UIButton({
 		title: "Explode",
 		callback: function() {
 			self.explode(false, false);
 		},
 		key: "a"
-	}) );
+	}));
 	
-	panel.add( new UIButton({
+	/* explode over */
+	explodePanel.add(new UIButton({
 		title: "Explode Over",
 		callback: function() {
 			self.explode(false, true);
 		},
 		key: "shift-a"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* follow */
+	explodePanel.add(new UIButton({
 		title: "Follow",
 		callback: function() {
 			self.explode(true, false);
 		},
 		key: "ctrl-a"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* follow over */
+	explodePanel.add(new UIButton({
 		title: "Follow Over",
 		callback: function() {
 			self.explode(true, true);
 		},
 		key: "alt-a"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* reverse draw */
+	explodePanel.add(new UIButton({
 		title: "Reverse Draw",
 		callback: function() {
 			self.reverse(false);
 		},
 		key: "shift-r"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* reverse multi  */
+	explodePanel.add(new UIButton({
 		title: "Reverse Multi",
 		callback: function() {
 			self.reverse(true);
 		},
 		key: "alt-r"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* copy */
+	editPanel.add(new UIButton({
 		title: "Copy",
 		callback: self.copyFrames,
 		key: "c"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* delete frame */
+	editPanel.add(new UIButton({
 		title: "Delete Frame",
 		callback: self.deleteFrame,
 		key: "d"
 	}));
 
-	panel.add( new UIButton({
+	/* delete frame range */
+	editPanel.add(new UIButton({
 		title: "Delete Frame Range",
 		callback: self.deleteFrameRange,
 		key: "shift-d"
 	}));
 
 	/* duplicate will be unnecessary when frames/drawings are fixed */
-	panel.add( new UIButton({
+	editPanel.add(new UIButton({
 		title: "Duplicate",
 		callback: self.duplicate,
 		key: "g"
-	}) );
+	}));
 
-	panel.add( new UIButton({
-		title: "Insert",
+	/* insert before */
+	editPanel.add(new UIButton({
+		title: "Insert Before",
 		callback: self.insertFrameBefore,
 		key: "i"
-	}) );
+	}));
 
-	panel.add( new UIButton({
-		title: "Insert",
+	/* insert after */
+	editPanel.add(new UIButton({
+		title: "Insert After ",
 		callback: self.insertFrameAfter,
 		key: "shift-i"
 	}) );
 
-	panel.add( new UIButton({
+	/* multi copies */
+	editPanel.add( new UIButton({
 		title: "Multi Copies",
 		callback: self.addMultipleCopies,
 		key: "m"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* offset */
+	editPanel.add(new UIButton({
 		title: "Offset",
 		callback: self.offsetDrawing,
 		key: "q"
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* save lines */
+	editPanel.add(new UIButton({
 		title: "Save Lines",
 		key:"r",
 		callback: self.saveLines
 	}));
 
-	panel.add( new UIButton({
+	/* clear frame */
+	editPanel.add(new UIButton({
 		title: "Clear Frame",
 		key:"x",
 		callback: self.clearFrame
 	}));
 
-	panel.add( new UIButton({
+	/* paste frames */
+	editPanel.add(new UIButton({
 		title: "Paste Frames",
 		key: "v",
 		callback: self.pasteFrames
 	}));
 
-	panel.add( new UIButton({
+	/* select all frames */
+	editPanel.add(new UIButton({
 		title: "Select All Frames",
 		key: "shift-v",
 		callback: function() {
@@ -509,8 +556,9 @@ function Data() {
 		}
 	}));
 
-	panel.add( new UIButton({
-		title: "Select Some Frames",
+	/* select frame range */
+	editPanel.add(new UIButton({
+		title: "Select Frame Range",
 		key: "alt-v",
 		callback: function() {
 			const start = prompt("Start frame:");
@@ -521,39 +569,45 @@ function Data() {
 		}
 	}));
 
-	panel.add( new UIButton({
+	/* clear selected frames  */
+	editPanel.add(new UIButton({
 		title: "Clear Frames to Copy",
 		key: "ctrl-v",
 		callback: self.clearFramesToCopy
-	}) );
+	}));
 
-	panel.add( new UIButton({
-		title: "Cut Last Drawing",
+	/* cut last layer */
+	editPanel.add(new UIButton({
+		title: "Cut Last Layer",
 		key: "shift-x",
 		callback: self.cutLastDrawing
-	}) );
+	}));
 
-	panel.add( new UIButton({
-		title: "Cut First Drawing",
+	/* cut first layer */
+	editPanel.add(new UIButton({
+		title: "Cut First Layer",
 		key: "ctrl-x",
 		callback: self.cutFirstDrawing
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* cut line segment */
+	editPanel.add(new UIButton({
 		title: "Cut Line",
 		key: "z",
 		callback: self.cutLastSegment
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* cut range of segments */
+	editPanel.add(new UIButton({
 		title: "Cut Segment Num",
 		key: "shift-z",
 		callback: self.cutLastSegmentNum
-	}) );
+	}));
 
-	panel.add( new UIButton({
+	/* undo */
+	editPanel.add(new UIButton({
 		title: "Undo",
 		key: "ctrl-z",
 		callback: self.undo
-	}) );
+	}));
 }
