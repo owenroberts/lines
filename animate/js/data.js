@@ -20,9 +20,9 @@ function Data() {
 	/* right click drag or shift v 
 		add frame num to the list of frames to copy */
 	this.addFrameToCopy = function(elem) {
-		if (!elem.classList.contains("copy")){
+		if (!elem.classList.contains("copy")) {
  			elem.classList.add("copy");
- 			self.framesToCopy.push( Number(elem.dataset.index) );
+ 			self.framesToCopy.push(+elem.dataset.index);
  		}
 	};
 
@@ -262,9 +262,9 @@ function Data() {
 		/* can't save state, saves multiple times */
 		self.framesCopy = [];
 		self.clearFramesToCopy();
-		let n = prompt("Number of copies: ");
+		let n = +prompt("Number of copies: ");
 		self.copyFrames();
-		if (Number(n)) {
+		if (n) {
 			for (let i = 0; i < n; i++) {
 				Lines.interface.nextFrame();
 				self.pasteFrames();
@@ -281,7 +281,7 @@ function Data() {
 	this.explode = function(follow, over) {
 		self.saveLines();
 		/* can't undo multiple saves */
-		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
+		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			for (let h = 0; h < tempFrames.length; h++) {
@@ -344,7 +344,7 @@ function Data() {
 		simultaneous draw multi drawings at one  (multi) */
 	this.reverse = function(simultaneous) {
 		self.saveLines();
-		const segmentsPerFrame = Number(prompt("Enter number of segments per frame: "));
+		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			const totalSegments = Lines.frames[Lines.currentFrame]
@@ -391,8 +391,8 @@ function Data() {
 		self.saveLines();
 		self.saveState();
 		if (!offset.x && !offset.y) {
-			const x = Number(prompt("x"));
-			const y = Number(prompt("y"));
+			const x = +prompt("x");
+			const y = +prompt("y");
 			offset = new Cool.Vector(x,y);
 		}
 		if (offset) {

@@ -25,7 +25,7 @@ function Canvas(width, height, color) {
 
 	/* update canvas width */
 	this.setWidth = function(width) {
-		if (Number(width)) {
+		if (+width) {
 			self.width = self.canvas.width = width;
 		} else {
 			if (self.widthInput.getValue()) 
@@ -38,7 +38,7 @@ function Canvas(width, height, color) {
 
 	/* update canvas height */
 	this.setHeight = function(height) {
-		if (Number(height)) {
+		if (+height) {
 			self.height = self.canvas.height = height;
 		} else {
 			if (self.heightInput.getValue()) 

@@ -15,11 +15,10 @@ function Files_IO(params) {
 
 		const json = {};
 		json.v = "2.1";
-		json.w = Math.floor( Number( Lines.canvas.width ));
-		json.h = Math.floor( Number( Lines.canvas.height ));
-		json.fps = Number( Lines.draw.fps );
+		json.w = Math.floor(+Lines.canvas.width);
+		json.h = Math.floor(+Lines.canvas.height);
+		json.fps = +Lines.draw.fps;
 		json.bg = Lines.canvas.bgColor.color;
-		console.log(Lines.lineColor.colors.length);
 		json.mc = Lines.lineColor.colors.length > 1 ? true : false;
 		json.f = [];
 		json.d = [];
