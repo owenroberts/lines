@@ -15,7 +15,7 @@ function Canvas(width, height, color) {
 	/* canvas bg color */
 	if (color) {
 		self.bgColor.color = color;
-		self.canvas.style.backgroundColor = "#" + color;
+		// self.canvas.style.backgroundColor = "#" + color;
 	}
 
 	/* set line color */
