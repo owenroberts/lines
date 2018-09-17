@@ -18,7 +18,7 @@ function Files_IO(params) {
 		json.w = Math.floor(+Lines.canvas.width);
 		json.h = Math.floor(+Lines.canvas.height);
 		json.fps = +Lines.draw.fps;
-		json.bg = Lines.canvas.bgColor.color;
+		json.bg = Cool.rgb2hex(Lines.canvas.canvas.style.backgroundColor).split('#')[1];
 		json.mc = Lines.lineColor.colors.length > 1 ? true : false;
 		json.f = [];
 		json.d = [];
@@ -80,7 +80,6 @@ function Files_IO(params) {
 			fetch(filename + '.json')
 				.then(response => { return response.json() })
 				.then(data => {
-					console.log(data);
 					Lines.frames =  data.f;
 					Lines.drawings = data.d;
 					for (let i = 0; i < Lines.frames.length; i++) {
