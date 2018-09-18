@@ -66,7 +66,6 @@ function Data() {
 				const frm = Lines.frames[frmIndex];
 				self.framesCopy[i] = [];
 				for (let h = 0; h < frm.length; h++) {
-					console.log(frm[h])
 					self.framesCopy[i].push(_.cloneDeep(frm[h]));
 				}
 			}
@@ -78,7 +77,6 @@ function Data() {
 				self.framesCopy.push([]);
 				/* clone all of the drawings in current frame */
 				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-					console.log(Lines.frames[Lines.currentFrame][i])
 					self.framesCopy[0].push(_.cloneDeep(Lines.frames[Lines.currentFrame][i]));
 				}
 			}
@@ -388,20 +386,33 @@ function Data() {
 	/* q key - all drawings in current frames, moved in each other frame
 		in v2, x y for frame layers */
 	this.offsetDrawing = function(offset) {
-		self.saveLines();
-		self.saveState();
-		if (!offset.x && !offset.y) {
-			const x = +prompt("x");
-			const y = +prompt("y");
-			offset = new Cool.Vector(x,y);
-		}
-		if (offset) {
-			/* ERROR if there are zero layers ... */
-			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-				const fr = Lines.frames[Lines.currentFrame][i];
-				fr.x += offset.x;
-				fr.y += offset.y;
+		if (Lines.frames[Lines.currentFrame]) {
+			self.saveLines();
+			self.saveState();
+			if (!offset.x && !offset.y) {
+				const x = +prompt("x");
+				const y = +prompt("y");
+				offset = new Cool.Vector(x,y);
 			}
+			if (offset) {
+				if (Lines.drawingInterface.layers.length > 0) {
+					for (let i = 0; i < Lines.drawingInterface.layers.length; i++) {
+						const fr = Lines.drawingInterface.layers[i];
+						if (fr.toggled) {
+							fr.x += offset.x;
+							fr.y += offset.y;
+						}
+					}
+				} else {
+					for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
+						const fr = Lines.frames[Lines.currentFrame][i];
+						fr.x += offset.x;
+						fr.y += offset.y;
+					}
+				}
+			}
+		} else {
+			console.log("%c No layers in frame ", "color:yellow; background:black;");
 		}
 	};
 

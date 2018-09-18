@@ -9,7 +9,7 @@ function Draw() {
 	
 	this.interval = 1000/this.lps;  // fps per one second, the line interval
 	this.timer = performance.now(); 
-	this.intervalRatio = this.interval / (1000/this.fps);  // this starts same as lineInterval, written out to show math
+	this.intervalRatio = this.interval / (1000 / this.fps);  // this starts same as lineInterval, written out to show math
 
 	this.onionSkinIsVisible = true;
 
