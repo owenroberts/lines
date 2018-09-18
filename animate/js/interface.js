@@ -12,6 +12,7 @@ function Interface() {
 		event: "click",
 		callback: function() {
 			Lines.currentFrame = Lines.frames.length;
+			Lines.drawingInterface.resetLayers();
 			self.updateFrameNum();
 		}
 	});
@@ -47,6 +48,7 @@ function Interface() {
 				frmElem.onclick = function(ev) {
 					Lines.currentFrame = Lines.draw.currentFrameCounter = i;
 					self.updateFrameNum();
+					Lines.drawingInterface.resetLayers();
 				};
 
 				/* right click, add/remove from copy frames */
@@ -92,7 +94,6 @@ function Interface() {
 			Lines.currentFrame++;
 		self.updateFramesPanel();
 		Lines.drawingInterface.resetLayers();
-		Lines.drawingInterface.resetDrawingsPanel();
 	};
 
 	/* w key - got to previous frame */
@@ -103,7 +104,6 @@ function Interface() {
 			Lines.currentFrame--;
 		self.updateFramesPanel();
 		Lines.drawingInterface.resetLayers();
-		Lines.drawingInterface.resetDrawingsPanel();
 	};
 
 	/* keyboard events and handlers */

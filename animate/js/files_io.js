@@ -91,6 +91,7 @@ function Files_IO(params) {
 					Lines.canvas.setWidth(data.w);
 					Lines.canvas.setHeight(data.h);
 					Lines.draw.setFps(data.fps);
+					Lines.drawingInterface.fpsSelect.setValue(data.fps);
 					if (data.bg)  // legacy compatible
 						Lines.canvas.bgColor.setColor(data.bg);
 					Lines.draw.reset();

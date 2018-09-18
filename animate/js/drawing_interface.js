@@ -66,7 +66,7 @@ function DrawingInterface() {
 	this.fpsSelect = new UISelect({
 		label: "FPS",
 		options: [1,2,5,10,12,15,24,30,60],
-		selected: 10,
+		selected: Lines.draw.fps,
 		callback: function(ev) {
 			if (ev.type == "change") {
 				Lines.draw.setFps(+this.value);
@@ -104,6 +104,7 @@ function DrawingInterface() {
 		title: "Go To Frame",
 		callback: function() {
 			const f = prompt("Frame:");
+			self.drawingInterface.resetLayers();
 			Lines.currentFrame = f;
 			Lines.interface.updateFramesPanel();
 		},
@@ -325,13 +326,15 @@ function DrawingInterface() {
 	};
 
 	this.resetLayers = function() {
-		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled)
-				self.layerToggle(self.layers[i]);
+		while (self.layers.length > 0) {
+			self.layerToggle(self.layers[0]);
 		}
 		self.layerPanel.clearComponents(self.frameRow);
 		self.layers = [];
-	}
+		while (self.drawingPanel.rows.length > 1) {
+			self.drawingPanel.removeRow(self.drawingPanel.rows[self.drawingPanel.rows.length - 1]);
+		}
+	};
 
 	this.layerToggle = function(layer) {
 		if (!layer.toggled) {
@@ -346,9 +349,19 @@ function DrawingInterface() {
 		layer.toggled = !layer.toggled;
 	};
 
+	this.killLayer = function() {
+		const n = prompt("Layer number");
+		Lines.frames.forEach(function(fr) {
+   			fr.forEach(function(layer) {
+   				if (layer.d == n) { 
+   					fr.splice(fr.indexOf(layer), 1) 
+   				}							
+   			});
+		});
+	};
+
 	this.displayLayers = function() {
-		self.layerPanel.clearComponents(self.frameRow);
-		self.layers = [];
+		self.resetLayers();
 		if (Lines.frames[Lines.currentFrame]) {
 			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
 				const layer = Lines.frames[Lines.currentFrame][i];
@@ -387,6 +400,11 @@ function DrawingInterface() {
 		}
 	}));
 
+	this.layerPanel.add(new UIButton({
+		"title": "Kill a Layer",
+		callback: self.killLayer
+	}));
+
 	this.layerPanel.add(new UIText({
 		label: "Change Color",
 		value: Lines.lineColor.color,
@@ -403,17 +421,11 @@ function DrawingInterface() {
 	/* drawing panel */
 	this.drawingPanel = new Panel("drawing-menu", "Drawings");
 
-	this.resetDrawingsPanel = function() {
-		while (self.drawingPanel.rows.length > 1) {
-			self.drawingPanel.removeRow( self.drawingPanel.rows[self.drawingPanel.rows.length - 1] );
-		}
-	};
-
 	this.drawingPanel.add(new UIButton({
 		title: "Update Drawings",
 		callback: function() {
 			/* have to regenerate this stuff to work with other frames */
-			self.resetDrawingsPanel();
+			self.resetLayers();
 			for (let i = 0; i < Lines.drawings.length; i++) {
 				let layer; /* check if layer is in frame already */
 				if (Lines.frames[Lines.currentFrame]) {
@@ -451,6 +463,10 @@ function DrawingInterface() {
 						}; /* defaults, maybe grab from existing layer? */
 					}
 				}
+
+				if (layer)
+					self.layers.push(layer);
+
 				const row = self.drawingPanel.addRow(i + '-drawing-row');
 					
 				self.drawingPanel.add(new UIToggleButton({
