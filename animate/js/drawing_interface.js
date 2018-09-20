@@ -143,7 +143,7 @@ function DrawingInterface() {
 	capturePanel.add(new UIButton({
 		title: "Capture Multiple Frames",
 		callback: function() {
-			self.captureFrames = prompt("Capture how many frames?");
+			Lines.draw.captureFrames = prompt("Capture how many frames?");
 		},
 		key: "shift-k"
 	}));
