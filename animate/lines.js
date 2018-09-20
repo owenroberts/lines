@@ -11,11 +11,14 @@ window.addEventListener("load", function() {
 	
 	// modules 
 	Lines.interface = new Interface();
-	Lines.canvas = new Canvas(375, 667, "ffffff" ); // width height color, default 000000
+
+	// width height color, def color is black 000000
+	Lines.canvas = new Canvas(1920, 1080, "ffffff" ); 
 	Lines.draw = new Draw();
 	Lines.data = new Data();
 	Lines.lineColor = new Color("color", "Line Color"); 
-	/* Lines.lineColor.setColor("ffffff"); */ // set line color white
+	Lines.lineColor.setColor("264F72");
+	Lines.canvas.ctx.lineWidth = 2;
 	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 0, v: 0 }); // defaults
 	Lines.fio = new Files_IO({
 		fit: false /* fit to canvas when saving */
