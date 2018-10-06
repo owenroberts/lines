@@ -44,10 +44,6 @@ function Draw() {
 	}
 
 	this.draw = function(time) {
-		// if (time == 'cap')
-		// 	console.log(Lines.currentFrame, self.currentFrameCounter);
-		// else
-		// 	console.log('not cap', Lines.currentFrame);
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 			/* calc current frame to draw */
@@ -139,8 +135,6 @@ function Draw() {
 					color: Lines.lineColor.color
 				});
 			}
-
-			// console.log(self.captureFrames, self.capturing);
 
 			/* capture frames */
 			if (self.captureFrames > 0) {
