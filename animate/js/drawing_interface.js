@@ -88,11 +88,11 @@ function DrawingInterface() {
 		selected: 10,
 		callback: function(ev) {
 			if (ev.type == "change") {
-				self.lps.setLps(this.value);
+				Lines.draw.setLps(this.value);
 				this.blur();
 			} else {
 				const n = prompt("Lines per second?");
-				self.lps.setLps(n);
+				Lines.draw.setLps(n);
 				this.setValue(n);
 			}
 		},
