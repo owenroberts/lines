@@ -25,7 +25,6 @@ function Interface() {
 			Lines.interface.updateFramesPanel();
 			Lines.interface.updateFramesPanel();
 			Lines.drawingInterface.resetLayers();
-			Lines.drawingInterface.resetDrawingsPanel();
 		}
 	});
 	this.keyCommands['backslash'] = this.back;
