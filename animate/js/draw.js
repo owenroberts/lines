@@ -15,6 +15,7 @@ function Draw() {
 
 	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
 	this.captureWithBackground = false;
+	this.capturing = false;
 
 	this.setFps = function(fps) {
 		self.fps = fps;
@@ -42,8 +43,8 @@ function Draw() {
 		Lines.interface.updateFrameNum();
 	}
 
-	this.draw = function() {
-		if (performance.now() > self.interval + self.timer) {
+	this.draw = function(time) {
+		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 			/* calc current frame to draw */
 			if (self.isPlaying && self.currentFrameCounter < Lines.frames.length) {
@@ -139,9 +140,13 @@ function Draw() {
 			if (self.captureFrames > 0) {
 				Lines.canvas.capture();
 				self.captureFrames--;
+				self.capturing = true;
+			} else if (self.capturing) {
+				self.capturing = false;
 			}
 		}
-		window.requestAnimFrame(self.draw);
+		if (!self.capturing)
+			window.requestAnimFrame(self.draw);
 	}
 
 	/* jig = jiggle amount, seg = num segments */

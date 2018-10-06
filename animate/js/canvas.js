@@ -56,7 +56,13 @@ function Canvas(width, height, color) {
 	this.capture = function() {
 		if (Lines.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
-				saveAs(blob, Lines.fio.title.getValue() + "-" + Cool.padNumber(Lines.currentFrame, 3) + ".png");
+				const f = saveAs(blob, Lines.fio.title.getValue() + "-" + Cool.padNumber(Lines.currentFrame, 3) + ".png");
+				f.onwriteend = function() { 
+					window.requestAnimFrame(() => {
+						Lines.draw.draw('cap'); 
+					});
+				};
+					
 			});
 		} else {
 			const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
