@@ -55,11 +55,14 @@ function Canvas(width, height, color) {
 
 	this.capture = function() {
 		if (Lines.fio.saveFilesEnabled) {
-			console.log('save', Lines.currentFrame);
 			canvas.toBlob(function(blob) {
 				const f = saveAs(blob, Lines.fio.title.getValue() + "-" + Cool.padNumber(Lines.currentFrame, 3) + ".png");
-				// setTimeout(() => {  }, 10);
-				f.onwriteend = function() { Lines.draw.draw('cap'); }
+				f.onwriteend = function() { 
+					window.requestAnimFrame(() => {
+						Lines.draw.draw('cap'); 
+					});
+				};
+					
 			});
 		} else {
 			const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
