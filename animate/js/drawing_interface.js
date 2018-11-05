@@ -321,7 +321,6 @@ function DrawingInterface() {
 		for (let i = 0; i < self.layers.length; i++) {
 			if (self.layers[i].toggled)
 				self.layers[i][prop] = value;
-			console.log(self.layers[i])
 		}
 	};
 
