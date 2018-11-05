@@ -53,10 +53,25 @@ function Canvas(width, height, color) {
 	this.setWidth(this.width);
 	this.setHeight(this.height);
 
+	this.prevCap = {
+		n: '',
+		f: 0
+	}
 	this.capture = function() {
 		if (Lines.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
-				const f = saveAs(blob, Lines.fio.title.getValue() + "-" + Cool.padNumber(Lines.currentFrame, 3) + ".png");
+				const title = Lines.fio.title.getValue();
+				const n = Cool.padNumber(Lines.currentFrame, 3);
+				let frm = 0;
+				let fileName = `${title}-${n}-${frm}.png`;
+				if (n == self.prevCap.n) {
+					frm = self.prevCap.f + 1;
+					fileName = `${title}-${n}-${frm}.png`;
+					self.prevCap.f = frm;
+				}
+				self.prevCap.n = n;
+
+				const f = saveAs(blob, fileName);
 				f.onwriteend = function() { 
 					window.requestAnimFrame(() => {
 						Lines.draw.draw('cap'); 
