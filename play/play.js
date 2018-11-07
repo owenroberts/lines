@@ -153,7 +153,6 @@ function LinesPlayer(canvas, src, lps, callback) {
 				this.sizeCanvas();
 				if (callback) 
 					callback(); // callback to do something after drawing loads
-				console.log(this);
 			});
 	};
 
