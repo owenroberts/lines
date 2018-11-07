@@ -30,6 +30,10 @@ function LinesPlayer(canvas, src, lps, callback) {
 	this.ctxStrokeColor;
 	this.mixedColors = false;
 
+	this.drawLines = function(params) {
+
+	}
+
 	this.draw = function() {
 		requestAnimFrame(this.draw.bind(this));
 		if (performance.now() > this.lineInterval + this.timer) {
@@ -82,15 +86,16 @@ function LinesPlayer(canvas, src, lps, callback) {
 							this.ctxStrokeColor = fr.c;
 							this.ctx.strokeStyle= "#" + this.ctxStrokeColor;
 						}
+
+						off.x += off.xSpeed;
+						if (off.x >= wig || off.x <= -wig)
+							off.xSpeed *= -1;
+
+						off.y += off.ySpeed;
+						if (off.y >= wig || off.y <= -wig)
+							off.ySpeed *= -1;
+
 					}
-
-					off.x += off.xSpeed;
-					if (off.x >= wig || off.x <= -wig)
-						off.xSpeed *= -1;
-
-					off.y += off.ySpeed;
-					if (off.y >= wig || off.y <= -wig)
-						off.ySpeed *= -1;
 
 					if (this.mixedColors)
 						this.ctx.stroke();
@@ -148,6 +153,7 @@ function LinesPlayer(canvas, src, lps, callback) {
 				this.sizeCanvas();
 				if (callback) 
 					callback(); // callback to do something after drawing loads
+				console.log(this);
 			});
 	};
 
