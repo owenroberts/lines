@@ -1,10 +1,10 @@
-function Canvas(width, height, color) {
+function Canvas(width, height, _color) {
 	const self = this;
 
 	this.width = width;
 	this.height = height;
 	this.canvas = document.getElementById("canvas"); // Lines.canvas.canvas is html elem
-	
+
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 
@@ -13,10 +13,11 @@ function Canvas(width, height, color) {
 	});
 
 	/* canvas bg color */
-	if (color) {
-		self.bgColor.color = color;
-		// self.canvas.style.backgroundColor = "#" + color;
+	if (_color) {
+		self.bgColor.color = _color;
+		self.canvas.style.backgroundColor = "#" + _color;
 	}
+	
 
 	/* set line color */
 	this.setStrokeColor = function(color) {
