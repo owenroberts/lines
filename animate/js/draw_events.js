@@ -44,9 +44,9 @@ function DrawEvents(defaults) {
 			self.mouseTimer = performance.now();
 			if (self.isDrawing)
 				if (self.brush <= 0)
-					self.addLine(ev.offsetX, ev.offsetY);
+					self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
 				else
-					self.addBrush(ev.offsetX, ev.offsetY);
+					self.addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
 		}
 	};
 
@@ -54,16 +54,16 @@ function DrawEvents(defaults) {
 		const b = self.brush * self.brush * self.brushSpread;
 		let origin = new Cool.Vector(x, y);
 		for (let i = 0; i < self.brush; i++) {
-			let point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
+			let point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
 			while (point.dist(origin) > b){
-				point = new Cool.Vector(x + Cool.random(-b, b), y + Cool.random(-b, b));
+				point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
 			}
 			Lines.lines.push(point);
 			const points = Cool.randomInt(1,3);
 			for (let i = 0; i < points; i ++) {
 				Lines.lines.push(new Cool.Vector(
-					point.x + Cool.random(-1, 1), 
-					point.y + Cool.random(-1, 1)
+					point.x + Cool.randomInt(-1, 1), 
+					point.y + Cool.randomInt(-1, 1)
 				));
 			}
 			Lines.lines.push('end');
@@ -79,11 +79,11 @@ function DrawEvents(defaults) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
 			if (self.brush <= 0)
-				self.addLine(ev.offsetX, ev.offsetY);
+				self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
 			else
 				self.addBrush(ev.offsetX, ev.offsetY);
 		} else if (ev.altKey) {
-			self.startDots = new Cool.Vector(ev.offsetX, ev.offsetY);
+			self.startDots = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY));
 		}
 	};
 
@@ -98,13 +98,13 @@ function DrawEvents(defaults) {
 			let [startY, endY] = self.startDots.y < ev.offsetY ? [self.startDots.y, ev.offsetY] : [ev.offsetY, self.startDots.y];
 			for (let x = startX; x < endX; x += c) {
 				for (let y = startY; y < endY; y += r) {
-					const _x = x + Cool.randomInt(-c/2, c/2);
-					const _y = y + Cool.randomInt(-r/2, r/2);
-					const points = Cool.randomInt(1,4);
+					const _x = Math.round(x) + Cool.randomInt(-c/2, c/2);
+					const _y = Math.round(y) + Cool.randomInt(-r/2, r/2);
+					const points = Cool.randomInt(1,3);
 					for (let i = 0; i < points; i ++) {
 						Lines.lines.push(new Cool.Vector(
-							_x + Cool.random(-1, 1), 
-							_y + Cool.random(-1, 1)
+							_x + Cool.randomInt(-1, 1), 
+							_y + Cool.randomInt(-1, 1)
 						));
 					}
 					Lines.lines.push('end');
