@@ -416,6 +416,33 @@ function Data() {
 		}
 	};
 
+
+	/* shift q - prob should be default? */
+	this.offsetAll = function(offset) {
+		for (let i = 0; i < Lines.frames.length; i++) {
+			if (Lines.frames[i]) {
+				self.saveLines();
+				self.saveState();
+				if (!offset.x && !offset.y) {
+					const x = +prompt("x");
+					const y = +prompt("y");
+					offset = new Cool.Vector(x,y);
+				}
+				if (offset) {
+					for (let j = 0; j < Lines.frames[i].length; j++) {
+						const layer = Lines.frames[i][j];
+						if (layer) {
+							layer.x += offset.x;
+							layer.y += offset.y;
+						}
+					}
+				}
+			} else {
+				console.log("%c No layers in frame ", "color:yellow; background:black;");
+			}
+		}
+	};
+
 	/* interfaces */
 	/* should interfaces be spread throughout? 
 		should data be broken into multiple modules?
@@ -533,6 +560,12 @@ function Data() {
 		title: "Offset",
 		callback: self.offsetDrawing,
 		key: "q"
+	}));
+
+	editPanel.add(new UIButton({
+		title: "Offset All",
+		callback: self.offsetAll,
+		key: "shift-q"
 	}));
 
 	/* save lines */
