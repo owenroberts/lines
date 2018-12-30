@@ -1,5 +1,5 @@
 /* play module */
-function LinesPlayer(canvas, src, lps, callback) {
+function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.canvas = canvas;
 	if (!this.canvas) 
 		this.canvas = document.getElementById('lines');
@@ -15,10 +15,9 @@ function LinesPlayer(canvas, src, lps, callback) {
 	
 	this.currentFrame = 0; // always int, floor cfc
 	this.currentFrameCounter = 0; // uses intervalRatio, so it's a float
-	this.playing = true;
+	this.isPlaying = true;
 	
-	if (lps) this.lps = lps; // lines per second
-	else this.lps = 10; // default
+	this.lps = lps || 10; // default
 	this.lineInterval = 1000 / this.lps;
 	this.timer = performance.now();
 	this.intervalRatio = 1;
@@ -29,27 +28,29 @@ function LinesPlayer(canvas, src, lps, callback) {
 	this.drawings = [];
 	this.ctxStrokeColor;
 	this.mixedColors = false;
+	this.isTexture = isTexture || false; /* if used for 3d texture it doesnt animate or resize */
 
 	this.drawLines = function(params) {
-
-	}
+	};
 
 	this.draw = function() {
-		requestAnimFrame(this.draw.bind(this));
+		if (!this.isTexture && this.isPlaying)
+			requestAnimFrame(this.draw.bind(this));
 		if (performance.now() > this.lineInterval + this.timer) {
 			this.timer = performance.now();
-			if (this.playing && this.currentFrameCounter < this.frames.length) {
+			if (this.isPlaying && this.currentFrameCounter < this.frames.length) {
 				this.currentFrameCounter += this.intervalRatio;
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 			}
-			if (this.playing && this.currentFrame >= this.frames.length) {
+			if (this.isPlaying && this.currentFrame >= this.frames.length) {
 				this.currentFrame = this.currentFrameCounter = 0;
+				if (this.onPlayedOnce)
+					this.onPlayedOnce();
 			}
 			this.ctx.clearRect(0, 0, this.width, this.height);
 			if (this.frames[this.currentFrame]) {
 				if (!this.mixedColors)
 					this.ctx.beginPath();
-				
 				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
 					const fr = this.frames[this.currentFrame][i];
 					const jig = +fr.r;
@@ -107,7 +108,7 @@ function LinesPlayer(canvas, src, lps, callback) {
 	};
 
 	this.sizeCanvas = function() {
-		const padding = 8; 
+		const padding = 0; /* seems like its for the comics, fucks the mobile stuff */ 
 		const top = canvas.getBoundingClientRect().top;
 
 		if (window.innerWidth - padding * 2 < this.width)
@@ -131,29 +132,33 @@ function LinesPlayer(canvas, src, lps, callback) {
 		this.ctxStrokeColor = undefined; // color gets f*ed when resetting canvas
 	};
 
-	window.addEventListener('resize', this.sizeCanvas.bind(this), false);
+	this.loadData = function(data, callback) {
+		this.frames = data.f;
+		this.drawings = data.d;
+		this.intervalRatio = this.lineInterval / (1000 / data.fps);
+		this.currentFrame = this.currentFrameCounter = 0;
+		this.width = this.canvas.width = data.w;
+		this.height = this.canvas.height = data.h;
+		this.ctxStrokeColor = undefined; // note setting canvas width resets the color
+		this.ctx.miterLimit = 1;
+		if (data.mc) this.mixedColors = data.mc;
+		if (data.bg) this.canvas.style.backgroundColor = '#' + data.bg;
+		if (callback) callback(); // callback to do something after drawing loads
+		if (!this.isTexture) {
+			requestAnimFrame(this.draw.bind(this));
+			this.sizeCanvas();
+			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
+		}
+	};
 
 	this.loadAnimation = function(src, callback) {
 		fetch(src)
 			.then(response => { return response.json() })
-			.then(data => {
-				this.frames = data.f;
-				this.drawings = data.d;
-				this.intervalRatio = this.lineInterval / (1000 / data.fps);
-				this.currentFrame = this.currentFrameCounter = 0;
-				this.width = this.canvas.width = data.w;
-				this.height = this.canvas.height = data.h;
-				this.ctxStrokeColor = undefined; // note setting canvas width resets the color
-				this.ctx.miterLimit = 1;
-				if (data.mc)
-					this.mixedColors = data.mc;
-				if (data.bg)
-					this.canvas.style.backgroundColor = '#' + data.bg;
-				requestAnimFrame(this.draw.bind(this));
-				this.sizeCanvas();
-				if (callback) 
-					callback(); // callback to do something after drawing loads
-			});
+			.then(json => { this.loadData(json, callback) });
+	};
+
+	this.loadJSON = function(json, callback) {
+		this.loadData(JSON.parse(json), callback);
 	};
 
 	if (src) 
