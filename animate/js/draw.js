@@ -1,10 +1,10 @@
-function Draw() {
+function Draw(fps) {
 	const self = this;
 
 	this.currentFrameCounter = 0; // for when line fps is different from anim fps, counts with floats
 	this.isPlaying = false;
 
-	this.fps = 10; // frames per second when playing
+	this.fps = fps || 10; // frames per second when playing
 	this.lps = 10; // lines per second all the time
 	
 	this.interval = 1000/this.lps;  // fps per one second, the line interval
@@ -165,8 +165,6 @@ function Draw() {
 			if (params.lines[h] != "end") {
 				const s = params.lines[h];
 				const e = params.lines[h + 1];
-				if (!e)
-					console.log(e, h + 1, params.end - 1, params.lines);
 				let v = new Cool.Vector(e.x, e.y);
 				v.subtract(s);
 				v.divide(params.segNum);
