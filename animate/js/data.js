@@ -346,10 +346,10 @@ function Data() {
 		if (segmentsPerFrame > 0) {
 			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			const totalSegments = Lines.frames[Lines.currentFrame]
-									.map((f) => { return f.e} )
+									.map(f => { return f.e} )
 									.reduce((x,y) => { return x + y });
 			for (let i = 0; i < totalSegments; i += segmentsPerFrame) {
-				let indexMod = 0;
+				let indexMod = 0; // where to start 
 				Lines.interface.nextFrame();
 				if (!Lines.frames[Lines.currentFrame]) 
 					Lines.frames[Lines.currentFrame] = [];
@@ -359,10 +359,10 @@ function Data() {
 					const drawingEnd = tempFrames[j].e;
 					const drawingStart = tempFrames[j].s;
 					const tempLines = Lines.drawings[drawingIndex].l;
-					if (i <= drawingEnd + (simultaneous ? 0 : indexMod)) {
+					if (i <= drawingEnd + (simultaneous ? 0 : indexMod) ) {
 						Lines.frames[Lines.currentFrame].push({
 							d: drawingIndex,
-							s: simultaneous ? i : i - indexMod,
+							s: simultaneous ? i : (i - indexMod < 0 ? 0 : i - indexMod),
 							e: drawingEnd,
 							c: tempFrames[j].c,
 							n: tempFrames[j].n,
