@@ -72,6 +72,7 @@ class Animation {
 				after state changed, means have to call playOnce after 
 				setState if intending to play once */
 			this.frameCount = -1;  
+			if (!this.isPlaying) this.isPlaying = true;
 		}
 	}
 
@@ -98,7 +99,7 @@ class Animation {
 			if (this.frames[this.currentFrame]) {
 				if (!Game.mixedColors) 
 					Game.ctx.beginPath();
-				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
+				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
 					const fr = this.frames[this.currentFrame][i];
 					const dr = this.drawings[fr.d];
 					const jig = this.jig || +fr.r;
@@ -179,6 +180,8 @@ class Animation {
 			} else {
 				this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
 			}
+
+			/* wtf is all this crap */
 			if (this.onePlay) {
 				this.onePlay = false;
 				if (this.isPlaying) {
@@ -198,7 +201,7 @@ class Animation {
 	drawBkg(x, y) {
 		if (!this.mixedColors)
 			Game.ctx.beginPath();
-		for (let i = 0; i < this.frames[this.currentFrameRounded].length; i++) {
+		for (let i = 0, len = this.frames[this.currentFrameRounded].length; i < len; i++) {
 			const frm = this.frames[this.currentFrameRounded][i];
 			const drw = this.drawings[frm.d];
 			if (mixedColors)
