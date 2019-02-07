@@ -184,17 +184,13 @@ class Animation {
 			/* wtf is all this crap */
 			if (this.onePlay) {
 				this.onePlay = false;
-				if (this.isPlaying) {
-					this.isPlaying = false;
-				}
+				// if (this.isPlaying) this.isPlaying = false;
 				if (this.onPlayedOnce) {
 					this.onPlayedOnce();
+					this.onPlayedOnce = undefined;
 				}
-			} else {
-				if (this.onPlayedState) {
-					this.onPlayedState();
-				}
-			}
+			} 
+			else if (this.onPlayedState) this.onPlayedState();
 		}
 	}
 
