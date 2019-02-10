@@ -1,5 +1,5 @@
 /* play module */
-function LinesPlayer(canvas, src, lps, callback, isTexture) {
+function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.canvas = canvas;
 	if (!this.canvas) 
 		this.canvas = document.getElementById('lines');
@@ -16,6 +16,8 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.currentFrame = 0; // always int, floor cfc
 	this.currentFrameCounter = 0; // uses intervalRatio, so it's a float
 	this.isPlaying = true;
+
+	this.doResize = resize || false;
 	
 	this.lps = lps || 10; // default
 	this.lineInterval = 1000 / this.lps;
@@ -29,6 +31,14 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.ctxStrokeColor;
 	this.mixedColors = false;
 	this.isTexture = isTexture || false; /* if used for 3d texture it doesnt animate or resize */
+	this.drawBg = true;
+
+	this.jig = undefined;
+	this.wig = undefined;
+	this.seg = undefined;
+	this.vig = undefined;
+
+	this.color = undefined;
 
 	this.drawLines = function(params) {
 	};
@@ -44,20 +54,23 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			}
 			if (this.isPlaying && this.currentFrame >= this.frames.length) {
 				this.currentFrame = this.currentFrameCounter = 0;
-				if (this.onPlayedOnce)
+				if (this.onPlayedOnce) {
 					this.onPlayedOnce();
+					this.onPlayedOnce = undefined;
+				}
 			}
-			this.ctx.clearRect(0, 0, this.width, this.height);
+			if (this.drawBg)
+				this.ctx.clearRect(0, 0, this.width, this.height);
 			if (this.frames[this.currentFrame]) {
 				if (!this.mixedColors)
 					this.ctx.beginPath();
-				for (let i = 0; i < this.frames[this.currentFrame].length; i++) {
+				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
 					const fr = this.frames[this.currentFrame][i];
-					const jig = +fr.r;
+					const jig = this.jig || +fr.r;
 					const seg = +fr.n;
 					const dr = this.drawings[fr.d];
-					const wig = +fr.w || 0; // or zero for older drawings for now 
-					const wigSpeed = +fr.v || 0;
+					const wig = this.wig || +fr.w || 0; // or zero for older drawings for now 
+					const wigSpeed = this.vig || +fr.v || 0;
 					const off = {
 						x: Cool.random(0, wig),
 						xSpeed: Cool.random(-wigSpeed, wigSpeed),
@@ -83,7 +96,8 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 								fr.y + p.y + v.y + Cool.random(-jig, jig) + off.y
 							);
 						}
-						if (this.ctxStrokeColor != fr.c) {
+
+						if (this.ctxStrokeColor != fr.c && !this.color) {
 							this.ctxStrokeColor = fr.c;
 							this.ctx.strokeStyle= "#" + this.ctxStrokeColor;
 						}
@@ -95,26 +109,33 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 						off.y += off.ySpeed;
 						if (off.y >= wig || off.y <= -wig)
 							off.ySpeed *= -1;
-
 					}
-
 					if (this.mixedColors)
 						this.ctx.stroke();
 				}
 				if (!this.mixedColors)
 					this.ctx.stroke();
 			}
+			if (this.update)
+				this.update();
 		}
 	};
 
 	this.sizeCanvas = function() {
 		const padding = 0; /* seems like its for the comics, fucks the mobile stuff */ 
 		const top = canvas.getBoundingClientRect().top;
+		const w = this.canvas.parentNode.clientWidth || window.innerWidth,
+			h = this.canvas.parentNode.clientHeight || window.innerHeight;
 
-		if (window.innerWidth - padding * 2 < this.width)
-			this.scale = (window.innerWidth - padding * 2) / this.width;
-		// else if ((window.innerHeight - top - padding * 2) < this.height)
-		// 	this.scale = (window.innerHeight - top - padding * 2) / this.height;
+		if (w - padding * 2 < this.width)
+			this.scale = (w - padding * 2) / this.width;
+		else if ((h - top - padding * 2) < this.height)
+			this.scale = (h - top - padding * 2) / this.height;
+		/* trying to scale up? */
+		else if (w - padding * 2 > this.width)
+			this.scale = (w - padding * 2) / this.width;
+		else if ((h - top - padding * 2) > this.height)
+			this.scale = (h - top - padding * 2) / this.height;
 		else
 			this.scale = 1;
 
@@ -130,6 +151,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			this.ctx.scale(this.scale, this.scale);
 		}
 		this.ctxStrokeColor = undefined; // color gets f*ed when resetting canvas
+		this.ctx.miterLimit = 1; // also gets f'ed
 	};
 
 	this.loadData = function(data, callback) {
@@ -143,26 +165,28 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 		this.ctx.miterLimit = 1;
 		if (data.mc) this.mixedColors = data.mc;
 		if (data.bg) this.canvas.style.backgroundColor = '#' + data.bg;
+		if (this.color) this.ctx.strokeStyle = '#' + this.color;
 		if (callback) callback(); // callback to do something after drawing loads
-		if (!this.isTexture) {
-			requestAnimFrame(this.draw.bind(this));
+		if (!this.isTexture) requestAnimFrame(this.draw.bind(this));
+		if (this.doResize) {
 			this.sizeCanvas();
 			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 		}
 	};
 
+	// original generic name, now is closer to "load file"
 	this.loadAnimation = function(src, callback) {
 		fetch(src)
 			.then(response => { return response.json() })
-			.then(json => { this.loadData(json, callback) });
+			.then(json => { this.loadData(json, callback) })
+			.catch(error => {console.log('error', error)});
 	};
 
 	this.loadJSON = function(json, callback) {
 		this.loadData(JSON.parse(json), callback);
 	};
 
-	if (src) 
-		this.loadAnimation(src, callback);
+	if (src) this.loadAnimation(src, callback);
 }
 
 function loadAnimation(src, canvas, callback) {
