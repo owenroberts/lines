@@ -113,8 +113,8 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 
 		if (window.innerWidth - padding * 2 < this.width)
 			this.scale = (window.innerWidth - padding * 2) / this.width;
-		else if ((window.innerHeight - top - padding * 2) < this.height)
-			this.scale = (window.innerHeight - top - padding * 2) / this.height;
+		// else if ((window.innerHeight - top - padding * 2) < this.height)
+		// 	this.scale = (window.innerHeight - top - padding * 2) / this.height;
 		else
 			this.scale = 1;
 
