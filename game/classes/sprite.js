@@ -7,20 +7,20 @@ class Sprite {
 		this.debug = false; /* argument? */
 		this.debugColor = "#00ffbb";
 		this.drawBackground = false;
-		this.initPhysics();
-		// this.bkg = false; /* draw a filled in outline */
-	}
-
-	/* make a physics class? */
-	initPhysics() {
 		this.collider = {
 			position: new Cool.Vector(0, 0),
 			width: this.width,
 			height: this.height
 		};
+		this.alive = true;
+		// this.initPhysics();
+		// this.bkg = false; /* draw a filled in outline */
+	}
+	
+	/* make a physics class? */
+	initPhysics() {
 		this.jumpAmount = 0;
 		this.velocity = new Cool.Vector(0,0);
-		this.alive = true;
 		this.bounceAmount = new Cool.Vector(0,0);
 		this.bounce = false;
 		this.wiggleAmount = -1;
