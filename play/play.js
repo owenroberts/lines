@@ -127,14 +127,15 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 		const w = this.canvas.parentNode.clientWidth || window.innerWidth,
 			h = this.canvas.parentNode.clientHeight || window.innerHeight;
 
-		if (w - padding * 2 < this.width)
+		if (w - padding * 2 < this.width && this.doResize.width)
 			this.scale = (w - padding * 2) / this.width;
-		else if ((h - top - padding * 2) < this.height)
+		else if ((h - top - padding * 2) < this.height && this.doResize.height)
 			this.scale = (h - top - padding * 2) / this.height;
-		/* trying to scale up? */
-		else if (w - padding * 2 > this.width)
+		
+		/* scale up - used in catslair ...  */
+		else if (w - padding * 2 > this.width && this.doResize.width && this.doResize.up)
 			this.scale = (w - padding * 2) / this.width;
-		else if ((h - top - padding * 2) > this.height)
+		else if ((h - top - padding * 2) > this.height && this.doResize.height && this.doResize.up)
 			this.scale = (h - top - padding * 2) / this.height;
 		else
 			this.scale = 1;
