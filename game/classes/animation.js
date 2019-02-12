@@ -18,13 +18,8 @@ class Animation {
 		this.loop = true;
 		this.intervalRatio = 1;
 
-		/* figure this out now, with states this is very different */
-		this.onePlay = false;
-		this.frameCount = -1; // i guess this is set at beginning? set to 0 so it doesn't go through
-		this.frameCountCounter = -1;  // floats
-
 		this.state = 'default';
-		this.states = { 'default': {start: 0, end: 0 } }
+		this.states = { 'default': {start: 0, end: 0 } };
 
 		this.randomFrames = false; /* play random frames */
 
@@ -71,7 +66,6 @@ class Animation {
 			/* bad temp fix for play once call back triggering
 				after state changed, means have to call playOnce after 
 				setState if intending to play once */
-			this.frameCount = -1;  
 			if (!this.isPlaying) this.isPlaying = true;
 		}
 	}
@@ -81,7 +75,6 @@ class Animation {
 			this.isPlaying = true;
 		this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 		this.onPlayedOnce = callback;
-		this.onePlay = true;
 		// this.randomFrames = false;  /* need this? */
 	}
 
@@ -97,6 +90,7 @@ class Animation {
 				// Game.ctx.scale(-1,1);
 			}
 			if (this.frames[this.currentFrame]) {
+
 				if (!Game.mixedColors) 
 					Game.ctx.beginPath();
 				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
@@ -165,7 +159,7 @@ class Animation {
 			// console.log(this.currentFrame, this.currentFrameCounter, this.states[this.state].end);
 		}
 
-		if (this.currentFrame < this.states[this.state].end) {
+		if (this.currentFrame <= this.states[this.state].end) {
 			this.currentFrameCounter += this.intervalRatio;
 			if (this.randomFrames && this.currentFrame != Math.floor(this.currentFrameCounter)) {
 				this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
@@ -175,22 +169,13 @@ class Animation {
 		}
 
 		if (this.currentFrameCounter >= this.states[this.state].end) {
-			if (this.loop) {
-				this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
-			} else {
-				this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
+			if (this.loop) this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
+			else this.currentFrame = this.currentFrameCounter = this.states[this.state].end;
+			if (this.onPlayedOnce) {
+				this.onPlayedOnce();
+				this.onPlayedOnce = undefined;
 			}
-
-			/* wtf is all this crap */
-			if (this.onePlay) {
-				this.onePlay = false;
-				// if (this.isPlaying) this.isPlaying = false;
-				if (this.onPlayedOnce) {
-					this.onPlayedOnce();
-					this.onPlayedOnce = undefined;
-				}
-			} 
-			else if (this.onPlayedState) this.onPlayedState();
+			if (this.onPlayedState) this.onPlayedState();
 		}
 	}
 
