@@ -13,11 +13,13 @@ window.addEventListener("load", function() {
 	Lines.interface = new Interface();
 
 	// width height color, def color is black 000000
-	Lines.canvas = new Canvas(512, 512, "ffffff" ); 
+	//  Lines.canvas = new Canvas(1024, 512, "ffffff" );  // sundays
+	Lines.canvas = new Canvas(1024, 768, "252831" )
 	Lines.draw = new Draw();
 	Lines.data = new Data();
-	Lines.lineColor = new Color("color", "Line Color"); 
-	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 0, v: 0 }); // defaults
+	Lines.lineColor = new Color("color", "Line Color");
+	Lines.lineColor.setColor('ffffff');
+	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 2, v: 0.2 }); // defaults
 	Lines.fio = new Files_IO({
 		fit: false /* fit to canvas when saving */
 	});
