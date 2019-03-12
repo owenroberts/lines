@@ -17,7 +17,6 @@ function Canvas(width, height, _color) {
 		self.bgColor.color = _color;
 		self.canvas.style.backgroundColor = "#" + _color;
 	}
-	
 
 	/* set line color */
 	this.setStrokeColor = function(color) {
@@ -54,10 +53,41 @@ function Canvas(width, height, _color) {
 	this.setWidth(this.width);
 	this.setHeight(this.height);
 
+	this.startCapture = true;
+
+	this.videoCapture = function() {
+		if (self.startCapture) {
+			self.startCapture = false;
+			Lines.draw.videoCapture = true;
+			self.stream = self.canvas.captureStream();
+			self.rec = new MediaRecorder(self.stream);
+			self.rec.start();
+			self.rec.addEventListener('dataavailable', e => {
+   				const blob = new Blob([ e.data ], { 'type': 'video/webm' });
+   				self.vid = document.createElement('video');
+   				self.vid.src = URL.createObjectURL(blob);
+   				self.vid.controls = true;
+   				document.body.appendChild(self.vid);
+   				const deleteVid = document.createElement('button');
+   				document.body.appendChild(deleteVid);
+   				deleteVid.textContent = 'Delete';
+   				deleteVid.onclick = function() {
+   					Lines.canvas.vid.remove();
+   					this.remove();
+   				};
+			});
+		} else {
+			Lines.draw.videoCapture = false;
+			self.startCapture = false;
+			self.rec.stop();
+		}
+	}
+
 	this.prevCap = {
 		n: '',
 		f: 0
 	}
+
 	this.capture = function() {
 		if (Lines.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {

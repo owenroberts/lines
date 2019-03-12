@@ -148,6 +148,15 @@ function DrawingInterface() {
 		key: "shift-k"
 	}));
 
+	/* alt k */
+	capturePanel.add(new UIToggleButton({
+		title: "Video Capture",
+		on: "Start Video",
+		off: "Stop Video",
+		callback: Lines.canvas.videoCapture,
+		key: "alt-k"
+	}));
+
 	/* brush menu */
 	const brushPanel = new Panel("brush-menu", "Brush");
 	
