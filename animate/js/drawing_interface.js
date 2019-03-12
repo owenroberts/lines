@@ -104,9 +104,9 @@ function DrawingInterface() {
 		title: "Go To Frame",
 		callback: function() {
 			const f = prompt("Frame:");
-			self.resetLayers();
+			Lines.interface.beforeFrame();
 			Lines.currentFrame = f;
-			Lines.interface.updateFramesPanel();
+			Lines.interface.afterFrame();
 		},
 		key: "f"
 	}));
