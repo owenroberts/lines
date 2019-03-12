@@ -33,17 +33,13 @@ class Sprite {
 			this.animation.load(false, (w, h) => {
 				this.width = this.collider.width = w;
 				this.height = this.collider.height = h;
-				if (callback)
-					callback();
+				if (callback) callback();
 			});
 		} else {
-			/* size determined by sprite */
-			this.animation.load({w: this.width, h: this.height});
+			this.animation.load({w: this.width, h: this.height}); /* size determined by sprite */
 		}
-		if (this.debug) 
-			this.animation.debug = true;
-		if (this.drawBackground)
-			this.animation.drawBackground = true;
+		if (this.debug) this.animation.debug = true;
+		if (this.drawBackground) this.animation.drawBackground = true;
 	}
 
 	setCollider(x, y, w, h) {
@@ -80,8 +76,8 @@ class Sprite {
 		}
 	}
 
-	display() {
-		if (this.alive && this.isOnScreen()) {
+	display(isMap) {
+		if (this.alive && (this.isOnScreen() || isMap)) {
 			if (this.debug) {
 				this.ctx.beginPath();
 				this.ctx.lineWidth = 1;
@@ -96,10 +92,8 @@ class Sprite {
 				this.ctx.stroke();
 			}
 			if (this.animation && this.animation.loaded) {
-				if (this.bkg) 
-					this.animation.drawBkg(this.position.x, this.position.y);
-				else 
-					this.animation.draw(this.position.x, this.position.y);
+				if (this.bkg) this.animation.drawBkg(this.position.x, this.position.y);
+				else this.animation.draw(this.position.x, this.position.y);
 			}
 		}
 	}
