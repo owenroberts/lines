@@ -84,32 +84,54 @@ function Interface() {
 		else 
 			self.plusFrame.setId("current");
 	};
+
+	/* call before changing a frame */
+	this.beforeFrame = function() {
+		Lines.drawEvents.isDrawing = false;
+		Lines.data.saveLines();
+	};
+	
+	/* call after changing a frame */
+	this.afterFrame = function() {
+		self.updateFramesPanel();
+		Lines.drawingInterface.resetLayers();
+	};
 	
 	/* e key - go to next frame */
 	this.nextFrame = function() {
-		Lines.drawEvents.isDrawing = false;
-		Lines.data.saveLines();
-		if (Lines.currentFrame < Lines.frames.length) 
-			Lines.currentFrame++;
-		self.updateFramesPanel();
-		Lines.drawingInterface.resetLayers();
+		self.beforeFrame();
+		if (Lines.currentFrame < Lines.frames.length) Lines.currentFrame++;
+		self.afterFrame();
 	};
 
 	/* w key - got to previous frame */
 	this.prevFrame = function() {
-		Lines.drawEvents.isDrawing = false;
-		Lines.data.saveLines();
-		if (Lines.currentFrame > 0) 
-			Lines.currentFrame--;
-		self.updateFramesPanel();
-		Lines.drawingInterface.resetLayers();
+		self.beforeFrame();
+		if (Lines.currentFrame > 0) Lines.currentFrame--;
+		self.afterFrame();
 	};
+
+	['1', '2', '3', '4', '5', '6', '7', '8', '9'].forEach(key => {
+		self.keyCommands[key] = {
+			callback: function() {
+				self.beforeFrame();
+				if (Lines.frames[+key]) Lines.currentFrame = +key;
+				self.afterFrame();
+			}
+		}
+	});
+	self.keyCommands['`'] = {
+		callback: function() {
+			self.beforeFrame();
+			if (Lines.frames[0]) Lines.currentFrame = 0;
+			self.afterFrame();
+		}
+	}
 
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
-		if (k == "space" || k == "tab") 
-			ev.preventDefault();
+		if (k == "space" || k == "tab") ev.preventDefault();
 		if (document.activeElement.type != "text") {
 			
 			if (ev.shiftKey) k = "shift-" + k;
@@ -119,15 +141,12 @@ function Interface() {
 			if (self.keyCommands[k]) {
 				self.keyCommands[k].callback(ev);
 				//  self.keyCommands[k].addClass('key-down'); show key presses?
-				if (self.keyCommands[k].toggleText) {
-					self.keyCommands[k].toggleText();
-				}
+				if (self.keyCommands[k].toggleText) self.keyCommands[k].toggleText();
 			}
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
 				Lines.fio.saveFramesToFile();
 				document.activeElement.blur();
-				
 			}
 		}
 	}
