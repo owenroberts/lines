@@ -60,8 +60,8 @@ function Draw(fps) {
 				Lines.interface.updateFrameNum();
 
 			Lines.canvas.ctx.clearRect(0, 0, Lines.canvas.width, Lines.canvas.height);
-			
-			if (self.captureWithBackground && self.captureFrames > 0) {
+
+			if (self.videoCapture || (self.captureWithBackground && self.captureFrames > 0)) {
 				Lines.canvas.ctx.rect(0, 0, Lines.canvas.width, Lines.canvas.height);
 				Lines.canvas.ctx.fillStyle = '#' + Lines.canvas.bgColor.color;
 				Lines.canvas.ctx.fill();
