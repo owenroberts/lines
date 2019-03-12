@@ -173,8 +173,7 @@ function Draw(fps) {
 					params.y + s.y + Cool.random(-params.jig, params.jig) + off.y
 				);
 				for (let i = 0; i < params.segNum; i++) {
-					/* midpoint(s) of segment */
-					const p = new Cool.Vector(s.x + v.x * i, s.y + v.y * i); 
+					const p = new Cool.Vector(s.x + v.x * i, s.y + v.y * i);  /* midpoint(s) of segment */
 					Lines.canvas.ctx.lineTo( 
 						params.x + p.x + v.x + Cool.random(-params.jig, params.jig) + off.x, 
 						params.y + p.y + v.y + Cool.random(-params.jig, params.jig) + off.y 
@@ -186,15 +185,11 @@ function Draw(fps) {
 					Lines.canvas.setStrokeColor(params.color);
 			}
 			
-			
 			off.x += off.xSpeed;
-			if (off.x >= params.wig || off.x <= -params.wig)
-				off.xSpeed *= -1;
+			if (off.x >= params.wig || off.x <= -params.wig) off.xSpeed *= -1;
 
 			off.y += off.ySpeed;
-			if (off.y >= params.wig || off.y <= -params.wig)
-				off.ySpeed *= -1;
-
+			if (off.y >= params.wig || off.y <= -params.wig) off.ySpeed *= -1;
 		}
 		Lines.canvas.ctx.stroke();
 	};

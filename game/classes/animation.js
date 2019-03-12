@@ -1,6 +1,7 @@
 /* animation is the lines playing module, child of sprite obj */
 class Animation {
 	constructor(src, debug) {
+		// if (debug) console.log(src);
 		this.src = src;
 		this.debug = debug;
 		this.loaded = false;
@@ -27,6 +28,8 @@ class Animation {
 	}
 
 	load(setAnimSize, callback) {
+		// if (this.debug) console.log(this.src);
+		// console.log(this.src);
 		fetch(this.src)
 			.then(response => { return response.json() })
 			.then(data => {
@@ -36,8 +39,7 @@ class Animation {
 				if (this.states.default)
 					this.states.default.end = this.frames.length;
 				if (!setAnimSize) {
-					if (callback) 
-						callback(data.w, data.h);
+					if (callback) callback(data.w, data.h);
 				} else {
 					this.widthRatio = setAnimSize.w / data.w;
 					this.heightRatio = setAnimSize.h / data.h;
@@ -90,11 +92,9 @@ class Animation {
 				// Game.ctx.scale(-1,1);
 			}
 			if (this.frames[this.currentFrame]) {
-
-				if (!Game.mixedColors) 
-					Game.ctx.beginPath();
+				if (!Game.mixedColors) Game.ctx.beginPath();
 				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
-					const fr = this.frames[this.currentFrame][i];
+					const fr = this.frames[this.currentFrame][i]; // layer
 					const dr = this.drawings[fr.d];
 					const jig = this.jig || +fr.r;
 					const seg = this.seg || +fr.n;
@@ -106,8 +106,7 @@ class Animation {
 						y: Cool.random(0, wig),
 						ySpeed: Cool.random(-wigSpeed, wigSpeed)
 					};
-					if (Game.mixedColors || Game.debug || this.debug) 
-						Game.ctx.beginPath();
+					if (Game.mixedColors || Game.debug || this.debug) Game.ctx.beginPath();
 					for (let h = fr.s; h < fr.e - 1; h++) {
 						const s = dr[h]; // line data
 						const e = dr[h + 1];
@@ -130,23 +129,17 @@ class Animation {
 							if (Game.ctx.strokeStyle.replace("#","") != fr.c)
 								Game.ctx.strokeStyle = "#" + fr.c;
 						}
-						
+
+						off.x += off.xSpeed;
+						if (off.x >= wig || off.x <= -wig) off.xSpeed *= -1;
+
+						off.y += off.ySpeed;
+						if (off.y >= wig || off.y <= -wig) off.ySpeed *= -1;
 					}
-					if (Game.mixedColors || Game.debug || this.debug)
-						Game.ctx.stroke();
-
-					off.x += off.xSpeed;
-					if (off.x >= wig || off.x <= -wig)
-						off.xSpeed *= -1;
-
-					off.y += off.ySpeed;
-					if (off.y >= wig || off.y <= -wig)
-						off.ySpeed *= -1;
+					if (Game.mixedColors || Game.debug || this.debug) Game.ctx.stroke();
 				}
-				if (!this.mixedColors) 
-					Game.ctx.stroke();
-				if (this.drawBackground)
-					this.drawBkg(x, y);
+				if (!this.mixedColors) Game.ctx.stroke();
+				if (this.drawBackground) this.drawBkg(x, y);
 			}
 			// if (this.mirror) Game.ctx.restore();
 		}
@@ -158,11 +151,17 @@ class Animation {
 			// console.log(this.state, this.states[this.state])
 			// console.log(this.currentFrame, this.currentFrameCounter, this.states[this.state].end);
 		}
-
 		if (this.currentFrame <= this.states[this.state].end) {
 			this.currentFrameCounter += this.intervalRatio;
 			if (this.randomFrames && this.currentFrame != Math.floor(this.currentFrameCounter)) {
-				this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
+				if (this.prevFrameCheck) {
+					const prevFrame = this.currentFrame;
+					while (prevFrame == this.currentFrame) {
+						this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
+					}
+				} else {
+					this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
+				}
 			} else {
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 			}
