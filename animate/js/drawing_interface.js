@@ -188,9 +188,9 @@ function DrawingInterface() {
 			/* not dry */
 			if (ev.type == 'keyup') {
 				self.brushElem.setValue(+ev.target.value);
-				Lines.drawEvents.brush = +ev.target.value;
+				Lines.drawEvents.brushSpread = +ev.target.value;
 			} else {
-				Lines.drawEvents.brush = +this.value;
+				Lines.drawEvents.brushSpread = +this.value;
 			}
 		}
 	});
@@ -213,6 +213,24 @@ function DrawingInterface() {
 		}
 	});
 	brushPanel.add(this.dotsElem);
+
+	this.grassElem = new UIRange({
+		label: "Grass",
+		value: 0,
+		min: 0,
+		max: 20,
+		input: "grass-range",
+		callback: ev => {
+			if (ev.type == 'keyup') {
+				self.grassElem.setValue(+ev.target.value);
+				Lines.drawEvents.grass = +ev.target.value;
+			} else {
+				Lines.drawEvents.grass = +ev.target.value;
+			}
+		}
+	});
+	brushPanel.add(this.grassElem);
+
 
 	/* lines panel */
 	const linesPanel = new Panel("lines-menu", "Lines");
