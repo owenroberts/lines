@@ -52,6 +52,8 @@ function DrawEvents(defaults) {
 
 	this.addBrush = function(x, y) {
 		const b = self.brush * self.brush * self.brushSpread;
+		let _y = 1;
+		if (self.grass > 0) _y *= self.grass;
 		let origin = new Cool.Vector(x, y);
 		for (let i = 0; i < self.brush; i++) {
 			let point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
@@ -63,7 +65,7 @@ function DrawEvents(defaults) {
 			for (let i = 0; i < points; i ++) {
 				Lines.lines.push(new Cool.Vector(
 					point.x + Cool.randomInt(-1, 1), 
-					point.y + Cool.randomInt(-1, 1)
+					point.y + Cool.randomInt(_y)
 				));
 			}
 			Lines.lines.push('end');
