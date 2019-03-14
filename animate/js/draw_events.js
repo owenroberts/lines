@@ -16,6 +16,7 @@ function DrawEvents(defaults) {
 	this.brushSpread = 1;
 	this.startDots = false;
 	this.dots = 10;
+	this.grass = 0;
 
 	// how often the mousemove records, default 30ms
 	this.mouseTimer = performance.now();  //  independent of draw timer 
