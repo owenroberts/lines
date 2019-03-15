@@ -134,18 +134,21 @@ function Canvas(width, height, _color) {
 			const fr = Lines.frames[i];
 			for (let h = 0; h < fr.length; h++) {
 				const layer = fr[h];
+				// console.log(layer.x, layer.y);
 				for (let j = 0; j < Lines.drawings[layer.d].length; j++) {
 					const dr = Lines.drawings[layer.d][j];
 					if (dr != "end") { /* v2.0 segments divided w end*/
 						tolerance = Math.max( tolerance, layer.r * 4 );
-						min.x = Math.min( min.x, dr.x );
-						min.y = Math.min( min.y, dr.y );
-						max.x = Math.max( max.x, dr.x );
-						max.y = Math.max( max.y, dr.y );
+						min.x = Math.min( min.x, dr.x + layer.x);
+						min.y = Math.min( min.y, dr.y + layer.y);
+						max.x = Math.max( max.x, dr.x + layer.x);
+						max.y = Math.max( max.y, dr.y + layer.y);
 					}	
 				}
 			}
 		}
+
+		// console.log(min, max);
 
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
@@ -158,10 +161,9 @@ function Canvas(width, height, _color) {
 					x: layer.x + (min.x - tolerance),
 					y: layer.y + (min.y - tolerance)
 				};
-				if (diff.x > 0)
-					layer.x -= diff.x;
-				if (diff.y > 0)
-					layer.y -= diff.y;
+				// console.log(diff);
+				if (diff.x > 0) layer.x -= diff.x;
+				if (diff.y > 0) layer.y -= diff.y;
 			}
 		}
 	};
