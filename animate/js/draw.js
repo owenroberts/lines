@@ -41,7 +41,11 @@ function Draw(fps) {
 		if (!self.isPlaying) Lines.data.saveLines();
 		self.isPlaying = !self.isPlaying;
 		Lines.interface.updateFrameNum();
-	}
+	};
+
+	this.setFrame = function(f) {
+		Lines.currentFrame = self.currentFrameCounter = +f;	
+	};
 
 	this.draw = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {

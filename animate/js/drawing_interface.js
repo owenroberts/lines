@@ -105,7 +105,7 @@ function DrawingInterface() {
 		callback: function() {
 			const f = prompt("Frame:");
 			Lines.interface.beforeFrame();
-			Lines.currentFrame = f;
+			Lines.draw.setFrame(f);
 			Lines.interface.afterFrame();
 		},
 		key: "f"
