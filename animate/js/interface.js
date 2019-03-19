@@ -16,13 +16,12 @@ function Interface() {
 			self.updateFrameNum();
 		}
 	});
-	this.keyCommands['p'] = this.plusFrame; /* can't add key command bc this module doesn't exist yet */
+	this.keyCommands['+'] = this.plusFrame; /* can't add key command bc this module doesn't exist yet */
 
 	this.back = new UI({
 		id: 'back',
 		callback: function() {
-			Lines.currentFrame = self.currentFrameCounter = 0;
-			Lines.interface.updateFramesPanel();
+			Lines.draw.setFrame(0);
 			Lines.interface.updateFramesPanel();
 			Lines.drawingInterface.resetLayers();
 		}
@@ -45,7 +44,7 @@ function Interface() {
 
 				/* click on frame, set the current frame */
 				frmElem.onclick = function(ev) {
-					Lines.currentFrame = Lines.draw.currentFrameCounter = i;
+					Lines.draw.setFrame(i);
 					self.updateFrameNum();
 					Lines.drawingInterface.resetLayers();
 				};
@@ -100,14 +99,14 @@ function Interface() {
 	/* e key - go to next frame */
 	this.nextFrame = function() {
 		self.beforeFrame();
-		if (Lines.currentFrame < Lines.frames.length) Lines.currentFrame++;
+		if (Lines.currentFrame < Lines.frames.length) Lines.draw.setFrame(Lines.currentFrame + 1);
 		self.afterFrame();
 	};
 
 	/* w key - got to previous frame */
 	this.prevFrame = function() {
 		self.beforeFrame();
-		if (Lines.currentFrame > 0) Lines.currentFrame--;
+		if (Lines.currentFrame > 0) Lines.draw.setFrame(Lines.currentFrame - 1);
 		self.afterFrame();
 	};
 
