@@ -20,19 +20,37 @@ function DrawingInterface() {
 	});
 	panel.add(this.frameNumDisplay); 
 
+	/* f - go to frame */
+	panel.add(new UIButton({
+		title: "Go To Frame",
+		callback: function() {
+			const f = prompt("Frame:");
+			Lines.interface.beforeFrame();
+			Lines.draw.setFrame(f);
+			Lines.interface.afterFrame();
+		},
+		key: "f"
+	}));
+
+	panel.addRow();
+
+
+
 	/* prev frame */
 	panel.add(new UIButton({
-		title: "Prev Frame",
+		title: "Prev",
 		callback: Lines.interface.prevFrame,
 		key: "w"
 	}));
 
 	/* next frame */
 	panel.add(new UIButton({
-		title: "Next Frame",
+		title: "Next",
 		callback: Lines.interface.nextFrame,
 		key: "e"
 	}));
+
+	panel.addRow();
 
 	/* l key - onion skin num */
 	panel.add(new UISelect({
@@ -62,6 +80,8 @@ function DrawingInterface() {
 		key: "shift-l"
 	}));
 
+	panel.addRow();
+
 	/* ; key - fps */
 	this.fpsSelect = new UISelect({
 		label: "FPS",
@@ -81,6 +101,7 @@ function DrawingInterface() {
 	});
 	panel.add(this.fpsSelect);
 
+	panel.addRow();
 	/* ' key - ' lines per second */
 	panel.add(new UISelect({
 		label: "Lines/Second",
@@ -97,18 +118,6 @@ function DrawingInterface() {
 			}
 		},
 		key: "'"
-	}));
-	
-	/* f - go to frame */
-	panel.add(new UIButton({
-		title: "Go To Frame",
-		callback: function() {
-			const f = prompt("Frame:");
-			Lines.interface.beforeFrame();
-			Lines.draw.setFrame(f);
-			Lines.interface.afterFrame();
-		},
-		key: "f"
 	}));
 
 	const capturePanel = new Panel("capture-menu", "Capture");
@@ -410,6 +419,8 @@ function DrawingInterface() {
 		callback: self.displayLayers
 	}));
 
+	console.log(this.layerPanel);
+
 	/* maybe use regular cut here? */
 	this.layerPanel.add(new UIButton({
 		"title": "Cut Selected Segment",
@@ -451,7 +462,7 @@ function DrawingInterface() {
 		title: "Update Drawings",
 		callback: function() {
 			/* have to regenerate this stuff to work with other frames */
-			self.resetLayers();
+			// self.resetLayers();
 			for (let i = 0; i < Lines.drawings.length; i++) {
 				let layer; /* check if layer is in frame already */
 				if (Lines.frames[Lines.currentFrame]) {
