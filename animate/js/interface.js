@@ -158,25 +158,27 @@ function Interface() {
 	this.addPalette = function() {
 		Lines.data.saveLines();
 		const name = self.palettes.current = prompt('Name this palette.');
-		self.palettes[name] = {
-			color: Lines.lineColor.color,
-			seg: Lines.drawEvents.segNumRange,
-			jig: Lines.drawEvents.jiggleRange,
-			wig: Lines.drawEvents.wiggleRange,
-			wigSpeed: Lines.drawEvents.wiggleSpeed,
-			lineWidth: Lines.canvas.ctx.lineWidth,
-			mouse: Lines.drawEvents.mouseInterval,
-			brush: Lines.drawEvents.brush,
-			brushSpread: Lines.drawEvents.brushSpread,
-			dots: Lines.drawEvents.dots,
-			grass: Lines.drawEvents.grass
-		};
-		palette.add(new UIButton({
-			title: name,
-			callback: function() {
-				self.loadPalette(name);
-			}
-		}));
+		if (name) {
+			self.palettes[name] = {
+				color: Lines.lineColor.color,
+				seg: Lines.drawEvents.segNumRange,
+				jig: Lines.drawEvents.jiggleRange,
+				wig: Lines.drawEvents.wiggleRange,
+				wigSpeed: Lines.drawEvents.wiggleSpeed,
+				lineWidth: Lines.canvas.ctx.lineWidth,
+				mouse: Lines.drawEvents.mouseInterval,
+				brush: Lines.drawEvents.brush,
+				brushSpread: Lines.drawEvents.brushSpread,
+				dots: Lines.drawEvents.dots,
+				grass: Lines.drawEvents.grass
+			};
+			palette.add(new UIButton({
+				title: name,
+				callback: function() {
+					self.loadPalette(name);
+				}
+			}));
+		}
 	};
 
 	this.loadPalette = function(name) {
@@ -212,7 +214,6 @@ function Interface() {
 	palette.add(this.keyCommands['p']);
 	this.keyCommands['p'].setKey('p');
 
-
 	/* settings */
 	this.saveSettings = function() {
 		const settings = {
@@ -238,7 +239,7 @@ function Interface() {
 		Lines.draw.onionSkinVisible = settings.onionSkinVisible;
 		Lines.draw.onionSkinNum = settings.onionSkinNum;
 		self.palettes = settings.palettes;
-		self.loadPalette(self.palettes.current);
+		if (self.palettes.current) self.loadPalette(self.palettes.current);
 		for (const key in settings.palettes) {
 			if (key != 'current') {
 				palette.add(new UIButton({
