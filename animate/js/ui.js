@@ -226,10 +226,8 @@ class UIRange extends UI {
 
 	setValue(value) {
 		this.el.value = value;
-		if (this.display)
-			this.display.set(value);
-		if (this.input)
-			this.input.set(value);
+		if (this.display) this.display.set(value);
+		if (this.input) this.input.set(value);
 		this.el.blur();
 	}
 	

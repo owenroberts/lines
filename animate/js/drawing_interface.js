@@ -534,7 +534,7 @@ function DrawingInterface() {
 	const mousePanel = new Panel("mouse-menu", "Mouse");
 	this.mouseElem = new UIRange({
 		label: "Mouse Time",
-		value: 30,
+		value: Lines.drawEvents.mouseInterval,
 		min: 0,
 		max: 100,
 		input: "mouse-range",

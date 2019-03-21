@@ -150,4 +150,62 @@ function Interface() {
 		}
 	}
 	document.addEventListener("keydown", self.keyDown, false);
+
+	/* palette */
+	const palette = new Panel('palette', 'Palettes');
+	this.palettes = {};
+	
+	this.addPalette = function() {
+		Lines.data.saveLines();
+		const name = prompt('Name this palette.');
+		self.palettes[name] = {
+			color: Lines.lineColor.color,
+			seg: Lines.drawEvents.segNumRange,
+			jig: Lines.drawEvents.jiggleRange,
+			wig: Lines.drawEvents.wiggleRange,
+			wigSpeed: Lines.drawEvents.wiggleSpeed,
+			lineWidth: Lines.canvas.ctx.lineWidth,
+			mouse: Lines.drawEvents.mouseInterval,
+			brush: Lines.drawEvents.brush,
+			brushSpread: Lines.drawEvents.brushSpread,
+			dots: Lines.drawEvents.dots,
+			grass: Lines.drawEvents.grass
+		};
+		palette.add(new UIButton({
+			title: name,
+			callback: function() {
+				self.loadPalette(name);
+			}
+		}));
+	};
+
+	this.loadPalette = function(name) {
+		Lines.data.saveLines();
+		Lines.lineColor.setColor(self.palettes[name].color);
+		Lines.drawEvents.segNumRange = self.palettes[name].seg;
+		Lines.drawingInterface.segNumElem.setValue(self.palettes[name].seg);
+		Lines.drawEvents.jiggleRange = self.palettes[name].jig;
+		Lines.drawingInterface.jiggleElem.setValue(self.palettes[name].jig);
+		Lines.drawEvents.wiggleRange = self.palettes[name].wig;
+		Lines.drawingInterface.wiggleElem.setValue(self.palettes[name].wig);
+		Lines.drawEvents.wiggleSpeed = self.palettes[name].wigSpeed;
+		Lines.drawingInterface.wiggleSpeedElem.setValue(self.palettes[name].wigSpeed);
+		Lines.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
+		Lines.drawingInterface.lineWidth.setValue(self.palettes[name].lineWidth);
+		Lines.drawEvents.mouseInterval = self.palettes[name].mouse;
+		Lines.drawingInterface.mouseElem.setValue(self.palettes[name].mouse);
+		Lines.drawEvents.brush = self.palettes[name].brush;
+		Lines.drawingInterface.brushElem.setValue(self.palettes[name].brush);
+		Lines.drawEvents.brushSpread = self.palettes[name].brushSpread;
+		Lines.drawingInterface.brushSpreadElem.setValue(self.palettes[name].brushSpread);
+		Lines.drawEvents.dots = self.palettes[name].dots;
+		Lines.drawingInterface.dotsElem.setValue(self.palettes[name].dots);
+		Lines.drawEvents.grass = self.palettes[name].grass;
+		Lines.drawingInterface.grassElem.setValue(self.palettes[name].grass);
+	};
+
+	palette.add(new UIButton({
+		title: "Save",
+		callback: self.addPalette
+	}))
 }

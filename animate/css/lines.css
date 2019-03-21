@@ -1,6 +1,6 @@
 @import url(font.css);
 body {
-  font-family: Monaco, Helvetica, sans-serif;
+  font-family: Verdana, sans-serif;
   margin: 0;
   font-size: 11px;
   -webkit-user-select: none;
@@ -12,13 +12,23 @@ body {
 button:focus {
   outline: none; }
 
+#nav .btn:hover:after, .menu-panel [title]:hover:after, .menu-panel .key-down:after {
+  content: attr(title);
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: lightblue;
+  border: 1px dashed blue;
+  border-radius: 2px;
+  padding: 1px 3px;
+  color: black; }
+
 #splash {
   font-size: 18px;
   width: 600px;
   margin: 2em auto; }
 
 #container {
-  /* 	min-width:720px; */
   margin: 1em;
   display: flex;
   flex-wrap: wrap; }
@@ -101,18 +111,6 @@ button:focus {
     margin-right: 3px; }
     .menu-panel .btn:hover {
       background: lightgray; }
-  .menu-panel input {
-    /* max-width: 80px; */ }
-  .menu-panel *[title]:hover:after, .menu-panel .key-down:after {
-    content: attr(title);
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: lightblue;
-    border: 1px dashed blue;
-    border-radius: 2px;
-    padding: 1px 3px;
-    color: black; }
 
 #color-menu input, #canvas-menu input {
   display: inline-block;
