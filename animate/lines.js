@@ -21,11 +21,13 @@ window.addEventListener("load", function() {
 	// Lines.lineColor.setColor('ffffff');
 	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
 	Lines.fio = new Files_IO({
-		fit: false /* fit to canvas when saving */
+		fit: false, /* fit to canvas when saving */
+		save: true /* save settings */
 	});
 
 	// interfaces 
 	Lines.drawingInterface = new DrawingInterface();
+	if (localStorage.settings) Lines.interface.loadSettings();
 	
 	Lines.draw.start(); // necessary ? 
 });
