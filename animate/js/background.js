@@ -46,6 +46,8 @@ function Background() {
 		on: "Hide", 
 		off: "Show" 
 	}));
+
+	panel.addRow();
 	
 	/* update x position */
 	this.xRange = new UIRange({

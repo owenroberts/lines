@@ -31,18 +31,8 @@ button:focus { outline: none; }
 	margin:1em;
 	display: flex;
 	flex-wrap: wrap;
-	#draw {
-		padding-right:1em;
-	}
-	#tools {
-		flex-grow: 1;
-		#panels {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-			margin-top:0.5em;
-
-		}
-	}
+	#draw { padding-right:1em; }
+	#tools { flex: 1; }
 }
 
 #canvas {
@@ -54,12 +44,12 @@ button:focus { outline: none; }
 
 #nav {
 	#title {
-		border:none;
-		font-size:1.5em;
-		display:block;
+		border: none;
+		font-size: 1.5em;
+		display: block;
 		margin-bottom: 0.5em;
 		border-bottom: 1px solid transparent;
-		width:100%;
+		width: 100%;
 		&:focus {
 			outline:none;
 			border-bottom: 1px solid black;
@@ -67,45 +57,54 @@ button:focus { outline: none; }
 	}
 	.btn {
 		border: 1px solid gray;
-		padding:0.25em;
+		padding: 0.25em;
 		margin: .25em 0;
-		border-radius:3px;
-		cursor:pointer;
-		&:hover {background:lightgray; }
-		&:hover:after {  }
+		border-radius: 3px;
+		cursor: pointer;
+		&:hover {background: lightgray; }
+		line-height: 2;
+    	white-space: nowrap;
 	}
-	.btn:hover:after {
-		@extend %tool-tip;
-	}
+	.btn:hover:after { @extend %tool-tip; }
 }
 
 .panel-toggle {
-	display:inline-block;
+	display: inline-block;
 	position: absolute;
 	right: 0;
-	top:0;
-	left:0;
-	text-align:right;
-	padding:0.1em 0.25em;
+	top: 0;
+	left: 0;
+	text-align: right;
+	padding: 0.1em 0.25em;
 	cursor: pointer;
-	font-size:14px;
+	font-size: 14px;
 	font-weight: 100;
 }
 
+#panels {
+	/*display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));*/
+	margin-top:0.5em;
+	display: flex;
+	flex-wrap: wrap;
+}
+
 .menu-panel {
+	flex-basis: 120px;
+	flex-grow: 1;
+	max-width: 160px;
 	border-top: 1px solid lightgray;
 	border-right: 1px solid lightgray;
 	padding: 0.5em;
 	overflow: hidden;
 	position: relative;
-	height:25px;
+	height: 25px;
 	.panel-title {
 		margin-bottom: 1em;
 	}
 	.row {
 		margin-bottom: 2px;
 		display: flex;
-		flex-direction: row;
     	flex-wrap: wrap;
 		span {
 			vertical-align: top;
@@ -120,22 +119,21 @@ button:focus { outline: none; }
 			width: 30px;
 			margin-left: 5px;
 		}
-		.btn {
-			padding: 0 3px;
-		}
 	}
 	.btn {
 		border: 1px solid gray;
+		border-radius: 3px;
 		padding: 0 0.25em;
 		margin: .25em 0;
 		cursor: pointer;
 		margin-right: 3px;
-		&:hover {
-			background:lightgray;
-		}
+		&:hover { background:lightgray; }
 	}
 	*[title]:hover:after, .key-down:after {
 		@extend %tool-tip;
+	}
+	&#frames {
+		max-width: 100%;
 	}
 }
 

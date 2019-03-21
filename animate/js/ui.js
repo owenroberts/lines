@@ -95,8 +95,7 @@ class Panel {
 	addRow(id) {
 		const row = document.createElement("div");
 		row.classList.add("row");
-		if (id)
-			row.id = id;
+		if (id) row.id = id;
 		this.el.appendChild(row);
 		this.rows.push(row);
 		return row;
@@ -108,11 +107,10 @@ class Panel {
 	}
 	add(component, _row) {
 		let row = _row;
-		if (!row)
-			row = this.addRow();
+		if (this.rows.length == 0) row = this.addRow();
+		if (!row) row = this.rows[this.rows.length - 1];
 		row.appendChild(component.el);
-		if (component.label)
-			component.addLabel();
+		if (component.label) component.addLabel();
 		if (component.display)
 			this.rows[this.rows.length - 1].insertBefore(component.display.el, component.el);
 		if (component.input)
