@@ -74,7 +74,7 @@ class Panel {
 		this.el.classList.add("menu-panel");
 		this.toggleBtn = document.createElement("div");
 		this.toggleBtn.classList.add("panel-toggle");
-		this.toggleBtn.textContent = "v";
+		this.toggleBtn.textContent = "▽";
 		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
 		const title = document.createElement("div");
 		title.textContent = label;
@@ -82,14 +82,22 @@ class Panel {
 		this.el.appendChild(title);
 		this.el.appendChild(this.toggleBtn);
 		this.rows = [];
+
+		this.orderBtn = document.createElement("div");
+		this.orderBtn.classList.add("panel-order");
+		this.orderBtn.textContent = "⚆";
+		this.orderBtn.addEventListener("click", ev => {
+			this.el.style.order = +this.el.style.order + 1;
+		});
+		this.el.appendChild(this.orderBtn);
 	}
 	toggle() {
 		if (this.el.clientHeight <= 25) {
 			this.el.style.height = "auto";
-			this.toggleBtn.innerHTML = "^";
+			this.toggleBtn.innerHTML = "△";
 		} else {
 			this.el.style.height = 25 + "px";
-			this.toggleBtn.innerHTML = "v";
+			this.toggleBtn.innerHTML = "▽";
 		}
 	}
 	addRow(id) {
