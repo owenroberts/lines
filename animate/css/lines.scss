@@ -68,10 +68,10 @@ button:focus { outline: none; }
 	.btn:hover:after { @extend %tool-tip; }
 }
 
-.panel-toggle {
+.panel-toggle, .panel-order {
 	display: inline-block;
 	position: absolute;
-	right: 0;
+	right: 12px;
 	top: 0;
 	left: 0;
 	text-align: right;
@@ -79,6 +79,12 @@ button:focus { outline: none; }
 	cursor: pointer;
 	font-size: 14px;
 	font-weight: 100;
+}
+.panel-order {
+	/*font-size: 0.8em; */
+	right: 0px; 
+	left: auto;
+	/*line-height: 2;*/
 }
 
 #panels {
@@ -93,6 +99,7 @@ button:focus { outline: none; }
 	flex-basis: 120px;
 	flex-grow: 1;
 	max-width: 160px;
+	order: 0;
 	border-top: 1px solid lightgray;
 	border-right: 1px solid lightgray;
 	padding: 0.5em;

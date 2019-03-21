@@ -34,8 +34,6 @@ function DrawingInterface() {
 
 	panel.addRow();
 
-
-
 	/* prev frame */
 	panel.add(new UIButton({
 		title: "Prev",
@@ -351,6 +349,7 @@ function DrawingInterface() {
 	/* layer panel */
 	this.layerPanel = new Panel("layer-menu", "Layer");
 	this.frameRow = this.layerPanel.addRow();
+	this.layerPanel.addRow();
 	this.layers = [];
 
 	this.updateLayerProperty = function(prop, value) {
@@ -462,7 +461,7 @@ function DrawingInterface() {
 		title: "Update Drawings",
 		callback: function() {
 			/* have to regenerate this stuff to work with other frames */
-			// self.resetLayers();
+			self.resetLayers();
 			for (let i = 0; i < Lines.drawings.length; i++) {
 				let layer; /* check if layer is in frame already */
 				if (Lines.frames[Lines.currentFrame]) {
@@ -501,8 +500,7 @@ function DrawingInterface() {
 					}
 				}
 
-				if (layer)
-					self.layers.push(layer);
+				if (layer) self.layers.push(layer);
 
 				const row = self.drawingPanel.addRow(i + '-drawing-row');
 					
