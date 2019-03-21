@@ -1,13 +1,26 @@
 @import 'font.css';
 body {
-	font-family: Monaco, Helvetica, sans-serif;
-	margin:0;
-	font-size:11px;
+	font-family: Verdana, sans-serif;
+	margin: 0;
+	font-size: 11px;
 	-webkit-user-select: none;
 	user-select: none;
 }
 * {box-sizing: border-box; }
 button:focus { outline: none; }
+
+%tool-tip {
+	content: attr(title);
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	background: lightblue;
+	border: 1px dashed blue;
+	border-radius: 2px;
+	padding: 1px 3px;
+	color: black;
+}
+
 #splash {
 	font-size: 18px;
 	width: 600px;
@@ -58,9 +71,11 @@ button:focus { outline: none; }
 		margin: .25em 0;
 		border-radius:3px;
 		cursor:pointer;
-		&:hover {
-			background:lightgray;
-		}
+		&:hover {background:lightgray; }
+		&:hover:after {  }
+	}
+	.btn:hover:after {
+		@extend %tool-tip;
 	}
 }
 
@@ -120,15 +135,7 @@ button:focus { outline: none; }
 		}
 	}
 	*[title]:hover:after, .key-down:after {
-		content: attr(title);
-		position: fixed;
-		top: 20px;
-		right: 20px;
-		background: lightblue;
-		border: 1px dashed blue;
-		border-radius: 2px;
-		padding: 1px 3px;
-		color: black;
+		@extend %tool-tip;
 	}
 }
 
