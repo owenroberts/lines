@@ -157,7 +157,7 @@ function Interface() {
 	
 	this.addPalette = function() {
 		Lines.data.saveLines();
-		const name = prompt('Name this palette.');
+		const name = self.palettes.current = prompt('Name this palette.');
 		self.palettes[name] = {
 			color: Lines.lineColor.color,
 			seg: Lines.drawEvents.segNumRange,
@@ -181,6 +181,7 @@ function Interface() {
 
 	this.loadPalette = function(name) {
 		Lines.data.saveLines();
+		self.palettes.current = name;
 		Lines.lineColor.setColor(self.palettes[name].color);
 		Lines.drawEvents.segNumRange = self.palettes[name].seg;
 		Lines.drawingInterface.segNumElem.setValue(self.palettes[name].seg);
@@ -204,8 +205,59 @@ function Interface() {
 		Lines.drawingInterface.grassElem.setValue(self.palettes[name].grass);
 	};
 
-	palette.add(new UIButton({
-		title: "Save",
+	this.keyCommands['p'] = new UIButton({
+		title: "Add Palette",
 		callback: self.addPalette
-	}))
+	});
+	palette.add(this.keyCommands['p']);
+	this.keyCommands['p'].setKey('p');
+
+
+	/* settings */
+	this.saveSettings = function() {
+		const settings = {
+			canvasColor: Lines.canvas.bgColor.color,
+			width: Lines.canvas.width,
+			height: Lines.canvas.height,
+			fps: Lines.draw.fps,
+			lps: Lines.draw.lps,
+			onionSkinVisible: Lines.draw.onionSkinVisible,
+			onionSkinNum: Lines.draw.onionSkinNum,
+
+		};
+		settings.palettes = self.palettes;
+		localStorage.settings = JSON.stringify(settings);
+	};	
+	this.loadSettings = function() {
+		const settings = JSON.parse(localStorage.settings);
+		Lines.canvas.bgColor.setColor(settings.canvasColor);
+		Lines.canvas.setWidth(settings.width);
+		Lines.canvas.setHeight(settings.height);
+		Lines.draw.setFps(settings.fps);
+		Lines.draw.setLps(settings.lps);
+		Lines.draw.onionSkinVisible = settings.onionSkinVisible;
+		Lines.draw.onionSkinNum = settings.onionSkinNum;
+		self.palettes = settings.palettes;
+		self.loadPalette(self.palettes.current);
+		for (const key in settings.palettes) {
+			if (key != 'current') {
+				palette.add(new UIButton({
+					title: key,
+					callback: function() {
+						self.loadPalette(key);
+					}
+				}));
+			}
+		}
+	};
+	this.keyCommands['ctrl-s'] = new UIButton({
+		id: "save-settings",
+		title: "Save Settings",
+		callback: self.saveSettings
+	});
+	this.keyCommands['alt-s'] = new UIButton({
+		id: "load-settings",
+		title: "Load Settings",
+		callback: self.loadSettings
+	});
 }

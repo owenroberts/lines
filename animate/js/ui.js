@@ -21,11 +21,7 @@ class UI {
 		if (params.value != undefined) 
 			this.el.value = params.value;
 
-		if (params.key) {
-			this.el.title = params.key; // hover title key text
-			Lines.interface.keyCommands[params.key] = this;
-		}
-
+		if (params.key) this.setKey(params.key);
 		if (params.observe && params.callback) {
 			const observer = new MutationObserver(function(list) {
 				for (var mut of list) {
@@ -35,6 +31,10 @@ class UI {
 			});
 			observer.observe(params.observe.elem, { attributes: true });
 		}
+	}
+	setKey(key) {
+		this.el.title = key; // hover title key text
+		if (Lines.interface) Lines.interface.keyCommands[key] = this;
 	}
 	addClass(c) {
 		this.el.classList.add(c);

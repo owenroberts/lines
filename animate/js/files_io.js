@@ -148,6 +148,7 @@ function Files_IO(params) {
 	}
 
 	window.addEventListener("beforeunload", function(ev) {
+		// Lines.interface.saveSettings();
 		ev.returnValue = 'Did you save dumbhole?';
 	});
 
