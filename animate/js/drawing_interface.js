@@ -418,8 +418,6 @@ function DrawingInterface() {
 		callback: self.displayLayers
 	}));
 
-	console.log(this.layerPanel);
-
 	/* maybe use regular cut here? */
 	this.layerPanel.add(new UIButton({
 		"title": "Cut Selected Segment",

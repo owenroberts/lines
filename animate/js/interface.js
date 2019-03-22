@@ -152,7 +152,7 @@ function Interface() {
 	document.addEventListener("keydown", self.keyDown, false);
 
 	/* palette */
-	const palette = new Panel('palette', 'Palettes');
+	const palette = new Panel('palette', 'Palette');
 	this.palettes = {};
 	
 	this.addPalette = function() {
@@ -229,6 +229,7 @@ function Interface() {
 		settings.palettes = self.palettes;
 		localStorage.settings = JSON.stringify(settings);
 	};	
+
 	this.loadSettings = function() {
 		const settings = JSON.parse(localStorage.settings);
 		Lines.canvas.bgColor.setColor(settings.canvasColor);
@@ -251,11 +252,13 @@ function Interface() {
 			}
 		}
 	};
+
 	this.keyCommands['ctrl-s'] = new UIButton({
 		id: "save-settings",
 		title: "Save Settings",
 		callback: self.saveSettings
 	});
+
 	this.keyCommands['alt-s'] = new UIButton({
 		id: "load-settings",
 		title: "Load Settings",
