@@ -25,17 +25,14 @@ function DrawEvents(defaults) {
 	
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != Lines.canvas.canvas) { 
-			if (self.isDrawing) 
-				Lines.data.saveLines();
+			if (self.isDrawing) Lines.data.saveLines();
 			self.isDrawing = false;
 
 			/* pointer context click on frames for copy frames */
 			if (ev.which == 3) {
 				ev.preventDefault();
 				const elem = document.elementFromPoint(ev.clientX, ev.clientY);
-				if (elem.classList.contains("frame")) {
-					Lines.data.addFrameToCopy(elem);
-				}
+				if (elem.classList.contains("frame")) Lines.data.addFrameToCopy(elem);
 			}
 		}
 	};
