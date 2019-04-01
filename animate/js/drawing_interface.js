@@ -377,8 +377,7 @@ function DrawingInterface() {
 		} else {
 			layer.c = layer.prevColor;
 			const index = self.layers.indexOf(layer);
-			if (index != -1)
-				self.layers.splice(index, 1);
+			if (index != -1)  self.layers.splice(index, 1);
 		}
 		layer.toggled = !layer.toggled;
 	};
@@ -399,11 +398,12 @@ function DrawingInterface() {
 		if (Lines.frames[Lines.currentFrame]) {
 			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
 				const layer = Lines.frames[Lines.currentFrame][i];
+				const layerIndex = layer.l;
 				self.layers.push(layer);
 				layer.toggled = false;
 				const toggleLayer = new UIToggleButton({
-					on: layer.d,
-					off: layer.d,
+					on: Lines.layers[layer.l].d,
+					off: Lines.layers[layer.l].d,
 					callback: function() {
 						self.layerToggle(layer);
 					}
