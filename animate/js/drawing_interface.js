@@ -518,7 +518,8 @@ function DrawingInterface() {
 						Lines.data.saveLines();
 						if (Lines.frames[Lines.currentFrame] == undefined) 
 							Lines.frames[Lines.currentFrame] = [];
-						Lines.frames[Lines.currentFrame].push(layer);
+						if (layer) Lines.frames[Lines.currentFrame].push(layer);
+						else console.log('%c no drawing', 'color:white;background:hotpink;');
 					}
 				}), row);
 
