@@ -73,11 +73,11 @@ class Animation {
 	}
 
 	playOnce(callback) {
-		if (!this.isPlaying)
-			this.isPlaying = true;
+		if (!this.isPlaying) this.isPlaying = true;
 		this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
 		this.onPlayedOnce = callback;
 		// this.randomFrames = false;  /* need this? */
+		// doesn't turn itself off?
 	}
 
 	overrideProperty(prop, value) {
