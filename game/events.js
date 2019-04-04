@@ -17,8 +17,7 @@ const Events = {
 				mouseDown(ev.offsetX, ev.offsetY, ev.which);
 			if (typeof startDrag === "function") {
 				dragOffset = startDrag(ev.offsetX, ev.offsetY);
-				if (dragOffset) 
-					dragStarted = true;
+				if (dragOffset) dragStarted = true;
 			}
 		}, false);
 
@@ -26,8 +25,7 @@ const Events = {
 			ev.preventDefault();
 			if (typeof mouseUp === "function") 
 				mouseUp(ev.offsetX, ev.offsetY, ev.which);
-			if (dragStarted)
-				dragStarted = false;
+			if (dragStarted) dragStarted = false;
 		}, false);
 
 		canvas.addEventListener('mousemove', function(ev) {
