@@ -96,6 +96,7 @@ class Sprite {
 				else this.animation.draw(this.position.x, this.position.y);
 			}
 		}
+		if (this.displayFunc) this.displayFunc();
 	}
 
 	isOnScreen() {
