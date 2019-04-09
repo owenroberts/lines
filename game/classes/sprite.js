@@ -26,6 +26,13 @@ class Sprite {
 		this.wiggleAmount = -1;
 	}
 	
+	/* i don't know why the other reset exists,
+		need this to add new animtion in toilet2 */
+	resetSize() {
+		this.width = undefined;
+		this.height = undefined;
+	}
+
 	addAnimation(src, callback) {
 		this.animation = new Animation(src, this.debug);
 		if (!this.width) {
