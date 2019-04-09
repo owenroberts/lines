@@ -1,4 +1,6 @@
 @import 'font.css';
+$main-color: lightblue;
+$accent-color: blue;
 body {
 	font-family: Verdana, sans-serif;
 	margin: 0;
@@ -14,8 +16,8 @@ button:focus { outline: none; }
 	position: fixed;
 	top: 20px;
 	right: 20px;
-	background: lightblue;
-	border: 1px dashed blue;
+	background: $main-color;
+	border: 1px dashed $accent-color;
 	border-radius: 2px;
 	padding: 1px 3px;
 	color: black;
@@ -71,20 +73,22 @@ button:focus { outline: none; }
 .panel-toggle, .panel-order {
 	display: inline-block;
 	position: absolute;
-	right: 12px;
+	right: 14px;
 	top: 0;
 	left: 0;
 	text-align: right;
-	padding: 0.1em 0.25em;
 	cursor: pointer;
 	font-size: 14px;
 	font-weight: 100;
+	&:hover { background: $main-color; }
+	opacity: 0.5;
+	border-top-right-radius: 3px;
+	border-bottom-right-radius: 3px;
 }
 .panel-order {
-	/*font-size: 0.8em; */
-	right: 0px; 
+	font-size: 1em; 
+	right: 2px; 
 	left: auto;
-	/*line-height: 2;*/
 }
 
 #panels {
