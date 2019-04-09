@@ -85,7 +85,7 @@ class Panel {
 
 		this.orderBtn = document.createElement("div");
 		this.orderBtn.classList.add("panel-order");
-		this.orderBtn.textContent = "⚆";
+		this.orderBtn.textContent = "⥂";
 		this.orderBtn.addEventListener("click", ev => {
 			this.el.style.order = +this.el.style.order + 1;
 		});

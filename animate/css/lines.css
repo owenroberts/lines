@@ -66,20 +66,23 @@ button:focus {
 .panel-toggle, .panel-order {
   display: inline-block;
   position: absolute;
-  right: 12px;
+  right: 14px;
   top: 0;
   left: 0;
   text-align: right;
-  padding: 0.1em 0.25em;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 100; }
+  font-weight: 100;
+  opacity: 0.5;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px; }
+  .panel-toggle:hover, .panel-order:hover {
+    background: lightblue; }
 
 .panel-order {
-  /*font-size: 0.8em; */
-  right: 0px;
-  left: auto;
-  /*line-height: 2;*/ }
+  font-size: 1em;
+  right: 2px;
+  left: auto; }
 
 #panels {
   /*display: grid;
