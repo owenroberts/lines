@@ -12,7 +12,7 @@ body {
 button:focus {
   outline: none; }
 
-#nav .btn:hover:after, .menu-panel [title]:hover:after, .menu-panel .key-down:after {
+#nav .btn[title]:hover:after, .menu-panel [title]:hover:after, .menu-panel .key-down:after {
   content: attr(title);
   position: fixed;
   top: 20px;

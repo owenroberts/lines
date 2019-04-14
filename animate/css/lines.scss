@@ -67,7 +67,7 @@ button:focus { outline: none; }
 		line-height: 2;
     	white-space: nowrap;
 	}
-	.btn:hover:after { @extend %tool-tip; }
+	.btn[title]:hover:after { @extend %tool-tip; }
 }
 
 .panel-toggle, .panel-order {
@@ -85,6 +85,7 @@ button:focus { outline: none; }
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
 }
+
 .panel-order {
 	font-size: 1em; 
 	right: 2px; 
