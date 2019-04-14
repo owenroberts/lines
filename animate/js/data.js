@@ -374,7 +374,6 @@ function Data() {
 			}
 			if (offset) {
 				// checking to see if layers are selected 
-
 				const layers = Lines.drawingInterface.layers.length > 0 ? Lines.drawingInterface.layers : Lines.frames[Lines.currentFrame];
 				// toggled - come back after layer panel is fixed .... 
 
