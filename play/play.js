@@ -28,6 +28,7 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 
 	this.frames = [];
 	this.drawings = [];
+	this.layers = [];
 	this.ctxStrokeColor;
 	this.mixedColors = false;
 	this.isTexture = isTexture || false; /* if used for 3d texture it doesnt animate or resize */
@@ -37,7 +38,6 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.wig = undefined;
 	this.seg = undefined;
 	this.vig = undefined;
-
 	this.color = undefined;
 
 	this.drawLines = function(params) {
@@ -59,46 +59,49 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 					this.onPlayedOnce = undefined;
 				}
 			}
-			if (this.drawBg)
-				this.ctx.clearRect(0, 0, this.width, this.height);
+			if (this.drawBg) this.ctx.clearRect(0, 0, this.width, this.height);
 			if (this.frames[this.currentFrame]) {
-				if (!this.mixedColors)
-					this.ctx.beginPath();
+				if (!this.mixedColors) this.ctx.beginPath();
 				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
-					const fr = this.frames[this.currentFrame][i];
-					const jig = this.jig || +fr.r;
-					const seg = +fr.n;
-					const dr = this.drawings[fr.d];
-					const wig = this.wig || +fr.w || 0; // or zero for older drawings for now 
-					const wigSpeed = this.vig || +fr.v || 0;
+					const frame = this.frames[this.currentFrame][i];
+					const layer = this.layers[frame.l];
+					const dr = this.drawings[layer.d];
+					const jig = this.jig || +frame.r || +layer.r;
+					const seg = +frame.n || +layer.n;
+					const wig = this.wig || +frame.w || +layer.w || 0;
+					const wigSpeed = this.vig || +frame.w || +layer.v || 0;
+					const x = +frame.x || +layer.x;
+					const y = +frame.y || +layer.y;
+					const start = +frame.s || +layer.s;
+					const end = +frame.e || +layer.e;
+					const color = +frame.c || +layer.c;
 					const off = {
 						x: Cool.random(0, wig),
 						xSpeed: Cool.random(-wigSpeed, wigSpeed),
 						y: Cool.random(0, wig),
 						ySpeed: Cool.random(-wigSpeed, wigSpeed)
 					};
-					if (this.mixedColors)
-						this.ctx.beginPath();
-					for (let h = fr.s; h < fr.e - 1; h++) {
-						const s = dr[h];
-						const e = dr[h + 1];
+					if (this.mixedColors) this.ctx.beginPath();
+					for (let j = start; j < end - 1; j++) {
+						const s = dr[j];
+						const e = dr[j + 1];
 						let v = new Cool.Vector(e.x, e.y);
 						v.subtract(s);
 						v.divide(seg);
 						this.ctx.moveTo( 
-							fr.x + s.x + Cool.random(-jig, jig) + off.x, 
-							fr.y + s.y + Cool.random(-jig, jig) + off.y
+							x + s.x + Cool.random(-jig, jig) + off.x, 
+							y + s.y + Cool.random(-jig, jig) + off.y
 						);
-						for (let j = 0; j < seg; j++) {
-							let p = new Cool.Vector(s.x + v.x * j, s.y + v.y * j);
+						for (let k = 0; k < seg; k++) {
+							let p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
 							this.ctx.lineTo( 
-								fr.x + p.x + v.x + Cool.random(-jig, jig) + off.x, 
-								fr.y + p.y + v.y + Cool.random(-jig, jig) + off.y
+								x + p.x + v.x + Cool.random(-jig, jig) + off.x, 
+								y + p.y + v.y + Cool.random(-jig, jig) + off.y
 							);
 						}
 
-						if (this.ctxStrokeColor != fr.c && !this.color) {
-							this.ctxStrokeColor = fr.c;
+						if (this.ctxStrokeColor != color && !this.color) {
+							this.ctxStrokeColor = color;
 							this.ctx.strokeStyle= "#" + this.ctxStrokeColor;
 						}
 
@@ -110,14 +113,11 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 						if (off.y >= wig || off.y <= -wig)
 							off.ySpeed *= -1;
 					}
-					if (this.mixedColors)
-						this.ctx.stroke();
+					if (this.mixedColors) this.ctx.stroke();
 				}
-				if (!this.mixedColors)
-					this.ctx.stroke();
+				if (!this.mixedColors) this.ctx.stroke();
 			}
-			if (this.update)
-				this.update();
+			if (this.update) this.update();
 		}
 	};
 
@@ -158,6 +158,7 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.loadData = function(data, callback) {
 		this.frames = data.f;
 		this.drawings = data.d;
+		this.layers = data.l;
 		this.intervalRatio = this.lineInterval / (1000 / data.fps);
 		this.currentFrame = this.currentFrameCounter = 0;
 		this.width = this.canvas.width = data.w;
