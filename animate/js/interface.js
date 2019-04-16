@@ -182,6 +182,7 @@ function Interface() {
 	};
 
 	this.loadPalette = function(name) {
+		/* this is crazy ... */
 		Lines.data.saveLines();
 		self.palettes.current = name;
 		Lines.lineColor.setColor(self.palettes[name].color);
@@ -256,12 +257,14 @@ function Interface() {
 	this.keyCommands['ctrl-s'] = new UIButton({
 		id: "save-settings",
 		title: "Save Settings",
-		callback: self.saveSettings
+		callback: self.saveSettings,
+		key: "ctrl-s"
 	});
 
 	this.keyCommands['alt-s'] = new UIButton({
 		id: "load-settings",
 		title: "Load Settings",
-		callback: self.loadSettings
+		callback: self.loadSettings,
+		key: "alt-s"
 	});
 }
