@@ -7,25 +7,32 @@ class Sprite {
 		this.debug = false; /* argument? */
 		this.debugColor = "#00ffbb";
 		this.drawBackground = false;
-		this.initPhysics();
-		// this.bkg = false; /* draw a filled in outline */
-	}
-
-	/* make a physics class? */
-	initPhysics() {
 		this.collider = {
 			position: new Cool.Vector(0, 0),
 			width: this.width,
 			height: this.height
 		};
+		this.alive = true;
+		// this.initPhysics();
+		// this.bkg = false; /* draw a filled in outline */
+	}
+	
+	/* make a physics class? */
+	initPhysics() {
 		this.jumpAmount = 0;
 		this.velocity = new Cool.Vector(0,0);
-		this.alive = true;
 		this.bounceAmount = new Cool.Vector(0,0);
 		this.bounce = false;
 		this.wiggleAmount = -1;
 	}
 	
+	/* i don't know why the other reset exists,
+		need this to add new animtion in toilet2 */
+	resetSize() {
+		this.width = undefined;
+		this.height = undefined;
+	}
+
 	addAnimation(src, callback) {
 		this.animation = new Animation(src, this.debug);
 		if (!this.width) {
@@ -33,17 +40,13 @@ class Sprite {
 			this.animation.load(false, (w, h) => {
 				this.width = this.collider.width = w;
 				this.height = this.collider.height = h;
-				if (callback)
-					callback();
+				if (callback) callback();
 			});
 		} else {
-			/* size determined by sprite */
-			this.animation.load({w: this.width, h: this.height});
+			this.animation.load({w: this.width, h: this.height}); /* size determined by sprite */
 		}
-		if (this.debug) 
-			this.animation.debug = true;
-		if (this.drawBackground)
-			this.animation.drawBackground = true;
+		if (this.debug) this.animation.debug = true;
+		if (this.drawBackground) this.animation.drawBackground = true;
 	}
 
 	setCollider(x, y, w, h) {
@@ -80,8 +83,8 @@ class Sprite {
 		}
 	}
 
-	display() {
-		if (this.alive && this.isOnScreen()) {
+	display(isMap) {
+		if (this.alive && (this.isOnScreen() || isMap)) {
 			if (this.debug) {
 				this.ctx.beginPath();
 				this.ctx.lineWidth = 1;
@@ -96,12 +99,11 @@ class Sprite {
 				this.ctx.stroke();
 			}
 			if (this.animation && this.animation.loaded) {
-				if (this.bkg) 
-					this.animation.drawBkg(this.position.x, this.position.y);
-				else 
-					this.animation.draw(this.position.x, this.position.y);
+				if (this.bkg) this.animation.drawBkg(this.position.x, this.position.y);
+				else this.animation.draw(this.position.x, this.position.y);
 			}
 		}
+		if (this.displayFunc) this.displayFunc();
 	}
 
 	isOnScreen() {
