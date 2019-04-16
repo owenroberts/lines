@@ -6,6 +6,7 @@ window.addEventListener("load", function() {
 	// global parts used everywhere
 	Lines.lines = []; // lines currently being drawn
 	Lines.frames = [];
+	Lines.layers = [];  // keep separate layers references by frames
 	Lines.drawings = []; // saved drawings
 	Lines.currentFrame = 0;
 

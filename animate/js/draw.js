@@ -60,8 +60,7 @@ function Draw(fps) {
 			}
 
 			/* update the anim frame number */
-			if (self.isPlaying) 
-				Lines.interface.updateFrameNum();
+			if (self.isPlaying) Lines.interface.updateFrameNum();
 
 			Lines.canvas.ctx.clearRect(0, 0, Lines.canvas.width, Lines.canvas.height);
 
@@ -81,19 +80,20 @@ function Draw(fps) {
 					if (frameNumber >= 0) {
 						const onionColor = 1.1 - (o / self.onionSkinNum); // number for color
 						const color = "rgba(105,150,255," + onionColor + ")";
-						for (var i = 0; i < Lines.frames[frameNumber].length; i++) {
-							const fr = Lines.frames[frameNumber][i];
-							const dr = Lines.drawings[fr.d];
+						for (let i = 0; i < Lines.frames[frameNumber].length; i++) {
+							const frame = Lines.frames[frameNumber][i];
+							const layer = Lines.layers[frame.l];
+							const drawing = Lines.drawings[layer.d];
 							self.drawLines({
-								lines: dr, 
-								start: fr.s, 
-								end: fr.e, 
-								segNum: fr.n, 
-								jig: fr.r,
-								wig: fr.w,
-								wigSpeed: fr.v,
-								x: fr.x, 
-								y: fr.y, 
+								lines: drawing, 
+								start: frame.s || layer.s, 
+								end: frame.e || layer.e, 
+								segNum: frame.n || layer.n, 
+								jig: frame.r || layer.r,
+								wig: frame.w || layer.w,
+								wigSpeed: frame.v || layer.v,
+								x: frame.x || layer.x, 
+								y: frame.y || layer.y, 
 								color: color,
 								onion: true
 							});
@@ -105,19 +105,20 @@ function Draw(fps) {
 			/* draws saved frames */
 			if (Lines.frames[Lines.currentFrame]) {
 				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-					const fr = Lines.frames[Lines.currentFrame][i];
-					const dr = Lines.drawings[fr.d];
+					const frame = Lines.frames[Lines.currentFrame][i];
+					const layer = Lines.layers[frame.l];
+					const drawing = Lines.drawings[layer.d];
 					self.drawLines({
-						lines: dr, 
-						start: fr.s, 
-						end: fr.e, 
-						segNum: fr.n, 
-						jig: fr.r,
-						wig: fr.w,
-						wigSpeed: fr.v,
-						x: fr.x, 
-						y: fr.y, 
-						color: fr.c,
+						lines: drawing, 
+						start: frame.s || layer.s, 
+						end: frame.e || layer.e, 
+						segNum: frame.n || layer.n, 
+						jig: frame.r || layer.r,
+						wig: frame.w || layer.w,
+						wigSpeed: frame.v || layer.v,
+						x: frame.x || layer.x, 
+						y: frame.y || layer.y, 
+						color: frame.c || layer.c,
 						onion: false
 					});
 				}

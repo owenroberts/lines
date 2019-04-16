@@ -377,28 +377,37 @@ function DrawingInterface() {
 		} else {
 			layer.c = layer.prevColor;
 			const index = self.layers.indexOf(layer);
-			if (index != -1)
-				self.layers.splice(index, 1);
+			if (index != -1)  self.layers.splice(index, 1);
 		}
 		layer.toggled = !layer.toggled;
 	};
 
 	this.killLayer = function() {
-		const n = prompt("Layer number");
-		Lines.frames.forEach(function(fr) {
-   			fr.forEach(function(layer) {
-   				if (layer.d == n) { 
-   					fr.splice(fr.indexOf(layer), 1) 
-   				}							
-   			});
-		});
+		const layers = self.layers.filter(l => l.toggled);
+		
+		// remove frames
+		for (let i = Lines.frames.length - 1; i >= 0; i--) {
+			const frame = Lines.frames[i];
+			for (let j = frame.length - 1; j >= 0; j--) {
+				if (Lines.layers[frame[j].l].toggled)
+					frame.splice(j, 1);
+			}
+		}
+
+		// remove layers
+		for (let i = Lines.layers.length - 1; i >= 0; i--) {
+			if (Lines.layers[i].toggled)
+				Lines.layers[i].remove = true; // remove in fio
+			// this is dumb right?  structure depends on index like drawing
+		}
 	};
 
 	this.displayLayers = function() {
 		self.resetLayers();
 		if (Lines.frames[Lines.currentFrame]) {
 			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-				const layer = Lines.frames[Lines.currentFrame][i];
+				const layer = Lines.layers[Lines.frames[Lines.currentFrame][i].l];
+				const layerIndex = layer.l;
 				self.layers.push(layer);
 				layer.toggled = false;
 				const toggleLayer = new UIToggleButton({
@@ -434,11 +443,13 @@ function DrawingInterface() {
 		}
 	}));
 
+	/* kill layer */
 	this.layerPanel.add(new UIButton({
-		"title": "Kill a Layer",
+		"title": "Kill Layer",
 		callback: self.killLayer
 	}));
 
+	/* change color */
 	this.layerPanel.add(new UIText({
 		label: "Change Color",
 		value: Lines.lineColor.color,
@@ -447,7 +458,6 @@ function DrawingInterface() {
 				if (self.layers[i].toggled) {
 					self.layers[i].c = self.layers[i].prevColor = ev.target.value;
 				}
-				
 			}
 		}
 	}));
@@ -462,25 +472,29 @@ function DrawingInterface() {
 			self.resetLayers();
 			for (let i = 0; i < Lines.drawings.length; i++) {
 				let layer; /* check if layer is in frame already */
-				if (Lines.frames[Lines.currentFrame]) {
-					for (let k = 0; k < Lines.frames[Lines.currentFrame].length; k++) {
-						if (i == Lines.frames[Lines.currentFrame][k].d)
-							layer = Lines.frames[Lines.currentFrame][k];
+				let layerIndex;
+				const frame = Lines.frames[Lines.currentFrame];
+				if (frame) {
+					for (let k = 0; k < frame.length; k++) {
+						if (i == Lines.layers[frame[k].l].d)
+							layer =  Lines.layers[frame[k].l];
 					}
 				}
-				if (!layer) {
-					/* check all the frames */
-					for (let j = 0; j < Lines.frames.length; j++) {
-						const frame = Lines.frames[j];
-						for (let k = 0; k < frame.length; k++) {
-							if (i == frame[k].d) {
-								layer = frame[k];
+				
+				if (!layer) { /* then check existing layers */
+					for (let j = 0; j < Lines.layers.length; j++) {
+						const layers = Lines.layers[j];
+						for (let k = 0; k < layers.length; k++) {
+							if (i == Lines.layers[k].d) {
+								layer = Lines.layers[k];
+								layerIndex = k;
 								break;
 							}
 						}
 					}
 				}
-				if (!layer) {
+				
+				if (!layer) { /* then create a layer*/
 					const drawing = Lines.drawings[i];
 					if (drawing != null) {
 						layer = {
@@ -488,14 +502,13 @@ function DrawingInterface() {
 							s: 0,
 							e: drawing.length,
 							c: '000000',
-							n: 2,
-							r: 1,
-							w: 0,
-							v: 0,
+							...Lines.drawEvents.defaults,
 							x: 0,
 							y: 0
-						}; /* defaults, maybe grab from existing layer? */
+						};
 					}
+					Lines.layers.push(layer);
+					layerIndex = Lines.layers.length - 1;
 				}
 
 				if (layer) self.layers.push(layer);
@@ -507,8 +520,7 @@ function DrawingInterface() {
 					on: i,
 					off: i,
 					callback: function() {
-						if (layer)
-							Lines.drawingInterface.layerToggle(layer);
+						if (layer) Lines.drawingInterface.layerToggle(layer);
 					}
 				}), row);
 
@@ -518,7 +530,7 @@ function DrawingInterface() {
 						Lines.data.saveLines();
 						if (Lines.frames[Lines.currentFrame] == undefined) 
 							Lines.frames[Lines.currentFrame] = [];
-						if (layer) Lines.frames[Lines.currentFrame].push(layer);
+						if (layer) Lines.frames[Lines.currentFrame].push({ l: layerIndex });
 						else console.log('%c no drawing', 'color:white;background:hotpink;');
 					}
 				}), row);
@@ -527,10 +539,11 @@ function DrawingInterface() {
 					title: "-",
 					callback: function() {
 						Lines.data.saveLines();
-						if (Lines.frames[Lines.currentFrame]) {
-							const index = Lines.frames[Lines.currentFrame].indexOf(layer);
-							if (index != -1)
-								Lines.frames[Lines.currentFrame].splice(index, 1);
+						const frame = Lines.frames[Lines.currentFrame];
+						if (frame) {
+							for (let i = frame.length - 1; i >= 0; i--) {
+								if (frame[i].l == layerIndex) frame.splice(i, 1);
+							}
 						}
 					}
 				}), row);
