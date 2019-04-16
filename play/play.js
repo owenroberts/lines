@@ -19,7 +19,7 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 
 	this.doResize = resize || false;
 	
-	this.lps = lps || 10; // default
+	this.lps = lps || 12; // default
 	this.lineInterval = 1000 / this.lps;
 	this.timer = performance.now();
 	this.intervalRatio = 1;
@@ -34,14 +34,19 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.isTexture = isTexture || false; /* if used for 3d texture it doesnt animate or resize */
 	this.drawBg = true;
 
-	this.jig = undefined;
-	this.wig = undefined;
-	this.seg = undefined;
-	this.vig = undefined;
-	this.color = undefined;
-
-	this.drawLines = function(params) {
+	this.rndr = {
+		off: { x: 0, y: 0 },
+		speed: { x: 0, y: 0 }
 	};
+
+	/* override drawing props */
+	this.over = {
+		n: undefined, // seg num
+		r: undefined, // random "jiggle"
+		w: undefined, // random "wiggle"
+		v: undefined, // "wiggle speed"
+		c: undefined  // color
+	}
 
 	this.draw = function() {
 		if (!this.isTexture && this.isPlaying)
@@ -65,53 +70,67 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
 					const frame = this.frames[this.currentFrame][i];
 					const layer = this.layers[frame.l];
-					const dr = this.drawings[layer.d];
-					const jig = this.jig || +frame.r || +layer.r;
-					const seg = +frame.n || +layer.n;
-					const wig = this.wig || +frame.w || +layer.w || 0;
-					const wigSpeed = this.vig || +frame.w || +layer.v || 0;
-					const x = +frame.x || +layer.x;
-					const y = +frame.y || +layer.y;
-					const start = +frame.s || +layer.s;
-					const end = +frame.e || +layer.e;
-					const color = +frame.c || +layer.c;
-					const off = {
-						x: Cool.random(0, wig),
-						xSpeed: Cool.random(-wigSpeed, wigSpeed),
-						y: Cool.random(0, wig),
-						ySpeed: Cool.random(-wigSpeed, wigSpeed)
-					};
+					const drawing = this.drawings[layer.d];
+
+					// update if new layer
+					if (this.rndr.l != frame.l) {
+						for (const key in layer) {
+							this.rndr[key] = layer[key];
+						}
+					}
+
+					// update layer num from frame, any other props (se, xy)
+					for (const key in frame) {
+						this.rndr[key] = frame[key];
+					}
+
+					// over ride props
+					for (const key in this.over) {
+						if (this.over[key]) this.rndr[key] = this.over[key];
+					}
+
+					// apply wiggle and speed if it exists 
+					if (this.rndr.w > 0) {
+						this.rndr.off.x = Cool.random(0, this.rndr.w);
+						this.rndr.off.y = Cool.random(0, this.rndr.w);
+						this.rndr.speed.x = Cool.random(-this.rndr.v, this.rndr.v);
+						this.rndr.speed.y = Cool.random(-this.rndr.v, this.rndr.v);
+					}
+
 					if (this.mixedColors) this.ctx.beginPath();
-					for (let j = start; j < end - 1; j++) {
-						const s = dr[j];
-						const e = dr[j + 1];
-						let v = new Cool.Vector(e.x, e.y);
+					for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
+						const s = drawing[j];
+						const e = drawing[j + 1];
+						const v = new Cool.Vector(e.x, e.y);
 						v.subtract(s);
-						v.divide(seg);
+						v.divide(this.rndr.n);
 						this.ctx.moveTo( 
-							x + s.x + Cool.random(-jig, jig) + off.x, 
-							y + s.y + Cool.random(-jig, jig) + off.y
+							this.rndr.x + s.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x, 
+							this.rndr.y + s.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
 						);
-						for (let k = 0; k < seg; k++) {
-							let p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
+						for (let k = 0; k < this.rndr.n; k++) {
+							const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
 							this.ctx.lineTo( 
-								x + p.x + v.x + Cool.random(-jig, jig) + off.x, 
-								y + p.y + v.y + Cool.random(-jig, jig) + off.y
+								this.rndr.x + p.x + v.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x, 
+								this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
 							);
 						}
 
-						if (this.ctxStrokeColor != color && !this.color) {
-							this.ctxStrokeColor = color;
+						if (this.ctxStrokeColor != this.rndr.c && !this.color) {
+							this.ctxStrokeColor = this.rndr.c;
 							this.ctx.strokeStyle= "#" + this.ctxStrokeColor;
 						}
 
-						off.x += off.xSpeed;
-						if (off.x >= wig || off.x <= -wig)
-							off.xSpeed *= -1;
-
-						off.y += off.ySpeed;
-						if (off.y >= wig || off.y <= -wig)
-							off.ySpeed *= -1;
+						// update wiggle and speed (if exists)
+						if (this.rndr.w > 0) {
+							this.rndr.off.x += this.rndr.speed.x;
+							if (this.rndr.off.x >= this.rndr.w || this.rndr.off.x <= -this.rndr.w)
+								this.rndr.speed.x *= -1;
+	
+							this.rndr.off.y += this.rndr.speed.y;
+							if (this.rndr.off.y >= this.rndr.w || this.rndr.off.y <= -this.rndr.w)
+								this.rndr.speed.y *= -1;
+						}
 					}
 					if (this.mixedColors) this.ctx.stroke();
 				}
