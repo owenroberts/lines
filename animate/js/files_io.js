@@ -7,14 +7,11 @@ function Files_IO(params) {
 	this.saveFramesToFile = function(single) {
 		Lines.data.saveLines();
 
-		if (params.fit) {
-			const fit = confirm("Fit canvas?");
-			if (fit)
-				Lines.canvas.fitCanvasToDrawing();
-		}
+		if (params.fit && confirm("Fit canvas?"))
+			Lines.canvas.fitCanvasToDrawing();
 
 		const json = {};
-		json.v = "2.1";
+		json.v = "2.2";
 		json.w = Math.floor(+Lines.canvas.width);
 		json.h = Math.floor(+Lines.canvas.height);
 		json.fps = +Lines.draw.fps;
@@ -24,42 +21,50 @@ function Files_IO(params) {
 		json.f = [];
 		json.d = [];
 
-		let drawingsIndexes = [];
+		let drawingIndexes = [], layerIndexes = [];
+		let frames;
 
-		/* save current frame */  
-		if (single && Lines.frames[Lines.currentFrame]) {
-			json.f.push( Lines.frames[Lines.currentFrame] );
-			for (let j = 0; j < Lines.frames[Lines.currentFrame].length; j++) {
-				if ( drawingsIndexes.indexOf(Lines.frames[Lines.currentFrame][j].d) == -1 ) 
-					drawingsIndexes.push( Lines.frames[Lines.currentFrame][j].d );
-			}
-		} else {
-			/* save all frames */
-			json.f = Lines.frames;
-			for (let i = 0; i < Lines.frames.length; i++) {
-				for (let j = 0; j < Lines.frames[i].length; j++) {
-					if ( drawingsIndexes.indexOf(Lines.frames[i][j].d) == -1 ) 
-						drawingsIndexes.push( Lines.frames[i][j].d );
-				}
+		/* save current frame */
+		if (single && Lines.frames[Lines.currentFrame])
+			frames = [Lines.frames[Lines.currentFrame]];
+		else
+			frames = Lines.frames;
+		json.f = frames;
 
-				/* get rid of layer info */
-				for (let j = 0; j < Lines.frames[i].length; j++) {
-					const layer = Lines.frames[i][j];
-					if (layer.prevColor) {
-						if (layer.c != layer.prevColor) {
-							layer.c = layer.prevColor
-						}
-						delete layer.prevColor;
-					}
-					delete layer.toggled;
-				}
+		/* search frames for layers and drawings used */
+		for (let i = 0; i < frames.length; i++) {
+			const frame = frames[i];
+			for (let j = 0; j < frame.length; j++) {
+				const layerIndex = frame[j].l;
+				const drawingIndex =  Lines.layers[layerIndex].d;
+				if (!layerIndexes.includes(layerIndex))
+					layerIndexes.push(layerIndex);
+				if (!drawingIndexes.includes(drawingIndex))
+					drawingIndexes.push(drawingIndex);
 			}
+		}
+
+		/* add layers
+			get rid of layer info (added in layer module) */
+		json.l = [];
+		for (let i = 0; i < layerIndexes.length; i++) {
+			const index = layerIndexes[i];
+			console.log(i, index)
+
+			const layer = Lines.layers[index];
+			if (layer.prevColor) {
+				if (layer.c != layer.prevColor) layer.c = layer.prevColor
+				delete layer.prevColor;
+			}
+			delete layer.toggled;
+			json.l[index] = layer;
 		}
 
 		for (let i = 0; i < Lines.drawings.length; i++) {
-			if ( drawingsIndexes.indexOf(i) != -1 ) 
+			if (drawingIndexes.includes(i))
 				json.d[i] = Lines.drawings[i]; // preserve index
 		}
+
 		const jsonfile = JSON.stringify(json);
 		let filename = self.title.getValue();
 
@@ -83,6 +88,7 @@ function Files_IO(params) {
 				.then(data => {
 					Lines.frames =  data.f;
 					Lines.drawings = data.d;
+					Lines.layers = data.l;
 					for (let i = 0; i < Lines.frames.length; i++) {
 						const fr = Lines.frames[i];
 						for (let j = 0; j < fr.length; j++) {
@@ -98,18 +104,16 @@ function Files_IO(params) {
 					Lines.draw.reset();
 
 					/* add wiggle params to old files */
-					for (let i = 0; i < Lines.frames.length; i++) {
-						const frame = Lines.frames[i];
-						for (let j = 0; j < frame.length; j++) {
-							const layer = frame[j];
-							if (!layer.w)
-								layer.w = 0;
-							if (!layer.v)
-								layer.v = 0;
-						}
+					for (let i = 0; i < Lines.layers.length; i++) {
+						const layer = Lines.layers[i];
+						if (!layer.w) layer.w = 0;
+						if (!layer.v) layer.v = 0;
 					}
 				})
-				.catch(error => { alert('File not found: ' + error) });
+				.catch(error => {
+					alert('File not found: ' + error.message);
+					console.log(error);
+				});
 		}
 	};
 
@@ -119,16 +123,16 @@ function Files_IO(params) {
 		title: "Save",
 		callback: function() {
 			self.saveFramesToFile(false);
-		}, 
+		},
 		key: "s"
 	});
 
 	const saveFrame = new UIButton({
-		id:"save-frame",  
+		id:"save-frame",
 		title: "Save Frame",
 		callback: function() {
 			self.saveFramesToFile(true);
-		}, 
+		},
 		key: "shift-s"
 	});
 
@@ -138,7 +142,7 @@ function Files_IO(params) {
 		callback: self.loadFramesFromFile,
 		key: "o"
 	});
-	
+
 	this.title = new UI({id:"title"});
 	/* save with enter? */
 
