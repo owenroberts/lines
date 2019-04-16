@@ -1,20 +1,20 @@
 /* global Lines object */
 window.addEventListener("load", function() {
-	
-	Lines = {}; // L ? 
+
+	Lines = {}; // L ?
 
 	// global parts used everywhere
 	Lines.lines = []; // lines currently being drawn
 	Lines.frames = [];
 	Lines.drawings = []; // saved drawings
 	Lines.currentFrame = 0;
-	
-	// modules 
+
+	// modules
 	Lines.interface = new Interface();
 
 	// width height color, def color is black 000000
 	//  Lines.canvas = new Canvas(1024, 512, "ffffff" );  // sundays
-	Lines.canvas = new Canvas(1024, 768, "ffffff" )
+	Lines.canvas = new Canvas(512, 512, "ffffff" )
 	Lines.draw = new Draw();
 	Lines.data = new Data();
 	Lines.lineColor = new Color("color", "Line Color");
@@ -22,12 +22,12 @@ window.addEventListener("load", function() {
 	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
 	Lines.fio = new Files_IO({
 		fit: false, /* fit to canvas when saving */
-		save: true /* save settings */
+		save: false /* save settings */
 	});
 
-	// interfaces 
+	// interfaces
 	Lines.drawingInterface = new DrawingInterface();
 	if (localStorage.settings) Lines.interface.loadSettings();
-	
-	Lines.draw.start(); // necessary ? 
+
+	Lines.draw.start(); // necessary ?
 });
