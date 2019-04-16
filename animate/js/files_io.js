@@ -109,7 +109,7 @@ function Files_IO(params) {
 						}
 					}
 				})
-				.catch(error => { console.log(error.message) });
+				.catch(error => { alert('File not found: ' + error) });
 		}
 	};
 
@@ -148,6 +148,7 @@ function Files_IO(params) {
 	}
 
 	window.addEventListener("beforeunload", function(ev) {
+		if (params.save) Lines.interface.saveSettings();
 		ev.returnValue = 'Did you save dumbhole?';
 	});
 

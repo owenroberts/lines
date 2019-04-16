@@ -20,19 +20,35 @@ function DrawingInterface() {
 	});
 	panel.add(this.frameNumDisplay); 
 
+	/* f - go to frame */
+	panel.add(new UIButton({
+		title: "Go To Frame",
+		callback: function() {
+			const f = prompt("Frame:");
+			Lines.interface.beforeFrame();
+			Lines.draw.setFrame(f);
+			Lines.interface.afterFrame();
+		},
+		key: "f"
+	}));
+
+	panel.addRow();
+
 	/* prev frame */
 	panel.add(new UIButton({
-		title: "Prev Frame",
+		title: "Prev",
 		callback: Lines.interface.prevFrame,
 		key: "w"
 	}));
 
 	/* next frame */
 	panel.add(new UIButton({
-		title: "Next Frame",
+		title: "Next",
 		callback: Lines.interface.nextFrame,
 		key: "e"
 	}));
+
+	panel.addRow();
 
 	/* l key - onion skin num */
 	panel.add(new UISelect({
@@ -62,6 +78,8 @@ function DrawingInterface() {
 		key: "shift-l"
 	}));
 
+	panel.addRow();
+
 	/* ; key - fps */
 	this.fpsSelect = new UISelect({
 		label: "FPS",
@@ -81,6 +99,7 @@ function DrawingInterface() {
 	});
 	panel.add(this.fpsSelect);
 
+	panel.addRow();
 	/* ' key - ' lines per second */
 	panel.add(new UISelect({
 		label: "Lines/Second",
@@ -97,18 +116,6 @@ function DrawingInterface() {
 			}
 		},
 		key: "'"
-	}));
-	
-	/* f - go to frame */
-	panel.add(new UIButton({
-		title: "Go To Frame",
-		callback: function() {
-			const f = prompt("Frame:");
-			self.resetLayers();
-			Lines.currentFrame = f;
-			Lines.interface.updateFramesPanel();
-		},
-		key: "f"
 	}));
 
 	const capturePanel = new Panel("capture-menu", "Capture");
@@ -148,6 +155,15 @@ function DrawingInterface() {
 		key: "shift-k"
 	}));
 
+	/* alt k */
+	capturePanel.add(new UIToggleButton({
+		title: "Video Capture",
+		on: "Start Video",
+		off: "Stop Video",
+		callback: Lines.canvas.videoCapture,
+		key: "alt-k"
+	}));
+
 	/* brush menu */
 	const brushPanel = new Panel("brush-menu", "Brush");
 	
@@ -179,9 +195,9 @@ function DrawingInterface() {
 			/* not dry */
 			if (ev.type == 'keyup') {
 				self.brushElem.setValue(+ev.target.value);
-				Lines.drawEvents.brush = +ev.target.value;
+				Lines.drawEvents.brushSpread = +ev.target.value;
 			} else {
-				Lines.drawEvents.brush = +this.value;
+				Lines.drawEvents.brushSpread = +this.value;
 			}
 		}
 	});
@@ -204,6 +220,24 @@ function DrawingInterface() {
 		}
 	});
 	brushPanel.add(this.dotsElem);
+
+	this.grassElem = new UIRange({
+		label: "Grass",
+		value: 0,
+		min: 0,
+		max: 20,
+		input: "grass-range",
+		callback: ev => {
+			if (ev.type == 'keyup') {
+				self.grassElem.setValue(+ev.target.value);
+				Lines.drawEvents.grass = +ev.target.value;
+			} else {
+				Lines.drawEvents.grass = +ev.target.value;
+			}
+		}
+	});
+	brushPanel.add(this.grassElem);
+
 
 	/* lines panel */
 	const linesPanel = new Panel("lines-menu", "Lines");
@@ -315,6 +349,7 @@ function DrawingInterface() {
 	/* layer panel */
 	this.layerPanel = new Panel("layer-menu", "Layer");
 	this.frameRow = this.layerPanel.addRow();
+	this.layerPanel.addRow();
 	this.layers = [];
 
 	this.updateLayerProperty = function(prop, value) {
@@ -463,8 +498,7 @@ function DrawingInterface() {
 					}
 				}
 
-				if (layer)
-					self.layers.push(layer);
+				if (layer) self.layers.push(layer);
 
 				const row = self.drawingPanel.addRow(i + '-drawing-row');
 					
@@ -484,7 +518,8 @@ function DrawingInterface() {
 						Lines.data.saveLines();
 						if (Lines.frames[Lines.currentFrame] == undefined) 
 							Lines.frames[Lines.currentFrame] = [];
-						Lines.frames[Lines.currentFrame].push(layer);
+						if (layer) Lines.frames[Lines.currentFrame].push(layer);
+						else console.log('%c no drawing', 'color:white;background:hotpink;');
 					}
 				}), row);
 
@@ -507,7 +542,7 @@ function DrawingInterface() {
 	const mousePanel = new Panel("mouse-menu", "Mouse");
 	this.mouseElem = new UIRange({
 		label: "Mouse Time",
-		value: 30,
+		value: Lines.drawEvents.mouseInterval,
 		min: 0,
 		max: 100,
 		input: "mouse-range",

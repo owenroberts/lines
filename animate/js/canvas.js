@@ -17,7 +17,6 @@ function Canvas(width, height, _color) {
 		self.bgColor.color = _color;
 		self.canvas.style.backgroundColor = "#" + _color;
 	}
-	
 
 	/* set line color */
 	this.setStrokeColor = function(color) {
@@ -54,10 +53,41 @@ function Canvas(width, height, _color) {
 	this.setWidth(this.width);
 	this.setHeight(this.height);
 
+	this.startCapture = true;
+
+	this.videoCapture = function() {
+		if (self.startCapture) {
+			self.startCapture = false;
+			Lines.draw.videoCapture = true;
+			self.stream = self.canvas.captureStream();
+			self.rec = new MediaRecorder(self.stream);
+			self.rec.start();
+			self.rec.addEventListener('dataavailable', e => {
+   				const blob = new Blob([ e.data ], { 'type': 'video/webm' });
+   				self.vid = document.createElement('video');
+   				self.vid.src = URL.createObjectURL(blob);
+   				self.vid.controls = true;
+   				document.body.appendChild(self.vid);
+   				const deleteVid = document.createElement('button');
+   				document.body.appendChild(deleteVid);
+   				deleteVid.textContent = 'Delete';
+   				deleteVid.onclick = function() {
+   					Lines.canvas.vid.remove();
+   					this.remove();
+   				};
+			});
+		} else {
+			Lines.draw.videoCapture = false;
+			self.startCapture = false;
+			self.rec.stop();
+		}
+	}
+
 	this.prevCap = {
 		n: '',
 		f: 0
 	}
+
 	this.capture = function() {
 		if (Lines.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
@@ -104,18 +134,21 @@ function Canvas(width, height, _color) {
 			const fr = Lines.frames[i];
 			for (let h = 0; h < fr.length; h++) {
 				const layer = fr[h];
+				// console.log(layer.x, layer.y);
 				for (let j = 0; j < Lines.drawings[layer.d].length; j++) {
 					const dr = Lines.drawings[layer.d][j];
 					if (dr != "end") { /* v2.0 segments divided w end*/
 						tolerance = Math.max( tolerance, layer.r * 4 );
-						min.x = Math.min( min.x, dr.x );
-						min.y = Math.min( min.y, dr.y );
-						max.x = Math.max( max.x, dr.x );
-						max.y = Math.max( max.y, dr.y );
+						min.x = Math.min( min.x, dr.x + layer.x);
+						min.y = Math.min( min.y, dr.y + layer.y);
+						max.x = Math.max( max.x, dr.x + layer.x);
+						max.y = Math.max( max.y, dr.y + layer.y);
 					}	
 				}
 			}
 		}
+
+		// console.log(min, max);
 
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
@@ -128,10 +161,9 @@ function Canvas(width, height, _color) {
 					x: layer.x + (min.x - tolerance),
 					y: layer.y + (min.y - tolerance)
 				};
-				if (diff.x > 0)
-					layer.x -= diff.x;
-				if (diff.y > 0)
-					layer.y -= diff.y;
+				// console.log(diff);
+				if (diff.x > 0) layer.x -= diff.x;
+				if (diff.y > 0) layer.y -= diff.y;
 			}
 		}
 	};

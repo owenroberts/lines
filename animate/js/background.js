@@ -30,7 +30,7 @@ function Background() {
 	}
 
 	/* interface */
-	const panel = new Panel("background-menu", "Background Image");
+	const panel = new Panel("background-menu", "BG Image");
 
 	/* copy/paste url */
 	panel.add(new UIText({
@@ -46,6 +46,8 @@ function Background() {
 		on: "Hide", 
 		off: "Show" 
 	}));
+
+	panel.addRow();
 	
 	/* update x position */
 	this.xRange = new UIRange({

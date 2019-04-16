@@ -21,11 +21,7 @@ class UI {
 		if (params.value != undefined) 
 			this.el.value = params.value;
 
-		if (params.key) {
-			this.el.title = params.key; // hover title key text
-			Lines.interface.keyCommands[params.key] = this;
-		}
-
+		if (params.key) this.setKey(params.key);
 		if (params.observe && params.callback) {
 			const observer = new MutationObserver(function(list) {
 				for (var mut of list) {
@@ -35,6 +31,10 @@ class UI {
 			});
 			observer.observe(params.observe.elem, { attributes: true });
 		}
+	}
+	setKey(key) {
+		this.el.title = key; // hover title key text
+		if (Lines.interface) Lines.interface.keyCommands[key] = this;
 	}
 	addClass(c) {
 		this.el.classList.add(c);
@@ -74,7 +74,7 @@ class Panel {
 		this.el.classList.add("menu-panel");
 		this.toggleBtn = document.createElement("div");
 		this.toggleBtn.classList.add("panel-toggle");
-		this.toggleBtn.textContent = "v";
+		this.toggleBtn.textContent = "▽";
 		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
 		const title = document.createElement("div");
 		title.textContent = label;
@@ -82,21 +82,28 @@ class Panel {
 		this.el.appendChild(title);
 		this.el.appendChild(this.toggleBtn);
 		this.rows = [];
+
+		this.orderBtn = document.createElement("div");
+		this.orderBtn.classList.add("panel-order");
+		this.orderBtn.textContent = "⥂";
+		this.orderBtn.addEventListener("click", ev => {
+			this.el.style.order = +this.el.style.order + 1;
+		});
+		this.el.appendChild(this.orderBtn);
 	}
 	toggle() {
 		if (this.el.clientHeight <= 25) {
 			this.el.style.height = "auto";
-			this.toggleBtn.innerHTML = "^";
+			this.toggleBtn.innerHTML = "△";
 		} else {
 			this.el.style.height = 25 + "px";
-			this.toggleBtn.innerHTML = "v";
+			this.toggleBtn.innerHTML = "▽";
 		}
 	}
 	addRow(id) {
 		const row = document.createElement("div");
 		row.classList.add("row");
-		if (id)
-			row.id = id;
+		if (id) row.id = id;
 		this.el.appendChild(row);
 		this.rows.push(row);
 		return row;
@@ -108,11 +115,10 @@ class Panel {
 	}
 	add(component, _row) {
 		let row = _row;
-		if (!row)
-			row = this.addRow();
+		if (this.rows.length == 0) row = this.addRow();
+		if (!row) row = this.rows[this.rows.length - 1];
 		row.appendChild(component.el);
-		if (component.label)
-			component.addLabel();
+		if (component.label) component.addLabel();
 		if (component.display)
 			this.rows[this.rows.length - 1].insertBefore(component.display.el, component.el);
 		if (component.input)
@@ -226,10 +232,8 @@ class UIRange extends UI {
 
 	setValue(value) {
 		this.el.value = value;
-		if (this.display)
-			this.display.set(value);
-		if (this.input)
-			this.input.set(value);
+		if (this.display) this.display.set(value);
+		if (this.input) this.input.set(value);
 		this.el.blur();
 	}
 	

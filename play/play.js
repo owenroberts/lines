@@ -1,5 +1,5 @@
 /* play module */
-function LinesPlayer(canvas, src, lps, callback, isTexture) {
+function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.canvas = canvas;
 	if (!this.canvas) 
 		this.canvas = document.getElementById('lines');
@@ -16,6 +16,8 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.currentFrame = 0; // always int, floor cfc
 	this.currentFrameCounter = 0; // uses intervalRatio, so it's a float
 	this.isPlaying = true;
+
+	this.doResize = resize || false;
 	
 	this.lps = lps || 10; // default
 	this.lineInterval = 1000 / this.lps;
@@ -122,21 +124,21 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.sizeCanvas = function() {
 		const padding = 0; /* seems like its for the comics, fucks the mobile stuff */ 
 		const top = canvas.getBoundingClientRect().top;
+		const w = this.canvas.parentNode.clientWidth || window.innerWidth,
+			h = this.canvas.parentNode.clientHeight || window.innerHeight;
 
-		/* only scales down */
-		if (window.innerWidth - padding * 2 < this.width)
-			this.scale = (window.innerWidth - padding * 2) / this.width;
-		else if ((window.innerHeight - top - padding * 2) < this.height)
-			this.scale = (window.innerHeight - top - padding * 2) / this.height;
-		/* trying to scale up? */
-		else if (window.innerWidth - padding * 2 > this.width)
-			this.scale = (window.innerWidth - padding * 2) / this.width;
-		else if ((window.innerHeight - top - padding * 2) > this.height)
-			this.scale = (window.innerHeight - top - padding * 2) / this.height;
+		if (w - padding * 2 < this.width && this.doResize.width)
+			this.scale = (w - padding * 2) / this.width;
+		else if ((h - top - padding * 2) < this.height && this.doResize.height)
+			this.scale = (h - top - padding * 2) / this.height;
+		
+		/* scale up - used in catslair ...  */
+		else if (w - padding * 2 > this.width && this.doResize.width && this.doResize.up)
+			this.scale = (w - padding * 2) / this.width;
+		else if ((h - top - padding * 2) > this.height && this.doResize.height && this.doResize.up)
+			this.scale = (h - top - padding * 2) / this.height;
 		else
 			this.scale = 1;
-
-		// console.log(this.scale)
 
 		if (this.scale != 1) {
 			if (this.scale * this.width / (window.innerHeight - top) > this.width/this.height) {
@@ -150,6 +152,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			this.ctx.scale(this.scale, this.scale);
 		}
 		this.ctxStrokeColor = undefined; // color gets f*ed when resetting canvas
+		this.ctx.miterLimit = 1; // also gets f'ed
 	};
 
 	this.loadData = function(data, callback) {
@@ -165,8 +168,8 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 		if (data.bg) this.canvas.style.backgroundColor = '#' + data.bg;
 		if (this.color) this.ctx.strokeStyle = '#' + this.color;
 		if (callback) callback(); // callback to do something after drawing loads
-		if (!this.isTexture) {
-			requestAnimFrame(this.draw.bind(this));
+		if (!this.isTexture) requestAnimFrame(this.draw.bind(this));
+		if (this.doResize) {
 			this.sizeCanvas();
 			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 		}
