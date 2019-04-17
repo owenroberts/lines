@@ -412,8 +412,8 @@ function DrawingInterface() {
 				self.layers.push(layer);
 				layer.toggled = false;
 				const toggleLayer = new UIToggleButton({
-					on: layer.d,
-					off: layer.d,
+					on: Lines.layers[layer.l].d,
+					off: Lines.layers[layer.l].d,
 					callback: function() {
 						self.layerToggle(layer);
 					}
