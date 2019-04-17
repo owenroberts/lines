@@ -1,4 +1,4 @@
-/* animation is the lines playing module, child of sprite obj */
+/* animation is the lines playing module, child of sprite class */
 class Animation {
 	constructor(src, debug) {
 		// if (debug) console.log(src);
@@ -11,6 +11,7 @@ class Animation {
 
 		this.frames = [];
 		this.drawings = [];
+		this.layers = [];
 		this.currentFrame = 0;
 		this.currentFrameCounter = 0;  // floats
 		this.widthRatio = 1;
@@ -25,17 +26,30 @@ class Animation {
 		this.randomFrames = false; /* play random frames */
 
 		// this.mirror = false; /* not implemented */
+		this.rndr = {
+			off: { x: 0, y: 0 },
+			speed: { x: 0, y: 0 }
+		};
+
+		/* override drawing props */
+		this.over = {
+			n: undefined, // seg num
+			r: undefined, // random "jiggle"
+			w: undefined, // random "wiggle"
+			v: undefined, // "wiggle speed"
+			c: undefined  // color
+		}
+		this.overRide = false;
 	}
 
 	load(setAnimSize, callback) {
-		// if (this.debug) console.log(this.src);
-		// console.log(this.src);
 		fetch(this.src)
 			.then(response => { return response.json() })
 			.then(data => {
 				this.loaded = true;
 				this.frames = data.f;
 				this.drawings = data.d;
+				this.layers = data.l;
 				if (this.states.default)
 					this.states.default.end = this.frames.length;
 				if (!setAnimSize) {
@@ -81,7 +95,8 @@ class Animation {
 	}
 
 	overrideProperty(prop, value) {
-		this[prop] = value;
+		this.over[prop] = value;
+		this.overRide = true;
 	}
 
 	draw(x, y) {
@@ -94,47 +109,67 @@ class Animation {
 			if (this.frames[this.currentFrame]) {
 				if (!Game.mixedColors) Game.ctx.beginPath();
 				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
-					const fr = this.frames[this.currentFrame][i]; // layer
-					const dr = this.drawings[fr.d];
-					const jig = this.jig || +fr.r;
-					const seg = this.seg || +fr.n;
-					const wig = this.wig || +fr.w || 0; // or zero for older drawings for now 
-					const wigSpeed = this.wigSpeed || +fr.v || 0;
-					const off = {
-						x: Cool.random(0, wig),
-						xSpeed: Cool.random(-wigSpeed, wigSpeed),
-						y: Cool.random(0, wig),
-						ySpeed: Cool.random(-wigSpeed, wigSpeed)
-					};
+					const frame = this.frames[this.currentFrame][i];
+					const layer = this.layers[frame.l];
+					const drawing = this.drawings[layer.d];
+					
+					if (this.rndr.l != frame.l) {
+						for (const key in layer) {
+							this.rndr[key] = layer[key];
+						}
+					}
+
+					for (const key in frame) {
+						this.rndr[key] = frame[key];
+					}
+
+					if (this.overRide) {
+						for (const key in this.over) {
+							if (this.over[key]) this.rndr[key] = this.over[key];
+						}
+					}
+					
+					if (this.rndr.w > 0) {
+						this.rndr.off.x = Cool.random(0, this.rndr.w);
+						this.rndr.off.y = Cool.random(0, this.rndr.w);
+						this.rndr.speed.x = Cool.random(-this.rndr.v, this.rndr.v);
+						this.rndr.speed.y = Cool.random(-this.rndr.v, this.rndr.v);
+					}
+
+					
 					if (Game.mixedColors || Game.debug || this.debug) Game.ctx.beginPath();
-					for (let h = fr.s; h < fr.e - 1; h++) {
-						const s = dr[h]; // line data
-						const e = dr[h + 1];
-						let v = new Cool.Vector(e.x, e.y);
+					for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
+						const s = drawing[j];
+						const e = drawing[j + 1];
+						const v = new Cool.Vector(e.x, e.y);
 						v.subtract(s);
-						v.divide(seg); // line num
+						v.divide(this.rndr.n);
 						Game.ctx.moveTo(
-							x + this.widthRatio * (fr.x + s.x + Cool.random(-jig, jig)) + off.x, 
-							y + this.heightRatio * (fr.y + s.y + Cool.random(-jig, jig)) + off.y 
+							x + this.widthRatio * (this.rndr.x + s.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x), 
+							y + this.heightRatio * (this.rndr.y + s.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y)
 						);
-						for (let j = 0; j < seg; j++) {
-							const p = new Cool.Vector(s.x + v.x * j, s.y + v.y * j);
+						for (let k = 0; k < this.rndr.n; k++) {
+							const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
 							Game.ctx.lineTo( 
-								x + this.widthRatio * (fr.x + p.x + v.x + Cool.random(-jig, jig)) + off.x, 
-								y + this.heightRatio * (fr.y +  p.y + v.y + Cool.random(-jig, jig)) + off.y
+								x + this.widthRatio * (this.rndr.x + p.x + v.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x),
+								y + this.heightRatio * (this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y)
 							);
 						}
 
 						if (Game.mixedColors || Game.debug) {
-							if (Game.ctx.strokeStyle.replace("#","") != fr.c)
-								Game.ctx.strokeStyle = "#" + fr.c;
+							if (Game.ctx.strokeStyle.replace("#","") != this.rndr.c)
+								Game.ctx.strokeStyle = "#" + this.rndr.c;
 						}
 
-						off.x += off.xSpeed;
-						if (off.x >= wig || off.x <= -wig) off.xSpeed *= -1;
-
-						off.y += off.ySpeed;
-						if (off.y >= wig || off.y <= -wig) off.ySpeed *= -1;
+						if (this.rndr.w > 0) {
+							this.rndr.off.x += this.rndr.speed.x;
+							if (this.rndr.off.x >= this.rndr.w || this.rndr.off.x <= -this.rndr.w)
+								this.rndr.speed.x *= -1;
+	
+							this.rndr.off.y += this.rndr.speed.y;
+							if (this.rndr.off.y >= this.rndr.w || this.rndr.off.y <= -this.rndr.w)
+								this.rndr.speed.y *= -1;
+						}
 					}
 					if (Game.mixedColors || Game.debug || this.debug) Game.ctx.stroke();
 				}
