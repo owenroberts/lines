@@ -1,8 +1,7 @@
 /* play module */
 function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.canvas = canvas;
-	if (!this.canvas) 
-		this.canvas = document.getElementById('lines');
+	if (!this.canvas) this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
 		this.canvas = document.createElement("canvas");
 		document.body.appendChild(this.canvas);
