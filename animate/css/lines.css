@@ -61,7 +61,7 @@ button:focus {
   line-height: 2;
   white-space: nowrap; }
   #nav .btn:hover {
-    background: lightgray; }
+    background: #ffddff; }
 
 .panel-toggle, .panel-order {
   display: inline-block;
@@ -77,7 +77,7 @@ button:focus {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px; }
   .panel-toggle:hover, .panel-order:hover {
-    background: lightblue; }
+    background: #ffddff; }
 
 .panel-order {
   font-size: 1em;

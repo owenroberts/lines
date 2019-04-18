@@ -374,12 +374,14 @@ function DrawingInterface() {
 		if (!layer.toggled) {
 			layer.prevColor = layer.c;
 			layer.c = "00CC96";
+			layer.toggled = true;
 		} else {
 			layer.c = layer.prevColor;
+			delete layer.prevColor;
+			delete layer.toggled;
 			const index = self.layers.indexOf(layer);
-			if (index != -1)  self.layers.splice(index, 1);
+			if (index != -1) self.layers.splice(index, 1);
 		}
-		layer.toggled = !layer.toggled;
 	};
 
 	this.killLayer = function() {
@@ -407,18 +409,37 @@ function DrawingInterface() {
 		self.resetLayers();
 		if (Lines.frames[Lines.currentFrame]) {
 			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-				const layer = Lines.layers[Lines.frames[Lines.currentFrame][i].l];
-				const layerIndex = layer.l;
+				const layer = Lines.frames[Lines.currentFrame][i];
+				const index = Lines.layers[layer.l].d;
 				self.layers.push(layer);
 				layer.toggled = false;
 				const toggleLayer = new UIToggleButton({
-					on: layer.d,
-					off: layer.d,
+					on: index,
+					off: index,
 					callback: function() {
 						self.layerToggle(layer);
 					}
 				});
 				self.layerPanel.add(toggleLayer, self.frameRow);
+			}
+		}
+	};
+
+	this.cutLayerSegment = function() {
+		for (let i = 0; i < self.layers.length; i++) {
+			const layer = self.layers[i];
+			const drawing = Lines.drawings[layer.d];
+			drawing.pop(); /* remove "end" */
+			drawing.pop(); /* remove segment */
+			drawing.push('end'); /* new end */
+			layer.e = drawing.length; /* update layer end num */
+		}
+	};
+
+	this.updateLayerColor = function(ev) {
+		for (let i = 0; i < self.layers.length; i++) {
+			if (self.layers[i].toggled) {
+				self.layers[i].c = self.layers[i].prevColor = ev.target.value;
 			}
 		}
 	};
@@ -432,16 +453,7 @@ function DrawingInterface() {
 	this.layerPanel.add(new UIButton({
 		"title": "Cut Selected Segment",
 		key: "alt-z",
-		callback: function() {
-			for (let i = 0; i < self.layers.length; i++) {
-				const layer = self.layers[i];
-				const drawing = Lines.drawings[layer.d];
-				drawing.pop(); /* remove "end" */
-				drawing.pop(); /* remove segment */
-				drawing.push('end'); /* new end */
-				layer.e = drawing.length; /* update layer end num */
-			}
-		}
+		callback: self.cutLayerSegment
 	}));
 
 	/* kill layer */
@@ -454,13 +466,7 @@ function DrawingInterface() {
 	this.layerPanel.add(new UIText({
 		label: "Change Color",
 		value: Lines.lineColor.color,
-		callback: function(ev) {
-			for (let i = 0; i < self.layers.length; i++) {
-				if (self.layers[i].toggled) {
-					self.layers[i].c = self.layers[i].prevColor = ev.target.value;
-				}
-			}
-		}
+		callback: self.updateLayerColor
 	}));
 
 	/* drawing panel */

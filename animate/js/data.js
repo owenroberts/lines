@@ -287,8 +287,23 @@ function Data() {
 		if (segmentsPerFrame > 0) {
 			const layers = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			for (let i = 0; i < layers.length; i++) {
-				const layerIndex = layers[i].l;
+				const layer = layers[i];
+				let layerIndex = layers[i].l;
 				const drawingIndex = Lines.layers[layerIndex].d;
+				// if there's more than just a layer number, make new layer -  ??
+				if (Object.keys(layer).length > 1) {
+					const prevLayer = Lines.layers[layerIndex];
+					const newLayer = {};
+					for (const key in prevLayer) {
+						if (layer[key] && layer[key] != prevLayer[key])
+							newLayer[key] = layer[key];
+						else
+							newLayer[key] = prevLayer[key];
+					}
+					Lines.layers.push(newLayer);
+					layerIndex = Lines.layers.length - 1;
+					Lines.frames[Lines.currentFrame][i].l = layerIndex;
+				}
 				const lines = Lines.drawings[drawingIndex];
 				for (let j = 0; j < lines.length - 1; j += segmentsPerFrame) {
 					if (!over) Lines.interface.nextFrame();
