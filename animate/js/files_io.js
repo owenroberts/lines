@@ -18,13 +18,9 @@ function Files_IO(params) {
 		if (params.bg)
 			json.bg = Cool.rgb2hex(Lines.canvas.canvas.style.backgroundColor).split('#')[1];
 		json.mc = Lines.lineColor.colors.length > 1 ? true : false;
-		json.f = [];
-		json.d = [];
-
-		let drawingIndexes = [], layerIndexes = [];
-		let frames;
-
+		
 		/* save current frame */
+		let frames;
 		if (single && Lines.frames[Lines.currentFrame])
 			frames = [Lines.frames[Lines.currentFrame]];
 		else
@@ -32,6 +28,7 @@ function Files_IO(params) {
 		json.f = frames;
 
 		/* search frames for layers and drawings used */
+		const drawingIndexes = [], layerIndexes = [];
 		for (let i = 0; i < frames.length; i++) {
 			const frame = frames[i];
 			for (let j = 0; j < frame.length; j++) {
@@ -44,22 +41,14 @@ function Files_IO(params) {
 			}
 		}
 
-		/* add layers
-			get rid of layer info (added in layer module) */
+		/* add layers */
 		json.l = [];
 		for (let i = 0; i < layerIndexes.length; i++) {
 			const index = layerIndexes[i];
-			console.log(i, index)
-
-			const layer = Lines.layers[index];
-			if (layer.prevColor) {
-				if (layer.c != layer.prevColor) layer.c = layer.prevColor
-				delete layer.prevColor;
-			}
-			delete layer.toggled;
-			json.l[index] = layer;
+			json.l[index] = Lines.layers[index];
 		}
 
+		json.d = [];
 		for (let i = 0; i < Lines.drawings.length; i++) {
 			if (drawingIndexes.includes(i))
 				json.d[i] = Lines.drawings[i]; // preserve index

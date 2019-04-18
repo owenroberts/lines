@@ -1,6 +1,7 @@
 @import 'font.css';
 $main-color: lightblue;
 $accent-color: blue;
+$accent-two: #ffddff;
 body {
 	font-family: Verdana, sans-serif;
 	margin: 0;
@@ -63,7 +64,7 @@ button:focus { outline: none; }
 		margin: .25em 0;
 		border-radius: 3px;
 		cursor: pointer;
-		&:hover {background: lightgray; }
+		&:hover {background: $accent-two; }
 		line-height: 2;
     	white-space: nowrap;
 	}
@@ -80,7 +81,7 @@ button:focus { outline: none; }
 	cursor: pointer;
 	font-size: 14px;
 	font-weight: 100;
-	&:hover { background: $main-color; }
+	&:hover { background: $accent-two; }
 	opacity: 0.5;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
