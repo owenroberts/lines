@@ -398,7 +398,6 @@ function DrawingInterface() {
 
 		// remove layers
 		for (let i = Lines.layers.length - 1; i >= 0; i--) {
-			console.log(i, Lines.layers[i])
 			if (Lines.layers[i].toggled)
 				Lines.layers[i].remove = true; // remove in fio
 			// this is dumb right?  structure depends on index like drawing
@@ -537,7 +536,6 @@ function DrawingInterface() {
 						Lines.data.saveLines();
 						if (Lines.frames[Lines.currentFrame] == undefined) 
 							Lines.frames[Lines.currentFrame] = [];
-						console.log(layer);
 						if (layer) Lines.frames[Lines.currentFrame].push({ l: layerIndex });
 						else console.log('%c no drawing', 'color:white;background:hotpink;');
 					}
