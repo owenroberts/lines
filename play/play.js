@@ -17,7 +17,7 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.currentFrameCounter = 0; // uses intervalRatio, so it's a float
 	this.isPlaying = true;
 
-	this.doResize = resize || false;
+	this.resize = resize || false;
 	
 	this.lps = lps || 10; // default
 	this.lineInterval = 1000 / this.lps;
@@ -127,15 +127,15 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 		const w = this.canvas.parentNode.clientWidth || window.innerWidth,
 			h = this.canvas.parentNode.clientHeight || window.innerHeight;
 
-		if (w - padding * 2 < this.width && this.doResize.width)
+		if (w - padding * 2 < this.width)
 			this.scale = (w - padding * 2) / this.width;
-		else if ((h - top - padding * 2) < this.height && this.doResize.height)
+		else if ((h - top - padding * 2) < this.height)
 			this.scale = (h - top - padding * 2) / this.height;
 		
 		/* scale up - used in catslair ...  */
-		else if (w - padding * 2 > this.width && this.doResize.width && this.doResize.up)
+		else if (w - padding * 2 > this.width)
 			this.scale = (w - padding * 2) / this.width;
-		else if ((h - top - padding * 2) > this.height && this.doResize.height && this.doResize.up)
+		else if ((h - top - padding * 2) > this.height)
 			this.scale = (h - top - padding * 2) / this.height;
 		else
 			this.scale = 1;
@@ -169,7 +169,7 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 		if (this.color) this.ctx.strokeStyle = '#' + this.color;
 		if (callback) callback(); // callback to do something after drawing loads
 		if (!this.isTexture) requestAnimFrame(this.draw.bind(this));
-		if (this.doResize) {
+		if (this.resize) {
 			this.sizeCanvas();
 			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 		}
