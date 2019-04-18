@@ -39,7 +39,6 @@ function Files_IO(params) {
 				if (!drawingIndexes.includes(drawingIndex))
 					drawingIndexes.push(drawingIndex);
 			}
-			json.l[index] = layer;
 		}
 
 		/* add layers */
