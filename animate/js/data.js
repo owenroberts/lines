@@ -416,14 +416,14 @@ function Data() {
 		}
 	};
 
-
 	/* shift q - prob should be default? */
 	this.offsetAll = function(offset) {
 		for (let i = 0; i < Lines.frames.length; i++) {
 			if (Lines.frames[i]) {
 				self.saveLines();
 				self.saveState();
-				if (!offset.x && !offset.y) {
+				// type to prevent mouse event 
+				if ((!offset.x && !offset.y) || offset.type) {
 					const x = +prompt("x");
 					const y = +prompt("y");
 					offset = new Cool.Vector(x,y);
@@ -562,6 +562,7 @@ function Data() {
 		key: "q"
 	}));
 
+	/* offset all */
 	editPanel.add(new UIButton({
 		title: "Offset All",
 		callback: self.offsetAll,
