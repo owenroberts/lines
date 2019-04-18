@@ -16,7 +16,7 @@ Game.scenes = {
 	'drag': {} /* not implemented */
 };
 Game.currentScene = 'walk';
-Game.initLettering('letters.json'); // create letters for each game
+// Game.initLettering('letters.json'); // create letters for each game
 
 /* usually in spearate data files */
 const title = new Text(10, 40, "welcome to the game", 10, Game.letters);
@@ -65,8 +65,8 @@ function draw() {
 		character.display();
 	});
 
-	title.display(); // lettering example
-	joinGame.display(); // ui example
+	// title.display(); // lettering example
+	// joinGame.display(); // ui example
 }
 
 function update() {
