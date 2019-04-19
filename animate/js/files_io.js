@@ -41,17 +41,16 @@ function Files_IO(params) {
 			}
 		}
 
-		/* add layers */
-		json.l = [];
+		json.l = []; /* add layers */
 		for (let i = 0; i < layerIndexes.length; i++) {
 			const index = layerIndexes[i];
 			json.l[index] = Lines.layers[index];
 		}
 
 		json.d = [];
-		for (let i = 0; i < Lines.drawings.length; i++) {
-			if (drawingIndexes.includes(i))
-				json.d[i] = Lines.drawings[i]; // preserve index
+		for (let i = 0; i < drawingIndexes.length; i++) {
+			const index = drawingIndexes[i];
+			json.d[index] = Lines.drawings[index];
 		}
 
 		const jsonfile = JSON.stringify(json);

@@ -23,7 +23,8 @@ window.addEventListener("load", function() {
 	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
 	Lines.fio = new Files_IO({
 		fit: false, /* fit to canvas when saving */
-		save: false /* save settings */
+		save: false, /* save settings */
+		bg: true /* bg color */
 	});
 
 	// interfaces
