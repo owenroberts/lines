@@ -132,13 +132,15 @@ function Interface() {
 		let k = Cool.keys[ev.which];
 		if (k == "space" || k == "tab") ev.preventDefault();
 		if (document.activeElement.type != "text") {
-			
+
 			if (ev.shiftKey) k = "shift-" + k;
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
-			if (self.keyCommands[k]) {
-				self.keyCommands[k].callback(ev);
+			console.log(k);
+
+			if (self.keyCommands[k].handler) {
+				self.keyCommands[k].handler(ev, self.keyCommands[k]);
 				//  self.keyCommands[k].addClass('key-down'); show key presses?
 				if (self.keyCommands[k].toggleText) self.keyCommands[k].toggleText();
 			}
@@ -267,4 +269,28 @@ function Interface() {
 		callback: self.loadSettings,
 		key: "alt-s"
 	});
+
+	fetch('./js/interface.json')
+		.then(response => { return response.json(); })
+		.then(data => { self.build(data) });
+
+	const classes = {
+		range: UIRange
+	}
+
+	this.build = function(data) {
+		for (const key in data) {
+			const panel = new Panel(data[key].id, data[key].label);
+			for (let i = 0; i < data[key].list.length; i++) {
+				const u = data[key].list[i];
+				const params = u.params;
+				for (const k in u.fromModule) {
+					params[k] =  Lines[u.module][u.fromModule[k]];
+				}
+				const ui = new classes[u.type](params);
+				panel.add(ui);
+				if (u.key) self.keyCommands[u.key] = ui;
+			}
+		}
+	};
 }

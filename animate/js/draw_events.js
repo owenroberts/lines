@@ -21,7 +21,10 @@ function DrawEvents(defaults) {
 	// how often the mousemove records, default 30ms
 	this.mouseTimer = performance.now();  //  independent of draw timer 
 	this.mouseInterval = 30;
-
+	this.setMouseInterval = function(n) {
+		// console.log(n);
+		self.mouseInterval = +n;
+	};
 	
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != Lines.canvas.canvas) { 

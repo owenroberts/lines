@@ -11,7 +11,7 @@ window.addEventListener("load", function() {
 	Lines.currentFrame = 0;
 
 	// modules
-	Lines.interface = new Interface();
+	
 
 	// width height color, def color is black 000000
 	//  Lines.canvas = new Canvas(1024, 512, "ffffff" );  // sundays
@@ -28,6 +28,7 @@ window.addEventListener("load", function() {
 	});
 
 	// interfaces
+	Lines.interface = new Interface();
 	Lines.drawingInterface = new DrawingInterface();
 	if (localStorage.settings) Lines.interface.loadSettings();
 

@@ -558,26 +558,15 @@ function DrawingInterface() {
 	}));
 
 	/* u - change mouse timer */
-	const mousePanel = new Panel("mouse-menu", "Mouse");
-	this.mouseElem = new UIRange({
-		label: "Mouse Time",
-		value: Lines.drawEvents.mouseInterval,
-		min: 0,
-		max: 100,
-		input: "mouse-range",
-		callback: function(ev) {
-			/* not dry */
-			if (ev.type == 'keyup') {
-				Lines.drawEvents.mouseInterval = +ev.target.value;
-				self.mouseElem.setValue(+ev.target.value);
-			} else if (ev.type == "input") {
-				Lines.drawEvents.mouseInterval = +this.value;
-			} else if (ev.type == "keydown") {
-				const n = prompt("Mouse move?");
-				Lines.drawEvents.mouseInterval = +n;
-			}
-		},
-		key: "u"
-	});
-	mousePanel.add(this.mouseElem);
+	// const mousePanel = new Panel("mouse-menu", "Mouse");
+	// this.mouseElem = new UIRange({
+	// 	label: "Mouse Time",
+	// 	value: Lines.drawEvents.mouseInterval,
+	// 	min: 0,
+	// 	max: 100,
+	// 	input: "mouse-range",
+	// 	callback: Lines.drawEvents.setMouseInterval,
+	// 	key: "u"
+	// });
+	// mousePanel.add(this.mouseElem);
 }
