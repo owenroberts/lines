@@ -1,0 +1,23 @@
+{
+	"mouse": {
+		"id": "mouse-menu",
+		"label": "Mouse",
+		"list": [
+			{
+				"type": "range",
+				"module": "drawEvents",
+				"key": "u",
+				"fromModule": {
+					"value": "mouseInterval",
+					"callback": "setMouseInterval"
+				},
+				"params": {
+					"min": 0,
+					"max": 100,
+					"input": "mouse-range",
+					"label": "Mouse time"
+				}
+			}
+		]
+	}
+}
