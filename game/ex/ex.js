@@ -41,7 +41,7 @@ class Character extends Sprite {
 	constructor(x, y) {
 		super(x, y);
 		this.speed = new Cool.Vector(0, 0); /* sprite physics has velocity ... */
-		this.addAnimation('wiggle_char.json');
+		this.addAnimation('sprite.json');
 	}
 
 	update() {
@@ -79,15 +79,19 @@ function update() {
 function keyDown(key) {
 	switch (key) {
 		case 'a':
+		case 'left':
 			char.speed.x = -5;
 			break;
 		case 'd':
+		case 'right':
 			char.speed.x = 5;
 			break;
 		case 'w':
+		case 'up':
 			char.speed.y = -5;
 			break;
 		case 's':
+		case 'down':
 			char.speed.y = 5;
 			break;
 	}
@@ -96,15 +100,19 @@ function keyDown(key) {
 function keyUp(key) {
 	switch (key) {
 		case 'a':
+		case 'left':
 			char.speed.x = 0;
 			break;
 		case 'd':
+		case 'right':
 			char.speed.x = 0;
 			break;
 		case 'w':
+		case 'up':
 			char.speed.y = 0;
 			break;
 		case 's':
+		case 'down':
 			char.speed.y = 0;
 			break;
 	}

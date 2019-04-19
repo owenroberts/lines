@@ -8,12 +8,14 @@ function Data() {
 		current: {
 			drawings: undefined,
 			frames: undefined,
-			lines: undefined
+			lines: undefined,
+			layers: undefined
 		},
 		prev: {
 			drawings: undefined,
 			frames: undefined,
-			lines: undefined
+			lines: undefined,
+			layers: undefined
 		}
 	};
 
@@ -29,13 +31,14 @@ function Data() {
 	/* r key - save lines and add new lines */
 	this.saveLines = function() {
 		if (Lines.lines.length > 0) {
-			
+
 			/* save current lines in new frame */
 			if (Lines.frames[Lines.currentFrame] == undefined) 
 				Lines.frames[Lines.currentFrame] = [];
+			Lines.frames[Lines.currentFrame].push({ l: Lines.layers.length });
 
-			/* add drawing ref to frames data */
-			Lines.frames[Lines.currentFrame].push({
+			/* save render settings to a new layer */	
+			Lines.layers.push({
 				d: Lines.drawings.length, // drawing index
 				s: 0, // start point
 				e: Lines.lines.length, // end point
@@ -47,7 +50,7 @@ function Data() {
 				x: 0, // default x and y
 				y: 0
 			});
-			
+
 			Lines.drawings.push(Lines.lines); /* add current lines to drawing data */
 			Lines.lineColor.addColorBtn(Lines.lineColor.color); /* add current color to color choices */
 			Lines.lines = []; /* lines are saved, stop drawing? */
@@ -70,8 +73,7 @@ function Data() {
 				}
 			}
 		} else { /* copy current frame */
-			if (Lines.lines.length > 0) 
-				self.saveLines();
+			if (Lines.lines.length > 0) self.saveLines();
 			if (Lines.frames[Lines.currentFrame]) {
 				self.framesCopy = [];
 				self.framesCopy.push([]);
@@ -153,19 +155,15 @@ function Data() {
 		self.saveState();
 		const startFrame = +prompt("Start frame:");
 		const endFrame = +prompt("End frame:");
-		if (startFrame > 0) {
-			Lines.currentFrame = startFrame - 1;
-		} else {
-			Lines.currentFrame = 0;
-		}
+		if (startFrame > 0) Lines.currentFrame = startFrame - 1;
+		else Lines.currentFrame = 0;
 		Lines.frames.splice(startFrame, endFrame - startFrame + 1);
 		Lines.interface.updateFramesPanel();
 	};
 
 	/* z key */
 	this.cutLastSegment = function() {
-		if (Lines.lines.length > 0) 
-			Lines.lines.pop();
+		if (Lines.lines.length > 0) Lines.lines.pop();
 	};
 
 	/* shift z */
@@ -177,7 +175,7 @@ function Data() {
 		}
 	};
 
-	/* shift x  */
+	/* shift x */
 	this.cutLastDrawing = function() {
 		self.saveState();
 		if (Lines.frames[Lines.currentFrame]) {
@@ -186,7 +184,7 @@ function Data() {
 		}
 	};
 
-	/* ctrl x  */
+	/* ctrl x */
 	this.cutFirstDrawing = function() {
 		self.saveState();
 		if (Lines.frames[Lines.currentFrame]) {
@@ -206,15 +204,20 @@ function Data() {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
 			self.saveStates.prev.frames = _.cloneDeep(self.saveStates.current.frames);
 			self.saveStates.prev.lines = _.cloneDeep(self.saveStates.current.lines);
+			self.saveStates.prev.layers = _.cloneDeep(self.saveStates.current.layers);
+
 		} else {
 			self.saveStates.prev.drawings = _.cloneDeep(Lines.drawings);
 			self.saveStates.prev.frames = _.cloneDeep(Lines.frames);
 			self.saveStates.prev.lines = _.cloneDeep(Lines.lines);
+			self.saveStates.prev.layers = _.cloneDeep(Lines.layers);
+
 		}
 
 		self.saveStates.current.drawings = _.cloneDeep(Lines.drawings);
 		self.saveStates.current.frames = _.cloneDeep(Lines.frames);
 		self.saveStates.current.lines = _.cloneDeep(Lines.lines);
+		self.saveStates.current.layers = _.cloneDeep(Lines.layers);
 	};
 
 	/* ctrl z - undo one save state  
@@ -251,6 +254,7 @@ function Data() {
 	this.insertFrameAfter = function() {
 		self.saveLines();
 		Lines.frames.insert(Lines.currentFrame + 1, []);
+		Lines.draw.setFrame(Lines.currentFrame + 1);
 		Lines.interface.updateFramesPanel();
 	};
 
@@ -270,6 +274,21 @@ function Data() {
 		}
 	};
 
+	this.newLayer = function(layer, layerIndex, frameIndex) {
+		const prevLayer = Lines.layers[layerIndex];
+		const newLayer = {};
+		for (const key in prevLayer) {
+			if (layer[key] && layer[key] != prevLayer[key])
+				newLayer[key] = layer[key];
+			else
+				newLayer[key] = prevLayer[key];
+		}
+		Lines.layers.push(newLayer);
+		layerIndex = Lines.layers.length - 1;
+		Lines.frames[Lines.currentFrame][frameIndex] = { l: layerIndex };
+		return layerIndex;
+	}
+
 	/* animate a drawing segment by segment (or multiple) 
 		follow means they don't accumulate to form drawing at the end
 		over means go over/add to subsequent frames */
@@ -281,55 +300,42 @@ function Data() {
 		/* can't undo multiple saves */
 		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
-			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
-			for (let h = 0; h < tempFrames.length; h++) {
-				const tempLines = Lines.drawings[tempFrames[h].d];
-				for (let i = 0; i < tempLines.length - 1; i += segmentsPerFrame) {
-					if (!over) {
-						self.insertFrameAfter();
-						Lines.interface.nextFrame();
-					}
+			const layers = _.cloneDeep(Lines.frames[Lines.currentFrame]);
+			for (let i = 0; i < layers.length; i++) {
+				const layer = layers[i];
+				let layerIndex = layers[i].l;
+				const drawingIndex = Lines.layers[layerIndex].d;
+				// if there's more than just a layer number, make new layer -  ??
+				if (Object.keys(layer).length > 1) {
+					layerIndex = self.newLayer(layer, layerIndex, i);
+				}
+				const lines = Lines.drawings[drawingIndex];
+				for (let j = 0; j < lines.length - 1; j += segmentsPerFrame) {
+					if (!over) Lines.interface.nextFrame();
 					
-					if (!Lines.frames[Lines.currentFrame]) 
-						Lines.frames[Lines.currentFrame] = [];
-					else if (!over) 
-						self.saveLines();
+					if (!Lines.frames[Lines.currentFrame]) Lines.frames[Lines.currentFrame] = [];
+					else if (!over) self.saveLines();
 
 					/* add previous drawings 
 						add another parameter for separating drawings? 
 						i think that exists in reverse draw? */
 					if (!follow) {
-						for (let j = 0; j < h; j++) {
+						for (let k = 0; k < i; k++) {
 							Lines.frames[Lines.currentFrame].push({
-								d: tempFrames[j].d,
+								l: layerIndex,
 								s: 0,
-								e: Lines.drawings[tempFrames[j].d].length,
-								c: tempFrames[j].c,
-								n: tempFrames[j].n,
-								r: tempFrames[j].r,
-								x: tempFrames[j].x,
-								y: tempFrames[j].y,
-								w: tempFrames[j].w,
-								v: tempFrames[j].v
+								e: Lines.drawings[drawingIndex].length,
 							});
 						}
 					}
 					
 					Lines.frames[Lines.currentFrame].push({
-						d: tempFrames[h].d,
-						s: follow ? i : 0,
-						e: Math.min(tempLines.length, i + segmentsPerFrame), /* maybe fix error */
-						c: tempFrames[h].c,
-						n: tempFrames[h].n,
-						r: tempFrames[h].r,
-						x: tempFrames[h].x,
-						y: tempFrames[h].y,
-						w: tempFrames[h].w,
-						v: tempFrames[h].v
+						l: layerIndex,
+						s: follow ? j : 0,
+						e: Math.min(lines.length, j + segmentsPerFrame), /* maybe fix error */
 					});
 
-					if (over)
-						Lines.interface.nextFrame();
+					if (over) Lines.interface.nextFrame();
 				}
 
 			}
@@ -344,40 +350,42 @@ function Data() {
 		self.saveLines();
 		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
-			const tempFrames = _.cloneDeep(Lines.frames[Lines.currentFrame]);
+			const layers = _.cloneDeep(Lines.frames[Lines.currentFrame]);
 			const totalSegments = Lines.frames[Lines.currentFrame]
-									.map(f => { return f.e} )
-									.reduce((x,y) => { return x + y });
+				.map(f => { return Lines.layers[f.l].e} )
+				.reduce((x,y) => { return x + y });
+
+			// make new layers if necessary
+			for (let i = 0; i < layers.length; i++) {
+				const layer = layers[i];
+				let layerIndex = layers[i].l;
+				if (Object.keys(layer).length > 1) {
+					layers[i] = { l: self.newLayer(layer, layerIndex, i) };
+				}
+			}
+
 			for (let i = 0; i < totalSegments; i += segmentsPerFrame) {
 				let indexMod = 0; // where to start 
 				Lines.interface.nextFrame();
-				if (!Lines.frames[Lines.currentFrame]) 
-					Lines.frames[Lines.currentFrame] = [];
+				if (!Lines.frames[Lines.currentFrame]) Lines.frames[Lines.currentFrame] = [];
 				let framesAdded = false;
-				for (let j = 0; j < tempFrames.length; j++) {
-					const drawingIndex = tempFrames[j].d;
-					const drawingEnd = tempFrames[j].e;
-					const drawingStart = tempFrames[j].s;
-					const tempLines = Lines.drawings[drawingIndex].l;
+				for (let j = 0; j < layers.length; j++) {
+					const layerIndex = layers[j].l;
+					const drawingIndex = Lines.layers[layerIndex].d;
+					const lines = Lines.drawings[drawingIndex];
+					const drawingEnd = Lines.layers[layerIndex].e;
+					const drawingStart = Lines.layers[layerIndex].s;
 					if (i <= drawingEnd + (simultaneous ? 0 : indexMod) ) {
 						Lines.frames[Lines.currentFrame].push({
-							d: drawingIndex,
+							l: layerIndex,
 							s: simultaneous ? i : (i - indexMod < 0 ? 0 : i - indexMod),
-							e: drawingEnd,
-							c: tempFrames[j].c,
-							n: tempFrames[j].n,
-							r: tempFrames[j].r,
-							x: tempFrames[j].x,
-							y: tempFrames[j].y,
-							w: tempFrames[j].w,
-							v: tempFrames[j].v,
+							e: drawingEnd
 						});
 						framesAdded = true;
 					}
 					indexMod += drawingEnd;
 				}
-				if (!framesAdded)
-					self.deleteFrame();
+				if (!framesAdded) self.deleteFrame();
 			}
 			Lines.interface.updateFramesPanel();
 		}
@@ -395,21 +403,17 @@ function Data() {
 				offset = new Cool.Vector(x,y);
 			}
 			if (offset) {
-				if (Lines.drawingInterface.layers.length > 0) {
-					for (let i = 0; i < Lines.drawingInterface.layers.length; i++) {
-						const fr = Lines.drawingInterface.layers[i];
-						if (fr.toggled) {
-							fr.x += offset.x;
-							fr.y += offset.y;
-						}
-					}
-				} else {
-					for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-						const fr = Lines.frames[Lines.currentFrame][i];
-						fr.x += offset.x;
-						fr.y += offset.y;
-					}
+				// checking to see if layers are selected 
+				const layers = Lines.drawingInterface.layers.length > 0 ? Lines.drawingInterface.layers : Lines.frames[Lines.currentFrame];
+				// toggled - come back after layer panel is fixed .... 
+
+				for (let i = 0; i < layers.length; i++) {
+					const layer = layers[i];
+					const layerIndex = layer.l; // is the layer layer[i] or Lines.layers[layer.l]
+					layer.x = Lines.layers[layerIndex].x + offset.x;
+					layer.y = Lines.layers[layerIndex].y + offset.y;
 				}
+				
 			}
 		} else {
 			console.log("%c No layers in frame ", "color:yellow; background:black;");
@@ -431,9 +435,10 @@ function Data() {
 				if (offset) {
 					for (let j = 0; j < Lines.frames[i].length; j++) {
 						const layer = Lines.frames[i][j];
+						const layerIndex = layer.l;
 						if (layer) {
-							layer.x += offset.x;
-							layer.y += offset.y;
+							layer.x = Lines.layers[layerIndex].x + offset.x;
+							layer.y = Lines.layers[layerIndex].y + offset.y;
 						}
 					}
 				}
