@@ -1,4 +1,4 @@
-function Canvas(width, height, _color) {
+function Canvas(width, height, color) {
 	const self = this;
 
 	this.width = width;
@@ -8,44 +8,27 @@ function Canvas(width, height, _color) {
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 
-	this.bgColor = new Color("canvas-color", "Canvas Color", function(color) {
-		self.canvas.style.backgroundColor = "#" + color;
+	Lines.bgColor = new Color(function(_color) {
+		self.canvas.style.backgroundColor = _color;
 	});
 
 	/* canvas bg color */
-	if (_color) {
-		self.bgColor.color = _color;
-		self.canvas.style.backgroundColor = "#" + _color;
-	}
+	if (color) Lines.bgColor.set(color);
 
 	/* set line color */
 	this.setStrokeColor = function(color) {
-		this.ctx.strokeStyle = "#" + color;
+		this.ctx.strokeStyle = color;
 	};
 
 	/* update canvas width */
 	this.setWidth = function(width) {
-		if (+width) {
-			self.width = self.canvas.width = width;
-		} else {
-			if (self.widthInput.getValue()) 
-				self.width = self.canvas.width = self.widthInput.getValue();
-			else if (!self.width)
-				console.error("No width value set?");
-		}
+		self.width = self.canvas.width = +width;
 		self.ctx.miterLimit = 1;
 	};
 
 	/* update canvas height */
 	this.setHeight = function(height) {
-		if (+height) {
-			self.height = self.canvas.height = height;
-		} else {
-			if (self.heightInput.getValue()) 
-				self.height = self.canvas.height = self.heightInput.getValue();
-			else if (!self.height)
-				console.error("No height value set?");
-		}
+		self.height = self.canvas.height = +height;
 		self.ctx.miterLimit = 1;
 	};
 	
@@ -81,17 +64,14 @@ function Canvas(width, height, _color) {
 			self.startCapture = false;
 			self.rec.stop();
 		}
-	}
+	};
 
-	this.prevCap = {
-		n: '',
-		f: 0
-	}
+	this.prevCap = { n: '', f: 0 };
 
 	this.capture = function() {
 		if (Lines.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
-				const title = Lines.fio.title.getValue();
+				const title = Lines.fio.title.getValue(); // this is a UI
 				const n = Cool.padNumber(Lines.currentFrame, 3);
 				let frm = 0;
 				let fileName = `${title}-${n}-${frm}.png`;
@@ -158,62 +138,4 @@ function Canvas(width, height, _color) {
 			}
 		}
 	};
-
-	/* interface */
-	const panel = new Panel("canvas-menu", "Canvas");
-
-	/* update canvas width */
-	this.widthInput = new UIText({
-		id: "canvas-width",
-		placeholder: this.width,
-		label: "Width",
-		blur: true,
-		observe: {
-			elem: self.canvas,
-			attribute: "width"
-		},
-		callback: function(ev) {
-			if (ev) { // key input
-				if (ev.which == 13) {
-					self.setWidth();
-					self.widthInput.reset(self.width);
-					this.blur();
-				}
-			} else { // observer
-				self.widthInput.reset(Lines.canvas.canvas.width);
-			}
-		}
-	});
-	panel.add(this.widthInput);
-	
-	/* update canvas height */
-	this.heightInput = new UIText({
-		id: "canvas-height",
-		placeholder: this.height,
-		label: "Height",
-		blur: true,
-		observe: {
-			elem: self.canvas,
-			attribute: "height"
-		},
-		callback: function(ev) {
-			if (ev) { // key input
-				if (ev.which == 13) {
-					self.setHeight();
-					self.heightInput.reset(self.height);
-					this.blur();
-				}
-			} else { // observer 
-				self.heightInput.reset(Lines.canvas.canvas.height);
-			}
-		}
-	});
-	panel.add(this.heightInput);
-
-	/* fit canvas to drawing */
-	panel.add(new UIButton({
-		title: "Fit Canvas to Drawing",
-		callback: self.fitCanvasToDrawing,
-		key: "shift-f"
-	}));
 }

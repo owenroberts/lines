@@ -1,6 +1,6 @@
 class UIRange extends UI {
 	constructor(params) {
-		params.type = "input";
+		params.tag = "input";
 		params.event = "input";
 		super(params);
 		this.el.type = "range";

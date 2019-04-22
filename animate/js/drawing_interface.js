@@ -556,17 +556,4 @@ function DrawingInterface() {
 			}
 		}
 	}));
-
-	/* u - change mouse timer */
-	// const mousePanel = new Panel("mouse-menu", "Mouse");
-	// this.mouseElem = new UIRange({
-	// 	label: "Mouse Time",
-	// 	value: Lines.drawEvents.mouseInterval,
-	// 	min: 0,
-	// 	max: 100,
-	// 	input: "mouse-range",
-	// 	callback: Lines.drawEvents.setMouseInterval,
-	// 	key: "u"
-	// });
-	// mousePanel.add(this.mouseElem);
 }

@@ -2,10 +2,10 @@
 	"mouse": {
 		"id": "mouse-menu",
 		"label": "Mouse",
+		"module": "drawEvents",
 		"list": [
 			{
 				"type": "range",
-				"module": "drawEvents",
 				"key": "u",
 				"fromModule": {
 					"value": "mouseInterval",
@@ -16,6 +16,463 @@
 					"max": 100,
 					"input": "mouse-range",
 					"label": "Mouse time"
+				}
+			}
+		]
+	},
+	"background-image": {
+		"id": "background-image-menu",
+		"label": "BG image",
+		"module": "background",
+		"list": [
+			{
+				"type": "text",
+				"fromModule": {
+					"callback": "loadImage"
+				},
+				"params": {
+					"title": "Image URL, Enter",
+					"id": "bg-img"
+				}
+			},
+			{
+				"type": "toggle",
+				"key": "b",
+				"fromModule": {
+					"callback": "toggle"
+				},
+				"params": {
+					"on": "Hide",
+					"off": "Show"
+				}
+			},
+			{
+				"type": "range",
+				"fromModule": {
+					"callback": "setX"
+				},
+				"params": {
+					"label": "X",
+					"min": -1024,
+					"max": 1024,
+					"value": 0,
+					"input": "x-range"
+				}
+			},
+			{
+				"type": "range",
+				"fromModule": {
+					"callback": "setY"
+				},
+				"params": {
+					"label": "Y",
+					"min": -1024,
+					"max": 1024,
+					"value": 0,
+					"input": "y-range"
+				}
+			},
+			{
+				"type": "range",
+				"fromModule": {
+					"callback": "setSize"
+				},
+				"params": {
+					"label": "Size",
+					"input": "size-range",
+					"min": 0.1,
+					"max": 2,
+					"value": 1,
+					"step": 0.1
+				}
+			}
+		]
+	},
+	"canvas": {
+		"id": "canvas-menu_",
+		"label": "Canvas",
+		"module": "canvas",
+		"list": [
+			{
+				"type": "button",
+				"key": "shift-f",
+				"params": {
+					"title": "Fit Canvas"
+				},
+				"fromModule": {
+					"callback": "fitCanvasToDrawing"
+				}
+			},
+			{
+				"type": "text",
+				"fromModule": {
+					"placeholder": "width",
+					"callback": "setWidth"
+				},
+				"params": {
+					"id": "canvas-width",
+					"blur": true,
+					"label": "Width"
+				}
+			},
+			{
+				"type": "text",
+				"fromModule": {
+					"placeholder": "height",
+					"callback": "setHeight"
+				},
+				"params": {
+					"id": "canvas-height",
+					"blur": true,
+					"label": "Height"
+				}
+			}
+		]	
+	},
+	"line-color": {
+		"id": "line-color-menu",
+		"label": "Line Color",
+		"module": "lineColor",
+		"list": [
+			{
+				"type": "color",
+				"fromModule": {
+					"callback": "set",
+					"value": "color"
+				}
+			},
+			{
+				"type": "ui",
+				"params": {
+					"id": "line-color-ways",
+					"label": "Colors"
+				}
+			}
+		]
+	},
+	"bg-color": {
+		"id": "bg-color-menu",
+		"label": "BG Color",
+		"module": "bgColor",
+		"list": [
+			{
+				"type": "color",
+				"fromModule": {
+					"callback": "set",
+					"value": "color"
+				}
+			},
+			{
+				"type": "ui",
+				"params": {
+					"id": "bg-color-ways",
+					"label": "Colors"
+				}
+			}
+		]
+	},
+	"data": {
+		"id": "data-menu",
+		"label": "Edit",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "c",
+				"fromModule": {
+					"callback": "copyFrames"
+				},
+				"params": {
+					"title": "Copy"
+				}
+			},
+			{
+				"type": "button",
+				"key": "d",
+				"fromModule": {
+					"callback": "deleteFrame"
+				},
+				"params": {
+					"title": "Delete Frame"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-d",
+				"fromModule": {
+					"callback": "deleteFrameRange"
+				},
+				"params": {
+					"title": "Delete Frame Range"
+				}
+			},
+			{
+				"type": "button",
+				"key": "g",
+				"fromModule": {
+					"callback": "duplicate"
+				},
+				"params": {
+					"title": "Duplicate"
+				}
+			},
+			{
+				"type": "button",
+				"key": "i",
+				"fromModule": {
+					"callback": "insertFrameBefore"
+				},
+				"params": {
+					"title": "Insert Before"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-i",
+				"fromModule": {
+					"callback": "insertFrameAfter"
+				},
+				"params": {
+					"title": "Insert After"
+				}
+			},
+			{
+				"type": "button",
+				"key": "m",
+				"fromModule": {
+					"callback": "addMultipleCopies"
+				},
+				"params": {
+					"title": "Multi Copies"
+				}
+			},
+			{
+				"type": "button",
+				"key": "q",
+				"fromModule": {
+					"callback": "offsetDrawing"
+				},
+				"params": {
+					"title": "Offset"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-q",
+				"fromModule": {
+					"callback": "offsetAll"
+				},
+				"params": {
+					"title": "Offset All"
+				}
+			},
+			{
+				"type": "button",
+				"key": "r",
+				"fromModule": {
+					"callback": "saveLines"
+				},
+				"params": {
+					"title": "Save Lines"
+				}
+			},
+			{
+				"type": "button",
+				"key": "x",
+				"fromModule": {
+					"callback": "clearFrame"
+				},
+				"params": {
+					"title": "Clear Frame"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-x",
+				"fromModule": {
+					"callback": "cutLastDrawing"
+				},
+				"params": {
+					"title": "Cut Last Layer"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-x",
+				"fromModule": {
+					"callback": "cutFirstDrawing"
+				},
+				"params": {
+					"title": "Cut First Layer"
+				}
+			},
+			{
+				"type": "button",
+				"key": "z",
+				"fromModule": {
+					"callback": "cutLastSegment"
+				},
+				"params": {
+					"title": "Cut Segment"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-z",
+				"fromModule": {
+					"callback": "cutLastSegmentNum"
+				},
+				"params": {
+					"title": "Cut Segment Range"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-z",
+				"fromModule": {
+					"callback": "undo"
+				},
+				"params": {
+					"title": "Undo"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-v",
+				"fromModule": {
+					"callback": "clearFramesToCopy"
+				},
+				"params": {
+					"title": "Clear Frames to Copy"
+				}
+			},
+			{
+				"type": "button",
+				"key": "v",
+				"fromModule": {
+					"callback": "pasteFrames"
+				},
+				"params": {
+					"title": "Paste Frames"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-v",
+				"fromModule": {
+					"callback": "selectAll"
+				},
+				"params": {
+					"title": "Select All"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-v",
+				"fromModule": {
+					"callback": "selectAll"
+				},
+				"params": {
+					"title": "Select All"
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-v",
+				"fromModule": {
+					"callback": "selectRange"
+				},
+				"params": {
+					"title": "Select Range"
+				}
+			}
+		]
+	},
+	"explode": {
+		"id": "explode-menu",
+		"label": "Explode",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Explode",
+					"arguments": {
+						"follow": false,
+						"over": false
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Explode Over",
+					"arguments": {
+						"follow": false,
+						"over": true
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Follow",
+					"arguments": {
+						"follow": true,
+						"over": false
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Follow Over",
+					"arguments": {
+						"follow": true,
+						"over": true
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-r",
+				"fromModule": {
+					"callback": "reverse"
+				},
+				"params": {
+					"title": "Reverse Draw",
+					"arguments": {
+						"simultaneous": false
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-r",
+				"fromModule": {
+					"callback": "reverse"
+				},
+				"params": {
+					"title": "Reverse Multi",
+					"arguments": {
+						"simultaneous": true
+					}
 				}
 			}
 		]

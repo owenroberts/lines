@@ -130,19 +130,20 @@ function Interface() {
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
-		if (k == "space" || k == "tab") ev.preventDefault();
-		if (document.activeElement.type != "text") {
-
+		if (k == "space") ev.preventDefault();
+		if (k && self.keyCommands[k] && document.activeElement.type != "text") {
+			if (k == "tab") ev.preventDefault(); // works?
 			if (ev.shiftKey) k = "shift-" + k;
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
-			console.log(k);
+			console.log('key', k, self.keyCommands[k]);
 
 			if (self.keyCommands[k].handler) {
 				self.keyCommands[k].handler(ev, self.keyCommands[k]);
 				//  self.keyCommands[k].addClass('key-down'); show key presses?
-				if (self.keyCommands[k].toggleText) self.keyCommands[k].toggleText();
+			} else {
+				self.keyCommands[k].callback();
 			}
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
@@ -275,17 +276,23 @@ function Interface() {
 		.then(data => { self.build(data) });
 
 	const classes = {
-		range: UIRange
+		ui: UI,
+		button: UIButton,
+		toggle: UIToggleButton,
+		text: UIText,
+		range: UIRange,
+		color: UIColor
 	}
 
 	this.build = function(data) {
 		for (const key in data) {
-			const panel = new Panel(data[key].id, data[key].label);
+			const panel = new Panel(data[key].id, data[key].label); 
 			for (let i = 0; i < data[key].list.length; i++) {
 				const u = data[key].list[i];
-				const params = u.params;
+				const module = data[key].module || u.module;
+				const params = { key: u.key, ...u.params };
 				for (const k in u.fromModule) {
-					params[k] =  Lines[u.module][u.fromModule[k]];
+					params[k] =  Lines[module][u.fromModule[k]];
 				}
 				const ui = new classes[u.type](params);
 				panel.add(ui);
