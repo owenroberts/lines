@@ -70,8 +70,8 @@ function Draw(fps) {
 				Lines.canvas.ctx.fill();
 			}
 
-			if (self.background.img.src && self.background.show)
-				Lines.canvas.ctx.drawImage(self.background.img, self.background.x, self.background.y, self.background.size, self.background.size/self.background.ratio);
+			// move to bg module ??
+			Lines.background.display();
 
 			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0 && self.onionSkinIsVisible) {
@@ -150,8 +150,7 @@ function Draw(fps) {
 				self.capturing = false;
 			}
 		}
-		if (!self.capturing)
-			window.requestAnimFrame(self.draw);
+		if (!self.capturing) window.requestAnimFrame(self.draw);
 	}
 
 	/* jig = jiggle amount, seg = num segments */
@@ -186,7 +185,7 @@ function Draw(fps) {
 				}
 				if (params.onion)
 					Lines.canvas.ctx.strokeStyle = params.color;
-				else if (Lines.canvas.ctx.strokeStyle != "#" + params.color)
+				else if (Lines.canvas.ctx.strokeStyle != params.color)
 					Lines.canvas.setStrokeColor(params.color);
 			}
 			
@@ -215,7 +214,7 @@ function Draw(fps) {
 	}
 
 	/* add background image module */
-	this.background = new Background();
+	Lines.background = new Background();
 }
 
 /*

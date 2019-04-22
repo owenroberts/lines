@@ -1,29 +1,34 @@
 class UIText extends UI {
 	constructor(params) {
-		params.type = "input";
+		params.tag = "input";
 		params.event = "keyup";
 		super(params);
 		this.el.type = "text";
-		if (params.placeholder) this.el.placeholder = params.placeholder;
-		else this.el.placeholder = params.title;
+		this.el.placeholder = params.placeholder || params.title;
 		
 		if (params.blur) {
 			this.el.addEventListener("blur", ev => {
-				params.callback(+ev.target.value);
+				if (ev.target.value) {
+					this.handler(ev, this);
+				}
 			});
 		}
 
 		this.el.addEventListener('keyup', ev => {
-			if (ev.which == 13) params.callback(+ev.target.value);
+			if (ev.which == 13) {
+				this.handler(ev, this);
+			}
 		});
 	}
 
-	reset(value) {
-		this.el.value = "";
-		this.el.placeholder = value;
+	handler(ev, self) {
+		const value = ev.target.value;
+		self.callback(value);
+		self.set(value);
 	}
 
 	set(value) {
-		this.el.value = value;
+		this.el.value = "";
+		this.el.placeholder = value;
 	}
 }

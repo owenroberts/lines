@@ -1,6 +1,6 @@
 class UIDisplay extends UI {
 	constructor(params) {
-		params.type = "span";
+		params.tag = "span";
 		super(params);
 		this.el.textContent = params.initial;
 	}

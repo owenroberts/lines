@@ -3,15 +3,17 @@ class UI {
 		var self = this;
 		this.el = document.getElementById(params.id); // attempt to find elem in html
 		if (!this.el) { // if not in html create it
-			if (params.type) this.el = document.createElement(params.type);
+			if (params.tag) this.el = document.createElement(params.tag);
 			else this.el = document.createElement("div");
 			if (params.id) this.el.id = params.id;
 		}
 
 		// callback ? 
 
+
 		if (params.callback) this.callback = params.callback;
 		if (params.label) this.label = params.label;
+		if (params.arguments) this.arguments = params.arguments;
 		if (params.value != undefined) 
 			this.el.value = params.value;
 
@@ -24,6 +26,11 @@ class UI {
 				}
 			});
 			observer.observe(params.observe.elem, { attributes: true });
+		}
+		if (params.css) {
+			for (const key in params.css) {
+				this.el.style[key] = params.css[key];
+			}
 		}
 	}
 

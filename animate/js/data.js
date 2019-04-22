@@ -295,7 +295,10 @@ function Data() {
 	/* a: explode, ctrl a: follow, shift a: explode over, alt a: follow over */
 	/* over states get fucked up with two drawings, need to figure
 		out after adding drawing nums to frames in v2 */
-	this.explode = function(follow, over) {
+	this.explode = function(params) {
+		console.log(params);
+		const follow = params.follow;
+		const over = params.over;
 		self.saveLines();
 		/* can't undo multiple saves */
 		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
@@ -346,7 +349,8 @@ function Data() {
 	/* reverse of explode - shift-r - multi alt-r
 		could be same function but then maybe my head would explode? 
 		simultaneous draw multi drawings at one  (multi) */
-	this.reverse = function(simultaneous) {
+	this.reverse = function(params) {
+		const simultaneous = params.simultaneous;
 		self.saveLines();
 		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
@@ -448,216 +452,22 @@ function Data() {
 		}
 	};
 
-	/* interfaces */
-	/* should interfaces be spread throughout? 
-		should data be broken into multiple modules?
-		explode and reverse could be transformations? 
-		removing, adding, changing frames 
-		offset and canvas size */
-	const editPanel = new Panel("data-menu", "Edit");
-	const explodePanel = new Panel("explode-menu", "Explode");
 
-	/* explode */
-	explodePanel.add(new UIButton({
-		title: "Explode",
-		callback: function() {
-			self.explode(false, false);
-		},
-		key: "a"
-	}));
-	
-	/* explode over */
-	explodePanel.add(new UIButton({
-		title: "Explode Over",
-		callback: function() {
-			self.explode(false, true);
-		},
-		key: "shift-a"
-	}));
+	/* interface ? */
 
-	/* follow */
-	explodePanel.add(new UIButton({
-		title: "Follow",
-		callback: function() {
-			self.explode(true, false);
-		},
-		key: "ctrl-a"
-	}));
+	/* shift v */
+	this.selectAll = function() {
+		Lines.interface.frameElems.looper((elem) => {
+			self.addFrameToCopy(elem);
+		});
+	};
 
-	/* follow over */
-	explodePanel.add(new UIButton({
-		title: "Follow Over",
-		callback: function() {
-			self.explode(true, true);
-		},
-		key: "alt-a"
-	}));
-
-	/* reverse draw */
-	explodePanel.add(new UIButton({
-		title: "Reverse Draw",
-		callback: function() {
-			self.reverse(false);
-		},
-		key: "shift-r"
-	}));
-
-	/* reverse multi  */
-	explodePanel.add(new UIButton({
-		title: "Reverse Multi",
-		callback: function() {
-			self.reverse(true);
-		},
-		key: "alt-r"
-	}));
-
-	/* copy */
-	editPanel.add(new UIButton({
-		title: "Copy",
-		callback: self.copyFrames,
-		key: "c"
-	}));
-
-	/* delete frame */
-	editPanel.add(new UIButton({
-		title: "Delete Frame",
-		callback: self.deleteFrame,
-		key: "d"
-	}));
-
-	/* delete frame range */
-	editPanel.add(new UIButton({
-		title: "Delete Frame Range",
-		callback: self.deleteFrameRange,
-		key: "shift-d"
-	}));
-
-	/* duplicate will be unnecessary when frames/drawings are fixed */
-	editPanel.add(new UIButton({
-		title: "Duplicate",
-		callback: self.duplicate,
-		key: "g"
-	}));
-
-	/* insert before */
-	editPanel.add(new UIButton({
-		title: "Insert Before",
-		callback: self.insertFrameBefore,
-		key: "i"
-	}));
-
-	/* insert after */
-	editPanel.add(new UIButton({
-		title: "Insert After ",
-		callback: self.insertFrameAfter,
-		key: "shift-i"
-	}) );
-
-	/* multi copies */
-	editPanel.add( new UIButton({
-		title: "Multi Copies",
-		callback: self.addMultipleCopies,
-		key: "m"
-	}));
-
-	/* offset */
-	editPanel.add(new UIButton({
-		title: "Offset",
-		callback: self.offsetDrawing,
-		key: "q"
-	}));
-
-	/* offset all */
-	editPanel.add(new UIButton({
-		title: "Offset All",
-		callback: self.offsetAll,
-		key: "shift-q"
-	}));
-
-	/* save lines */
-	editPanel.add(new UIButton({
-		title: "Save Lines",
-		key:"r",
-		callback: self.saveLines
-	}));
-
-	/* clear frame */
-	editPanel.add(new UIButton({
-		title: "Clear Frame",
-		key:"x",
-		callback: self.clearFrame
-	}));
-
-	/* paste frames */
-	editPanel.add(new UIButton({
-		title: "Paste Frames",
-		key: "v",
-		callback: self.pasteFrames
-	}));
-
-	/* select all frames */
-	editPanel.add(new UIButton({
-		title: "Select All Frames",
-		key: "shift-v",
-		callback: function() {
-			Lines.interface.frameElems.looper((elem) => {
-				self.addFrameToCopy(elem);
-			});
-		}
-	}));
-
-	/* select frame range */
-	editPanel.add(new UIButton({
-		title: "Select Frame Range",
-		key: "alt-v",
-		callback: function() {
-			const start = prompt("Start frame:");
-			const end = prompt("end frame:");
-			Lines.interface.frameElems.looper((elem) => {
-				self.addFrameToCopy(elem);
-			}, start, end);
-		}
-	}));
-
-	/* clear selected frames  */
-	editPanel.add(new UIButton({
-		title: "Clear Frames to Copy",
-		key: "ctrl-v",
-		callback: self.clearFramesToCopy
-	}));
-
-	/* cut last layer */
-	editPanel.add(new UIButton({
-		title: "Cut Last Layer",
-		key: "shift-x",
-		callback: self.cutLastDrawing
-	}));
-
-	/* cut first layer */
-	editPanel.add(new UIButton({
-		title: "Cut First Layer",
-		key: "ctrl-x",
-		callback: self.cutFirstDrawing
-	}));
-
-	/* cut line segment */
-	editPanel.add(new UIButton({
-		title: "Cut Line",
-		key: "z",
-		callback: self.cutLastSegment
-	}));
-
-	/* cut range of segments */
-	editPanel.add(new UIButton({
-		title: "Cut Segment Num",
-		key: "shift-z",
-		callback: self.cutLastSegmentNum
-	}));
-
-	/* undo */
-	editPanel.add(new UIButton({
-		title: "Undo",
-		key: "ctrl-z",
-		callback: self.undo
-	}));
+	/* alt v */
+	this.selectRange = function() {
+		const start = prompt("Start frame:");
+		const end = prompt("end frame:");
+		Lines.interface.frameElems.looper((elem) => {
+			self.addFrameToCopy(elem);
+		}, start, end);
+	};
 }

@@ -1,14 +1,12 @@
 class UIColor extends UI {
 	constructor(params) {
+		params.tag = params.event = "input";
 		super(params);
+		this.el.type = "color";
 		this.el.style.backgroundColor = "#" + params.color;
 		this.el.classList.add("ui-color");
-	}
-	setColor(color) {
-		this.el.style.backgroundColor = "#" + color;
-	}
-	/* for color gradients */
-	setBkg(bkg) {
-		this.el.style.backgroundImage = bkg;
+		this.el.addEventListener('input', ev => {
+			this.callback(ev.target.value);
+		});
 	}
 }
