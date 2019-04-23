@@ -11,17 +11,28 @@ function Draw(fps) {
 	this.timer = performance.now(); 
 	this.intervalRatio = this.interval / (1000 / this.fps);  // this starts same as lineInterval, written out to show math
 
-	this.onionSkinIsVisible = true;
+	this.onionSkinNum = 0;
+	this.onionSkinIsVisible = false;
 
-	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
-	this.captureWithBackground = false;
-	this.capturing = false;
+	/* l key */
+	this.setOnionSkin = function(n) {
+		self.onionSkinNum = +n;
+		self.onionSkinIsVisible = true;
+	};
 
+	/* shift l */
+	this.toggleOnion = function() {
+		self.onionSkinIsVisible = !self.onionSkinIsVisible;
+		/* set onion back? */
+	};
+	
+	/* ; key */
 	this.setFps = function(fps) {
 		self.fps = fps;
 		self.intervalRatio = self.interval / (1000 / self.fps);
 	};
 
+	/* ' key */
 	this.setLps = function(lps) {
 		self.lps = lps;
 		self.interval = 1000 / self.lps;
@@ -43,6 +54,7 @@ function Draw(fps) {
 		Lines.interface.updateFrameNum();
 	};
 
+	/* f key */
 	this.setFrame = function(f) {
 		Lines.currentFrame = self.currentFrameCounter = +f;	
 	};
@@ -59,14 +71,16 @@ function Draw(fps) {
 				Lines.currentFrame = self.currentFrameCounter = 0;
 			}
 
-			/* update the anim frame number */
+			/* update the anim frame number 
+				another place where interface is tied to frame num
+				maybe use callback style thing here */
 			if (self.isPlaying) Lines.interface.updateFrameNum();
 
 			Lines.canvas.ctx.clearRect(0, 0, Lines.canvas.width, Lines.canvas.height);
 
 			if (self.videoCapture || (self.captureWithBackground && self.captureFrames > 0)) {
 				Lines.canvas.ctx.rect(0, 0, Lines.canvas.width, Lines.canvas.height);
-				Lines.canvas.ctx.fillStyle = '#' + Lines.canvas.bgColor.color;
+				Lines.canvas.ctx.fillStyle = Lines.bgColor.color;
 				Lines.canvas.ctx.fill();
 			}
 
@@ -198,6 +212,26 @@ function Draw(fps) {
 		Lines.canvas.ctx.stroke();
 	};
 
+
+	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
+	this.captureWithBackground = true; /* default capture bg */
+	this.capturing = false;
+
+	/* k key */
+	this.captureOne = function() {
+		self.captureFrames = 1;
+	};
+
+	/* shift k */
+	this.captureMultiple = function() {
+		self.captureFrames = prompt("Capture how many frames?");
+	};
+
+	/* n key */
+	this.toggleBGCapture = function() {
+		self.captureWithBackground = !self.captureWithBackground;
+	};
+
 	/* ctrl-k - start at beginning and capture one of every frame */
 	this.captureCycle = function() {
 		Lines.data.saveLines();
@@ -206,7 +240,7 @@ function Draw(fps) {
 		self.isPlaying = true;
 		// capture as many frames as necessary for lines ratio or 1 of every frame 
 		self.captureFrames = Lines.frames.length * Math.max(1, self.lps / self.fps);
-	}
+	};
 	
 	/* starts drawing  */
 	this.start = function() {

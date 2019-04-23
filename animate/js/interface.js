@@ -3,9 +3,10 @@ function Interface() {
 
 	this.panels = {}; 
 	this.keyCommands = {}; /* parts of the interface? */
+	this.faces = {}; /* references to faces we need */
 
-	this.framesPanel = new UI({id:"frames"});
-	this.frameElems = new UIList({class:"frame"});
+	this.framesPanel = new UI({ id:"frames" });
+	this.frameElems = new UIList({ class:"frame" });
 	/* plus frame is unsaved drawing frame */
 	this.plusFrame = new UI({
 		id:"current",
@@ -27,6 +28,15 @@ function Interface() {
 		}
 	});
 	this.keyCommands['backslash'] = this.back;
+
+	/* f key */
+	this.setFrame = function(f) {
+		if (+f < Lines.frames.length) {
+			self.beforeFrame();
+			Lines.draw.setFrame(+f);
+			self.afterFrame();
+		}
+	};
 
 	/* updates the frame panel representation of frames, 
 		sets current frame, 
@@ -75,13 +85,14 @@ function Interface() {
 
 	/* update frame display and current frame */
 	this.updateFrameNum = function() {
-		Lines.drawingInterface.frameNumDisplay.set(Lines.currentFrame);
+		// Lines.drawingInterface.frameNumDisplay.set(Lines.currentFrame);
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[Lines.currentFrame]) // also un-ui
 			self.frameElems.setId("current", Lines.currentFrame);
 		else 
 			self.plusFrame.setId("current");
+		self.faces.frameDisplay.set(Lines.currentFrame);
 	};
 
 	/* call before changing a frame */
@@ -286,17 +297,35 @@ function Interface() {
 
 	this.build = function(data) {
 		for (const key in data) {
-			const panel = new Panel(data[key].id, data[key].label); 
+			const id = data[key].id;
+			const panel = self.panels[id] ? self.panels[id] : new Panel(id, data[key].label);
 			for (let i = 0; i < data[key].list.length; i++) {
 				const u = data[key].list[i];
-				const module = data[key].module || u.module;
+				const module = u.module || data[key].module;
 				const params = { key: u.key, ...u.params };
 				for (const k in u.fromModule) {
 					params[k] =  Lines[module][u.fromModule[k]];
 				}
+				
+				if (u.set) {
+					params.callback = function(value) {
+						console.log(module, u.set.prop);
+						Lines[module][u.set.prop] = u.set.number ? +value : value;
+					};
+					params.value = Lines[module][u.set.prop];
+
+					/* update layer property .... ie 
+						if (self.layers.length > 0) {
+							self.updateLayerProperty('n', value);
+						}
+					*/
+				}
+
 				const ui = new classes[u.type](params);
+				if (u.row) panel.addRow();
 				panel.add(ui);
 				if (u.key) self.keyCommands[u.key] = ui;
+				if (u.face) self.faces[u.face] = ui;
 			}
 		}
 	};

@@ -22,13 +22,14 @@ class UIText extends UI {
 	}
 
 	handler(ev, self) {
-		const value = ev.target.value;
+		const value = ev.target.value || prompt(self.prompt);
 		self.callback(value);
-		self.set(value);
+		if (value) self.set(value);
 	}
 
 	set(value) {
 		this.el.value = "";
 		this.el.placeholder = value;
+		this.el.blur();
 	}
 }

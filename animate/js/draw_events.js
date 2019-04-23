@@ -4,8 +4,8 @@ function DrawEvents(defaults) {
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 
 	this.setDefaults = function() {
-		self.segNumRange = defaults.n; /* default 2*/
-		self.jiggleRange = defaults.r; /* default 1 */
+		self.segNumRange = defaults.n; /* default 2 - h key */
+		self.jiggleRange = defaults.r; /* default 1 - j key */
 		self.wiggleRange = defaults.w; /* 2 is good */
 		self.wiggleSpeed = defaults.v; /* 0.1 good */
 	};
@@ -21,9 +21,6 @@ function DrawEvents(defaults) {
 	// how often the mousemove records, default 30ms
 	this.mouseTimer = performance.now();  //  independent of draw timer 
 	this.mouseInterval = 30;
-	this.setMouseInterval = function(n) {
-		self.mouseInterval = +n;
-	};
 	
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != Lines.canvas.canvas) { 
