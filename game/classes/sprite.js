@@ -49,6 +49,10 @@ class Sprite {
 		if (this.drawBackground) this.animation.drawBackground = true;
 	}
 
+	fit(width) {
+		if (this.width > width) this.scale(width / this.width);
+	}
+
 	setCollider(x, y, w, h) {
 		this.collider.position.x = x;
 		this.collider.position.y = y;
@@ -58,12 +62,12 @@ class Sprite {
 
 	scale(n) {
 		/* need to wait for animation to load, do this later */
-		this.animation.widthRatio = this.width / (this.width*n);
-		this.animation.heightRatio = this.height / (this.height*n);
 		this.width *= n;
 		this.height *= n;
 		this.collider.width *= n;
 		this.collider.height *= n;
+		this.animation.widthRatio *= n
+		this.animation.heightRatio *= n;
 	}
 
 	update() {
@@ -121,7 +125,7 @@ class Sprite {
 		this.position.y -= this.height / 2;
 	}
 
-	/* better name for this? collide */
+	/* better name for this? interact...  */
 	tap(x, y) {
 		if (x > this.position.x + this.collider.position.x &&
 			x < this.position.x + this.collider.position.x + this.collider.width && 
@@ -137,7 +141,6 @@ class Sprite {
 		this.jumpAmount += Math.min(-amount / 25, 10);
 	}
 
-	/* nm this is collide*/
 	collide(other, callback) {
 		if (this.alive && other.alive) {
 			if (this.position.x + this.collider.position.x < other.position.x + other.collider.position.x + other.collider.width &&
