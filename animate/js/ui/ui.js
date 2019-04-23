@@ -11,9 +11,11 @@ class UI {
 		// callback ? 
 
 
+
 		if (params.callback) this.callback = params.callback;
 		if (params.label) this.label = params.label;
 		if (params.arguments) this.arguments = params.arguments;
+		if (params.prompt) this.prompt = params.prompt;
 		if (params.value != undefined) 
 			this.el.value = params.value;
 

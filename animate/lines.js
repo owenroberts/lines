@@ -15,11 +15,11 @@ window.addEventListener("load", function() {
 
 	// width height color, def color is black 000000
 	//  Lines.canvas = new Canvas(1024, 512, "ffffff" );  // sundays
-	Lines.canvas = new Canvas(512, 512, "ffffff" )
+	Lines.canvas = new Canvas(512, 512, "#ffffff" )
 	Lines.draw = new Draw();
 	Lines.data = new Data();
 	Lines.lineColor = new Color();
-	// Lines.lineColor.setColor('ffffff');
+	// Lines.lineColor.setColor('#ffffff');
 	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
 	Lines.fio = new Files_IO({
 		fit: false, /* fit to canvas when saving */

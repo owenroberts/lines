@@ -35,7 +35,7 @@ class UIRange extends UI {
 
 	handler(ev, ui) {
 		let val;
-		if (ev.type == 'keydown') val = prompt("Mouse time?");
+		if (ev.type == 'keydown') val = prompt(ui.prompt);
 		else val = +ev.target.value;
 		ui.update(val);
 	}

@@ -12,6 +12,10 @@ function Canvas(width, height, color) {
 		self.canvas.style.backgroundColor = _color;
 	});
 
+	this.setLineWidth = function(n) {
+		self.canvas.ctx.lineWidth = +n;
+	};
+
 	/* canvas bg color */
 	if (color) Lines.bgColor.set(color);
 
