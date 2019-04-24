@@ -1,7 +1,6 @@
 class UIText extends UI {
 	constructor(params) {
 		params.tag = "input";
-		params.event = "keyup";
 		super(params);
 		this.el.type = "text";
 		this.el.placeholder = params.placeholder || params.title;

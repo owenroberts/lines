@@ -1,13 +1,12 @@
 class UIToggleButton extends UI {
 	constructor(params) {
 		params.tag = "span";
-		params.event = "click";
 		super(params);
 		this.el.classList.add("btn");
 		this.el.textContent = this.on = params.on;
 		this.isOn = true;
 		this.off = params.off;
-		this.el.addEventListener(params.event, function(ev) {
+		this.el.addEventListener('click', function(ev) {
 			this.handler(ev, this);
 		}.bind(this));
 	}

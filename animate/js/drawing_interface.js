@@ -11,7 +11,7 @@ function DrawingInterface() {
 
 	/* layer panel */
 	this.layerPanel = new Panel("layer-menu", "Layer");
-	Lines.interface.panels['layer-menu'] = this.layerPanel;
+	Lines.interface.panels['layer'] = this.layerPanel;
 	this.frameRow = this.layerPanel.addRow();
 	this.layerPanel.addRow();
 	this.layers = [];
@@ -119,7 +119,7 @@ function DrawingInterface() {
 	/* drawing panel */
 	this.drawingPanel = new Panel("drawing-menu", "Drawings");
 	/* add in panel */
-	Lines.interface.panels['drawing-menu'] = this.drawingPanel;
+	Lines.interface.panels['drawing'] = this.drawingPanel;
 
 	this.showDrawings = function() {
 		self.resetLayers();

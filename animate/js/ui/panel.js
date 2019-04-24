@@ -7,34 +7,40 @@ class Panel {
 			document.getElementById("panels").appendChild(this.el);
 		}
 		this.el.classList.add("menu-panel");
-		this.toggleBtn = document.createElement("div");
-		this.toggleBtn.classList.add("panel-toggle");
-		this.toggleBtn.textContent = "▽";
-		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
-		const title = document.createElement("div");
-		title.textContent = label;
-		title.classList.add("panel-title");
-		this.el.appendChild(title);
-		this.el.appendChild(this.toggleBtn);
+		this.open = false;
 		this.rows = [];
 
-		this.orderBtn = document.createElement("div");
-		this.orderBtn.classList.add("panel-order");
-		this.orderBtn.textContent = "⥂";
-		this.orderBtn.addEventListener("click", ev => {
+		const title = document.createElement("div");
+		title.textContent = label;
+		title.classList.add("title");
+		this.el.appendChild(title);
+		
+		this.toggleBtn = document.createElement("div");
+		this.toggleBtn.classList.add("toggle");
+		this.toggleBtn.textContent = "▽";
+		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
+		this.el.appendChild(this.toggleBtn);
+
+		const orderBtn = document.createElement("div");
+		orderBtn.classList.add("order");
+		orderBtn.textContent = "⥂";
+		orderBtn.addEventListener("click", ev => {
 			this.el.style.order = +this.el.style.order + 1;
 		});
-		this.el.appendChild(this.orderBtn);
+		this.el.appendChild(orderBtn);
 	}
+
 	toggle() {
-		if (this.el.clientHeight <= 25) {
+		if (this.open) {
+			this.el.style.height = "25px";
+			this.toggleBtn.innerHTML = "▽";
+		} else {
 			this.el.style.height = "auto";
 			this.toggleBtn.innerHTML = "△";
-		} else {
-			this.el.style.height = 25 + "px";
-			this.toggleBtn.innerHTML = "▽";
 		}
+		this.open = !this.open;
 	}
+
 	addRow(id) {
 		const row = document.createElement("div");
 		row.classList.add("row");
@@ -43,22 +49,22 @@ class Panel {
 		this.rows.push(row);
 		return row;
 	}
+
 	removeRow(row) {
 		const index = this.rows.indexOf(row);
 		this.rows.splice(index, 1);
 		this.el.removeChild(row);
 	}
+
 	add(component, _row) {
-		let row = _row;
-		if (this.rows.length == 0) row = this.addRow();
-		if (!row) row = this.rows[this.rows.length - 1];
+		let row = _row || this.rows[this.rows.length - 1];
+		if (!row) row = this.addRow();
+		if (component.display) this.add(component.display);
+		if (component.input) this.add(component.input);
 		row.appendChild(component.el);
 		if (component.label) component.addLabel();
-		if (component.display)
-			this.rows[this.rows.length - 1].insertBefore(component.display.el, component.el);
-		if (component.input)
-			this.rows[this.rows.length - 1].insertBefore(component.input.el, component.el);
 	}
+
 	clearComponents(row) {
 		if (row) {
 			while (row.firstChild) {

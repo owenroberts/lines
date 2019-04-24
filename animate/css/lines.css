@@ -12,7 +12,7 @@ body {
 button:focus {
   outline: none; }
 
-#nav .btn[title]:hover:after, .menu-panel [title]:hover:after, .menu-panel .key-down:after {
+.btn[title]:hover:after, .menu-panel [title]:hover:after, .menu-panel .press:after {
   content: attr(title);
   position: fixed;
   top: 20px;
@@ -22,11 +22,6 @@ button:focus {
   border-radius: 2px;
   padding: 1px 3px;
   color: black; }
-
-#splash {
-  font-size: 18px;
-  width: 600px;
-  margin: 2em auto; }
 
 #container {
   margin: 1em;
@@ -38,9 +33,23 @@ button:focus {
     flex: 1; }
 
 #canvas {
-  border: 1px solid gray; }
+  border: 1px solid lightgray; }
   #canvas:active, #canvas:hover {
     cursor: crosshair; }
+
+.btn {
+  border: 1px solid gray;
+  padding: 0.25em;
+  margin: .25em 0;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 200ms ease-in;
+  line-height: 1.75;
+  white-space: nowrap; }
+  .btn:hover {
+    background: #ffddff; }
+  .btn.press {
+    background-color: #ffddff; }
 
 #nav #title {
   border: none;
@@ -52,37 +61,6 @@ button:focus {
   #nav #title:focus {
     outline: none;
     border-bottom: 1px solid black; }
-#nav .btn {
-  border: 1px solid gray;
-  padding: 0.25em;
-  margin: .25em 0;
-  border-radius: 3px;
-  cursor: pointer;
-  line-height: 2;
-  white-space: nowrap; }
-  #nav .btn:hover {
-    background: #ffddff; }
-
-.panel-toggle, .panel-order {
-  display: inline-block;
-  position: absolute;
-  right: 14px;
-  top: 0;
-  left: 0;
-  text-align: right;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 100;
-  opacity: 0.5;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px; }
-  .panel-toggle:hover, .panel-order:hover {
-    background: #ffddff; }
-
-.panel-order {
-  font-size: 1em;
-  right: 2px;
-  left: auto; }
 
 #panels {
   /*display: grid;
@@ -102,8 +80,27 @@ button:focus {
   overflow: hidden;
   position: relative;
   height: 25px; }
-  .menu-panel .panel-title {
+  .menu-panel .title {
     margin-bottom: 1em; }
+  .menu-panel .toggle, .menu-panel .order {
+    display: inline-block;
+    position: absolute;
+    right: 14px;
+    top: 0;
+    left: 0;
+    text-align: right;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 100;
+    opacity: 0.5;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px; }
+    .menu-panel .toggle:hover, .menu-panel .order:hover {
+      background: #ffddff; }
+  .menu-panel .order {
+    font-size: 1em;
+    right: 2px;
+    left: auto; }
   .menu-panel .row {
     margin-bottom: 2px;
     display: flex;
@@ -119,38 +116,10 @@ button:focus {
       width: 30px;
       margin-left: 5px; }
   .menu-panel .btn {
-    border: 1px solid gray;
-    border-radius: 3px;
     padding: 0 0.25em;
-    margin: .25em 0;
-    cursor: pointer;
-    margin-right: 3px;
-    transition: background-color 300ms ease-in; }
-    .menu-panel .btn:hover {
-      background: lightgray; }
-    .menu-panel .btn.press {
-      background-color: #ffddff; }
+    margin-right: 3px; }
   .menu-panel#frames {
     max-width: 100%; }
-
-#color-menu input, #canvas-menu input {
-  display: inline-block;
-  /* width:100px; */ }
-#color-menu #html-color, #color-menu #bkg-img, #color-menu #bkg-x, #color-menu #bkg-y, #color-menu #bkg-size, #canvas-menu #html-color, #canvas-menu #bkg-img, #canvas-menu #bkg-x, #canvas-menu #bkg-y, #canvas-menu #bkg-size {
-  width: 80px; }
-#color-menu #colorways, #canvas-menu #colorways {
-  margin-top: 0.5em; }
-  #color-menu #colorways button, #canvas-menu #colorways button {
-    padding: 2px;
-    border: 1px solid lightgray; }
-    #color-menu #colorways button:hover, #canvas-menu #colorways button:hover {
-      cursor: pointer; }
-
-.ui-color {
-  width: 100%;
-  height: 2em;
-  border: 1px solid gray;
-  margin-bottom: 1em; }
 
 #frames {
   height: auto;
@@ -162,18 +131,19 @@ button:focus {
   grid-template-rows: max-content max-content; }
   #frames p {
     margin: 0;
-    grid-column: 1/ span 2; }
+    grid-column: 1 / span 2; }
   #frames .frame, #frames .plus, #frames #current {
     display: inline-block;
     background-color: lightgray;
     margin-right: 1px;
     margin-top: 1px;
-    padding: 0.5em; }
+    padding: 0.5em;
+    cursor: pointer; }
     #frames .frame:hover, #frames .plus:hover, #frames #current:hover {
       background-color: gray; }
   #frames #current {
     background-color: lightblue !important; }
   #frames .copy {
-    background-color: pink !important; }
+    background-color: #ffddff !important; }
 
 /*# sourceMappingURL=lines.css.map */
