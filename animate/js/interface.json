@@ -536,7 +536,7 @@
 				"type": "text",
 				"key": "f",
 				"module": "interface",
-				"face": "frameDisplay",	
+				"face": "frameDisplay",
 				"fromModule": {
 					"callback": "setFrame"
 				},

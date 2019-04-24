@@ -10,8 +10,6 @@ class UI {
 
 		// callback ? 
 
-
-
 		if (params.callback) this.callback = params.callback;
 		if (params.label) this.label = params.label;
 		if (params.arguments) this.arguments = params.arguments;
@@ -36,9 +34,16 @@ class UI {
 		}
 	}
 
+	press() {
+		this.el.classList.add('press');
+		this.el.addEventListener('transitionend', function() {
+			this.el.classList.remove('press');
+		}.bind(this));
+	}
+
 	setKey(key) {
 		this.el.title = key; // hover title key text
-		if (Lines.interface) Lines.interface.keyCommands[key] = this;
+		if (Lines.interface) Lines.interface.keys[key] = this;
 	}
 	
 	addClass(c) {

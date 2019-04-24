@@ -212,7 +212,6 @@ function Draw(fps) {
 		Lines.canvas.ctx.stroke();
 	};
 
-
 	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
 	this.captureWithBackground = true; /* default capture bg */
 	this.capturing = false;

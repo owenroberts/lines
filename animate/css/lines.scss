@@ -141,6 +141,8 @@ button:focus { outline: none; }
 		cursor: pointer;
 		margin-right: 3px;
 		&:hover { background:lightgray; }
+		transition: background-color 300ms ease-in;
+		&.press { background-color: $accent-two; }
 	}
 	*[title]:hover:after, .key-down:after {
 		@extend %tool-tip;
