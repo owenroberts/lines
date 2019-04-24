@@ -5,27 +5,27 @@ function Files_IO(params) {
 
 	/* s key - shift-s for single */
 	this.saveFramesToFile = function(title, single, callback) {
-		Lines.data.saveLines();
+		lns.data.saveLines();
 
 		if (params.fit && confirm("Fit canvas?"))
-			Lines.canvas.fitCanvasToDrawing();
+			lns.canvas.fitCanvasToDrawing();
 
 		const json = {};
 		json.v = "2.2";
-		json.w = Math.floor(+Lines.canvas.width);
-		json.h = Math.floor(+Lines.canvas.height);
-		json.fps = +Lines.draw.fps;
+		json.w = Math.floor(+lns.canvas.width);
+		json.h = Math.floor(+lns.canvas.height);
+		json.fps = +lns.draw.fps;
 		if (params.bg)
-			json.bg = Lines.bgColor.color;
+			json.bg = lns.bgColor.color;
 		// what if one color isn't used ?
-		json.mc = Lines.lineColor.colors.length > 1 ? true : false;
+		json.mc = lns.lineColor.colors.length > 1 ? true : false;
 		
 		/* save current frame */
 		let frames;
-		if (single && Lines.frames[Lines.currentFrame])
-			frames = [Lines.frames[Lines.currentFrame]];
+		if (single && lns.frames[lns.currentFrame])
+			frames = [lns.frames[lns.currentFrame]];
 		else
-			frames = Lines.frames;
+			frames = lns.frames;
 		json.f = frames;
 
 		/* search frames for layers and drawings used */
@@ -34,7 +34,7 @@ function Files_IO(params) {
 			const frame = frames[i];
 			for (let j = 0; j < frame.length; j++) {
 				const layerIndex = frame[j].l;
-				const drawingIndex =  Lines.layers[layerIndex].d;
+				const drawingIndex =  lns.layers[layerIndex].d;
 				if (!layerIndexes.includes(layerIndex))
 					layerIndexes.push(layerIndex);
 				if (!drawingIndexes.includes(drawingIndex))
@@ -45,13 +45,13 @@ function Files_IO(params) {
 		json.l = []; /* add layers */
 		for (let i = 0; i < layerIndexes.length; i++) {
 			const index = layerIndexes[i];
-			json.l[index] = Lines.layers[index];
+			json.l[index] = lns.layers[index];
 		}
 
 		json.d = [];
 		for (let i = 0; i < drawingIndexes.length; i++) {
 			const index = drawingIndexes[i];
-			json.d[index] = Lines.drawings[index];
+			json.d[index] = lns.drawings[index];
 		}
 
 		const jsonfile = JSON.stringify(json);
@@ -73,22 +73,22 @@ function Files_IO(params) {
 			fetch(filename + '.json')
 				.then(response => { return response.json() })
 				.then(data => {
-					Lines.frames = data.f;
-					Lines.drawings = data.d;
-					Lines.layers = data.l;
-					for (let i = 0; i < Lines.frames.length; i++) {
-						const fr = Lines.frames[i];
+					lns.frames = data.f;
+					lns.drawings = data.d;
+					lns.layers = data.l;
+					for (let i = 0; i < lns.frames.length; i++) {
+						const fr = lns.frames[i];
 						for (let j = 0; j < fr.length; j++) {
-							Lines.lineColor.addColorBtn(fr[j].c);
+							lns.lineColor.addColorBtn(fr[j].c);
 						}
 					}
 					/* set interface values */
-					Lines.canvas.setWidth(data.w);
-					Lines.canvas.setHeight(data.h);
-					Lines.draw.setFps(data.fps);
+					lns.canvas.setWidth(data.w);
+					lns.canvas.setHeight(data.h);
+					lns.draw.setFps(data.fps);
 					if (data.bg)  // legacy compatible
-						Lines.bgColor.setColor(data.bg);
-					Lines.draw.reset();
+						lns.bgColor.setColor(data.bg);
+					lns.draw.reset();
 				})
 				.catch(error => {
 					alert('File not found: ' + error.message);
@@ -105,7 +105,7 @@ function Files_IO(params) {
 	}
 
 	window.addEventListener("beforeunload", function(ev) {
-		if (params.save) Lines.interface.saveSettings();
+		if (params.save) lns.interface.saveSettings();
 		ev.returnValue = 'Did you save dumbhole?';
 	});
 

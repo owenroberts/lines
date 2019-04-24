@@ -13,7 +13,7 @@ function Interface() {
 		id:"current",
 		event: "click",
 		callback: function() {
-			self.setFrame(Lines.frames.length);
+			self.setFrame(lns.frames.length);
 		},
 		key: "+"
 	});
@@ -21,9 +21,9 @@ function Interface() {
 
 	/* f key */
 	this.setFrame = function(f) {
-		if (+f <= Lines.frames.length) {
+		if (+f <= lns.frames.length) {
 			self.beforeFrame();
-			Lines.draw.setFrame(+f);
+			lns.draw.setFrame(+f);
 			self.afterFrame();
 		}
 	};
@@ -35,8 +35,8 @@ function Interface() {
 		const numFrames = self.frameElems.getLength();
 		/* this creates frames that don't already exist
 			loop from the num of already made html frames to frames.length */
-		if (Lines.frames.length > numFrames) {
-			for (let i = numFrames; i < Lines.frames.length; i++) {
+		if (lns.frames.length > numFrames) {
+			for (let i = numFrames; i < lns.frames.length; i++) {
 				const frmElem = document.createElement("div");
 				frmElem.classList.add("frame");
 				frmElem.textContent = i;
@@ -44,19 +44,19 @@ function Interface() {
 
 				/* click on frame, set the current frame */
 				frmElem.onclick = function(ev) {
-					Lines.draw.setFrame(i);
+					lns.draw.setFrame(i);
 					self.updateFrameNum();
-					Lines.drawingInterface.resetLayers();
+					lns.drawingInterface.resetLayers();
 				};
 
 				/* right click, add/remove from copy frames */
 				frmElem.oncontextmenu = function(ev) {
 					ev.preventDefault();
 					if (!this.classList.toggle("copy")){
-						Lines.data.framesToCopy.splice(Lines.data.framesToCopy.indexOf(i), 1);
+						lns.data.framesToCopy.splice(lns.data.framesToCopy.indexOf(i), 1);
 					} else {
 						this.classList.add("copy");
-						Lines.data.framesToCopy.push(i);
+						lns.data.framesToCopy.push(i);
 					}
 				};
 
@@ -66,7 +66,7 @@ function Interface() {
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
-			for (let i = numFrames; i > Lines.frames.length; i--){
+			for (let i = numFrames; i > lns.frames.length; i--){
 				this.frameElems.remove(i-1); /* remove html frame */
 			}
 		}
@@ -77,36 +77,36 @@ function Interface() {
 	this.updateFrameNum = function() {
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
-		if (self.frameElems.els[Lines.currentFrame]) // also un-ui
-			self.frameElems.setId("current", Lines.currentFrame);
+		if (self.frameElems.els[lns.currentFrame]) // also un-ui
+			self.frameElems.setId("current", lns.currentFrame);
 		else 
 			self.plusFrame.setId("current");
-		self.faces.frameDisplay.set(Lines.currentFrame);
+		self.faces.frameDisplay.set(lns.currentFrame);
 	};
 
 	/* call before changing a frame */
 	this.beforeFrame = function() {
-		Lines.drawEvents.isDrawing = false;
-		Lines.data.saveLines();
+		lns.drawEvents.isDrawing = false;
+		lns.data.saveLines();
 	};
 	
 	/* call after changing a frame */
 	this.afterFrame = function() {
 		self.updateFramesPanel();
-		Lines.drawingInterface.resetLayers();
+		lns.drawingInterface.resetLayers();
 	};
 	
 	/* e key - go to next frame */
 	this.nextFrame = function() {
 		self.beforeFrame();
-		if (Lines.currentFrame < Lines.frames.length) Lines.draw.setFrame(Lines.currentFrame + 1);
+		if (lns.currentFrame < lns.frames.length) lns.draw.setFrame(lns.currentFrame + 1);
 		self.afterFrame();
 	};
 
 	/* w key - got to previous frame */
 	this.prevFrame = function() {
 		self.beforeFrame();
-		if (Lines.currentFrame > 0) Lines.draw.setFrame(Lines.currentFrame - 1);
+		if (lns.currentFrame > 0) lns.draw.setFrame(lns.currentFrame - 1);
 		self.afterFrame();
 	};
 
@@ -126,7 +126,7 @@ function Interface() {
 	this.keys['s'] = new UIButton({
 		id: "save",
 		callback: function() {
-			Lines.fio.saveFramesToFile(self.title.getValue(), false, function(title) {
+			lns.fio.saveFramesToFile(self.title.getValue(), false, function(title) {
 				self.title.setValue(title);
 			});
 		},
@@ -135,7 +135,7 @@ function Interface() {
 	this.keys['shift-s'] = new UIButton({
 		id: "save-frame",
 		callback: function() {
-			Lines.fio.saveFramesToFile(self.title.getValue(), true, function(filename) {
+			lns.fio.saveFramesToFile(self.title.getValue(), true, function(filename) {
 				self.title.setValue(filename.split("/").pop());
 			});
 		},
@@ -143,7 +143,7 @@ function Interface() {
 	});
 	this.keys['o'] = new UIButton({
 		id: "open",
-		callback: Lines.fio.loadFramesFromFile,
+		callback: lns.fio.loadFramesFromFile,
 		key: "o"
 	});
 
@@ -165,7 +165,7 @@ function Interface() {
 
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
-				Lines.fio.saveFramesToFile();
+				lns.fio.saveFramesToFile();
 				document.activeElement.blur();
 			}
 		}
@@ -178,21 +178,21 @@ function Interface() {
 	this.palettes = {};
 	
 	this.addPalette = function() {
-		Lines.data.saveLines();
+		lns.data.saveLines();
 		const name = self.palettes.current = prompt('Name this palette.');
 		if (name) {
 			self.palettes[name] = {
-				color: Lines.lineColor.color,
-				seg: Lines.drawEvents.segNumRange,
-				jig: Lines.drawEvents.jiggleRange,
-				wig: Lines.drawEvents.wiggleRange,
-				wigSpeed: Lines.drawEvents.wiggleSpeed,
-				lineWidth: Lines.canvas.ctx.lineWidth,
-				mouse: Lines.drawEvents.mouseInterval,
-				brush: Lines.drawEvents.brush,
-				brushSpread: Lines.drawEvents.brushSpread,
-				dots: Lines.drawEvents.dots,
-				grass: Lines.drawEvents.grass
+				color: lns.lineColor.color,
+				seg: lns.drawEvents.segNumRange,
+				jig: lns.drawEvents.jiggleRange,
+				wig: lns.drawEvents.wiggleRange,
+				wigSpeed: lns.drawEvents.wiggleSpeed,
+				lineWidth: lns.canvas.ctx.lineWidth,
+				mouse: lns.drawEvents.mouseInterval,
+				brush: lns.drawEvents.brush,
+				brushSpread: lns.drawEvents.brushSpread,
+				dots: lns.drawEvents.dots,
+				grass: lns.drawEvents.grass
 			};
 			palette.add(new UIButton({
 				title: name,
@@ -205,29 +205,29 @@ function Interface() {
 
 	this.loadPalette = function(name) {
 		/* this is crazy ... */
-		Lines.data.saveLines();
+		lns.data.saveLines();
 		self.palettes.current = name;
-		Lines.lineColor.setColor(self.palettes[name].color);
-		Lines.drawEvents.segNumRange = self.palettes[name].seg;
-		Lines.drawingInterface.segNumElem.setValue(self.palettes[name].seg);
-		Lines.drawEvents.jiggleRange = self.palettes[name].jig;
-		Lines.drawingInterface.jiggleElem.setValue(self.palettes[name].jig);
-		Lines.drawEvents.wiggleRange = self.palettes[name].wig;
-		Lines.drawingInterface.wiggleElem.setValue(self.palettes[name].wig);
-		Lines.drawEvents.wiggleSpeed = self.palettes[name].wigSpeed;
-		Lines.drawingInterface.wiggleSpeedElem.setValue(self.palettes[name].wigSpeed);
-		Lines.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
-		Lines.drawingInterface.lineWidth.setValue(self.palettes[name].lineWidth);
-		Lines.drawEvents.mouseInterval = self.palettes[name].mouse;
-		Lines.drawingInterface.mouseElem.setValue(self.palettes[name].mouse);
-		Lines.drawEvents.brush = self.palettes[name].brush;
-		Lines.drawingInterface.brushElem.setValue(self.palettes[name].brush);
-		Lines.drawEvents.brushSpread = self.palettes[name].brushSpread;
-		Lines.drawingInterface.brushSpreadElem.setValue(self.palettes[name].brushSpread);
-		Lines.drawEvents.dots = self.palettes[name].dots;
-		Lines.drawingInterface.dotsElem.setValue(self.palettes[name].dots);
-		Lines.drawEvents.grass = self.palettes[name].grass;
-		Lines.drawingInterface.grassElem.setValue(self.palettes[name].grass);
+		lns.lineColor.setColor(self.palettes[name].color);
+		lns.drawEvents.segNumRange = self.palettes[name].seg;
+		lns.drawingInterface.segNumElem.setValue(self.palettes[name].seg);
+		lns.drawEvents.jiggleRange = self.palettes[name].jig;
+		lns.drawingInterface.jiggleElem.setValue(self.palettes[name].jig);
+		lns.drawEvents.wiggleRange = self.palettes[name].wig;
+		lns.drawingInterface.wiggleElem.setValue(self.palettes[name].wig);
+		lns.drawEvents.wiggleSpeed = self.palettes[name].wigSpeed;
+		lns.drawingInterface.wiggleSpeedElem.setValue(self.palettes[name].wigSpeed);
+		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
+		lns.drawingInterface.lineWidth.setValue(self.palettes[name].lineWidth);
+		lns.drawEvents.mouseInterval = self.palettes[name].mouse;
+		lns.drawingInterface.mouseElem.setValue(self.palettes[name].mouse);
+		lns.drawEvents.brush = self.palettes[name].brush;
+		lns.drawingInterface.brushElem.setValue(self.palettes[name].brush);
+		lns.drawEvents.brushSpread = self.palettes[name].brushSpread;
+		lns.drawingInterface.brushSpreadElem.setValue(self.palettes[name].brushSpread);
+		lns.drawEvents.dots = self.palettes[name].dots;
+		lns.drawingInterface.dotsElem.setValue(self.palettes[name].dots);
+		lns.drawEvents.grass = self.palettes[name].grass;
+		lns.drawingInterface.grassElem.setValue(self.palettes[name].grass);
 	};
 
 	palette.add(new UIButton({
@@ -239,17 +239,17 @@ function Interface() {
 	/* settings */
 	this.saveSettings = function() {
 		const settings = {
-			canvasColor: Lines.bgColor.color,
-			width: Lines.canvas.width,
-			height: Lines.canvas.height,
-			fps: Lines.draw.fps,
-			lps: Lines.draw.lps,
-			onionSkinVisible: Lines.draw.onionSkinVisible,
-			onionSkinNum: Lines.draw.onionSkinNum,
+			canvasColor: lns.bgColor.color,
+			width: lns.canvas.width,
+			height: lns.canvas.height,
+			fps: lns.draw.fps,
+			lps: lns.draw.lps,
+			onionSkinVisible: lns.draw.onionSkinVisible,
+			onionSkinNum: lns.draw.onionSkinNum,
 		};
 		settings.open = [];
-		for (const p in Lines.interface.panels) {
-			if (Lines.interface.panels[p].open) settings.open.push(p) 
+		for (const p in lns.interface.panels) {
+			if (lns.interface.panels[p].open) settings.open.push(p) 
 		}
 		settings.palettes = self.palettes;
 		localStorage.settings = JSON.stringify(settings);
@@ -257,15 +257,15 @@ function Interface() {
 
 	this.loadSettings = function() {
 		const settings = JSON.parse(localStorage.settings);
-		Lines.bgColor.set(settings.canvasColor);
-		Lines.canvas.setWidth(settings.width);
-		Lines.canvas.setHeight(settings.height);
-		Lines.draw.setFps(settings.fps);
-		Lines.draw.setLps(settings.lps);
-		Lines.draw.onionSkinVisible = settings.onionSkinVisible;
-		Lines.draw.onionSkinNum = settings.onionSkinNum;
+		lns.bgColor.set(settings.canvasColor);
+		lns.canvas.setWidth(settings.width);
+		lns.canvas.setHeight(settings.height);
+		lns.draw.setFps(settings.fps);
+		lns.draw.setLps(settings.lps);
+		lns.draw.onionSkinVisible = settings.onionSkinVisible;
+		lns.draw.onionSkinNum = settings.onionSkinNum;
 		for (let i = 0; i < settings.open.length; i++) {
-			Lines.interface.panels[settings.open[i]].toggle();
+			lns.interface.panels[settings.open[i]].toggle();
 		} 
 		self.palettes = settings.palettes;
 		if (self.palettes.current) self.loadPalette(self.palettes.current);
@@ -322,14 +322,14 @@ function Interface() {
 				const module = u.module || data[key].module;
 				const params = { key: u.key, ...u.params };
 				for (const k in u.fromModule) {
-					params[k] =  Lines[module][u.fromModule[k]];
+					params[k] =  lns[module][u.fromModule[k]];
 				}
 				
 				if (u.set) {
 					params.callback = function(value) {
-						Lines[module][u.set.prop] = u.set.number ? +value : value;
+						lns[module][u.set.prop] = u.set.number ? +value : value;
 					};
-					params.value = Lines[module][u.set.prop];
+					params.value = lns[module][u.set.prop];
 
 					/* update layer property .... ie 
 						if (self.layers.length > 0) {

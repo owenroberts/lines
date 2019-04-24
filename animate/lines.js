@@ -1,36 +1,36 @@
-/* global Lines object */
+/* global lns object */
 window.addEventListener("load", function() {
 
-	Lines = {}; // L ?
+	lns = {};
 
 	// global parts used everywhere - module? render?
-	Lines.lines = []; // lines currently being drawn
-	Lines.frames = [];
-	Lines.layers = [];  // keep separate layers references by frames
-	Lines.drawings = []; // saved drawings
-	Lines.currentFrame = 0;
+	lns.lines = []; // lines currently being drawn
+	lns.frames = [];
+	lns.layers = [];  // keep separate layers references by frames
+	lns.drawings = []; // saved drawings
+	lns.currentFrame = 0;
 
 	// modules
 	
 
 	// width height color, def color is black 000000
-	//  Lines.canvas = new Canvas(1024, 512, "ffffff" );  // sundays
-	Lines.canvas = new Canvas(512, 512, "#ffffff" )
-	Lines.draw = new Draw();
-	Lines.data = new Data();
-	Lines.lineColor = new Color();
-	// Lines.lineColor.set('#ffffff');
-	Lines.drawEvents = new DrawEvents({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
-	Lines.fio = new Files_IO({
+	//  lns.canvas = new Canvas(1024, 512, "ffffff" );  // sundays
+	lns.canvas = new Canvas(512, 512, "#ffffff" )
+	lns.draw = new Draw();
+	lns.data = new Data();
+	lns.lineColor = new Color();
+	// lns.lineColor.set('#ffffff');
+	lns.drawEvents = new DrawEvents({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
+	lns.fio = new Files_IO({
 		fit: false, /* fit to canvas when saving */
 		save: false, /* save settings */
 		bg: true /* bg color */
 	});
 
 	// interfaces
-	Lines.interface = new Interface();
-	Lines.drawingInterface = new DrawingInterface();
-	if (localStorage.settings) Lines.interface.loadSettings();
+	lns.interface = new Interface();
+	lns.drawingInterface = new DrawingInterface();
+	if (localStorage.settings) lns.interface.loadSettings();
 
-	Lines.draw.start(); // necessary ?
+	lns.draw.start(); // necessary ?
 });

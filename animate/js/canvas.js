@@ -3,12 +3,12 @@ function Canvas(width, height, color) {
 
 	this.width = width;
 	this.height = height;
-	this.canvas = document.getElementById("canvas"); // Lines.canvas.canvas is html elem
+	this.canvas = document.getElementById("canvas"); // lns.canvas.canvas is html elem
 
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 
-	Lines.bgColor = new Color(function(_color) {
+	lns.bgColor = new Color(function(_color) {
 		self.canvas.style.backgroundColor = _color;
 	});
 
@@ -17,7 +17,7 @@ function Canvas(width, height, color) {
 	};
 
 	/* canvas bg color */
-	if (color) Lines.bgColor.set(color);
+	if (color) lns.bgColor.set(color);
 
 	/* set line color */
 	this.setStrokeColor = function(color) {
@@ -45,7 +45,7 @@ function Canvas(width, height, color) {
 	this.videoCapture = function() {
 		if (self.startCapture) {
 			self.startCapture = false;
-			Lines.draw.videoCapture = true;
+			lns.draw.videoCapture = true;
 			self.stream = self.canvas.captureStream();
 			self.rec = new MediaRecorder(self.stream);
 			self.rec.start();
@@ -59,12 +59,12 @@ function Canvas(width, height, color) {
    				document.body.appendChild(deleteVid);
    				deleteVid.textContent = 'Delete';
    				deleteVid.onclick = function() {
-   					Lines.canvas.vid.remove();
+   					lns.canvas.vid.remove();
    					this.remove();
    				};
 			});
 		} else {
-			Lines.draw.videoCapture = false;
+			lns.draw.videoCapture = false;
 			self.startCapture = false;
 			self.rec.stop();
 		}
@@ -73,10 +73,10 @@ function Canvas(width, height, color) {
 	this.prevCap = { n: '', f: 0 };
 
 	this.capture = function() {
-		if (Lines.fio.saveFilesEnabled) {
+		if (lns.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
-				const title = Lines.fio.title.getValue(); // this is a UI
-				const n = Cool.padNumber(Lines.currentFrame, 3);
+				const title = lns.fio.title.getValue(); // this is a UI
+				const n = Cool.padNumber(lns.currentFrame, 3);
 				let frm = 0;
 				let fileName = `${title}-${n}-${frm}.png`;
 				if (n == self.prevCap.n) {
@@ -89,7 +89,7 @@ function Canvas(width, height, color) {
 				const f = saveAs(blob, fileName);
 				f.onwriteend = function() { 
 					window.requestAnimFrame(() => {
-						Lines.draw.draw('cap'); 
+						lns.draw.draw('cap'); 
 					});
 				};
 					
@@ -102,19 +102,19 @@ function Canvas(width, height, color) {
 
 	/* shift-f key */
 	this.fitCanvasToDrawing = function() {
-		Lines.data.saveLines();
+		lns.data.saveLines();
 		
 		let tolerance = 0;
 		// min max size of canvas
 		let min = { x: 10000, y: 10000 };
 		let max = { x: 0, y: 0 };
 
-		for (let i = 0; i < Lines.frames.length; i++) {
-			const frame = Lines.frames[i];
+		for (let i = 0; i < lns.frames.length; i++) {
+			const frame = lns.frames[i];
 			for (let j = 0; j < frame.length; j++) {
-				const layer = Lines.layers[frame[j].l];
-				for (let k = 0; k < Lines.drawings[layer.d].length; k++) {
-					const dr = Lines.drawings[layer.d][k];
+				const layer = lns.layers[frame[j].l];
+				for (let k = 0; k < lns.drawings[layer.d].length; k++) {
+					const dr = lns.drawings[layer.d][k];
 					if (dr != "end") { /* v2.0 segments divided w end*/
 						tolerance = Math.max( tolerance, layer.r * 4 );
 						min.x = Math.min( min.x, dr.x + layer.x);
@@ -129,10 +129,10 @@ function Canvas(width, height, color) {
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
 
-		for (let i = 0; i < Lines.frames.length; i++) {
-			const frame = Lines.frames[i];
+		for (let i = 0; i < lns.frames.length; i++) {
+			const frame = lns.frames[i];
 			for (let j = 0; j < frame.length; j++) {
-				const layer = Lines.layers[frame[j].l];
+				const layer = lns.layers[frame[j].l];
 				const diff = {
 					x: layer.x + (min.x - tolerance),
 					y: layer.y + (min.y - tolerance)
