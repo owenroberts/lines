@@ -2,36 +2,26 @@ function Interface() {
 	let self = this;
 
 	this.panels = {}; 
-	this.keyCommands = {}; /* parts of the interface? */
-	this.faces = {}; /* references to faces we need */
+	this.keys = {}; 
+	this.faces = {}; /* references to faces we need ?  */
 
 	this.framesPanel = new UI({ id:"frames" });
 	this.frameElems = new UIList({ class:"frame" });
+	
 	/* plus frame is unsaved drawing frame */
 	this.plusFrame = new UI({
 		id:"current",
 		event: "click",
 		callback: function() {
-			Lines.currentFrame = Lines.frames.length;
-			Lines.drawingInterface.resetLayers();
-			self.updateFrameNum();
-		}
+			self.setFrame(Lines.frames.length);
+		},
+		key: "+"
 	});
-	this.keyCommands['+'] = this.plusFrame; /* can't add key command bc this module doesn't exist yet */
-
-	this.back = new UI({
-		id: 'back',
-		callback: function() {
-			Lines.draw.setFrame(0);
-			Lines.interface.updateFramesPanel();
-			Lines.drawingInterface.resetLayers();
-		}
-	});
-	this.keyCommands['backslash'] = this.back;
+	this.keys['+'] = this.plusFrame;
 
 	/* f key */
 	this.setFrame = function(f) {
-		if (+f < Lines.frames.length) {
+		if (+f <= Lines.frames.length) {
 			self.beforeFrame();
 			Lines.draw.setFrame(+f);
 			self.afterFrame();
@@ -85,7 +75,6 @@ function Interface() {
 
 	/* update frame display and current frame */
 	this.updateFrameNum = function() {
-		// Lines.drawingInterface.frameNumDisplay.set(Lines.currentFrame);
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[Lines.currentFrame]) // also un-ui
@@ -121,41 +110,61 @@ function Interface() {
 		self.afterFrame();
 	};
 
-	['1', '2', '3', '4', '5', '6', '7', '8', '9'].forEach(key => {
-		self.keyCommands[key] = {
+	['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].forEach(key => {
+		self.keys[key] = {
 			callback: function() {
-				self.beforeFrame();
-				if (Lines.frames[+key]) Lines.currentFrame = +key;
-				self.afterFrame();
+				self.setFrame(+key);
 			}
-		}
+		};
 	});
-	self.keyCommands['`'] = {
+
+	/* fio interface */
+	this.title = new UI({ id:"title" });
+	/* set title after save, load? - observer ... */
+	/* duplicated key value because of set key ... */
+
+
+
+	this.keys['s'] = new UIButton({
+		id: "save",
 		callback: function() {
-			self.beforeFrame();
-			if (Lines.frames[0]) Lines.currentFrame = 0;
-			self.afterFrame();
-		}
-	}
+			Lines.fio.saveFramesToFile(self.title.getValue(), false, function(title) {
+				self.title.setValue(title);
+			});
+		},
+		key: "s"
+	});
+	this.keys['shift-s'] = new UIButton({
+		id: "save-frame",
+		callback: function() {
+			Lines.fio.saveFramesToFile(self.title.getValue(), true, function(filename) {
+				self.title.setValue(filename.split("/").pop());
+			});
+		},
+		key: "shift-s"
+	});
+	this.keys['o'] = new UIButton({
+		id: "open",
+		callback: Lines.fio.loadFramesFromFile,
+		key: "o"
+	});
 
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
 		if (k == "space") ev.preventDefault();
-		if (k && self.keyCommands[k] && document.activeElement.type != "text") {
+		if (k && self.keys[k] && document.activeElement.type != "text") {
 			if (k == "tab") ev.preventDefault(); // works?
 			if (ev.shiftKey) k = "shift-" + k;
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
-			console.log('key', k, self.keyCommands[k]);
+			console.log('key', k, self.keys[k]);
 
-			if (self.keyCommands[k].handler) {
-				self.keyCommands[k].handler(ev, self.keyCommands[k]);
-				//  self.keyCommands[k].addClass('key-down'); show key presses?
-			} else {
-				self.keyCommands[k].callback();
-			}
+			if (self.keys[k].handler) self.keys[k].handler(ev, self.keys[k]);
+			else self.keys[k].callback();
+			self.keys[k].press();
+
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
 				Lines.fio.saveFramesToFile();
@@ -222,12 +231,11 @@ function Interface() {
 		Lines.drawingInterface.grassElem.setValue(self.palettes[name].grass);
 	};
 
-	this.keyCommands['p'] = new UIButton({
+	palette.add(new UIButton({
 		title: "Add Palette",
-		callback: self.addPalette
-	});
-	palette.add(this.keyCommands['p']);
-	this.keyCommands['p'].setKey('p');
+		callback: self.addPalette,
+		key: "p"
+	}));
 
 	/* settings */
 	this.saveSettings = function() {
@@ -247,7 +255,7 @@ function Interface() {
 
 	this.loadSettings = function() {
 		const settings = JSON.parse(localStorage.settings);
-		Lines.canvas.bgColor.setColor(settings.canvasColor);
+		Lines.bgColor.set(settings.canvasColor);
 		Lines.canvas.setWidth(settings.width);
 		Lines.canvas.setHeight(settings.height);
 		Lines.draw.setFps(settings.fps);
@@ -268,14 +276,14 @@ function Interface() {
 		}
 	};
 
-	this.keyCommands['ctrl-s'] = new UIButton({
+	this.keys['ctrl-s'] = new UIButton({
 		id: "save-settings",
 		title: "Save Settings",
 		callback: self.saveSettings,
 		key: "ctrl-s"
 	});
 
-	this.keyCommands['alt-s'] = new UIButton({
+	this.keys['alt-s'] = new UIButton({
 		id: "load-settings",
 		title: "Load Settings",
 		callback: self.loadSettings,
@@ -309,7 +317,6 @@ function Interface() {
 				
 				if (u.set) {
 					params.callback = function(value) {
-						console.log(module, u.set.prop);
 						Lines[module][u.set.prop] = u.set.number ? +value : value;
 					};
 					params.value = Lines[module][u.set.prop];
@@ -324,7 +331,7 @@ function Interface() {
 				const ui = new classes[u.type](params);
 				if (u.row) panel.addRow();
 				panel.add(ui);
-				if (u.key) self.keyCommands[u.key] = ui;
+				if (u.key) self.keys[u.key] = ui;
 				if (u.face) self.faces[u.face] = ui;
 			}
 		}

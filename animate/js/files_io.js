@@ -4,7 +4,7 @@ function Files_IO(params) {
 	this.saveFilesEnabled = false;
 
 	/* s key - shift-s for single */
-	this.saveFramesToFile = function(single) {
+	this.saveFramesToFile = function(title, single, callback) {
 		Lines.data.saveLines();
 
 		if (params.fit && confirm("Fit canvas?"))
@@ -16,7 +16,8 @@ function Files_IO(params) {
 		json.h = Math.floor(+Lines.canvas.height);
 		json.fps = +Lines.draw.fps;
 		if (params.bg)
-			json.bg = Cool.rgb2hex(Lines.canvas.canvas.style.backgroundColor).split('#')[1];
+			json.bg = Lines.bgColor.color;
+		// what if one color isn't used ?
 		json.mc = Lines.lineColor.colors.length > 1 ? true : false;
 		
 		/* save current frame */
@@ -54,27 +55,25 @@ function Files_IO(params) {
 		}
 
 		const jsonfile = JSON.stringify(json);
-		let filename = self.title.getValue();
+		const filename = title || prompt("Name this file:");
 
-		if (!filename) {
-			filename = prompt("Name this file:");
-			self.title.setValue(filename);
-		}
 		if (filename) {
 			const blob = new Blob([jsonfile], {type:"application/x-download;charset=utf-8"});
 			saveAs(blob, filename+".json");
 		}
+		/* to set values ... */
+		if (callback) callback(filename);
 	};
 
 	/* o key */
-	this.loadFramesFromFile = function() {
+	this.loadFramesFromFile = function(callback) {
 		const filename = prompt("Open file:");
 		if (filename) {
-			self.title.setValue(filename.split("/").pop());
+			if (callback) callback(filename);
 			fetch(filename + '.json')
 				.then(response => { return response.json() })
 				.then(data => {
-					Lines.frames =  data.f;
+					Lines.frames = data.f;
 					Lines.drawings = data.d;
 					Lines.layers = data.l;
 					for (let i = 0; i < Lines.frames.length; i++) {
@@ -83,20 +82,13 @@ function Files_IO(params) {
 							Lines.lineColor.addColorBtn(fr[j].c);
 						}
 					}
+					/* set interface values */
 					Lines.canvas.setWidth(data.w);
 					Lines.canvas.setHeight(data.h);
 					Lines.draw.setFps(data.fps);
-					Lines.drawingInterface.fpsSelect.setValue(data.fps);
 					if (data.bg)  // legacy compatible
-						Lines.canvas.bgColor.setColor(data.bg);
+						Lines.bgColor.setColor(data.bg);
 					Lines.draw.reset();
-
-					/* add wiggle params to old files */
-					for (let i = 0; i < Lines.layers.length; i++) {
-						const layer = Lines.layers[i];
-						if (!layer.w) layer.w = 0;
-						if (!layer.v) layer.v = 0;
-					}
 				})
 				.catch(error => {
 					alert('File not found: ' + error.message);
@@ -104,34 +96,7 @@ function Files_IO(params) {
 				});
 		}
 	};
-
-	/* interfaces */
-	const save = new UIButton({
-		id:"save",
-		title: "Save",
-		callback: function() {
-			self.saveFramesToFile(false);
-		},
-		key: "s"
-	});
-
-	const saveFrame = new UIButton({
-		id:"save-frame",
-		title: "Save Frame",
-		callback: function() {
-			self.saveFramesToFile(true);
-		},
-		key: "shift-s"
-	});
-
-	const open = new UIButton({
-		id: "open",
-		title: "Open",
-		callback: self.loadFramesFromFile,
-		key: "o"
-	});
-
-	this.title = new UI({id:"title"});
+	
 	/* save with enter? */
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
