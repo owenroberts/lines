@@ -24,7 +24,7 @@ function Color(callback) {
 				value: color,
 				callback: self.set
 			});
-			Lines.interface.panels['line-color'].add(btn);
+			lns.interface.panels['line-color'].add(btn);
 		}
 	};
 }

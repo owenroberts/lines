@@ -2,16 +2,16 @@ function DrawingInterface() {
 	const self = this;
 
 	/*
-		self.segNumElem.setValue(Lines.drawEvents.defaults.n);
-		self.jiggleElem.setValue(Lines.drawEvents.defaults.r);
-		self.wiggleElem.setValue(Lines.drawEvents.defaults.w);
-		self.wiggleSpeedElem.setValue(Lines.drawEvents.defaults.v);
+		self.segNumElem.setValue(lns.drawEvents.defaults.n);
+		self.jiggleElem.setValue(lns.drawEvents.defaults.r);
+		self.wiggleElem.setValue(lns.drawEvents.defaults.w);
+		self.wiggleSpeedElem.setValue(lns.drawEvents.defaults.v);
 	*/
 
 
 	/* layer panel */
 	this.layerPanel = new Panel("layer-menu", "Layer");
-	Lines.interface.panels['layer'] = this.layerPanel;
+	lns.interface.panels['layer'] = this.layerPanel;
 	this.frameRow = this.layerPanel.addRow();
 	this.layerPanel.addRow();
 	this.layers = [];
@@ -56,32 +56,32 @@ function DrawingInterface() {
 		const layers = self.layers.filter(l => l.toggled);
 		
 		// remove frames
-		for (let i = Lines.frames.length - 1; i >= 0; i--) {
-			const frame = Lines.frames[i];
+		for (let i = lns.frames.length - 1; i >= 0; i--) {
+			const frame = lns.frames[i];
 			for (let j = frame.length - 1; j >= 0; j--) {
-				if (Lines.layers[frame[j].l].toggled)
+				if (lns.layers[frame[j].l].toggled)
 					frame.splice(j, 1);
 			}
 		}
 
 		// remove layers
-		for (let i = Lines.layers.length - 1; i >= 0; i--) {
-			if (Lines.layers[i].toggled)
-				Lines.layers[i].remove = true; // remove in fio
+		for (let i = lns.layers.length - 1; i >= 0; i--) {
+			if (lns.layers[i].toggled)
+				lns.layers[i].remove = true; // remove in fio
 			// this is dumb right?  structure depends on index like drawing
 		}
 	};
 
 	/*
 		this references the layer in each frame
-		not layer reference in Lines.layers
+		not layer reference in lns.layers
 	*/
 	this.displayLayers = function() {
 		self.resetLayers();
-		if (Lines.frames[Lines.currentFrame]) {
-			for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-				const layer = Lines.frames[Lines.currentFrame][i];
-				const index = Lines.layers[layer.l].d;
+		if (lns.frames[lns.currentFrame]) {
+			for (let i = 0; i < lns.frames[lns.currentFrame].length; i++) {
+				const layer = lns.frames[lns.currentFrame][i];
+				const index = lns.layers[layer.l].d;
 				self.layers.push(layer);
 				layer.toggled = false;
 				const toggleLayer = new UIToggleButton({
@@ -99,7 +99,7 @@ function DrawingInterface() {
 	this.cutLayerSegment = function() {
 		for (let i = 0; i < self.layers.length; i++) {
 			const layer = self.layers[i];
-			const drawing = Lines.drawings[layer.d];
+			const drawing = lns.drawings[layer.d];
 			drawing.pop(); /* remove "end" */
 			drawing.pop(); /* remove segment */
 			drawing.push('end'); /* new end */
@@ -119,30 +119,30 @@ function DrawingInterface() {
 	/* drawing panel */
 	this.drawingPanel = new Panel("drawing-menu", "Drawings");
 	/* add in panel */
-	Lines.interface.panels['drawing'] = this.drawingPanel;
+	lns.interface.panels['drawing'] = this.drawingPanel;
 
 	this.showDrawings = function() {
 		self.resetLayers();
 		self.drawingPanel.addRow();
-		for (let i = 0; i < Lines.drawings.length; i++) {
+		for (let i = 0; i < lns.drawings.length; i++) {
 			let layer; /* check if layer is in frame already */
 			let layerIndex;
-			const frame = Lines.frames[Lines.currentFrame];
+			const frame = lns.frames[lns.currentFrame];
 			if (frame) {
 				for (let k = 0; k < frame.length; k++) {
-					if (i == Lines.layers[frame[k].l].d) {
-						layer = Lines.layers[frame[k].l];
+					if (i == lns.layers[frame[k].l].d) {
+						layer = lns.layers[frame[k].l];
 						layerIndex = k;
 					}
 				}
 			}
 			
 			if (!layer) { /* then check existing layers */
-				for (let j = 0; j < Lines.layers.length; j++) {
-					const layers = Lines.layers[j];
+				for (let j = 0; j < lns.layers.length; j++) {
+					const layers = lns.layers[j];
 					for (let k = 0; k < layers.length; k++) {
-						if (i == Lines.layers[k].d) {
-							layer = Lines.layers[k];
+						if (i == lns.layers[k].d) {
+							layer = lns.layers[k];
 							layerIndex = k;
 							break;
 						}
@@ -151,20 +151,20 @@ function DrawingInterface() {
 			}
 			
 			if (!layer) { /* then create a layer*/
-				const drawing = Lines.drawings[i];
+				const drawing = lns.drawings[i];
 				if (drawing != null) {
 					layer = {
 						d: i,
 						s: 0,
 						e: drawing.length,
 						c: '000000',
-						...Lines.drawEvents.defaults,
+						...lns.drawEvents.defaults,
 						x: 0,
 						y: 0
 					};
 				}
-				Lines.layers.push(layer);
-				layerIndex = Lines.layers.length - 1;
+				lns.layers.push(layer);
+				layerIndex = lns.layers.length - 1;
 			}
 
 			console.log(layerIndex)
@@ -176,27 +176,27 @@ function DrawingInterface() {
 				on: i,
 				off: i,
 				callback: function() {
-					if (layer) Lines.drawingInterface.layerToggle(layer);
+					if (layer) lns.drawingInterface.layerToggle(layer);
 				}
 			}));
 		}
 	};
 
 	this.addDrawing = function() {
-		Lines.data.saveLines();
-		if (Lines.frames[Lines.currentFrame] == undefined) 
-			Lines.frames[Lines.currentFrame] = [];
+		lns.data.saveLines();
+		if (lns.frames[lns.currentFrame] == undefined) 
+			lns.frames[lns.currentFrame] = [];
 		if (self.layers.length > 0) {
 			for (let i = 0; i < self.layers.length; i++) {
-				if (self.layers[i]) Lines.frames[Lines.currentFrame].push({ l: i });
+				if (self.layers[i]) lns.frames[lns.currentFrame].push({ l: i });
 			}
 		} 
 		else console.log('%c no drawing', 'color:white;background:hotpink;');
 	};
 
 	this.cutDrawing = function() {
-		Lines.data.saveLines();
-		const frame = Lines.frames[Lines.currentFrame];
+		lns.data.saveLines();
+		const frame = lns.frames[lns.currentFrame];
 		if (frame) {
 			for (let i = frame.length - 1; i >= 0; i--) {
 				console.log(self.layers);

@@ -23,15 +23,15 @@ function DrawEvents(defaults) {
 	this.mouseInterval = 30;
 	
 	this.outSideCanvas = function(ev) {
-		if (ev.toElement != Lines.canvas.canvas) { 
-			if (self.isDrawing) Lines.data.saveLines();
+		if (ev.toElement != lns.canvas.canvas) { 
+			if (self.isDrawing) lns.data.saveLines();
 			self.isDrawing = false;
 
 			/* pointer context click on frames for copy frames */
 			if (ev.which == 3) {
 				ev.preventDefault();
 				const elem = document.elementFromPoint(ev.clientX, ev.clientY);
-				if (elem.classList.contains("frame")) Lines.data.addFrameToCopy(elem);
+				if (elem.classList.contains("frame")) lns.data.addFrameToCopy(elem);
 			}
 		}
 	};
@@ -57,24 +57,24 @@ function DrawEvents(defaults) {
 			while (point.dist(origin) > b){
 				point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
 			}
-			Lines.lines.push(point);
+			lns.lines.push(point);
 			const points = Cool.randomInt(1,3);
 			for (let i = 0; i < points; i ++) {
-				Lines.lines.push(new Cool.Vector(
+				lns.lines.push(new Cool.Vector(
 					point.x + Cool.randomInt(-1, 1), 
 					point.y + Cool.randomInt(_y)
 				));
 			}
-			Lines.lines.push('end');
+			lns.lines.push('end');
 		}
 	}
 
 	this.addLine = function(x, y) {
-		Lines.lines.push(new Cool.Vector(x, y));
+		lns.lines.push(new Cool.Vector(x, y));
 	};
 
 	this.drawStart = function(ev) {
-		if (ev.which == 1 && !Lines.draw.isPlaying && !ev.altKey) {
+		if (ev.which == 1 && !lns.draw.isPlaying && !ev.altKey) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
 			if (self.brush <= 0)
@@ -101,29 +101,29 @@ function DrawEvents(defaults) {
 					const _y = Math.round(y) + Cool.randomInt(-r/2, r/2);
 					const points = Cool.randomInt(1,3);
 					for (let i = 0; i < points; i ++) {
-						Lines.lines.push(new Cool.Vector(
+						lns.lines.push(new Cool.Vector(
 							_x + Cool.randomInt(-1, 1), 
 							_y + Cool.randomInt(-1, 1)
 						));
 					}
-					Lines.lines.push('end');
+					lns.lines.push('end');
 				}
 			}
 			self.startDots = false;
 		} else if (ev.which == 1) {
 			self.isDrawing = false;
-			Lines.lines.push("end");
+			lns.lines.push("end");
 		}
 	}
 
 	if (window.PointerEvent) {
-		Lines.canvas.canvas.addEventListener('pointermove', self.drawUpdate);
-		Lines.canvas.canvas.addEventListener('pointerdown', self.drawStart);
-		Lines.canvas.canvas.addEventListener('pointerup', self.drawEnd);
+		lns.canvas.canvas.addEventListener('pointermove', self.drawUpdate);
+		lns.canvas.canvas.addEventListener('pointerdown', self.drawStart);
+		lns.canvas.canvas.addEventListener('pointerup', self.drawEnd);
 	} else {	
-		Lines.canvas.canvas.addEventListener('mousemove', self.drawUpdate);
-		Lines.canvas.canvas.addEventListener('mousedown', self.drawStart);
-		Lines.canvas.canvas.addEventListener('mouseup', self.drawEnd);
+		lns.canvas.canvas.addEventListener('mousemove', self.drawUpdate);
+		lns.canvas.canvas.addEventListener('mousedown', self.drawStart);
+		lns.canvas.canvas.addEventListener('mouseup', self.drawEnd);
 	}
 	document.addEventListener('mousemove', self.outSideCanvas);
 }

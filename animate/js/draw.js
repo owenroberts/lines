@@ -41,63 +41,63 @@ function Draw(fps) {
 
 	/* just set drawing back to 0 but might do other things */
 	this.reset = function() {
-		Lines.currentFrame = self.currentFrameCounter = 0;
+		lns.currentFrame = self.currentFrameCounter = 0;
 		self.isPlaying = false;
-		Lines.canvas.ctx.miterLimit = 1;
-		Lines.interface.updateFramesPanel();
+		lns.canvas.ctx.miterLimit = 1;
+		lns.interface.updateFramesPanel();
 	}
 
 	/* toggle play animation */
 	this.toggle = function() {
-		if (!self.isPlaying) Lines.data.saveLines();
+		if (!self.isPlaying) lns.data.saveLines();
 		self.isPlaying = !self.isPlaying;
-		Lines.interface.updateFrameNum();
+		lns.interface.updateFrameNum();
 	};
 
 	/* f key */
 	this.setFrame = function(f) {
-		Lines.currentFrame = self.currentFrameCounter = +f;	
+		lns.currentFrame = self.currentFrameCounter = +f;	
 	};
 
 	this.draw = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 			/* calc current frame to draw */
-			if (self.isPlaying && self.currentFrameCounter < Lines.frames.length) {
+			if (self.isPlaying && self.currentFrameCounter < lns.frames.length) {
 				self.currentFrameCounter += self.intervalRatio;
-				Lines.currentFrame = Math.floor(self.currentFrameCounter);
+				lns.currentFrame = Math.floor(self.currentFrameCounter);
 			}
-			if (self.isPlaying && self.currentFrameCounter >= Lines.frames.length) {
-				Lines.currentFrame = self.currentFrameCounter = 0;
+			if (self.isPlaying && self.currentFrameCounter >= lns.frames.length) {
+				lns.currentFrame = self.currentFrameCounter = 0;
 			}
 
 			/* update the anim frame number 
 				another place where interface is tied to frame num
 				maybe use callback style thing here */
-			if (self.isPlaying) Lines.interface.updateFrameNum();
+			if (self.isPlaying) lns.interface.updateFrameNum();
 
-			Lines.canvas.ctx.clearRect(0, 0, Lines.canvas.width, Lines.canvas.height);
+			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 
 			if (self.videoCapture || (self.captureWithBackground && self.captureFrames > 0)) {
-				Lines.canvas.ctx.rect(0, 0, Lines.canvas.width, Lines.canvas.height);
-				Lines.canvas.ctx.fillStyle = Lines.bgColor.color;
-				Lines.canvas.ctx.fill();
+				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
+				lns.canvas.ctx.fillStyle = lns.bgColor.color;
+				lns.canvas.ctx.fill();
 			}
 
 			// move to bg module ??
-			Lines.background.display();
+			lns.background.display();
 
 			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0 && self.onionSkinIsVisible) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
-					const frameNumber = Lines.currentFrame - o;
+					const frameNumber = lns.currentFrame - o;
 					if (frameNumber >= 0) {
 						const onionColor = 1.1 - (o / self.onionSkinNum); // number for color
 						const color = "rgba(105,150,255," + onionColor + ")";
-						for (let i = 0; i < Lines.frames[frameNumber].length; i++) {
-							const frame = Lines.frames[frameNumber][i];
-							const layer = Lines.layers[frame.l];
-							const drawing = Lines.drawings[layer.d];
+						for (let i = 0; i < lns.frames[frameNumber].length; i++) {
+							const frame = lns.frames[frameNumber][i];
+							const layer = lns.layers[frame.l];
+							const drawing = lns.drawings[layer.d];
 							self.drawLines({
 								lines: drawing, 
 								start: frame.s || layer.s, 
@@ -117,11 +117,11 @@ function Draw(fps) {
 			}
 
 			/* draws saved frames */
-			if (Lines.frames[Lines.currentFrame]) {
-				for (let i = 0; i < Lines.frames[Lines.currentFrame].length; i++) {
-					const frame = Lines.frames[Lines.currentFrame][i];
-					const layer = Lines.layers[frame.l];
-					const drawing = Lines.drawings[layer.d];
+			if (lns.frames[lns.currentFrame]) {
+				for (let i = 0; i < lns.frames[lns.currentFrame].length; i++) {
+					const frame = lns.frames[lns.currentFrame][i];
+					const layer = lns.layers[frame.l];
+					const drawing = lns.drawings[layer.d];
 					self.drawLines({
 						lines: drawing, 
 						start: frame.s || layer.s, 
@@ -139,25 +139,25 @@ function Draw(fps) {
 			}
 
 			/* draws current lines */
-			if (Lines.lines.length > 0) {
+			if (lns.lines.length > 0) {
 				self.drawLines({
-					lines: Lines.lines, 
+					lines: lns.lines, 
 					start: 0, 
-					end: Lines.lines.length, 
-					segNum: Lines.drawEvents.segNumRange, 
-					jig: Lines.drawEvents.jiggleRange, 
-					wig: Lines.drawEvents.wiggleRange, 
-					wigSpeed: Lines.drawEvents.wiggleSpeed, 
+					end: lns.lines.length, 
+					segNum: lns.drawEvents.segNumRange, 
+					jig: lns.drawEvents.jiggleRange, 
+					wig: lns.drawEvents.wiggleRange, 
+					wigSpeed: lns.drawEvents.wiggleSpeed, 
 					x: 0, 
 					y: 0,
 					onion: false, 
-					color: Lines.lineColor.color
+					color: lns.lineColor.color
 				});
 			}
 
 			/* capture frames */
 			if (self.captureFrames > 0) {
-				Lines.canvas.capture();
+				lns.canvas.capture();
 				self.captureFrames--;
 				self.capturing = true;
 			} else if (self.capturing) {
@@ -170,7 +170,7 @@ function Draw(fps) {
 	/* jig = jiggle amount, seg = num segments */
 	this.drawLines = function(params) {
 		/* mixed color?  - assume always mixed? - care about performance? */
-		Lines.canvas.ctx.beginPath();
+		lns.canvas.ctx.beginPath();
 
 		const off = {
 			x: Cool.random(0, params.wig),
@@ -186,21 +186,21 @@ function Draw(fps) {
 				let v = new Cool.Vector(e.x, e.y);
 				v.subtract(s);
 				v.divide(params.segNum);
-				Lines.canvas.ctx.moveTo(
+				lns.canvas.ctx.moveTo(
 					params.x + s.x + Cool.random(-params.jig, params.jig) + off.x, 
 					params.y + s.y + Cool.random(-params.jig, params.jig) + off.y
 				);
 				for (let i = 0; i < params.segNum; i++) {
 					const p = new Cool.Vector(s.x + v.x * i, s.y + v.y * i);  /* midpoint(s) of segment */
-					Lines.canvas.ctx.lineTo( 
+					lns.canvas.ctx.lineTo( 
 						params.x + p.x + v.x + Cool.random(-params.jig, params.jig) + off.x, 
 						params.y + p.y + v.y + Cool.random(-params.jig, params.jig) + off.y 
 					);
 				}
 				if (params.onion)
-					Lines.canvas.ctx.strokeStyle = params.color;
-				else if (Lines.canvas.ctx.strokeStyle != params.color)
-					Lines.canvas.setStrokeColor(params.color);
+					lns.canvas.ctx.strokeStyle = params.color;
+				else if (lns.canvas.ctx.strokeStyle != params.color)
+					lns.canvas.setStrokeColor(params.color);
 			}
 			
 			off.x += off.xSpeed;
@@ -209,7 +209,7 @@ function Draw(fps) {
 			off.y += off.ySpeed;
 			if (off.y >= params.wig || off.y <= -params.wig) off.ySpeed *= -1;
 		}
-		Lines.canvas.ctx.stroke();
+		lns.canvas.ctx.stroke();
 	};
 
 	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
@@ -233,12 +233,12 @@ function Draw(fps) {
 
 	/* ctrl-k - start at beginning and capture one of every frame */
 	this.captureCycle = function() {
-		Lines.data.saveLines();
+		lns.data.saveLines();
 		/* set animation to last frame because it updates frames before draw */
-		Lines.currentFrame = self.currentFrameCounter =  Lines.frames.length; 
+		lns.currentFrame = self.currentFrameCounter =  lns.frames.length; 
 		self.isPlaying = true;
 		// capture as many frames as necessary for lines ratio or 1 of every frame 
-		self.captureFrames = Lines.frames.length * Math.max(1, self.lps / self.fps);
+		self.captureFrames = lns.frames.length * Math.max(1, self.lps / self.fps);
 	};
 	
 	/* starts drawing  */
@@ -247,7 +247,7 @@ function Draw(fps) {
 	}
 
 	/* add background image module */
-	Lines.background = new Background();
+	lns.background = new Background();
 }
 
 /*

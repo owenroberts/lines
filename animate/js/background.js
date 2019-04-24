@@ -43,6 +43,6 @@ function Background() {
 
 	this.display = function() {
 		if (this.img.src && this.show)
-			Lines.canvas.ctx.drawImage(this.img, this.x, this.y, this.size * this.img.width, this.img.height * this.size);
+			lns.canvas.ctx.drawImage(this.img, this.x, this.y, this.size * this.img.width, this.img.height * this.size);
 	};
 }
