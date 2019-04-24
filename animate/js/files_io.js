@@ -91,12 +91,6 @@ function Files_IO(params) {
 						Lines.canvas.bgColor.setColor(data.bg);
 					Lines.draw.reset();
 
-					/* add wiggle params to old files */
-					for (let i = 0; i < Lines.layers.length; i++) {
-						const layer = Lines.layers[i];
-						if (!layer.w) layer.w = 0;
-						if (!layer.v) layer.v = 0;
-					}
 				})
 				.catch(error => {
 					alert('File not found: ' + error.message);

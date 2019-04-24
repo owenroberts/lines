@@ -86,6 +86,10 @@ class Animation {
 		}
 	}
 
+	setFrame(frame) {
+		this.currentFrame = this.currentFrameCounter = frame;
+	}
+
 	playOnce(callback) {
 		if (!this.isPlaying) this.isPlaying = true;
 		this.currentFrame = this.currentFrameCounter = this.states[this.state].start;
@@ -183,6 +187,7 @@ class Animation {
 
 	updateFrame() {
 		if (this.debug) {
+			console.log(this.currentFrame, this.currentFrameCounter);
 			// console.log(this.state, this.states[this.state])
 			// console.log(this.currentFrame, this.currentFrameCounter, this.states[this.state].end);
 		}
