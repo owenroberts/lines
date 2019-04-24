@@ -48,9 +48,11 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "range",
-				"fromModule": {
-					"callback": "setX"
+				"set": {
+					"prop": "x",
+					"number": true
 				},
 				"params": {
 					"label": "X",
@@ -62,8 +64,9 @@
 			},
 			{
 				"type": "range",
-				"fromModule": {
-					"callback": "setY"
+				"set": {
+					"prop": "y",
+					"number": true
 				},
 				"params": {
 					"label": "Y",
@@ -75,8 +78,9 @@
 			},
 			{
 				"type": "range",
-				"fromModule": {
-					"callback": "setSize"
+				"set": {
+					"prop": "size",
+					"number": true
 				},
 				"params": {
 					"label": "Size",

@@ -5,15 +5,15 @@ function Background() {
 	this.img = new Image();
 	this.x = 0;
 	this.y = 0;
-	this.size = 0;
-	this.ratio = 1; // why?
+	this.width = 0;
+	this.height = 0;
+	this.size = 1;
 
 	this.loadImage = function(url) {
 		self.img.src = url;
 		self.img.onload = function() {
-			/* set img size */
-			self.size = self.img.width;
-			self.ratio = self.img.width / self.img.height;
+			self.width = self.img.width;
+			self.height = self.img.height;
 			
 			/* set uis fuck me ... could just code this one 
 				hard code for now */
@@ -29,20 +29,8 @@ function Background() {
 		self.show = !self.show;
 	};
 
-	this.setX = function(n) {
-		self.x = +n;
-	};
-
-	this.setY = function(n) {
-		self.y = +n;
-	};
-
-	this.setSize = function(n) {
-		self.size = +n;
-	};
-
 	this.display = function() {
 		if (this.img.src && this.show)
-			lns.canvas.ctx.drawImage(this.img, this.x, this.y, this.size * this.img.width, this.img.height * this.size);
+			lns.canvas.ctx.drawImage(this.img, this.x, this.y, this.size * this.width, this.height * this.size);
 	};
 }

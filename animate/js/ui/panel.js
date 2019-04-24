@@ -63,6 +63,8 @@ class Panel {
 		if (component.input) this.add(component.input);
 		row.appendChild(component.el);
 		if (component.label) component.addLabel();
+		
+		
 	}
 
 	clearComponents(row) {

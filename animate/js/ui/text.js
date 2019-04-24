@@ -22,6 +22,7 @@ class UIText extends UI {
 
 	handler(ev, self) {
 		const value = ev.target.value || prompt(self.prompt);
+		console.log(value);
 		self.callback(value);
 		if (value) self.set(value);
 	}

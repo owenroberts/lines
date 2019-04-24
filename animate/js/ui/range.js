@@ -25,11 +25,9 @@ class UIRange extends UI {
 			});
 		}
 
-		if (params.event) {
-			this.el.addEventListener(params.event, ev => {
-				this.handler(ev, this);
-			});
-		}
+		this.el.addEventListener('input', ev => {
+			this.handler(ev, this);
+		});
 	}
 
 	handler(ev, ui) {
