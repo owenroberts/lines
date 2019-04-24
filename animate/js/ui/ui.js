@@ -1,6 +1,5 @@
 class UI {
 	constructor(params) {
-		var self = this;
 		this.el = document.getElementById(params.id); // attempt to find elem in html
 		if (!this.el) { // if not in html create it
 			if (params.tag) this.el = document.createElement(params.tag);
@@ -8,25 +7,13 @@ class UI {
 			if (params.id) this.el.id = params.id;
 		}
 
-		// callback ? 
-
 		if (params.callback) this.callback = params.callback;
 		if (params.label) this.label = params.label;
 		if (params.arguments) this.arguments = params.arguments;
 		if (params.prompt) this.prompt = params.prompt;
-		if (params.value != undefined) 
-			this.el.value = params.value;
-
+		if (params.value != undefined) this.el.value = params.value;
 		if (params.key) this.setKey(params.key);
-		if (params.observe && params.callback) {
-			const observer = new MutationObserver(function(list) {
-				for (var mut of list) {
-					if (mut.type == "attributes" && mut.attributeName == params.observe.attribute)
-						params.callback();
-				}
-			});
-			observer.observe(params.observe.elem, { attributes: true });
-		}
+		
 		if (params.css) {
 			for (const key in params.css) {
 				this.el.style[key] = params.css[key];
@@ -43,7 +30,6 @@ class UI {
 
 	setKey(key) {
 		this.el.title = key; // hover title key text
-		if (Lines.interface) Lines.interface.keys[key] = this;
 	}
 	
 	addClass(c) {

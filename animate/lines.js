@@ -3,7 +3,7 @@ window.addEventListener("load", function() {
 
 	Lines = {}; // L ?
 
-	// global parts used everywhere
+	// global parts used everywhere - module? render?
 	Lines.lines = []; // lines currently being drawn
 	Lines.frames = [];
 	Lines.layers = [];  // keep separate layers references by frames

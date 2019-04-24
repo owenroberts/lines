@@ -1,7 +1,6 @@
 class UISelect extends UI {
 	constructor(params) {
 		params.tag = "select";
-		params.event = "change";
 		super(params);
 		for (let i = 0; i < params.options.length; i++) {
 			const opt = document.createElement("option");
@@ -10,5 +9,10 @@ class UISelect extends UI {
 				opt.selected = "selected";
 			this.el.appendChild(opt);
 		}
+
+		/* test but don't have any select rn */
+		this.el.addEventListener('change', function() {
+			this.callback();
+		});
 	}
 }

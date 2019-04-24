@@ -155,13 +155,6 @@
 					"callback": "set",
 					"value": "color"
 				}
-			},
-			{
-				"type": "ui",
-				"params": {
-					"id": "line-color-ways",
-					"label": "Colors"
-				}
 			}
 		]
 	},
@@ -175,13 +168,6 @@
 				"fromModule": {
 					"callback": "set",
 					"value": "color"
-				}
-			},
-			{
-				"type": "ui",
-				"params": {
-					"id": "bg-color-ways",
-					"label": "Colors"
 				}
 			}
 		]

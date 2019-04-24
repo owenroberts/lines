@@ -123,8 +123,6 @@ function Interface() {
 	/* set title after save, load? - observer ... */
 	/* duplicated key value because of set key ... */
 
-
-
 	this.keys['s'] = new UIButton({
 		id: "save",
 		callback: function() {
@@ -305,8 +303,13 @@ function Interface() {
 
 	this.build = function(data) {
 		for (const key in data) {
-			const id = data[key].id;
-			const panel = self.panels[id] ? self.panels[id] : new Panel(id, data[key].label);
+			let panel;
+			if (self.panels[key]) {
+				panel = self.panels[key];
+			} else {
+				panel = new Panel(data[key].id, data[key].label);
+				self.panels[key] = panel;
+			}
 			for (let i = 0; i < data[key].list.length; i++) {
 				const u = data[key].list[i];
 				const module = u.module || data[key].module;

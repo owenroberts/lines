@@ -1,7 +1,6 @@
 class UIRange extends UI {
 	constructor(params) {
 		params.tag = "input";
-		params.event = "input";
 		super(params);
 		this.el.type = "range";
 		this.setRange(params.min, params.max);
@@ -21,8 +20,8 @@ class UIRange extends UI {
 
 		if (params.display) {
 			this.display = new UIDisplay({
-				id:params.display,  
-				initial:params.value
+				id: params.display,  
+				text: params.value
 			});
 		}
 
