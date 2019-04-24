@@ -174,6 +174,7 @@ function Interface() {
 
 	/* palette */
 	const palette = new Panel('palette', 'Palette');
+	this.panels.palette = palette;
 	this.palettes = {};
 	
 	this.addPalette = function() {
@@ -238,15 +239,18 @@ function Interface() {
 	/* settings */
 	this.saveSettings = function() {
 		const settings = {
-			canvasColor: Lines.canvas.bgColor.color,
+			canvasColor: Lines.bgColor.color,
 			width: Lines.canvas.width,
 			height: Lines.canvas.height,
 			fps: Lines.draw.fps,
 			lps: Lines.draw.lps,
 			onionSkinVisible: Lines.draw.onionSkinVisible,
 			onionSkinNum: Lines.draw.onionSkinNum,
-
 		};
+		settings.open = [];
+		for (const p in Lines.interface.panels) {
+			if (Lines.interface.panels[p].open) settings.open.push(p) 
+		}
 		settings.palettes = self.palettes;
 		localStorage.settings = JSON.stringify(settings);
 	};	
@@ -260,6 +264,9 @@ function Interface() {
 		Lines.draw.setLps(settings.lps);
 		Lines.draw.onionSkinVisible = settings.onionSkinVisible;
 		Lines.draw.onionSkinNum = settings.onionSkinNum;
+		for (let i = 0; i < settings.open.length; i++) {
+			Lines.interface.panels[settings.open[i]].toggle();
+		} 
 		self.palettes = settings.palettes;
 		if (self.palettes.current) self.loadPalette(self.palettes.current);
 		for (const key in settings.palettes) {
