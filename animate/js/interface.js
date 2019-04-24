@@ -306,7 +306,7 @@ function Interface() {
 		text: UIText,
 		range: UIRange,
 		color: UIColor
-	}
+	};
 
 	this.build = function(data) {
 		for (const key in data) {
@@ -326,13 +326,10 @@ function Interface() {
 				}
 				
 				if (u.set) {
-
 					params.callback = function(value) {
-						console.log(value);
 						lns[module][u.set.prop] = u.set.number ? +value : value;
 					};
 					params.value = lns[module][u.set.prop];
-					console.log(u.set, params.callback);
 
 					/* update layer property .... ie 
 						if (self.layers.length > 0) {
