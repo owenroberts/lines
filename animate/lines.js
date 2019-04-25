@@ -23,14 +23,13 @@ window.addEventListener("load", function() {
 	lns.drawEvents = new DrawEvents({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
 	lns.fio = new Files_IO({
 		fit: false, /* fit to canvas when saving */
-		save: false, /* save settings */
+		save: true, /* save settings */
 		bg: true /* bg color */
 	});
 
 	// interfaces
 	lns.interface = new Interface();
 	lns.drawingInterface = new DrawingInterface();
-	if (localStorage.settings) lns.interface.loadSettings();
 
 	lns.draw.start(); // necessary ?
 });

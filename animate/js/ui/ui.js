@@ -49,7 +49,7 @@ class UI {
 	}
 	
 	addLabel(key) {
-		const label = document.createElement("span");
+		const label = document.createElement("label");
 		label.textContent = this.label;
 		if (this.el.title) label.title = this.el.title;
 		this.el.parentNode.insertBefore(label, this.el);

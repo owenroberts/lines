@@ -59,12 +59,12 @@ class Panel {
 	add(component, _row) {
 		let row = _row || this.rows[this.rows.length - 1];
 		if (!row) row = this.addRow();
-		if (component.display) this.add(component.display);
-		if (component.input) this.add(component.input);
 		row.appendChild(component.el);
 		if (component.label) component.addLabel();
-		
-		
+		if (component.display) 
+			row.insertBefore(component.display.el, component.el);
+		if (component.input) 
+			row.insertBefore(component.input.el, component.el);
 	}
 
 	clearComponents(row) {
