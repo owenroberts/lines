@@ -1,4 +1,4 @@
-function Files_IO(params) {
+function Files(params) {
 	const self = this;
 
 	this.saveFilesEnabled = false;

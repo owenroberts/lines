@@ -7,6 +7,7 @@
 			{
 				"type": "range",
 				"key": "u",
+				"face": "mouse",
 				"set": {
 					"prop": "mouseInterval",
 					"number": true
@@ -137,6 +138,7 @@
 			{
 				"row": true,
 				"type": "range",
+				"face": "lineWidth",
 				"fromModule": {
 					"callback": "setLineWidth"
 				},
@@ -662,6 +664,7 @@
 		"list": [
 			{
 				"type": "range",
+				"face": "brush",
 				"set": {
 					"prop": "brush",
 					"number": true
@@ -675,6 +678,7 @@
 			},
 			{
 				"type": "range",
+				"face": "brushSpread",
 				"set": {
 					"prop": "brushSpread",
 					"number": true
@@ -688,6 +692,7 @@
 			},
 			{
 				"type": "range",
+				"face": "grass",
 				"set": {
 					"prop": "grass",
 					"number": true
@@ -701,6 +706,7 @@
 			},
 			{
 				"type": "range",
+				"face": "dots",
 				"set": {
 					"prop": "dots",
 					"number": true
@@ -797,7 +803,7 @@
 	"layer": {
 		"id": "layer-menu",
 		"label": "Layer",
-		"module": "drawingInterface",
+		"module": "interface",
 		"list": [
 			{
 				"type": "button",
@@ -842,7 +848,7 @@
 	"drawing": {
 		"id": "drawing-menu",
 		"label": "Drawings",
-		"module": "drawingInterface",
+		"module": "interface",
 		"list": [
 			{
 				"type": "button",
