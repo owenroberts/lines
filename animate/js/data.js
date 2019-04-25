@@ -407,7 +407,7 @@ function Data() {
 			}
 			if (offset) {
 				// checking to see if layers are selected 
-				const layers = lns.drawingInterface.layers.length > 0 ? lns.drawingInterface.layers : lns.frames[lns.currentFrame];
+				const layers = lns.interface.layers.length > 0 ? lns.interface.layers : lns.frames[lns.currentFrame];
 				// toggled - come back after layer panel is fixed .... 
 				for (let i = 0; i < layers.length; i++) {
 					const layer = layers[i]; // frame layer
