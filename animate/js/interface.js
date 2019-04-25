@@ -493,6 +493,7 @@ function Interface() {
 		key: "alt-s"
 	});
 
+	/* build interface */
 	fetch('./js/interface.json')
 		.then(response => { return response.json(); })
 		.then(data => { 
