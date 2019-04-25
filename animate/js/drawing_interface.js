@@ -12,7 +12,7 @@ function DrawingInterface() {
 	/* layer panel */
 	this.layerPanel = new Panel("layer-menu", "Layer");
 	lns.interface.panels['layer'] = this.layerPanel;
-	this.frameRow = this.layerPanel.addRow();
+	this.frameRow = this.layerPanel.addRow('layers');
 	this.layerPanel.addRow();
 	this.layers = [];
 
@@ -27,18 +27,18 @@ function DrawingInterface() {
 		for (let i = self.layers.length - 1; i >= 0; i--) {
 			if (self.layers[i]) {
 				if (self.layers[i].toggled)
-					self.layerToggle(self.layers[i]);
+					self.toggle(self.layers[i]);
 			}
 		}
 		self.layerPanel.clearComponents(self.frameRow);
 		self.layers = [];
-		while (self.drawingPanel.rows.length > 1) {
+		while (self.drawingPanel.rows.length > 2) {
 			self.drawingPanel.removeRow(self.drawingPanel.rows[self.drawingPanel.rows.length - 1]);
 		}
 	};
 
 	/* could be part of a layer class */
-	this.layerToggle = function(layer) {
+	this.toggle = function(layer) {
 		if (!layer.toggled) {
 			layer.prevColor = layer.c;
 			layer.c = "#00CC96";
@@ -88,7 +88,7 @@ function DrawingInterface() {
 					on: index,
 					off: index,
 					callback: function() {
-						self.layerToggle(layer);
+						self.toggle(layer);
 					}
 				});
 				self.layerPanel.add(toggleLayer, self.frameRow);
@@ -118,21 +118,19 @@ function DrawingInterface() {
 
 	/* drawing panel */
 	this.drawingPanel = new Panel("drawing-menu", "Drawings");
-	/* add in panel */
-	lns.interface.panels['drawing'] = this.drawingPanel;
+	lns.interface.panels['drawing'] = this.drawingPanel; /* add to panels */
 
 	this.showDrawings = function() {
 		self.resetLayers();
-		self.drawingPanel.addRow();
+		self.drawingPanel.addRow('drawings');
 		for (let i = 0; i < lns.drawings.length; i++) {
-			let layer; /* check if layer is in frame already */
-			let layerIndex;
+			let layer, index; /* check if layer is in frame already */
 			const frame = lns.frames[lns.currentFrame];
 			if (frame) {
 				for (let k = 0; k < frame.length; k++) {
 					if (i == lns.layers[frame[k].l].d) {
 						layer = lns.layers[frame[k].l];
-						layerIndex = k;
+						index = k;
 					}
 				}
 			}
@@ -143,7 +141,7 @@ function DrawingInterface() {
 					for (let k = 0; k < layers.length; k++) {
 						if (i == lns.layers[k].d) {
 							layer = lns.layers[k];
-							layerIndex = k;
+							index = k;
 							break;
 						}
 					}
@@ -164,19 +162,17 @@ function DrawingInterface() {
 					};
 				}
 				lns.layers.push(layer);
-				layerIndex = lns.layers.length - 1;
+				index = lns.layers.length - 1;
 			}
 
-			console.log(layerIndex)
-			if (layer) self.layers[layerIndex] = layer;
-			/* weidr but using indexes */
+			if (layer) self.layers[index] = layer; /* weidr but using indexes */
 				
 			self.drawingPanel.add(new UIToggleButton({
 				title: i,
 				on: i,
 				off: i,
 				callback: function() {
-					if (layer) lns.drawingInterface.layerToggle(layer);
+					if (layer) lns.drawingInterface.toggle(layer);
 				}
 			}));
 		}

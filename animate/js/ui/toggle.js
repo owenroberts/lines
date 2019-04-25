@@ -22,7 +22,7 @@ class UIToggleButton extends UI {
 			this.el.style.backgroundColor = "gray";
 		} else {
 			this.el.textContent = this.on;
-			this.el.style.backgroundColor = "white";
+			this.el.style.backgroundColor = "lightgray";
 		}
 		this.isOn = !this.isOn;
 	}

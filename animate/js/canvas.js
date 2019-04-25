@@ -13,7 +13,7 @@ function Canvas(width, height, color) {
 	});
 
 	this.setLineWidth = function(n) {
-		self.canvas.ctx.lineWidth = +n;
+		self.ctx.lineWidth = +n;
 	};
 
 	/* canvas bg color */

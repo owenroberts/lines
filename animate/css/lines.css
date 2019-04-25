@@ -12,7 +12,7 @@ body {
 button:focus {
   outline: none; }
 
-.btn[title]:hover:after, .menu-panel [title]:hover:after, .menu-panel .press:after {
+.btn[title]:hover:after, [title]:hover:after, .press:after {
   content: attr(title);
   position: fixed;
   top: 20px;
@@ -38,16 +38,16 @@ button:focus {
     cursor: crosshair; }
 
 .btn {
-  border: 1px solid gray;
-  padding: 0.25em;
+  background-color: lightgray;
+  padding: 0.25em 0.5em;
   margin: .25em 0;
   border-radius: 3px;
-  cursor: pointer;
   transition: background-color 200ms ease-in;
   line-height: 1.75;
   white-space: nowrap; }
   .btn:hover {
-    background: #ffddff; }
+    background: #ffddff;
+    cursor: pointer; }
   .btn.press {
     background-color: #ffddff; }
 
@@ -105,23 +105,31 @@ button:focus {
     margin-bottom: 2px;
     display: flex;
     flex-wrap: wrap; }
-    .menu-panel .row span {
-      vertical-align: top;
-      line-height: 2;
+    .menu-panel .row label {
+      line-height: 2; }
+    .menu-panel .row span, .menu-panel .row label, .menu-panel .row input {
       white-space: nowrap;
-      margin-right: 0.25em; }
+      margin-right: 0.25em;
+      flex: 0 1 auto; }
     .menu-panel .row input {
+      flex: 1;
       width: 100%; }
-    .menu-panel .row input.display {
+    .menu-panel .row input[type=range], .menu-panel .row input[type=color] {
+      flex: 1 1 auto; }
+    .menu-panel .row input[type=text] {
+      border: none;
+      background-color: lightgray;
+      padding-right: 0.25em; }
+    .menu-panel .row .display {
+      flex: 0;
       width: 30px;
-      margin-left: 5px; }
+      text-align: right; }
   .menu-panel .btn {
     padding: 0 0.25em;
     margin-right: 3px; }
-  .menu-panel#frames {
-    max-width: 100%; }
 
 #frames {
+  max-width: 100%;
   height: auto;
   padding: 0.5em;
   width: auto;
@@ -133,6 +141,7 @@ button:focus {
     margin: 0;
     grid-column: 1 / span 2; }
   #frames .frame, #frames .plus, #frames #current {
+    border-radius: 3px;
     display: inline-block;
     background-color: lightgray;
     margin-right: 1px;

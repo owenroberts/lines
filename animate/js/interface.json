@@ -37,6 +37,7 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "toggle",
 				"key": "b",
 				"fromModule": {
@@ -109,6 +110,7 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "text",
 				"fromModule": {
 					"placeholder": "width",
@@ -121,6 +123,7 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "text",
 				"fromModule": {
 					"placeholder": "height",
@@ -133,6 +136,7 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "range",
 				"fromModule": {
 					"callback": "setLineWidth"
@@ -534,10 +538,12 @@
 					"id": "frame",
 					"label": "Frame ",
 					"value": 0,
-					"prompt": "Go To Frame"
+					"prompt": "Go To Frame",
+					"display": true
 				}
 			},
 			{
+				"row": true,
 				"type": "text",
 				"key": ";",
 				"fromModule": {
@@ -546,7 +552,8 @@
 				},
 				"params": {
 					"prompt": "Set FPS",
-					"label": "FPS" 
+					"label": "FPS",
+					"display": true
 				}
 			},
 			{
@@ -558,10 +565,12 @@
 				},
 				"params": {
 					"prompt": "Set Lines/Second",
-					"label": "LPS" 
+					"label": "LPS",
+					"display": true
 				}
 			},
 			{
+				"row": true,
 				"type": "text",
 				"key": "l",
 				"fromModule": {
@@ -570,7 +579,8 @@
 				"params": {
 					"value": 0,
 					"label": "Onion",
-					"prompt": "Onion skin"
+					"prompt": "Onion skin",
+					"display": true
 				}
 			},
 			{
@@ -811,6 +821,7 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "color",
 				"fromModule": {
 					"callback": "updateLayerColor"
@@ -836,6 +847,7 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "button",
 				"fromModule": {
 					"callback": "addDrawing"

@@ -297,7 +297,10 @@ function Interface() {
 
 	fetch('./js/interface.json')
 		.then(response => { return response.json(); })
-		.then(data => { self.build(data) });
+		.then(data => { 
+			self.build(data);
+			if (localStorage.settings) self.loadSettings();
+		});
 
 	const classes = {
 		ui: UI,
