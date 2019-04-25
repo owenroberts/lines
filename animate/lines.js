@@ -16,11 +16,12 @@ window.addEventListener("load", function() {
 	// width height color, def color is black 000000
 	//  lns.canvas = new Canvas(1024, 512, "ffffff" );  // sundays
 	lns.canvas = new Canvas(512, 512, "#ffffff" )
-	lns.draw = new Draw();
+	lns.render = new Render();
+	lns.bgImage = new Background();
 	lns.data = new Data();
 	lns.lineColor = new Color();
 	// lns.lineColor.set('#ffffff');
-	lns.drawEvents = new DrawEvents({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
+	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
 	lns.fio = new Files_IO({
 		fit: false, /* fit to canvas when saving */
 		save: true, /* save settings */
@@ -31,5 +32,5 @@ window.addEventListener("load", function() {
 	lns.interface = new Interface();
 	lns.drawingInterface = new DrawingInterface();
 
-	lns.draw.start(); // necessary ?
+	lns.render.start(); // necessary ?
 });

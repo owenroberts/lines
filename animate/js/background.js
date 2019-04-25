@@ -14,13 +14,6 @@ function Background() {
 		self.img.onload = function() {
 			self.width = self.img.width;
 			self.height = self.img.height;
-			
-			/* set uis fuck me ... could just code this one 
-				hard code for now */
-			// self.xRange.setRange(-self.img.width, self.img.height);
-			// self.yRange.setRange(-self.img.height, self.img.height);
-			// self.sizeRange.setRange(self.img.width / 4, self.img.width * 4);
-			// self.sizeRange.setValue(self.img.width);
 		}
 	};
 

@@ -14,9 +14,8 @@ function Files_IO(params) {
 		json.v = "2.2";
 		json.w = Math.floor(+lns.canvas.width);
 		json.h = Math.floor(+lns.canvas.height);
-		json.fps = +lns.draw.fps;
-		if (params.bg)
-			json.bg = lns.bgColor.color;
+		json.fps = +lns.render.fps;
+		if (params.bg) json.bg = lns.bgColor.color;
 		// what if one color isn't used ?
 		json.mc = lns.lineColor.colors.length > 1 ? true : false;
 		
@@ -85,10 +84,9 @@ function Files_IO(params) {
 					/* set interface values */
 					lns.canvas.setWidth(data.w);
 					lns.canvas.setHeight(data.h);
-					lns.draw.setFps(data.fps);
-					if (data.bg)  // legacy compatible
-						lns.bgColor.setColor(data.bg);
-					lns.draw.reset();
+					lns.render.setFps(data.fps);
+					if (data.bg) lns.bgColor.setColor(data.bg);
+					lns.render.reset();
 				})
 				.catch(error => {
 					alert('File not found: ' + error.message);
@@ -97,7 +95,6 @@ function Files_IO(params) {
 		}
 	};
 	
-	/* save with enter? */
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		self.saveFilesEnabled = true;

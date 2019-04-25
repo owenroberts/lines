@@ -15,13 +15,12 @@ body {
 button:focus { outline: none; }
 
 %tool-tip {
-	content: attr(title);
+	content: '~ ' attr(title);
 	position: fixed;
-	top: 20px;
+	top: 40px;
 	right: 20px;
 	background: $main-color;
-	border: 1px dashed $accent-color;
-	border-radius: 2px;
+	border-radius: 3px;
 	padding: 1px 3px;
 	color: black;
 }
@@ -42,13 +41,12 @@ button:focus { outline: none; }
 .btn {
 	background-color: $ui-color;
 	padding: 0.25em 0.5em;
-	margin: .25em 0;
 	border-radius: 3px;
 	&:hover { 
 		background: $accent-two; 
 		cursor: pointer;
 	}
-	transition: background-color 200ms ease-in;
+	transition: background-color 150ms ease-in;
 	line-height: 1.75;
 	white-space: nowrap;
 	&[title]:hover:after { @extend %tool-tip; }
@@ -119,17 +117,18 @@ button:focus { outline: none; }
 	}
 
 	.row {
-		margin-bottom: 2px;
+		margin-bottom: 0.5em;
 		display: flex;
 		flex-wrap: wrap;
 		label {
-			line-height: 2;
+			line-height: 1.5;
 		}
 		span, label, input {
 			// vertical-align: top;
 			// line-height: 2;
 			white-space: nowrap;
 			margin-right: 0.25em;
+			margin-top: 0.25em;
 			flex: 0 1 auto;
 		}
 		input {
@@ -160,7 +159,7 @@ button:focus { outline: none; }
 #frames {
 	max-width: 100%;
 	height:auto;
-	padding: 0.5em;
+	padding: 0;
 	width: auto;
 	width: 100%;
 	display: grid;

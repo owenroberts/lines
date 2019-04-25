@@ -25,9 +25,13 @@ class Panel {
 		orderBtn.classList.add("order");
 		orderBtn.textContent = "⥂";
 		orderBtn.addEventListener("click", ev => {
-			this.el.style.order = +this.el.style.order + 1;
+			this.setOrder(+this.el.style.order + 1)
 		});
 		this.el.appendChild(orderBtn);
+	}
+
+	setOrder(n) {
+		this.el.style.order = this.order = n;
 	}
 
 	toggle() {

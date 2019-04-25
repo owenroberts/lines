@@ -43,10 +43,10 @@ function Data() {
 				s: 0, // start point
 				e: lns.lines.length, // end point
 				c: lns.lineColor.color, // color
-				n: lns.drawEvents.segNumRange, // segment number
-				r: lns.drawEvents.jiggleRange, // jiggle ammount
-				w: lns.drawEvents.wiggleRange, // wiggle amount
-				v: lns.drawEvents.wiggleSpeed, // wiggle change speed (v for velocity i guess)
+				n: lns.draw.segNumRange, // segment number
+				r: lns.draw.jiggleRange, // jiggle ammount
+				w: lns.draw.wiggleRange, // wiggle amount
+				v: lns.draw.wiggleSpeed, // wiggle change speed (v for velocity i guess)
 				x: 0, // default x and y
 				y: 0
 			});
@@ -254,7 +254,7 @@ function Data() {
 	this.insertFrameAfter = function() {
 		self.saveLines();
 		lns.frames.insert(lns.currentFrame + 1, []);
-		lns.draw.setFrame(lns.currentFrame + 1);
+		lns.render.setFrame(lns.currentFrame + 1);
 		lns.interface.updateFramesPanel();
 	};
 
@@ -396,26 +396,24 @@ function Data() {
 	};
 
 	/* q key - all drawings in current frames, moved in each other frame
-		in v2, x y for frame layers */
+		in v2, x y for frame layers 
+		no context where argument is used ... */
 	this.offsetDrawing = function(offset) {
 		if (lns.frames[lns.currentFrame]) {
 			self.saveLines();
 			self.saveState();
-			if (!offset.x && !offset.y) {
-				const x = +prompt("x");
-				const y = +prompt("y");
-				offset = new Cool.Vector(x,y);
+			if (!offset) {
+				offset = new Cool.Vector( +prompt("x"), +prompt("y") );
 			}
 			if (offset) {
 				// checking to see if layers are selected 
 				const layers = lns.drawingInterface.layers.length > 0 ? lns.drawingInterface.layers : lns.frames[lns.currentFrame];
 				// toggled - come back after layer panel is fixed .... 
-
 				for (let i = 0; i < layers.length; i++) {
-					const layer = layers[i];
-					const layerIndex = layer.l; // is the layer layer[i] or lns.layers[layer.l]
-					layer.x = lns.layers[layerIndex].x + offset.x;
-					layer.y = lns.layers[layerIndex].y + offset.y;
+					const layer = layers[i]; // frame layer
+					const index = layer.l; // index of lines.layers
+					layer.x = (layer.x ? layer.x : lns.layers[index].x) + offset.x;
+					layer.y = (layer.y ? layer.y : lns.layers[index].y) + offset.y;
 				}
 				
 			}
@@ -451,9 +449,6 @@ function Data() {
 			}
 		}
 	};
-
-
-	/* interface ? */
 
 	/* shift v */
 	this.selectAll = function() {

@@ -23,7 +23,7 @@ function Interface() {
 	this.setFrame = function(f) {
 		if (+f <= lns.frames.length) {
 			self.beforeFrame();
-			lns.draw.setFrame(+f);
+			lns.render.setFrame(+f);
 			self.afterFrame();
 		}
 	};
@@ -44,7 +44,7 @@ function Interface() {
 
 				/* click on frame, set the current frame */
 				frmElem.onclick = function(ev) {
-					lns.draw.setFrame(i);
+					lns.render.setFrame(i);
 					self.updateFrameNum();
 					lns.drawingInterface.resetLayers();
 				};
@@ -86,7 +86,7 @@ function Interface() {
 
 	/* call before changing a frame */
 	this.beforeFrame = function() {
-		lns.drawEvents.isDrawing = false;
+		lns.render.isDrawing = false;
 		lns.data.saveLines();
 	};
 	
@@ -99,14 +99,14 @@ function Interface() {
 	/* e key - go to next frame */
 	this.nextFrame = function() {
 		self.beforeFrame();
-		if (lns.currentFrame < lns.frames.length) lns.draw.setFrame(lns.currentFrame + 1);
+		if (lns.currentFrame < lns.frames.length) lns.render.setFrame(lns.currentFrame + 1);
 		self.afterFrame();
 	};
 
 	/* w key - got to previous frame */
 	this.prevFrame = function() {
 		self.beforeFrame();
-		if (lns.currentFrame > 0) lns.draw.setFrame(lns.currentFrame - 1);
+		if (lns.currentFrame > 0) lns.render.setFrame(lns.currentFrame - 1);
 		self.afterFrame();
 	};
 
@@ -120,8 +120,6 @@ function Interface() {
 
 	/* fio interface */
 	this.title = new UI({ id:"title" });
-	/* set title after save, load? - observer ... */
-	/* duplicated key value because of set key ... */
 
 	this.keys['s'] = new UIButton({
 		id: "save",
@@ -132,6 +130,7 @@ function Interface() {
 		},
 		key: "s"
 	});
+
 	this.keys['shift-s'] = new UIButton({
 		id: "save-frame",
 		callback: function() {
@@ -141,6 +140,7 @@ function Interface() {
 		},
 		key: "shift-s"
 	});
+
 	this.keys['o'] = new UIButton({
 		id: "open",
 		callback: lns.fio.loadFramesFromFile,
@@ -157,11 +157,10 @@ function Interface() {
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
-			console.log('key', k, self.keys[k]);
-
-			if (self.keys[k].handler) self.keys[k].handler(ev, self.keys[k]);
-			else self.keys[k].callback();
-			self.keys[k].press();
+			const key = self.keys[k];
+			if (key.handler) key.handler(ev, key);
+			else key.callback();
+			if (key.press) key.press();
 
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
@@ -183,16 +182,16 @@ function Interface() {
 		if (name) {
 			self.palettes[name] = {
 				color: lns.lineColor.color,
-				seg: lns.drawEvents.segNumRange,
-				jig: lns.drawEvents.jiggleRange,
-				wig: lns.drawEvents.wiggleRange,
-				wigSpeed: lns.drawEvents.wiggleSpeed,
+				seg: lns.draw.segNumRange,
+				jig: lns.draw.jiggleRange,
+				wig: lns.draw.wiggleRange,
+				wigSpeed: lns.draw.wiggleSpeed,
 				lineWidth: lns.canvas.ctx.lineWidth,
-				mouse: lns.drawEvents.mouseInterval,
-				brush: lns.drawEvents.brush,
-				brushSpread: lns.drawEvents.brushSpread,
-				dots: lns.drawEvents.dots,
-				grass: lns.drawEvents.grass
+				mouse: lns.draw.mouseInterval,
+				brush: lns.draw.brush,
+				brushSpread: lns.draw.brushSpread,
+				dots: lns.draw.dots,
+				grass: lns.draw.grass
 			};
 			palette.add(new UIButton({
 				title: name,
@@ -208,25 +207,25 @@ function Interface() {
 		lns.data.saveLines();
 		self.palettes.current = name;
 		lns.lineColor.setColor(self.palettes[name].color);
-		lns.drawEvents.segNumRange = self.palettes[name].seg;
+		lns.draw.segNumRange = self.palettes[name].seg;
 		lns.drawingInterface.segNumElem.setValue(self.palettes[name].seg);
-		lns.drawEvents.jiggleRange = self.palettes[name].jig;
+		lns.draw.jiggleRange = self.palettes[name].jig;
 		lns.drawingInterface.jiggleElem.setValue(self.palettes[name].jig);
-		lns.drawEvents.wiggleRange = self.palettes[name].wig;
+		lns.draw.wiggleRange = self.palettes[name].wig;
 		lns.drawingInterface.wiggleElem.setValue(self.palettes[name].wig);
-		lns.drawEvents.wiggleSpeed = self.palettes[name].wigSpeed;
+		lns.draw.wiggleSpeed = self.palettes[name].wigSpeed;
 		lns.drawingInterface.wiggleSpeedElem.setValue(self.palettes[name].wigSpeed);
 		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
 		lns.drawingInterface.lineWidth.setValue(self.palettes[name].lineWidth);
-		lns.drawEvents.mouseInterval = self.palettes[name].mouse;
+		lns.draw.mouseInterval = self.palettes[name].mouse;
 		lns.drawingInterface.mouseElem.setValue(self.palettes[name].mouse);
-		lns.drawEvents.brush = self.palettes[name].brush;
+		lns.draw.brush = self.palettes[name].brush;
 		lns.drawingInterface.brushElem.setValue(self.palettes[name].brush);
-		lns.drawEvents.brushSpread = self.palettes[name].brushSpread;
+		lns.draw.brushSpread = self.palettes[name].brushSpread;
 		lns.drawingInterface.brushSpreadElem.setValue(self.palettes[name].brushSpread);
-		lns.drawEvents.dots = self.palettes[name].dots;
+		lns.draw.dots = self.palettes[name].dots;
 		lns.drawingInterface.dotsElem.setValue(self.palettes[name].dots);
-		lns.drawEvents.grass = self.palettes[name].grass;
+		lns.draw.grass = self.palettes[name].grass;
 		lns.drawingInterface.grassElem.setValue(self.palettes[name].grass);
 	};
 
@@ -242,14 +241,17 @@ function Interface() {
 			canvasColor: lns.bgColor.color,
 			width: lns.canvas.width,
 			height: lns.canvas.height,
-			fps: lns.draw.fps,
-			lps: lns.draw.lps,
-			onionSkinVisible: lns.draw.onionSkinVisible,
-			onionSkinNum: lns.draw.onionSkinNum,
+			fps: lns.render.fps,
+			lps: lns.render.lps,
+			onionSkinVisible: lns.render.onionSkinVisible,
+			onionSkinNum: lns.render.onionSkinNum,
 		};
-		settings.open = [];
+		settings.panels = {};
 		for (const p in lns.interface.panels) {
-			if (lns.interface.panels[p].open) settings.open.push(p) 
+			settings.panels[p] = {
+				open: lns.interface.panels[p].open,
+				order: lns.interface.panels[p].order
+			};
 		}
 		settings.palettes = self.palettes;
 		localStorage.settings = JSON.stringify(settings);
@@ -260,13 +262,14 @@ function Interface() {
 		lns.bgColor.set(settings.canvasColor);
 		lns.canvas.setWidth(settings.width);
 		lns.canvas.setHeight(settings.height);
-		lns.draw.setFps(settings.fps);
-		lns.draw.setLps(settings.lps);
-		lns.draw.onionSkinVisible = settings.onionSkinVisible;
-		lns.draw.onionSkinNum = settings.onionSkinNum;
-		for (let i = 0; i < settings.open.length; i++) {
-			lns.interface.panels[settings.open[i]].toggle();
-		} 
+		lns.render.setFps(settings.fps);
+		lns.render.setLps(settings.lps);
+		lns.render.onionSkinVisible = settings.onionSkinVisible;
+		lns.render.onionSkinNum = settings.onionSkinNum;
+		for (const p in settings.panels) {
+			if (settings.panels[p].open) lns.interface.panels[p].toggle();
+			lns.interface.panels[p].setOrder(settings.panels[p].order);
+		}
 		self.palettes = settings.palettes;
 		if (self.palettes.current) self.loadPalette(self.palettes.current);
 		for (const key in settings.palettes) {
@@ -331,14 +334,12 @@ function Interface() {
 				if (u.set) {
 					params.callback = function(value) {
 						lns[module][u.set.prop] = u.set.number ? +value : value;
+
+						if (u.set.layer) {
+							lns.drawingInterface.updateProperty(u.set.layer, u.set.number ? +value : value)
+						}
 					};
 					params.value = lns[module][u.set.prop];
-
-					/* update layer property .... ie 
-						if (self.layers.length > 0) {
-							self.updateLayerProperty('n', value);
-						}
-					*/
 				}
 
 				const ui = new classes[u.type](params);

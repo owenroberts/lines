@@ -1,14 +1,6 @@
 function DrawingInterface() {
 	const self = this;
 
-	/*
-		self.segNumElem.setValue(lns.drawEvents.defaults.n);
-		self.jiggleElem.setValue(lns.drawEvents.defaults.r);
-		self.wiggleElem.setValue(lns.drawEvents.defaults.w);
-		self.wiggleSpeedElem.setValue(lns.drawEvents.defaults.v);
-	*/
-
-
 	/* layer panel */
 	this.layerPanel = new Panel("layer-menu", "Layer");
 	lns.interface.panels['layer'] = this.layerPanel;
@@ -16,7 +8,7 @@ function DrawingInterface() {
 	this.layerPanel.addRow();
 	this.layers = [];
 
-	this.updateLayerProperty = function(prop, value) {
+	this.updateProperty = function(prop, value) {
 		for (let i = 0; i < self.layers.length; i++) {
 			if (self.layers[i].toggled)
 				self.layers[i][prop] = value;
@@ -115,7 +107,6 @@ function DrawingInterface() {
 		}
 	};
 
-
 	/* drawing panel */
 	this.drawingPanel = new Panel("drawing-menu", "Drawings");
 	lns.interface.panels['drawing'] = this.drawingPanel; /* add to panels */
@@ -156,7 +147,7 @@ function DrawingInterface() {
 						s: 0,
 						e: drawing.length,
 						c: '000000',
-						...lns.drawEvents.defaults,
+						...lns.draw.defaults,
 						x: 0,
 						y: 0
 					};

@@ -13,13 +13,12 @@ button:focus {
   outline: none; }
 
 .btn[title]:hover:after, [title]:hover:after, .press:after {
-  content: attr(title);
+  content: "~ " attr(title);
   position: fixed;
-  top: 20px;
+  top: 40px;
   right: 20px;
   background: lightblue;
-  border: 1px dashed blue;
-  border-radius: 2px;
+  border-radius: 3px;
   padding: 1px 3px;
   color: black; }
 
@@ -40,9 +39,8 @@ button:focus {
 .btn {
   background-color: lightgray;
   padding: 0.25em 0.5em;
-  margin: .25em 0;
   border-radius: 3px;
-  transition: background-color 200ms ease-in;
+  transition: background-color 150ms ease-in;
   line-height: 1.75;
   white-space: nowrap; }
   .btn:hover {
@@ -102,14 +100,15 @@ button:focus {
     right: 2px;
     left: auto; }
   .menu-panel .row {
-    margin-bottom: 2px;
+    margin-bottom: 0.5em;
     display: flex;
     flex-wrap: wrap; }
     .menu-panel .row label {
-      line-height: 2; }
+      line-height: 1.5; }
     .menu-panel .row span, .menu-panel .row label, .menu-panel .row input {
       white-space: nowrap;
       margin-right: 0.25em;
+      margin-top: 0.25em;
       flex: 0 1 auto; }
     .menu-panel .row input {
       flex: 1;
@@ -131,7 +130,7 @@ button:focus {
 #frames {
   max-width: 100%;
   height: auto;
-  padding: 0.5em;
+  padding: 0;
   width: auto;
   width: 100%;
   display: grid;

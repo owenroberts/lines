@@ -45,7 +45,7 @@ function Canvas(width, height, color) {
 	this.videoCapture = function() {
 		if (self.startCapture) {
 			self.startCapture = false;
-			lns.draw.videoCapture = true;
+			lns.render.videoCapture = true;
 			self.stream = self.canvas.captureStream();
 			self.rec = new MediaRecorder(self.stream);
 			self.rec.start();
@@ -64,7 +64,7 @@ function Canvas(width, height, color) {
    				};
 			});
 		} else {
-			lns.draw.videoCapture = false;
+			lns.render.videoCapture = false;
 			self.startCapture = false;
 			self.rec.stop();
 		}
@@ -89,7 +89,7 @@ function Canvas(width, height, color) {
 				const f = saveAs(blob, fileName);
 				f.onwriteend = function() { 
 					window.requestAnimFrame(() => {
-						lns.draw.draw('cap'); 
+						lns.render.draw('cap'); 
 					});
 				};
 					
