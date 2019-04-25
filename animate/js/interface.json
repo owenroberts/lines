@@ -2,7 +2,7 @@
 	"mouse": {
 		"id": "mouse-menu",
 		"label": "Mouse",
-		"module": "drawEvents",
+		"module": "draw",
 		"list": [
 			{
 				"type": "range",
@@ -21,10 +21,10 @@
 			}
 		]
 	},
-	"background-image": {
+	"bgImage": {
 		"id": "background-image-menu",
 		"label": "BG image",
-		"module": "background",
+		"module": "bgImage",
 		"list": [
 			{
 				"type": "text",
@@ -37,7 +37,6 @@
 				}
 			},
 			{
-				"row": true,
 				"type": "toggle",
 				"key": "b",
 				"fromModule": {
@@ -152,7 +151,7 @@
 			}
 		]	
 	},
-	"line-color": {
+	"lineColor": {
 		"id": "line-color-menu",
 		"label": "Line Color",
 		"module": "lineColor",
@@ -166,7 +165,7 @@
 			}
 		]
 	},
-	"bg-color": {
+	"bgColor": {
 		"id": "bg-color-menu",
 		"label": "BG Color",
 		"module": "bgColor",
@@ -486,10 +485,10 @@
 			}
 		]
 	},
-	"play-back": {
+	"playBack": {
 		"id": "play-back-menu",
 		"label": "Play Back",
-		"module": "draw",
+		"module": "render",
 		"list": [
 			{
 				"type": "toggle",
@@ -590,8 +589,8 @@
 					"callback": "toggleOnion"
 				},
 				"params": {
-					"on": "Hide Onion",
-					"off": "Show Onion"
+					"on": "Hide",
+					"off": "Show"
 				}
 			}
 		]
@@ -599,7 +598,7 @@
 	"capture": {
 		"id": "capture-menu",
 		"label": "Capture",
-		"module": "draw",
+		"module": "render",
 		"list": [
 			{
 				"type": "button",
@@ -659,7 +658,7 @@
 	"brush": {
 		"id": "brush-menu",
 		"label": "Brush",
-		"module": "drawEvents",
+		"module": "draw",
 		"list": [
 			{
 				"type": "range",
@@ -719,12 +718,14 @@
 	"lines": {
 		"id": "lines-menu",
 		"label": "Lines",
-		"module": "drawEvents",
+		"module": "draw",
 		"list": [
 			{
 				"type": "range",
 				"key": "h",
+				"face": "segNumRange",
 				"set": {
+					"layer": "n",
 					"prop": "segNumRange",
 					"number": true
 				},
@@ -738,7 +739,9 @@
 			{
 				"type": "range",
 				"key": "j",
+				"face": "jiggleRange",
 				"set": {
+					"layer": "r",
 					"prop": "jiggleRange",
 					"number": true
 				},
@@ -751,7 +754,9 @@
 			},
 			{
 				"type": "range",
+				"face": "wiggleRange",
 				"set": {
+					"layer": "w",
 					"prop": "wiggleRange",
 					"number": true
 				},
@@ -764,7 +769,9 @@
 			},
 			{
 				"type": "range",
+				"face": "wiggleSpeed",
 				"set": {
+					"layer": "v",
 					"prop": "wiggleSpeed",
 					"number": true
 				},
