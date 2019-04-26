@@ -6,6 +6,13 @@
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<style>
+		#splash {
+			font-size: 18px;
+			width: 600px;
+			margin: 2em auto;
+		}
+	</style>
 </head>
 <body>
 	<div id="splash">
@@ -24,17 +31,49 @@
 interface idea - read through functions in each module and make interface if they match dict pairs
 	- means interfaces have to call functions, no wierd callbacks
 	- work on interface classes to update themselves
-lns -- lns.draw = function() ... like p5.prototype.ellipse etc.
-interfaces classes in separate files
+
+- interface 
+	- go back later
+		- canvas, capture references fio ui
+			- capture is separate module? or part of fio?
+			- kind of fine either way?
+			- leads into bigger classes, animation etc. questions
+			- same with fit frames to canvas
+		- draw events, reset defaults
+			- affiliate functions? idk how to do this, maybe not worth it
+		- layer 
+			- add/use color btns
+		- fio setting interface values with width/height/fps/lps on open
+			- don't really care can fix later
+			- callback on animation load
+
+	- modules vs program
+	- any reference to Lines/lns is technically non-modular
+		- background - ctx argument
+		- canvas has a ton - sort of part of interface
+			- fio
+			- bg color
+			- capture
+		- color - add color btn - should be part of interface ... too complicated for json tho
+		- data - every function - basically interface
+		- draw - interface for parameters, lines to add lines, canvas
+		- fio - everything  - also "interface"
+		- interface - duh
+		- render - current frame, canvas, lines, layers, drawings, 
+	- interface.faces with sub modules interfaces.faces.drawingInterface.seg num bla
+
 
 play rndr - is this is the new way to do it?
 - maybe for performance, play and game, for animate, doesn't matter as much
 - use lines player as animation class for game?
 - game separates the canvas/render from animation ... 
-- animation in games should use rndr, would be nice to have ONE draw func for all three 
+- animation in games should use rndr, would be nice to have ONE draw/render func for all three 
 
-- convert file code
-- decide on v3 vs v2.2?
-- key commands for layers ... 
+- key commands for layers ... not really necessary unless im wanting during development
 - files with a lot of drawings the same settings ? like letters.json
+- combine explode and reverse (with multi, simultaneous)
+- param to delete first frame in explode - this will annoy me
+- "animation" class with layers, drawings, etc?
+- range slider for offset ? 
+- review key commands - don't really use segnum, jiggle 
  -->

@@ -5,74 +5,25 @@ function Background() {
 	this.img = new Image();
 	this.x = 0;
 	this.y = 0;
-	this.size = 0;
-	this.ratio = 1;
+	this.width = 0;
+	this.height = 0;
+	this.size = 1;
 
-	this.loadImage = function(ev) {
-		if (ev.which == 13) {
-			self.img.src = this.value;
-			self.img.onload = function() {
-				/* set img size */
-				self.size = self.img.width;
-				self.ratio = self.img.width / self.img.height;
-				/* set uis */
-				self.xRange.setRange(-self.img.width, self.img.height);
-				self.yRange.setRange(-self.img.height, self.img.height);
-				self.sizeRange.setRange(self.img.width / 4, self.img.width * 4);
-				self.sizeRange.setValue(self.img.width);
-			}
+	this.loadImage = function(url) {
+		self.img.src = url;
+		self.img.onload = function() {
+			self.width = self.img.width;
+			self.height = self.img.height;
 		}
 	};
 
 	/* b key */
 	this.toggle = function() {
 		self.show = !self.show;
-	}
+	};
 
-	/* interface */
-	const panel = new Panel("background-menu", "BG Image");
-
-	/* copy/paste url */
-	panel.add(new UIText({
-		title: "Add image URL hit enter",
-		callback: this.loadImage
-	}));
-	
-	/* b - toggle visibility of bkg */
-	panel.add(new UIToggleButton({
-		title: "Hide Background",
-		callback: this.toggle, 
-		key: "b", 
-		on: "Hide", 
-		off: "Show" 
-	}));
-
-	panel.addRow();
-	
-	/* update x position */
-	this.xRange = new UIRange({
-		label: "X", 
-		callback: function() {
-			self.x = this.value;
-		}
-	});
-	panel.add(this.xRange);
-	
-	/* update y position */
-	this.yRange = new UIRange({
-		label: "Y", 
-		callback: function() {
-			self.y = this.value;
-		}
-	});
-	panel.add(this.yRange);
-	
-	/* update size */
-	this.sizeRange = new UIRange({
-		label: "Size", 
-		callback: function() {
-			self.size = this.value;
-		}
-	});
-	panel.add(this.sizeRange);
+	this.display = function() {
+		if (this.img.src && this.show)
+			lns.canvas.ctx.drawImage(this.img, this.x, this.y, this.size * this.width, this.height * this.size);
+	};
 }
