@@ -2,31 +2,31 @@ function Interface() {
 	let self = this;
 
 	this.panels = {}; 
-	this.keyCommands = {}; /* parts of the interface? */
+	this.keys = {}; 
+	this.faces = {}; /* references to faces we need ?  */
 
-	this.framesPanel = new UI({id:"frames"});
-	this.frameElems = new UIList({class:"frame"});
+	this.framesPanel = new UI({ id:"frames" });
+	this.frameElems = new UIList({ class:"frame" });
+	
 	/* plus frame is unsaved drawing frame */
 	this.plusFrame = new UI({
 		id:"current",
 		event: "click",
 		callback: function() {
-			Lines.currentFrame = Lines.frames.length;
-			Lines.drawingInterface.resetLayers();
-			self.updateFrameNum();
-		}
+			self.setFrame(lns.frames.length);
+		},
+		key: "+"
 	});
-	this.keyCommands['+'] = this.plusFrame; /* can't add key command bc this module doesn't exist yet */
+	this.keys['+'] = this.plusFrame;
 
-	this.back = new UI({
-		id: 'back',
-		callback: function() {
-			Lines.draw.setFrame(0);
-			Lines.interface.updateFramesPanel();
-			Lines.drawingInterface.resetLayers();
+	/* f key */
+	this.setFrame = function(f) {
+		if (+f <= lns.frames.length) {
+			self.beforeFrame();
+			lns.render.setFrame(+f);
+			self.afterFrame();
 		}
-	});
-	this.keyCommands['backslash'] = this.back;
+	};
 
 	/* updates the frame panel representation of frames, 
 		sets current frame, 
@@ -35,8 +35,8 @@ function Interface() {
 		const numFrames = self.frameElems.getLength();
 		/* this creates frames that don't already exist
 			loop from the num of already made html frames to frames.length */
-		if (Lines.frames.length > numFrames) {
-			for (let i = numFrames; i < Lines.frames.length; i++) {
+		if (lns.frames.length > numFrames) {
+			for (let i = numFrames; i < lns.frames.length; i++) {
 				const frmElem = document.createElement("div");
 				frmElem.classList.add("frame");
 				frmElem.textContent = i;
@@ -44,19 +44,19 @@ function Interface() {
 
 				/* click on frame, set the current frame */
 				frmElem.onclick = function(ev) {
-					Lines.draw.setFrame(i);
+					lns.render.setFrame(i);
 					self.updateFrameNum();
-					Lines.drawingInterface.resetLayers();
+					self.resetLayers();
 				};
 
 				/* right click, add/remove from copy frames */
 				frmElem.oncontextmenu = function(ev) {
 					ev.preventDefault();
 					if (!this.classList.toggle("copy")){
-						Lines.data.framesToCopy.splice(Lines.data.framesToCopy.indexOf(i), 1);
+						lns.data.framesToCopy.splice(lns.data.framesToCopy.indexOf(i), 1);
 					} else {
 						this.classList.add("copy");
-						Lines.data.framesToCopy.push(i);
+						lns.data.framesToCopy.push(i);
 					}
 				};
 
@@ -66,7 +66,7 @@ function Interface() {
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
-			for (let i = numFrames; i > Lines.frames.length; i--){
+			for (let i = numFrames; i > lns.frames.length; i--){
 				this.frameElems.remove(i-1); /* remove html frame */
 			}
 		}
@@ -75,76 +75,96 @@ function Interface() {
 
 	/* update frame display and current frame */
 	this.updateFrameNum = function() {
-		Lines.drawingInterface.frameNumDisplay.set(Lines.currentFrame);
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
-		if (self.frameElems.els[Lines.currentFrame]) // also un-ui
-			self.frameElems.setId("current", Lines.currentFrame);
+		if (self.frameElems.els[lns.currentFrame]) // also un-ui
+			self.frameElems.setId("current", lns.currentFrame);
 		else 
 			self.plusFrame.setId("current");
+		self.faces.frameDisplay.set(lns.currentFrame);
 	};
 
 	/* call before changing a frame */
 	this.beforeFrame = function() {
-		Lines.drawEvents.isDrawing = false;
-		Lines.data.saveLines();
+		lns.render.isDrawing = false;
+		lns.data.saveLines();
 	};
 	
 	/* call after changing a frame */
 	this.afterFrame = function() {
 		self.updateFramesPanel();
-		Lines.drawingInterface.resetLayers();
+		self.resetLayers();
 	};
 	
 	/* e key - go to next frame */
 	this.nextFrame = function() {
 		self.beforeFrame();
-		if (Lines.currentFrame < Lines.frames.length) Lines.draw.setFrame(Lines.currentFrame + 1);
+		if (lns.currentFrame < lns.frames.length) lns.render.setFrame(lns.currentFrame + 1);
 		self.afterFrame();
 	};
 
 	/* w key - got to previous frame */
 	this.prevFrame = function() {
 		self.beforeFrame();
-		if (Lines.currentFrame > 0) Lines.draw.setFrame(Lines.currentFrame - 1);
+		if (lns.currentFrame > 0) lns.render.setFrame(lns.currentFrame - 1);
 		self.afterFrame();
 	};
 
-	['1', '2', '3', '4', '5', '6', '7', '8', '9'].forEach(key => {
-		self.keyCommands[key] = {
+	['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].forEach(key => {
+		self.keys[key] = {
 			callback: function() {
-				self.beforeFrame();
-				if (Lines.frames[+key]) Lines.currentFrame = +key;
-				self.afterFrame();
+				self.setFrame(+key);
 			}
-		}
+		};
 	});
-	self.keyCommands['`'] = {
+
+	/* fio interface */
+	this.title = new UI({ id:"title" });
+
+	this.keys['s'] = new UIButton({
+		id: "save",
 		callback: function() {
-			self.beforeFrame();
-			if (Lines.frames[0]) Lines.currentFrame = 0;
-			self.afterFrame();
-		}
-	}
+			lns.fio.saveFramesToFile(self.title.getValue(), false, function(title) {
+				self.title.setValue(title);
+			});
+		},
+		key: "s"
+	});
+
+	this.keys['shift-s'] = new UIButton({
+		id: "save-frame",
+		callback: function() {
+			lns.fio.saveFramesToFile(self.title.getValue(), true, function(filename) {
+				self.title.setValue(filename.split("/").pop());
+			});
+		},
+		key: "shift-s"
+	});
+
+	this.keys['o'] = new UIButton({
+		id: "open",
+		callback: lns.fio.loadFramesFromFile,
+		key: "o"
+	});
 
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
-		if (k == "space" || k == "tab") ev.preventDefault();
-		if (document.activeElement.type != "text") {
-			
+		if (k == "space") ev.preventDefault();
+		if (k && self.keys[k] && document.activeElement.type != "text") {
+			if (k == "tab") ev.preventDefault(); // works?
 			if (ev.shiftKey) k = "shift-" + k;
 			if (ev.ctrlKey) k = "ctrl-" + k;
 			if (ev.altKey) k = "alt-" + k;
 
-			if (self.keyCommands[k]) {
-				self.keyCommands[k].callback(ev);
-				//  self.keyCommands[k].addClass('key-down'); show key presses?
-				if (self.keyCommands[k].toggleText) self.keyCommands[k].toggleText();
-			}
+			const key = self.keys[k];
+			if (key.handler) key.handler(ev, key);
+			else key.callback();
+			if (key.press) key.press();
+
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
-				Lines.fio.saveFramesToFile();
+				lns.fio.saveFramesToFile();
 				document.activeElement.blur();
 			}
 		}
@@ -153,24 +173,25 @@ function Interface() {
 
 	/* palette */
 	const palette = new Panel('palette', 'Palette');
+	this.panels.palette = palette;
 	this.palettes = {};
 	
 	this.addPalette = function() {
-		Lines.data.saveLines();
+		lns.data.saveLines();
 		const name = self.palettes.current = prompt('Name this palette.');
 		if (name) {
 			self.palettes[name] = {
-				color: Lines.lineColor.color,
-				seg: Lines.drawEvents.segNumRange,
-				jig: Lines.drawEvents.jiggleRange,
-				wig: Lines.drawEvents.wiggleRange,
-				wigSpeed: Lines.drawEvents.wiggleSpeed,
-				lineWidth: Lines.canvas.ctx.lineWidth,
-				mouse: Lines.drawEvents.mouseInterval,
-				brush: Lines.drawEvents.brush,
-				brushSpread: Lines.drawEvents.brushSpread,
-				dots: Lines.drawEvents.dots,
-				grass: Lines.drawEvents.grass
+				color: lns.lineColor.color,
+				seg: lns.draw.segNumRange,
+				jig: lns.draw.jiggleRange,
+				wig: lns.draw.wiggleRange,
+				wigSpeed: lns.draw.wiggleSpeed,
+				lineWidth: lns.canvas.ctx.lineWidth,
+				mouse: lns.draw.mouseInterval,
+				brush: lns.draw.brush,
+				brushSpread: lns.draw.brushSpread,
+				dots: lns.draw.dots,
+				grass: lns.draw.grass
 			};
 			palette.add(new UIButton({
 				title: name,
@@ -183,63 +204,267 @@ function Interface() {
 
 	this.loadPalette = function(name) {
 		/* this is crazy ... */
-		Lines.data.saveLines();
+		lns.data.saveLines();
 		self.palettes.current = name;
-		Lines.lineColor.setColor(self.palettes[name].color);
-		Lines.drawEvents.segNumRange = self.palettes[name].seg;
-		Lines.drawingInterface.segNumElem.setValue(self.palettes[name].seg);
-		Lines.drawEvents.jiggleRange = self.palettes[name].jig;
-		Lines.drawingInterface.jiggleElem.setValue(self.palettes[name].jig);
-		Lines.drawEvents.wiggleRange = self.palettes[name].wig;
-		Lines.drawingInterface.wiggleElem.setValue(self.palettes[name].wig);
-		Lines.drawEvents.wiggleSpeed = self.palettes[name].wigSpeed;
-		Lines.drawingInterface.wiggleSpeedElem.setValue(self.palettes[name].wigSpeed);
-		Lines.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
-		Lines.drawingInterface.lineWidth.setValue(self.palettes[name].lineWidth);
-		Lines.drawEvents.mouseInterval = self.palettes[name].mouse;
-		Lines.drawingInterface.mouseElem.setValue(self.palettes[name].mouse);
-		Lines.drawEvents.brush = self.palettes[name].brush;
-		Lines.drawingInterface.brushElem.setValue(self.palettes[name].brush);
-		Lines.drawEvents.brushSpread = self.palettes[name].brushSpread;
-		Lines.drawingInterface.brushSpreadElem.setValue(self.palettes[name].brushSpread);
-		Lines.drawEvents.dots = self.palettes[name].dots;
-		Lines.drawingInterface.dotsElem.setValue(self.palettes[name].dots);
-		Lines.drawEvents.grass = self.palettes[name].grass;
-		Lines.drawingInterface.grassElem.setValue(self.palettes[name].grass);
+		lns.lineColor.setColor(self.palettes[name].color);
+		lns.draw.segNumRange = self.palettes[name].seg;
+		lns.draw.jiggleRange = self.palettes[name].jig;
+		lns.draw.wiggleRange = self.palettes[name].wig;
+		lns.draw.wiggleSpeed = self.palettes[name].wigSpeed;
+		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
+		lns.draw.mouseInterval = self.palettes[name].mouse;
+		lns.draw.brush = self.palettes[name].brush;
+		lns.draw.brushSpread = self.palettes[name].brushSpread;
+		lns.draw.dots = self.palettes[name].dots;
+		lns.draw.grass = self.palettes[name].grass;
+												
+		lns.interface.faces.segNumElem.setValue(self.palettes[name].seg);
+		lns.interface.faces.jiggleElem.setValue(self.palettes[name].jig);
+		lns.interface.faces.wiggleElem.setValue(self.palettes[name].wig);
+		lns.interface.faces.wiggleSpeedElem.setValue(self.palettes[name].wigSpeed);
+		lns.interface.faces.lineWidth.setValue(self.palettes[name].lineWidth);
+		lns.interface.faces.mouse.setValue(self.palettes[name].mouse);
+		lns.interface.faces.brush.setValue(self.palettes[name].brush);
+		lns.interface.faces.brushSpread.setValue(self.palettes[name].brushSpread);
+		lns.interface.faces.dots.setValue(self.palettes[name].dots);
+		lns.interface.faces.grass.setValue(self.palettes[name].grass);
 	};
 
-	this.keyCommands['p'] = new UIButton({
+	palette.add(new UIButton({
 		title: "Add Palette",
-		callback: self.addPalette
-	});
-	palette.add(this.keyCommands['p']);
-	this.keyCommands['p'].setKey('p');
+		callback: self.addPalette,
+		key: "p"
+	}));
+
+	/* layer panel */
+	this.layerPanel = new Panel("layer-menu", "Layer");
+	self.panels['layer'] = this.layerPanel;
+	this.frameRow = this.layerPanel.addRow('layers');
+	this.layerPanel.addRow();
+	this.layers = [];
+
+	this.updateProperty = function(prop, value) {
+		for (let i = 0; i < self.layers.length; i++) {
+			if (self.layers[i].toggled)
+				self.layers[i][prop] = value;
+		}
+	};
+
+	this.resetLayers = function() {
+		for (let i = self.layers.length - 1; i >= 0; i--) {
+			if (self.layers[i]) {
+				if (self.layers[i].toggled)
+					self.toggle(self.layers[i]);
+			}
+		}
+		self.layerPanel.clearComponents(self.frameRow);
+		self.layers = [];
+		while (self.drawingPanel.rows.length > 2) {
+			self.drawingPanel.removeRow(self.drawingPanel.rows[self.drawingPanel.rows.length - 1]);
+		}
+	};
+
+	/* could be part of a layer class */
+	this.toggle = function(layer) {
+		if (!layer.toggled) {
+			layer.prevColor = layer.c;
+			layer.c = "#00CC96";
+			layer.toggled = true;
+		} else {
+			layer.c = layer.prevColor;
+			delete layer.prevColor;
+			delete layer.toggled;
+			const index = self.layers.indexOf(layer);
+			if (index != -1) self.layers.splice(index, 1);
+		}
+	};
+
+	this.killLayer = function() {
+		const layers = self.layers.filter(l => l.toggled);
+		
+		// remove frames
+		for (let i = lns.frames.length - 1; i >= 0; i--) {
+			const frame = lns.frames[i];
+			for (let j = frame.length - 1; j >= 0; j--) {
+				if (lns.layers[frame[j].l].toggled)
+					frame.splice(j, 1);
+			}
+		}
+
+		// remove layers
+		for (let i = lns.layers.length - 1; i >= 0; i--) {
+			if (lns.layers[i].toggled)
+				lns.layers[i].remove = true; // remove in fio
+			// this is dumb right?  structure depends on index like drawing
+		}
+	};
+
+	/*
+		this references the layer in each frame
+		not layer reference in lns.layers
+	*/
+	this.displayLayers = function() {
+		self.resetLayers();
+		if (lns.frames[lns.currentFrame]) {
+			for (let i = 0; i < lns.frames[lns.currentFrame].length; i++) {
+				const layer = lns.frames[lns.currentFrame][i];
+				const index = lns.layers[layer.l].d;
+				self.layers.push(layer);
+				layer.toggled = false;
+				const toggleLayer = new UIToggleButton({
+					on: index,
+					off: index,
+					callback: function() {
+						self.toggle(layer);
+					}
+				});
+				self.layerPanel.add(toggleLayer, self.frameRow);
+			}
+		}
+	};
+
+	this.cutLayerSegment = function() {
+		for (let i = 0; i < self.layers.length; i++) {
+			const layer = self.layers[i];
+			const drawing = lns.drawings[layer.d];
+			drawing.pop(); /* remove "end" */
+			drawing.pop(); /* remove segment */
+			drawing.push('end'); /* new end */
+			layer.e = drawing.length; /* update layer end num */
+		}
+	};
+
+	this.updateLayerColor = function(color) {
+		for (let i = 0; i < self.layers.length; i++) {
+			if (self.layers[i].toggled) {
+				self.layers[i].c = self.layers[i].prevColor = color;
+			}
+		}
+	};
+
+	/* drawing panel */
+	this.drawingPanel = new Panel("drawing-menu", "Drawings");
+	this.panels['drawing'] = this.drawingPanel; /* add to panels */
+
+	this.showDrawings = function() {
+		self.resetLayers();
+		self.drawingPanel.addRow('drawings');
+		for (let i = 0; i < lns.drawings.length; i++) {
+			let layer, index; /* check if layer is in frame already */
+			const frame = lns.frames[lns.currentFrame];
+			if (frame) {
+				for (let k = 0; k < frame.length; k++) {
+					if (i == lns.layers[frame[k].l].d) {
+						layer = lns.layers[frame[k].l];
+						index = k;
+					}
+				}
+			}
+			
+			if (!layer) { /* then check existing layers */
+				for (let j = 0; j < lns.layers.length; j++) {
+					const layers = lns.layers[j];
+					for (let k = 0; k < layers.length; k++) {
+						if (i == lns.layers[k].d) {
+							layer = lns.layers[k];
+							index = k;
+							break;
+						}
+					}
+				}
+			}
+			
+			if (!layer) { /* then create a layer*/
+				const drawing = lns.drawings[i];
+				if (drawing != null) {
+					layer = {
+						d: i,
+						s: 0,
+						e: drawing.length,
+						c: '000000',
+						...lns.draw.defaults,
+						x: 0,
+						y: 0
+					};
+				}
+				lns.layers.push(layer);
+				index = lns.layers.length - 1;
+			}
+
+			if (layer) self.layers[index] = layer; /* weidr but using indexes */
+				
+			self.drawingPanel.add(new UIToggleButton({
+				title: i,
+				on: i,
+				off: i,
+				callback: function() {
+					if (layer) self.toggle(layer);
+				}
+			}));
+		}
+	};
+
+	this.addDrawing = function() {
+		lns.data.saveLines();
+		if (lns.frames[lns.currentFrame] == undefined) 
+			lns.frames[lns.currentFrame] = [];
+		if (self.layers.length > 0) {
+			for (let i = 0; i < self.layers.length; i++) {
+				if (self.layers[i]) lns.frames[lns.currentFrame].push({ l: i });
+			}
+		} 
+		else console.log('%c no drawing', 'color:white;background:hotpink;');
+	};
+
+	this.cutDrawing = function() {
+		lns.data.saveLines();
+		const frame = lns.frames[lns.currentFrame];
+		if (frame) {
+			for (let i = frame.length - 1; i >= 0; i--) {
+				console.log(self.layers);
+				for (let j = 0; j < self.layers.length; j++) {
+					if (self.layers[j] && frame[i].l == j)
+						frame.splice(i, 1);
+				}
+			}
+		}
+	};
 
 	/* settings */
 	this.saveSettings = function() {
 		const settings = {
-			canvasColor: Lines.canvas.bgColor.color,
-			width: Lines.canvas.width,
-			height: Lines.canvas.height,
-			fps: Lines.draw.fps,
-			lps: Lines.draw.lps,
-			onionSkinVisible: Lines.draw.onionSkinVisible,
-			onionSkinNum: Lines.draw.onionSkinNum,
-
+			canvasColor: lns.bgColor.color,
+			width: lns.canvas.width,
+			height: lns.canvas.height,
+			fps: lns.render.fps,
+			lps: lns.render.lps,
+			onionSkinVisible: lns.render.onionSkinVisible,
+			onionSkinNum: lns.render.onionSkinNum,
 		};
+		settings.panels = {};
+		for (const p in lns.interface.panels) {
+			settings.panels[p] = {
+				open: lns.interface.panels[p].open,
+				order: lns.interface.panels[p].order
+			};
+		}
 		settings.palettes = self.palettes;
 		localStorage.settings = JSON.stringify(settings);
 	};	
 
 	this.loadSettings = function() {
 		const settings = JSON.parse(localStorage.settings);
-		Lines.canvas.bgColor.setColor(settings.canvasColor);
-		Lines.canvas.setWidth(settings.width);
-		Lines.canvas.setHeight(settings.height);
-		Lines.draw.setFps(settings.fps);
-		Lines.draw.setLps(settings.lps);
-		Lines.draw.onionSkinVisible = settings.onionSkinVisible;
-		Lines.draw.onionSkinNum = settings.onionSkinNum;
+		lns.bgColor.set(settings.canvasColor);
+		lns.canvas.setWidth(settings.width);
+		lns.canvas.setHeight(settings.height);
+		lns.render.setFps(settings.fps);
+		lns.render.setLps(settings.lps);
+		lns.render.onionSkinVisible = settings.onionSkinVisible;
+		lns.render.onionSkinNum = settings.onionSkinNum;
+		for (const p in settings.panels) {
+			if (settings.panels[p].open) lns.interface.panels[p].toggle();
+			lns.interface.panels[p].setOrder(settings.panels[p].order);
+		}
 		self.palettes = settings.palettes;
 		if (self.palettes.current) self.loadPalette(self.palettes.current);
 		for (const key in settings.palettes) {
@@ -254,17 +479,71 @@ function Interface() {
 		}
 	};
 
-	this.keyCommands['ctrl-s'] = new UIButton({
+	this.keys['ctrl-s'] = new UIButton({
 		id: "save-settings",
 		title: "Save Settings",
 		callback: self.saveSettings,
 		key: "ctrl-s"
 	});
 
-	this.keyCommands['alt-s'] = new UIButton({
+	this.keys['alt-s'] = new UIButton({
 		id: "load-settings",
 		title: "Load Settings",
 		callback: self.loadSettings,
 		key: "alt-s"
 	});
+
+	/* build interface */
+	fetch('./js/interface.json')
+		.then(response => { return response.json(); })
+		.then(data => { 
+			self.build(data);
+			if (localStorage.settings) self.loadSettings();
+		});
+
+	const classes = {
+		ui: UI,
+		button: UIButton,
+		toggle: UIToggleButton,
+		text: UIText,
+		range: UIRange,
+		color: UIColor
+	};
+
+	this.build = function(data) {
+		for (const key in data) {
+			let panel;
+			if (self.panels[key]) {
+				panel = self.panels[key];
+			} else {
+				panel = new Panel(data[key].id, data[key].label);
+				self.panels[key] = panel;
+			}
+			for (let i = 0; i < data[key].list.length; i++) {
+				const u = data[key].list[i];
+				const module = u.module || data[key].module;
+				const params = { key: u.key, ...u.params };
+				for (const k in u.fromModule) {
+					params[k] =  lns[module][u.fromModule[k]];
+				}
+				
+				if (u.set) {
+					params.callback = function(value) {
+						lns[module][u.set.prop] = u.set.number ? +value : value;
+
+						if (u.set.layer) {
+							self.updateProperty(u.set.layer, u.set.number ? +value : value)
+						}
+					};
+					params.value = lns[module][u.set.prop];
+				}
+
+				const ui = new classes[u.type](params);
+				if (u.row) panel.addRow();
+				panel.add(ui);
+				if (u.key) self.keys[u.key] = ui;
+				if (u.face) self.faces[u.face] = ui;
+			}
+		}
+	};
 }
