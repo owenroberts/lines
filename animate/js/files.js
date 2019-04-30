@@ -87,6 +87,14 @@ function Files(params) {
 					lns.render.setFps(data.fps);
 					if (data.bg) lns.bgColor.set(data.bg);
 					lns.render.reset();
+
+					if (lns.interface) {
+						lns.interface.title.setValue(filename);
+						lns.interface.faces.width.set(data.w);
+						lns.interface.faces.height.set(data.h);
+						lns.interface.faces.lineColor.setValue(lns.layers[0].c);
+						lns.interface.faces.bgColor.setValue(data.bg);
+					}
 				})
 				.catch(error => {
 					alert('File not found: ' + error.message);
@@ -103,7 +111,6 @@ function Files(params) {
 
 	window.addEventListener("beforeunload", function(ev) {
 		if (params.save) lns.interface.saveSettings();
-		ev.returnValue = 'Did you save dumbhole?';
+		if (params.reload) ev.returnValue = 'Did you save dumbhole?';
 	});
-
 }

@@ -20,6 +20,7 @@ window.addEventListener("load", function() {
 	lns.fio = new Files({
 		fit: false, /* fit to canvas when saving */
 		save: true, /* save settings */
+		reload: false, /* confirm reload */
 		bg: true /* bg color */
 	});
 
