@@ -37,6 +37,8 @@ button:focus {
     cursor: crosshair; }
 
 .btn {
+  display: inline-block;
+  margin-top: 0.5em;
   background-color: lightgray;
   padding: 0.25em 0.5em;
   border-radius: 3px;

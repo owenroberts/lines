@@ -85,7 +85,7 @@ function Files(params) {
 					lns.canvas.setWidth(data.w);
 					lns.canvas.setHeight(data.h);
 					lns.render.setFps(data.fps);
-					if (data.bg) lns.bgColor.setColor(data.bg);
+					if (data.bg) lns.bgColor.set(data.bg);
 					lns.render.reset();
 				})
 				.catch(error => {

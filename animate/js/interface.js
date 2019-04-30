@@ -434,6 +434,7 @@ function Interface() {
 	this.saveSettings = function() {
 		const settings = {
 			canvasColor: lns.bgColor.color,
+			lineColor: lns.lineColor.color,
 			width: lns.canvas.width,
 			height: lns.canvas.height,
 			fps: lns.render.fps,
@@ -459,6 +460,7 @@ function Interface() {
 		lns.canvas.setHeight(settings.height);
 		lns.render.setFps(settings.fps);
 		lns.render.setLps(settings.lps);
+		lns.lineColor.set(settings.lineColor);
 		lns.render.onionSkinVisible = settings.onionSkinVisible;
 		lns.render.onionSkinNum = settings.onionSkinNum;
 		for (const p in settings.panels) {

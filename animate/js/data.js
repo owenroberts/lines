@@ -296,7 +296,6 @@ function Data() {
 	/* over states get fucked up with two drawings, need to figure
 		out after adding drawing nums to frames in v2 */
 	this.explode = function(params) {
-		console.log(params);
 		const follow = params.follow;
 		const over = params.over;
 		self.saveLines();
@@ -304,15 +303,18 @@ function Data() {
 		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
 			const layers = _.cloneDeep(lns.frames[lns.currentFrame]);
+			console.log(layers);
 			for (let i = 0; i < layers.length; i++) {
 				const layer = layers[i];
 				let layerIndex = layers[i].l;
 				const drawingIndex = lns.layers[layerIndex].d;
+				const lines = lns.drawings[drawingIndex];
+
 				// if there's more than just a layer number, make new layer -  ??
 				if (Object.keys(layer).length > 1) {
 					layerIndex = self.newLayer(layer, layerIndex, i);
 				}
-				const lines = lns.drawings[drawingIndex];
+				
 				for (let j = 0; j < lines.length - 1; j += segmentsPerFrame) {
 					if (!over) lns.interface.nextFrame();
 					
@@ -325,9 +327,9 @@ function Data() {
 					if (!follow) {
 						for (let k = 0; k < i; k++) {
 							lns.frames[lns.currentFrame].push({
-								l: layerIndex,
+								l: layers[k].l,
 								s: 0,
-								e: lns.drawings[drawingIndex].length,
+								e: lns.drawings[ lns.layers[layers[k].l].d ].length,
 							});
 						}
 					}

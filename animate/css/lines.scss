@@ -39,6 +39,8 @@ button:focus { outline: none; }
 }
 
 .btn {
+	display: inline-block;
+	margin-top: 0.5em;
 	background-color: $ui-color;
 	padding: 0.25em 0.5em;
 	border-radius: 3px;
