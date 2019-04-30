@@ -164,7 +164,7 @@ function Interface() {
 
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
-				lns.fio.saveFramesToFile();
+				lns.fio.saveFramesToFile(self.title.getValue());
 				document.activeElement.blur();
 			}
 		}
@@ -481,6 +481,10 @@ function Interface() {
 		}
 	};
 
+	this.clearSettings = function() {
+		delete localStorage.settings;
+	};	
+
 	this.keys['ctrl-s'] = new UIButton({
 		id: "save-settings",
 		title: "Save Settings",
@@ -494,6 +498,12 @@ function Interface() {
 		callback: self.loadSettings,
 		key: "alt-s"
 	});
+
+	const clear = new UIButton({
+		id: "clear-settings",
+		title: "Clear Settings",
+		callback: self.clearSettings
+	})
 
 	/* build interface */
 	fetch('./js/interface.json')

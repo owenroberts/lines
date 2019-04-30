@@ -112,6 +112,7 @@
 			{
 				"row": true,
 				"type": "text",
+				"face": "width",
 				"fromModule": {
 					"placeholder": "width",
 					"callback": "setWidth"
@@ -125,6 +126,7 @@
 			{
 				"row": true,
 				"type": "text",
+				"face": "height",
 				"fromModule": {
 					"placeholder": "height",
 					"callback": "setHeight"
@@ -160,6 +162,7 @@
 		"list": [
 			{
 				"type": "color",
+				"face": "lineColor",
 				"fromModule": {
 					"callback": "set",
 					"value": "color"
@@ -174,6 +177,7 @@
 		"list": [
 			{
 				"type": "color",
+				"face": "bgColor",
 				"fromModule": {
 					"callback": "set",
 					"value": "color"
