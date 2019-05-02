@@ -326,8 +326,8 @@ function Data() {
 						i think that exists in reverse draw? */
 					if (!follow) {
 						for (let k = 0; k < i; k++) {
-							lns.frames[lns.currentFrame].push({
-								l: layers[k].l,
+							lns.frames[lns.currentFrame].push({ 
+								...layers[k], 
 								s: 0,
 								e: lns.drawings[ lns.layers[layers[k].l].d ].length,
 							});

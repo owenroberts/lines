@@ -19,6 +19,8 @@ const Game = {
 		this.mixedColors = params.mixedColors || false; /* param? */
 		this.debug = params.debug || false;
 
+		this.clearBg = true;
+
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
 			this.ctx.miterLimit = 1;
@@ -38,7 +40,7 @@ const Game = {
 	gDraw: function() {
 		const time = performance.now();
 		if (time > Game.drawTime + Game.lineInterval) {
-			Game.ctx.clearRect(0, 0, Game.width, Game.height);
+			if (Game.clearBg) Game.ctx.clearRect(0, 0, Game.width, Game.height);
 			draw(); // draw defined in each game js file
 			if (Game.stats) {
 				Game.drawFrameRates.push( 1000 / (time - Game.drawTime) );

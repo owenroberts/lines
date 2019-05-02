@@ -479,6 +479,11 @@ function Interface() {
 				}));
 			}
 		}
+
+		lns.interface.faces.width.set(settings.width);
+		lns.interface.faces.height.set(settings.height);
+		lns.interface.faces.lineColor.setValue(settings.lineColor);
+		lns.interface.faces.bgColor.setValue(settings.canvasColor);
 	};
 
 	this.clearSettings = function() {
