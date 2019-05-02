@@ -89,11 +89,19 @@ function Files(params) {
 					lns.render.reset();
 
 					if (lns.interface) {
-						lns.interface.title.setValue(filename);
+						lns.interface.title.setValue(filename.split('/').pop());
 						lns.interface.faces.width.set(data.w);
 						lns.interface.faces.height.set(data.h);
+						let color;
+						lns.layers.some(layer => {
+							if (layer) {
+								color = layer.c;
+								return true;
+							}
+						});
 						lns.interface.faces.lineColor.setValue(lns.layers[0].c);
 						lns.interface.faces.bgColor.setValue(data.bg);
+						lns.interface.faces.fps.setValue(data.fps);
 					}
 				})
 				.catch(error => {
