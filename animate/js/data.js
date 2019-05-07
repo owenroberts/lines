@@ -303,7 +303,6 @@ function Data() {
 		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
 		if (segmentsPerFrame > 0) {
 			const layers = _.cloneDeep(lns.frames[lns.currentFrame]);
-			console.log(layers);
 			for (let i = 0; i < layers.length; i++) {
 				const layer = layers[i];
 				let layerIndex = layers[i].l;

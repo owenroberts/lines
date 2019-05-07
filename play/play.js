@@ -209,6 +209,6 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	if (src) this.loadAnimation(src, callback);
 }
 
-function loadAnimation(src, canvas, callback) {
-	const player = new LinesPlayer(canvas, src, callback);
+function loadAnimation(src, canvas, lps, callback) {
+	const player = new LinesPlayer(canvas, src, lps, true, callback);
 }
