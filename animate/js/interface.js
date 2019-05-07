@@ -206,7 +206,7 @@ function Interface() {
 		/* this is crazy ... */
 		lns.data.saveLines();
 		self.palettes.current = name;
-		lns.lineColor.setColor(self.palettes[name].color);
+		lns.lineColor.set(self.palettes[name].color);
 		lns.draw.segNumRange = self.palettes[name].seg;
 		lns.draw.jiggleRange = self.palettes[name].jig;
 		lns.draw.wiggleRange = self.palettes[name].wig;
@@ -218,10 +218,10 @@ function Interface() {
 		lns.draw.dots = self.palettes[name].dots;
 		lns.draw.grass = self.palettes[name].grass;
 												
-		lns.interface.faces.segNumElem.setValue(self.palettes[name].seg);
-		lns.interface.faces.jiggleElem.setValue(self.palettes[name].jig);
-		lns.interface.faces.wiggleElem.setValue(self.palettes[name].wig);
-		lns.interface.faces.wiggleSpeedElem.setValue(self.palettes[name].wigSpeed);
+		lns.interface.faces.segNumRange.setValue(self.palettes[name].seg);
+		lns.interface.faces.jiggleRange.setValue(self.palettes[name].jig);
+		lns.interface.faces.wiggleRange.setValue(self.palettes[name].wig);
+		lns.interface.faces.wiggleSpeed.setValue(self.palettes[name].wigSpeed);
 		lns.interface.faces.lineWidth.setValue(self.palettes[name].lineWidth);
 		lns.interface.faces.mouse.setValue(self.palettes[name].mouse);
 		lns.interface.faces.brush.setValue(self.palettes[name].brush);
