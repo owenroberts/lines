@@ -884,5 +884,41 @@
 				}
 			}
 		]
+	},
+	"settings": {
+		"id": "settings-menu",
+		"label": "Settings",
+		"module": "interface",
+		"list": [
+			{
+				"type": "button",
+				"key": "ctrl-s",
+				"fromModule": {
+					"callback": "saveSettings"
+				},
+				"params": {
+					"title": "Save Settings"
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-s",
+				"fromModule": {
+					"callback": "loadSettings"
+				},
+				"params": {
+					"title": "Load Settings"
+				}
+			},
+			{
+				"type": "button",
+				"fromModule": {
+					"callback": "clearSettings"
+				},
+				"params": {
+					"title": "Clear Settings"
+				}
+			}
+		]
 	}
 }

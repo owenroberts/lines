@@ -19,7 +19,7 @@ button:focus { outline: none; }
 	position: fixed;
 	top: 40px;
 	right: 20px;
-	background: $main-color;
+	background: $accent-two;
 	border-radius: 3px;
 	padding: 1px 3px;
 	color: black;
@@ -42,7 +42,7 @@ button:focus { outline: none; }
 	display: inline-block;
 	margin-top: 0.5em;
 	background-color: $ui-color;
-	padding: 0.25em 0.5em;
+	padding: 0 0.5em;
 	border-radius: 3px;
 	&:hover { 
 		background: $accent-two; 

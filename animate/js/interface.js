@@ -431,6 +431,9 @@ function Interface() {
 	};
 
 	/* settings */
+	this.settingsPanel = new Panel('settings-menu', "Settings");
+	this.panels['settings'] = this.settingsPanel;
+	
 	this.saveSettings = function() {
 		const settings = {
 			canvasColor: lns.bgColor.color,
@@ -489,26 +492,6 @@ function Interface() {
 	this.clearSettings = function() {
 		delete localStorage.settings;
 	};	
-
-	this.keys['ctrl-s'] = new UIButton({
-		id: "save-settings",
-		title: "Save Settings",
-		callback: self.saveSettings,
-		key: "ctrl-s"
-	});
-
-	this.keys['alt-s'] = new UIButton({
-		id: "load-settings",
-		title: "Load Settings",
-		callback: self.loadSettings,
-		key: "alt-s"
-	});
-
-	const clear = new UIButton({
-		id: "clear-settings",
-		title: "Clear Settings",
-		callback: self.clearSettings
-	})
 
 	/* build interface */
 	fetch('./js/interface.json')
