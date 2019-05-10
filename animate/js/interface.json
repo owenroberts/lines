@@ -551,7 +551,7 @@
 				"row": true,
 				"type": "text",
 				"key": ";",
-				"faces": "fps",
+				"face": "fps",
 				"fromModule": {
 					"callback": "setFps",
 					"value": "fps"
