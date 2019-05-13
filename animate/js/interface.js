@@ -158,6 +158,7 @@ function Interface() {
 			if (ev.altKey) k = "alt-" + k;
 
 			const key = self.keys[k];
+			if (!self.keys[k]) console.log(k, self.keys);
 			if (key.handler) key.handler(ev, key);
 			else key.callback();
 			if (key.press) key.press();
