@@ -91,7 +91,6 @@ function Draw(defaults) {
 		} else if (ev.altKey) {
 			self.startDots = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY));
 		}
-		console.log(lns.lines)
 	};
 
 	this.end = function(ev) {
@@ -133,7 +132,6 @@ function Draw(defaults) {
 		lns.canvas.canvas.addEventListener('mousedown', self.start);
 		lns.canvas.canvas.addEventListener('mouseup', self.end);
 
-		console.log('touch test');
 		const lastTouch = { which: 1 };
 
 		function toucher(ev, callback) {
