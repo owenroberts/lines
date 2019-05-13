@@ -91,6 +91,7 @@ function Draw(defaults) {
 		} else if (ev.altKey) {
 			self.startDots = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY));
 		}
+		console.log(lns.lines)
 	};
 
 	this.end = function(ev) {
@@ -123,7 +124,7 @@ function Draw(defaults) {
 		}
 	}
 
-	if (window.PointerEvent) {
+	if (false && window.PointerEvent) {
 		lns.canvas.canvas.addEventListener('pointermove', self.update);
 		lns.canvas.canvas.addEventListener('pointerdown', self.start);
 		lns.canvas.canvas.addEventListener('pointerup', self.end);
@@ -133,24 +134,28 @@ function Draw(defaults) {
 		lns.canvas.canvas.addEventListener('mouseup', self.end);
 
 		console.log('touch test');
+		const lastTouch = { which: 1 };
 
 		function toucher(ev, callback) {
 			ev.preventDefault();
 			if (ev.touches[0]) {
-				const touch = ev.touches[0];
-				if (touch.touchType == 'stylus') callback(touch);
+				const rect = ev.target.getBoundingClientRect();
+				lastTouch.offsetX = ev.targetTouches[0].pageX - rect.left;
+				lastTouch.offsetY = ev.targetTouches[0].pageY - rect.top;
+				lastTouch.which = 1;
+				callback(lastTouch);
 			}
 		}
 
 		/* apple pencil - safari doesn't support pointer event */
-		lns.canvas.canvas.addEventListener('touchmove', ev => {
-			toucher(ev, self.update);
-		});
 		lns.canvas.canvas.addEventListener('touchstart', ev => {
 			toucher(ev, self.start);
 		});
+		lns.canvas.canvas.addEventListener('touchmove', ev => {
+			toucher(ev, self.update);
+		});
 		lns.canvas.canvas.addEventListener('touchend', ev => {
-			toucher(ev, self.end);
+			self.end(lastTouch);
 		});	
 
 	}
