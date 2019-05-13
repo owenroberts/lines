@@ -43,7 +43,7 @@ function Draw(defaults) {
 		}
 	};
 
-	this.drawUpdate = function(ev) {
+	this.update = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
 			if (self.isDrawing)
@@ -80,7 +80,7 @@ function Draw(defaults) {
 		lns.lines.push(new Cool.Vector(x, y));
 	};
 
-	this.drawStart = function(ev) {
+	this.start = function(ev) {
 		if (ev.which == 1 && !lns.render.isPlaying && !ev.altKey) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
@@ -93,7 +93,7 @@ function Draw(defaults) {
 		}
 	};
 
-	this.drawEnd = function(ev) {
+	this.end = function(ev) {
 		if (self.startDots) {
 			const w = Math.abs(self.startDots.x - ev.offsetX);
 			const h = Math.abs(self.startDots.y - ev.offsetY);
@@ -124,13 +124,35 @@ function Draw(defaults) {
 	}
 
 	if (window.PointerEvent) {
-		lns.canvas.canvas.addEventListener('pointermove', self.drawUpdate);
-		lns.canvas.canvas.addEventListener('pointerdown', self.drawStart);
-		lns.canvas.canvas.addEventListener('pointerup', self.drawEnd);
+		lns.canvas.canvas.addEventListener('pointermove', self.update);
+		lns.canvas.canvas.addEventListener('pointerdown', self.start);
+		lns.canvas.canvas.addEventListener('pointerup', self.end);
 	} else {	
-		lns.canvas.canvas.addEventListener('mousemove', self.drawUpdate);
-		lns.canvas.canvas.addEventListener('mousedown', self.drawStart);
-		lns.canvas.canvas.addEventListener('mouseup', self.drawEnd);
+		lns.canvas.canvas.addEventListener('mousemove', self.update);
+		lns.canvas.canvas.addEventListener('mousedown', self.start);
+		lns.canvas.canvas.addEventListener('mouseup', self.end);
+
+		console.log('touch test');
+
+		function toucher(ev, callback) {
+			ev.preventDefault();
+			if (ev.touches[0]) {
+				const touch = ev.touches[0];
+				if (touch.touchType == 'stylus') callback(touch);
+			}
+		}
+
+		/* apple pencil - safari doesn't support pointer event */
+		lns.canvas.canvas.addEventListener('touchmove', ev => {
+			toucher(ev, self.update);
+		});
+		lns.canvas.canvas.addEventListener('touchstart', ev => {
+			toucher(ev, self.start);
+		});
+		lns.canvas.canvas.addEventListener('touchend', ev => {
+			toucher(ev, self.end);
+		});	
+
 	}
 	document.addEventListener('mousemove', self.outSideCanvas);
 }
