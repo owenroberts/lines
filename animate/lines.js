@@ -19,7 +19,7 @@ window.addEventListener("load", function() {
 	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
 	lns.fio = new Files({
 		fit: false, /* fit to canvas when saving */
-		save: true, /* save settings */
+		save: false, /* save settings */
 		reload: false, /* confirm reload */
 		bg: true /* bg color */
 	});
