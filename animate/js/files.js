@@ -99,7 +99,11 @@ function Files(params) {
 								return true;
 							}
 						});
-						lns.interface.faces.lineColor.setValue(lns.layers[0].c);
+						lns.layers.forEach(layer => {
+							if (layer)
+								lns.interface.faces.lineColor.setValue(layer.c);
+						});
+						
 						if (data.bg) lns.interface.faces.bgColor.setValue(data.bg);
 						lns.interface.faces.fps.setValue(data.fps);
 					}
