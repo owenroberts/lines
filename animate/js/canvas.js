@@ -1,4 +1,4 @@
-function Canvas(width, height, color) {
+ function Canvas(width, height, color) {
 	const self = this;
 
 	this.width = width;
@@ -75,7 +75,7 @@ function Canvas(width, height, color) {
 	this.capture = function() {
 		if (lns.fio.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
-				const title = lns.fio.title.getValue(); // this is a UI
+				const title = lns.interface.title.getValue(); // this is a UI
 				const n = Cool.padNumber(lns.currentFrame, 3);
 				let frm = 0;
 				let fileName = `${title}-${n}-${frm}.png`;
