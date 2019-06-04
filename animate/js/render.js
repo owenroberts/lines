@@ -100,14 +100,14 @@ function Render(fps) {
 							const drawing = lns.drawings[layer.d];
 							self.drawLines({
 								lines: drawing, 
-								start: frame.s || layer.s, 
-								end: frame.e || layer.e, 
-								segNum: frame.n || layer.n, 
-								jig: frame.r || layer.r,
-								wig: frame.w || layer.w,
-								wigSpeed: frame.v || layer.v,
-								x: frame.x || layer.x, 
-								y: frame.y || layer.y, 
+								start: frame.s != undefined ? frame.s : layer.s, 
+								end: frame.e != undefined ? frame.e : layer.e, 
+								segNum: frame.n != undefined ? frame.n : layer.n, 
+								jig: frame.r != undefined ? frame.r : layer.r,
+								wig: frame.w != undefined ? frame.w : layer.w,
+								wigSpeed: frame.v != undefined ? frame.v : layer.v,
+								x: frame.x != undefined ? frame.x : layer.x, 
+								y: frame.y != undefined ? frame.y : layer.y, 
 								color: color,
 								onion: true
 							});
@@ -124,14 +124,14 @@ function Render(fps) {
 					const drawing = lns.drawings[layer.d];
 					self.drawLines({
 						lines: drawing, 
-						start: frame.s || layer.s, 
-						end: frame.e || layer.e, 
-						segNum: frame.n || layer.n, 
-						jig: frame.r || layer.r,
-						wig: frame.w || layer.w,
-						wigSpeed: frame.v || layer.v,
-						x: frame.x || layer.x, 
-						y: frame.y || layer.y, 
+						start: frame.s != undefined ? frame.s : layer.s, 
+						end: frame.e != undefined ? frame.e : layer.e, 
+						segNum: frame.n != undefined ? frame.n : layer.n, 
+						jig: frame.r != undefined ? frame.r : layer.r,
+						wig: frame.w != undefined ? frame.w : layer.w,
+						wigSpeed: frame.v != undefined ? frame.v : layer.v,
+						x: frame.x != undefined ? frame.x : layer.x, 
+						y: frame.y != undefined ? frame.y : layer.y, 
 						color: frame.c || layer.c,
 						onion: false
 					});
@@ -171,6 +171,7 @@ function Render(fps) {
 	this.drawLines = function(params) {
 		/* mixed color?  - assume always mixed? - care about performance? */
 		lns.canvas.ctx.beginPath();
+
 
 		const off = {
 			x: Cool.random(0, params.wig),

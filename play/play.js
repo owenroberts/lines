@@ -85,7 +85,8 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 
 					// over ride props
 					for (const key in this.over) {
-						if (this.over[key]) this.rndr[key] = this.over[key];
+						if (this.over[key] != undefined) 
+							this.rndr[key] = this.over[key];
 					}
 
 					// apply wiggle and speed if it exists 
