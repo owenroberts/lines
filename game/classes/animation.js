@@ -129,7 +129,8 @@ class Animation {
 
 					if (this.overRide) {
 						for (const key in this.over) {
-							if (this.over[key]) this.rndr[key] = this.over[key];
+							if (this.over[key] != undefined) 
+								this.rndr[key] = this.over[key];
 						}
 					}
 					
