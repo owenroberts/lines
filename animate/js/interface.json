@@ -918,6 +918,17 @@
 				"params": {
 					"title": "Clear Settings"
 				}
+			},
+			{
+				"type": "toggle",
+				"module": "fio",
+				"fromModule": {
+					"callback": "toggleSaveSettings"
+				},
+				"params": {
+					"on": "Auto Save Settings On",
+					"off": "Auto Save Settings Off"
+				}
 			}
 		]
 	}

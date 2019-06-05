@@ -2,6 +2,11 @@ function Files(params) {
 	const self = this;
 
 	this.saveFilesEnabled = false;
+	this.saveOnUnload = params.save || false;
+
+	this.toggleSaveSettings = function() {
+		self.saveOnUnload = !self.saveOnUnload;
+	};
 
 	/* s key - shift-s for single */
 	this.saveFramesToFile = function(title, single, callback) {
@@ -122,7 +127,7 @@ function Files(params) {
 	}
 
 	window.addEventListener("beforeunload", function(ev) {
-		if (params.save) lns.interface.saveSettings();
+		if (self.saveOnUnload) lns.interface.saveSettings();
 		if (params.reload) ev.returnValue = 'Did you save dumbhole?';
 	});
 }
