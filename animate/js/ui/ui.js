@@ -23,9 +23,9 @@ class UI {
 
 	press() {
 		this.el.classList.add('press');
-		this.el.addEventListener('transitionend', function() {
+		setTimeout(function() {
 			this.el.classList.remove('press');
-		}.bind(this));
+		}.bind(this), 300)
 	}
 
 	setKey(key) {

@@ -145,6 +145,7 @@ button:focus {
     border-radius: 3px;
     display: inline-block;
     background-color: lightgray;
+    transition: background-color 100ms ease-in;
     margin-right: 1px;
     margin-top: 1px;
     padding: 0.5em;

@@ -175,6 +175,7 @@ button:focus { outline: none; }
 		border-radius: 3px;
 		display: inline-block;
 		background-color: $ui-color;
+		transition: background-color 100ms ease-in;
 		margin-right: 1px;
 		margin-top: 1px;
 		padding: 0.5em;
