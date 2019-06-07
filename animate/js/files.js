@@ -3,6 +3,7 @@ function Files(params) {
 
 	this.saveFilesEnabled = false;
 	this.saveOnUnload = params.save || false;
+	this.fileName = undefined;
 
 	this.toggleSaveSettings = function() {
 		self.saveOnUnload = !self.saveOnUnload;
@@ -70,11 +71,11 @@ function Files(params) {
 	};
 
 	/* o key */
-	this.loadFramesFromFile = function(callback) {
-		const filename = prompt("Open file:");
-		if (filename) {
-			if (callback) callback(filename);
-			fetch(filename + '.json')
+	this.loadFramesFromFile = function(filename, callback) {
+		self.fileName = filename || prompt("Open file:");
+		if (self.fileName) {
+			if (callback) callback(self.fileName);
+			fetch(self.fileName + '.json')
 				.then(response => { return response.json() })
 				.then(data => {
 					lns.frames = data.f;
@@ -94,7 +95,7 @@ function Files(params) {
 					lns.render.reset();
 
 					if (lns.interface) {
-						lns.interface.title.setValue(filename.split('/').pop());
+						lns.interface.title.setValue(self.fileName.split('/').pop());
 						lns.interface.faces.width.set(data.w);
 						lns.interface.faces.height.set(data.h);
 						let color;
@@ -118,6 +119,11 @@ function Files(params) {
 					console.log(error);
 				});
 		}
+	};
+
+	this.reOpenFile = function() {
+		if (self.fileName) localStorage.setItem('re-open', self.fileName);
+		location.reload();
 	};
 	
 

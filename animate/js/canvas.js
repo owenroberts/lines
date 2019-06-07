@@ -126,6 +126,8 @@
 			}
 		}
 
+		/* update canvas ui ? */
+
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
 

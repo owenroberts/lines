@@ -147,6 +147,12 @@ function Interface() {
 		key: "o"
 	});
 
+	this.keys['shift-o'] = new UIButton({
+		id: 're-open',
+		callback: lns.fio.reOpenFile,
+		key: 'shift-o'
+	})
+
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
@@ -313,10 +319,11 @@ function Interface() {
 				self.layers.push(layer);
 				layer.toggled = false;
 				const toggleLayer = new UIToggleButton({
-					on: index,
-					off: index,
+					on: layer.l,
+					off: layer.l,
 					callback: function() {
 						self.toggle(layer);
+						console.log(lns.layers[layer.l]); // debugging 
 					}
 				});
 				self.layerPanel.add(toggleLayer, self.frameRow);
@@ -351,57 +358,61 @@ function Interface() {
 		self.resetLayers();
 		self.drawingPanel.addRow('drawings');
 		for (let i = 0; i < lns.drawings.length; i++) {
-			let layer, index; /* check if layer is in frame already */
-			const frame = lns.frames[lns.currentFrame];
-			if (frame) {
-				for (let k = 0; k < frame.length; k++) {
-					if (i == lns.layers[frame[k].l].d) {
-						layer = lns.layers[frame[k].l];
-						index = k;
-					}
-				}
-			}
-			
-			if (!layer) { /* then check existing layers */
-				for (let j = 0; j < lns.layers.length; j++) {
-					const layers = lns.layers[j];
-					for (let k = 0; k < layers.length; k++) {
-						if (i == lns.layers[k].d) {
-							layer = lns.layers[k];
+			if (lns.drawings[i]) {
+				let layer, index; /* check if layer is in frame already */
+				const frame = lns.frames[lns.currentFrame];
+				if (frame) {
+					for (let k = 0; k < frame.length; k++) {
+						if (i == lns.layers[frame[k].l].d) {
+							layer = lns.layers[frame[k].l];
 							index = k;
-							break;
 						}
 					}
 				}
-			}
-			
-			if (!layer) { /* then create a layer*/
-				const drawing = lns.drawings[i];
-				if (drawing != null) {
-					layer = {
-						d: i,
-						s: 0,
-						e: drawing.length,
-						c: '000000',
-						...lns.draw.defaults,
-						x: 0,
-						y: 0
-					};
-				}
-				lns.layers.push(layer);
-				index = lns.layers.length - 1;
-			}
-
-			if (layer) self.layers[index] = layer; /* weidr but using indexes */
 				
-			self.drawingPanel.add(new UIToggleButton({
-				title: i,
-				on: i,
-				off: i,
-				callback: function() {
-					if (layer) self.toggle(layer);
+				if (!layer) { /* then check existing layers */
+					for (let j = 0; j < lns.layers.length; j++) {
+						const layers = lns.layers[j];
+						if (lns.layers[j]) {
+							for (let k = 0; k < layers.length; k++) {
+								if (i == lns.layers[k].d) {
+									layer = lns.layers[k];
+									index = k;
+									break;
+								}
+							}
+						}
+					}
 				}
-			}));
+				
+				if (!layer) { /* then create a layer*/
+					const drawing = lns.drawings[i];
+					if (drawing != null) {
+						layer = {
+							d: i,
+							s: 0,
+							e: drawing.length,
+							c: '000000',
+							...lns.draw.defaults,
+							x: 0,
+							y: 0
+						};
+					}
+					lns.layers.push(layer);
+					index = lns.layers.length - 1;
+				}
+
+				if (layer) self.layers[index] = layer; /* weidr but using indexes */
+					
+				self.drawingPanel.add(new UIToggleButton({
+					title: i,
+					on: i,
+					off: i,
+					callback: function() {
+						if (layer) self.toggle(layer);
+					}
+				}));
+			}
 		}
 	};
 
