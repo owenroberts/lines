@@ -172,7 +172,6 @@ function Render(fps) {
 		/* mixed color?  - assume always mixed? - care about performance? */
 		lns.canvas.ctx.beginPath();
 
-
 		const off = {
 			x: Cool.random(0, params.wig),
 			xSpeed: Cool.random(-params.wigSpeed, params.wigSpeed),

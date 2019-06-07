@@ -21,10 +21,15 @@ window.addEventListener("load", function() {
 		fit: false, /* fit to canvas when saving */
 		save: false, /* save settings on unload  */
 		reload: false, /* confirm reload */
-		bg: true /* bg color */
+		bg: false /* bg color */
 	});
-
 	lns.interface = new Interface();
+
+	const openFile = localStorage.getItem('re-open');
+	if (openFile) {
+		lns.fio.loadFramesFromFile(openFile);
+		localStorage.removeItem('re-open');
+	}
 
 	lns.render.start(); // necessary ?
 });
