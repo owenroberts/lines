@@ -12,7 +12,7 @@ class UI {
 		if (params.arguments) this.arguments = params.arguments;
 		if (params.prompt) this.prompt = params.prompt;
 		if (params.value != undefined) this.el.value = params.value;
-		if (params.key) this.setKey(params.key);
+		if (params.key) this.setKey(params.key, params.title || params.label);
 		
 		if (params.css) {
 			for (const key in params.css) {
@@ -28,8 +28,8 @@ class UI {
 		}.bind(this), 300)
 	}
 
-	setKey(key) {
-		this.el.title = key; // hover title key text
+	setKey(key, title) {
+		this.el.title = `${key} ${title ? title : ''}`; // hover title key text
 	}
 	
 	addClass(c) {
