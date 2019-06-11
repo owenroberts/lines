@@ -287,7 +287,7 @@ function Data() {
 		layerIndex = lns.layers.length - 1;
 		lns.frames[lns.currentFrame][frameIndex] = { l: layerIndex };
 		return layerIndex;
-	}
+	};
 
 	/* animate a drawing segment by segment (or multiple) 
 		follow means they don't accumulate to form drawing at the end

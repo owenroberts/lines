@@ -94,6 +94,7 @@ function Interface() {
 	this.afterFrame = function() {
 		self.updateFramesPanel();
 		self.resetLayers();
+		self.resetDrawings();
 	};
 	
 	/* e key - go to next frame */
@@ -266,9 +267,7 @@ function Interface() {
 		}
 		self.layerPanel.clearComponents(self.frameRow);
 		self.layers = [];
-		while (self.drawingPanel.rows.length > 2) {
-			self.drawingPanel.removeRow(self.drawingPanel.rows[self.drawingPanel.rows.length - 1]);
-		}
+		
 	};
 
 	/* could be part of a layer class */
@@ -312,6 +311,7 @@ function Interface() {
 	*/
 	this.displayLayers = function() {
 		self.resetLayers();
+		self.resetDrawings();
 		if (lns.frames[lns.currentFrame]) {
 			for (let i = 0; i < lns.frames[lns.currentFrame].length; i++) {
 				const layer = lns.frames[lns.currentFrame][i];
@@ -359,40 +359,31 @@ function Interface() {
 		self.drawingPanel.addRow('drawings');
 		for (let i = 0; i < lns.drawings.length; i++) {
 			if (lns.drawings[i]) {
-				let layer, index; /* check if layer is in frame already */
-				const frame = lns.frames[lns.currentFrame];
-				if (frame) {
-					for (let k = 0; k < frame.length; k++) {
-						if (i == lns.layers[frame[k].l].d) {
-							layer = lns.layers[frame[k].l];
-							index = k;
+				let layer, index;
+				const drawing = lns.drawings[i];
+
+				/* add the full drawing regardless */
+				
+				/* check for existing layer */
+				for (let j = 0; j < lns.layers.length; j++) {
+					const _layer = lns.layers[j];
+					if (_layer) {
+						if (i == _layer.d) {
+							layer = _layer;
+							index = j;
+							break;
 						}
 					}
 				}
-				
-				if (!layer) { /* then check existing layers */
-					for (let j = 0; j < lns.layers.length; j++) {
-						const layers = lns.layers[j];
-						if (lns.layers[j]) {
-							for (let k = 0; k < layers.length; k++) {
-								if (i == lns.layers[k].d) {
-									layer = lns.layers[k];
-									index = k;
-									break;
-								}
-							}
-						}
-					}
-				}
-				
-				if (!layer) { /* then create a layer*/
-					const drawing = lns.drawings[i];
+
+				/* create a layer if none existing */
+				if (!layer) { 
 					if (drawing != null) {
 						layer = {
 							d: i,
 							s: 0,
 							e: drawing.length,
-							c: '000000',
+							c: lns.lineColor.color,
 							...lns.draw.defaults,
 							x: 0,
 							y: 0
@@ -400,45 +391,37 @@ function Interface() {
 					}
 					lns.layers.push(layer);
 					index = lns.layers.length - 1;
+				} else {
+					/* check start and end, create new player if different */
+					if (layer.s != 0 || layer.e != drawing.length) {
+						layer = { ...layer };
+						layer.s = 0;
+						layer.e = drawing.length;
+						lns.layers.push(layer);
+						index = lns.layers.length - 1;
+					}
 				}
-
-				if (layer) self.layers[index] = layer; /* weidr but using indexes */
 					
 				self.drawingPanel.add(new UIToggleButton({
 					title: i,
 					on: i,
 					off: i,
 					callback: function() {
-						if (layer) self.toggle(layer);
+						if (!lns.frames[lns.currentFrame])
+							lns.frames[lns.currentFrame] = [];
+						const idx = lns.frames[lns.currentFrame].findIndex(e => e.l == index);
+						if (idx >= 0)lns.frames[lns.currentFrame].splice(idx, 1);
+						else lns.frames[lns.currentFrame].push({ l: index });
 					}
 				}));
 			}
 		}
 	};
 
-	this.addDrawing = function() {
-		lns.data.saveLines();
-		if (lns.frames[lns.currentFrame] == undefined) 
-			lns.frames[lns.currentFrame] = [];
-		if (self.layers.length > 0) {
-			for (let i = 0; i < self.layers.length; i++) {
-				if (self.layers[i]) lns.frames[lns.currentFrame].push({ l: i });
-			}
-		} 
-		else console.log('%c no drawing', 'color:white;background:hotpink;');
-	};
-
-	this.cutDrawing = function() {
-		lns.data.saveLines();
-		const frame = lns.frames[lns.currentFrame];
-		if (frame) {
-			for (let i = frame.length - 1; i >= 0; i--) {
-				console.log(self.layers);
-				for (let j = 0; j < self.layers.length; j++) {
-					if (self.layers[j] && frame[i].l == j)
-						frame.splice(i, 1);
-				}
-			}
+	this.resetDrawings = function() {
+		const rows = self.drawingPanel.rows;
+		for (let i = rows.length - 1; i >= 1; i--) {
+			self.drawingPanel.removeRow(rows[i]);
 		}
 	};
 

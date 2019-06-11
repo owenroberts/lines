@@ -863,25 +863,6 @@
 				"params": {
 					"title": "Show Drawings"
 				}
-			},
-			{
-				"row": true,
-				"type": "button",
-				"fromModule": {
-					"callback": "addDrawing"
-				},
-				"params": {
-					"title": "Add"
-				}
-			},
-			{
-				"type": "button",
-				"fromModule": {
-					"callback": "cutDrawing"
-				},
-				"params": {
-					"title": "Remove"
-				}
 			}
 		]
 	},
