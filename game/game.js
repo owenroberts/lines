@@ -72,6 +72,7 @@ const Game = {
 		Game.drawFrameRates = [];
 	},
 	drawStat: function(s, x, y) {
+		Game.ctx.font = 'lighter 11px sans-serif';
 		Game.ctx.clearRect(x, y, 50, 20);
 		Game.ctx.beginPath();
 		Game.ctx.rect(x, y, 50, 20);
