@@ -58,9 +58,25 @@ class Animation {
 					this.widthRatio = setAnimSize.w / data.w;
 					this.heightRatio = setAnimSize.h / data.h;
 				}
-				this.intervalRatio = Game.lineInterval / (1000/data.fps);
+				this.intervalRatio = Game.lineInterval / (1000 / data.fps);
 			})
 			.catch(error => { console.error(error) });
+	}
+
+	loadJSON(json, setAnimSize, callback) {
+		this.loaded = true;
+		this.frames = json.f;
+		this.drawings = json.d;
+		this.layers = json.l;
+		if (this.states.default)
+			this.states.default.end = this.frames.length;
+		if (!setAnimSize) {
+			if (callback) callback(json.w, json.h);
+		} else {
+			this.widthRatio = setAnimSize.w / json.w;
+			this.heightRatio = setAnimSize.h / json.h;
+		}
+		this.intervalRatio = Game.lineInterval / (1000 / json.fps);
 	}
 
 	createNewState(label, start, end) {
@@ -116,12 +132,19 @@ class Animation {
 					const frame = this.frames[this.currentFrame][i];
 					const layer = this.layers[frame.l];
 					const drawing = this.drawings[layer.d];
-					
+
 					if (this.rndr.l != frame.l) {
 						for (const key in layer) {
 							this.rndr[key] = layer[key];
 						}
 					}
+
+					/* 
+						s is not saved in frames because its the same as layer 
+						temp fix
+					*/
+					if (this.rndr.s != layer.s) this.rndr.s = layer.s;
+					if (this.rndr.e != layer.e) this.rndr.e = layer.e;
 
 					for (const key in frame) {
 						this.rndr[key] = frame[key];
@@ -146,8 +169,8 @@ class Animation {
 						this.rndr.speed.y = 0;
 					}
 
-					
 					if (Game.mixedColors) Game.ctx.beginPath();
+					
 					for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
 						const s = drawing[j];
 						const e = drawing[j + 1];
