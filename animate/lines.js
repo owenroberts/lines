@@ -5,10 +5,10 @@ window.addEventListener("load", function() {
 
 	// global parts used everywhere - module? render?
 	lns.lines = []; // lines currently being drawn
-	lns.frames = [];
 	lns.layers = [];  // keep separate layers references by frames
 	lns.drawings = []; // saved drawings
 	lns.currentFrame = 0;
+	lns.frames = 0;
 
 	// modules
 	lns.canvas = new Canvas(512, 512, "#ffffff" )
