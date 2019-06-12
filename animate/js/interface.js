@@ -363,7 +363,6 @@ function Interface() {
 				const drawing = lns.drawings[i];
 
 				/* add the full drawing regardless */
-				
 				/* check for existing layer */
 				for (let j = 0; j < lns.layers.length; j++) {
 					const _layer = lns.layers[j];
