@@ -147,7 +147,7 @@ class Animation {
 					}
 
 					
-					if (Game.mixedColors || Game.debug || this.debug) Game.ctx.beginPath();
+					if (Game.mixedColors) Game.ctx.beginPath();
 					for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
 						const s = drawing[j];
 						const e = drawing[j + 1];
@@ -166,9 +166,9 @@ class Animation {
 							);
 						}
 
-						if (Game.mixedColors || Game.debug) {
-							if (Game.ctx.strokeStyle.replace("#","") != this.rndr.c)
-								Game.ctx.strokeStyle = "#" + this.rndr.c;
+						if (Game.mixedColors) {
+							if (Game.ctx.strokeStyle != this.rndr.c)
+								Game.ctx.strokeStyle = this.rndr.c;
 						}
 
 						if (this.rndr.w > 0) {
@@ -181,9 +181,9 @@ class Animation {
 								this.rndr.speed.y *= -1;
 						}
 					}
-					if (Game.mixedColors || Game.debug || this.debug) Game.ctx.stroke();
+					if (Game.mixedColors) Game.ctx.stroke();
 				}
-				if (!this.mixedColors) Game.ctx.stroke();
+				if (!Game.mixedColors) Game.ctx.stroke();
 				if (this.drawBackground) this.drawBkg(x, y);
 			}
 			// if (this.mirror) Game.ctx.restore();
@@ -193,7 +193,7 @@ class Animation {
 
 	updateFrame() {
 		if (this.debug) {
-			console.log(this.currentFrame, this.currentFrameCounter);
+			// console.log(this.currentFrame, this.currentFrameCounter);
 			// console.log(this.state, this.states[this.state])
 			// console.log(this.currentFrame, this.currentFrameCounter, this.states[this.state].end);
 		}

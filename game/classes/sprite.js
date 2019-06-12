@@ -90,17 +90,18 @@ class Sprite {
 	display(isMap) {
 		if (this.alive && (this.isOnScreen() || isMap)) {
 			if (this.debug) {
-				this.ctx.beginPath();
-				this.ctx.lineWidth = 1;
-				this.ctx.rect(
+				Game.ctx.beginPath();
+				Game.ctx.lineWidth = 1;
+				Game.ctx.rect(
 					this.position.x + this.collider.position.x, 
 					this.position.y + this.collider.position.y, 
 					this.collider.width, 
 					this.collider.height
 				);
-				if (this.ctx.strokeStyle != this.debugColor) 
-					this.ctx.strokeStyle = this.debugColor;
-				this.ctx.stroke();
+				const temp = Game.ctx.strokeStyle;
+				Game.ctx.strokeStyle = this.debugColor;
+				Game.ctx.stroke();
+				Game.ctx.strokeStyle = temp;
 			}
 			if (this.animation && this.animation.loaded) {
 				if (this.bkg) this.animation.drawBkg(this.position.x, this.position.y);
