@@ -24,7 +24,7 @@ function Files(params) {
 		if (params.bg) json.bg = lns.bgColor.color;
 		// what if one color isn't used ?
 		json.mc = lns.lineColor.colors.length > 1 ? true : false;
-		
+
 		/* save current frame */
 		let frames;
 		if (single && lns.frames[lns.currentFrame])
@@ -64,8 +64,9 @@ function Files(params) {
 
 		if (filename) {
 			const blob = new Blob([jsonfile], {type:"application/x-download;charset=utf-8"});
-			saveAs(blob, filename+".json");
+			saveAs(blob, `${filename}.json`);
 		}
+
 		/* to set values ... */
 		if (callback) callback(filename);
 	};
@@ -109,7 +110,7 @@ function Files(params) {
 							if (layer)
 								lns.interface.faces.lineColor.setValue(layer.c);
 						});
-						
+
 						if (data.bg) lns.interface.faces.bgColor.setValue(data.bg);
 						lns.interface.faces.fps.setValue(data.fps);
 					}
@@ -125,7 +126,6 @@ function Files(params) {
 		if (self.fileName) localStorage.setItem('re-open', self.fileName);
 		location.reload();
 	};
-	
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		self.saveFilesEnabled = true;
