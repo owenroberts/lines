@@ -19,7 +19,7 @@ function Data() {
 		}
 	};
 
-	/* right click drag or shift v 
+	/* right click drag or shift v
 		add frame num to the list of frames to copy */
 	this.addFrameToCopy = function(elem) {
 		if (!elem.classList.contains("copy")) {
@@ -31,13 +31,7 @@ function Data() {
 	/* r key - save lines and add new lines */
 	this.saveLines = function() {
 		if (lns.lines.length > 0) {
-
-			/* save current lines in new frame */
-			if (lns.frames[lns.currentFrame] == undefined) 
-				lns.frames[lns.currentFrame] = [];
-			lns.frames[lns.currentFrame].push({ l: lns.layers.length });
-
-			/* save render settings to a new layer */	
+			/* save render settings to a new layer */
 			lns.layers.push({
 				d: lns.drawings.length, // drawing index
 				s: 0, // start point
@@ -48,7 +42,11 @@ function Data() {
 				w: lns.draw.wiggleRange, // wiggle amount
 				v: lns.draw.wiggleSpeed, // wiggle change speed (v for velocity i guess)
 				x: 0, // default x and y
-				y: 0
+				y: 0,
+				f: [{
+					s: lns.currentFrame,
+					e: lns.currentFrame
+				}]
 			});
 
 			lns.drawings.push(lns.lines); /* add current lines to drawing data */
@@ -58,7 +56,7 @@ function Data() {
 		}
 		self.saveState(); /* save current state - one undo currently */
 	};
-	
+
 	/* c key  */
 	this.copyFrames = function() {
 		/* if copy frames selected ... */
@@ -90,7 +88,7 @@ function Data() {
 		self.saveState();
 		if (self.framesCopy.length > 1) { /* copy multiple to multiple */
 			for (let i = 0; i < self.framesCopy.length; i++) {
-				if (lns.frames[lns.currentFrame] == undefined) 
+				if (lns.frames[lns.currentFrame] == undefined)
 					lns.frames[lns.currentFrame] = [];
 				const len = self.framesCopy[i].length;
 				for (let h = 0; h < len; h++) {
@@ -198,7 +196,7 @@ function Data() {
 		/*
 			if save state already exists, save current to previous state
 			if not save previous to new
-			always save current to new 
+			always save current to new
 		*/
 		if (self.saveStates.current.drawings) {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
@@ -220,7 +218,7 @@ function Data() {
 		self.saveStates.current.layers = _.cloneDeep(lns.layers);
 	};
 
-	/* ctrl z - undo one save state  
+	/* ctrl z - undo one save state
 		currently only works in some cases: after removing an drawing
 		actually super buggy */
 	this.undo = function() {
@@ -236,7 +234,7 @@ function Data() {
 			self.saveStates.prev.drawings = undefined;
 			self.saveStates.prev.frames = undefined;
 			self.saveStates.prev.lines = undefined;
-			
+
 		} else {
 			console.log("%c Can't undo ", "color:lightblue;background:gray;");
 		}
@@ -289,7 +287,7 @@ function Data() {
 		return layerIndex;
 	};
 
-	/* animate a drawing segment by segment (or multiple) 
+	/* animate a drawing segment by segment (or multiple)
 		follow means they don't accumulate to form drawing at the end
 		over means go over/add to subsequent frames */
 	/* a: explode, ctrl a: follow, shift a: explode over, alt a: follow over */
@@ -313,26 +311,26 @@ function Data() {
 				if (Object.keys(layer).length > 1) {
 					layerIndex = self.newLayer(layer, layerIndex, i);
 				}
-				
+
 				for (let j = 0; j < lines.length - 1; j += segmentsPerFrame) {
 					if (!over) lns.interface.nextFrame();
-					
+
 					if (!lns.frames[lns.currentFrame]) lns.frames[lns.currentFrame] = [];
 					else if (!over) self.saveLines();
 
-					/* add previous drawings 
-						add another parameter for separating drawings? 
+					/* add previous drawings
+						add another parameter for separating drawings?
 						i think that exists in reverse draw? */
 					if (!follow) {
 						for (let k = 0; k < i; k++) {
-							lns.frames[lns.currentFrame].push({ 
-								...layers[k], 
+							lns.frames[lns.currentFrame].push({
+								...layers[k],
 								s: 0,
 								e: lns.drawings[ lns.layers[layers[k].l].d ].length,
 							});
 						}
 					}
-					
+
 					lns.frames[lns.currentFrame].push({
 						l: layerIndex,
 						s: follow ? j : 0,
@@ -348,7 +346,7 @@ function Data() {
 	};
 
 	/* reverse of explode - shift-r - multi alt-r
-		could be same function but then maybe my head would explode? 
+		could be same function but then maybe my head would explode?
 		simultaneous draw multi drawings at one  (multi) */
 	this.reverse = function(params) {
 		const simultaneous = params.simultaneous;
@@ -370,7 +368,7 @@ function Data() {
 			}
 
 			for (let i = 0; i < totalSegments; i += segmentsPerFrame) {
-				let indexMod = 0; // where to start 
+				let indexMod = 0; // where to start
 				lns.interface.nextFrame();
 				if (!lns.frames[lns.currentFrame]) lns.frames[lns.currentFrame] = [];
 				let framesAdded = false;
@@ -397,7 +395,7 @@ function Data() {
 	};
 
 	/* q key - all drawings in current frames, moved in each other frame
-		in v2, x y for frame layers 
+		in v2, x y for frame layers
 		no context where argument is used ... */
 	this.offsetDrawing = function(offset) {
 		if (lns.frames[lns.currentFrame]) {
@@ -407,16 +405,16 @@ function Data() {
 				offset = new Cool.Vector( +prompt("x"), +prompt("y") );
 			}
 			if (offset) {
-				// checking to see if layers are selected 
+				// checking to see if layers are selected
 				const layers = lns.interface.layers.length > 0 ? lns.interface.layers : lns.frames[lns.currentFrame];
-				// toggled - come back after layer panel is fixed .... 
+				// toggled - come back after layer panel is fixed ....
 				for (let i = 0; i < layers.length; i++) {
 					const layer = layers[i]; // frame layer
 					const index = layer.l; // index of lines.layers
 					layer.x = (layer.x ? layer.x : lns.layers[index].x) + offset.x;
 					layer.y = (layer.y ? layer.y : lns.layers[index].y) + offset.y;
 				}
-				
+
 			}
 		} else {
 			console.log("%c No layers in frame ", "color:yellow; background:black;");
@@ -429,7 +427,7 @@ function Data() {
 			if (lns.frames[i]) {
 				self.saveLines();
 				self.saveState();
-				// type to prevent mouse event 
+				// type to prevent mouse event
 				if ((!offset.x && !offset.y) || offset.type) {
 					const x = +prompt("x");
 					const y = +prompt("y");

@@ -8,7 +8,7 @@ function Draw(defaults) {
 		self.jiggleRange = defaults.r; /* default 1 - j key */
 		self.wiggleRange = defaults.w; /* 2 is good */
 		self.wiggleSpeed = defaults.v; /* 0.1 good */
-	
+
 		if (lns.interface) { 	/* not modular */
 			lns.interface.faces.segNumRange.update(defaults.n);
 			lns.interface.faces.jiggleRange.update(defaults.r);
@@ -26,11 +26,11 @@ function Draw(defaults) {
 	this.grass = 0;
 
 	// how often the mousemove records, default 30ms
-	this.mouseTimer = performance.now();  //  independent of draw timer 
+	this.mouseTimer = performance.now();  //  independent of draw timer
 	this.mouseInterval = 30;
-	
+
 	this.outSideCanvas = function(ev) {
-		if (ev.toElement != lns.canvas.canvas) { 
+		if (ev.toElement != lns.canvas.canvas) {
 			if (self.isDrawing) lns.data.saveLines();
 			self.isDrawing = false;
 
@@ -68,7 +68,7 @@ function Draw(defaults) {
 			const points = Cool.randomInt(1,3);
 			for (let i = 0; i < points; i ++) {
 				lns.lines.push(new Cool.Vector(
-					point.x + Cool.randomInt(-1, 1), 
+					point.x + Cool.randomInt(-1, 1),
 					point.y + Cool.randomInt(_y)
 				));
 			}
@@ -109,7 +109,7 @@ function Draw(defaults) {
 					const points = Cool.randomInt(1,3);
 					for (let i = 0; i < points; i ++) {
 						lns.lines.push(new Cool.Vector(
-							_x + Cool.randomInt(-1, 1), 
+							_x + Cool.randomInt(-1, 1),
 							_y + Cool.randomInt(-1, 1)
 						));
 					}
@@ -127,7 +127,7 @@ function Draw(defaults) {
 		lns.canvas.canvas.addEventListener('pointermove', self.update);
 		lns.canvas.canvas.addEventListener('pointerdown', self.start);
 		lns.canvas.canvas.addEventListener('pointerup', self.end);
-	} else {	
+	} else {
 		lns.canvas.canvas.addEventListener('mousemove', self.update);
 		lns.canvas.canvas.addEventListener('mousedown', self.start);
 		lns.canvas.canvas.addEventListener('mouseup', self.end);
@@ -154,7 +154,7 @@ function Draw(defaults) {
 		});
 		lns.canvas.canvas.addEventListener('touchend', ev => {
 			self.end(lastTouch);
-		});	
+		});
 
 	}
 	document.addEventListener('mousemove', self.outSideCanvas);
