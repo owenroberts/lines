@@ -7,13 +7,11 @@ function Data() {
 	this.saveStates = {
 		current: {
 			drawings: undefined,
-			frames: undefined,
 			lines: undefined,
 			layers: undefined
 		},
 		prev: {
 			drawings: undefined,
-			frames: undefined,
 			lines: undefined,
 			layers: undefined
 		}
@@ -59,68 +57,67 @@ function Data() {
 
 	/* c key  */
 	this.copyFrames = function() {
-		/* if copy frames selected ... */
+		/* if copy frames selected ... 
+			i don't really use this ... */
 		if (self.framesToCopy.length > 0) {
 			self.framesCopy = [];
-			for (let i = 0; i < self.framesToCopy.length; i++) {
-				const frmIndex = self.framesToCopy[i];
-				const frm = lns.frames[frmIndex];
-				self.framesCopy[i] = [];
-				for (let h = 0; h < frm.length; h++) {
-					self.framesCopy[i].push(_.cloneDeep(frm[h]));
-				}
-			}
+
 		} else { /* copy current frame */
 			if (lns.lines.length > 0) self.saveLines();
-			if (lns.frames[lns.currentFrame]) {
-				self.framesCopy = [];
-				self.framesCopy.push([]);
-				/* clone all of the drawings in current frame */
-				for (let i = 0; i < lns.frames[lns.currentFrame].length; i++) {
-					self.framesCopy[0].push(_.cloneDeep(lns.frames[lns.currentFrame][i]));
-				}
-			}
+			/* turn this into a function somewhere? 
+				or part of layer class ... */
+			lns.getLayers(lns.currentFrame, layer => {
+				self.framesCopy[0].push(_.cloneDeep(layer));
+			});
 		}
 	};
 
 	/* v key */
 	this.pasteFrames = function() {
 		self.saveState();
-		if (self.framesCopy.length > 1) { /* copy multiple to multiple */
-			for (let i = 0; i < self.framesCopy.length; i++) {
-				if (lns.frames[lns.currentFrame] == undefined)
-					lns.frames[lns.currentFrame] = [];
-				const len = self.framesCopy[i].length;
-				for (let h = 0; h < len; h++) {
-					lns.frames[lns.currentFrame].push(self.framesCopy[i][h]);
+		if (self.framesCopy.length > 1) { 
+			/* copy multiple to multiple 
+				not really used, ignore for now */
+			
+		}
+
+		if (self.framesToCopy.length == 0)
+			self.framesToCopy.push(lns.currentFrame); 
+
+		/* copy one frame onto multiple */
+		for (let h = 0; h < self.framesToCopy.length; h++) {
+			for (let i = 0; i < self.framesCopy[0].length; i++) {
+				/* need to check frames in each layer */
+				/* i never want duplicate layers, right? */
+				const frameIndex = self.framesToCopy[h];
+				const layer = self.framesCopy[0][i];
+				let adjacentFrame = false;
+				for (let j = 0; j < layer.f.length; j++) {
+					const frames = layer.f[j];
+					if (frames.s - 1 == frameIndex) {
+						frames.s -= 1;
+						adjacentFrame = true;
+					}
+					if (frames.e + 1 == frameIndex) {
+						frames.e += 1;
+						adjacentFrame = true;
+					}
 				}
-				self.saveLines();
-				lns.interface.nextFrame();
-			}
-			lns.interface.updateFramesPanel();
-		} else if (self.framesToCopy.length > 0) { /* copy one frame onto multiple */
-			for (let h = 0; h < self.framesToCopy.length; h++) {
-				for (let i = 0; i < self.framesCopy[0].length; i++) {
-					lns.frames[self.framesToCopy[h]].push( _.cloneDeep(self.framesCopy[0][i]) );
-				}
-			}
-			self.clearFramesToCopy();
-		} else {
-			if (self.framesCopy[0]) {
-				if (lns.frames[lns.currentFrame] == undefined) {
-					if (lns.lines.length > 0) self.saveLines();
-					else lns.frames[lns.currentFrame] = [];
-				}
-				for (let i = 0; i <  self.framesCopy[0].length; i++) {
-					lns.frames[lns.currentFrame].push( _.cloneDeep(self.framesCopy[0][i]) );
-				}
+				if (!adjacentFrame)
+					layer.f.push({s: frameIndex, e: frameIndex});
+				/* hopefully this takes care of multiple copies ... */
+
 			}
 		}
+
+		self.clearFramesToCopy();
 	};
 
 	/* ctrl v */
 	this.clearFramesToCopy = function() {
 		self.framesToCopy = [];
+
+		/* this is a ui thing ... */
 		const copyFrameElems = document.getElementsByClassName("copy");
 		for (let i = copyFrameElems.length - 1; i >= 0; i--) {
 			copyFrameElems[i].classList.remove("copy");
@@ -130,32 +127,40 @@ function Data() {
 	/* x key */
 	this.clearFrame = function() {
 		self.saveState();
-		if (lns.frames[lns.currentFrame])
-			lns.frames[lns.currentFrame] = [];
+		/* separate lns.lines and layers ? */
 		lns.lines = [];
+		lns.getLayers(lns.currentFrame, (layer, frames, frame) => {
+			if (frame.s == lns.currentFrame) {
+				frame.s++;
+			} else if (frame.e == lns.currentFrame) {
+				frame.e--;
+			} else {
+				frames.push({s: lns.currentFrame + 1, e: frame.e });
+				frame.e = lns.currentFrame - 1;
+			}
+		});
 	};
 
 	/* d key */
 	this.deleteFrame = function() {
+		/* i don't know if this is even relevant
+			... but maybe this is why frames is good ... */
 		self.saveState();
-		const ftemp = lns.currentFrame;
-		if (lns.currentFrame > 0 || lns.frames.length > 1) {
-			lns.interface.prevFrame();
-			lns.frames.splice(ftemp, 1);
-		} else {
-			lns.lines = [];
-		}
+
+		/* delete ? */
+
+		lns.lines = []; /* separate ... */
 		lns.interface.updateFramesPanel();
 	};
 
 	/* shift-d */
 	this.deleteFrameRange = function() {
+		/* also don't know if this is relevant ... */
 		self.saveState();
 		const startFrame = +prompt("Start frame:");
 		const endFrame = +prompt("End frame:");
 		if (startFrame > 0) lns.currentFrame = startFrame - 1;
 		else lns.currentFrame = 0;
-		lns.frames.splice(startFrame, endFrame - startFrame + 1);
 		lns.interface.updateFramesPanel();
 	};
 
@@ -175,20 +180,15 @@ function Data() {
 
 	/* shift x */
 	this.cutLastDrawing = function() {
+		/* also not relevant, remove layer or something */
 		self.saveState();
-		if (lns.frames[lns.currentFrame]) {
-			self.saveLines();
-			lns.frames[lns.currentFrame].pop(); // pop last drawing
-		}
+
 	};
 
 	/* ctrl x */
 	this.cutFirstDrawing = function() {
+		/* ditto */
 		self.saveState();
-		if (lns.frames[lns.currentFrame]) {
-			self.saveLines();
-			lns.frames[lns.currentFrame].shift(); // pop last drawing
-		}
 	};
 
 	/* save current state of frames and drawing - one undo */
@@ -200,20 +200,15 @@ function Data() {
 		*/
 		if (self.saveStates.current.drawings) {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
-			self.saveStates.prev.frames = _.cloneDeep(self.saveStates.current.frames);
 			self.saveStates.prev.lines = _.cloneDeep(self.saveStates.current.lines);
 			self.saveStates.prev.layers = _.cloneDeep(self.saveStates.current.layers);
-
 		} else {
 			self.saveStates.prev.drawings = _.cloneDeep(lns.drawings);
-			self.saveStates.prev.frames = _.cloneDeep(lns.frames);
 			self.saveStates.prev.lines = _.cloneDeep(lns.lines);
 			self.saveStates.prev.layers = _.cloneDeep(lns.layers);
-
 		}
 
 		self.saveStates.current.drawings = _.cloneDeep(lns.drawings);
-		self.saveStates.current.frames = _.cloneDeep(lns.frames);
 		self.saveStates.current.lines = _.cloneDeep(lns.lines);
 		self.saveStates.current.layers = _.cloneDeep(lns.layers);
 	};
@@ -224,17 +219,17 @@ function Data() {
 	this.undo = function() {
 		if (self.saveStates.prev.drawings) {
 			lns.drawings = _.cloneDeep(self.saveStates.prev.drawings);
-			lns.frames = _.cloneDeep(self.saveStates.prev.frames);
 			lns.lines = _.cloneDeep(self.saveStates.prev.lines);
+			lns.layers = _.cloneDeep(self.saveStates.prev.layers);
+
 
 			self.saveStates.current.drawings = _.cloneDeep(self.saveStates.prev.drawings);
-			self.saveStates.current.frames = _.cloneDeep(self.saveStates.prev.frames);
 			self.saveStates.current.lines = _.cloneDeep(self.saveStates.prev.lines);
+			self.saveStates.current.layers = _.cloneDeep(self.saveStates.prev.layers);
 
 			self.saveStates.prev.drawings = undefined;
-			self.saveStates.prev.frames = undefined;
 			self.saveStates.prev.lines = undefined;
-
+			self.saveStates.prev.layers = undefined;
 		} else {
 			console.log("%c Can't undo ", "color:lightblue;background:gray;");
 		}
@@ -244,14 +239,16 @@ function Data() {
 	/* i key */
 	this.insertFrameBefore = function() {
 		self.saveLines();
-		lns.frames.insert(lns.currentFrame, []);
+		
+		/* move indexes */
+
 		lns.interface.updateFramesPanel();
 	};
 
 	/* shift-i key */
 	this.insertFrameAfter = function() {
 		self.saveLines();
-		lns.frames.insert(lns.currentFrame + 1, []);
+		/* move indexes */
 		lns.render.setFrame(lns.currentFrame + 1);
 		lns.interface.updateFramesPanel();
 	};
@@ -260,6 +257,7 @@ function Data() {
 		either into current frame or makes new one	 */
 	this.addMultipleCopies = function() {
 		/* can't save state, saves multiple times */
+		/* maybe this works ? */
 		self.framesCopy = [];
 		self.clearFramesToCopy();
 		let n = +prompt("Number of copies: ");
@@ -286,6 +284,8 @@ function Data() {
 		lns.frames[lns.currentFrame][frameIndex] = { l: layerIndex };
 		return layerIndex;
 	};
+
+	/* this should basically all become irrelevant ... */
 
 	/* animate a drawing segment by segment (or multiple)
 		follow means they don't accumulate to form drawing at the end
@@ -398,15 +398,14 @@ function Data() {
 		in v2, x y for frame layers
 		no context where argument is used ... */
 	this.offsetDrawing = function(offset) {
-		if (lns.frames[lns.currentFrame]) {
+		const _layers = lns.getLayers();
+		if (_layers) {
 			self.saveLines();
 			self.saveState();
-			if (!offset) {
-				offset = new Cool.Vector( +prompt("x"), +prompt("y") );
-			}
+			if (!offset) offset = new Cool.Vector(+prompt("x"), +prompt("y"));
 			if (offset) {
 				// checking to see if layers are selected
-				const layers = lns.interface.layers.length > 0 ? lns.interface.layers : lns.frames[lns.currentFrame];
+				const layers = lns.interface.layers.length > 0 ? lns.interface.layers : _layers;
 				// toggled - come back after layer panel is fixed ....
 				for (let i = 0; i < layers.length; i++) {
 					const layer = layers[i]; // frame layer
@@ -423,35 +422,12 @@ function Data() {
 
 	/* shift q - prob should be default? */
 	this.offsetAll = function(offset) {
-		for (let i = 0; i < lns.frames.length; i++) {
-			if (lns.frames[i]) {
-				self.saveLines();
-				self.saveState();
-				// type to prevent mouse event
-				if ((!offset.x && !offset.y) || offset.type) {
-					const x = +prompt("x");
-					const y = +prompt("y");
-					offset = new Cool.Vector(x,y);
-				}
-				if (offset) {
-					for (let j = 0; j < lns.frames[i].length; j++) {
-						const layer = lns.frames[i][j];
-						const layerIndex = layer.l;
-						if (layer) {
-							layer.x = lns.layers[layerIndex].x + offset.x;
-							layer.y = lns.layers[layerIndex].y + offset.y;
-						}
-					}
-				}
-			} else {
-				console.log("%c No layers in frame ", "color:yellow; background:black;");
-			}
-		}
+		// forget this for now ... 
 	};
 
 	/* shift v */
 	this.selectAll = function() {
-		lns.interface.frameElems.looper((elem) => {
+		lns.interface.frameElems.looper(elem => {
 			self.addFrameToCopy(elem);
 		});
 	};
@@ -460,7 +436,7 @@ function Data() {
 	this.selectRange = function() {
 		const start = prompt("Start frame:");
 		const end = prompt("end frame:");
-		lns.interface.frameElems.looper((elem) => {
+		lns.interface.frameElems.looper(elem => {
 			self.addFrameToCopy(elem);
 		}, start, end);
 	};
