@@ -1,4 +1,4 @@
- function Canvas(width, height, color) {
+function Canvas(width, height, color) {
 	const self = this;
 
 	this.width = width;

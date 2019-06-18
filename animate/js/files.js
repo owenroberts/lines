@@ -26,31 +26,19 @@ function Files(params) {
 		json.mc = lns.lineColor.colors.length > 1 ? true : false;
 
 		/* save current frame */
-		let frames;
-		if (single && lns.frames[lns.currentFrame])
-			frames = [lns.frames[lns.currentFrame]];
+		let layers;
+		if (single && lns.getLayers())
+			layers = lns.getLayers();
 		else
-			frames = lns.frames;
-		json.f = frames;
+			layers = lns.layers;
+		json.l = layers;
 
 		/* search frames for layers and drawings used */
-		const drawingIndexes = [], layerIndexes = [];
-		for (let i = 0; i < frames.length; i++) {
-			const frame = frames[i];
-			for (let j = 0; j < frame.length; j++) {
-				const layerIndex = frame[j].l;
-				const drawingIndex =  lns.layers[layerIndex].d;
-				if (!layerIndexes.includes(layerIndex))
-					layerIndexes.push(layerIndex);
-				if (!drawingIndexes.includes(drawingIndex))
-					drawingIndexes.push(drawingIndex);
-			}
-		}
-
-		json.l = []; /* add layers */
-		for (let i = 0; i < layerIndexes.length; i++) {
-			const index = layerIndexes[i];
-			json.l[index] = lns.layers[index];
+		const drawingIndexes = [];
+		for (let i = 0; i < layers.length; i++) {
+			const drawingIndex = layers[i].d;
+			if (!drawingIndexes.includes(drawingIndex))
+				drawingIndexes.push(drawingIndex);
 		}
 
 		json.d = [];
@@ -79,14 +67,10 @@ function Files(params) {
 			fetch(self.fileName + '.json')
 				.then(response => { return response.json() })
 				.then(data => {
-					lns.frames = data.f;
 					lns.drawings = data.d;
 					lns.layers = data.l;
-					for (let i = 0; i < lns.frames.length; i++) {
-						const fr = lns.frames[i];
-						for (let j = 0; j < fr.length; j++) {
-							lns.lineColor.addColorBtn(fr[j].c);
-						}
+					for (let i = 0; i < lns.layers.length; i++) {
+						lns.lineColor.addColorBtn(lns.layers[i].c);
 					}
 					/* set interface values */
 					lns.canvas.setWidth(data.w);

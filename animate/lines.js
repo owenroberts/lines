@@ -10,6 +10,23 @@ window.addEventListener("load", function() {
 	lns.currentFrame = 0;
 	lns.frames = 0;
 
+	lns.getLayers = function(index) {
+		if (!index) index = lns.currentFrame;
+		const layers = [];
+		for (let i = 0; i < lns.layers.length; i++) {
+			const layer = lns.layers[i];
+			const frames = layer.f;
+			for (let j = 0; j < frames.length; j++) {
+				const frame = frames[j];
+				if (index >= frame.s && index <= frame.e) {
+					layers.push(layer);
+					if (callback) callback(layer, frames, frame);
+				}
+			}
+		}
+		return layers;
+	};
+
 	// modules
 	lns.canvas = new Canvas(512, 512, "#ffffff" )
 	lns.render = new Render();
