@@ -194,7 +194,7 @@
 				"type": "button",
 				"key": "c",
 				"fromModule": {
-					"callback": "copyFrames"
+					"callback": "copy"
 				},
 				"params": {
 					"title": "Copy"
@@ -218,16 +218,6 @@
 				},
 				"params": {
 					"title": "Delete Frame Range"
-				}
-			},
-			{
-				"type": "button",
-				"key": "g",
-				"fromModule": {
-					"callback": "duplicate"
-				},
-				"params": {
-					"title": "Duplicate"
 				}
 			},
 			{
@@ -364,7 +354,7 @@
 				"type": "button",
 				"key": "v",
 				"fromModule": {
-					"callback": "pasteFrames"
+					"callback": "paste"
 				},
 				"params": {
 					"title": "Paste Frames"
@@ -734,10 +724,10 @@
 			{
 				"type": "range",
 				"key": "h",
-				"face": "segNumRange",
+				"face": "n",
 				"set": {
 					"layer": "n",
-					"prop": "segNumRange",
+					"prop": "n",
 					"number": true
 				},
 				"params": {
@@ -750,10 +740,10 @@
 			{
 				"type": "range",
 				"key": "j",
-				"face": "jiggleRange",
+				"face": "r",
 				"set": {
 					"layer": "r",
-					"prop": "jiggleRange",
+					"prop": "r",
 					"number": true
 				},
 				"params": {
@@ -765,10 +755,10 @@
 			},
 			{
 				"type": "range",
-				"face": "wiggleRange",
+				"face": "w",
 				"set": {
 					"layer": "w",
-					"prop": "wiggleRange",
+					"prop": "w",
 					"number": true
 				},
 				"params": {
@@ -780,10 +770,10 @@
 			},
 			{
 				"type": "range",
-				"face": "wiggleSpeed",
+				"face": "v",
 				"set": {
 					"layer": "v",
-					"prop": "wiggleSpeed",
+					"prop": "v",
 					"number": true
 				},
 				"params": {
@@ -858,10 +848,10 @@
 			{
 				"type": "button",
 				"fromModule": {
-					"callback": "showDrawings"
+					"callback": "displayDrawings"
 				},
 				"params": {
-					"title": "Show Drawings"
+					"title": "Display Drawings"
 				}
 			}
 		]
@@ -902,7 +892,7 @@
 			},
 			{
 				"type": "toggle",
-				"module": "fio",
+				"module": "files",
 				"fromModule": {
 					"callback": "toggleSaveSettings"
 				},

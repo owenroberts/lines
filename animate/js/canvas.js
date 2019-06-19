@@ -73,7 +73,7 @@ function Canvas(width, height, color) {
 	this.prevCap = { n: '', f: 0 };
 
 	this.capture = function() {
-		if (lns.fio.saveFilesEnabled) {
+		if (lns.files.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
 				const title = lns.interface.title.getValue(); // this is a UI
 				const n = Cool.padNumber(lns.currentFrame, 3);

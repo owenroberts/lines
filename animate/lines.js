@@ -8,9 +8,9 @@ window.addEventListener("load", function() {
 	lns.layers = [];  // keep separate layers references by frames
 	lns.drawings = []; // saved drawings
 	lns.currentFrame = 0;
-	lns.frames = 0;
+	lns.numFrames = 0; // or 1 if 0 frame is one frame .... fml, or frames start at 1
 
-	lns.getLayers = function(index) {
+	lns.getLayers = function(index, callback) {
 		if (!index) index = lns.currentFrame;
 		const layers = [];
 		for (let i = 0; i < lns.layers.length; i++) {
@@ -28,13 +28,13 @@ window.addEventListener("load", function() {
 	};
 
 	// modules
-	lns.canvas = new Canvas(512, 512, "#ffffff" )
+	lns.canvas = new Canvas(512, 512, "#ffffff");
 	lns.render = new Render();
 	lns.bgImage = new Background();
 	lns.data = new Data();
 	lns.lineColor = new Color(); // lns.lineColor.set('#ffffff');
 	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
-	lns.fio = new Files({
+	lns.files = new Files({
 		fit: false, /* fit to canvas when saving */
 		save: false, /* save settings on unload  */
 		reload: false, /* confirm reload */
