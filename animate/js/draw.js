@@ -4,16 +4,16 @@ function Draw(defaults) {
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 
 	this.setDefaults = function() {
-		self.segNumRange = defaults.n; /* default 2 - h key */
-		self.jiggleRange = defaults.r; /* default 1 - j key */
-		self.wiggleRange = defaults.w; /* 2 is good */
-		self.wiggleSpeed = defaults.v; /* 0.1 good */
+		self.n = defaults.n; /* default 2 - h key */
+		self.r = defaults.r; /* default 1 - j key */
+		self.w = defaults.w; /* 2 is good */
+		self.v = defaults.v; /* 0.1 good */
 
 		if (lns.interface) { 	/* not modular */
-			lns.interface.faces.segNumRange.update(defaults.n);
-			lns.interface.faces.jiggleRange.update(defaults.r);
-			lns.interface.faces.wiggleRange.update(defaults.w);
-			lns.interface.faces.wiggleSpeed.update(defaults.v);
+			lns.interface.faces.n.update(defaults.n);
+			lns.interface.faces.r.update(defaults.r);
+			lns.interface.faces.w.update(defaults.w);
+			lns.interface.faces.v.update(defaults.v);
 		}
 	};
 	this.defaults = defaults;

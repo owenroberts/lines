@@ -8,12 +8,13 @@ function Interface() {
 	this.framesPanel = new UI({ id:"frames" });
 	this.frameElems = new UIList({ class:"frame" });
 
-	/* plus frame is unsaved drawing frame */
+	/* plus frame is unsaved drawing frame 
+		do i need a plus frame? */
 	this.plusFrame = new UI({
 		id:"current",
 		event: "click",
 		callback: function() {
-			self.setFrame(lns.frames.length);
+			self.setFrame(lns.numFrames);
 		},
 		key: "+"
 	});
@@ -21,7 +22,7 @@ function Interface() {
 
 	/* f key */
 	this.setFrame = function(f) {
-		if (+f <= lns.frames.length) {
+		if (+f <= lns.numFrames) {
 			self.beforeFrame();
 			lns.render.setFrame(+f);
 			self.afterFrame();
@@ -32,25 +33,27 @@ function Interface() {
 		sets current frame,
 		sets copy frames */
 	this.updateFramesPanel = function() {
-		const numFrames = self.frameElems.getLength();
+		const numFrames = self.frameElems.getLength() - 1;
 		/* this creates frames that don't already exist
 			loop from the num of already made html frames to frames.length */
-		if (lns.frames > numFrames) {
-			for (let i = numFrames; i < lns.frames; i++) {
-				const frmElem = document.createElement("div");
-				frmElem.classList.add("frame");
-				frmElem.textContent = i;
-				frmElem.dataset.index = i;
+		if (lns.numFrames > numFrames) {
+			/* this seems bad ... */
+			for (let i = numFrames + 1; i < lns.numFrames + 1; i++) {
+				/* should be a ui? */
+				const frameElem = document.createElement("div");
+				frameElem.classList.add("frame");
+				frameElem.textContent = i;
+				frameElem.dataset.index = i;
 
 				/* click on frame, set the current frame */
-				frmElem.onclick = function(ev) {
+				frameElem.onclick = function(ev) {
 					lns.render.setFrame(i);
 					self.updateFrameNum();
 					self.resetLayers();
 				};
 
 				/* right click, add/remove from copy frames */
-				frmElem.oncontextmenu = function(ev) {
+				frameElem.oncontextmenu = function(ev) {
 					ev.preventDefault();
 					if (!this.classList.toggle("copy")){
 						lns.data.framesToCopy.splice(lns.data.framesToCopy.indexOf(i), 1);
@@ -61,13 +64,13 @@ function Interface() {
 				};
 
 				/* this is one time un-ui thing */
-				this.framesPanel.el.insertBefore(frmElem, self.plusFrame.el);
+				this.framesPanel.el.appendChild(frameElem);
 			}
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
-			for (let i = numFrames; i > lns.frames; i--){
-				this.frameElems.remove(i-1); /* remove html frame */
+			for (let i = numFrames; i > lns.numFrames; i--){
+				this.frameElems.remove(i); /* remove html frame */
 			}
 		}
 		this.updateFrameNum();
@@ -101,7 +104,7 @@ function Interface() {
 	this.nextFrame = function() {
 		self.beforeFrame();
 		lns.render.setFrame(lns.currentFrame + 1);
-		if (lns.currentFrame > lns.frames) lns.frames = lns.currentFrame;
+		if (lns.currentFrame > lns.numFrames) lns.numFrames = lns.currentFrame;
 		self.afterFrame();
 	};
 
@@ -120,13 +123,13 @@ function Interface() {
 		};
 	});
 
-	/* fio interface */
+	/* files interface */
 	this.title = new UI({ id:"title" });
 
 	this.keys['s'] = new UIButton({
 		id: "save",
 		callback: function() {
-			lns.fio.saveFramesToFile(self.title.getValue(), false, function(title) {
+			lns.files.saveFramesToFile(self.title.getValue(), false, function(title) {
 				self.title.setValue(title);
 			});
 		},
@@ -136,7 +139,7 @@ function Interface() {
 	this.keys['shift-s'] = new UIButton({
 		id: "save-frame",
 		callback: function() {
-			lns.fio.saveFramesToFile(self.title.getValue(), true, function(filename) {
+			lns.files.saveFramesToFile(self.title.getValue(), true, function(filename) {
 				self.title.setValue(filename.split("/").pop());
 			});
 		},
@@ -145,13 +148,13 @@ function Interface() {
 
 	this.keys['o'] = new UIButton({
 		id: "open",
-		callback: lns.fio.loadFramesFromFile,
+		callback: lns.files.loadFramesFromFile,
 		key: "o"
 	});
 
 	this.keys['shift-o'] = new UIButton({
 		id: 're-open',
-		callback: lns.fio.reOpenFile,
+		callback: lns.files.reOpenFile,
 		key: 'shift-o'
 	})
 
@@ -173,7 +176,7 @@ function Interface() {
 
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
-				lns.fio.saveFramesToFile(self.title.getValue());
+				lns.files.saveFramesToFile(self.title.getValue());
 				document.activeElement.blur();
 			}
 		}
@@ -191,10 +194,10 @@ function Interface() {
 		if (name) {
 			self.palettes[name] = {
 				color: lns.lineColor.color,
-				seg: lns.draw.segNumRange,
-				jig: lns.draw.jiggleRange,
-				wig: lns.draw.wiggleRange,
-				wigSpeed: lns.draw.wiggleSpeed,
+				n: lns.draw.n,
+				r: lns.draw.r,
+				w: lns.draw.w,
+				v: lns.draw.v,
 				lineWidth: lns.canvas.ctx.lineWidth,
 				mouse: lns.draw.mouseInterval,
 				brush: lns.draw.brush,
@@ -216,10 +219,10 @@ function Interface() {
 		lns.data.saveLines();
 		self.palettes.current = name;
 		lns.lineColor.set(self.palettes[name].color);
-		lns.draw.segNumRange = self.palettes[name].seg;
-		lns.draw.jiggleRange = self.palettes[name].jig;
-		lns.draw.wiggleRange = self.palettes[name].wig;
-		lns.draw.wiggleSpeed = self.palettes[name].wigSpeed;
+		lns.draw.n = self.palettes[name].n;
+		lns.draw.r = self.palettes[name].r;
+		lns.draw.w = self.palettes[name].w;
+		lns.draw.v = self.palettes[name].v;
 		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
 		lns.draw.mouseInterval = self.palettes[name].mouse;
 		lns.draw.brush = self.palettes[name].brush;
@@ -227,10 +230,10 @@ function Interface() {
 		lns.draw.dots = self.palettes[name].dots;
 		lns.draw.grass = self.palettes[name].grass;
 
-		lns.interface.faces.segNumRange.setValue(self.palettes[name].seg);
-		lns.interface.faces.jiggleRange.setValue(self.palettes[name].jig);
-		lns.interface.faces.wiggleRange.setValue(self.palettes[name].wig);
-		lns.interface.faces.wiggleSpeed.setValue(self.palettes[name].wigSpeed);
+		lns.interface.faces.w.setValue(self.palettes[name].n);
+		lns.interface.faces.r.setValue(self.palettes[name].r);
+		lns.interface.faces.w.setValue(self.palettes[name].w);
+		lns.interface.faces.v.setValue(self.palettes[name].v);
 		lns.interface.faces.lineWidth.setValue(self.palettes[name].lineWidth);
 		lns.interface.faces.mouse.setValue(self.palettes[name].mouse);
 		lns.interface.faces.brush.setValue(self.palettes[name].brush);
@@ -268,10 +271,10 @@ function Interface() {
 		}
 		self.layerPanel.clearComponents(self.frameRow);
 		self.layers = [];
-
 	};
 
-	/* could be part of a layer class */
+	/* could be part of a layer class 
+		changing color is annoying, maybe highlight somehow */
 	this.toggle = function(layer) {
 		if (!layer.toggled) {
 			layer.prevColor = layer.c;
@@ -288,47 +291,31 @@ function Interface() {
 
 	this.killLayer = function() {
 		const layers = self.layers.filter(l => l.toggled);
-
-		// remove frames
-		for (let i = lns.frames.length - 1; i >= 0; i--) {
-			const frame = lns.frames[i];
-			for (let j = frame.length - 1; j >= 0; j--) {
-				if (lns.layers[frame[j].l].toggled)
-					frame.splice(j, 1);
-			}
-		}
-
-		// remove layers
 		for (let i = lns.layers.length - 1; i >= 0; i--) {
-			if (lns.layers[i].toggled)
-				lns.layers[i].remove = true; // remove in fio
-			// this is dumb right?  structure depends on index like drawing
+			lns.layers.splice(i, 1);
 		}
 	};
 
 	/*
 		this references the layer in each frame
-		not layer reference in lns.layers
+		fml layer index
 	*/
 	this.displayLayers = function() {
 		self.resetLayers();
 		self.resetDrawings();
-		if (lns.frames[lns.currentFrame]) {
-			for (let i = 0; i < lns.frames[lns.currentFrame].length; i++) {
-				const layer = lns.frames[lns.currentFrame][i];
-				const index = lns.layers[layer.l].d;
-				self.layers.push(layer);
-				layer.toggled = false;
-				const toggleLayer = new UIToggleButton({
-					on: layer.l,
-					off: layer.l,
-					callback: function() {
-						self.toggle(layer);
-						console.log(lns.layers[layer.l]); // debugging
-					}
-				});
-				self.layerPanel.add(toggleLayer, self.frameRow);
-			}
+		const layers = lns.getLayers();
+		for (let i = 0; i < layers.length; i++) {
+			const layer = layers[i];
+			self.layers.push(layer);
+			layer.toggled = false;
+			const toggleLayer = new UIToggleButton({
+				on: i,
+				off: i,
+				callback: function() {
+					self.toggle(layer);
+				}
+			});
+			self.layerPanel.add(toggleLayer, self.frameRow);
 		}
 	};
 
@@ -345,9 +332,8 @@ function Interface() {
 
 	this.updateLayerColor = function(color) {
 		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled) {
+			if (self.layers[i].toggled)
 				self.layers[i].c = self.layers[i].prevColor = color;
-			}
 		}
 	};
 
@@ -355,7 +341,7 @@ function Interface() {
 	this.drawingPanel = new Panel("drawing-menu", "Drawings");
 	this.panels['drawing'] = this.drawingPanel; /* add to panels */
 
-	this.showDrawings = function() {
+	this.displayDrawings = function() {
 		self.resetLayers();
 		self.drawingPanel.addRow('drawings');
 		for (let i = 0; i < lns.drawings.length; i++) {
@@ -376,6 +362,8 @@ function Interface() {
 						}
 					}
 				}
+
+				console.log(layer);
 
 				/* create a layer if none existing */
 				if (!layer) {
@@ -408,11 +396,12 @@ function Interface() {
 					on: i,
 					off: i,
 					callback: function() {
-						if (!lns.frames[lns.currentFrame])
-							lns.frames[lns.currentFrame] = [];
-						const idx = lns.frames[lns.currentFrame].findIndex(e => e.l == index);
-						if (idx >= 0)lns.frames[lns.currentFrame].splice(idx, 1);
-						else lns.frames[lns.currentFrame].push({ l: index });
+						/* add or remove frame index to layer
+							user layer class */
+						if (!layer.isInFrame(lns.currentFrame))
+							layer.addIndex(lns.currentFrame);
+						else
+							layer.removeIndex(lns.currentFrame);
 					}
 				}));
 			}

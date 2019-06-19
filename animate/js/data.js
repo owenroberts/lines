@@ -1,8 +1,8 @@
 function Data() {
 	const self = this;
 
-	this.framesCopy = []; // copied frame(s)
-	this.framesToCopy = []; // selected frames to copy
+	this.copyFrame = []; // copy layers in frame
+	this.pasteFrames = []; // frame indexes to paste
 
 	this.saveStates = {
 		current: {
@@ -17,35 +17,26 @@ function Data() {
 		}
 	};
 
-	/* right click drag or shift v
-		add frame num to the list of frames to copy */
-	this.addFrameToCopy = function(elem) {
-		if (!elem.classList.contains("copy")) {
- 			elem.classList.add("copy");
- 			self.framesToCopy.push(+elem.dataset.index);
- 		}
-	};
-
 	/* r key - save lines and add new lines */
 	this.saveLines = function() {
 		if (lns.lines.length > 0) {
 			/* save render settings to a new layer */
-			lns.layers.push({
+			lns.layers.push(new Layer({
 				d: lns.drawings.length, // drawing index
 				s: 0, // start point
 				e: lns.lines.length, // end point
 				c: lns.lineColor.color, // color
-				n: lns.draw.segNumRange, // segment number
-				r: lns.draw.jiggleRange, // jiggle ammount
-				w: lns.draw.wiggleRange, // wiggle amount
-				v: lns.draw.wiggleSpeed, // wiggle change speed (v for velocity i guess)
+				n: lns.draw.n, // segment number
+				r: lns.draw.r, // jiggle ammount
+				w: lns.draw.w, // wiggle amount
+				v: lns.draw.v, // wiggle change speed (v for velocity i guess)
 				x: 0, // default x and y
 				y: 0,
 				f: [{
 					s: lns.currentFrame,
 					e: lns.currentFrame
 				}]
-			});
+			}));
 
 			lns.drawings.push(lns.lines); /* add current lines to drawing data */
 			lns.lineColor.addColorBtn(lns.lineColor.color); /* add current color to color choices */
@@ -56,66 +47,33 @@ function Data() {
 	};
 
 	/* c key  */
-	this.copyFrames = function() {
-		/* if copy frames selected ... 
-			i don't really use this ... */
-		if (self.framesToCopy.length > 0) {
-			self.framesCopy = [];
-
-		} else { /* copy current frame */
-			if (lns.lines.length > 0) self.saveLines();
-			/* turn this into a function somewhere? 
-				or part of layer class ... */
-			lns.getLayers(lns.currentFrame, layer => {
-				self.framesCopy[0].push(_.cloneDeep(layer));
-			});
-		}
+	this.copy = function() {
+		self.saveLines();
+		lns.getLayers(lns.currentFrame, layer => {
+			self.copyFrame.push(layer);
+		});
 	};
 
 	/* v key */
-	this.pasteFrames = function() {
+	this.paste = function() {
 		self.saveState();
-		if (self.framesCopy.length > 1) { 
-			/* copy multiple to multiple 
-				not really used, ignore for now */
-			
-		}
 
-		if (self.framesToCopy.length == 0)
-			self.framesToCopy.push(lns.currentFrame); 
+		if (self.pasteFrames.length == 0)
+			self.pasteFrames.push(lns.currentFrame); 
 
 		/* copy one frame onto multiple */
-		for (let h = 0; h < self.framesToCopy.length; h++) {
-			for (let i = 0; i < self.framesCopy[0].length; i++) {
-				/* need to check frames in each layer */
-				/* i never want duplicate layers, right? */
-				const frameIndex = self.framesToCopy[h];
-				const layer = self.framesCopy[0][i];
-				let adjacentFrame = false;
-				for (let j = 0; j < layer.f.length; j++) {
-					const frames = layer.f[j];
-					if (frames.s - 1 == frameIndex) {
-						frames.s -= 1;
-						adjacentFrame = true;
-					}
-					if (frames.e + 1 == frameIndex) {
-						frames.e += 1;
-						adjacentFrame = true;
-					}
-				}
-				if (!adjacentFrame)
-					layer.f.push({s: frameIndex, e: frameIndex});
-				/* hopefully this takes care of multiple copies ... */
-
+		for (let i = 0; i < self.pasteFrames.length; i++) {
+			for (let j = 0; j < self.copyFrame.length; j++) {
+				self.copyFrame[j].addIndex(self.pasteFrames[i]);
 			}
 		}
 
-		self.clearFramesToCopy();
+		self.pasteFrames = [];
 	};
 
 	/* ctrl v */
-	this.clearFramesToCopy = function() {
-		self.framesToCopy = [];
+	this.clearPasteFrames = function() {
+		self.pasteFrames = [];
 
 		/* this is a ui thing ... */
 		const copyFrameElems = document.getElementsByClassName("copy");
@@ -129,15 +87,8 @@ function Data() {
 		self.saveState();
 		/* separate lns.lines and layers ? */
 		lns.lines = [];
-		lns.getLayers(lns.currentFrame, (layer, frames, frame) => {
-			if (frame.s == lns.currentFrame) {
-				frame.s++;
-			} else if (frame.e == lns.currentFrame) {
-				frame.e--;
-			} else {
-				frames.push({s: lns.currentFrame + 1, e: frame.e });
-				frame.e = lns.currentFrame - 1;
-			}
+		lns.getLayers(lns.currentFrame, layer => {
+			layer.removeIndex(lns.currentFrame);
 		});
 	};
 
@@ -147,8 +98,11 @@ function Data() {
 			... but maybe this is why frames is good ... */
 		self.saveState();
 
-		/* delete ? */
+		for (let i = 0; i < lns.layers.length; i++) {
+			lns.layers[i].shiftIndex(lns.currentFrame);
+		}
 
+		lns.numFrames--;
 		lns.lines = []; /* separate ... */
 		lns.interface.updateFramesPanel();
 	};
@@ -253,19 +207,18 @@ function Data() {
 		lns.interface.updateFramesPanel();
 	};
 
-	/* m key - copies all drawings in frame and pastes in multiple frames after
-		either into current frame or makes new one	 */
+	/* m key */
 	this.addMultipleCopies = function() {
 		/* can't save state, saves multiple times */
 		/* maybe this works ? */
-		self.framesCopy = [];
-		self.clearFramesToCopy();
+		self.copyFrame = [];
+		self.clearPasteFrames();
 		let n = +prompt("Number of copies: ");
-		self.copyFrames();
+		self.copy();
 		if (n) {
 			for (let i = 0; i < n; i++) {
 				lns.interface.nextFrame();
-				self.pasteFrames();
+				self.paste();
 			}
 		}
 	};

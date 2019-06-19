@@ -63,11 +63,11 @@ function Render(fps) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 			/* calc current frame to draw */
-			if (self.isPlaying && self.currentFrameCounter < lns.frames.length) {
+			if (self.isPlaying && self.currentFrameCounter < lns.numFrames) {
 				self.currentFrameCounter += self.intervalRatio;
 				lns.currentFrame = Math.floor(self.currentFrameCounter);
 			}
-			if (self.isPlaying && self.currentFrameCounter >= lns.frames.length) {
+			if (self.isPlaying && self.currentFrameCounter >= lns.numFrames) {
 				lns.currentFrame = self.currentFrameCounter = 0;
 			}
 
@@ -84,73 +84,49 @@ function Render(fps) {
 				lns.canvas.ctx.fill();
 			}
 
-			// move to bg module ??
 			lns.bgImage.display();
 
 			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0 && self.onionSkinIsVisible) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
-					const frameNumber = lns.currentFrame - o;
+					const frameNumber = Math.max(0, lns.currentFrame - o);
 					if (frameNumber >= 0) {
 						const onionColor = 1.1 - (o / self.onionSkinNum); // number for color
 						const color = "rgba(105,150,255," + onionColor + ")";
-						for (let i = 0; i < lns.frames[frameNumber].length; i++) {
-							const frame = lns.frames[frameNumber][i];
-							const layer = lns.layers[frame.l];
-							const drawing = lns.drawings[layer.d];
-							self.drawLines({
-								lines: drawing,
-								start: frame.s != undefined ? frame.s : layer.s,
-								end: frame.e != undefined ? frame.e : layer.e,
-								segNum: frame.n != undefined ? frame.n : layer.n,
-								jig: frame.r != undefined ? frame.r : layer.r,
-								wig: frame.w != undefined ? frame.w : layer.w,
-								wigSpeed: frame.v != undefined ? frame.v : layer.v,
-								x: frame.x != undefined ? frame.x : layer.x,
-								y: frame.y != undefined ? frame.y : layer.y,
-								color: color,
-								onion: true
-							});
+						for (let i = frameNumber; i < frameNumber + self.onionSkinNum; i++) {
+							const layers = lns.getLayers(i);
+							for (let j = 0; j < layers.length; i++) {
+								self.drawLines({
+									lines: lns.drawings[layers[j].d],
+									...layers[j],
+									color: color,
+									onion: true
+								});
+							}
 						}
 					}
 				}
 			}
 
 			/* draws saved frames */
-			for (let i = 0; i < lns.layers.length; i++) {
-				const layer = lns.layers[i];
-				const frames = layer.f;
-				for (let j = 0; j < frames.length; j++) {
-					const frame = frames[j];
-					if (lns.currentFrame >= frame.s && lns.currentFrame <= frame.e) {
-						const drawing = lns.drawings[layer.d];
-						self.drawLines({
-							lines: drawing,
-							start: layer.s,
-							end: layer.e,
-							segNum: layer.n,
-							jig: layer.r,
-							wig: layer.w,
-							wigSpeed: layer.v,
-							x: layer.x,
-							y: layer.y,
-							color: layer.c,
-							onion: false
-						});
-					}
-				}
-			}
+			lns.getLayers(lns.currentFrame, layer => {
+				self.drawLines({
+					lines: lns.drawings[layer.d],
+					...layer,
+					onion: false
+				});
+			});
 
 			/* draws current lines */
 			if (lns.lines.length > 0) {
 				self.drawLines({
 					lines: lns.lines,
-					start: 0,
-					end: lns.lines.length,
-					segNum: lns.draw.segNumRange,
-					jig: lns.draw.jiggleRange,
-					wig: lns.draw.wiggleRange,
-					wigSpeed: lns.draw.wiggleSpeed,
+					s: 0,
+					e: lns.lines.length,
+					n: lns.draw.n,
+					r: lns.draw.r,
+					w: lns.draw.w,
+					v: lns.draw.v,
 					x: 0,
 					y: 0,
 					onion: false,
@@ -176,41 +152,40 @@ function Render(fps) {
 		lns.canvas.ctx.beginPath();
 
 		const off = {
-			x: Cool.random(0, params.wig),
-			xSpeed: Cool.random(-params.wigSpeed, params.wigSpeed),
-			y: Cool.random(0, params.wig),
-			ySpeed: Cool.random(-params.wigSpeed, params.wigSpeed)
+			x: Cool.random(0, params.w),
+			xSpeed: Cool.random(-params.v, params.v),
+			y: Cool.random(0, params.w),
+			ySpeed: Cool.random(-params.v, params.v)
 		}; /* trying offsetting more of drawing */
 
-		for (let h = params.start; h < params.end - 1; h++) {
-			if (params.lines[h] != "end") {
-				const s = params.lines[h];
-				const e = params.lines[h + 1];
+		for (let i = params.s; i < params.e - 1; i++) {
+			if (params.lines[i] != "end") {
+				const s = params.lines[i];
+				const e = params.lines[i + 1];
 				let v = new Cool.Vector(e.x, e.y);
 				v.subtract(s);
-				v.divide(params.segNum);
+				v.divide(params.n);
 				lns.canvas.ctx.moveTo(
-					params.x + s.x + Cool.random(-params.jig, params.jig) + off.x,
-					params.y + s.y + Cool.random(-params.jig, params.jig) + off.y
+					params.x + s.x + Cool.random(-params.r, params.r) + off.x,
+					params.y + s.y + Cool.random(-params.r, params.r) + off.y
 				);
-				for (let i = 0; i < params.segNum; i++) {
-					const p = new Cool.Vector(s.x + v.x * i, s.y + v.y * i);  /* midpoint(s) of segment */
+				for (let j = 0; j < params.n; j++) {
+					const p = new Cool.Vector(s.x + v.x * j, s.y + v.y * j);  /* midpoint(s) of segment */
 					lns.canvas.ctx.lineTo(
-						params.x + p.x + v.x + Cool.random(-params.jig, params.jig) + off.x,
-						params.y + p.y + v.y + Cool.random(-params.jig, params.jig) + off.y
+						params.x + p.x + v.x + Cool.random(-params.r, params.r) + off.x,
+						params.y + p.y + v.y + Cool.random(-params.r, params.r) + off.y
 					);
 				}
-				if (params.onion)
-					lns.canvas.ctx.strokeStyle = params.color;
-				else if (lns.canvas.ctx.strokeStyle != params.color)
-					lns.canvas.setStrokeColor(params.color);
+				if (params.color) lns.canvas.ctx.strokeStyle = params.color;
+				else if (lns.canvas.ctx.strokeStyle != params.c)
+					lns.canvas.setStrokeColor(params.c);
 			}
 
 			off.x += off.xSpeed;
-			if (off.x >= params.wig || off.x <= -params.wig) off.xSpeed *= -1;
+			if (off.x >= params.w || off.x <= -params.w) off.xSpeed *= -1;
 
 			off.y += off.ySpeed;
-			if (off.y >= params.wig || off.y <= -params.wig) off.ySpeed *= -1;
+			if (off.y >= params.w || off.y <= -params.w) off.ySpeed *= -1;
 		}
 		lns.canvas.ctx.stroke();
 	};
@@ -241,7 +216,7 @@ function Render(fps) {
 		lns.currentFrame = self.currentFrameCounter =  lns.frames.length;
 		self.isPlaying = true;
 		// capture as many frames as necessary for lines ratio or 1 of every frame
-		self.captureFrames = lns.frames.length * Math.max(1, self.lps / self.fps);
+		self.captureFrames = lns.numFrames * Math.max(1, self.lps / self.fps);
 	};
 
 	/* starts drawing  */
