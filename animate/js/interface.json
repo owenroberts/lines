@@ -262,16 +262,6 @@
 			},
 			{
 				"type": "button",
-				"key": "shift-q",
-				"fromModule": {
-					"callback": "offsetAll"
-				},
-				"params": {
-					"title": "Offset All"
-				}
-			},
-			{
-				"type": "button",
 				"key": "r",
 				"fromModule": {
 					"callback": "saveLines"
@@ -292,26 +282,6 @@
 			},
 			{
 				"type": "button",
-				"key": "shift-x",
-				"fromModule": {
-					"callback": "cutLastDrawing"
-				},
-				"params": {
-					"title": "Cut Last Layer"
-				}
-			},
-			{
-				"type": "button",
-				"key": "ctrl-x",
-				"fromModule": {
-					"callback": "cutFirstDrawing"
-				},
-				"params": {
-					"title": "Cut First Layer"
-				}
-			},
-			{
-				"type": "button",
 				"key": "z",
 				"fromModule": {
 					"callback": "cutLastSegment"
@@ -324,10 +294,10 @@
 				"type": "button",
 				"key": "shift-z",
 				"fromModule": {
-					"callback": "cutLastSegmentNum"
+					"callback": "cutLastLine"
 				},
 				"params": {
-					"title": "Cut Segment Range"
+					"title": "Cut Last Line"
 				}
 			},
 			{
@@ -344,10 +314,10 @@
 				"type": "button",
 				"key": "ctrl-v",
 				"fromModule": {
-					"callback": "clearFramesToCopy"
+					"callback": "clearSelected"
 				},
 				"params": {
-					"title": "Clear Frames to Copy"
+					"title": "Clear Selected"
 				}
 			},
 			{
@@ -358,16 +328,6 @@
 				},
 				"params": {
 					"title": "Paste Frames"
-				}
-			},
-			{
-				"type": "button",
-				"key": "shift-v",
-				"fromModule": {
-					"callback": "selectAll"
-				},
-				"params": {
-					"title": "Select All"
 				}
 			},
 			{
@@ -807,25 +767,6 @@
 				},
 				"params": {
 					"title": "Update Layers"
-				}
-			},
-			{
-				"type": "button",
-				"key": "alt-z",
-				"fromModule": {
-					"callback": "cutLayerSegment"
-				},
-				"params": {
-					"title": "Cut Selected Segment"
-				}
-			},
-			{
-				"type": "button",
-				"fromModule": {
-					"callback": "killLayer"
-				},
-				"params": {
-					"title": "Kill Layer"
 				}
 			},
 			{

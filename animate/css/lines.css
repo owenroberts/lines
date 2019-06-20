@@ -154,7 +154,7 @@ button:focus {
       background-color: gray; }
   #frames #current {
     background-color: lightblue !important; }
-  #frames .copy {
+  #frames .selected {
     background-color: #ffddff !important; }
 
 /*# sourceMappingURL=lines.css.map */

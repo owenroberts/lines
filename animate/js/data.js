@@ -68,17 +68,40 @@ function Data() {
 			}
 		}
 
-		self.pasteFrames = [];
+		self.clearSelected();
+	};
+
+	this.selectFrame = function(elem) {
+		if (!elem.classList.contains("selected")) {
+ 			elem.classList.add("selected");
+ 			self.pasteFrames.push(+elem.dataset.index);
+ 		}
+	};
+
+	/* shift v */
+	this.selectAll = function() {
+		lns.interface.frameElems.looper(elem => {
+			self.selectFrame(elem);
+		});
+	};
+
+	/* alt v */
+	this.selectRange = function() {
+		const start = prompt("Start frame:");
+		const end = prompt("end frame:");
+		lns.interface.frameElems.looper(elem => {
+			self.selectFrame(elem);
+		}, start, end);
 	};
 
 	/* ctrl v */
-	this.clearPasteFrames = function() {
+	this.clearSelected = function() {
 		self.pasteFrames = [];
 
 		/* this is a ui thing ... */
-		const copyFrameElems = document.getElementsByClassName("copy");
+		const copyFrameElems = document.getElementsByClassName("selected");
 		for (let i = copyFrameElems.length - 1; i >= 0; i--) {
-			copyFrameElems[i].classList.remove("copy");
+			copyFrameElems[i].classList.remove("selected");
 		}
 	};
 
@@ -97,52 +120,57 @@ function Data() {
 		/* i don't know if this is even relevant
 			... but maybe this is why frames is good ... */
 		self.saveState();
-
-		for (let i = 0; i < lns.layers.length; i++) {
-			lns.layers[i].shiftIndex(lns.currentFrame);
+		if (lns.numFrames > 0) {
+			for (let i = 0; i < lns.layers.length; i++) {
+				lns.layers[i].removeIndex(lns.currentFrame);
+				lns.layers[i].shiftIndex(lns.currentFrame + 1, -1);
+			}
+			lns.numFrames--;
+			lns.render.setFrame(lns.currentFrame - 1);
+			lns.lines = []; /* separate ... */
+			lns.interface.updateFramesPanel();
+		} else {
+			self.clearFrame();
 		}
-
-		lns.numFrames--;
-		lns.lines = []; /* separate ... */
-		lns.interface.updateFramesPanel();
 	};
 
 	/* shift-d */
 	this.deleteFrameRange = function() {
-		/* also don't know if this is relevant ... */
 		self.saveState();
 		const startFrame = +prompt("Start frame:");
 		const endFrame = +prompt("End frame:");
-		if (startFrame > 0) lns.currentFrame = startFrame - 1;
-		else lns.currentFrame = 0;
-		lns.interface.updateFramesPanel();
+
+		if (endFrame > 0) {
+			for (let i = 0; i < lns.layers.length; i++) {
+				for (let j = endFrame; j >= startFrame; j--) {
+					lns.layers[i].removeIndex(j);
+					lns.layers[i].shiftIndex(j + 1, -1);
+				}
+			}
+
+			lns.numFrames -= endFrame - startFrame + 1;
+			if (startFrame > 0) lns.render.setFrame(startFrame - 1);
+			else lns.currentFrame = 0;
+			lns.interface.updateFramesPanel();
+		}
 	};
 
 	/* z key */
 	this.cutLastSegment = function() {
-		if (lns.lines.length > 0) lns.lines.pop();
+		if (lns.interface.layers.length > 0) lns.interface.cutLayerSegment();
+		else if (lns.lines.length > 0) lns.lines.pop();
 	};
 
 	/* shift z */
-	this.cutLastSegmentNum = function() {
-		let num = prompt("How many segments?");
-		while (lns.lines.length > 0 && num > 0) {
-			lns.lines.pop();
-			num--;
+	this.cutLastLine = function() {
+		if (lns.interface.layers.length > 0) lns.interface.cutLayerLine();
+		if (lns.lines.length > 0) {
+			lns.lines.pop(); // remove end
+			for (let i = lns.lines.length - 1; i > 0; i--) {
+				if (lns.lines[i] != 'end') lns.lines.pop();
+				else break;
+			}
 		}
-	};
-
-	/* shift x */
-	this.cutLastDrawing = function() {
-		/* also not relevant, remove layer or something */
-		self.saveState();
-
-	};
-
-	/* ctrl x */
-	this.cutFirstDrawing = function() {
-		/* ditto */
-		self.saveState();
 	};
 
 	/* save current state of frames and drawing - one undo */
@@ -193,24 +221,28 @@ function Data() {
 	/* i key */
 	this.insertFrameBefore = function() {
 		self.saveLines();
-		
-		/* move indexes */
-
+		for (let i = 0; i < lns.layers.length; i++) {
+			lns.layers[i].shiftIndex(lns.currentFrame, 1);
+			lns.layers[i].removeIndex(lns.currentFrame);
+		}
+		lns.numFrames++;
 		lns.interface.updateFramesPanel();
 	};
 
 	/* shift-i key */
 	this.insertFrameAfter = function() {
 		self.saveLines();
-		/* move indexes */
+		for (let i = 0; i < lns.layers.length; i++) {
+			lns.layers[i].shiftIndex(lns.currentFrame, -1);
+			lns.layers[i].removeIndex(lns.currentFrame + 1);
+		}
+		lns.numFrames++;
 		lns.render.setFrame(lns.currentFrame + 1);
 		lns.interface.updateFramesPanel();
 	};
 
 	/* m key */
 	this.addMultipleCopies = function() {
-		/* can't save state, saves multiple times */
-		/* maybe this works ? */
 		self.copyFrame = [];
 		self.clearPasteFrames();
 		let n = +prompt("Number of copies: ");
@@ -223,6 +255,7 @@ function Data() {
 		}
 	};
 
+	/* maybe don't need this */
 	this.newLayer = function(layer, layerIndex, frameIndex) {
 		const prevLayer = lns.layers[layerIndex];
 		const newLayer = {};
@@ -358,40 +391,25 @@ function Data() {
 			self.saveState();
 			if (!offset) offset = new Cool.Vector(+prompt("x"), +prompt("y"));
 			if (offset) {
-				// checking to see if layers are selected
-				const layers = lns.interface.layers.length > 0 ? lns.interface.layers : _layers;
-				// toggled - come back after layer panel is fixed ....
-				for (let i = 0; i < layers.length; i++) {
-					const layer = layers[i]; // frame layer
-					const index = layer.l; // index of lines.layers
-					layer.x = (layer.x ? layer.x : lns.layers[index].x) + offset.x;
-					layer.y = (layer.y ? layer.y : lns.layers[index].y) + offset.y;
+				
+				// check to see if layers are selected
+				let layers = [];
+				if (lns.interface.layers.length > 0) {
+					for (let i = 0; i < lns.interface.layers.length; i++) {
+						if (lns.interface.layers[i].toggled)
+							layers.push(lns.interface.layers[i])
+					}
+				} else {
+					layers = _layers;
 				}
 
+				for (let i = 0; i < layers.length; i++) {
+					layers[i].x += offset.x;
+					layers[i].y += offset.y;
+				}
 			}
 		} else {
 			console.log("%c No layers in frame ", "color:yellow; background:black;");
 		}
-	};
-
-	/* shift q - prob should be default? */
-	this.offsetAll = function(offset) {
-		// forget this for now ... 
-	};
-
-	/* shift v */
-	this.selectAll = function() {
-		lns.interface.frameElems.looper(elem => {
-			self.addFrameToCopy(elem);
-		});
-	};
-
-	/* alt v */
-	this.selectRange = function() {
-		const start = prompt("Start frame:");
-		const end = prompt("end frame:");
-		lns.interface.frameElems.looper(elem => {
-			self.addFrameToCopy(elem);
-		}, start, end);
 	};
 }

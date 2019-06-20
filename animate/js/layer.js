@@ -3,6 +3,25 @@ class Layer {
 		for (const key in params) {
 			this[key] = params[key];
 		}
+		this.toggled = false;
+		this.prevColor = this.c;
+		// this.display = true; // display everywhere
+		// drop from frame
+		// delete entirely ? 
+	}
+
+	clean() {
+		delete this.toggled;
+		delete this.prevColor;
+	}
+
+	toggle() {
+		this.c = this.toggled ? this.prevColor : "#00CC96";
+		this.toggled = !this.toggled;
+	}
+
+	remove() {
+		lns.layers.splice(lns.layers.indexOf(this), 1);
 	}
 
 	addIndex(index) {
@@ -38,17 +57,12 @@ class Layer {
 		}
 	}
 
-	shiftIndex(index) {
+	shiftIndex(index, n) {
+		if (!n) n = -1;
 		for (let i = this.f.length - 1; i >= 0; i--) {
 			const f = this.f[i];
-			if (index < f.s) {
-				f.s--;
-				f.e--;
-			} else if (index == f.s && index == f.e) {
-				this.f.splice(i, 1);
-			} else if (index <= f.e) {
-				f.e--;
-			}
+			if (f.s >= index) f.s += n;
+			if (f.e >= index) f.e += n;
 		}
 	}
 

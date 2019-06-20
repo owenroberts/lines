@@ -1,4 +1,4 @@
-	@import 'font.css';
+@import 'font.css';
 $main-color: lightblue;
 $accent-color: blue;
 $accent-two: #ffddff;
@@ -183,5 +183,5 @@ button:focus { outline: none; }
 		&:hover { background-color: $ui-select; }
 	}
 	#current { background-color: $main-color !important; }
-	.copy { background-color: $accent-two !important; }
+	.selected { background-color: $accent-two !important; }
 }

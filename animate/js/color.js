@@ -17,7 +17,6 @@ function Color(callback) {
 	this.addColorBtn = function(color) {
 		if (!self.colors.includes(color)) {
 			self.colors.push(color);
-
 			const btn = new UIButton({
 				title: color,
 				css: { "background": color },
