@@ -249,90 +249,93 @@ function Interface() {
 	}));
 
 	/* layer panel */
-	this.layerPanel = new Panel("layer-menu", "Layer");
-	self.panels['layer'] = this.layerPanel;
-	this.frameRow = this.layerPanel.addRow('layers');
-	this.layerPanel.addRow();
+	this.panels['layer'] = new Panel("layer-menu", "Layer");
 	this.layers = [];
 
 	this.updateProperty = function(prop, value) {
 		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled)
-				self.layers[i][prop] = value;
+			if (self.layers[i].toggled) self.layers[i][prop] = value;
 		}
 	};
 
 	this.resetLayers = function() {
 		for (let i = self.layers.length - 1; i >= 0; i--) {
-			if (self.layers[i]) {
-				if (self.layers[i].toggled)
-					self.toggle(self.layers[i]);
-			}
+			if (self.layers[i].toggled) self.layers[i].toggle(); 
 		}
-		self.layerPanel.clearComponents(self.frameRow);
+		for (let i = self.panels['layer'].rows.length - 1; i > 1; i--) {
+			self.panels['layer'].removeRow(self.panels['layer'].rows[i]);
+		}
 		self.layers = [];
-	};
-
-	/* could be part of a layer class 
-		changing color is annoying, maybe highlight somehow */
-	this.toggle = function(layer) {
-		if (!layer.toggled) {
-			layer.prevColor = layer.c;
-			layer.c = "#00CC96";
-			layer.toggled = true;
-		} else {
-			layer.c = layer.prevColor;
-			delete layer.prevColor;
-			delete layer.toggled;
-			const index = self.layers.indexOf(layer);
-			if (index != -1) self.layers.splice(index, 1);
-		}
-	};
-
-	this.killLayer = function() {
-		const layers = self.layers.filter(l => l.toggled);
-		for (let i = lns.layers.length - 1; i >= 0; i--) {
-			lns.layers.splice(i, 1);
-		}
 	};
 
 	/*
 		this references the layer in each frame
-		fml layer index
 	*/
 	this.displayLayers = function() {
 		self.resetLayers();
 		self.resetDrawings();
-		const layers = lns.getLayers();
-		for (let i = 0; i < layers.length; i++) {
-			const layer = layers[i];
-			self.layers.push(layer);
-			layer.toggled = false;
-			const toggleLayer = new UIToggleButton({
-				on: i,
-				off: i,
+		self.layers = lns.getLayers();
+		for (let i = 0; i < self.layers.length; i++) {
+			const row = self.panels['layer'].addRow(`layer ${i}`);
+			self.panels['layer'].add(new UIDisplay({text: i }), row);
+			self.panels['layer'].add(new UIToggleButton({
+				on: '○',
+				off: '◉',
 				callback: function() {
-					self.toggle(layer);
+					self.layers[i].toggle();
 				}
-			});
-			self.layerPanel.add(toggleLayer, self.frameRow);
+			}), row);
+			self.panels['layer'].add(new UIToggleButton({
+				on: 'x',
+				off: 'x',
+				callback: function() {
+					self.layers[i].remove();
+					self.resetLayers();
+				}
+			}), row);
+
+			// self.panels['layer'].add(new UIToggleButton({
+			// 	on: '👀',
+			// 	off: '🕶️',
+			// 	callback: function() {
+			// 		layers[i].toggle();
+			// 	}
+			// }), row);
+
 		}
 	};
 
+	/* z */
 	this.cutLayerSegment = function() {
 		for (let i = 0; i < self.layers.length; i++) {
-			const layer = self.layers[i];
-			const drawing = lns.drawings[layer.d];
-			drawing.pop(); /* remove "end" */
-			drawing.pop(); /* remove segment */
-			drawing.push('end'); /* new end */
-			layer.e = drawing.length; /* update layer end num */
+			if (self.layers[i].toggled) {
+				const drawing = lns.drawings[self.layers[i].d];
+				drawing.pop(); /* remove "end" */
+				drawing.pop(); /* remove segment */
+				drawing.push('end'); /* new end */
+				self.layers[i].e = drawing.length; /* update layer end num */
+			}
+		}
+	};
+
+	/* shift z */
+	this.cutLayerLine = function() {
+		for (let i = 0; i < self.layers.length; i++) {
+			if (self.layers[i].toggled) {
+				const drawing = lns.drawings[self.layers[i].d];
+				drawing.pop(); /* remove "end" */
+				for (let i = drawing.length - 1; i > 0; i--) {
+					if (drawing[i] != 'end') drawing.pop();
+					else break;
+				}
+				self.layers[i].e = drawing.length; /* update layer end num */
+			}
 		}
 	};
 
 	this.updateLayerColor = function(color) {
 		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled)
+			if (self.layers[i].toggled) 
 				self.layers[i].c = self.layers[i].prevColor = color;
 		}
 	};
@@ -343,6 +346,7 @@ function Interface() {
 
 	this.displayDrawings = function() {
 		self.resetLayers();
+		self.resetDrawings();
 		self.drawingPanel.addRow('drawings');
 		for (let i = 0; i < lns.drawings.length; i++) {
 			if (lns.drawings[i]) {

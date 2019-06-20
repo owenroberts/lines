@@ -24,8 +24,8 @@ class UIList {
 	}
 
 	looper(callback, start, end) {
-		const len = end || this.els.length;
-		for (let i = start || 0; i < len; i++) {
+		const len = end || this.els.length - 1;
+		for (let i = start || 0; i <= len; i++) {
 			callback(this.els[i]);
 		}
 	}

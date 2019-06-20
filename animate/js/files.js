@@ -17,7 +17,7 @@ function Files(params) {
 			lns.canvas.fitCanvasToDrawing();
 
 		const json = {};
-		json.v = "2.2";
+		json.v = "2.3";
 		json.w = Math.floor(+lns.canvas.width);
 		json.h = Math.floor(+lns.canvas.height);
 		json.fps = +lns.render.fps;
@@ -26,11 +26,19 @@ function Files(params) {
 		json.mc = lns.lineColor.colors.length > 1 ? true : false;
 
 		/* save current frame */
-		let layers;
-		if (single && lns.getLayers())
+		let layers = [];
+		if (single && lns.getLayers()) {
 			layers = lns.getLayers();
-		else
-			layers = lns.layers;
+		} else {
+			for (let i = 0; i < lns.layers.length; i++) {
+				if (lns.layers[i].f.length > 0)
+					layers.push(lns.layers[i]);
+			}
+		}
+		
+		for (let i = 0; i < layers.length; i++) {
+			layers[i].clean();
+		}
 		json.l = layers;
 
 		/* search frames for layers and drawings used */
