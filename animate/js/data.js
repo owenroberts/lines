@@ -158,7 +158,11 @@ function Data() {
 	/* z key */
 	this.cutLastSegment = function() {
 		if (lns.interface.layers.length > 0) lns.interface.cutLayerSegment();
-		else if (lns.lines.length > 0) lns.lines.pop();
+		else if (lns.lines.length > 0) {
+			if (lns.lines.pop() == 'end')
+				lns.lines.pop();
+			lns.lines.push('end');
+		}
 	};
 
 	/* shift z */
@@ -244,7 +248,7 @@ function Data() {
 	/* m key */
 	this.addMultipleCopies = function() {
 		self.copyFrame = [];
-		self.clearPasteFrames();
+		self.clearSelected();
 		let n = +prompt("Number of copies: ");
 		self.copy();
 		if (n) {
@@ -269,115 +273,6 @@ function Data() {
 		layerIndex = lns.layers.length - 1;
 		lns.frames[lns.currentFrame][frameIndex] = { l: layerIndex };
 		return layerIndex;
-	};
-
-	/* this should basically all become irrelevant ... */
-
-	/* animate a drawing segment by segment (or multiple)
-		follow means they don't accumulate to form drawing at the end
-		over means go over/add to subsequent frames */
-	/* a: explode, ctrl a: follow, shift a: explode over, alt a: follow over */
-	/* over states get fucked up with two drawings, need to figure
-		out after adding drawing nums to frames in v2 */
-	this.explode = function(params) {
-		const follow = params.follow;
-		const over = params.over;
-		self.saveLines();
-		/* can't undo multiple saves */
-		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
-		if (segmentsPerFrame > 0) {
-			const layers = _.cloneDeep(lns.frames[lns.currentFrame]);
-			for (let i = 0; i < layers.length; i++) {
-				const layer = layers[i];
-				let layerIndex = layers[i].l;
-				const drawingIndex = lns.layers[layerIndex].d;
-				const lines = lns.drawings[drawingIndex];
-
-				// if there's more than just a layer number, make new layer -  ??
-				if (Object.keys(layer).length > 1) {
-					layerIndex = self.newLayer(layer, layerIndex, i);
-				}
-
-				for (let j = 0; j < lines.length - 1; j += segmentsPerFrame) {
-					if (!over) lns.interface.nextFrame();
-
-					if (!lns.frames[lns.currentFrame]) lns.frames[lns.currentFrame] = [];
-					else if (!over) self.saveLines();
-
-					/* add previous drawings
-						add another parameter for separating drawings?
-						i think that exists in reverse draw? */
-					if (!follow) {
-						for (let k = 0; k < i; k++) {
-							lns.frames[lns.currentFrame].push({
-								...layers[k],
-								s: 0,
-								e: lns.drawings[ lns.layers[layers[k].l].d ].length,
-							});
-						}
-					}
-
-					lns.frames[lns.currentFrame].push({
-						l: layerIndex,
-						s: follow ? j : 0,
-						e: Math.min(lines.length, j + segmentsPerFrame), /* maybe fix error */
-					});
-
-					if (over) lns.interface.nextFrame();
-				}
-
-			}
-			lns.interface.updateFramesPanel();
-		}
-	};
-
-	/* reverse of explode - shift-r - multi alt-r
-		could be same function but then maybe my head would explode?
-		simultaneous draw multi drawings at one  (multi) */
-	this.reverse = function(params) {
-		const simultaneous = params.simultaneous;
-		self.saveLines();
-		const segmentsPerFrame = +prompt("Enter number of segments per frame:");
-		if (segmentsPerFrame > 0) {
-			const layers = _.cloneDeep(lns.frames[lns.currentFrame]);
-			const totalSegments = lns.frames[lns.currentFrame]
-				.map(f => { return lns.layers[f.l].e} )
-				.reduce((x,y) => { return x + y });
-
-			// make new layers if necessary
-			for (let i = 0; i < layers.length; i++) {
-				const layer = layers[i];
-				let layerIndex = layers[i].l;
-				if (Object.keys(layer).length > 1) {
-					layers[i] = { l: self.newLayer(layer, layerIndex, i) };
-				}
-			}
-
-			for (let i = 0; i < totalSegments; i += segmentsPerFrame) {
-				let indexMod = 0; // where to start
-				lns.interface.nextFrame();
-				if (!lns.frames[lns.currentFrame]) lns.frames[lns.currentFrame] = [];
-				let framesAdded = false;
-				for (let j = 0; j < layers.length; j++) {
-					const layerIndex = layers[j].l;
-					const drawingIndex = lns.layers[layerIndex].d;
-					const lines = lns.drawings[drawingIndex];
-					const drawingEnd = lns.layers[layerIndex].e;
-					const drawingStart = lns.layers[layerIndex].s;
-					if (i <= drawingEnd + (simultaneous ? 0 : indexMod) ) {
-						lns.frames[lns.currentFrame].push({
-							l: layerIndex,
-							s: simultaneous ? i : (i - indexMod < 0 ? 0 : i - indexMod),
-							e: drawingEnd
-						});
-						framesAdded = true;
-					}
-					indexMod += drawingEnd;
-				}
-				if (!framesAdded) self.deleteFrame();
-			}
-			lns.interface.updateFramesPanel();
-		}
 	};
 
 	/* q key - all drawings in current frames, moved in each other frame
