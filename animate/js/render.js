@@ -63,11 +63,11 @@ function Render(fps) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 			/* calc current frame to draw */
-			if (self.isPlaying && self.currentFrameCounter < lns.numFrames) {
+			if (self.isPlaying && self.currentFrameCounter <= lns.numFrames) {
 				self.currentFrameCounter += self.intervalRatio;
 				lns.currentFrame = Math.floor(self.currentFrameCounter);
 			}
-			if (self.isPlaying && self.currentFrameCounter >= lns.numFrames) {
+			if (self.isPlaying && self.currentFrameCounter > lns.numFrames) {
 				lns.currentFrame = self.currentFrameCounter = 0;
 			}
 
@@ -109,13 +109,18 @@ function Render(fps) {
 			}
 
 			/* draws saved frames */
-			lns.getLayers(lns.currentFrame, layer => {
-				self.drawLines({
-					lines: lns.drawings[layer.d],
-					...layer,
-					onion: false
-				});
-			});
+			for (let i = 0; i < lns.layers.length; i++) {
+				const layer = lns.layers[i];
+				if (layer.isInFrame(lns.currentFrame)) {
+					if (layer.explode)
+						layer.e = layer.getFrames(lns.currentFrame);
+					self.drawLines({
+						lines: lns.drawings[layer.d],
+						...layer,
+						onion: false
+					});
+				}
+			}
 
 			/* draws current lines */
 			if (lns.lines.length > 0) {

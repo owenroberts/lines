@@ -353,21 +353,17 @@ function Interface() {
 				let layer, index;
 				const drawing = lns.drawings[i];
 
-				/* add the full drawing regardless */
 
 				/* check for existing layer */
 				for (let j = 0; j < lns.layers.length; j++) {
-					const _layer = lns.layers[j];
-					if (_layer) {
-						if (i == _layer.d) {
-							layer = _layer;
+					if (lns.layers[j]) {
+						if (i == lns.layers[j].d) {
+							layer = lns.layers[j];
 							index = j;
 							break;
 						}
 					}
 				}
-
-				console.log(layer);
 
 				/* create a layer if none existing */
 				if (!layer) {
@@ -379,13 +375,17 @@ function Interface() {
 							c: lns.lineColor.color,
 							...lns.draw.defaults,
 							x: 0,
-							y: 0
+							y: 0,
+							f: [{
+								s: lns.currentFrame,
+								e: lns.currentFrame
+							}]
 						};
 					}
 					lns.layers.push(layer);
 					index = lns.layers.length - 1;
 				} else {
-					/* check start and end, create new player if different */
+					/* check start and end, create new layer if different */
 					if (layer.s != 0 || layer.e != drawing.length) {
 						layer = { ...layer };
 						layer.s = 0;

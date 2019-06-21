@@ -48,7 +48,7 @@ class Layer {
 				this.f.splice(i, 1);
 			} else if (f.s == index) {
 				f.s++;
-			} else if (frame.e == index) {
+			} else if (f.e == index) {
 				f.e--;
 			} else {
 				this.f.push({s: index + 1, e: f.e });
@@ -76,5 +76,16 @@ class Layer {
 			}
 		}
 		return false;
+	}
+
+	getFrames(index) {
+		for (let i = 0; i < this.f.length; i++) {
+			const f = this.f[i]; // frame sequence
+			if (index >= f.s && index <= f.e) {
+				const segments = lns.drawings[this.d].length / (f.e - f.s + 1);
+				return segments * (index - f.s + 1);
+					// s: segments * (index - f.s),
+			}
+		}
 	}
 }
