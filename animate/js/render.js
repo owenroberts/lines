@@ -90,19 +90,18 @@ function Render(fps) {
 			if (self.onionSkinNum > 0 && self.onionSkinIsVisible) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
 					const frameNumber = Math.max(0, lns.currentFrame - o);
-					if (frameNumber >= 0) {
-						const onionColor = 1.1 - (o / self.onionSkinNum); // number for color
-						const color = "rgba(105,150,255," + onionColor + ")";
-						for (let i = frameNumber; i < frameNumber + self.onionSkinNum; i++) {
-							const layers = lns.getLayers(i);
-							for (let j = 0; j < layers.length; i++) {
-								self.drawLines({
-									lines: lns.drawings[layers[j].d],
-									...layers[j],
-									color: color,
-									onion: true
-								});
-							}
+					const color = `rgba(105,150,255,${ 1.5 - (o / self.onionSkinNum) })`;
+					for (let i = 0; i < lns.layers.length; i++) {
+						const layer = lns.layers[i];
+						if (layer.isInFrame(frameNumber)) {
+							if (layer.draw == 'Explode') layer.e = layer.getFrames(frameNumber, true);
+							if (layer.draw == 'Reverse') layer.s = layer.getFrames(frameNumber, false);
+							self.drawLines({
+								lines: lns.drawings[layer.d],
+								...layer,
+								color: color,
+								onion: true
+							});
 						}
 					}
 				}
@@ -112,8 +111,8 @@ function Render(fps) {
 			for (let i = 0; i < lns.layers.length; i++) {
 				const layer = lns.layers[i];
 				if (layer.isInFrame(lns.currentFrame)) {
-					if (layer.explode)
-						layer.e = layer.getFrames(lns.currentFrame);
+					if (layer.draw == 'Explode') layer.e = layer.getFrames(lns.currentFrame, true);
+					if (layer.draw == 'Reverse') layer.s = layer.getFrames(lns.currentFrame, false);
 					self.drawLines({
 						lines: lns.drawings[layer.d],
 						...layer,

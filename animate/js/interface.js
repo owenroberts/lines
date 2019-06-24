@@ -287,22 +287,35 @@ function Interface() {
 		self.layers = lns.getLayers();
 		for (let i = 0; i < self.layers.length; i++) {
 			const row = self.panels['layer'].addRow(`layer ${i}`);
-			self.panels['layer'].add(new UIDisplay({text: i }), row);
+			const layer = self.layers[i];
+			self.panels['layer'].add(new UIDisplay({text: `◪${i}` }), row);
+			
 			self.panels['layer'].add(new UIToggleButton({
-				on: '○',
-				off: '◉',
+				on: '◐',
+				off: '◑',
 				callback: function() {
 					self.layers[i].toggle();
 				}
 			}), row);
+
+			self.panels['layer'].add(new UISelect({
+				options: ['None', 'Explode', 'Reverse'],
+				selected: self.layers[i].draw,
+				callback: function(ev) {
+					layer.draw = ev.target.value;
+				}
+			}), row);
+			
 			self.panels['layer'].add(new UIToggleButton({
 				on: 'x',
 				off: 'x',
 				callback: function() {
-					self.layers[i].remove();
+					layer.remove();
 					self.resetLayers();
 				}
 			}), row);
+
+
 
 			// self.panels['layer'].add(new UIToggleButton({
 			// 	on: '👀',
@@ -363,12 +376,14 @@ function Interface() {
 				let layer, index;
 				const drawing = lns.drawings[i];
 
+				/* add the full drawing regardless */
 
 				/* check for existing layer */
 				for (let j = 0; j < lns.layers.length; j++) {
-					if (lns.layers[j]) {
-						if (i == lns.layers[j].d) {
-							layer = lns.layers[j];
+					const _layer = lns.layers[j];
+					if (_layer) {
+						if (i == _layer.d) {
+							layer = _layer;
 							index = j;
 							break;
 						}
@@ -385,17 +400,13 @@ function Interface() {
 							c: lns.lineColor.color,
 							...lns.draw.defaults,
 							x: 0,
-							y: 0,
-							f: [{
-								s: lns.currentFrame,
-								e: lns.currentFrame
-							}]
+							y: 0
 						};
 					}
 					lns.layers.push(layer);
 					index = lns.layers.length - 1;
 				} else {
-					/* check start and end, create new layer if different */
+					/* check start and end, create new player if different */
 					if (layer.s != 0 || layer.e != drawing.length) {
 						layer = { ...layer };
 						layer.s = 0;
