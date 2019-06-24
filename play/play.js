@@ -32,11 +32,7 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.mixedColors = false;
 	this.isTexture = isTexture || false; /* if used for 3d texture it doesnt animate or resize */
 	this.drawBg = true;
-
-	this.rndr = {
-		off: { x: 0, y: 0 },
-		speed: { x: 0, y: 0 }
-	};
+	this.rndr = {};
 
 	/* override drawing props */
 	this.over = {
@@ -45,7 +41,14 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 		w: undefined, // random "wiggle"
 		v: undefined, // "wiggle speed"
 		c: undefined  // color
-	}
+	};
+
+	this.reset = function() {
+		this.rndr = {
+			off: { x: 0, y: 0 },
+			speed: { x: 0, y: 0 }
+		};
+	};
 
 	this.draw = function() {
 		if (!this.isTexture && this.isPlaying)
@@ -77,6 +80,9 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 							this.rndr[key] = layer[key];
 						}
 					}
+
+					if (this.rndr.s != layer.s) this.rndr.s = layer.s;
+					if (this.rndr.e != layer.e) this.rndr.e = layer.e;
 
 					// update layer num from frame, any other props (se, xy)
 					for (const key in frame) {
@@ -118,7 +124,7 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 
 						if (this.ctxStrokeColor != this.rndr.c && !this.color) {
 							this.ctxStrokeColor = this.rndr.c;
-							this.ctx.strokeStyle= "#" + this.ctxStrokeColor;
+							this.ctx.strokeStyle = this.ctxStrokeColor;
 						}
 
 						// update wiggle and speed (if exists)
@@ -185,18 +191,19 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 		this.ctxStrokeColor = undefined; // note setting canvas width resets the color
 		this.ctx.miterLimit = 1;
 		if (data.mc) this.mixedColors = data.mc;
-		if (data.bg) this.canvas.style.backgroundColor = '#' + data.bg;
-		if (this.color) this.ctx.strokeStyle = '#' + this.color;
+		if (data.bg) this.canvas.style.backgroundColor = data.bg;
 		if (callback) callback(); // callback to do something after drawing loads
 		if (!this.isTexture) requestAnimFrame(this.draw.bind(this));
 		if (this.resize) {
 			this.sizeCanvas();
 			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 		}
+		if (this.color) this.ctx.strokeStyle = this.color;
 	};
 
 	// original generic name, now is closer to "load file"
 	this.loadAnimation = function(src, callback) {
+		this.reset(); /* reset rndr */
 		fetch(src)
 			.then(response => { return response.json() })
 			.then(json => { this.loadData(json, callback) })
