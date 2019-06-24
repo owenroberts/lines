@@ -88,4 +88,41 @@ class Layer {
 			}
 		}
 	}
+
+	getEx(index) {
+		for (let i = 0; i < this.f.length; i++) {
+			const f = this.f[i]; // frame sequence
+			if (index >= f.s && index <= f.e) {
+				const segments = lns.drawings[this.d].length / (f.e - f.s + 1);
+				return Math.round(segments * (index - f.s + 1));
+			}
+		}
+	}
+
+	getRev(index) {
+		for (let i = 0; i < this.f.length; i++) {
+			const f = this.f[i]; // frame sequence
+			if (index >= f.s && index <= f.e) {
+				const segments = lns.drawings[this.d].length / (f.e - f.s + 1);
+				return Math.round(segments * (index - f.s));
+			}
+		}
+	}
+
+	getExRev(index) {
+		for (let i = 0; i < this.f.length; i++) {
+			const f = this.f[i]; // frame sequence
+			if (index >= f.s && index <= f.e) {
+				const mid = f.s + ((f.e - f.s + 1) / 2); 	// halfway
+				if (index < mid) {
+					const segments = lns.drawings[this.d].length / (mid - f.s + 1);
+					return [undefined, Math.round(segments * (index - f.s))];
+				} else {
+					const segments = lns.drawings[this.d].length / (f.e - mid + 1);
+					return [Math.round(segments * (index - mid)), undefined];
+				}
+				
+			}
+		}
+	}
 }

@@ -296,15 +296,49 @@ function Interface() {
 				callback: function() {
 					self.layers[i].toggle();
 				}
-			}), row);
+			}), row); /* select */
+
+			/*
+				layer.f is just one object .... 
+			*/
+
+			// self.panels['layer'].add(new UIText({
+			// 	label: 'S',
+			// 	value: layer.s,
+			// 	callback: function(ev) {
+			// 		layer.s = +ev.target.value;
+			// 		if (layer.s > lns.numFrames) lns.numFrames = layer.s;
+			// 		if (layer.e < layer.s) layer.e = layer.s;
+			// 	}
+			// }), row); 
+
+			// self.panels['layer'].add(new UIText({
+			// 	label: 'E',
+			// 	value: layer.e,
+			// 	callback: function(ev) {
+			// 		console.log(ev);
+			// 		layer.e = +ev.target.value;
+			// 		if (layer.e > lns.numFrames) lns.numFrames = layer.e;
+			// 		if (layer.s > layer.e) layer.s = layer.e;
+			// 	}
+			// }), row); 
 
 			self.panels['layer'].add(new UISelect({
-				options: ['None', 'Explode', 'Reverse'],
+				options: ['None', 'Explode', 'Reverse', 'ExRev'],
 				selected: self.layers[i].draw,
 				callback: function(ev) {
 					layer.draw = ev.target.value;
 				}
-			}), row);
+			}), row); /* draw mode */
+
+			self.panels['layer'].add(new UIButton({
+				title: "+",
+				callback: function() {
+					lns.layers.push(new Layer({...layer}));
+					self.displayLayers();
+					layer.removeIndex(lns.currentFrame);
+				}
+			}), row); /* duplicate */
 			
 			self.panels['layer'].add(new UIToggleButton({
 				on: 'x',
@@ -313,7 +347,7 @@ function Interface() {
 					layer.remove();
 					self.resetLayers();
 				}
-			}), row);
+			}), row); /* delete */
 
 
 
