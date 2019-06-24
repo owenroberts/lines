@@ -5,6 +5,7 @@ class Layer {
 		}
 		this.toggled = false;
 		this.prevColor = this.c;
+		this.draw = 'None';
 		// this.display = true; // display everywhere
 		// drop from frame
 		// delete entirely ? 
@@ -78,13 +79,12 @@ class Layer {
 		return false;
 	}
 
-	getFrames(index) {
+	getFrames(index, explode) {
 		for (let i = 0; i < this.f.length; i++) {
 			const f = this.f[i]; // frame sequence
 			if (index >= f.s && index <= f.e) {
 				const segments = lns.drawings[this.d].length / (f.e - f.s + 1);
-				return segments * (index - f.s + 1);
-					// s: segments * (index - f.s),
+				return Math.round(segments * (explode ? (index - f.s + 1) : (index - f.s)));
 			}
 		}
 	}
