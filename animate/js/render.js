@@ -111,12 +111,17 @@ function Render(fps) {
 			for (let i = 0; i < lns.layers.length; i++) {
 				const layer = lns.layers[i];
 				if (layer.isInFrame(lns.currentFrame)) {
-					if (layer.draw == 'Explode') layer.e = layer.getFrames(lns.currentFrame, true);
-					if (layer.draw == 'Reverse') layer.s = layer.getFrames(lns.currentFrame, false);
+					let start, end;
+					if (layer.draw == 'Explode') end = layer.getEx(lns.currentFrame);
+					if (layer.draw == 'Reverse') start = layer.getRev(lns.currentFrame);
+					if (layer.draw == 'ExRev') [start, end] = layer.getExRev(lns.currentFrame);
 					self.drawLines({
 						lines: lns.drawings[layer.d],
 						...layer,
-						onion: false
+						s: start != undefined ? start : layer.s,
+						e: end != undefined ? end : layer.e,
+						onion: false,
+						color: lns.lineColor.color
 					});
 				}
 			}
