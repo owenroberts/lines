@@ -31,14 +31,10 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.isTexture = isTexture || false; /* if used for 3d texture it doesnt animate or resize */
 	this.drawBg = true;
 	this.rndr = {};
+	this.over = {}; /* override drawing props */
 
-	/* override drawing props */
-	this.over = {
-		n: undefined, // seg num
-		r: undefined, // random "jiggle"
-		w: undefined, // random "wiggle"
-		v: undefined, // "wiggle speed"
-		c: undefined  // color
+	this.override = function(prop, value) {
+		this.over[prop] = value;
 	};
 
 
@@ -47,6 +43,14 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			off: { x: 0, y: 0 },
 			speed: { x: 0, y: 0 }
 		};
+		this.over = {
+			n: undefined, // seg num
+			r: undefined, // random "jiggle"
+			w: undefined, // random "wiggle"
+			v: undefined, // "wiggle speed"
+			c: undefined  // color
+		};
+		this.update = undefined;
 	};
 
 	this.draw = function() {
@@ -77,9 +81,6 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 					for (const key in layer) {
 						this.rndr[key] = layer[key];
 					} 
-
-					if (this.rndr.s != layer.s) this.rndr.s = layer.s;
-					if (this.rndr.e != layer.e) this.rndr.e = layer.e;
 
 					// update layer num from frame, any other props (se, xy)
 					for (const key in frame) {
