@@ -284,81 +284,80 @@ function Interface() {
 	this.displayLayers = function() {
 		self.resetLayers();
 		self.resetDrawings();
-		self.layers = lns.getLayers();
-		for (let i = 0; i < self.layers.length; i++) {
-			const row = self.panels['layer'].addRow(`layer ${i}`);
-			const layer = self.layers[i];
-			self.panels['layer'].add(new UIDisplay({text: `◪${i}` }), row);
-			
-			self.panels['layer'].add(new UIToggleButton({
-				on: '◐',
-				off: '◑',
-				callback: function() {
-					self.layers[i].toggle();
-				}
-			}), row); /* select */
 
-			/*
-				layer.f is just one object .... 
-			*/
+		for (let i = 0; i < lns.layers.length; i++) {
+			const layer = lns.layers[i];
+			if (layer.isInFrame(lns.currentFrame)) {
+				self.layers.push(layer)
 
-			// self.panels['layer'].add(new UIText({
-			// 	label: 'S',
-			// 	value: layer.s,
-			// 	callback: function(ev) {
-			// 		layer.s = +ev.target.value;
-			// 		if (layer.s > lns.numFrames) lns.numFrames = layer.s;
-			// 		if (layer.e < layer.s) layer.e = layer.s;
-			// 	}
-			// }), row); 
+				const row = self.panels['layer'].addRow(`layer ${i}`);
+				self.panels['layer'].add(new UIDisplay({text: `◪${i}` }), row);
+				
+				self.panels['layer'].add(new UIToggleButton({
+					on: '◐',
+					off: '◑',
+					callback: function() {
+						self.layers[i].toggle();
+					}
+				}), row); /* select */
 
-			// self.panels['layer'].add(new UIText({
-			// 	label: 'E',
-			// 	value: layer.e,
-			// 	callback: function(ev) {
-			// 		console.log(ev);
-			// 		layer.e = +ev.target.value;
-			// 		if (layer.e > lns.numFrames) lns.numFrames = layer.e;
-			// 		if (layer.s > layer.e) layer.s = layer.e;
-			// 	}
-			// }), row); 
+				self.panels['layer'].add(new UIText({
+					label: 'S',
+					blur: true,
+					value: layer.f.s,
+					callback: function(value) {
+						layer.f.s = +value;
+						if (layer.f.s > lns.numFrames) lns.numFrames = layer.s;
+						if (layer.f.e < layer.s) layer.e = layer.s;
+					}
+				}), row); 
 
-			self.panels['layer'].add(new UISelect({
-				options: ['None', 'Explode', 'Reverse', 'ExRev'],
-				selected: self.layers[i].draw,
-				callback: function(ev) {
-					layer.draw = ev.target.value;
-				}
-			}), row); /* draw mode */
+				self.panels['layer'].add(new UIText({
+					label: 'E',
+					blur: true,
+					value: layer.f.e,
+					callback: function(value) {
+						layer.f.e = +value;
+						if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
+						if (layer.f.s > layer.f.e) layer.f.s = layer.f.e;
+						self.updateFramesPanel();
+					}
+				}), row); 
 
-			self.panels['layer'].add(new UIButton({
-				title: "+",
-				callback: function() {
-					lns.layers.push(new Layer({...layer}));
-					self.displayLayers();
-					layer.removeIndex(lns.currentFrame);
-				}
-			}), row); /* duplicate */
-			
-			self.panels['layer'].add(new UIToggleButton({
-				on: 'x',
-				off: 'x',
-				callback: function() {
-					layer.remove();
-					self.resetLayers();
-				}
-			}), row); /* delete */
+				self.panels['layer'].add(new UISelect({
+					options: ['None', 'Explode', 'Reverse', 'ExRev'],
+					selected: self.layers[i].draw,
+					callback: function(value) {
+						layer.draw = value;
+					}
+				}), row); /* draw mode */
 
+				self.panels['layer'].add(new UIButton({
+					title: "+",
+					callback: function() {
+						lns.layers.push(new Layer({...layer}));
+						self.displayLayers();
+						layer.removeIndex(lns.currentFrame);
+					}
+				}), row); /* duplicate */
+				
+				self.panels['layer'].add(new UIToggleButton({
+					on: 'x',
+					off: 'x',
+					callback: function() {
+						layer.remove();
+						self.resetLayers();
+					}
+				}), row); /* delete */
 
-
-			// self.panels['layer'].add(new UIToggleButton({
-			// 	on: '👀',
-			// 	off: '🕶️',
-			// 	callback: function() {
-			// 		layers[i].toggle();
-			// 	}
-			// }), row);
-
+				// self.panels['layer'].add(new UIToggleButton({
+				// 	on: '👀',
+				// 	off: '🕶️',
+				// 	callback: function() {
+				// 		layers[i].toggle();
+				// 	}
+				// }), row);
+			}
 		}
 	};
 

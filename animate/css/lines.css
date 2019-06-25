@@ -113,7 +113,7 @@ button:focus {
       margin-top: 0.25em;
       flex: 0 1 auto; }
     .menu-panel .row input {
-      flex: 1;
+      flex: 0 1 20px;
       width: 100%; }
     .menu-panel .row input[type=range], .menu-panel .row input[type=color] {
       flex: 1 1 auto; }
