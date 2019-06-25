@@ -62,19 +62,17 @@ function Render(fps) {
 	this.draw = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
-			/* calc current frame to draw */
-			if (self.isPlaying && self.currentFrameCounter <= lns.numFrames) {
-				self.currentFrameCounter += self.intervalRatio;
-				lns.currentFrame = Math.floor(self.currentFrameCounter);
-			}
-			if (self.isPlaying && self.currentFrameCounter > lns.numFrames) {
-				lns.currentFrame = self.currentFrameCounter = 0;
-			}
 
-			/* update the anim frame number
-				another place where interface is tied to frame num
-				maybe use callback style thing here */
-			if (self.isPlaying) lns.interface.updateFrameNum();
+			if (self.isPlaying) {
+				if (self.currentFrameCounter <= lns.numFrames) {
+					self.currentFrameCounter += self.intervalRatio;
+					lns.currentFrame = Math.floor(self.currentFrameCounter);
+				}	
+				if (self.currentFrameCounter > lns.numFrames) {
+					lns.currentFrame = self.currentFrameCounter = 0;
+				}
+				lns.interface.updateFrameNum(); /* ui thing */
+			}
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 
@@ -94,11 +92,15 @@ function Render(fps) {
 					for (let i = 0; i < lns.layers.length; i++) {
 						const layer = lns.layers[i];
 						if (layer.isInFrame(frameNumber)) {
-							if (layer.draw == 'Explode') layer.e = layer.getFrames(frameNumber, true);
-							if (layer.draw == 'Reverse') layer.s = layer.getFrames(frameNumber, false);
+							let start, end;
+							if (layer.draw == 'Explode') layer.e = layer.getFrames(frameNumber);
+							if (layer.draw == 'Reverse') layer.s = layer.getFrames(frameNumber);
+							if (layer.draw == 'ExRev') [start, end] = layer.getExRev(frameNumber);
 							self.drawLines({
 								lines: lns.drawings[layer.d],
 								...layer,
+								s: start != undefined ? start : layer.s,
+								e: end != undefined ? end : layer.e,
 								color: color,
 								onion: true
 							});
