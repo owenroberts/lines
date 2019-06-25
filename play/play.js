@@ -1,5 +1,5 @@
 /* play module */
-function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
+function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
@@ -15,8 +15,6 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.currentFrame = 0; // always int, floor cfc
 	this.currentFrameCounter = 0; // uses intervalRatio, so it's a float
 	this.isPlaying = true;
-
-	this.resize = resize || false;
 	
 	this.lps = lps || 12; // default
 	this.lineInterval = 1000 / this.lps;
@@ -33,14 +31,10 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 	this.isTexture = isTexture || false; /* if used for 3d texture it doesnt animate or resize */
 	this.drawBg = true;
 	this.rndr = {};
+	this.over = {}; /* override drawing props */
 
-	/* override drawing props */
-	this.over = {
-		n: undefined, // seg num
-		r: undefined, // random "jiggle"
-		w: undefined, // random "wiggle"
-		v: undefined, // "wiggle speed"
-		c: undefined  // color
+	this.override = function(prop, value) {
+		this.over[prop] = value;
 	};
 
 	this.reset = function() {
@@ -48,6 +42,14 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 			off: { x: 0, y: 0 },
 			speed: { x: 0, y: 0 }
 		};
+		this.over = {
+			n: undefined, // seg num
+			r: undefined, // random "jiggle"
+			w: undefined, // random "wiggle"
+			v: undefined, // "wiggle speed"
+			c: undefined  // color
+		};
+		this.update = undefined;
 	};
 
 	this.draw = function() {
@@ -73,16 +75,11 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 					const frame = this.frames[this.currentFrame][i];
 					const layer = this.layers[frame.l];
 					const drawing = this.drawings[layer.d];
-
-					// update if new layer
-					if (this.rndr.l != frame.l) {
-						for (const key in layer) {
-							this.rndr[key] = layer[key];
-						}
-					}
-
-					if (this.rndr.s != layer.s) this.rndr.s = layer.s;
-					if (this.rndr.e != layer.e) this.rndr.e = layer.e;
+					
+					// want to use prev layer but too many exceptions ... 
+					for (const key in layer) {
+						this.rndr[key] = layer[key];
+					} 
 
 					// update layer num from frame, any other props (se, xy)
 					for (const key in frame) {
@@ -146,40 +143,6 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 		}
 	};
 
-	this.sizeCanvas = function() {
-		const padding = 0; /* seems like its for the comics, fucks the mobile stuff */ 
-		const top = canvas.getBoundingClientRect().top;
-		const w = this.canvas.parentNode.clientWidth || window.innerWidth,
-			h = this.canvas.parentNode.clientHeight || window.innerHeight;
-
-		if (w - padding * 2 < this.width)
-			this.scale = (w - padding * 2) / this.width;
-		else if ((h - top - padding * 2) < this.height)
-			this.scale = (h - top - padding * 2) / this.height;
-		
-		/* scale up - used in catslair ...  */
-		else if (w - padding * 2 > this.width)
-			this.scale = (w - padding * 2) / this.width;
-		else if ((h - top - padding * 2) > this.height)
-			this.scale = (h - top - padding * 2) / this.height;
-		else
-			this.scale = 1;
-
-		if (this.scale != 1) {
-			if (this.scale * this.width / (window.innerHeight - top) > this.width/this.height) {
-				this.canvas.height = window.innerHeight;
-				this.canvas.width = this.canvas.height * (this.width / this.height);
-				this.scale = this.canvas.height / this.height;
-			} else {
-				this.canvas.width = Math.min(this.width * this.scale, this.width);
-				this.canvas.height = Math.min(this.height * this.scale, this.height);
-			}
-			this.ctx.scale(this.scale, this.scale);
-		}
-		this.ctxStrokeColor = undefined; // color gets f*ed when resetting canvas
-		this.ctx.miterLimit = 1; // also gets f'ed
-	};
-
 	this.loadData = function(data, callback) {
 		this.frames = data.f;
 		this.drawings = data.d;
@@ -194,7 +157,9 @@ function LinesPlayer(canvas, src, lps, resize, callback, isTexture) {
 		if (data.bg) this.canvas.style.backgroundColor = data.bg;
 		if (callback) callback(); // callback to do something after drawing loads
 		if (!this.isTexture) requestAnimFrame(this.draw.bind(this));
-		if (this.resize) {
+
+		/* defined by instance */
+		if (this.sizeCanvas) {
 			this.sizeCanvas();
 			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 		}
