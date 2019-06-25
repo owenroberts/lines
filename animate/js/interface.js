@@ -279,7 +279,7 @@ function Interface() {
 		for (let i = 0; i < lns.layers.length; i++) {
 			const layer = lns.layers[i];
 			if (layer.isInFrame(lns.currentFrame)) {
-				self.layers.push(layer)
+				self.layers.push(layer);
 
 				const row = self.panels['layer'].addRow(`layer ${i}`);
 				self.panels['layer'].add(new UIDisplay({text: `◪${i}` }), row);
@@ -359,7 +359,7 @@ function Interface() {
 		const w = self.canvas.width;
 		const h = self.canvas.height;
 		const col = w / (lns.numFrames + 1);
-		const row = h / lns.layers.length;
+		
 		
 		self.ctx.fillStyle = '#D3D3D3';
 		self.ctx.fillRect(0, 0, w, h);
@@ -369,15 +369,16 @@ function Interface() {
 			self.ctx.fillStyle = '#fdf';
 			self.ctx.fillRect((i * col) + col/20, h - 20, col - col/20 * 2, 4);
 		}
+
+		const row = (h - 20) / lns.layers.length;
 		
 		for (let i = 0; i < lns.layers.length; i++) {
 			const layer = lns.layers[i];
 			const x = layer.f.s * col + 1;
-			const y = i * row/2;
+			const y = i * row + row/20;
 			const _w = (layer.f.e - layer.f.s + 1) * col - 2;
 			self.ctx.fillStyle = '#ADD8E6';
-			console.log(x, y, _w, row);
-			self.ctx.fillRect(x, y, _w, row / 2);
+			self.ctx.fillRect(x, y, _w, row - row/20 * 2);
 		}
 	};
 
