@@ -185,3 +185,7 @@ button:focus { outline: none; }
 	#current { background-color: $main-color !important; }
 	.selected { background-color: $accent-two !important; }
 }
+
+#layers {
+	margin-top: 1em;
+}

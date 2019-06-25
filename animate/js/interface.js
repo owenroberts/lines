@@ -98,6 +98,7 @@ function Interface() {
 		self.updateFramesPanel();
 		self.resetLayers();
 		self.resetDrawings();
+		self.drawLayers();
 	};
 
 	/* e key - go to next frame */
@@ -348,6 +349,35 @@ function Interface() {
 				// 	}
 				// }), row);
 			}
+		}
+	};
+
+	/* use canvas mod */
+	this.canvas = document.getElementById("layers");
+	this.ctx = this.canvas.getContext('2d');
+	this.drawLayers = function() {
+		const w = self.canvas.width;
+		const h = self.canvas.height;
+		const col = w / (lns.numFrames + 1);
+		const row = h / lns.layers.length;
+		
+		self.ctx.fillStyle = '#D3D3D3';
+		self.ctx.fillRect(0, 0, w, h);
+		
+		for (let i = 0; i < lns.numFrames + 1; i++) {
+			const x = i * col;
+			self.ctx.fillStyle = '#fdf';
+			self.ctx.fillRect((i * col) + col/20, h - 20, col - col/20 * 2, 4);
+		}
+		
+		for (let i = 0; i < lns.layers.length; i++) {
+			const layer = lns.layers[i];
+			const x = layer.f.s * col + 1;
+			const y = i * row/2;
+			const _w = (layer.f.e - layer.f.s + 1) * col - 2;
+			self.ctx.fillStyle = '#ADD8E6';
+			console.log(x, y, _w, row);
+			self.ctx.fillRect(x, y, _w, row / 2);
 		}
 	};
 
