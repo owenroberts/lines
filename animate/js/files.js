@@ -27,14 +27,15 @@ function Files(params) {
 
 		/* save current frame */
 		let layers = [];
-		if (single && lns.getLayers()) {
-			layers = lns.getLayers();
-		} else {
+		if (single) {
 			for (let i = 0; i < lns.layers.length; i++) {
-				if (lns.layers[i].f.length > 0)
+				if (lns.layers[i].isInFrame(lns.currentFrame))
 					layers.push(lns.layers[i]);
 			}
+		} else {
+			layers = lns.layers;
 		}
+		
 		
 		for (let i = 0; i < layers.length; i++) {
 			layers[i].clean();
@@ -114,6 +115,7 @@ function Files(params) {
 		}
 	};
 
+	/* shift o */
 	this.reOpenFile = function() {
 		if (self.fileName) localStorage.setItem('re-open', self.fileName);
 		location.reload();

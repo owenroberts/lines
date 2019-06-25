@@ -134,7 +134,7 @@ button:focus { outline: none; }
 			flex: 0 1 auto;
 		}
 		input {
-			flex: 1;
+			flex: 0 1 20px;
 			width: 100%;
 		}
 		input[type=range], input[type=color] {

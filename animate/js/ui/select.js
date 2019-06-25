@@ -12,7 +12,7 @@ class UISelect extends UI {
 
 		/* test but don't have any select rn */
 		this.el.addEventListener('change', function(ev) {
-			params.callback(ev);
+			params.callback(ev.target.value);
 		});
 	}
 }

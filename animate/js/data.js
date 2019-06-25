@@ -32,10 +32,7 @@ function Data() {
 				v: lns.draw.v, // wiggle change speed (v for velocity i guess)
 				x: 0, // default x and y
 				y: 0,
-				f: [{
-					s: lns.currentFrame,
-					e: lns.currentFrame
-				}]
+				f: { s: lns.currentFrame, e: lns.currentFrame }
 			}));
 
 			lns.drawings.push(lns.lines); /* add current lines to drawing data */
@@ -49,9 +46,11 @@ function Data() {
 	/* c key  */
 	this.copy = function() {
 		self.saveLines();
-		lns.getLayers(lns.currentFrame, layer => {
-			self.copyFrame.push(layer);
-		});
+
+		for (let i = 0; i < lns.layers.length; i++) {
+			if (lns.layers[i].isInFrame(lns.currentFrame))
+				self.copyFrame.push(lns.layers[i]);
+		}
 	};
 
 	/* v key */
@@ -110,9 +109,11 @@ function Data() {
 		self.saveState();
 		/* separate lns.lines and layers ? */
 		lns.lines = [];
-		lns.getLayers(lns.currentFrame, layer => {
-			layer.removeIndex(lns.currentFrame);
-		});
+
+		for (let i = 0; i < lns.layers.length; i++) {
+			if (lns.layers[i].inInFrame(lns.currentFrame))
+				lns.layers[i].removeIndex(lns.currentFrame);
+		}
 	};
 
 	/* d key */
@@ -259,25 +260,7 @@ function Data() {
 		}
 	};
 
-	/* maybe don't need this */
-	this.newLayer = function(layer, layerIndex, frameIndex) {
-		const prevLayer = lns.layers[layerIndex];
-		const newLayer = {};
-		for (const key in prevLayer) {
-			if (layer[key] && layer[key] != prevLayer[key])
-				newLayer[key] = layer[key];
-			else
-				newLayer[key] = prevLayer[key];
-		}
-		lns.layers.push(newLayer);
-		layerIndex = lns.layers.length - 1;
-		lns.frames[lns.currentFrame][frameIndex] = { l: layerIndex };
-		return layerIndex;
-	};
-
-	/* q key - all drawings in current frames, moved in each other frame
-		in v2, x y for frame layers
-		no context where argument is used ... */
+	/* q key  */
 	this.offsetDrawing = function(offset) {
 		self.saveLines();
 		const _layers = lns.getLayers();
