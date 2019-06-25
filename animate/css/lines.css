@@ -157,4 +157,7 @@ button:focus {
   #frames .selected {
     background-color: #ffddff !important; }
 
+#layers {
+  margin-top: 1em; }
+
 /*# sourceMappingURL=lines.css.map */
