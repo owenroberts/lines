@@ -96,8 +96,8 @@ function Render(fps) {
 							self.drawLines({
 								lines: lns.drawings[layer.d],
 								...layer,
-								s: start != undefined ? start : layer.s,
-								e: end != undefined ? end : layer.e,
+								s: start != undefined ? start : 0,
+								e: end != undefined ? end : lns.drawings[layer.d].length,
 								color: color,
 								onion: true
 							});
@@ -114,10 +114,9 @@ function Render(fps) {
 					self.drawLines({
 						lines: lns.drawings[layer.d],
 						...layer,
-						s: start != undefined ? start : layer.s,
-						e: end != undefined ? end : layer.e,
-						onion: false,
-						color: lns.lineColor.color
+						s: start != undefined ? start : 0,
+						e: end != undefined ? end : lns.drawings[layer.d].length,
+						onion: false
 					});
 				}
 			}

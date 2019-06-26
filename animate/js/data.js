@@ -23,8 +23,6 @@ function Data() {
 			/* save render settings to a new layer */
 			lns.layers.push(new Layer({
 				d: lns.drawings.length, // drawing index
-				s: 0, // start point
-				e: lns.lines.length, // end point
 				c: lns.lineColor.color, // color
 				n: lns.draw.n, // segment number
 				r: lns.draw.r, // jiggle ammount
@@ -46,7 +44,6 @@ function Data() {
 	/* c key  */
 	this.copy = function() {
 		self.saveLines();
-
 		for (let i = 0; i < lns.layers.length; i++) {
 			if (lns.layers[i].isInFrame(lns.currentFrame))
 				self.copyFrame.push(lns.layers[i]);
@@ -289,5 +286,18 @@ function Data() {
 		} else {
 			console.log("%c No layers in frame ", "color:yellow; background:black;");
 		}
+	};
+
+	/* a key */
+	this.explode = function(params) {
+		self.saveLines();
+		const frames = +prompt('Number of frames?');
+		for (let i = 0; i < lns.layers.length; i++) {
+			const layer = lns.layers[i];
+			layer.f.e = layer.f.s + frames;
+			if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
+			layer.draw = params.type;
+		}
+		lns.interface.updateFramesPanel();
 	};
 }

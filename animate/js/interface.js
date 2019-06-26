@@ -33,6 +33,7 @@ function Interface() {
 		sets current frame,
 		sets copy frames */
 	this.updateFramesPanel = function() {
+		
 		const numFrames = self.frameElems.getLength() - 1;
 		/* this creates frames that don't already exist
 			loop from the num of already made html frames to frames.length */
@@ -78,6 +79,7 @@ function Interface() {
 
 	/* update frame display and current frame */
 	this.updateFrameNum = function() {
+		self.drawLayers();
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[lns.currentFrame]) // also un-ui
@@ -98,7 +100,6 @@ function Interface() {
 		self.updateFramesPanel();
 		self.resetLayers();
 		self.resetDrawings();
-		self.drawLayers();
 	};
 
 	/* e key - go to next frame */
@@ -288,7 +289,7 @@ function Interface() {
 					on: '◐',
 					off: '◑',
 					callback: function() {
-						self.layers[i].toggle();
+						layer.toggle();
 					}
 				}), row); /* select */
 
@@ -317,7 +318,7 @@ function Interface() {
 
 				self.panels['layer'].add(new UISelect({
 					options: ['None', 'Explode', 'Reverse', 'ExRev'],
-					selected: self.layers[i].draw,
+					selected: layer.draw,
 					callback: function(value) {
 						layer.draw = value;
 					}
@@ -326,9 +327,11 @@ function Interface() {
 				self.panels['layer'].add(new UIButton({
 					title: "+",
 					callback: function() {
-						lns.layers.push(new Layer({...layer}));
-						self.displayLayers();
-						layer.removeIndex(lns.currentFrame);
+						const n = new Layer(_.cloneDeep(layer));
+						n.f.s = n.f.e = lns.currentFrame + 1;
+						layer.f.e = lns.currentFrame;
+						lns.layers.push(n);
+						lns.interface.nextFrame();
 					}
 				}), row); /* duplicate */
 				
@@ -356,29 +359,30 @@ function Interface() {
 	this.canvas = document.getElementById("layers");
 	this.ctx = this.canvas.getContext('2d');
 	this.drawLayers = function() {
-		const w = self.canvas.width;
-		const h = self.canvas.height;
+		const w = self.canvas.offsetWidth;
+		self.canvas.width = w;
+		const row = 10;
+		const h = row * (lns.layers.length + 1);
+		self.canvas.height = h;
 		const col = w / (lns.numFrames + 1);
 		
-		
-		self.ctx.fillStyle = '#D3D3D3';
-		self.ctx.fillRect(0, 0, w, h);
+		// self.ctx.fillStyle = '#afafaf';
+		// self.ctx.fillRect(0, 0, w, h);
 		
 		for (let i = 0; i < lns.numFrames + 1; i++) {
 			const x = i * col;
-			self.ctx.fillStyle = '#fdf';
-			self.ctx.fillRect((i * col) + col/20, h - 20, col - col/20 * 2, 4);
+			if (i == lns.currentFrame) self.ctx.fillStyle = '#FF79FF';
+			else self.ctx.fillStyle = '#fdf';
+			self.ctx.fillRect((i * col) + col/20, h - 5, col - col/10, 4);
 		}
 
-		const row = (h - 20) / lns.layers.length;
-		
 		for (let i = 0; i < lns.layers.length; i++) {
 			const layer = lns.layers[i];
 			const x = layer.f.s * col + 1;
 			const y = i * row + row/20;
 			const _w = (layer.f.e - layer.f.s + 1) * col - 2;
 			self.ctx.fillStyle = '#ADD8E6';
-			self.ctx.fillRect(x, y, _w, row - row/20 * 2);
+			self.ctx.fillRect(x, y + row/4, _w, row/2);
 		}
 	};
 
