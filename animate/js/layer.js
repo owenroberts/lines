@@ -5,7 +5,7 @@ class Layer {
 		}
 		this.toggled = false;
 		this.prevColor = this.c;
-		this.draw = 'None';
+		this.draw = params.draw || 'None';
 		// this.display = true; // display everywhere
 		// drop from frame
 		// delete entirely ? 

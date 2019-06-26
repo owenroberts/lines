@@ -27,7 +27,7 @@ window.addEventListener("load", function() {
 
 	const openFile = localStorage.getItem('re-open');
 	if (openFile) {
-		lns.fio.loadFramesFromFile(openFile);
+		lns.files.loadFramesFromFile(openFile);
 		localStorage.removeItem('re-open');
 	}
 

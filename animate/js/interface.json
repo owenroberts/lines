@@ -6,7 +6,7 @@
 		"list": [
 			{
 				"type": "range",
-				"key": "u",
+				"key": "shift-m",
 				"face": "mouse",
 				"set": {
 					"prop": "mouseInterval",
@@ -673,11 +673,12 @@
 		"list": [
 			{
 				"type": "button",
+				"key": "u",
 				"fromModule": {
 					"callback": "displayLayers"
 				},
 				"params": {
-					"title": "Update Layers"
+					"title": "Display Layers"
 				}
 			},
 			{
@@ -751,6 +752,52 @@
 				"params": {
 					"on": "Auto Save Settings On",
 					"off": "Auto Save Settings Off"
+				}
+			}
+		]
+	},
+	"explode": {
+		"id": "explode-menu",
+		"label": "Explode",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Explode",
+					"arguments": {
+						"type": "Explode"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Reverse",
+					"arguments": {
+						"type": "Reverse"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "ExRev",
+					"arguments": {
+						"type": "ExRev"
+					}
 				}
 			}
 		]

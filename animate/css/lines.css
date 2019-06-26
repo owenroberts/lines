@@ -158,6 +158,7 @@ button:focus {
     background-color: #ffddff !important; }
 
 #layers {
-  margin-top: 1em; }
+  margin-top: 1em;
+  width: 100%; }
 
 /*# sourceMappingURL=lines.css.map */
