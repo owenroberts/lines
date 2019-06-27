@@ -75,7 +75,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			if (this.drawBg) this.ctx.clearRect(0, 0, this.width, this.height);
 			
 			if (!this.mixedColors) this.ctx.beginPath();
-			for (let i = 0; i < this.layers.length; i++) {
+			for (let i = 0, len = this.layers.length; i < len; i++) {
 				const layer = this.layers[i];
 				const drawing = this.drawings[layer.d];
 				if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
