@@ -8,7 +8,7 @@ function Interface() {
 	this.framesPanel = new UI({ id:"frames" });
 	this.frameElems = new UIList({ class:"frame" });
 
-	/* plus frame is unsaved drawing frame 
+	/* plus frame is unsaved drawing frame
 		do i need a plus frame? */
 	this.plusFrame = new UI({
 		id:"current",
@@ -33,7 +33,7 @@ function Interface() {
 		sets current frame,
 		sets copy frames */
 	this.updateFramesPanel = function() {
-		
+
 		const numFrames = self.frameElems.getLength() - 1;
 		/* this creates frames that don't already exist
 			loop from the num of already made html frames to frames.length */
@@ -272,7 +272,7 @@ function Interface() {
 
 	this.resetLayers = function() {
 		for (let i = self.layers.length - 1; i >= 0; i--) {
-			if (self.layers[i].toggled) self.layers[i].toggle(); 
+			if (self.layers[i].toggled) self.layers[i].toggle();
 		}
 		for (let i = self.panels['layer'].rows.length - 1; i > 1; i--) {
 			self.panels['layer'].removeRow(self.panels['layer'].rows[i]);
@@ -280,9 +280,7 @@ function Interface() {
 		self.layers = [];
 	};
 
-	/*
-		this references the layer in each frame
-	*/
+	/* layers in current frame */
 	this.displayLayers = function() {
 		self.resetLayers();
 		self.resetDrawings();
@@ -292,9 +290,9 @@ function Interface() {
 			if (layer.isInFrame(lns.currentFrame)) {
 				self.layers.push(layer);
 
-				const row = self.panels['layer'].addRow(`layer ${i}`);
-				self.panels['layer'].add(new UIDisplay({text: `◪${i}` }), row);
-				
+				const row = self.panels['layer'].addRow(`layer-${i}`);
+				self.panels['layer'].add(new UIDisplay({text: `${i}` }), row);
+
 				self.panels['layer'].add(new UIToggleButton({
 					on: '◐',
 					off: '◑',
@@ -312,7 +310,7 @@ function Interface() {
 						if (layer.f.s > lns.numFrames) lns.numFrames = layer.s;
 						if (layer.f.e < layer.s) layer.e = layer.s;
 					}
-				}), row); 
+				}), row);
 
 				self.panels['layer'].add(new UIText({
 					label: 'E',
@@ -324,7 +322,7 @@ function Interface() {
 						if (layer.f.s > layer.f.e) layer.f.s = layer.f.e;
 						self.updateFramesPanel();
 					}
-				}), row); 
+				}), row);
 
 				self.panels['layer'].add(new UISelect({
 					options: ['None', 'Explode', 'Reverse', 'ExRev'],
@@ -344,7 +342,7 @@ function Interface() {
 						lns.interface.nextFrame();
 					}
 				}), row); /* duplicate */
-				
+
 				self.panels['layer'].add(new UIToggleButton({
 					on: 'x',
 					off: 'x',
@@ -375,10 +373,10 @@ function Interface() {
 		const h = row * (lns.layers.length + 1);
 		self.canvas.height = h;
 		const col = w / (lns.numFrames + 1);
-		
+
 		// self.ctx.fillStyle = '#afafaf';
 		// self.ctx.fillRect(0, 0, w, h);
-		
+
 		for (let i = 0; i < lns.numFrames + 1; i++) {
 			const x = i * col;
 			if (i == lns.currentFrame) self.ctx.fillStyle = '#FF79FF';
@@ -426,7 +424,7 @@ function Interface() {
 
 	this.updateLayerColor = function(color) {
 		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled) 
+			if (self.layers[i].toggled)
 				self.layers[i].c = self.layers[i].prevColor = color;
 		}
 	};
