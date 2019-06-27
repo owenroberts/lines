@@ -62,7 +62,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 					this.currentFrameCounter += this.intervalRatio;
 					this.currentFrame = Math.floor(this.currentFrameCounter);
 				}
-				if (this.currentFrame > this.numFrames) {
+				if (this.currentFrameCounter > this.numFrames) {
 					this.currentFrame = this.currentFrameCounter = 0;
 					if (this.onPlayedOnce) {
 						this.onPlayedOnce();
@@ -164,6 +164,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	};
 
 	this.loadData = function(data, callback) {
+		console.log('fart');
 		this.drawings = [];
 		for (let i = 0; i < data.d.length; i++) {
 			const drawing = data.d[i];
@@ -199,6 +200,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 		}
 		if (this.color) this.ctx.strokeStyle = this.color;
+		console.log(this.layers);
 	};
 
 	// original generic name, now is closer to "load file"
