@@ -4,6 +4,7 @@ $accent-color: blue;
 $accent-two: #ffddff;
 $ui-color: lightgray;
 $ui-select: gray;
+
 body {
 	font-family: Verdana, sans-serif;
 	margin: 0;
@@ -11,7 +12,9 @@ body {
 	-webkit-user-select: none;
 	user-select: none;
 }
+
 * {box-sizing: border-box; }
+
 button:focus { outline: none; }
 
 %tool-tip {
@@ -44,8 +47,8 @@ button:focus { outline: none; }
 	background-color: $ui-color;
 	padding: 0 0.5em;
 	border-radius: 3px;
-	&:hover { 
-		background: $accent-two; 
+	&:hover {
+		background: $accent-two;
 		cursor: pointer;
 	}
 	transition: background-color 150ms ease-in;
@@ -93,7 +96,7 @@ button:focus { outline: none; }
 	overflow: hidden;
 	position: relative;
 	height: 25px;
-	
+
 	.title { margin-bottom: 1em; }
 
 	.toggle, .order {
@@ -113,8 +116,8 @@ button:focus { outline: none; }
 	}
 
 	.order {
-		font-size: 1em; 
-		right: 2px; 
+		font-size: 1em;
+		right: 2px;
 		left: auto;
 	}
 
@@ -125,7 +128,7 @@ button:focus { outline: none; }
 		label {
 			line-height: 1.5;
 		}
-		span, label, input {
+		span, label, input, select {
 			// vertical-align: top;
 			// line-height: 2;
 			white-space: nowrap;
@@ -134,8 +137,9 @@ button:focus { outline: none; }
 			flex: 0 1 auto;
 		}
 		input {
-			flex: 0 1 20px;
+			flex: 0 1 30px;
 			width: 100%;
+			text-align: right;
 		}
 		input[type=range], input[type=color] {
 			flex: 1 1 auto;
@@ -146,8 +150,6 @@ button:focus { outline: none; }
 			padding-right: 0.25em;
 		}
 		.display {
-			flex: 0;
-			width: 30px;
 			text-align: right;
 		}
 	}

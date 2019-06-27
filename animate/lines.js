@@ -1,4 +1,3 @@
-/* global lns object */
 window.addEventListener("load", function() {
 
 	lns = {};

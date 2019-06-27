@@ -35,8 +35,8 @@ function Files(params) {
 		} else {
 			layers = lns.layers;
 		}
-		
-		
+
+
 		for (let i = 0; i < layers.length; i++) {
 			layers[i].clean();
 		}

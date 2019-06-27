@@ -13,7 +13,7 @@ class UI {
 		if (params.prompt) this.prompt = params.prompt;
 		if (params.value != undefined) this.el.value = params.value;
 		if (params.key) this.setKey(params.key, params.title || params.label);
-		
+
 		if (params.css) {
 			for (const key in params.css) {
 				this.el.style[key] = params.css[key];
@@ -31,30 +31,30 @@ class UI {
 	setKey(key, title) {
 		this.el.title = `${key} ${title ? title : ''}`; // hover title key text
 	}
-	
+
 	addClass(c) {
 		this.el.classList.add(c);
 	}
-	
+
 	setId(id) {
 		this.el.id = id;
 	}
-	
+
 	setValue(value) {
 		this.el.value = value;
 	}
-	
+
 	getValue() {
 		return this.el.value;
 	}
-	
+
 	addLabel(key) {
 		const label = document.createElement("label");
 		label.textContent = this.label;
 		if (this.el.title) label.title = this.el.title;
 		this.el.parentNode.insertBefore(label, this.el);
 	}
-	
+
 	append(elem) {
 		this.el.appendChild(elem);
 	}
