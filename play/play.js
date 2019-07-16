@@ -98,6 +98,11 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 						this.rndr.off.y = Cool.random(0, this.rndr.w);
 						this.rndr.speed.x = Cool.random(-this.rndr.v, this.rndr.v);
 						this.rndr.speed.y = Cool.random(-this.rndr.v, this.rndr.v);
+					} else {
+						this.rndr.off.x = 0;
+						this.rndr.off.y = 0;
+						this.rndr.speed.x = 0;
+						this.rndr.speed.y = 0;
 					}
 
 					if (this.mixedColors) this.ctx.beginPath();
