@@ -30,6 +30,8 @@ const Game = {
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
 		}
+
+		this.loaded = {}; /* auto save loaded json sprites */
 	},
 	start: function() {
 		if (typeof start === "function") start(); // should be game method?
