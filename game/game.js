@@ -29,20 +29,20 @@ const Game = {
 
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
-			
-
-			if (typeof start === "function") start(); // should be game method?
-			if (typeof sizeCanvas === "function") sizeCanvas();
-
-			/* draw and update are separates functions 
-				because lines draw at relatively slow rate (10fps) */
-			if (typeof draw === "function") requestAnimFrame(Game.gDraw);
-			if (typeof update === "function") requestAnimFrame(Game.gUpdate);
-			if (typeof Events != "undefined") Events.init(Game.canvas);
-			if (this.stats) this.initStats();
 		}
 	},
-	gDraw: function() {
+	start: function() {
+		if (typeof start === "function") start(); // should be game method?
+		if (typeof sizeCanvas === "function") sizeCanvas();
+
+		/* draw and update are separates functions 
+			because lines draw at relatively slow rate (10fps) */
+		if (typeof draw === "function") requestAnimFrame(Game.draw);
+		if (typeof update === "function") requestAnimFrame(Game.update);
+		if (typeof Events != "undefined") Events.init(Game.canvas);
+		if (this.stats) this.initStats();
+	},
+	draw: function() {
 		const time = performance.now();
 		if (time > Game.drawTime + Game.lineInterval) {
 			if (Game.clearBg) Game.ctx.clearRect(0, 0, Game.width, Game.height);
@@ -55,9 +55,9 @@ const Game = {
 			}
 			Game.drawTime = time;
 		}
-		requestAnimFrame(Game.gDraw);
+		requestAnimFrame(Game.draw);
 	},
-	gUpdate: function() {
+	update: function() {
 		const time = performance.now();
 		if (time > Game.updateTime + Game.updateInterval) {
 			update(); // update defined in each game js file
@@ -69,7 +69,7 @@ const Game = {
 			}
 			Game.updateTime = time;
 		}
-		requestAnimFrame(Game.gUpdate); 
+		requestAnimFrame(Game.update); 
 	},
 	initStats: function() {
 		Game.ctx.font = 'lighter 11px sans-serif';
