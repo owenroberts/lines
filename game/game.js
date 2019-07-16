@@ -1,6 +1,6 @@
 const Game = {
 	init: function(params) {
-		this.canvas = document.getElementById("lines");
+		this.canvas = document.getElementById(params.canvas || "lines");
 		
 		// window.AudioContext = window.AudioContext || window.webkitAudioContext; // update audio new chrome
 		// this.audioCtx = new AudioContext(); // not using this rn
@@ -26,6 +26,11 @@ const Game = {
 			this.ctx.miterLimit = 1;
 			this.canvas.width = this.width;
 			this.canvas.height = this.height;
+
+			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
+			if (params.scale) this.ctx.scale(params.scale, params.scale);
+			
+
 			if (typeof start === "function") start(); // should be game method?
 			if (typeof sizeCanvas === "function") sizeCanvas();
 
@@ -33,7 +38,7 @@ const Game = {
 				because lines draw at relatively slow rate (10fps) */
 			if (typeof draw === "function") requestAnimFrame(Game.gDraw);
 			if (typeof update === "function") requestAnimFrame(Game.gUpdate);
-			Events.init(Game.canvas);
+			if (typeof Events != "undefined") Events.init(Game.canvas);
 			if (this.stats) this.initStats();
 		}
 	},

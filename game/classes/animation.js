@@ -45,20 +45,8 @@ class Animation {
 	load(setAnimSize, callback) {
 		fetch(this.src)
 			.then(response => { return response.json() })
-			.then(data => {
-				this.loaded = true;
-				this.frames = data.f;
-				this.drawings = data.d;
-				this.layers = data.l;
-				if (this.states.default)
-					this.states.default.end = this.frames.length;
-				if (!setAnimSize) {
-					if (callback) callback(data.w, data.h);
-				} else {
-					this.widthRatio = setAnimSize.w / data.w;
-					this.heightRatio = setAnimSize.h / data.h;
-				}
-				this.intervalRatio = Game.lineInterval / (1000 / data.fps);
+			.then(json => { 
+				this.loadJSON(json, setAnimSize, callback); 
 			})
 			.catch(error => { console.error(error) });
 	}
@@ -68,6 +56,7 @@ class Animation {
 		this.frames = json.f;
 		this.drawings = json.d;
 		this.layers = json.l;
+		
 		if (this.states.default)
 			this.states.default.end = this.frames.length;
 		if (!setAnimSize) {
@@ -77,6 +66,13 @@ class Animation {
 			this.heightRatio = setAnimSize.h / json.h;
 		}
 		this.intervalRatio = Game.lineInterval / (1000 / json.fps);
+
+		if (this.onLoad) this.onLoad();
+	}
+
+	setOnLoad(callback) {
+		if (this.loaded) callback();
+		else this.onLoad = callback;
 	}
 
 	createNewState(label, start, end) {
@@ -120,6 +116,7 @@ class Animation {
 	}
 
 	draw(x, y) {
+		// console.log(this.state, this.states[this.state]);
 		if (this.loaded && this.isPlaying) {
 			if (this.mirror) {
 				// Game.ctx.save();
