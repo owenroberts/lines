@@ -236,6 +236,7 @@ class Animation {
 			} else {
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 			}
+			if (this.onUpdate) this.onUpdate();
 		}
 
 		if (this.currentFrameCounter >= this.states[this.state].end) {
