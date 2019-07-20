@@ -135,18 +135,16 @@ class Animation {
 					const layer = this.layers[frame.l];
 					const drawing = this.drawings[layer.d];
 
-					if (this.rndr.l != frame.l) {
-						for (const key in layer) {
-							this.rndr[key] = layer[key];
-						}
+					for (const key in layer) {
+						this.rndr[key] = layer[key];
 					}
 
 					/* 
 						s is not saved in frames because its the same as layer 
 						temp fix
 					*/
-					if (this.rndr.s != layer.s) this.rndr.s = layer.s;
-					if (this.rndr.e != layer.e) this.rndr.e = layer.e;
+					// if (this.rndr.s != layer.s) this.rndr.s = layer.s;
+					// if (this.rndr.e != layer.e) this.rndr.e = layer.e;
 
 					for (const key in frame) {
 						this.rndr[key] = frame[key];
