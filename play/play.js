@@ -10,8 +10,8 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.ctx.miterLimit = 1;
 	this.width;
 	this.height;
-	this.scale = 1;
 	
+	this.numFrames = 0;
 	this.currentFrame = 0; // always int, floor cfc
 	this.currentFrameCounter = 0; // uses intervalRatio, so it's a float
 	this.isPlaying = true;
@@ -23,7 +23,6 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	/* 	initialize to one but this is the math
 	 this.lineInterval / (1000 / this.lps);    */
 
-	this.frames = [];
 	this.drawings = [];
 	this.layers = [];
 	this.ctxStrokeColor;
@@ -57,36 +56,56 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			requestAnimFrame(this.draw.bind(this));
 		if (performance.now() > this.lineInterval + this.timer) {
 			this.timer = performance.now();
-			if (this.isPlaying && this.currentFrameCounter < this.frames.length) {
-				this.currentFrameCounter += this.intervalRatio;
-				this.currentFrame = Math.floor(this.currentFrameCounter);
-			}
-			if (this.isPlaying && this.currentFrame >= this.frames.length) {
-				this.currentFrame = this.currentFrameCounter = 0;
-				if (this.onPlayedOnce) {
-					this.onPlayedOnce();
-					this.onPlayedOnce = undefined;
+			
+			if (this.isPlaying) {
+				if (this.currentFrameCounter <= this.numFrames) {
+					this.currentFrameCounter += this.intervalRatio;
+					this.currentFrame = Math.floor(this.currentFrameCounter);
+				}
+				if (this.currentFrameCounter > this.numFrames) {
+					this.currentFrame = this.currentFrameCounter = 0;
+					if (this.onPlayedOnce) {
+						this.onPlayedOnce();
+						this.onPlayedOnce = undefined;
+					}
 				}
 			}
+			
 			if (this.drawBg) this.ctx.clearRect(0, 0, this.width, this.height);
-			if (this.frames[this.currentFrame]) {
-				if (!this.mixedColors) this.ctx.beginPath();
-				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
-					const frame = this.frames[this.currentFrame][i];
-					const layer = this.layers[frame.l];
-					const drawing = this.drawings[layer.d];
+			
+			if (!this.mixedColors) this.ctx.beginPath();
+			for (let i = 0, len = this.layers.length; i < len; i++) {
+				const layer = this.layers[i];
+				const drawing = this.drawings[layer.d];
+				if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
 					
-					// want to use prev layer but too many exceptions ... 
-					for (const key in layer) {
-						this.rndr[key] = layer[key];
-					} 
-
-					// update layer num from frame, any other props (se, xy)
-					for (const key in frame) {
-						this.rndr[key] = frame[key];
+					this.rndr.s = 0;
+					this.rndr.e = drawing.length;
+					const frameCount = layer.f.e - layer.f.s + 1;
+					
+					if (layer.draw == 'Explode') {
+						const segments = drawing.length / frameCount;
+						this.rndr.e = Math.round(segments * (this.currentFrame - layer.f.s + 1));
+					}
+					else if (layer.draw == 'Reverse') {
+						const segments = drawing.length / frameCount;
+						this.rndr.s = Math.round(segments * (this.currentFrame - layer.f.s));
+					}
+					else if (layer.draw == 'ExRev') {
+						const mid = layer.f.s + frameCount / 2;
+						if (this.currentFrame < mid) {
+							const segments = drawing.length / (mid - layer.f.s + 1);
+							this.rndr.e = Math.round(segments * (this.currentFrame - layer.f.s));
+						} else {
+							const segments = drawing.length / (layer.f.e - mid + 1);
+							this.rndr.s = Math.round(segments * (this.currentFrame - mid));
+						}
 					}
 
-					// over ride props
+					for (const key in layer) {
+						this.rndr[key] = layer[key];
+					}
+
 					for (const key in this.over) {
 						if (this.over[key] != undefined) 
 							this.rndr[key] = this.over[key];
@@ -106,6 +125,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 					}
 
 					if (this.mixedColors) this.ctx.beginPath();
+					
 					for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
 						const s = drawing[j];
 						const e = drawing[j + 1];
@@ -121,7 +141,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 							this.ctx.lineTo( 
 								this.rndr.x + p.x + v.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x, 
 								this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
-							);
+							);	
 						}
 
 						if (this.ctxStrokeColor != this.rndr.c && !this.color) {
@@ -134,7 +154,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 							this.rndr.off.x += this.rndr.speed.x;
 							if (this.rndr.off.x >= this.rndr.w || this.rndr.off.x <= -this.rndr.w)
 								this.rndr.speed.x *= -1;
-	
+
 							this.rndr.off.y += this.rndr.speed.y;
 							if (this.rndr.off.y >= this.rndr.w || this.rndr.off.y <= -this.rndr.w)
 								this.rndr.speed.y *= -1;
@@ -143,15 +163,30 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 					if (this.mixedColors) this.ctx.stroke();
 				}
 				if (!this.mixedColors) this.ctx.stroke();
+				if (this.update) this.update();
 			}
-			if (this.update) this.update();
 		}
 	};
 
 	this.loadData = function(data, callback) {
-		this.frames = data.f;
-		this.drawings = data.d;
+		this.drawings = [];
+		for (let i = 0; i < data.d.length; i++) {
+			const drawing = data.d[i];
+			const d = [];
+			if (drawing) {
+				for (let j = 0; j < drawing.length; j++) {
+					const point = drawing[j];
+					if (point) d.push({ x: point[0], y: point[1] });
+					else d.push('end');
+				}
+			}
+			this.drawings[i] = d;
+		}
 		this.layers = data.l;
+		for (let i = 0; i < this.layers.length; i++) {
+			if (this.numFrames < this.layers[i].f.e)
+				this.numFrames = this.layers[i].f.e;
+		}
 		this.intervalRatio = this.lineInterval / (1000 / data.fps);
 		this.currentFrame = this.currentFrameCounter = 0;
 		this.width = this.canvas.width = data.w;

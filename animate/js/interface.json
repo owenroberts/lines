@@ -6,7 +6,7 @@
 		"list": [
 			{
 				"type": "range",
-				"key": "u",
+				"key": "shift-m",
 				"face": "mouse",
 				"set": {
 					"prop": "mouseInterval",
@@ -194,7 +194,7 @@
 				"type": "button",
 				"key": "c",
 				"fromModule": {
-					"callback": "copyFrames"
+					"callback": "copy"
 				},
 				"params": {
 					"title": "Copy"
@@ -218,16 +218,6 @@
 				},
 				"params": {
 					"title": "Delete Frame Range"
-				}
-			},
-			{
-				"type": "button",
-				"key": "g",
-				"fromModule": {
-					"callback": "duplicate"
-				},
-				"params": {
-					"title": "Duplicate"
 				}
 			},
 			{
@@ -272,16 +262,6 @@
 			},
 			{
 				"type": "button",
-				"key": "shift-q",
-				"fromModule": {
-					"callback": "offsetAll"
-				},
-				"params": {
-					"title": "Offset All"
-				}
-			},
-			{
-				"type": "button",
 				"key": "r",
 				"fromModule": {
 					"callback": "saveLines"
@@ -302,26 +282,6 @@
 			},
 			{
 				"type": "button",
-				"key": "shift-x",
-				"fromModule": {
-					"callback": "cutLastDrawing"
-				},
-				"params": {
-					"title": "Cut Last Layer"
-				}
-			},
-			{
-				"type": "button",
-				"key": "ctrl-x",
-				"fromModule": {
-					"callback": "cutFirstDrawing"
-				},
-				"params": {
-					"title": "Cut First Layer"
-				}
-			},
-			{
-				"type": "button",
 				"key": "z",
 				"fromModule": {
 					"callback": "cutLastSegment"
@@ -334,10 +294,10 @@
 				"type": "button",
 				"key": "shift-z",
 				"fromModule": {
-					"callback": "cutLastSegmentNum"
+					"callback": "cutLastLine"
 				},
 				"params": {
-					"title": "Cut Segment Range"
+					"title": "Cut Last Line"
 				}
 			},
 			{
@@ -354,30 +314,20 @@
 				"type": "button",
 				"key": "ctrl-v",
 				"fromModule": {
-					"callback": "clearFramesToCopy"
+					"callback": "clearSelected"
 				},
 				"params": {
-					"title": "Clear Frames to Copy"
+					"title": "Clear Selected"
 				}
 			},
 			{
 				"type": "button",
 				"key": "v",
 				"fromModule": {
-					"callback": "pasteFrames"
+					"callback": "paste"
 				},
 				"params": {
 					"title": "Paste Frames"
-				}
-			},
-			{
-				"type": "button",
-				"key": "shift-v",
-				"fromModule": {
-					"callback": "selectAll"
-				},
-				"params": {
-					"title": "Select All"
 				}
 			},
 			{
@@ -398,95 +348,6 @@
 				},
 				"params": {
 					"title": "Select Range"
-				}
-			}
-		]
-	},
-	"explode": {
-		"id": "explode-menu",
-		"label": "Explode",
-		"module": "data",
-		"list": [
-			{
-				"type": "button",
-				"key": "a",
-				"fromModule": {
-					"callback": "explode"
-				},
-				"params": {
-					"title": "Explode",
-					"arguments": {
-						"follow": false,
-						"over": false
-					}
-				}
-			},
-			{
-				"type": "button",
-				"key": "shift-a",
-				"fromModule": {
-					"callback": "explode"
-				},
-				"params": {
-					"title": "Explode Over",
-					"arguments": {
-						"follow": false,
-						"over": true
-					}
-				}
-			},
-			{
-				"type": "button",
-				"key": "ctrl-a",
-				"fromModule": {
-					"callback": "explode"
-				},
-				"params": {
-					"title": "Follow",
-					"arguments": {
-						"follow": true,
-						"over": false
-					}
-				}
-			},
-			{
-				"type": "button",
-				"key": "alt-a",
-				"fromModule": {
-					"callback": "explode"
-				},
-				"params": {
-					"title": "Follow Over",
-					"arguments": {
-						"follow": true,
-						"over": true
-					}
-				}
-			},
-			{
-				"type": "button",
-				"key": "shift-r",
-				"fromModule": {
-					"callback": "reverse"
-				},
-				"params": {
-					"title": "Reverse Draw",
-					"arguments": {
-						"simultaneous": false
-					}
-				}
-			},
-			{
-				"type": "button",
-				"key": "alt-r",
-				"fromModule": {
-					"callback": "reverse"
-				},
-				"params": {
-					"title": "Reverse Multi",
-					"arguments": {
-						"simultaneous": true
-					}
 				}
 			}
 		]
@@ -734,10 +595,10 @@
 			{
 				"type": "range",
 				"key": "h",
-				"face": "segNumRange",
+				"face": "n",
 				"set": {
 					"layer": "n",
-					"prop": "segNumRange",
+					"prop": "n",
 					"number": true
 				},
 				"params": {
@@ -750,10 +611,10 @@
 			{
 				"type": "range",
 				"key": "j",
-				"face": "jiggleRange",
+				"face": "r",
 				"set": {
 					"layer": "r",
-					"prop": "jiggleRange",
+					"prop": "r",
 					"number": true
 				},
 				"params": {
@@ -765,10 +626,10 @@
 			},
 			{
 				"type": "range",
-				"face": "wiggleRange",
+				"face": "w",
 				"set": {
 					"layer": "w",
-					"prop": "wiggleRange",
+					"prop": "w",
 					"number": true
 				},
 				"params": {
@@ -780,10 +641,10 @@
 			},
 			{
 				"type": "range",
-				"face": "wiggleSpeed",
+				"face": "v",
 				"set": {
 					"layer": "v",
-					"prop": "wiggleSpeed",
+					"prop": "v",
 					"number": true
 				},
 				"params": {
@@ -812,30 +673,12 @@
 		"list": [
 			{
 				"type": "button",
+				"key": "u",
 				"fromModule": {
 					"callback": "displayLayers"
 				},
 				"params": {
-					"title": "Update Layers"
-				}
-			},
-			{
-				"type": "button",
-				"key": "alt-z",
-				"fromModule": {
-					"callback": "cutLayerSegment"
-				},
-				"params": {
-					"title": "Cut Selected Segment"
-				}
-			},
-			{
-				"type": "button",
-				"fromModule": {
-					"callback": "killLayer"
-				},
-				"params": {
-					"title": "Kill Layer"
+					"title": "Display Layers"
 				}
 			},
 			{
@@ -858,10 +701,10 @@
 			{
 				"type": "button",
 				"fromModule": {
-					"callback": "showDrawings"
+					"callback": "displayDrawings"
 				},
 				"params": {
-					"title": "Show Drawings"
+					"title": "Display Drawings"
 				}
 			}
 		]
@@ -902,13 +745,59 @@
 			},
 			{
 				"type": "toggle",
-				"module": "fio",
+				"module": "files",
 				"fromModule": {
 					"callback": "toggleSaveSettings"
 				},
 				"params": {
 					"on": "Auto Save Settings On",
 					"off": "Auto Save Settings Off"
+				}
+			}
+		]
+	},
+	"explode": {
+		"id": "explode-menu",
+		"label": "Explode",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Explode",
+					"arguments": {
+						"type": "Explode"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Reverse",
+					"arguments": {
+						"type": "Reverse"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "ExRev",
+					"arguments": {
+						"type": "ExRev"
+					}
 				}
 			}
 		]

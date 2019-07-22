@@ -1,4 +1,4 @@
- function Canvas(width, height, color) {
+function Canvas(width, height, color) {
 	const self = this;
 
 	this.width = width;
@@ -73,7 +73,7 @@
 	this.prevCap = { n: '', f: 0 };
 
 	this.capture = function() {
-		if (lns.fio.saveFilesEnabled) {
+		if (lns.files.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
 				const title = lns.interface.title.getValue(); // this is a UI
 				const n = Cool.padNumber(lns.currentFrame, 3);
@@ -109,39 +109,34 @@
 		let min = { x: 10000, y: 10000 };
 		let max = { x: 0, y: 0 };
 
-		for (let i = 0; i < lns.frames.length; i++) {
-			const frame = lns.frames[i];
-			for (let j = 0; j < frame.length; j++) {
-				const layer = lns.layers[frame[j].l];
-				for (let k = 0; k < lns.drawings[layer.d].length; k++) {
-					const dr = lns.drawings[layer.d][k];
-					if (dr != "end") { /* v2.0 segments divided w end*/
-						tolerance = Math.max( tolerance, layer.r * 4 );
-						min.x = Math.min( min.x, dr.x + layer.x);
-						min.y = Math.min( min.y, dr.y + layer.y);
-						max.x = Math.max( max.x, dr.x + layer.x);
-						max.y = Math.max( max.y, dr.y + layer.y);
-					}	
+		for (let i = 0; i < lns.layers.length; i++) {
+			const layer = lns.layers[i];
+			const drawing = lns.drawings[layer.d];
+			for (let j = 0; j < drawing.length; j++) {
+				const point = drawing[j];
+				if (point != 'end') {
+					tolerance = Math.max(tolerance, layer.r * 4);
+					min.x = Math.min(min.x, point.x + layer.x);
+					min.y = Math.min(min.y, point.y + layer.y);
+					max.x = Math.max(max.x, point.x + layer.x);
+					max.y = Math.max(max.y, point.y + layer.y);
 				}
 			}
 		}
 
-		/* update canvas ui ? */
-
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
+		lns.interface.faces.width.set(self.canvas.width);
+		lns.interface.faces.height.set(self.canvas.height);
 
-		for (let i = 0; i < lns.frames.length; i++) {
-			const frame = lns.frames[i];
-			for (let j = 0; j < frame.length; j++) {
-				const layer = lns.layers[frame[j].l];
-				const diff = {
-					x: layer.x + (min.x - tolerance),
-					y: layer.y + (min.y - tolerance)
-				};
-				if (diff.x > 0) layer.x -= diff.x;
-				if (diff.y > 0) layer.y -= diff.y;
-			}
+		for (let i = 0; i < lns.layers.length; i++) {
+			const layer = lns.layers[i];
+			const diff = {
+				x: layer.x + (min.x - tolerance),
+				y: layer.y + (min.y - tolerance)
+			};
+			if (diff.x > 0) layer.x -= diff.x;
+			if (diff.y > 0) layer.y -= diff.y;
 		}
 	};
 }

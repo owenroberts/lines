@@ -1,18 +1,21 @@
-@import url(font.css);
+@import 'font.css';
 body {
   font-family: Verdana, sans-serif;
   margin: 0;
   font-size: 11px;
   -webkit-user-select: none;
-  user-select: none; }
+  user-select: none;
+}
 
 * {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 button:focus {
-  outline: none; }
+  outline: none;
+}
 
-.btn[title]:hover:after, [title]:hover:after, .press:after {
+*[title]:hover:after, .press:after, .btn[title]:hover:after {
   content: "~ " attr(title);
   position: fixed;
   top: 40px;
@@ -20,21 +23,27 @@ button:focus {
   background: #ffddff;
   border-radius: 3px;
   padding: 1px 3px;
-  color: black; }
+  color: black;
+}
 
 #container {
   margin: 1em;
   display: flex;
-  flex-wrap: wrap; }
-  #container #draw {
-    padding-right: 1em; }
-  #container #tools {
-    flex: 1; }
+  flex-wrap: wrap;
+}
+#container #draw {
+  padding-right: 1em;
+}
+#container #tools {
+  flex: 1;
+}
 
 #canvas {
-  border: 1px solid lightgray; }
-  #canvas:active, #canvas:hover {
-    cursor: crosshair; }
+  border: 1px solid lightgray;
+}
+#canvas:active, #canvas:hover {
+  cursor: crosshair;
+}
 
 .btn {
   display: inline-block;
@@ -44,12 +53,15 @@ button:focus {
   border-radius: 3px;
   transition: background-color 150ms ease-in;
   line-height: 1.75;
-  white-space: nowrap; }
-  .btn:hover {
-    background: #ffddff;
-    cursor: pointer; }
-  .btn.press {
-    background-color: #ffddff; }
+  white-space: nowrap;
+}
+.btn:hover {
+  background: #ffddff;
+  cursor: pointer;
+}
+.btn.press {
+  background-color: #ffddff;
+}
 
 #nav #title {
   border: none;
@@ -57,17 +69,20 @@ button:focus {
   display: block;
   margin-bottom: 0.5em;
   border-bottom: 1px solid transparent;
-  width: 100%; }
-  #nav #title:focus {
-    outline: none;
-    border-bottom: 1px solid black; }
+  width: 100%;
+}
+#nav #title:focus {
+  outline: none;
+  border-bottom: 1px solid black;
+}
 
 #panels {
   /*display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));*/
   margin-top: 0.5em;
   display: flex;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+}
 
 .menu-panel {
   flex-basis: 120px;
@@ -79,55 +94,67 @@ button:focus {
   padding: 0.5em;
   overflow: hidden;
   position: relative;
-  height: 25px; }
-  .menu-panel .title {
-    margin-bottom: 1em; }
-  .menu-panel .toggle, .menu-panel .order {
-    display: inline-block;
-    position: absolute;
-    right: 14px;
-    top: 0;
-    left: 0;
-    text-align: right;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 100;
-    opacity: 0.5;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px; }
-    .menu-panel .toggle:hover, .menu-panel .order:hover {
-      background: #ffddff; }
-  .menu-panel .order {
-    font-size: 1em;
-    right: 2px;
-    left: auto; }
-  .menu-panel .row {
-    margin-bottom: 0.5em;
-    display: flex;
-    flex-wrap: wrap; }
-    .menu-panel .row label {
-      line-height: 1.5; }
-    .menu-panel .row span, .menu-panel .row label, .menu-panel .row input {
-      white-space: nowrap;
-      margin-right: 0.25em;
-      margin-top: 0.25em;
-      flex: 0 1 auto; }
-    .menu-panel .row input {
-      flex: 1;
-      width: 100%; }
-    .menu-panel .row input[type=range], .menu-panel .row input[type=color] {
-      flex: 1 1 auto; }
-    .menu-panel .row input[type=text] {
-      border: none;
-      background-color: lightgray;
-      padding-right: 0.25em; }
-    .menu-panel .row .display {
-      flex: 0;
-      width: 30px;
-      text-align: right; }
-  .menu-panel .btn {
-    padding: 0 0.25em;
-    margin-right: 3px; }
+  height: 25px;
+}
+.menu-panel .title {
+  margin-bottom: 1em;
+}
+.menu-panel .toggle, .menu-panel .order {
+  display: inline-block;
+  position: absolute;
+  right: 14px;
+  top: 0;
+  left: 0;
+  text-align: right;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 100;
+  opacity: 0.5;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.menu-panel .toggle:hover, .menu-panel .order:hover {
+  background: #ffddff;
+}
+.menu-panel .order {
+  font-size: 1em;
+  right: 2px;
+  left: auto;
+}
+.menu-panel .row {
+  margin-bottom: 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+}
+.menu-panel .row label {
+  line-height: 1.5;
+}
+.menu-panel .row span, .menu-panel .row label, .menu-panel .row input, .menu-panel .row select {
+  white-space: nowrap;
+  margin-right: 0.25em;
+  margin-top: 0.25em;
+  flex: 0 1 auto;
+}
+.menu-panel .row input {
+  flex: 0 1 30px;
+  width: 100%;
+  text-align: right;
+}
+.menu-panel .row input[type=range], .menu-panel .row input[type=color] {
+  flex: 1 1 auto;
+}
+.menu-panel .row input[type=text] {
+  border: none;
+  background-color: lightgray;
+  padding-right: 0.25em;
+}
+.menu-panel .row .display {
+  text-align: right;
+}
+.menu-panel .btn {
+  padding: 0 0.25em;
+  margin-right: 3px;
+}
 
 #frames {
   max-width: 100%;
@@ -137,24 +164,35 @@ button:focus {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, 24px);
-  grid-template-rows: max-content max-content; }
-  #frames p {
-    margin: 0;
-    grid-column: 1 / span 2; }
-  #frames .frame, #frames .plus, #frames #current {
-    border-radius: 3px;
-    display: inline-block;
-    background-color: lightgray;
-    transition: background-color 100ms ease-in;
-    margin-right: 1px;
-    margin-top: 1px;
-    padding: 0.5em;
-    cursor: pointer; }
-    #frames .frame:hover, #frames .plus:hover, #frames #current:hover {
-      background-color: gray; }
-  #frames #current {
-    background-color: lightblue !important; }
-  #frames .copy {
-    background-color: #ffddff !important; }
+  grid-template-rows: max-content max-content;
+}
+#frames p {
+  margin: 0;
+  grid-column: 1/span 2;
+}
+#frames .frame, #frames .plus, #frames #current {
+  border-radius: 3px;
+  display: inline-block;
+  background-color: lightgray;
+  transition: background-color 100ms ease-in;
+  margin-right: 1px;
+  margin-top: 1px;
+  padding: 0.5em;
+  cursor: pointer;
+}
+#frames .frame:hover, #frames .plus:hover, #frames #current:hover {
+  background-color: gray;
+}
+#frames #current {
+  background-color: lightblue !important;
+}
+#frames .selected {
+  background-color: #ffddff !important;
+}
+
+#layers {
+  margin-top: 1em;
+  width: 100%;
+}
 
 /*# sourceMappingURL=lines.css.map */

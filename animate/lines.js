@@ -1,23 +1,22 @@
-/* global lns object */
 window.addEventListener("load", function() {
 
 	lns = {};
 
 	// global parts used everywhere - module? render?
 	lns.lines = []; // lines currently being drawn
-	lns.frames = [];
 	lns.layers = [];  // keep separate layers references by frames
 	lns.drawings = []; // saved drawings
 	lns.currentFrame = 0;
+	lns.numFrames = 0; // or 1 if 0 frame is one frame .... fml, or frames start at 1
 
 	// modules
-	lns.canvas = new Canvas(512, 512, "#ffffff" )
+	lns.canvas = new Canvas(512, 512, "#ffffff");
 	lns.render = new Render();
 	lns.bgImage = new Background();
 	lns.data = new Data();
 	lns.lineColor = new Color(); // lns.lineColor.set('#ffffff');
 	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
-	lns.fio = new Files({
+	lns.files = new Files({
 		fit: false, /* fit to canvas when saving */
 		save: false, /* save settings on unload  */
 		reload: false, /* confirm reload */
@@ -27,7 +26,7 @@ window.addEventListener("load", function() {
 
 	const openFile = localStorage.getItem('re-open');
 	if (openFile) {
-		lns.fio.loadFramesFromFile(openFile);
+		lns.files.loadFramesFromFile(openFile);
 		localStorage.removeItem('re-open');
 	}
 

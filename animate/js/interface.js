@@ -1,19 +1,20 @@
 function Interface() {
 	let self = this;
 
-	this.panels = {}; 
-	this.keys = {}; 
+	this.panels = {};
+	this.keys = {};
 	this.faces = {}; /* references to faces we need ?  */
 
 	this.framesPanel = new UI({ id:"frames" });
 	this.frameElems = new UIList({ class:"frame" });
-	
-	/* plus frame is unsaved drawing frame */
+
+	/* plus frame is unsaved drawing frame
+		do i need a plus frame? */
 	this.plusFrame = new UI({
 		id:"current",
 		event: "click",
 		callback: function() {
-			self.setFrame(lns.frames.length);
+			self.setFrame(lns.numFrames);
 		},
 		key: "+"
 	});
@@ -21,36 +22,39 @@ function Interface() {
 
 	/* f key */
 	this.setFrame = function(f) {
-		if (+f <= lns.frames.length) {
+		if (+f <= lns.numFrames) {
 			self.beforeFrame();
 			lns.render.setFrame(+f);
 			self.afterFrame();
 		}
 	};
 
-	/* updates the frame panel representation of frames, 
-		sets current frame, 
+	/* updates the frame panel representation of frames,
+		sets current frame,
 		sets copy frames */
 	this.updateFramesPanel = function() {
-		const numFrames = self.frameElems.getLength();
+
+		const numFrames = self.frameElems.getLength() - 1;
 		/* this creates frames that don't already exist
 			loop from the num of already made html frames to frames.length */
-		if (lns.frames.length > numFrames) {
-			for (let i = numFrames; i < lns.frames.length; i++) {
-				const frmElem = document.createElement("div");
-				frmElem.classList.add("frame");
-				frmElem.textContent = i;
-				frmElem.dataset.index = i;
+		if (lns.numFrames > numFrames) {
+			/* this seems bad ... */
+			for (let i = numFrames + 1; i < lns.numFrames + 1; i++) {
+				/* should be a ui? */
+				const frameElem = document.createElement("div");
+				frameElem.classList.add("frame");
+				frameElem.textContent = i;
+				frameElem.dataset.index = i;
 
 				/* click on frame, set the current frame */
-				frmElem.onclick = function(ev) {
+				frameElem.onclick = function(ev) {
 					lns.render.setFrame(i);
 					self.updateFrameNum();
 					self.resetLayers();
 				};
 
 				/* right click, add/remove from copy frames */
-				frmElem.oncontextmenu = function(ev) {
+				frameElem.oncontextmenu = function(ev) {
 					ev.preventDefault();
 					if (!this.classList.toggle("copy")){
 						lns.data.framesToCopy.splice(lns.data.framesToCopy.indexOf(i), 1);
@@ -61,13 +65,13 @@ function Interface() {
 				};
 
 				/* this is one time un-ui thing */
-				this.framesPanel.el.insertBefore(frmElem, self.plusFrame.el);
+				this.framesPanel.el.appendChild(frameElem);
 			}
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
-			for (let i = numFrames; i > lns.frames.length; i--){
-				this.frameElems.remove(i-1); /* remove html frame */
+			for (let i = numFrames; i > lns.numFrames; i--){
+				this.frameElems.remove(i); /* remove html frame */
 			}
 		}
 		this.updateFrameNum();
@@ -75,32 +79,34 @@ function Interface() {
 
 	/* update frame display and current frame */
 	this.updateFrameNum = function() {
+		self.drawLayers();
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[lns.currentFrame]) // also un-ui
 			self.frameElems.setId("current", lns.currentFrame);
-		else 
+		else
 			self.plusFrame.setId("current");
 		self.faces.frameDisplay.set(lns.currentFrame);
 	};
 
 	/* call before changing a frame */
 	this.beforeFrame = function() {
-		lns.render.isDrawing = false;
+		lns.draw.isDrawing = false;
 		lns.data.saveLines();
 	};
-	
+
 	/* call after changing a frame */
 	this.afterFrame = function() {
 		self.updateFramesPanel();
 		self.resetLayers();
 		self.resetDrawings();
 	};
-	
+
 	/* e key - go to next frame */
 	this.nextFrame = function() {
 		self.beforeFrame();
-		if (lns.currentFrame < lns.frames.length) lns.render.setFrame(lns.currentFrame + 1);
+		lns.render.setFrame(lns.currentFrame + 1);
+		if (lns.currentFrame > lns.numFrames) lns.numFrames = lns.currentFrame;
 		self.afterFrame();
 	};
 
@@ -119,13 +125,13 @@ function Interface() {
 		};
 	});
 
-	/* fio interface */
+	/* files interface */
 	this.title = new UI({ id:"title" });
 
 	this.keys['s'] = new UIButton({
 		id: "save",
 		callback: function() {
-			lns.fio.saveFramesToFile(self.title.getValue(), false, function(title) {
+			lns.files.saveFramesToFile(self.title.getValue(), false, function(title) {
 				self.title.setValue(title);
 			});
 		},
@@ -135,7 +141,7 @@ function Interface() {
 	this.keys['shift-s'] = new UIButton({
 		id: "save-frame",
 		callback: function() {
-			lns.fio.saveFramesToFile(self.title.getValue(), true, function(filename) {
+			lns.files.saveFramesToFile(self.title.getValue(), true, function(filename) {
 				self.title.setValue(filename.split("/").pop());
 			});
 		},
@@ -144,13 +150,13 @@ function Interface() {
 
 	this.keys['o'] = new UIButton({
 		id: "open",
-		callback: lns.fio.loadFramesFromFile,
+		callback: lns.files.loadFramesFromFile,
 		key: "o"
 	});
 
 	this.keys['shift-o'] = new UIButton({
 		id: 're-open',
-		callback: lns.fio.reOpenFile,
+		callback: lns.files.reOpenFile,
 		key: 'shift-o'
 	})
 
@@ -172,7 +178,7 @@ function Interface() {
 
 		} else if (document.activeElement.id == 'title') {
 			if (k == 'enter') {
-				lns.fio.saveFramesToFile(self.title.getValue());
+				lns.files.saveFramesToFile(self.title.getValue());
 				document.activeElement.blur();
 			}
 		}
@@ -183,17 +189,17 @@ function Interface() {
 	const palette = new Panel('palette', 'Palette');
 	this.panels.palette = palette;
 	this.palettes = {};
-	
+
 	this.addPalette = function() {
 		lns.data.saveLines();
 		const name = self.palettes.current = prompt('Name this palette.');
 		if (name) {
 			self.palettes[name] = {
 				color: lns.lineColor.color,
-				seg: lns.draw.segNumRange,
-				jig: lns.draw.jiggleRange,
-				wig: lns.draw.wiggleRange,
-				wigSpeed: lns.draw.wiggleSpeed,
+				n: lns.draw.n,
+				r: lns.draw.r,
+				w: lns.draw.w,
+				v: lns.draw.v,
 				lineWidth: lns.canvas.ctx.lineWidth,
 				mouse: lns.draw.mouseInterval,
 				brush: lns.draw.brush,
@@ -215,21 +221,21 @@ function Interface() {
 		lns.data.saveLines();
 		self.palettes.current = name;
 		lns.lineColor.set(self.palettes[name].color);
-		lns.draw.segNumRange = self.palettes[name].seg;
-		lns.draw.jiggleRange = self.palettes[name].jig;
-		lns.draw.wiggleRange = self.palettes[name].wig;
-		lns.draw.wiggleSpeed = self.palettes[name].wigSpeed;
+		lns.draw.n = self.palettes[name].n;
+		lns.draw.r = self.palettes[name].r;
+		lns.draw.w = self.palettes[name].w;
+		lns.draw.v = self.palettes[name].v;
 		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
 		lns.draw.mouseInterval = self.palettes[name].mouse;
 		lns.draw.brush = self.palettes[name].brush;
 		lns.draw.brushSpread = self.palettes[name].brushSpread;
 		lns.draw.dots = self.palettes[name].dots;
 		lns.draw.grass = self.palettes[name].grass;
-												
-		lns.interface.faces.segNumRange.setValue(self.palettes[name].seg);
-		lns.interface.faces.jiggleRange.setValue(self.palettes[name].jig);
-		lns.interface.faces.wiggleRange.setValue(self.palettes[name].wig);
-		lns.interface.faces.wiggleSpeed.setValue(self.palettes[name].wigSpeed);
+
+		lns.interface.faces.w.setValue(self.palettes[name].n);
+		lns.interface.faces.r.setValue(self.palettes[name].r);
+		lns.interface.faces.w.setValue(self.palettes[name].w);
+		lns.interface.faces.v.setValue(self.palettes[name].v);
 		lns.interface.faces.lineWidth.setValue(self.palettes[name].lineWidth);
 		lns.interface.faces.mouse.setValue(self.palettes[name].mouse);
 		lns.interface.faces.brush.setValue(self.palettes[name].brush);
@@ -245,108 +251,171 @@ function Interface() {
 	}));
 
 	/* layer panel */
-	this.layerPanel = new Panel("layer-menu", "Layer");
-	self.panels['layer'] = this.layerPanel;
-	this.frameRow = this.layerPanel.addRow('layers');
-	this.layerPanel.addRow();
+	this.panels['layer'] = new Panel("layer-menu", "Layer");
 	this.layers = [];
 
 	this.updateProperty = function(prop, value) {
 		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled)
-				self.layers[i][prop] = value;
+			if (self.layers[i].toggled) self.layers[i][prop] = value;
 		}
 	};
 
 	this.resetLayers = function() {
 		for (let i = self.layers.length - 1; i >= 0; i--) {
-			if (self.layers[i]) {
-				if (self.layers[i].toggled)
-					self.toggle(self.layers[i]);
-			}
+			if (self.layers[i].toggled) self.layers[i].toggle();
 		}
-		self.layerPanel.clearComponents(self.frameRow);
+		for (let i = self.panels['layer'].rows.length - 1; i > 1; i--) {
+			self.panels['layer'].removeRow(self.panels['layer'].rows[i]);
+		}
 		self.layers = [];
-		
 	};
 
-	/* could be part of a layer class */
-	this.toggle = function(layer) {
-		if (!layer.toggled) {
-			layer.prevColor = layer.c;
-			layer.c = "#00CC96";
-			layer.toggled = true;
-		} else {
-			layer.c = layer.prevColor;
-			delete layer.prevColor;
-			delete layer.toggled;
-			const index = self.layers.indexOf(layer);
-			if (index != -1) self.layers.splice(index, 1);
-		}
-	};
-
-	this.killLayer = function() {
-		const layers = self.layers.filter(l => l.toggled);
-		
-		// remove frames
-		for (let i = lns.frames.length - 1; i >= 0; i--) {
-			const frame = lns.frames[i];
-			for (let j = frame.length - 1; j >= 0; j--) {
-				if (lns.layers[frame[j].l].toggled)
-					frame.splice(j, 1);
-			}
-		}
-
-		// remove layers
-		for (let i = lns.layers.length - 1; i >= 0; i--) {
-			if (lns.layers[i].toggled)
-				lns.layers[i].remove = true; // remove in fio
-			// this is dumb right?  structure depends on index like drawing
-		}
-	};
-
-	/*
-		this references the layer in each frame
-		not layer reference in lns.layers
-	*/
+	/* layers in current frame */
 	this.displayLayers = function() {
 		self.resetLayers();
 		self.resetDrawings();
-		if (lns.frames[lns.currentFrame]) {
-			for (let i = 0; i < lns.frames[lns.currentFrame].length; i++) {
-				const layer = lns.frames[lns.currentFrame][i];
-				const index = lns.layers[layer.l].d;
+
+		for (let i = 0; i < lns.layers.length; i++) {
+			const layer = lns.layers[i];
+			if (layer.isInFrame(lns.currentFrame)) {
 				self.layers.push(layer);
-				layer.toggled = false;
-				const toggleLayer = new UIToggleButton({
-					on: layer.l,
-					off: layer.l,
+
+				const row = self.panels['layer'].addRow(`layer-${i}`);
+				self.panels['layer'].add(new UIDisplay({text: `${i}` }), row);
+
+				self.panels['layer'].add(new UIToggleButton({
+					on: '◐',
+					off: '◑',
 					callback: function() {
-						self.toggle(layer);
-						console.log(lns.layers[layer.l]); // debugging 
+						layer.toggle();
 					}
-				});
-				self.layerPanel.add(toggleLayer, self.frameRow);
+				}), row); /* select */
+
+				self.panels['layer'].add(new UIText({
+					label: 'S',
+					blur: true,
+					value: layer.f.s,
+					callback: function(value) {
+						layer.f.s = +value;
+						if (layer.f.s > lns.numFrames) lns.numFrames = layer.s;
+						if (layer.f.e < layer.s) layer.e = layer.s;
+					}
+				}), row);
+
+				self.panels['layer'].add(new UIText({
+					label: 'E',
+					blur: true,
+					value: layer.f.e,
+					callback: function(value) {
+						layer.f.e = +value;
+						if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
+						if (layer.f.s > layer.f.e) layer.f.s = layer.f.e;
+						self.updateFramesPanel();
+					}
+				}), row);
+
+				self.panels['layer'].add(new UISelect({
+					options: ['None', 'Explode', 'Reverse', 'ExRev'],
+					selected: layer.draw,
+					callback: function(value) {
+						layer.draw = value;
+					}
+				}), row); /* draw mode */
+
+				self.panels['layer'].add(new UIButton({
+					title: "+",
+					callback: function() {
+						const n = new Layer(_.cloneDeep(layer));
+						n.f.s = n.f.e = lns.currentFrame + 1;
+						layer.f.e = lns.currentFrame;
+						lns.layers.push(n);
+						lns.interface.nextFrame();
+					}
+				}), row); /* duplicate */
+
+				self.panels['layer'].add(new UIToggleButton({
+					on: 'x',
+					off: 'x',
+					callback: function() {
+						layer.remove();
+						self.resetLayers();
+					}
+				}), row); /* delete */
+
+				// self.panels['layer'].add(new UIToggleButton({
+				// 	on: '👀',
+				// 	off: '🕶️',
+				// 	callback: function() {
+				// 		layers[i].toggle();
+				// 	}
+				// }), row);
 			}
 		}
 	};
 
+	/* use canvas mod */
+	this.canvas = document.getElementById("layers");
+	this.ctx = this.canvas.getContext('2d');
+	this.drawLayers = function() {
+		const w = self.canvas.offsetWidth;
+		self.canvas.width = w;
+		const row = 10;
+		const h = row * (lns.layers.length + 1);
+		self.canvas.height = h;
+		const col = w / (lns.numFrames + 1);
+
+		// self.ctx.fillStyle = '#afafaf';
+		// self.ctx.fillRect(0, 0, w, h);
+
+		for (let i = 0; i < lns.numFrames + 1; i++) {
+			const x = i * col;
+			if (i == lns.currentFrame) self.ctx.fillStyle = '#FF79FF';
+			else self.ctx.fillStyle = '#fdf';
+			self.ctx.fillRect((i * col) + col/20, h - 5, col - col/10, 4);
+		}
+
+		for (let i = 0; i < lns.layers.length; i++) {
+			const layer = lns.layers[i];
+			const x = layer.f.s * col + 1;
+			const y = i * row + row/20;
+			const _w = (layer.f.e - layer.f.s + 1) * col - 2;
+			self.ctx.fillStyle = '#ADD8E6';
+			self.ctx.fillRect(x, y + row/4, _w, row/2);
+		}
+	};
+
+	/* z */
 	this.cutLayerSegment = function() {
 		for (let i = 0; i < self.layers.length; i++) {
-			const layer = self.layers[i];
-			const drawing = lns.drawings[layer.d];
-			drawing.pop(); /* remove "end" */
-			drawing.pop(); /* remove segment */
-			drawing.push('end'); /* new end */
-			layer.e = drawing.length; /* update layer end num */
+			if (self.layers[i].toggled) {
+				const drawing = lns.drawings[self.layers[i].d];
+				drawing.pop(); /* remove "end" */
+				drawing.pop(); /* remove segment */
+				drawing.push('end'); /* new end */
+				self.layers[i].e = drawing.length; /* update layer end num */
+			}
+		}
+	};
+
+	/* shift z */
+	this.cutLayerLine = function() {
+		for (let i = 0; i < self.layers.length; i++) {
+			if (self.layers[i].toggled) {
+				const drawing = lns.drawings[self.layers[i].d];
+				drawing.pop(); /* remove "end" */
+				for (let i = drawing.length - 1; i > 0; i--) {
+					if (drawing[i] != 'end') drawing.pop();
+					else break;
+				}
+				self.layers[i].e = drawing.length; /* update layer end num */
+			}
 		}
 	};
 
 	this.updateLayerColor = function(color) {
 		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled) {
+			if (self.layers[i].toggled)
 				self.layers[i].c = self.layers[i].prevColor = color;
-			}
 		}
 	};
 
@@ -354,8 +423,9 @@ function Interface() {
 	this.drawingPanel = new Panel("drawing-menu", "Drawings");
 	this.panels['drawing'] = this.drawingPanel; /* add to panels */
 
-	this.showDrawings = function() {
+	this.displayDrawings = function() {
 		self.resetLayers();
+		self.resetDrawings();
 		self.drawingPanel.addRow('drawings');
 		for (let i = 0; i < lns.drawings.length; i++) {
 			if (lns.drawings[i]) {
@@ -363,6 +433,7 @@ function Interface() {
 				const drawing = lns.drawings[i];
 
 				/* add the full drawing regardless */
+
 				/* check for existing layer */
 				for (let j = 0; j < lns.layers.length; j++) {
 					const _layer = lns.layers[j];
@@ -376,7 +447,7 @@ function Interface() {
 				}
 
 				/* create a layer if none existing */
-				if (!layer) { 
+				if (!layer) {
 					if (drawing != null) {
 						layer = {
 							d: i,
@@ -400,17 +471,18 @@ function Interface() {
 						index = lns.layers.length - 1;
 					}
 				}
-					
+
 				self.drawingPanel.add(new UIToggleButton({
 					title: i,
 					on: i,
 					off: i,
 					callback: function() {
-						if (!lns.frames[lns.currentFrame])
-							lns.frames[lns.currentFrame] = [];
-						const idx = lns.frames[lns.currentFrame].findIndex(e => e.l == index);
-						if (idx >= 0)lns.frames[lns.currentFrame].splice(idx, 1);
-						else lns.frames[lns.currentFrame].push({ l: index });
+						/* add or remove frame index to layer
+							user layer class */
+						if (!layer.isInFrame(lns.currentFrame))
+							layer.addIndex(lns.currentFrame);
+						else
+							layer.removeIndex(lns.currentFrame);
 					}
 				}));
 			}
@@ -427,7 +499,7 @@ function Interface() {
 	/* settings */
 	this.settingsPanel = new Panel('settings-menu', "Settings");
 	this.panels['settings'] = this.settingsPanel;
-	
+
 	this.saveSettings = function() {
 		const settings = {
 			canvasColor: lns.bgColor.color,
@@ -448,7 +520,7 @@ function Interface() {
 		}
 		settings.palettes = self.palettes;
 		localStorage.settings = JSON.stringify(settings);
-	};	
+	};
 
 	this.loadSettings = function() {
 		const settings = JSON.parse(localStorage.settings);
@@ -485,12 +557,12 @@ function Interface() {
 
 	this.clearSettings = function() {
 		delete localStorage.settings;
-	};	
+	};
 
 	/* build interface */
 	fetch('./js/interface.json')
 		.then(response => { return response.json(); })
-		.then(data => { 
+		.then(data => {
 			self.build(data);
 			if (localStorage.settings) self.loadSettings();
 		});
@@ -520,7 +592,7 @@ function Interface() {
 				for (const k in u.fromModule) {
 					params[k] =  lns[module][u.fromModule[k]];
 				}
-				
+
 				if (u.set) {
 					params.callback = function(value) {
 						lns[module][u.set.prop] = u.set.number ? +value : value;

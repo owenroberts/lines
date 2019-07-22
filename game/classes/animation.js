@@ -9,7 +9,7 @@ class Animation {
 
 		this.isPlaying = true;
 
-		this.frames = [];
+		this.numFrames = 0;
 		this.drawings = [];
 		this.layers = [];
 		this.currentFrame = 0;
@@ -43,27 +43,36 @@ class Animation {
 	}
 
 	load(setAnimSize, callback) {
-		if (Game.loaded[this.src]) {
-			this.loadJSON(Game.loaded[this.src], setAnimSize, callback);
-		} else {
-			fetch(this.src)
-				.then(response => { return response.json() })
-				.then(json => { 
-					this.loadJSON(json, setAnimSize, callback);
-					Game.loaded[this.src] = json;
-				})
-				.catch(error => { console.error(error) });
-		}
+		fetch(this.src)
+			.then(response => { return response.json() })
+			.then(data => {
+				this.loadJSON(data, setAnimSize, callback);
+			})
+			.catch(error => { console.error(error) });
 	}
 
 	loadJSON(json, setAnimSize, callback) {
 		this.loaded = true;
-		this.frames = json.f;
-		this.drawings = json.d;
+		this.drawings = [];
+		for (let i = 0; i < json.d.length; i++) {
+			const drawing = json.d[i];
+			const d = [];
+			if (drawing) {
+				for (let j = 0; j < drawing.length; j++) {
+					const point = drawing[j];
+					if (point) d.push({ x: point[0], y: point[1] });
+					else d.push('end');
+				}
+			}
+			this.drawings[i] = d;
+		}
 		this.layers = json.l;
-		
+		for (let i = 0; i < this.layers.length; i++) {
+			if (this.numFrames < this.layers[i].f.e)
+				this.numFrames = this.layers[i].f.e;
+		}
 		if (this.states.default)
-			this.states.default.end = this.frames.length;
+			this.states.default.end = this.numFrames;
 		if (!setAnimSize) {
 			if (callback) callback(json.w, json.h);
 		} else {
@@ -128,26 +137,38 @@ class Animation {
 				// Game.ctx.translate(this.width, 0);
 				// Game.ctx.scale(-1,1);
 			}
-			if (this.frames[this.currentFrame]) {
-				if (!Game.mixedColors) Game.ctx.beginPath();
-				for (let i = 0, len = this.frames[this.currentFrame].length; i < len; i++) {
-					const frame = this.frames[this.currentFrame][i];
-					const layer = this.layers[frame.l];
-					const drawing = this.drawings[layer.d];
+
+			if (!Game.mixedColors) Game.ctx.beginPath();
+			for (let i = 0, len = this.layers.length; i < len; i++) {
+				const layer = this.layers[i];
+				const drawing = this.drawings[layer.d];
+				// if (this.debug) console.log(layer);
+				if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
+					this.rndr.s = 0;
+					this.rndr.e = drawing.length;
+					const frameCount = layer.f.e - layer.f.s + 1;
+					
+					if (layer.draw == 'Explode') {
+						const segments = drawing.length / frameCount;
+						this.rndr.e = Math.round(segments * (this.currentFrame - layer.f.s + 1));
+					}
+					else if (layer.draw == 'Reverse') {
+						const segments = drawing.length / frameCount;
+						this.rndr.s = Math.round(segments * (this.currentFrame - layer.f.s));
+					}
+					else if (layer.draw == 'ExRev') {
+						const mid = layer.f.s + frameCount / 2;
+						if (this.currentFrame < mid) {
+							const segments = drawing.length / (mid - layer.f.s + 1);
+							this.rndr.e = Math.round(segments * (this.currentFrame - layer.f.s));
+						} else {
+							const segments = drawing.length / (layer.f.e - mid + 1);
+							this.rndr.s = Math.round(segments * (this.currentFrame - mid));
+						}
+					}
 
 					for (const key in layer) {
 						this.rndr[key] = layer[key];
-					}
-
-					/* 
-						s is not saved in frames because its the same as layer 
-						temp fix
-					*/
-					// if (this.rndr.s != layer.s) this.rndr.s = layer.s;
-					// if (this.rndr.e != layer.e) this.rndr.e = layer.e;
-
-					for (const key in frame) {
-						this.rndr[key] = frame[key];
 					}
 
 					if (this.overRide) {
@@ -156,7 +177,7 @@ class Animation {
 								this.rndr[key] = this.over[key];
 						}
 					}
-					
+
 					if (this.rndr.w > 0) {
 						this.rndr.off.x = Cool.random(0, this.rndr.w);
 						this.rndr.off.y = Cool.random(0, this.rndr.w);
@@ -170,7 +191,6 @@ class Animation {
 					}
 
 					if (Game.mixedColors) Game.ctx.beginPath();
-					
 					for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
 						const s = drawing[j];
 						const e = drawing[j + 1];
