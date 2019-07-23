@@ -19,6 +19,7 @@ window.addEventListener("load", function() {
 	lns.files = new Files({
 		fit: false, /* fit to canvas when saving */
 		save: false, /* save settings on unload  */
+		load: true, /* load setttings after file load */
 		reload: false, /* confirm reload */
 		bg: false /* bg color */
 	});

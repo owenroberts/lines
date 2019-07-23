@@ -131,6 +131,8 @@ function Files(params) {
 
 						if (data.bg) lns.interface.faces.bgColor.setValue(data.bg);
 						lns.interface.faces.fps.setValue(data.fps);
+
+						if (params.load) lns.interface.canvasLoad();
 					}
 				})
 				.catch(error => {

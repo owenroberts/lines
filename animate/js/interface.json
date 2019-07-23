@@ -520,6 +520,15 @@
 					"on": "Start Video",
 					"off": "Stop Video"
 				}
+			},
+			{
+				"type": "button",
+				"fromModule": {
+					"callback": "captureVideo"
+				},
+				"params": {
+					"title": "Capture Video Loops"
+				}
 			}
 		]
 	},

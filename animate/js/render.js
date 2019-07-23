@@ -70,11 +70,21 @@ function Render(fps) {
 				}	
 				if (self.currentFrameCounter > lns.numFrames) {
 					lns.currentFrame = self.currentFrameCounter = 0;
+
+					if (self.videoLoops > 1) {
+						self.videoLoops--;
+					} else if (self.capturingVideo) {
+						lns.canvas.videoCapture();
+						self.isPlaying = false;
+						self.capturingVideo = false;
+					}
+
 				}
 				lns.interface.updateFrameNum(); /* ui thing */
 			}
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
+			
 
 			if (self.videoCapture || (self.captureWithBackground && self.captureFrames > 0)) {
 				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
@@ -145,13 +155,18 @@ function Render(fps) {
 				self.capturing = true;
 			} else if (self.capturing) {
 				self.capturing = false;
+				
 			}
+
+			
+			
 		}
 		if (!self.capturing) window.requestAnimFrame(self.draw);
 	};
 
 	/* jig = jiggle amount, seg = num segments */
 	this.drawLines = function(params) {
+		// console.log('draw', lns.canvas.ctx.lineWidth);
 		/* mixed color?  - assume always mixed? - care about performance? */
 		lns.canvas.ctx.beginPath();
 
@@ -223,11 +238,23 @@ function Render(fps) {
 		self.captureFrames = lns.numFrames * Math.max(1, self.lps / self.fps);
 	};
 
+	/*  */
+	this.capturingVideo = false;
+	this.videoLoops = 0;
+	this.captureVideo = function() {
+		self.isPlaying = false;
+		self.videoLoops = +prompt("Number of loops?");
+		self.setFrame(0);
+		
+		self.capturingVideo = true;
+		lns.canvas.videoCapture();
+		self.isPlaying = true;
+	};
+
 	/* starts drawing  */
 	this.start = function() {
 		window.requestAnimFrame(self.draw);
 	}
-
 }
 
 /*

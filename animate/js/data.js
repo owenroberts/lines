@@ -260,7 +260,11 @@ function Data() {
 	/* q key  */
 	this.offsetDrawing = function(offset) {
 		self.saveLines();
-		const _layers = lns.getLayers();
+		const _layers = [];
+		for (let i = 0; i < lns.layers.length; i++) {
+			if (lns.layers[i].isInFrame(lns.currentFrame)) 
+				_layers.push(lns.layers[i]);
+		}
 		if (_layers) {
 			self.saveLines();
 			self.saveState();
