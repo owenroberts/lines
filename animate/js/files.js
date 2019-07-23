@@ -10,7 +10,7 @@ function Files(params) {
 	};
 
 	/* s key - shift-s for single */
-	this.saveFramesToFile = function(title, single, callback) {
+	this.saveFile = function(title, single, callback) {
 		lns.data.saveLines();
 
 		if (params.fit && confirm("Fit canvas?"))
@@ -76,69 +76,70 @@ function Files(params) {
 	};
 
 	/* o key */
-	this.loadFramesFromFile = function(filename, callback) {
-		self.fileName = filename || prompt("Open file:");
+	this.loadFile = function(fileName, callback) {
+		self.fileName = fileName || prompt("Open file:");
 		if (self.fileName) {
 			if (callback) callback(self.fileName);
 			fetch(self.fileName + '.json')
 				.then(response => { return response.json() })
-				.then(data => {
-
-					lns.drawings = [];
-					for (let i = 0; i < data.d.length; i++) {
-						const drawing = data.d[i];
-						const d = [];
-						if (drawing) {
-							for (let j = 0; j < drawing.length; j++) {
-								const point = drawing[j];
-								if (point) d.push({ x: point[0], y: point[1] });
-								else d.push('end');
-							}
-						}
-						lns.drawings[i] = d;
-					}
-
-					lns.layers = [];
-					for (let i = 0; i < data.l.length; i++) {
-						lns.layers[i] = new Layer(data.l[i]);
-						lns.lineColor.addColorBtn(lns.layers[i].c);
-						if (lns.numFrames < lns.layers[i].f.e)
-							lns.numFrames = lns.layers[i].f.e;
-					}
-
-					/* set interface values */
-					lns.canvas.setWidth(data.w);
-					lns.canvas.setHeight(data.h);
-					lns.render.setFps(data.fps);
-					if (data.bg) lns.bgColor.set(data.bg);
-					lns.render.reset();
-
-					if (lns.interface) {
-						lns.interface.title.setValue(self.fileName.split('/').pop());
-						lns.interface.faces.width.set(data.w);
-						lns.interface.faces.height.set(data.h);
-						let color;
-						lns.layers.some(layer => {
-							if (layer) {
-								color = layer.c;
-								return true;
-							}
-						});
-						lns.layers.forEach(layer => {
-							if (layer)
-								lns.interface.faces.lineColor.setValue(layer.c);
-						});
-
-						if (data.bg) lns.interface.faces.bgColor.setValue(data.bg);
-						lns.interface.faces.fps.setValue(data.fps);
-
-						if (params.load) lns.interface.canvasLoad();
-					}
-				})
+				.then(data => { self.loadJSON(data); })
 				.catch(error => {
 					alert('File not found: ' + error.message);
 					console.log(error);
 				});
+		}
+	};
+
+	this.loadJSON = function(data) {
+		lns.drawings = [];
+		for (let i = 0; i < data.d.length; i++) {
+			const drawing = data.d[i];
+			const d = [];
+			if (drawing) {
+				for (let j = 0; j < drawing.length; j++) {
+					const point = drawing[j];
+					if (point) d.push({ x: point[0], y: point[1] });
+					else d.push('end');
+				}
+			}
+			lns.drawings[i] = d;
+		}
+
+		lns.layers = [];
+		for (let i = 0; i < data.l.length; i++) {
+			lns.layers[i] = new Layer(data.l[i]);
+			lns.lineColor.addColorBtn(lns.layers[i].c);
+			if (lns.numFrames < lns.layers[i].f.e)
+				lns.numFrames = lns.layers[i].f.e;
+		}
+
+		/* set interface values */
+		lns.canvas.setWidth(data.w);
+		lns.canvas.setHeight(data.h);
+		lns.render.setFps(data.fps);
+		if (data.bg) lns.bgColor.set(data.bg);
+		lns.render.reset();
+
+		if (lns.interface) {
+			lns.interface.title.setValue(self.fileName.split('/').pop());
+			lns.interface.faces.width.set(data.w);
+			lns.interface.faces.height.set(data.h);
+			let color;
+			lns.layers.some(layer => {
+				if (layer) {
+					color = layer.c;
+					return true;
+				}
+			});
+			lns.layers.forEach(layer => {
+				if (layer)
+					lns.interface.faces.lineColor.setValue(layer.c);
+			});
+
+			if (data.bg) lns.interface.faces.bgColor.setValue(data.bg);
+			lns.interface.faces.fps.setValue(data.fps);
+
+			if (params.load) lns.interface.canvasLoad();
 		}
 	};
 
@@ -151,6 +152,34 @@ function Files(params) {
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		self.saveFilesEnabled = true;
 		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
+		const nav = document.getElementById('nav');
+		nav.addEventListener('dragover', dragOverHandler);
+		nav.addEventListener('drop', dropHandler);
+		// https://gist.github.com/andjosh/7867934
+	}
+
+	function dropHandler(ev) {
+ 		ev.preventDefault();
+ 		ev.stopPropagation();
+
+ 		const files = ev.dataTransfer.files;
+     	for (let i = 0, f; f = files[i]; i++) {
+			if (!f.type.match('application/json')) {
+          		continue;
+        	}
+        	const reader = new FileReader();
+			reader.onload = (function(theFile) {
+				return function(e) {
+				self.fileName = f.name.split('.')[0];
+				self.loadJSON(JSON.parse(e.target.result));
+          	};
+        	})(f);
+        	reader.readAsText(f);
+        }
+	}
+
+	function dragOverHandler(ev) {
+		ev.preventDefault();
 	}
 
 	window.addEventListener("beforeunload", function(ev) {

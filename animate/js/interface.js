@@ -131,7 +131,7 @@ function Interface() {
 	this.keys['s'] = new UIButton({
 		id: "save",
 		callback: function() {
-			lns.files.saveFramesToFile(self.title.getValue(), false, function(title) {
+			lns.files.saveFile(self.title.getValue(), false, function(title) {
 				self.title.setValue(title);
 			});
 		},
@@ -141,7 +141,7 @@ function Interface() {
 	this.keys['shift-s'] = new UIButton({
 		id: "save-frame",
 		callback: function() {
-			lns.files.saveFramesToFile(self.title.getValue(), true, function(filename) {
+			lns.files.saveFile(self.title.getValue(), true, function(filename) {
 				self.title.setValue(filename.split("/").pop());
 			});
 		},
@@ -150,7 +150,7 @@ function Interface() {
 
 	this.keys['o'] = new UIButton({
 		id: "open",
-		callback: lns.files.loadFramesFromFile,
+		callback: lns.files.loadFile,
 		key: "o"
 	});
 
@@ -159,16 +159,6 @@ function Interface() {
 		callback: lns.files.reOpenFile,
 		key: 'shift-o'
 	});
-
-	/* nav drag and drop */
-	function dropHandler(ev) {
- 		console.log(ev.dataTransfer.files);
- 		ev.preventDefault();
-	}
-
-	function dragOverHandler(ev) {
-		ev.preventDefault();
-	}
 
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
