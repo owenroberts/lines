@@ -51,21 +51,18 @@ function Canvas(width, height, color) {
 			self.rec.start();
 			self.rec.addEventListener('dataavailable', e => {
    				const blob = new Blob([ e.data ], { 'type': 'video/webm' });
-   				self.vid = document.createElement('video');
-   				self.vid.src = URL.createObjectURL(blob);
-   				self.vid.controls = true;
-   				document.body.appendChild(self.vid);
-   				const deleteVid = document.createElement('button');
-   				document.body.appendChild(deleteVid);
-   				deleteVid.textContent = 'Delete';
-   				deleteVid.onclick = function() {
-   					lns.canvas.vid.remove();
-   					this.remove();
-   				};
+   				const url = URL.createObjectURL(blob);
+
+   				const a = document.createElement('a');
+   				document.body.appendChild(a);
+   				a.href = url;
+   				a.download = `${lns.interface.title.getValue()}.webm` || 'lines.webm';
+   				a.click();
+   				// window.URL.revokeObjectURL(url);
 			});
 		} else {
 			lns.render.videoCapture = false;
-			self.startCapture = false;
+			self.startCapture = true;
 			self.rec.stop();
 		}
 	};

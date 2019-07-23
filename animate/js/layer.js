@@ -47,9 +47,10 @@ class Layer {
 	}
 
 	shiftIndex(index, n) {
+		console.log(this);
 		if (!n) n = -1;
-		if (this.f.s >= index) f.s += n;
-		if (this.f.e >= index) f.e += n;
+		if (this.f.s >= index) this.f.s += n;
+		if (this.f.e >= index) this.f.e += n;
 	}
 
 	isInFrame(index) {
