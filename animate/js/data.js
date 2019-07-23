@@ -400,6 +400,7 @@ function Data() {
 		in v2, x y for frame layers 
 		no context where argument is used ... */
 	this.offsetDrawing = function(offset) {
+		self.saveLines();
 		if (lns.frames[lns.currentFrame]) {
 			self.saveLines();
 			self.saveState();

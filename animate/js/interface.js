@@ -1,5 +1,5 @@
 function Interface() {
-	let self = this;
+	const self = this;
 
 	this.panels = {}; 
 	this.keys = {}; 
@@ -152,7 +152,17 @@ function Interface() {
 		id: 're-open',
 		callback: lns.fio.reOpenFile,
 		key: 'shift-o'
-	})
+	});
+
+	/* nav drag and drop */
+	function dropHandler(ev) {
+ 		console.log(ev.dataTransfer.files);
+ 		ev.preventDefault();
+	}
+
+	function dragOverHandler(ev) {
+		ev.preventDefault();
+	}
 
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
