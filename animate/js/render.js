@@ -62,13 +62,12 @@ function Render(fps) {
 	this.draw = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
-
+			
 			if (self.isPlaying) {
 				if (self.currentFrameCounter <= lns.numFrames) {
 					self.currentFrameCounter += self.intervalRatio;
 					lns.currentFrame = Math.floor(self.currentFrameCounter);
-				}	
-				if (self.currentFrameCounter > lns.numFrames) {
+				} else if (self.currentFrameCounter > lns.numFrames) {
 					lns.currentFrame = self.currentFrameCounter = 0;
 
 					if (self.videoLoops > 1) {
