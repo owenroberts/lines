@@ -49,9 +49,11 @@ function Render(fps) {
 
 	/* toggle play animation */
 	this.toggle = function() {
-		if (!self.isPlaying) lns.data.saveLines();
+		if (!self.isPlaying) {
+			lns.interface.beforeFrame();
+			lns.interface.afterFrame();
+		}
 		self.isPlaying = !self.isPlaying;
-		lns.interface.updateFrameNum();
 	};
 
 	/* f key */
@@ -62,12 +64,14 @@ function Render(fps) {
 	this.draw = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
-			
+
+
 			if (self.isPlaying) {
-				if (self.currentFrameCounter <= lns.numFrames) {
+				if (self.currentFrameCounter < lns.numFrames) {
 					self.currentFrameCounter += self.intervalRatio;
 					lns.currentFrame = Math.floor(self.currentFrameCounter);
-				} else if (self.currentFrameCounter > lns.numFrames) {
+				} 
+				if (self.currentFrameCounter >= lns.numFrames) {
 					lns.currentFrame = self.currentFrameCounter = 0;
 
 					if (self.videoLoops > 1) {
@@ -81,6 +85,7 @@ function Render(fps) {
 				}
 				lns.interface.updateFrameNum(); /* ui thing */
 			}
+			console.log(lns.currentFrame, self.currentFrameCounter, lns.numFrames);
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 			

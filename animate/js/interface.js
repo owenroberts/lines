@@ -39,7 +39,7 @@ function Interface() {
 			loop from the num of already made html frames to frames.length */
 		if (lns.numFrames > numFrames) {
 			/* this seems bad ... */
-			for (let i = numFrames + 1; i < lns.numFrames + 1; i++) {
+			for (let i = numFrames; i < lns.numFrames; i++) {
 				/* should be a ui? */
 				const frameElem = document.createElement("div");
 				frameElem.classList.add("frame");
@@ -65,7 +65,8 @@ function Interface() {
 				};
 
 				/* this is one time un-ui thing */
-				this.framesPanel.el.appendChild(frameElem);
+				// this.framesPanel.el.appendChild(frameElem);
+				this.framesPanel.el.insertBefore(frameElem, self.plusFrame.el);
 			}
 		} else {
 			/* if there are same number of less then frames than frame divs
@@ -93,6 +94,15 @@ function Interface() {
 	this.beforeFrame = function() {
 		lns.draw.isDrawing = false;
 		lns.data.saveLines();
+
+		/* determine if add to num frames */
+		let inCurrentFrame = false;
+		for (let i = 0; i < lns.layers.length; i++) {
+			if (lns.layers[i].isInFrame(lns.currentFrame))
+				inCurrentFrame = true;
+		}
+		if (inCurrentFrame && lns.numFrames < lns.currentFrame + 1)
+			lns.numFrames++;
 	};
 
 	/* call after changing a frame */
@@ -105,8 +115,7 @@ function Interface() {
 	/* e key - go to next frame */
 	this.nextFrame = function() {
 		self.beforeFrame();
-		lns.render.setFrame(lns.currentFrame + 1);
-		if (lns.currentFrame > lns.numFrames) lns.numFrames = lns.currentFrame;
+		if (lns.currentFrame < lns.numFrames) lns.render.setFrame(lns.currentFrame + 1);
 		self.afterFrame();
 	};
 
@@ -362,12 +371,12 @@ function Interface() {
 		const row = 10;
 		const h = row * (lns.layers.length + 1);
 		self.canvas.height = h;
-		const col = w / (lns.numFrames + 1);
+		const col = w / (lns.numFrames);
 
 		// self.ctx.fillStyle = '#afafaf';
 		// self.ctx.fillRect(0, 0, w, h);
 
-		for (let i = 0; i < lns.numFrames + 1; i++) {
+		for (let i = 0; i < lns.numFrames; i++) {
 			const x = i * col;
 			if (i == lns.currentFrame) self.ctx.fillStyle = '#FF79FF';
 			else self.ctx.fillStyle = '#fdf';
