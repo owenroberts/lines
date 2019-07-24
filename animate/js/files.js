@@ -113,6 +113,8 @@ function Files(params) {
 				lns.numFrames = lns.layers[i].f.e;
 		}
 
+		lns.numFrames += 1; /* plus frame */
+
 		/* set interface values */
 		lns.canvas.setWidth(data.w);
 		lns.canvas.setHeight(data.h);

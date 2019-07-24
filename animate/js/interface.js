@@ -98,8 +98,7 @@ function Interface() {
 		/* determine if add to num frames */
 		let inCurrentFrame = false;
 		for (let i = 0; i < lns.layers.length; i++) {
-			if (lns.layers[i].isInFrame(lns.currentFrame))
-				inCurrentFrame = true;
+			if (lns.layers[i].isInFrame(lns.currentFrame)) inCurrentFrame = true;
 		}
 		if (inCurrentFrame && lns.numFrames < lns.currentFrame + 1)
 			lns.numFrames++;

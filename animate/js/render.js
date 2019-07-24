@@ -81,11 +81,9 @@ function Render(fps) {
 						self.isPlaying = false;
 						self.capturingVideo = false;
 					}
-
 				}
 				lns.interface.updateFrameNum(); /* ui thing */
 			}
-			console.log(lns.currentFrame, self.currentFrameCounter, lns.numFrames);
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 			
