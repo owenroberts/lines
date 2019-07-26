@@ -36,7 +36,7 @@ function Data() {
 			lns.drawings.push(lns.lines); /* add current lines to drawing data */
 			lns.lineColor.addColorBtn(lns.lineColor.color); /* add current color to color choices */
 			lns.lines = []; /* lines are saved, stop drawing? */
-			lns.interface.updateFramesPanel(); /* update interface */
+			lns.interface.updateInterface(); /* update interface */
 		}
 		self.saveState(); /* save current state - one undo currently */
 	};
@@ -108,25 +108,29 @@ function Data() {
 		lns.lines = [];
 
 		for (let i = 0; i < lns.layers.length; i++) {
-			if (lns.layers[i].inInFrame(lns.currentFrame))
+			if (lns.layers[i].isInFrame(lns.currentFrame))
 				lns.layers[i].removeIndex(lns.currentFrame);
 		}
 	};
 
 	/* d key */
 	this.deleteFrame = function() {
+		console.log('delete');
 		/* i don't know if this is even relevant
 			... but maybe this is why frames is good ... */
 		self.saveState();
-		if (lns.numFrames > 0) {
+		// console.log(lns.numFrames, lns.currentFrame);
+		if (lns.numFrames > 0 && lns.numFrames > lns.currentFrame) {
 			for (let i = 0; i < lns.layers.length; i++) {
+				console.log(lns.layers[i])
 				lns.layers[i].removeIndex(lns.currentFrame);
 				lns.layers[i].shiftIndex(lns.currentFrame + 1, -1);
 			}
 			lns.numFrames--;
+
 			lns.render.setFrame(lns.currentFrame - 1);
 			lns.lines = []; /* separate ... */
-			lns.interface.updateFramesPanel();
+			lns.interface.updateInterface();
 		} else {
 			self.clearFrame();
 		}

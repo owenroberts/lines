@@ -8,6 +8,13 @@ function Interface() {
 	this.framesPanel = new UI({ id:"frames" });
 	this.frameElems = new UIList({ class:"frame" });
 
+	/* update interface */
+	this.updateInterface = function() {
+		self.updateFrameNum();
+		self.drawLayers();
+		self.updateFramesPanel();
+	};
+
 	/* plus frame is unsaved drawing frame
 		do i need a plus frame? */
 	this.plusFrame = new UI({
@@ -80,7 +87,11 @@ function Interface() {
 
 	/* update frame display and current frame */
 	this.updateFrameNum = function() {
-		self.drawLayers();
+
+		if (lns.currentFrame == lns.numFrames && self.layersInFrame(lns.currentFrame)) {
+			lns.numFrames++;
+		}
+
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[lns.currentFrame]) // also un-ui
@@ -96,14 +107,20 @@ function Interface() {
 		lns.data.saveLines();
 
 		/* determine if add to num frames */
-		let inCurrentFrame = false;
-		for (let i = 0; i < lns.layers.length; i++) {
-			if (lns.layers[i].isInFrame(lns.currentFrame)) inCurrentFrame = true;
-		}
-		if (inCurrentFrame && lns.numFrames < lns.currentFrame + 1)
+		
+		if (self.layersInFrame(lns.currentFrame) && lns.numFrames < lns.currentFrame + 1)
 			lns.numFrames++;
 	};
 
+	this.layersInFrame = function(n) {
+		let inFrame = false;
+		for (let i = 0; i < lns.layers.length; i++) {
+			if (lns.layers[i].isInFrame(n)) 
+				inFrame = true;
+		}
+		return inFrame;
+	};
+	
 	/* call after changing a frame */
 	this.afterFrame = function() {
 		self.updateFramesPanel();
@@ -440,8 +457,6 @@ function Interface() {
 				let layer, index;
 				const drawing = lns.drawings[i];
 
-				/* add the full drawing regardless */
-
 				/* check for existing layer */
 				for (let j = 0; j < lns.layers.length; j++) {
 					const _layer = lns.layers[j];
@@ -457,7 +472,7 @@ function Interface() {
 				/* create a layer if none existing */
 				if (!layer) {
 					if (drawing != null) {
-						layer = {
+						layer = new Layer({
 							d: i,
 							s: 0,
 							e: drawing.length,
@@ -465,19 +480,10 @@ function Interface() {
 							...lns.draw.defaults,
 							x: 0,
 							y: 0
-						};
+						});
 					}
 					lns.layers.push(layer);
 					index = lns.layers.length - 1;
-				} else {
-					/* check start and end, create new player if different */
-					if (layer.s != 0 || layer.e != drawing.length) {
-						layer = { ...layer };
-						layer.s = 0;
-						layer.e = drawing.length;
-						lns.layers.push(layer);
-						index = lns.layers.length - 1;
-					}
 				}
 
 				self.drawingPanel.add(new UIToggleButton({
@@ -574,6 +580,8 @@ function Interface() {
 	this.clearSettings = function() {
 		delete localStorage.settings;
 	};
+
+
 
 	/* build interface */
 	fetch('./js/interface.json')

@@ -65,7 +65,6 @@ function Render(fps) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
-
 			if (self.isPlaying) {
 				if (self.currentFrameCounter < lns.numFrames) {
 					self.currentFrameCounter += self.intervalRatio;
@@ -157,11 +156,7 @@ function Render(fps) {
 				self.capturing = true;
 			} else if (self.capturing) {
 				self.capturing = false;
-				
 			}
-
-			
-			
 		}
 		if (!self.capturing) window.requestAnimFrame(self.draw);
 	};
