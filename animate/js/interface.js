@@ -474,16 +474,15 @@ function Interface() {
 					if (drawing != null) {
 						layer = new Layer({
 							d: i,
-							s: 0,
-							e: drawing.length,
 							c: lns.lineColor.color,
 							...lns.draw.defaults,
 							x: 0,
-							y: 0
+							y: 0,
+							f: { s: undefined, e: undefined}
 						});
 					}
 					lns.layers.push(layer);
-					index = lns.layers.length - 1;
+					// index = lns.layers.length - 1;
 				}
 
 				self.drawingPanel.add(new UIToggleButton({
