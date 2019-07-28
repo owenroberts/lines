@@ -120,7 +120,7 @@ function Interface() {
 		}
 		return inFrame;
 	};
-	
+
 	/* call after changing a frame */
 	this.afterFrame = function() {
 		self.updateFramesPanel();
@@ -389,9 +389,6 @@ function Interface() {
 		self.canvas.height = h;
 		const col = w / (lns.numFrames);
 
-		// self.ctx.fillStyle = '#afafaf';
-		// self.ctx.fillRect(0, 0, w, h);
-
 		for (let i = 0; i < lns.numFrames; i++) {
 			const x = i * col;
 			if (i == lns.currentFrame) self.ctx.fillStyle = '#FF79FF';
@@ -579,8 +576,6 @@ function Interface() {
 	this.clearSettings = function() {
 		delete localStorage.settings;
 	};
-
-
 
 	/* build interface */
 	fetch('./js/interface.json')

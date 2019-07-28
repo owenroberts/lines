@@ -43,17 +43,12 @@ class Animation {
 	}
 
 	load(setAnimSize, callback) {
-		if (Game.loaded[this.src]) {
-			this.loadJSON(Game.loaded[this.src], setAnimSize, callback);
-		} else {
-			fetch(this.src)
-				.then(response => { return response.json() })
-				.then(json => { 
-					this.loadJSON(json, setAnimSize, callback);
-					Game.loaded[this.src] = json;
-				})
-				.catch(error => { console.error(error) });
-		}
+		fetch(this.src)
+			.then(response => { return response.json() })
+			.then(data => {
+				this.loadJSON(data, setAnimSize, callback);
+			})
+			.catch(error => { console.error(error) });
 	}
 
 	loadJSON(json, setAnimSize, callback) {

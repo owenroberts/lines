@@ -72,7 +72,6 @@ function Render(fps) {
 				} 
 				if (self.currentFrameCounter >= lns.numFrames) {
 					lns.currentFrame = self.currentFrameCounter = 0;
-
 					if (self.videoLoops > 1) {
 						self.videoLoops--;
 					} else if (self.capturingVideo) {
@@ -156,7 +155,11 @@ function Render(fps) {
 				self.capturing = true;
 			} else if (self.capturing) {
 				self.capturing = false;
+				
 			}
+
+			
+			
 		}
 		if (!self.capturing) window.requestAnimFrame(self.draw);
 	};

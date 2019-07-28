@@ -83,7 +83,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 					this.rndr.s = 0;
 					this.rndr.e = drawing.length;
 					const frameCount = layer.f.e - layer.f.s + 1;
-					
+
 					if (layer.draw == 'Explode') {
 						const segments = drawing.length / frameCount;
 						this.rndr.e = Math.round(segments * (this.currentFrame - layer.f.s + 1));
@@ -170,7 +170,6 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	};
 
 	this.loadData = function(data, callback) {
-		console.log('fart');
 		this.drawings = [];
 		for (let i = 0; i < data.d.length; i++) {
 			const drawing = data.d[i];
