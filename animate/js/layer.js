@@ -46,6 +46,7 @@ class Layer {
 		}
 	}
 
+	/* what is n? */
 	shiftIndex(index, n) {
 		if (!n) n = -1;
 		if (this.f.s >= index) this.f.s += n;

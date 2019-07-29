@@ -122,6 +122,8 @@ function Data() {
 		if (lns.numFrames > 0 && lns.numFrames > lns.currentFrame) {
 			for (let i = 0; i < lns.layers.length; i++) {
 				lns.layers[i].removeIndex(lns.currentFrame);
+			}
+			for (let i = 0; i < lns.layers.length; i++) {
 				lns.layers[i].shiftIndex(lns.currentFrame + 1, -1);
 			}
 			lns.numFrames--;

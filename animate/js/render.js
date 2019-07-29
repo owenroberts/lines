@@ -58,7 +58,7 @@ function Render(fps) {
 
 	/* f key */
 	this.setFrame = function(f) {
-		lns.currentFrame = self.currentFrameCounter = +f;
+		if (+f >= 0) lns.currentFrame = self.currentFrameCounter = +f;
 	};
 
 	this.draw = function(time) {

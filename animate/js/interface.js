@@ -6,7 +6,7 @@ function Interface() {
 	this.faces = {}; /* references to faces we need ?  */
 
 	this.framesPanel = new UI({ id:"frames" });
-	this.frameElems = new UIList({ class:"frame" });
+	this.frameElems = new UIList({ class: "frame" });
 
 	/* update interface */
 	this.updateInterface = function() {
@@ -78,7 +78,7 @@ function Interface() {
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
-			for (let i = numFrames; i > lns.numFrames; i--){
+			for (let i = numFrames - 1; i >= lns.numFrames; i--){
 				this.frameElems.remove(i); /* remove html frame */
 			}
 		}
