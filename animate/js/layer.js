@@ -29,15 +29,23 @@ class Layer {
 		if (!this.isInFrame(index)) {
 			if (this.f.s - 1 == index) this.f.s -= 1;
 			else if (this.f.e + 1 == index) this.f.e += 1;
-			else lns.layers.push(new Layer({
-				...this,
-				f: { s: index, e: index }
-			}));
+			else {
+				lns.layers.push(new Layer({
+					...this,
+					f: { s: index, e: index }
+				}));
+			}
+		}
+
+		/* lns.layers not modular ? */
+		if (lns.layers.indexOf(this) == -1) {
+			lns.layers.push(this);
 		}
 	}
 
 	removeIndex(index) {
-		if (this.f.s == index && this.f.e == index) lns.layers.splice(this, 1);
+		if (this.f.s == index && this.f.e == index) 
+			lns.layers.splice(lns.layers.indexOf(this), 1);
 		else if (this.f.s == index) this.f.s += 1;
 		else if (this.f.e == index) this.f.e -= 1;
 		else if (index > this.f.s && index < this.f.e) {
@@ -54,7 +62,8 @@ class Layer {
 	}
 
 	isInFrame(index) {
-		if (index >= this.f.s && index <= this.f.e) return true;
+		if (lns.layers.indexOf(this) == -1) return false
+		else if (index >= this.f.s && index <= this.f.e) return true;
 		else return false;
 	}
 

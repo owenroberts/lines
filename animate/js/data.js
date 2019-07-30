@@ -115,25 +115,17 @@ function Data() {
 
 	/* d key */
 	this.deleteFrame = function() {
-		/* i don't know if this is even relevant
-			... but maybe this is why frames is good ... */
 		self.saveState();
-		// console.log(lns.numFrames, lns.currentFrame);
-		if (lns.numFrames > 0 && lns.numFrames > lns.currentFrame) {
-			for (let i = 0; i < lns.layers.length; i++) {
+		if (lns.layers.length > 0) {
+			for (let i = lns.layers.length - 1; i >= 0; i--) {
 				lns.layers[i].removeIndex(lns.currentFrame);
-			}
-			for (let i = 0; i < lns.layers.length; i++) {
-				lns.layers[i].shiftIndex(lns.currentFrame + 1, -1);
+				if (lns.layers[i])
+					lns.layers[i].shiftIndex(lns.currentFrame + 1, -1);
 			}
 			lns.numFrames--;
-			lns.render.setFrame(lns.currentFrame - 1);
-			lns.lines = []; /* separate ... */
-			lns.interface.updateInterface();
-
-		} else {
-			self.clearFrame();
 		}
+		lns.interface.updateInterface();
+		self.clearFrame();
 	};
 
 	/* shift-d */

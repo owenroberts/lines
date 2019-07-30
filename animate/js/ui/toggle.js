@@ -6,6 +6,7 @@ class UIToggleButton extends UI {
 		this.el.textContent = this.on = params.on;
 		this.isOn = true;
 		this.off = params.off;
+		if (params.isOn === false) this.toggle();
 		this.el.addEventListener('click', function(ev) {
 			this.handler(ev, this);
 		}.bind(this));
@@ -13,17 +14,22 @@ class UIToggleButton extends UI {
 
 	handler(ev, self) {
 		self.callback();
-		self.toggleText();
+		self.toggle();
 	}
 
-	toggleText() {
-		if (this.isOn) {
-			this.el.textContent = this.off;
-			this.el.style.backgroundColor = "gray";
-		} else {
-			this.el.textContent = this.on;
-			this.el.style.backgroundColor = "lightgray";
-		}
+	toggleOn() {
+		this.el.textContent = this.on;
+		this.el.style.backgroundColor = "lightgray";
+	}
+
+	toggleOff() {
+		this.el.textContent = this.off;
+		this.el.style.backgroundColor = "gray";
+	}
+
+	toggle() {
+		if (this.isOn) this.toggleOff();
+		else  this.toggleOn();
 		this.isOn = !this.isOn;
 	}
 }
