@@ -483,7 +483,7 @@ function Interface() {
 					off: i,
 					isOn: toggleOn,
 					callback: function() {
-						if (!layer) layer = self.getDrawingLayer(i);
+						layer = self.getDrawingLayer(i);
 						if (layer) {
 							if (layer.isInFrame(lns.currentFrame)) {
 								layer.removeIndex(lns.currentFrame);
