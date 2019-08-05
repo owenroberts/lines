@@ -410,6 +410,14 @@ function Interface() {
 							a.ev = +value;
 						}
 					}), aRow);
+
+					self.panels['layer'].add(new UIButton({
+						title: 'X',
+						callback: function() {
+							self.panels['layer'].removeRow(aRow);
+							layer.a.splice(layer.a.indexOf(a));
+						}
+					}))
 				}
 
 				self.panels['layer'].add(new UIButton({
@@ -422,7 +430,7 @@ function Interface() {
 							sv: 0,
 							ev: 0
 						};
-						addAnimation(a)
+						addAnimation(a);
 						layer.a.push(a);
 					}
 				}), row);
