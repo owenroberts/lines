@@ -102,12 +102,10 @@ function Render(fps) {
 					for (let i = 0; i < lns.layers.length; i++) {
 						const layer = lns.layers[i];
 						if (layer.isInFrame(index)) {
-							[start, end] = layer.getFrames(index);
-							self.drawLines({
+								self.drawLines({
 								lines: lns.drawings[layer.d],
 								...layer,
-								s: start != undefined ? start : 0,
-								e: end != undefined ? end : lns.drawings[layer.d].length,
+								...layer.getProps(lns.currentFrame),
 								color: color,
 								onion: true
 							});
@@ -120,12 +118,10 @@ function Render(fps) {
 			for (let i = 0; i < lns.layers.length; i++) {
 				const layer = lns.layers[i];
 				if (layer.isInFrame(lns.currentFrame)) {
-					[start, end] = layer.getFrames(lns.currentFrame);
 					self.drawLines({
 						lines: lns.drawings[layer.d],
 						...layer,
-						s: start != undefined ? start : 0,
-						e: end != undefined ? end : lns.drawings[layer.d].length,
+						...layer.getProps(lns.currentFrame),
 						onion: false
 					});
 				}
@@ -157,8 +153,6 @@ function Render(fps) {
 				self.capturing = false;
 				
 			}
-
-			
 			
 		}
 		if (!self.capturing) window.requestAnimFrame(self.draw);
@@ -176,7 +170,6 @@ function Render(fps) {
 			y: Cool.random(0, params.w),
 			ySpeed: Cool.random(-params.v, params.v)
 		}; /* trying offsetting more of drawing */
-
 		for (let i = params.s; i < params.e - 1; i++) {
 			if (params.lines[i] != "end") {
 				const s = params.lines[i];

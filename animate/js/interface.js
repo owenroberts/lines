@@ -323,6 +323,7 @@ function Interface() {
 						layer.f.s = +value;
 						if (layer.f.s > lns.numFrames) lns.numFrames = layer.s;
 						if (layer.f.e < layer.s) layer.e = layer.s;
+						self.updateInterface();
 					}
 				}), row);
 
@@ -334,17 +335,9 @@ function Interface() {
 						layer.f.e = +value;
 						if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
 						if (layer.f.s > layer.f.e) layer.f.s = layer.f.e;
-						self.updateFramesPanel();
+						self.updateInterface();
 					}
 				}), row);
-
-				self.panels['layer'].add(new UISelect({
-					options: ['None', 'Explode', 'Reverse', 'ExRev'],
-					selected: layer.draw,
-					callback: function(value) {
-						layer.draw = value;
-					}
-				}), row); /* draw mode */
 
 				self.panels['layer'].add(new UIButton({
 					title: "+",
@@ -373,6 +366,82 @@ function Interface() {
 				// 		layers[i].toggle();
 				// 	}
 				// }), row);
+
+				/* add animation */
+				function addAnimation(a) {
+					const aRow = self.panels['layer'].addRow(`layer-${i}-anim-${layer.a.length}`);
+					self.panels['layer'].add(new UISelect({
+						options: ['s', 'e', 'n', 'r', 'w', 'v'],
+						selected: a.prop,
+						value: a.prop,
+						callback: function(value) {
+							a.prop = value;
+							if (value == 's' || value == 'e') {
+								a.sv = 0;
+								a.ev = lns.drawings[layer.d].length
+							}
+						}
+					}), aRow);
+					self.panels['layer'].add(new UIText({
+						label: 'sf',
+						value: a.sf,
+						callback: function(value) {
+							a.sf = +value;
+						}
+					}), aRow);
+					self.panels['layer'].add(new UIText({
+						label: 'ef',
+						value: a.ef,
+						callback: function(value) {
+							a.ef = +value;
+						}
+					}), aRow);
+					self.panels['layer'].add(new UIText({
+						label: 'sv',
+						value: a.sv,
+						callback: function(value) {
+							a.sv = +value;
+						}
+					}), aRow);
+					self.panels['layer'].add(new UIText({
+						label: 'ev',
+						value: a.ev,
+						callback: function(value) {
+							a.ev = +value;
+						}
+					}), aRow);
+
+					self.panels['layer'].add(new UIButton({
+						title: 'X',
+						callback: function() {
+							self.panels['layer'].removeRow(aRow);
+							layer.a.splice(layer.a.indexOf(a));
+						}
+					}))
+				}
+
+				self.panels['layer'].add(new UIButton({
+					title: '❏',
+					callback: function() {
+						const a = {
+							prop: undefined,
+							sf: lns.currentFrame,
+							ef: lns.currentFrame,
+							sv: 0,
+							ev: 0
+						};
+						addAnimation(a);
+						layer.a.push(a);
+					}
+				}), row);
+
+				for (let i = 0; i < layer.a.length; i++) {
+					addAnimation(layer.a[i]);
+				}
+
+
+				// https://unicode.org/charts/PDF/U2600.pdf
+				// ☠ ☰ ☁ ☂ ⛄ ⚆ ⚈ ⚇ ⚉ 
 			}
 		}
 	};

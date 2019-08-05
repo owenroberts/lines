@@ -30,7 +30,8 @@ function Data() {
 				v: lns.draw.v, // wiggle change speed (v for velocity i guess)
 				x: 0, // default x and y
 				y: 0,
-				f: { s: lns.currentFrame, e: lns.currentFrame }
+				f: { s: lns.currentFrame, e: lns.currentFrame },
+				a: []
 			}));
 
 			lns.drawings.push(lns.lines); /* add current lines to drawing data */
