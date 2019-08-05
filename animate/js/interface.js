@@ -56,7 +56,7 @@ function Interface() {
 				/* click on frame, set the current frame */
 				frameElem.onclick = function(ev) {
 					lns.render.setFrame(i);
-					self.updateFrameNum();
+					self.updateInterface();
 					self.resetLayers();
 				};
 
@@ -107,7 +107,6 @@ function Interface() {
 		lns.data.saveLines();
 
 		/* determine if add to num frames */
-		
 		if (self.layersInFrame(lns.currentFrame) && lns.numFrames < lns.currentFrame + 1)
 			lns.numFrames++;
 	};
@@ -123,7 +122,7 @@ function Interface() {
 
 	/* call after changing a frame */
 	this.afterFrame = function() {
-		self.updateFramesPanel();
+		self.updateInterface();
 		self.resetLayers();
 		self.resetDrawings();
 	};

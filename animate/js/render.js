@@ -80,7 +80,7 @@ function Render(fps) {
 						self.capturingVideo = false;
 					}
 				}
-				lns.interface.updateFrameNum(); /* ui thing */
+				lns.interface.updateInterface(); /* ui thing */
 			}
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);

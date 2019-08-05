@@ -141,6 +141,7 @@ function Files(params) {
 			lns.interface.faces.fps.setValue(data.fps);
 
 			if (params.load) lns.interface.canvasLoad();
+			lns.interface.updateInterface();
 		}
 	};
 
