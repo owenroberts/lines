@@ -75,6 +75,8 @@ function update() {
 	});
 }
 
+Game.start();
+
 /* events */
 function keyDown(key) {
 	switch (key) {

@@ -82,7 +82,6 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 					
 					this.rndr.s = 0;
 					this.rndr.e = drawing.length;
-					const frameCount = layer.f.e - layer.f.s + 1;
 
 					for (const key in layer) {
 						this.rndr[key] = layer[key];

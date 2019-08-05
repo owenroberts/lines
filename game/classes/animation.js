@@ -141,32 +141,26 @@ class Animation {
 				const drawing = this.drawings[layer.d];
 				// if (this.debug) console.log(layer);
 				if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
+					
 					this.rndr.s = 0;
 					this.rndr.e = drawing.length;
-					const frameCount = layer.f.e - layer.f.s + 1;
 					
-					if (layer.draw == 'Explode') {
-						const segments = drawing.length / frameCount;
-						this.rndr.e = Math.round(segments * (this.currentFrame - layer.f.s + 1));
-					}
-					else if (layer.draw == 'Reverse') {
-						const segments = drawing.length / frameCount;
-						this.rndr.s = Math.round(segments * (this.currentFrame - layer.f.s));
-					}
-					else if (layer.draw == 'ExRev') {
-						const mid = layer.f.s + frameCount / 2;
-						if (this.currentFrame < mid) {
-							const segments = drawing.length / (mid - layer.f.s + 1);
-							this.rndr.e = Math.round(segments * (this.currentFrame - layer.f.s));
-						} else {
-							const segments = drawing.length / (layer.f.e - mid + 1);
-							this.rndr.s = Math.round(segments * (this.currentFrame - mid));
-						}
-					}
 
 					for (const key in layer) {
 						this.rndr[key] = layer[key];
 					}
+
+					if (layer.a) {
+						for (let j = 0; j < layer.a.length; j++) {
+							const a = layer.a[j];
+							if (a.sf <= this.currentFrame && a.ef >= this.currentFrame) {
+								this.rndr[a.prop] = Cool.map(this.currentFrame, a.sf, a.ef, a.sv, a.ev);
+								if (a.prop == 's' || a.prop == 'e')
+									this.rndr[a.prop] = Math.round(this.rndr[a.prop]);
+							}
+						}
+					}
+					
 
 					if (this.overRide) {
 						for (const key in this.over) {
