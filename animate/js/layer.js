@@ -67,32 +67,22 @@ class Layer {
 		else return false;
 	}
 
-	getFrames(index) {
-		let start, end;
-		if (this.draw == 'Explode') end = this.getEx(index);
-		if (this.draw == 'Reverse') start = this.getRev(index);
-		if (this.draw == 'ExRev') [start, end] = this.getExRev(index);
-		return [start, end];
-	}
+	getProps(f) {
+		const props = {
+			s: 0,
+			e: lns.drawings[this.d].length /* faster to save?? */
+		};
+		// console.log(lns.drawings[this.d].length, props.e)
+		for (let i = 0; i < this.a.length; i++) {
+			const a = this.a[i];
+			if (a.sf <= lns.currentFrame && a.ef >= lns.currentFrame) {
+				props[a.prop] = Cool.map(f, a.sf, a.ef, a.sv, a.ev);
+				if (a.prop == 's' || a.prop == 'e')
+					props[a.prop] = Math.round(props[a.prop]);
+			}
 
-	getEx(index) {
-		const segments = lns.drawings[this.d].length / (this.f.e - this.f.s + 1);
-		return Math.round(segments * (index - this.f.s + 1));
-	}
-
-	getRev(index) {
-		const segments = lns.drawings[this.d].length / (this.f.e - this.f.s + 1);
-		return Math.round(segments * (index - this.f.s));
-	}
-
-	getExRev(index) {
-		const mid = this.f.s + ((this.f.e - this.f.s + 1) / 2); // halfway
-		if (index < mid) {
-			const segments = lns.drawings[this.d].length / (mid - this.f.s + 1);
-			return [undefined, Math.round(segments * (index - this.f.s))];
-		} else {
-			const segments = lns.drawings[this.d].length / (this.f.e - mid + 1);
-			return [Math.round(segments * (index - mid)), undefined];
 		}
+		// console.log(props);
+		return props;
 	}
 }

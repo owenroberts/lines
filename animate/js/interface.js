@@ -373,6 +373,70 @@ function Interface() {
 				// 		layers[i].toggle();
 				// 	}
 				// }), row);
+
+				/* add animation */
+				function addAnimation(a) {
+					const aRow = self.panels['layer'].addRow(`layer-${i}-anim-${layer.a.length}`);
+					self.panels['layer'].add(new UISelect({
+						options: ['s', 'e', 'n', 'r', 'w', 'v'],
+						selected: a.prop,
+						value: a.prop,
+						callback: function(value) {
+							a.prop = value;
+						}
+					}), aRow);
+					self.panels['layer'].add(new UIText({
+						label: 'sf',
+						value: a.sf,
+						callback: function(value) {
+							a.sf = +value;
+						}
+					}), aRow);
+					self.panels['layer'].add(new UIText({
+						label: 'ef',
+						value: a.ef,
+						callback: function(value) {
+							a.ef = +value;
+						}
+					}), aRow);
+					self.panels['layer'].add(new UIText({
+						label: 'sv',
+						value: a.sv,
+						callback: function(value) {
+							a.sv = +value;
+						}
+					}), aRow);
+					self.panels['layer'].add(new UIText({
+						label: 'ev',
+						value: a.ev,
+						callback: function(value) {
+							a.ev = +value;
+						}
+					}), aRow);
+				}
+
+				self.panels['layer'].add(new UIButton({
+					title: '❏',
+					callback: function() {
+						const a = {
+							prop: 'e',
+							sf: lns.currentFrame,
+							ef: lns.currentFrame,
+							sv: 0,
+							ev: lns.drawings[layer.d].length
+						};
+						addAnimation(a)
+						layer.a.push(a);
+					}
+				}), row);
+
+				for (let i = 0; i < layer.a.length; i++) {
+					addAnimation(layer.a[i]);
+				}
+
+
+				// https://unicode.org/charts/PDF/U2600.pdf
+				// ☠ ☰ ☁ ☂ ⛄ ⚆ ⚈ ⚇ ⚉ 
 			}
 		}
 	};
