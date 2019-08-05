@@ -72,7 +72,6 @@ class Layer {
 			s: 0,
 			e: lns.drawings[this.d].length /* faster to save?? */
 		};
-		// console.log(lns.drawings[this.d].length, props.e)
 		for (let i = 0; i < this.a.length; i++) {
 			const a = this.a[i];
 			if (a.sf <= lns.currentFrame && a.ef >= lns.currentFrame) {
@@ -82,7 +81,6 @@ class Layer {
 			}
 
 		}
-		// console.log(props);
 		return props;
 	}
 }

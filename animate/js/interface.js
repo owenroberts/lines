@@ -323,6 +323,7 @@ function Interface() {
 						layer.f.s = +value;
 						if (layer.f.s > lns.numFrames) lns.numFrames = layer.s;
 						if (layer.f.e < layer.s) layer.e = layer.s;
+						self.updateInterface();
 					}
 				}), row);
 
@@ -334,17 +335,9 @@ function Interface() {
 						layer.f.e = +value;
 						if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
 						if (layer.f.s > layer.f.e) layer.f.s = layer.f.e;
-						self.updateFramesPanel();
+						self.updateInterface();
 					}
 				}), row);
-
-				self.panels['layer'].add(new UISelect({
-					options: ['None', 'Explode', 'Reverse', 'ExRev'],
-					selected: layer.draw,
-					callback: function(value) {
-						layer.draw = value;
-					}
-				}), row); /* draw mode */
 
 				self.panels['layer'].add(new UIButton({
 					title: "+",
@@ -383,6 +376,10 @@ function Interface() {
 						value: a.prop,
 						callback: function(value) {
 							a.prop = value;
+							if (value == 's' || value == 'e') {
+								a.sv = 0;
+								a.ev = lns.drawings[layer.d].length
+							}
 						}
 					}), aRow);
 					self.panels['layer'].add(new UIText({
@@ -419,11 +416,11 @@ function Interface() {
 					title: '❏',
 					callback: function() {
 						const a = {
-							prop: 'e',
+							prop: undefined,
 							sf: lns.currentFrame,
 							ef: lns.currentFrame,
 							sv: 0,
-							ev: lns.drawings[layer.d].length
+							ev: 0
 						};
 						addAnimation(a)
 						layer.a.push(a);

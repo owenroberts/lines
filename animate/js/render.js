@@ -102,9 +102,7 @@ function Render(fps) {
 					for (let i = 0; i < lns.layers.length; i++) {
 						const layer = lns.layers[i];
 						if (layer.isInFrame(index)) {
-							// [start, end] = layer.getFrames(index);
-
-							self.drawLines({
+								self.drawLines({
 								lines: lns.drawings[layer.d],
 								...layer,
 								...layer.getProps(lns.currentFrame),
