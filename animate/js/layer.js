@@ -48,8 +48,8 @@ class Layer {
 		else if (this.f.s == index) this.f.s += 1;
 		else if (this.f.e == index) this.f.e -= 1;
 		else if (index > this.f.s && index < this.f.e) {
-			this.f.e = index - 1;
 			lns.layers.push(new Layer({ ...this, f: { s: index + 1, e: this.f.e } }));
+			this.f.e = index - 1;
 		}
 	}
 

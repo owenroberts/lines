@@ -231,8 +231,8 @@ function Data() {
 	/* shift-i key */
 	this.insertFrameAfter = function() {
 		self.saveLines();
-		for (let i = 0; i < lns.layers.length; i++) {
-			lns.layers[i].shiftIndex(lns.currentFrame, -1);
+		for (let i = 0, len = lns.layers.length; i < len; i++) {
+			lns.layers[i].shiftIndex(lns.currentFrame + 1, 1);
 			lns.layers[i].removeIndex(lns.currentFrame + 1);
 		}
 		lns.numFrames++;
