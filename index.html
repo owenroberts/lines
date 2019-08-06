@@ -28,9 +28,39 @@
 
 <!-- 
 
-interface idea - read through functions in each module and make interface if they match dict pairs
-	- means interfaces have to call functions, no wierd callbacks
+- new interface
+	- interface is object literal?
+	- folder for drawings/layers/settings interfaces 
+	- hide and show interfaces panels - or add
+	- set panel order more sophisticated
 	- work on interface classes to update themselves
+	- review key commands - don't really use segnum, jiggle 
+
+- issues
+	- color btn update color picker value
+	- double setting color picker
+	- need to set values like canvas on load
+		- files load sets canvas, fps, lps, line color etc.
+		- not modular but can be made modular if this is ever modular ....
+		- loading settings, need to set ui values
+	- fix onion skin lightness
+	- ui interfaces, set vs setValue
+	- layers display confusing because only see that frame ... 
+
+- thinkers
+	- rndr object in layer { r, n, w, v } ... xy?
+	- persistent layer interface? key commands?
+	- object for layers and drawings with hash keys
+	- remove fonts.css?
+	- frame ui
+	- frames and layers??
+	- blender like window system????
+	- frames get their own canvas display
+
+- possible features
+	- change onion skin color
+	- option to loop back to beginning of frames, option to stop at end, option not to create frames beyond last frame
+	
 
 - interface 
 	- go back later
@@ -62,25 +92,14 @@ interface idea - read through functions in each module and make interface if the
 		- render - current frame, canvas, lines, layers, drawings, 
 	- interface.faces with sub modules interfaces.faces.drawingInterface.seg num bla
 
+- play rndr - is this is the new way to do it?
+	- maybe for performance, play and game, for animate, doesn't matter as much
+	- use lines player as animation class for game?
+	- game separates the canvas/render from animation ... 
+	- animation in games should use rndr, would be nice to have ONE draw/render func for all three 
 
-play rndr - is this is the new way to do it?
-- maybe for performance, play and game, for animate, doesn't matter as much
-- use lines player as animation class for game?
-- game separates the canvas/render from animation ... 
-- animation in games should use rndr, would be nice to have ONE draw/render func for all three 
-
-- key commands for layers ... not really necessary unless im wanting during development
-- files with a lot of drawings the same settings ? like letters.json
-- combine explode and reverse (with multi, simultaneous)
-- param to delete first frame in explode - this will annoy me
 - "animation" class with layers, drawings, etc?
 - range slider for offset ? 
-- review key commands - don't really use segnum, jiggle 
-
-errors
-- need to set values like canvas on load
-	- files load sets canvas, fps, lps, line color etc.
-	- not modular but can be made modular if this is ever modular ....
 	
 - old color values need #
 - add drawings if fucked up
@@ -88,15 +107,7 @@ errors
 - bg color wtf
 - saved wrong color ffffff
 - frame layer toggled in file
-- clear settings doesn't really work if settings just gets saved on reload
-- onion skin color line color
-- layer resetting not working
-- display layer in layers panel? or drawing
-- plus frame key command doesn't disappear
-- toggle just toggles values? no callback?
-- open with same drawing 
 
-- hide and show interfaces panels
 
 - game thoughts 
 	- animation class doesn't automatically load src, maybe need protocol for this
@@ -109,45 +120,13 @@ errors
 
 idtio - lines 
 - render module
-- follow over missing first segment?
-- offset doesn't work with xy frames
-- html color pickers
-- save palette order in settings
-- fix onion skin lightness
-- delete up to last "end" - also clean up cut segment 
-- explode to set length (maybe wait for layers)
-- explode doesn't push frames (also wait for layers)
-
 - no more drawing indexes, random keys, or name drawing
 
-
-- draw argument "time" could just be capture is true
 - draw/data ui code
-
-- remove fonts.css?
-- frame ui
-
-
-- interface folder
 - generic update ui function
-- option to loop back to beginning of frames, option to stop at end, option not to create frames beyond last frame
-- save xy as array
 
-
-- layf
-	- loading settings, need to set ui values
-	- ui interfaces, set vs setValue
-
-
-- frames - should animate module keep track of frames AND layers and only export the layers?
-- dispaly drawings - show ui toggle
-	- could just select drawings in layer panel ... 
 - system for adding and removing ui components - frames, layers, drawings ... 
-- frames? - layer system could replace frame system ....
-- layers display confusing because only see that frame ... 
-- frames get their own canvas display
-- blender like window system????
-- layers - layer.rndr = { r, n, w, v } ??
+
 
 - layers issues for later 
 	- copy with frame between then add to previous frame, makes two layers ... not that big of a deal, not super common
@@ -165,6 +144,5 @@ idtio - lines
 
 	- saving files with names/extension - ios issue
 	- always airdrop - not doable
-
 
  -->
