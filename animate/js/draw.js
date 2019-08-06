@@ -116,7 +116,7 @@ function Draw(defaults) {
 		}
 	}
 
-	if (false && window.PointerEvent) {
+	if (window.PointerEvent) {
 		lns.canvas.canvas.addEventListener('pointermove', self.update);
 		lns.canvas.canvas.addEventListener('pointerdown', self.start);
 		lns.canvas.canvas.addEventListener('pointerup', self.end);
@@ -137,6 +137,18 @@ function Draw(defaults) {
 				callback(lastTouch);
 			}
 		}
+
+		document.addEventListener('touchstart', ev => {
+			// console.log(ev);
+		});
+
+		document.addEventListener('touchmove', ev => {
+			// console.log(ev);
+		});
+
+		document.addEventListener('touchend', ev => {
+			// console.log(ev);
+		});
 
 		/* apple pencil - safari doesn't support pointer event */
 		lns.canvas.canvas.addEventListener('touchstart', ev => {

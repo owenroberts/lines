@@ -13,6 +13,7 @@ class UIToggleButton extends UI {
 	}
 
 	handler(ev, self) {
+		console.log(ev);
 		self.callback();
 		self.toggle();
 	}

@@ -5,17 +5,24 @@ $accent-two: #ffddff;
 $ui-color: lightgray;
 $ui-select: gray;
 
+* { 
+	box-sizing: border-box;
+	touch-action: manipulation;
+}
+
 body {
 	font-family: Verdana, sans-serif;
 	margin: 0;
 	font-size: 11px;
 	-webkit-user-select: none;
 	user-select: none;
+	touch-action: manipulation;
 }
 
-* {box-sizing: border-box; }
 
-button:focus { outline: none; }
+button:focus { 
+	outline: none; 
+}
 
 %tool-tip {
 	content: '~ ' attr(title);
@@ -54,7 +61,6 @@ button:focus { outline: none; }
 	transition: background-color 150ms ease-in;
 	line-height: 1.75;
 	white-space: nowrap;
-	&[title]:hover:after { @extend %tool-tip; }
 	&.press { background-color: $accent-two; }
 }
 
@@ -191,4 +197,8 @@ button:focus { outline: none; }
 #layers {
 	margin-top: 1em;
 	width: 100%;
+}
+
+.mobile {
+
 }

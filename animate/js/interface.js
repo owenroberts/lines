@@ -708,4 +708,6 @@ function Interface() {
 			}
 		}
 	};
+
+	if (Cool.mobilecheck()) document.body.classList.add('mobile');
 }

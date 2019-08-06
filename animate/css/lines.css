@@ -1,21 +1,23 @@
 @import 'font.css';
+* {
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
 body {
   font-family: Verdana, sans-serif;
   margin: 0;
   font-size: 11px;
   -webkit-user-select: none;
   user-select: none;
-}
-
-* {
-  box-sizing: border-box;
+  touch-action: manipulation;
 }
 
 button:focus {
   outline: none;
 }
 
-*[title]:hover:after, .press:after, .btn[title]:hover:after {
+*[title]:hover:after, .press:after {
   content: "~ " attr(title);
   position: fixed;
   top: 40px;
