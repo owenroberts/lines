@@ -90,6 +90,7 @@ function Files(params) {
 	};
 
 	this.loadJSON = function(data) {
+		lns.numFrames = 0; /* reset */
 		lns.drawings = [];
 		for (let i = 0; i < data.d.length; i++) {
 			const drawing = data.d[i];

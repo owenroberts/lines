@@ -71,7 +71,7 @@ function Render(fps) {
 					/* fix for js float imprecision ... effects anims with 1.999 etc */
 					lns.currentFrame = Math.floor(self.currentFrameCounter.toFixed(4));
 				} 
-				if (self.currentFrameCounter >= lns.numFrames) {
+				if (self.currentFrameCounter.toFixed(4) >= lns.numFrames) {
 					lns.currentFrame = self.currentFrameCounter = 0;
 					if (self.videoLoops > 1) {
 						self.videoLoops--;
