@@ -203,7 +203,6 @@ function Data() {
 			lns.lines = _.cloneDeep(self.saveStates.prev.lines);
 			lns.layers = _.cloneDeep(self.saveStates.prev.layers);
 
-
 			self.saveStates.current.drawings = _.cloneDeep(self.saveStates.prev.drawings);
 			self.saveStates.current.lines = _.cloneDeep(self.saveStates.prev.lines);
 			self.saveStates.current.layers = _.cloneDeep(self.saveStates.prev.layers);
@@ -298,6 +297,43 @@ function Data() {
 			layer.f.e = layer.f.s + frames;
 			if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
 			layer.draw = params.type;
+			switch(params.type) {
+				case "Explode":
+					layer.a.push({
+						prop: 'e',
+						sf: layer.f.s,
+						ef: layer.f.e,
+						sv: 0,
+						ev: lns.drawings[layer.d].length
+					});
+				break;
+				case "Reverse":
+					layer.a.push({
+						prop: 's',
+						sf: layer.f.s,
+						ef: layer.f.e,
+						sv: 0,
+						ev: lns.drawings[layer.d].length
+					});
+				break;
+				case "ExRev":
+					const mid = Math.floor(frames / 2);
+					layer.a.push({
+						prop: 'e',
+						sf: layer.f.s,
+						ef: layer.f.s + mid,
+						sv: 0,
+						ev: lns.drawings[layer.d].length
+					});
+					layer.a.push({
+						prop: 's',
+						sf: layer.f.s + mid,
+						ef: layer.f.e,
+						sv: 0,
+						ev: lns.drawings[layer.d].length
+					});
+				break;
+			}
 		}
 		lns.interface.updateFramesPanel();
 	};
