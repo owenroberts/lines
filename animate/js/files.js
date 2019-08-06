@@ -17,7 +17,7 @@ function Files(params) {
 			lns.canvas.fitCanvasToDrawing();
 
 		const json = {};
-		json.v = "2.3";
+		json.v = "2.4";
 		json.w = Math.floor(+lns.canvas.width);
 		json.h = Math.floor(+lns.canvas.height);
 		json.fps = +lns.render.fps;

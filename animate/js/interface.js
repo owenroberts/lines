@@ -645,9 +645,10 @@ function Interface() {
 	};
 
 	this.canvasLoad = function() {
-		const settings = JSON.parse(localStorage.settings);
-		if (settings)
-			lns.canvas.setLineWidth(settings.lineWidth);
+		if (localStorage.settings) {
+			const settings = JSON.parse(localStorage.settings);
+			if (settings) lns.canvas.setLineWidth(settings.lineWidth);
+		}
 	};
 
 	this.clearSettings = function() {
