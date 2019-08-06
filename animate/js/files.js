@@ -2,12 +2,8 @@ function Files(params) {
 	const self = this;
 
 	this.saveFilesEnabled = false;
-	this.saveOnUnload = params.save || false;
+	this.saveSettingsOnUnload = params.save || false;
 	this.fileName = undefined;
-
-	this.toggleSaveSettings = function() {
-		self.saveOnUnload = !self.saveOnUnload;
-	};
 
 	/* s key - shift-s for single */
 	this.saveFile = function(title, single, callback) {
@@ -186,7 +182,7 @@ function Files(params) {
 	}
 
 	window.addEventListener("beforeunload", function(ev) {
-		if (self.saveOnUnload) lns.interface.saveSettings();
+		if (self.saveSettingsOnUnload) lns.interface.settings.saveSettings();
 		if (params.reload) ev.returnValue = 'Did you save dumbhole?';
 	});
 }

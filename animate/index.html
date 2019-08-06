@@ -10,7 +10,7 @@
 <body>
 	<div id="container">
 		<div id="draw" class="section">
-			<canvas id="canvas"></canvas>
+			<canvas id="lines"></canvas>
 		</div>
 		<div id="tools" class="section">
 
@@ -27,7 +27,7 @@
 			</script>
 			
 			<div id="panels"></div>
-			<canvas id="layers" height='0'></canvas>
+			<canvas id="draw-layers" height='0'></canvas>
 			<p>Frames</p>
 			<div id="frames">
 				<div id="current" class="plus frame">+</div>
@@ -68,6 +68,11 @@
 	<script type="text/javascript" src="js/layer.js"></script>
 
 	<!-- interface -->
+	<script type="text/javascript" src="js/interface/palette.js"></script>
+	<script type="text/javascript" src="js/interface/layers.js"></script>
+	<script type="text/javascript" src="js/interface/drawings.js"></script>
+	<script type="text/javascript" src="js/interface/settings.js"></script>
+
 	<script type="text/javascript" src="js/interface.js"></script>
 
 	<!-- build the lines -->

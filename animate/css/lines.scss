@@ -43,7 +43,7 @@ button:focus {
 	#tools { flex: 1; }
 }
 
-#canvas {
+#lines {
 	border: 1px solid $ui-color;
 	&:active, &:hover { cursor: crosshair; }
 }
@@ -194,7 +194,7 @@ button:focus {
 	.selected { background-color: $accent-two !important; }
 }
 
-#layers {
+#draw-layers {
 	margin-top: 1em;
 	width: 100%;
 }

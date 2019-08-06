@@ -40,10 +40,10 @@ button:focus {
   flex: 1;
 }
 
-#canvas {
+#lines {
   border: 1px solid lightgray;
 }
-#canvas:active, #canvas:hover {
+#lines:active, #lines:hover {
   cursor: crosshair;
 }
 
@@ -192,7 +192,7 @@ button:focus {
   background-color: #ffddff !important;
 }
 
-#layers {
+#draw-layers {
   margin-top: 1em;
   width: 100%;
 }

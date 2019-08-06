@@ -10,7 +10,7 @@ window.addEventListener("load", function() {
 	lns.numFrames = 0; // or 1 if 0 frame is one frame .... fml, or frames start at 1
 
 	// modules
-	lns.canvas = new Canvas(512, 512, "#ffffff");
+	lns.canvas = new Canvas("lines", 512, 512, "#ffffff");
 	lns.render = new Render();
 	lns.bgImage = new Background();
 	lns.data = new Data();

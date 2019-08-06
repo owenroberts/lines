@@ -173,7 +173,8 @@
 	"bgColor": {
 		"id": "bg-color-menu",
 		"label": "BG Color",
-		"module": "bgColor",
+		"module": "canvas",
+		"sub": "bgColor",
 		"list": [
 			{
 				"type": "color",
@@ -675,10 +676,11 @@
 			}
 		]
 	},
-	"layer": {
-		"id": "layer-menu",
-		"label": "Layer",
+	"layers": {
+		"id": "layers-menu",
+		"label": "Layers",
 		"module": "interface",
+		"sub": "layers",
 		"list": [
 			{
 				"type": "button",
@@ -702,10 +704,11 @@
 			}
 		]
 	},
-	"drawing": {
+	"drawings": {
 		"id": "drawing-menu",
 		"label": "Drawings",
 		"module": "interface",
+		"sub": "drawings",
 		"list": [
 			{
 				"type": "button",
@@ -722,6 +725,7 @@
 		"id": "settings-menu",
 		"label": "Settings",
 		"module": "interface",
+		"sub": "settings",
 		"list": [
 			{
 				"type": "button",
@@ -754,7 +758,6 @@
 			},
 			{
 				"type": "toggle",
-				"module": "files",
 				"fromModule": {
 					"callback": "toggleSaveSettings"
 				},
@@ -807,6 +810,24 @@
 					"arguments": {
 						"type": "ExRev"
 					}
+				}
+			}
+		]
+	},
+	"palette": {
+		"id": "palette-menu",
+		"label": "Palette",
+		"module": "interface",
+		"sub": "palette",
+		"list": [
+			{
+				"type": "button",
+				"key": "p",
+				"fromModule": {
+					"callback": "addPalette"
+				},
+				"params": {
+					"title": "Add Palette"
 				}
 			}
 		]

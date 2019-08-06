@@ -29,12 +29,25 @@
 <!-- 
 
 - new interface
+	- abbreviation for lns.interface - ui or gui or something funny
 	- interface is object literal?
 	- folder for drawings/layers/settings interfaces 
+		- adding palette as sub module issues:
+			- key command, not part of interface.json
+			- could add to lns.interface.keys in ui
+			- or use line in code like in interface itself
+			- palette key command didnt work previously ...
+			- 
 	- hide and show interfaces panels - or add
+		- make them and then display: none or dont make them at all?
+		- might help with key command issues ... 
 	- set panel order more sophisticated
 	- work on interface classes to update themselves
-	- review key commands - don't really use segnum, jiggle 
+	- review key commands - don't really use segnum, jiggle
+	- add capture interface/panel
+	- cut layer segment / line ... 
+	- update layer color saved as new color button
+	
 
 - issues
 	- color btn update color picker value
@@ -46,6 +59,7 @@
 	- fix onion skin lightness
 	- ui interfaces, set vs setValue
 	- layers display confusing because only see that frame ... 
+	- btn to reset animation values
 
 - thinkers
 	- rndr object in layer { r, n, w, v } ... xy?

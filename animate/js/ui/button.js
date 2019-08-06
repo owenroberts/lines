@@ -5,7 +5,6 @@ class UIButton extends UI {
 		this.el.classList.add("btn");
 		if (params.title) this.el.textContent = params.title;
 		this.el.addEventListener('click', this.handler.bind(this));
-		// this.el.addEventListener('touchend', this.handler.bind(this));
 	}
 	
 	handler(ev) {
