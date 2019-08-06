@@ -297,45 +297,47 @@ function Data() {
 		const frames = +prompt('Number of frames?');
 		for (let i = 0; i < lns.layers.length; i++) {
 			const layer = lns.layers[i];
-			layer.f.e = layer.f.s + frames;
-			if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e + 1; /* plus frame, is this weird? */
-			layer.draw = params.type;
-			switch(params.type) {
-				case "Explode":
-					layer.a.push({
-						prop: 'e',
-						sf: layer.f.s,
-						ef: layer.f.e,
-						sv: 0,
-						ev: lns.drawings[layer.d].length
-					});
-				break;
-				case "Reverse":
-					layer.a.push({
-						prop: 's',
-						sf: layer.f.s,
-						ef: layer.f.e,
-						sv: 0,
-						ev: lns.drawings[layer.d].length
-					});
-				break;
-				case "ExRev":
-					const mid = Math.floor(frames / 2);
-					layer.a.push({
-						prop: 'e',
-						sf: layer.f.s,
-						ef: layer.f.s + mid,
-						sv: 0,
-						ev: lns.drawings[layer.d].length
-					});
-					layer.a.push({
-						prop: 's',
-						sf: layer.f.s + mid,
-						ef: layer.f.e,
-						sv: 0,
-						ev: lns.drawings[layer.d].length
-					});
-				break;
+			if (layer.isInFrame(lns.currentFrame)) {
+				layer.f.e = layer.f.s + frames;
+				if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e + 1; /* plus frame, is this weird? */
+				layer.draw = params.type;
+				switch(params.type) {
+					case "Explode":
+						layer.a.push({
+							prop: 'e',
+							sf: layer.f.s,
+							ef: layer.f.e,
+							sv: 0,
+							ev: lns.drawings[layer.d].length
+						});
+					break;
+					case "Reverse":
+						layer.a.push({
+							prop: 's',
+							sf: layer.f.s,
+							ef: layer.f.e,
+							sv: 0,
+							ev: lns.drawings[layer.d].length
+						});
+					break;
+					case "ExRev":
+						const mid = Math.floor(frames / 2);
+						layer.a.push({
+							prop: 'e',
+							sf: layer.f.s,
+							ef: layer.f.s + mid,
+							sv: 0,
+							ev: lns.drawings[layer.d].length
+						});
+						layer.a.push({
+							prop: 's',
+							sf: layer.f.s + mid,
+							ef: layer.f.e,
+							sv: 0,
+							ev: lns.drawings[layer.d].length
+						});
+					break;
+				}
 			}
 		}
 		lns.interface.updateInterface();
