@@ -36,7 +36,6 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 		this.over[prop] = value;
 	};
 
-
 	this.reset = function() {
 		this.rndr = {
 			off: { x: 0, y: 0 },
@@ -61,7 +60,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			if (this.isPlaying) {
 				if (this.currentFrameCounter <= this.numFrames) {
 					this.currentFrameCounter += this.intervalRatio;
-					this.currentFrame = Math.floor(this.currentFrameCounter);
+					this.currentFrame = Math.floor(this.currentFrameCounter.toFixed(4));
 				}
 				if (this.currentFrameCounter > this.numFrames) {
 					this.currentFrame = this.currentFrameCounter = 0;
@@ -87,12 +86,14 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 						this.rndr[key] = layer[key];
 					}
 
-					for (let j = 0; j < layer.a.length; j++) {
-						const a = layer.a[j];
-						if (a.sf <= this.currentFrame && a.ef >= this.currentFrame) {
-							this.rndr[a.prop] = Cool.map(this.currentFrame, a.sf, a.ef, a.sv, a.ev);
-							if (a.prop == 's' || a.prop == 'e')
-								this.rndr[a.prop] = Math.round(this.rndr[a.prop]);
+					if (layer.a) {
+						for (let j = 0; j < layer.a.length; j++) {
+							const a = layer.a[j];
+							if (a.sf <= this.currentFrame && a.ef >= this.currentFrame) {
+								this.rndr[a.prop] = Cool.map(this.currentFrame, a.sf, a.ef, a.sv, a.ev);
+								if (a.prop == 's' || a.prop == 'e')
+									this.rndr[a.prop] = Math.round(this.rndr[a.prop]);
+							}
 						}
 					}
 

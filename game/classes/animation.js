@@ -243,7 +243,7 @@ class Animation {
 					this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
 				}
 			} else {
-				this.currentFrame = Math.floor(this.currentFrameCounter);
+				this.currentFrame = Math.floor(this.currentFrameCounter.toFixed(4));
 			}
 			if (this.onUpdate) this.onUpdate();
 		}

@@ -30,7 +30,6 @@ function Render(fps) {
 	this.setFps = function(fps) {
 		self.fps = +fps;
 		self.intervalRatio = self.interval / (1000 / self.fps);
-		console.log('ratio', self.intervalRatio);
 	};
 
 	/* ' key */
@@ -67,7 +66,6 @@ function Render(fps) {
 			self.timer = performance.now();
 
 			if (self.isPlaying) {
-				console.log(lns.currentFrame, self.currentFrameCounter);
 				if (self.currentFrameCounter < lns.numFrames) {
 					self.currentFrameCounter += self.intervalRatio;
 					/* fix for js float imprecision ... effects anims with 1.999 etc */
