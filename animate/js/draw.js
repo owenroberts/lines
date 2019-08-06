@@ -33,13 +33,6 @@ function Draw(defaults) {
 		if (ev.toElement != lns.canvas.canvas) {
 			if (self.isDrawing) lns.data.saveLines();
 			self.isDrawing = false;
-
-			/* pointer context click on frames for copy frames */
-			if (ev.which == 3) {
-				ev.preventDefault();
-				const elem = document.elementFromPoint(ev.clientX, ev.clientY);
-				if (elem.classList.contains("frame")) lns.data.addFrameToCopy(elem);
-			}
 		}
 	};
 

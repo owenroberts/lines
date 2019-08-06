@@ -21,6 +21,7 @@ function Interface() {
 		id:"current",
 		event: "click",
 		callback: function() {
+			/* make frame ui */
 			self.setFrame(lns.numFrames);
 		},
 		key: "+"
@@ -63,12 +64,7 @@ function Interface() {
 				/* right click, add/remove from copy frames */
 				frameElem.oncontextmenu = function(ev) {
 					ev.preventDefault();
-					if (!this.classList.toggle("copy")){
-						lns.data.framesToCopy.splice(lns.data.framesToCopy.indexOf(i), 1);
-					} else {
-						this.classList.add("copy");
-						lns.data.framesToCopy.push(i);
-					}
+					lns.data.selectFrame(ev.currentTarget);
 				};
 
 				/* this is one time un-ui thing */

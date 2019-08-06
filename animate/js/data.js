@@ -72,6 +72,9 @@ function Data() {
 		if (!elem.classList.contains("selected")) {
  			elem.classList.add("selected");
  			self.pasteFrames.push(+elem.dataset.index);
+ 		} else {
+ 			self.pasteFrames.splice(self.pasteFrames.indexOf(+elem.dataset.index), 1);
+ 			elem.classList.remove("selected");
  		}
 	};
 
@@ -295,7 +298,7 @@ function Data() {
 		for (let i = 0; i < lns.layers.length; i++) {
 			const layer = lns.layers[i];
 			layer.f.e = layer.f.s + frames;
-			if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
+			if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e + 1; /* plus frame, is this weird? */
 			layer.draw = params.type;
 			switch(params.type) {
 				case "Explode":
@@ -335,6 +338,6 @@ function Data() {
 				break;
 			}
 		}
-		lns.interface.updateFramesPanel();
+		lns.interface.updateInterface();
 	};
 }
