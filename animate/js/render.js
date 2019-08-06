@@ -9,7 +9,7 @@ function Render(fps) {
 
 	this.interval = 1000/this.lps;  // fps per one second, the line interval
 	this.timer = performance.now();
-	this.intervalRatio = this.interval / (1000 / this.fps);  // this starts same as lineInterval, written out to show math
+	this.intervalRatio = +(self.interval / (1000 / self.fps)).toFixed(4);  // this starts same as lineInterval, written out to show math
 
 	this.onionSkinNum = 0;
 	this.onionSkinIsVisible = false;
@@ -28,13 +28,14 @@ function Render(fps) {
 
 	/* ; key */
 	this.setFps = function(fps) {
-		self.fps = fps;
+		self.fps = +fps;
 		self.intervalRatio = self.interval / (1000 / self.fps);
+		console.log('ratio', self.intervalRatio);
 	};
 
 	/* ' key */
 	this.setLps = function(lps) {
-		self.lps = lps;
+		self.lps = +lps;
 		self.interval = 1000 / self.lps;
 		self.intervalRatio = self.interval / (1000 / self.fps);
 	};
@@ -66,9 +67,11 @@ function Render(fps) {
 			self.timer = performance.now();
 
 			if (self.isPlaying) {
+				console.log(lns.currentFrame, self.currentFrameCounter);
 				if (self.currentFrameCounter < lns.numFrames) {
 					self.currentFrameCounter += self.intervalRatio;
-					lns.currentFrame = Math.floor(self.currentFrameCounter);
+					/* fix for js float imprecision ... effects anims with 1.999 etc */
+					lns.currentFrame = Math.floor(self.currentFrameCounter.toFixed(4));
 				} 
 				if (self.currentFrameCounter >= lns.numFrames) {
 					lns.currentFrame = self.currentFrameCounter = 0;
