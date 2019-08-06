@@ -568,7 +568,8 @@ function Interface() {
 								...lns.draw.defaults,
 								x: 0,
 								y: 0,
-								f: { s: lns.currentFrame, e: lns.currentFrame }
+								f: { s: lns.currentFrame, e: lns.currentFrame },
+								a: []
 							});
 							lns.layers.push(layer);
 						}
