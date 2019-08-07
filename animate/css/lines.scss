@@ -64,7 +64,7 @@ button:focus {
 	&.press { background-color: $accent-two; }
 }
 
-*[title]:hover:after, .press:after {
+.desktop *[title]:hover:after, .press:after {
 	@extend %tool-tip;
 }
 
@@ -125,7 +125,6 @@ button:focus {
 		border-bottom-right-radius: 3px;
 	}
 
-
 	.hide {
 		right: 14px;
 		left: auto;
@@ -136,8 +135,6 @@ button:focus {
 		right: 2px;
 		left: auto;
 	}
-
-
 
 	.row {
 		margin-bottom: 0.5em;
@@ -212,5 +209,18 @@ button:focus {
 }
 
 .mobile {
+	
+	.menu-panel {
+		flex-basis: 180px;
+		max-width: 220px;
+
+		.row input {
+			flex-basis: 50px;
+		}
+	}
+
+	.btn, select, input {
+		font-size: 1.75em;
+	}
 
 }

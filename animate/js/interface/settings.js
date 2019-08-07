@@ -20,6 +20,7 @@ function Settings(panel) {
 				hidden: lns.ui.panels[p].isHidden(),
 				order: lns.ui.panels[p].order
 			};
+			if (p == 'settings') settings.panels[p].open = false;
 		}
 		settings.palettes = lns.ui.palette.palettes;
 		localStorage.settings = JSON.stringify(settings);

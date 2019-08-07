@@ -213,7 +213,6 @@ function Interface() {
 		const nav = document.getElementById('nav');
 		this.addPanel = new UISelect({
 			id: 'add-ui',
-			label: "Add UI",
 			options: Object.keys(self.data),
 			callback: function(value) {
 				self.showUI(value);
@@ -268,4 +267,5 @@ function Interface() {
 	};
 
 	if (Cool.mobilecheck()) document.body.classList.add('mobile');
+	else document.body.classList.add('desktop');
 }

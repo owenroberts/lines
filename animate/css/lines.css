@@ -17,7 +17,7 @@ button:focus {
   outline: none;
 }
 
-*[title]:hover:after, .press:after {
+.desktop *[title]:hover:after, .press:after {
   content: "~ " attr(title);
   position: fixed;
   top: 40px;
@@ -205,6 +205,17 @@ button:focus {
 #draw-layers {
   margin-top: 1em;
   width: 100%;
+}
+
+.mobile .menu-panel {
+  flex-basis: 180px;
+  max-width: 220px;
+}
+.mobile .menu-panel .row input {
+  flex-basis: 50px;
+}
+.mobile .btn, .mobile select, .mobile input {
+  font-size: 1.75em;
 }
 
 /*# sourceMappingURL=lines.css.map */
