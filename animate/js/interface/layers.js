@@ -47,7 +47,7 @@ function Layers(panel) {
 						layer.f.s = +value;
 						if (layer.f.s > lns.numFrames) lns.numFrames = layer.s;
 						if (layer.f.e < layer.s) layer.e = layer.s;
-						self.updateInterface();
+						lns.ui.updateInterface();
 					}
 				}), row);
 
@@ -59,7 +59,7 @@ function Layers(panel) {
 						layer.f.e = +value;
 						if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
 						if (layer.f.s > layer.f.e) layer.f.s = layer.f.e;
-						self.updateInterface();
+						lns.ui.updateInterface();
 					}
 				}), row);
 
@@ -95,9 +95,9 @@ function Layers(panel) {
 				function addAnimation(a) {
 					const aRow = self.panel.addRow(`layer-${i}-anim-${layer.a.length}`);
 					self.panel.add(new UISelect({
-						options: ['s', 'e', 'n', 'r', 'w', 'v'],
-						selected: a.prop,
-						value: a.prop,
+						options: ['anim', 's', 'e', 'n', 'r', 'w', 'v'],
+						selected: a.prop || 'anim',
+						value: a.prop || 'anim',
 						callback: function(value) {
 							a.prop = value;
 							if (value == 's' || value == 'e') {

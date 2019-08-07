@@ -15,7 +15,6 @@ function Settings(panel) {
 		};
 		settings.panels = {};
 		for (const p in lns.ui.panels) {
-			console.log(lns.ui.panels[p])
 			settings.panels[p] = {
 				open: lns.ui.panels[p].open,
 				hidden: lns.ui.panels[p].isHidden(),

@@ -56,7 +56,7 @@ function Canvas(id, width, height, color) {
    				const a = document.createElement('a');
    				document.body.appendChild(a);
    				a.href = url;
-   				a.download = `${lns.ui.title.getValue()}.webm` || 'lines.webm';
+   				a.download = `${lns.ui.fio.title.getValue()}.webm` || 'lines.webm';
    				a.click();
    				// window.URL.revokeObjectURL(url);
 			});

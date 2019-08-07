@@ -89,7 +89,7 @@ function Render(fps) {
 
 			if (self.videoCapture || (self.captureWithBackground && self.captureFrames > 0)) {
 				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
-				lns.canvas.ctx.fillStyle = lns.bgColor.color;
+				lns.canvas.ctx.fillStyle = lns.canvas.bgColor.color;
 				lns.canvas.ctx.fill();
 			}
 

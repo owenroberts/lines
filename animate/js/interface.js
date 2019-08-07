@@ -11,6 +11,8 @@ function Interface() {
 	/* update interface */
 	this.updateInterface = function() {
 		self.updateFrameNum();
+		self.layers.resetLayers();
+		self.drawings.resetDrawings();
 		self.layers.drawLayers();
 		self.updateFramesPanel();
 	};
@@ -58,7 +60,6 @@ function Interface() {
 				frameElem.onclick = function(ev) {
 					lns.render.setFrame(i);
 					self.updateInterface();
-					self.resetLayers();
 				};
 
 				/* right click, add/remove from copy frames */
