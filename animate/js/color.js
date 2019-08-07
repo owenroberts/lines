@@ -23,7 +23,8 @@ function Color(callback) {
 				value: color,
 				callback: self.set
 			});
-			lns.interface.panels.lineColor.add(btn);
+			/* breaks without this panel ... */
+			lns.ui.panels.lineColor.add(btn);
 		}
 	};
 }

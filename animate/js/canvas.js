@@ -56,7 +56,7 @@ function Canvas(id, width, height, color) {
    				const a = document.createElement('a');
    				document.body.appendChild(a);
    				a.href = url;
-   				a.download = `${lns.interface.title.getValue()}.webm` || 'lines.webm';
+   				a.download = `${lns.ui.title.getValue()}.webm` || 'lines.webm';
    				a.click();
    				// window.URL.revokeObjectURL(url);
 			});
@@ -72,7 +72,7 @@ function Canvas(id, width, height, color) {
 	this.capture = function() {
 		if (lns.files.saveFilesEnabled) {
 			canvas.toBlob(function(blob) {
-				const title = lns.interface.title.getValue(); // this is a UI
+				const title = lns.ui.title.getValue(); // this is a UI
 				const n = Cool.padNumber(lns.currentFrame, 3);
 				let frm = 0;
 				let fileName = `${title}-${n}-${frm}.png`;
@@ -123,8 +123,8 @@ function Canvas(id, width, height, color) {
 
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
-		lns.interface.faces.width.set(self.canvas.width);
-		lns.interface.faces.height.set(self.canvas.height);
+		lns.ui.faces.width.set(self.canvas.width);
+		lns.ui.faces.height.set(self.canvas.height);
 
 		for (let i = 0; i < lns.layers.length; i++) {
 			const layer = lns.layers[i];

@@ -20,7 +20,7 @@ function Drawings(panel) {
 	};
 
 	this.displayDrawings = function() {
-		lns.interface.layers.resetLayers();
+		lns.ui.layers.resetLayers();
 		self.resetDrawings();
 		panel.addRow('drawings');
 		for (let i = 0; i < lns.drawings.length; i++) {

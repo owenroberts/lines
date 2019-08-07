@@ -44,14 +44,14 @@ function Render(fps) {
 		lns.currentFrame = self.currentFrameCounter = 0;
 		self.isPlaying = false;
 		lns.canvas.ctx.miterLimit = 1;
-		lns.interface.updateFramesPanel();
+		lns.ui.updateInterface();
 	};
 
 	/* toggle play animation */
 	this.toggle = function() {
 		if (!self.isPlaying) {
-			lns.interface.beforeFrame();
-			lns.interface.afterFrame();
+			lns.ui.beforeFrame();
+			lns.ui.afterFrame();
 		}
 		self.isPlaying = !self.isPlaying;
 	};
@@ -81,7 +81,7 @@ function Render(fps) {
 						self.capturingVideo = false;
 					}
 				}
-				lns.interface.updateInterface(); /* ui thing */
+				lns.ui.updateInterface(); /* ui thing */
 			}
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);

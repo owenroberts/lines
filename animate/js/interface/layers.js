@@ -21,7 +21,7 @@ function Layers(panel) {
 
 	this.displayLayers = function() {
 		self.resetLayers();
-		lns.interface.drawings.resetDrawings();
+		lns.ui.drawings.resetDrawings();
 
 		for (let i = 0; i < lns.layers.length; i++) {
 			const layer = lns.layers[i];
@@ -70,7 +70,7 @@ function Layers(panel) {
 						n.f.s = n.f.e = lns.currentFrame + 1;
 						layer.f.e = lns.currentFrame;
 						lns.layers.push(n);
-						lns.interface.nextFrame();
+						lns.ui.nextFrame();
 					}
 				}), row); /* duplicate */
 

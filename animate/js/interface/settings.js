@@ -14,13 +14,13 @@ function Settings(panel) {
 			onionSkinNum: lns.render.onionSkinNum,
 		};
 		settings.panels = {};
-		for (const p in lns.interface.panels) {
+		for (const p in lns.ui.panels) {
 			settings.panels[p] = {
-				open: lns.interface.panels[p].open,
-				order: lns.interface.panels[p].order
+				open: lns.ui.panels[p].open,
+				order: lns.ui.panels[p].order
 			};
 		}
-		settings.palettes = lns.interface.palette.palettes;
+		settings.palettes = lns.ui.palette.palettes;
 		localStorage.settings = JSON.stringify(settings);
 	};
 
@@ -36,11 +36,11 @@ function Settings(panel) {
 		lns.render.onionSkinVisible = settings.onionSkinVisible;
 		lns.render.onionSkinNum = settings.onionSkinNum;
 		for (const p in settings.panels) {
-			if (settings.panels[p].open) lns.interface.panels[p].toggle();
-			lns.interface.panels[p].setOrder(settings.panels[p].order);
+			if (settings.panels[p].open) lns.ui.panels[p].toggle();
+			lns.ui.panels[p].setOrder(settings.panels[p].order);
 		}
-		lns.interface.palette.palettes = settings.palettes;
-		if (lns.interface.palette.current) 
+		lns.ui.palette.palettes = settings.palettes;
+		if (lns.ui.palette.current) 
 			self.loadPalette(lns.palettes.current);
 		for (const key in settings.palettes) {
 			if (key != 'current') {
@@ -53,11 +53,11 @@ function Settings(panel) {
 			}
 		}
 
-		lns.interface.faces.width.set(settings.width);
-		lns.interface.faces.height.set(settings.height);
-		lns.interface.faces.lineColor.setValue(settings.lineColor);
-		lns.interface.faces.bgColor.setValue(settings.canvasColor);
-		lns.interface.faces.lineWidth.setValue(settings.lineWidth);
+		lns.ui.faces.width.set(settings.width);
+		lns.ui.faces.height.set(settings.height);
+		lns.ui.faces.lineColor.setValue(settings.lineColor);
+		lns.ui.faces.bgColor.setValue(settings.canvasColor);
+		lns.ui.faces.lineWidth.setValue(settings.lineWidth);
 	};
 
 	this.canvasLoad = function() {

@@ -37,7 +37,7 @@ function Data() {
 			lns.drawings.push(lns.lines); /* add current lines to drawing data */
 			lns.lineColor.addColorBtn(lns.lineColor.color); /* add current color to color choices */
 			lns.lines = []; /* lines are saved, stop drawing? */
-			lns.interface.updateInterface(); /* update interface */
+			lns.ui.updateInterface(); /* update interface */
 		}
 		self.saveState(); /* save current state - one undo currently */
 	};
@@ -80,7 +80,7 @@ function Data() {
 
 	/* shift v */
 	this.selectAll = function() {
-		lns.interface.frameElems.looper(elem => {
+		lns.ui.frameElems.looper(elem => {
 			self.selectFrame(elem);
 		});
 	};
@@ -89,7 +89,7 @@ function Data() {
 	this.selectRange = function() {
 		const start = prompt("Start frame:");
 		const end = prompt("end frame:");
-		lns.interface.frameElems.looper(elem => {
+		lns.ui.frameElems.looper(elem => {
 			self.selectFrame(elem);
 		}, start, end);
 	};
@@ -128,7 +128,7 @@ function Data() {
 			}
 			lns.numFrames--;
 		}
-		lns.interface.updateInterface();
+		lns.ui.updateInterface();
 		self.clearFrame();
 	};
 
@@ -149,13 +149,13 @@ function Data() {
 			lns.numFrames -= endFrame - startFrame + 1;
 			if (startFrame > 0) lns.render.setFrame(startFrame - 1);
 			else lns.currentFrame = 0;
-			lns.interface.updateFramesPanel();
+			lns.ui.updateFramesPanel();
 		}
 	};
 
 	/* z key */
 	this.cutLastSegment = function() {
-		if (lns.interface.layers.length > 0) lns.interface.cutLayerSegment();
+		if (lns.ui.layers.length > 0) lns.ui.cutLayerSegment();
 		else if (lns.lines.length > 0) {
 			if (lns.lines.pop() == 'end')
 				lns.lines.pop();
@@ -165,7 +165,7 @@ function Data() {
 
 	/* shift z */
 	this.cutLastLine = function() {
-		if (lns.interface.layers.length > 0) lns.interface.cutLayerLine();
+		if (lns.ui.layers.length > 0) lns.ui.cutLayerLine();
 		if (lns.lines.length > 0) {
 			lns.lines.pop(); // remove end
 			for (let i = lns.lines.length - 1; i > 0; i--) {
@@ -216,7 +216,7 @@ function Data() {
 		} else {
 			console.log("%c Can't undo ", "color:lightblue;background:gray;");
 		}
-		lns.interface.updateFramesPanel();
+		lns.ui.updateInterface();
 	};
 
 	/* i key */
@@ -227,7 +227,7 @@ function Data() {
 			lns.layers[i].removeIndex(lns.currentFrame);
 		}
 		lns.numFrames++;
-		lns.interface.updateFramesPanel();
+		lns.ui.updateInterface();
 	};
 
 	/* shift-i key */
@@ -239,7 +239,7 @@ function Data() {
 		}
 		lns.numFrames++;
 		lns.render.setFrame(lns.currentFrame + 1);
-		lns.interface.updateFramesPanel();
+		lns.ui.updateInterface();
 	};
 
 	/* m key */
@@ -250,7 +250,7 @@ function Data() {
 		self.copy();
 		if (n) {
 			for (let i = 0; i < n; i++) {
-				lns.interface.nextFrame();
+				lns.ui.nextFrame();
 				self.paste();
 			}
 		}
@@ -272,10 +272,10 @@ function Data() {
 				
 				// check to see if layers are selected
 				let layers = [];
-				if (lns.interface.layers.length > 0) {
-					for (let i = 0; i < lns.interface.layers.length; i++) {
-						if (lns.interface.layers[i].toggled)
-							layers.push(lns.interface.layers[i])
+				if (lns.ui.layers.length > 0) {
+					for (let i = 0; i < lns.ui.layers.length; i++) {
+						if (lns.ui.layers[i].toggled)
+							layers.push(lns.ui.layers[i])
 					}
 				} else {
 					layers = _layers;
@@ -340,6 +340,6 @@ function Data() {
 				}
 			}
 		}
-		lns.interface.updateInterface();
+		lns.ui.updateInterface();
 	};
 }

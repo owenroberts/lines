@@ -23,7 +23,7 @@ window.addEventListener("load", function() {
 		reload: false, /* confirm reload */
 		bg: false /* bg color */
 	});
-	lns.interface = new Interface();
+	lns.ui = new Interface();
 
 	const openFile = localStorage.getItem('re-open');
 	if (openFile) {

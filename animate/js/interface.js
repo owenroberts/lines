@@ -3,7 +3,7 @@ function Interface() {
 
 	this.panels = {};
 	this.keys = {};
-	this.faces = {}; /* references to faces we need ?  */
+	this.faces = {}; /* references to faces we need to update values ???  */
 
 	this.framesPanel = new UI({ id:"frames" });
 	this.frameElems = new UIList({ class: "frame" });
@@ -120,7 +120,7 @@ function Interface() {
 	this.afterFrame = function() {
 		self.updateInterface();
 		self.layers.resetLayers();
-		self.resetDrawings();
+		self.drawings.resetDrawings();
 	};
 
 	/* e key - go to next frame */
@@ -145,40 +145,6 @@ function Interface() {
 		};
 	});
 
-	/* files interface */
-	this.title = new UI({ id:"title" });
-
-	this.keys['s'] = new UIButton({
-		id: "save",
-		callback: function() {
-			lns.files.saveFile(self.title.getValue(), false, function(title) {
-				self.title.setValue(title);
-			});
-		},
-		key: "s"
-	});
-
-	this.keys['shift-s'] = new UIButton({
-		id: "save-frame",
-		callback: function() {
-			lns.files.saveFile(self.title.getValue(), true, function(filename) {
-				self.title.setValue(filename.split("/").pop());
-			});
-		},
-		key: "shift-s"
-	});
-
-	this.keys['o'] = new UIButton({
-		id: "open",
-		callback: lns.files.loadFile,
-		key: "o"
-	});
-
-	this.keys['shift-o'] = new UIButton({
-		id: 're-open',
-		callback: lns.files.reOpenFile,
-		key: 'shift-o'
-	});
 
 	/* keyboard events and handlers */
 	this.keyDown = function(ev) {
@@ -214,9 +180,10 @@ function Interface() {
 	this.panels.drawings = new Panel("drawing-menu", "Drawings");
 	this.drawings = new Drawings(this.panels.drawings);
 
-
 	this.panels.settings = new Panel('settings-menu', "Settings");
 	this.settings = new Settings(this.panels.settings);
+
+	this.fio = new FilesInterface(this);	
 
 	/* build interface */
 	fetch('./js/interface.json')

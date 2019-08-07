@@ -21,7 +21,7 @@ function Palette(ui) {
 				grass: lns.draw.grass
 			};
 			/* is this petter or panel better? */
-			lns.interface.panels.palette.add(new UIButton({
+			lns.ui.panels.palette.add(new UIButton({
 				title: name,
 				callback: function() {
 					self.loadPalette(name);
@@ -46,15 +46,15 @@ function Palette(ui) {
 		lns.draw.dots = self.palettes[name].dots;
 		lns.draw.grass = self.palettes[name].grass;
 
-		lns.interface.faces.w.setValue(self.palettes[name].n);
-		lns.interface.faces.r.setValue(self.palettes[name].r);
-		lns.interface.faces.w.setValue(self.palettes[name].w);
-		lns.interface.faces.v.setValue(self.palettes[name].v);
-		lns.interface.faces.lineWidth.setValue(self.palettes[name].lineWidth);
-		lns.interface.faces.mouse.setValue(self.palettes[name].mouse);
-		lns.interface.faces.brush.setValue(self.palettes[name].brush);
-		lns.interface.faces.brushSpread.setValue(self.palettes[name].brushSpread);
-		lns.interface.faces.dots.setValue(self.palettes[name].dots);
-		lns.interface.faces.grass.setValue(self.palettes[name].grass);
+		lns.ui.faces.w.setValue(self.palettes[name].n);
+		lns.ui.faces.r.setValue(self.palettes[name].r);
+		lns.ui.faces.w.setValue(self.palettes[name].w);
+		lns.ui.faces.v.setValue(self.palettes[name].v);
+		lns.ui.faces.lineWidth.setValue(self.palettes[name].lineWidth);
+		lns.ui.faces.mouse.setValue(self.palettes[name].mouse);
+		lns.ui.faces.brush.setValue(self.palettes[name].brush);
+		lns.ui.faces.brushSpread.setValue(self.palettes[name].brushSpread);
+		lns.ui.faces.dots.setValue(self.palettes[name].dots);
+		lns.ui.faces.grass.setValue(self.palettes[name].grass);
 	};
 }

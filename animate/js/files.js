@@ -118,10 +118,10 @@ function Files(params) {
 		if (data.bg) lns.bgColor.set(data.bg);
 		lns.render.reset();
 
-		if (lns.interface) {
-			lns.interface.title.setValue(self.fileName.split('/').pop());
-			lns.interface.faces.width.set(data.w);
-			lns.interface.faces.height.set(data.h);
+		if (lns.ui) {
+			lns.ui.fio.title.setValue(self.fileName.split('/').pop());
+			lns.ui.faces.width.set(data.w);
+			lns.ui.faces.height.set(data.h);
 			let color;
 			lns.layers.some(layer => {
 				if (layer) {
@@ -131,14 +131,14 @@ function Files(params) {
 			});
 			lns.layers.forEach(layer => {
 				if (layer)
-					lns.interface.faces.lineColor.setValue(layer.c);
+					lns.ui.faces.lineColor.setValue(layer.c);
 			});
 
-			if (data.bg) lns.interface.faces.bgColor.setValue(data.bg);
-			lns.interface.faces.fps.setValue(data.fps);
+			if (data.bg) lns.ui.faces.bgColor.setValue(data.bg);
+			lns.ui.faces.fps.setValue(data.fps);
 
-			if (params.load) lns.interface.canvasLoad();
-			lns.interface.updateInterface();
+			if (params.load) lns.ui.settings.canvasLoad();
+			lns.ui.updateInterface();
 		}
 	};
 
@@ -182,7 +182,7 @@ function Files(params) {
 	}
 
 	window.addEventListener("beforeunload", function(ev) {
-		if (self.saveSettingsOnUnload) lns.interface.settings.saveSettings();
+		if (self.saveSettingsOnUnload) lns.ui.settings.saveSettings();
 		if (params.reload) ev.returnValue = 'Did you save dumbhole?';
 	});
 }

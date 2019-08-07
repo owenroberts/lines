@@ -9,11 +9,11 @@ function Draw(defaults) {
 		self.w = defaults.w; /* 2 is good */
 		self.v = defaults.v; /* 0.1 good */
 
-		if (lns.interface) { 	/* not modular */
-			lns.interface.faces.n.update(defaults.n);
-			lns.interface.faces.r.update(defaults.r);
-			lns.interface.faces.w.update(defaults.w);
-			lns.interface.faces.v.update(defaults.v);
+		if (lns.ui) { 	/* not modular */
+			lns.ui.faces.n.update(defaults.n);
+			lns.ui.faces.r.update(defaults.r);
+			lns.ui.faces.w.update(defaults.w);
+			lns.ui.faces.v.update(defaults.v);
 		}
 	};
 	this.defaults = defaults;
