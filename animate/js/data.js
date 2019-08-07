@@ -254,6 +254,7 @@ function Data() {
 				self.paste();
 			}
 		}
+		lns.ui.updateInterface();
 	};
 
 	/* q key  */

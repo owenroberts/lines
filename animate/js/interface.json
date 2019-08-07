@@ -6,7 +6,6 @@
 		"list": [
 			{
 				"type": "range",
-				"key": "shift-m",
 				"face": "mouse",
 				"set": {
 					"prop": "mouseInterval",
@@ -249,7 +248,7 @@
 			},
 			{
 				"type": "button",
-				"key": "m",
+				"key": "shift-c",
 				"fromModule": {
 					"callback": "addMultipleCopies"
 				},
@@ -446,7 +445,7 @@
 			{
 				"row": true,
 				"type": "text",
-				"key": "l",
+				"key": "shift-l",
 				"fromModule": {
 					"callback": "setOnionSkin"
 				},
@@ -459,7 +458,7 @@
 			},
 			{
 				"type": "toggle",
-				"key": "shift-l",
+				"key": "l",
 				"fromModule": {
 					"callback": "toggleOnion"
 				},
@@ -610,7 +609,6 @@
 		"list": [
 			{
 				"type": "range",
-				"key": "h",
 				"face": "n",
 				"set": {
 					"layer": "n",
@@ -626,7 +624,6 @@
 			},
 			{
 				"type": "range",
-				"key": "j",
 				"face": "r",
 				"set": {
 					"layer": "r",
@@ -718,6 +715,7 @@
 		"list": [
 			{
 				"type": "button",
+				"key": "y",
 				"fromModule": {
 					"callback": "displayDrawings"
 				},
