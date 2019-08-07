@@ -61,7 +61,7 @@ function Render(fps) {
 		if (+f >= 0) lns.currentFrame = self.currentFrameCounter = +f;
 	};
 
-	this.draw = function(time) {
+	this.update = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
@@ -73,13 +73,15 @@ function Render(fps) {
 				} 
 				if (self.currentFrameCounter.toFixed(4) >= lns.numFrames) {
 					lns.currentFrame = self.currentFrameCounter = 0;
-					if (self.videoLoops > 1) {
-						self.videoLoops--;
-					} else if (self.capturingVideo) {
-						lns.canvas.videoCapture();
+
+					if (lns.ui.capture.videoLoops > 1) {
+						lns.ui.capture.videoLoops--;
+					} else if (lns.ui.capture.capturingVideo) {
+						lns.ui.capture.videoCapture();
+						lns.ui.capture.capturingVideo = false;
 						self.isPlaying = false;
-						self.capturingVideo = false;
 					}
+
 				}
 				lns.ui.updateInterface(); /* ui thing */
 			}
@@ -87,7 +89,7 @@ function Render(fps) {
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 			
 
-			if (self.videoCapture || (self.captureWithBackground && self.captureFrames > 0)) {
+			if (lns.ui.capture.captureWithBackground) {
 				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
 				lns.canvas.ctx.fillStyle = lns.canvas.bgColor.color;
 				lns.canvas.ctx.fill();
@@ -103,7 +105,7 @@ function Render(fps) {
 					for (let i = 0; i < lns.layers.length; i++) {
 						const layer = lns.layers[i];
 						if (layer.isInFrame(index)) {
-								self.drawLines({
+								self.draw({
 								lines: lns.drawings[layer.d],
 								...layer,
 								...layer.getProps(lns.currentFrame),
@@ -119,7 +121,7 @@ function Render(fps) {
 			for (let i = 0; i < lns.layers.length; i++) {
 				const layer = lns.layers[i];
 				if (layer.isInFrame(lns.currentFrame)) {
-					self.drawLines({
+					self.draw({
 						lines: lns.drawings[layer.d],
 						...layer,
 						...layer.getProps(lns.currentFrame),
@@ -130,7 +132,7 @@ function Render(fps) {
 
 			/* draws current lines */
 			if (lns.lines.length > 0) {
-				self.drawLines({
+				self.draw({
 					lines: lns.lines,
 					s: 0,
 					e: lns.lines.length,
@@ -146,21 +148,22 @@ function Render(fps) {
 			}
 
 			/* capture frames */
-			if (self.captureFrames > 0) {
-				lns.canvas.capture();
-				self.captureFrames--;
-				self.capturing = true;
-			} else if (self.capturing) {
-				self.capturing = false;
-				
+			if (lns.ui.capture.captureFrames > 0) {
+				lns.ui.capture.capture();
+				lns.ui.capture.captureFrames--;
+				lns.ui.capture.capturing = true;
+			} else if (lns.ui.capture.capturing) {
+				lns.ui.capture.capturing = false;
+				lns.ui.capture.captureWithBackground = false;
+				self.isPlaying = false;
 			}
 			
 		}
-		if (!self.capturing) window.requestAnimFrame(self.draw);
+		if (!lns.ui.capture.capturing) window.requestAnimFrame(self.update);
 	};
 
 	/* jig = jiggle amount, seg = num segments */
-	this.drawLines = function(params) {
+	this.draw = function(params) {
 		// console.log('draw', lns.canvas.ctx.lineWidth);
 		/* mixed color?  - assume always mixed? - care about performance? */
 		lns.canvas.ctx.beginPath();
@@ -203,52 +206,9 @@ function Render(fps) {
 		lns.canvas.ctx.stroke();
 	};
 
-	this.captureFrames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
-	this.captureWithBackground = true; /* default capture bg */
-	this.capturing = false;
-
-	/* k key */
-	this.captureOne = function() {
-		self.captureFrames = 1;
-	};
-
-	/* shift k */
-	this.captureMultiple = function() {
-		self.captureFrames = prompt("Capture how many frames?");
-	};
-
-	/* n key */
-	this.toggleBGCapture = function() {
-		self.captureWithBackground = !self.captureWithBackground;
-	};
-
-	/* ctrl-k - start at beginning and capture one of every frame */
-	this.captureCycle = function() {
-		lns.data.saveLines();
-		/* set animation to last frame because it updates frames before draw */
-		lns.currentFrame = self.currentFrameCounter =  lns.frames.length;
-		self.isPlaying = true;
-		// capture as many frames as necessary for lines ratio or 1 of every frame
-		self.captureFrames = lns.numFrames * Math.max(1, self.lps / self.fps);
-	};
-
-	/*  */
-	this.capturingVideo = false;
-	this.videoLoops = 0;
-	this.captureVideo = function() {
-		self.isPlaying = false;
-		self.videoLoops = +prompt("Number of loops?");
-		self.setFrame(0);
-		
-		self.capturingVideo = true;
-		lns.canvas.videoCapture();
-		self.isPlaying = true;
-	};
-
-	/* starts drawing  */
 	this.start = function() {
-		window.requestAnimFrame(self.draw);
-	}
+		window.requestAnimFrame(self.update);
+	};
 }
 
 /*

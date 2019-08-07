@@ -472,7 +472,8 @@
 	"capture": {
 		"id": "capture-menu",
 		"label": "Capture",
-		"module": "render",
+		"module": "ui",
+		"sub": "capture",
 		"list": [
 			{
 				"type": "button",
@@ -518,7 +519,6 @@
 			{
 				"type": "toggle",
 				"key": "alt-k",
-				"module": "canvas",
 				"fromModule": {
 					"callback": "videoCapture"
 				},
@@ -530,7 +530,7 @@
 			{
 				"type": "button",
 				"fromModule": {
-					"callback": "captureVideo"
+					"callback": "startVideoCapture"
 				},
 				"params": {
 					"title": "Capture Video Loops"

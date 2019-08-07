@@ -184,7 +184,8 @@ function Interface() {
 	this.panels.settings = new Panel('settings-menu', "Settings");
 	this.settings = new Settings(this.panels.settings);
 
-	this.fio = new FilesInterface(this);	
+	this.fio = new FilesInterface(this);
+	this.capture = new Capture();
 
 	/* build interface */
 	this.data = {};
@@ -210,7 +211,6 @@ function Interface() {
 
 	function initUI() {
 		const nav = document.getElementById('nav');
-		
 		this.addPanel = new UISelect({
 			id: 'add-ui',
 			options: Object.keys(self.data),

@@ -13,7 +13,6 @@ function Settings(panel) {
 			onionSkinVisible: lns.render.onionSkinVisible,
 			onionSkinNum: lns.render.onionSkinNum,
 		};
-		console.log(settings);
 		settings.panels = {};
 		for (const p in lns.ui.panels) {
 			settings.panels[p] = {

@@ -40,63 +40,6 @@ function Canvas(id, width, height, color) {
 	this.setWidth(this.width);
 	this.setHeight(this.height);
 
-	this.startCapture = true;
-
-	this.videoCapture = function() {
-		if (self.startCapture) {
-			self.startCapture = false;
-			lns.render.videoCapture = true;
-			self.stream = self.canvas.captureStream();
-			self.rec = new MediaRecorder(self.stream);
-			self.rec.start();
-			self.rec.addEventListener('dataavailable', e => {
-   				const blob = new Blob([ e.data ], { 'type': 'video/webm' });
-   				const url = URL.createObjectURL(blob);
-
-   				const a = document.createElement('a');
-   				document.body.appendChild(a);
-   				a.href = url;
-   				a.download = `${lns.ui.fio.title.getValue()}.webm` || 'lines.webm';
-   				a.click();
-   				// window.URL.revokeObjectURL(url);
-			});
-		} else {
-			lns.render.videoCapture = false;
-			self.startCapture = true;
-			self.rec.stop();
-		}
-	};
-
-	this.prevCap = { n: '', f: 0 };
-
-	this.capture = function() {
-		if (lns.files.saveFilesEnabled) {
-			canvas.toBlob(function(blob) {
-				const title = lns.ui.title.getValue(); // this is a UI
-				const n = Cool.padNumber(lns.currentFrame, 3);
-				let frm = 0;
-				let fileName = `${title}-${n}-${frm}.png`;
-				if (n == self.prevCap.n) {
-					frm = self.prevCap.f + 1;
-					fileName = `${title}-${n}-${frm}.png`;
-					self.prevCap.f = frm;
-				}
-				self.prevCap.n = n;
-
-				const f = saveAs(blob, fileName);
-				f.onwriteend = function() { 
-					window.requestAnimFrame(() => {
-						lns.render.draw('cap'); 
-					});
-				};
-					
-			});
-		} else {
-			const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-			window.location.href = cap;
-		}
-	};
-
 	/* shift-f key */
 	this.fitCanvasToDrawing = function() {
 		lns.data.saveLines();
