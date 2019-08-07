@@ -74,10 +74,10 @@ function Files(params) {
 	this.loadFile = function(fileName, callback) {
 		self.fileName = fileName || prompt("Open file:");
 		if (self.fileName) {
-			if (callback) callback(self.fileName);
+			// if (callback) callback(self.fileName);
 			fetch(self.fileName + '.json')
 				.then(response => { return response.json() })
-				.then(data => { self.loadJSON(data); })
+				.then(data => { self.loadJSON(data, callback); })
 				.catch(error => {
 					alert('File not found: ' + error.message);
 					console.log(error);
@@ -85,7 +85,7 @@ function Files(params) {
 		}
 	};
 
-	this.loadJSON = function(data) {
+	this.loadJSON = function(data, callback) {
 		lns.numFrames = 0; /* reset */
 		lns.drawings = [];
 		for (let i = 0; i < data.d.length; i++) {
@@ -104,7 +104,7 @@ function Files(params) {
 		lns.layers = [];
 		for (let i = 0; i < data.l.length; i++) {
 			lns.layers[i] = new Layer(data.l[i]);
-			lns.lineColor.addColorBtn(lns.layers[i].c);
+			lns.lineColor.set(lns.layers[i].c);
 			if (lns.numFrames < lns.layers[i].f.e)
 				lns.numFrames = lns.layers[i].f.e;
 		}
@@ -118,28 +118,7 @@ function Files(params) {
 		if (data.bg) lns.canvas.bgColor.set(data.bg);
 		lns.render.reset();
 
-		if (lns.ui) {
-			lns.ui.fio.title.setValue(self.fileName.split('/').pop());
-			lns.ui.faces.width.set(data.w);
-			lns.ui.faces.height.set(data.h);
-			let color;
-			lns.layers.some(layer => {
-				if (layer) {
-					color = layer.c;
-					return true;
-				}
-			});
-			lns.layers.forEach(layer => {
-				if (layer)
-					lns.ui.faces.lineColor.setValue(layer.c);
-			});
-
-			if (data.bg) lns.ui.faces.bgColor.setValue(data.bg);
-			lns.ui.faces.fps.setValue(data.fps);
-
-			if (params.load) lns.ui.settings.canvasLoad();
-			lns.ui.updateInterface();
-		}
+		if (callback) callback(data, params);
 	};
 
 	/* shift o */

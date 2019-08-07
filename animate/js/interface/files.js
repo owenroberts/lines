@@ -25,7 +25,9 @@ function FilesInterface(ui) {
 
 	ui.keys['o'] = new UIButton({
 		id: "open",
-		callback: lns.files.loadFile,
+		callback: function() {
+			lns.files.loadFile(undefined, self.updateInterface);
+		},
 		key: "o"
 	});
 
@@ -34,4 +36,20 @@ function FilesInterface(ui) {
 		callback: lns.files.reOpenFile,
 		key: 'shift-o'
 	});
+
+	this.updateInterface = function(data, params) {
+		self.title.setValue(lns.files.fileName.split('/').pop());
+		lns.ui.faces.fps.setValue(data.fps);
+
+		lns.layers.forEach(layer => {
+			if (layer) {
+				lns.lineColor.addColorBtn(lns.layers[i].c); /* ui thing */
+				lns.ui.faces.lineColor.setValue(layer.c);
+			}
+		});
+
+		if (data.bg) lns.ui.faces.bgColor.setValue(data.bg);
+		if (params.load) lns.ui.settings.canvasLoad();
+		lns.ui.updateInterface();
+	};
 }

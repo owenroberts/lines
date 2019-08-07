@@ -27,7 +27,7 @@ window.addEventListener("load", function() {
 
 	const openFile = localStorage.getItem('re-open');
 	if (openFile) {
-		lns.files.loadFile(openFile);
+		lns.files.loadFile(openFile, lns.ui.fio.updateInterface);
 		localStorage.removeItem('re-open');
 	}
 

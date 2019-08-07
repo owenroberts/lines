@@ -25,7 +25,7 @@ class Panel {
 
 		const hideBtn = document.createElement("div");
 		hideBtn.classList.add('hide');
-		hideBtn.textContent = '👀';
+		hideBtn.textContent = 'x';
 		hideBtn.addEventListener("click", this.hide.bind(this));
 		this.el.appendChild(hideBtn);
 
@@ -39,6 +39,7 @@ class Panel {
 	}
 
 	setOrder(n) {
+		
 		this.el.style.order = this.order = n;
 	}
 

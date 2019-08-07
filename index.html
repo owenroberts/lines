@@ -32,24 +32,15 @@
 	/*
 		interface.js currently contains the play back and update interface functions ...
 	*/
-	- abbreviation for lns.interface - ui or gui or something funny
-	- interface is object literal?
-		- advantage of functions is controlling when they run without having to make everything one big literal ... 
-	- folder for drawings/layers/settings interfaces 
-		- adding palette as sub module issues:
-			- key command, not part of interface.json
-			- could add to lns.interface.keys in ui
-			- or use line in code like in interface itself
-			- palette key command didnt work previously ...
-			- 
-	- hide and show interfaces panels - or add
-		- make them and then display: none or dont make them at all?
-		- might help with key command issues ... 
-		- key commands currently tied to panels existing ... creating breaks this
-		- any reason not to build interfaces? other than feels "nicer"?
-	- set panel order more sophisticated
+	
 	- work on interface classes to update themselves
+		- mutation observer work in the case of elements like canvas with width
+		- not in other cases 
+		- document here
+		- moving them to callback in ui files
+	
 	- review key commands - don't really use segnum, jiggle
+	
 	- add capture interface/panel
 	- cut layer segment / line ... 
 	- update layer color saved as new color button
@@ -61,6 +52,7 @@
 	- anim gets frame number wrong
 	- save settings with settings panel closed ... 
 	- onion appears to be fucked up ...
+	- dont see tool tips when panels aren't docked ... 
 
 
 - issues
@@ -85,11 +77,13 @@
 	- frames and layers??
 	- blender like window system????
 	- frames get their own canvas display
+	- support for multiple line widths ... 
 
 - possible features
 	- change onion skin color
 	- option to loop back to beginning of frames, option to stop at end, option not to create frames beyond last frame
 	- center lines canvas in larger area
+	- set panel order more sophisticated - live with the idiosyncracy for now ... 
 	
 
 - interface 

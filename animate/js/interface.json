@@ -112,7 +112,10 @@
 			{
 				"row": true,
 				"type": "text",
-				"face": "width",
+				"observe": {
+					"elem": "canvas",
+					"attribute": "width"
+				},
 				"fromModule": {
 					"placeholder": "width",
 					"callback": "setWidth"
@@ -126,7 +129,10 @@
 			{
 				"row": true,
 				"type": "text",
-				"face": "height",
+				"observe": {
+					"elem": "canvas",
+					"attribute": "height"
+				},
 				"fromModule": {
 					"placeholder": "height",
 					"callback": "setHeight"

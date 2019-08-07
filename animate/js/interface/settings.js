@@ -13,6 +13,7 @@ function Settings(panel) {
 			onionSkinVisible: lns.render.onionSkinVisible,
 			onionSkinNum: lns.render.onionSkinNum,
 		};
+		console.log(settings);
 		settings.panels = {};
 		for (const p in lns.ui.panels) {
 			settings.panels[p] = {
@@ -56,8 +57,6 @@ function Settings(panel) {
 			}
 		}
 
-		lns.ui.faces.width.set(settings.width);
-		lns.ui.faces.height.set(settings.height);
 		lns.ui.faces.lineColor.setValue(settings.lineColor);
 		lns.ui.faces.bgColor.setValue(settings.canvasColor);
 		lns.ui.faces.lineWidth.setValue(settings.lineWidth);

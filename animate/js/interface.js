@@ -191,10 +191,9 @@ function Interface() {
 	fetch('./js/interface.json')
 		.then(response => { return response.json(); })
 		.then(data => {
-			// self.build(data);
 			self.data = data;
 			for (const key in data) {
-				self.build(key);
+				self.createPanel(key);
 			}
 			initUI();
 			if (localStorage.settings) self.settings.loadSettings();
@@ -211,6 +210,7 @@ function Interface() {
 
 	function initUI() {
 		const nav = document.getElementById('nav');
+		
 		this.addPanel = new UISelect({
 			id: 'add-ui',
 			options: Object.keys(self.data),
@@ -225,7 +225,7 @@ function Interface() {
 		self.panels[key].show();
 	};
 
-	this.build = function(key) {
+	this.createPanel = function(key) {
 		const data = self.data[key];
 		let panel;
 		/* grab panel reference if it exists, 
@@ -263,6 +263,19 @@ function Interface() {
 			panel.add(ui);
 			if (u.key) self.keys[u.key] = ui;
 			if (u.face) self.faces[u.face] = ui;
+			if (u.observe) {
+				const elem = mod[u.observe.elem];
+				const attribute = u.observe.attribute;
+				const observer = new MutationObserver(function(list) {
+					for (const mut of list) {
+						if (mut.type == 'attributes' && mut.attributeName == attribute) {
+							ui.setValue(elem[attribute])
+						}
+					}
+				});
+				observer.observe(elem, { attributeFilter: [attribute] });
+
+			}
 		}
 	};
 
