@@ -10,9 +10,22 @@ class UISelect extends UI {
 			this.el.appendChild(opt);
 		}
 
-		/* test but don't have any select rn */
-		this.el.addEventListener('change', function(ev) {
-			params.callback(ev.target.value);
-		});
+		if (params.label) this.addLabel(params.label);
+
+		if (params.btn) {
+			const select = this;
+			const btn = new UIButton({
+				id: `${this.title || this.id}-btn`,
+				title: params.btn,
+				callback: function() {
+					params.callback(select.getValue());
+				}
+			});
+			this.el.parentNode.appendChild(btn.el);
+		} else {
+			this.el.addEventListener('change', function(ev) {
+				params.callback(ev.target.value);
+			});
+		}
 	}
 }

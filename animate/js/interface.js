@@ -186,12 +186,17 @@ function Interface() {
 	this.fio = new FilesInterface(this);	
 
 	/* build interface */
+	this.data = {};
 	fetch('./js/interface.json')
 		.then(response => { return response.json(); })
 		.then(data => {
-			self.build(data);
+			// self.build(data);
+			self.data = data;
+			for (const key in data) {
+				self.build(key);
+			}
+			initUI();
 			if (localStorage.settings) self.settings.loadSettings();
-			// console.log(self.panels);
 		});
 
 	const classes = {
@@ -203,45 +208,61 @@ function Interface() {
 		color: UIColor
 	};
 
-	this.build = function(data) {
-		for (const key in data) {
-			let panel;
-			/* grab panel reference if it exists, 
-				create if it doesn't */
-			if (self.panels[key]) {
-				panel = self.panels[key];
-			} else {
-				panel = new Panel(data[key].id, data[key].label);
-				self.panels[key] = panel;
-			}
-			/* create uis from list */
-			for (let i = 0; i < data[key].list.length; i++) {
-				const u = data[key].list[i];
-				const module = u.module || data[key].module;
-				const sub = u.sub || data[key].sub;
-				const mod = sub ? lns[module][sub] : lns[module];
-				const params = { key: u.key, ...u.params };
-				for (const k in u.fromModule) {
-					params[k] = mod[u.fromModule[k]];
-				}
+	function initUI() {
+		const nav = document.getElementById('nav');
+		this.addPanel = new UISelect({
+			id: 'add-ui',
+			label: "Add UI",
+			options: Object.keys(self.data),
+			callback: function(value) {
+				self.showUI(value);
+			},
+			btn: '+'
+		});
+	}
 
-				/* setters don't need a callback for one value */
-				if (u.set) {
-					params.callback = function(value) {
-						mod[u.set.prop] = u.set.number ? +value : value;
-						if (u.set.layer) {
-							self.updateProperty(u.set.layer, u.set.number ? +value : value)
-						}
-					};
-					params.value = mod[u.set.prop];
-				}
+	this.showUI = function(key) {
+		self.panels[key].show();
+	};
 
-				const ui = new classes[u.type](params);
-				if (u.row) panel.addRow();
-				panel.add(ui);
-				if (u.key) self.keys[u.key] = ui;
-				if (u.face) self.faces[u.face] = ui;
+	this.build = function(key) {
+		const data = self.data[key];
+		let panel;
+		/* grab panel reference if it exists, 
+			create if it doesn't */
+		if (self.panels[key]) {
+			panel = self.panels[key];
+		} else {
+			panel = new Panel(data.id, data.label);
+			self.panels[key] = panel;
+		}
+		/* create uis from list */
+		for (let i = 0; i < data.list.length; i++) {
+			const u = data.list[i];
+			const module = u.module || data.module;
+			const sub = u.sub || data.sub;
+			const mod = sub ? lns[module][sub] : lns[module];
+			const params = { key: u.key, ...u.params };
+			for (const k in u.fromModule) {
+				params[k] = mod[u.fromModule[k]];
 			}
+
+			/* setters don't need a callback for one value */
+			if (u.set) {
+				params.callback = function(value) {
+					mod[u.set.prop] = u.set.number ? +value : value;
+					if (u.set.layer) {
+						self.updateProperty(u.set.layer, u.set.number ? +value : value)
+					}
+				};
+				params.value = mod[u.set.prop];
+			}
+
+			const ui = new classes[u.type](params);
+			if (u.row) panel.addRow();
+			panel.add(ui);
+			if (u.key) self.keys[u.key] = ui;
+			if (u.face) self.faces[u.face] = ui;
 		}
 	};
 

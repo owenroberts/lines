@@ -77,6 +77,9 @@ button:focus {
   outline: none;
   border-bottom: 1px solid black;
 }
+#nav label {
+  margin-right: 0.25em;
+}
 
 #panels {
   /*display: grid;
@@ -96,15 +99,18 @@ button:focus {
   padding: 0.5em;
   overflow: hidden;
   position: relative;
-  height: 25px;
+  height: auto;
+}
+.menu-panel.hide {
+  display: none;
 }
 .menu-panel .title {
   margin-bottom: 1em;
 }
-.menu-panel .toggle, .menu-panel .order {
+.menu-panel .toggle, .menu-panel .order, .menu-panel .hide {
   display: inline-block;
   position: absolute;
-  right: 14px;
+  right: 34px;
   top: 0;
   left: 0;
   text-align: right;
@@ -115,8 +121,12 @@ button:focus {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-.menu-panel .toggle:hover, .menu-panel .order:hover {
+.menu-panel .toggle:hover, .menu-panel .order:hover, .menu-panel .hide:hover {
   background: #ffddff;
+}
+.menu-panel .hide {
+  right: 14px;
+  left: auto;
 }
 .menu-panel .order {
   font-size: 1em;

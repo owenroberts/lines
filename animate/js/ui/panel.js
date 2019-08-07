@@ -7,9 +7,11 @@ class Panel {
 			document.getElementById("panels").appendChild(this.el);
 		}
 		this.el.classList.add("menu-panel");
-		this.open = false;
+		this.el.classList.add("hide");
+		this.open = true;
 		this.rows = [];
 
+		/* why aren't these uis ?? */
 		const title = document.createElement("div");
 		title.textContent = label;
 		title.classList.add("title");
@@ -17,9 +19,15 @@ class Panel {
 		
 		this.toggleBtn = document.createElement("div");
 		this.toggleBtn.classList.add("toggle");
-		this.toggleBtn.textContent = "▽";
+		this.toggleBtn.textContent = "△";
 		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
 		this.el.appendChild(this.toggleBtn);
+
+		const hideBtn = document.createElement("div");
+		hideBtn.classList.add('hide');
+		hideBtn.textContent = '👀';
+		hideBtn.addEventListener("click", this.hide.bind(this));
+		this.el.appendChild(hideBtn);
 
 		const orderBtn = document.createElement("div");
 		orderBtn.classList.add("order");
@@ -43,6 +51,18 @@ class Panel {
 			this.toggleBtn.innerHTML = "△";
 		}
 		this.open = !this.open;
+	}
+
+	isHidden() {
+		return this.el.classList.contains('hide');
+	}
+
+	show() {
+		this.el.classList.remove('hide');
+	}
+
+	hide() {
+		this.el.classList.add('hide');
 	}
 
 	addRow(id) {

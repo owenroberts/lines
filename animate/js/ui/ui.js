@@ -48,7 +48,7 @@ class UI {
 		return this.el.value;
 	}
 
-	addLabel(key) {
+	addLabel() {
 		const label = document.createElement("label");
 		label.textContent = this.label;
 		if (this.el.title) label.title = this.el.title;

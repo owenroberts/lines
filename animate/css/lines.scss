@@ -81,6 +81,8 @@ button:focus {
 			border-bottom: 1px solid black;
 		}
 	}
+
+	label { margin-right: 0.25em; }
 }
 
 #panels {
@@ -101,14 +103,16 @@ button:focus {
 	padding: 0.5em;
 	overflow: hidden;
 	position: relative;
-	height: 25px;
+	height: auto;
+
+	&.hide { display: none; }
 
 	.title { margin-bottom: 1em; }
 
-	.toggle, .order {
+	.toggle, .order, .hide {
 		display: inline-block;
 		position: absolute;
-		right: 14px;
+		right: 34px;
 		top: 0;
 		left: 0;
 		text-align: right;
@@ -121,11 +125,19 @@ button:focus {
 		border-bottom-right-radius: 3px;
 	}
 
+
+	.hide {
+		right: 14px;
+		left: auto;
+	}
+
 	.order {
 		font-size: 1em;
 		right: 2px;
 		left: auto;
 	}
+
+
 
 	.row {
 		margin-bottom: 0.5em;

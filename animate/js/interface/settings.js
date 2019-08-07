@@ -15,8 +15,10 @@ function Settings(panel) {
 		};
 		settings.panels = {};
 		for (const p in lns.ui.panels) {
+			console.log(lns.ui.panels[p])
 			settings.panels[p] = {
 				open: lns.ui.panels[p].open,
+				hidden: lns.ui.panels[p].isHidden(),
 				order: lns.ui.panels[p].order
 			};
 		}
@@ -36,7 +38,8 @@ function Settings(panel) {
 		lns.render.onionSkinVisible = settings.onionSkinVisible;
 		lns.render.onionSkinNum = settings.onionSkinNum;
 		for (const p in settings.panels) {
-			if (settings.panels[p].open) lns.ui.panels[p].toggle();
+			if (!settings.panels[p].hidden) lns.ui.panels[p].show();
+			if (!settings.panels[p].open) lns.ui.panels[p].toggle();
 			lns.ui.panels[p].setOrder(settings.panels[p].order);
 		}
 		lns.ui.palette.palettes = settings.palettes;
