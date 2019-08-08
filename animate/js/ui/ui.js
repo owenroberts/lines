@@ -23,13 +23,18 @@ class UI {
 
 	press() {
 		this.el.classList.add('press');
+		const toolTip = document.getElementById('tool-tip');
+		toolTip.textContent = `~ ${this.el.title}`;
+		toolTip.classList.add('visible');
 		setTimeout(function() {
 			this.el.classList.remove('press');
-		}.bind(this), 300)
+			toolTip.textContent = '';
+			toolTip.classList.remove('visible');
+		}.bind(this), 300);
 	}
 
 	setKey(key, title) {
-		this.el.title = `${key} ${title ? title : ''}`; // hover title key text
+		this.el.title = `${title ? title : ''} (${key})`; // hover title key text
 	}
 
 	addClass(c) {

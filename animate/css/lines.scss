@@ -35,6 +35,21 @@ button:focus {
 	color: black;
 }
 
+#tool-tip {
+	// content: '~ ' attr(title);
+	position: fixed;
+	top: 40px;
+	right: 20px;
+	background: $accent-two;
+	border-radius: 3px;
+	font-size: 1.5em;
+	color: black;
+	&.visible {
+		padding: 2px 6px;
+		border: 2px solid $ui-select;
+	}
+}
+
 #container {
 	margin:1em;
 	display: flex;
@@ -65,7 +80,7 @@ button:focus {
 }
 
 .desktop *[title]:hover:after, .press:after {
-	@extend %tool-tip;
+	// @extend %tool-tip;
 }
 
 #nav {

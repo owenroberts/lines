@@ -17,15 +17,18 @@ button:focus {
   outline: none;
 }
 
-.desktop *[title]:hover:after, .press:after {
-  content: "~ " attr(title);
+#tool-tip {
   position: fixed;
   top: 40px;
   right: 20px;
   background: #ffddff;
   border-radius: 3px;
-  padding: 1px 3px;
+  font-size: 1.5em;
   color: black;
+}
+#tool-tip.visible {
+  padding: 2px 6px;
+  border: 2px solid gray;
 }
 
 #container {
