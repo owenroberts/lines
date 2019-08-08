@@ -18,18 +18,20 @@ class UIColor extends UI {
 	}
 
 	addColor(color) {
-		console.log(color);
+		const self = this;
 		if (!this.colors.includes(color)) {
 			this.colors.push(color);
-			console.log(this, this.callback);
 			const btn = new UIButton({
 				title: color,
 				css: { "background": color },
 				value: color,
-				callback: this.callback
+				callback: function() {
+					self.callback(color);
+					self.setValue(color);
+				}
 			});
-			console.log(this.parentNode);
-			lns.ui.panels.lineColor.add(btn);
+			/* not great design here ... */
+			self.el.parentNode.appendChild(btn.el);
 		}
 	}
 }
