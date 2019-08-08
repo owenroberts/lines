@@ -23,7 +23,7 @@ button:focus {
   right: 20px;
   background: #ffddff;
   border-radius: 3px;
-  font-size: 1.5em;
+  font-size: 1em;
   color: black;
 }
 #tool-tip.visible {

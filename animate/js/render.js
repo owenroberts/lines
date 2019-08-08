@@ -102,18 +102,20 @@ function Render(fps, color) {
 			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0 && self.onionSkinIsVisible) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
-					const index = Math.max(0, lns.currentFrame - o);
-					const color = `rgba(105,150,255,${ 1.5 - (o / self.onionSkinNum) })`;
-					for (let i = 0; i < lns.layers.length; i++) {
-						const layer = lns.layers[i];
-						if (layer.isInFrame(index)) {
-								self.draw({
-								lines: lns.drawings[layer.d],
-								...layer,
-								...layer.getProps(lns.currentFrame),
-								color: color,
-								onion: true
-							});
+					const index = lns.currentFrame - o;
+					if (index >= 0) {
+						const color = `rgba(105,150,255,${ 1.5 - (o / self.onionSkinNum) })`;
+						for (let i = 0; i < lns.layers.length; i++) {
+							const layer = lns.layers[i];
+							if (layer.isInFrame(index)) {
+									self.draw({
+									lines: lns.drawings[layer.d],
+									...layer,
+									...layer.getProps(index),
+									color: color,
+									onion: true
+								});
+							}
 						}
 					}
 				}
