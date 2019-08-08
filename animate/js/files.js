@@ -17,9 +17,13 @@ function Files(params) {
 		json.w = Math.floor(+lns.canvas.width);
 		json.h = Math.floor(+lns.canvas.height);
 		json.fps = +lns.render.fps;
-		if (params.bg) json.bg = lns.bgColor.color;
+		if (params.bg) json.bg = lns.canvas.bgColor;
 		// what if one color isn't used ?
-		json.mc = lns.lineColor.colors.length > 1 ? true : false;
+		// json.mc = lns.lineColor.colors.length > 1 ? true : false;
+		let colors = lns.layers.map(layer => layer.c);
+		colors = [...new Set(colors)];
+		json.mc = colors.length > 1 ? true : false;
+		// set by layers
 
 		/* save current frame */
 		let layers = [];
@@ -80,7 +84,7 @@ function Files(params) {
 				.then(data => { self.loadJSON(data, callback); })
 				.catch(error => {
 					alert('File not found: ' + error.message);
-					console.log(error);
+					console.error(error);
 				});
 		}
 	};
@@ -104,7 +108,7 @@ function Files(params) {
 		lns.layers = [];
 		for (let i = 0; i < data.l.length; i++) {
 			lns.layers[i] = new Layer(data.l[i]);
-			lns.lineColor.set(lns.layers[i].c);
+			lns.render.lineColor = lns.layers[i].c;
 			if (lns.numFrames < lns.layers[i].f.e)
 				lns.numFrames = lns.layers[i].f.e;
 		}
@@ -115,7 +119,7 @@ function Files(params) {
 		lns.canvas.setWidth(data.w);
 		lns.canvas.setHeight(data.h);
 		lns.render.setFps(data.fps);
-		if (data.bg) lns.canvas.bgColor.set(data.bg);
+		if (data.bg) lns.canvas.setBGColor(data.bg);
 		lns.render.reset();
 
 		if (callback) callback(data, params);

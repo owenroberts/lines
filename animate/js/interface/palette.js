@@ -8,7 +8,7 @@ function Palette(ui) {
 		const name = self.current = prompt('Name this palette.');
 		if (name) {
 			self.palettes[name] = {
-				color: lns.lineColor.color,
+				color: lns.render.lineColor,
 				n: lns.draw.n,
 				r: lns.draw.r,
 				w: lns.draw.w,
@@ -34,7 +34,10 @@ function Palette(ui) {
 		/* this is crazy ... */
 		lns.data.saveLines();
 		self.palettes.current = name;
-		lns.lineColor.set(self.palettes[name].color);
+		
+		// lns.lineColor.set(); // mutation observer?
+		lns.render.lineColor = self.palettes[name].color;
+		
 		lns.draw.n = self.palettes[name].n;
 		lns.draw.r = self.palettes[name].r;
 		lns.draw.w = self.palettes[name].w;

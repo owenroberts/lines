@@ -163,14 +163,14 @@
 	"lineColor": {
 		"id": "line-color-menu",
 		"label": "Line Color",
-		"module": "lineColor",
+		"module": "render",
 		"list": [
 			{
 				"type": "color",
 				"face": "lineColor",
-				"fromModule": {
-					"callback": "set",
-					"value": "color"
+				"set": {
+					"prop": "lineColor",
+					"number": false
 				}
 			}
 		]
@@ -179,14 +179,13 @@
 		"id": "bg-color-menu",
 		"label": "BG Color",
 		"module": "canvas",
-		"sub": "bgColor",
 		"list": [
 			{
 				"type": "color",
 				"face": "bgColor",
 				"fromModule": {
-					"callback": "set",
-					"value": "color"
+					"callback": "setBGColor",
+					"value": "bgColor"
 				}
 			}
 		]

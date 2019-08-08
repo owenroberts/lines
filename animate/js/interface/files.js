@@ -43,7 +43,7 @@ function FilesInterface(ui) {
 
 		lns.layers.forEach(layer => {
 			if (layer) {
-				lns.lineColor.addColorBtn(lns.layers[i].c); /* ui thing */
+				lns.ui.faces.lineColor.addColor(layer.c);
 				lns.ui.faces.lineColor.setValue(layer.c);
 			}
 		});

@@ -52,7 +52,7 @@ function Drawings(panel) {
 						} else {
 							layer = new Layer({
 								d: i,
-								c: lns.lineColor.color,
+								c: lns.render.lineColor,
 								...lns.draw.defaults,
 								x: 0,
 								y: 0,

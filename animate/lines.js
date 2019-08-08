@@ -11,10 +11,9 @@ window.addEventListener("load", function() {
 
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff");
-	lns.render = new Render();
+	lns.render = new Render(); // (fps, lineColor)
 	lns.bgImage = new Background();
 	lns.data = new Data();
-	lns.lineColor = new Color(); // lns.lineColor.set('#ffffff');
 	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
 	lns.files = new Files({
 		fit: false, /* fit to canvas when saving */

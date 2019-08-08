@@ -8,16 +8,16 @@ function Canvas(id, width, height, color) {
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 
-	this.bgColor = new Color(function(_color) {
+	this.setBGColor = function(_color) {
+		self.bgColor = _color;
 		self.canvas.style.backgroundColor = _color;
-	});
+	};
+
+	this.setBGColor(color);
 
 	this.setLineWidth = function(n) {
 		self.ctx.lineWidth = +n;
 	};
-
-	/* canvas bg color */
-	if (color) this.bgColor.set(color);
 
 	/* set line color */
 	this.setStrokeColor = function(color) {

@@ -23,7 +23,7 @@ function Data() {
 			/* save render settings to a new layer */
 			lns.layers.push(new Layer({
 				d: lns.drawings.length, // drawing index
-				c: lns.lineColor.color, // color
+				c: lns.render.lineColor, // color
 				n: lns.draw.n, // segment number
 				r: lns.draw.r, // jiggle ammount
 				w: lns.draw.w, // wiggle amount
@@ -35,7 +35,6 @@ function Data() {
 			}));
 
 			lns.drawings.push(lns.lines); /* add current lines to drawing data */
-			// lns.lineColor.addColorBtn(lns.lineColor.color); /* add current color to color choices */
 			lns.lines = []; /* lines are saved, stop drawing? */
 			lns.ui.updateInterface(); /* update interface */
 		}

@@ -3,9 +3,9 @@ function Settings(panel) {
 
 	this.saveSettings = function() {
 		const settings = {
-			canvasColor: lns.canvas.bgColor.color,
+			canvasColor: lns.canvas.bgColor,
 			lineWidth: lns.canvas.ctx.lineWidth,
-			lineColor: lns.lineColor.color,
+			lineColor: lns.render.lineColor,
 			width: lns.canvas.width,
 			height: lns.canvas.height,
 			fps: lns.render.fps,
@@ -28,13 +28,13 @@ function Settings(panel) {
 
 	this.loadSettings = function() {
 		const settings = JSON.parse(localStorage.settings);
-		lns.canvas.bgColor.set(settings.canvasColor);
+		lns.canvas.setBGColor(settings.canvasColor);
 		lns.canvas.setWidth(settings.width);
 		lns.canvas.setHeight(settings.height);
 		lns.canvas.setLineWidth(settings.lineWidth);
 		lns.render.setFps(settings.fps);
 		lns.render.setLps(settings.lps);
-		lns.lineColor.set(settings.lineColor);
+		lns.render.lineColor = settings.lineColor;
 		lns.render.onionSkinVisible = settings.onionSkinVisible;
 		lns.render.onionSkinNum = settings.onionSkinNum;
 		for (const p in settings.panels) {

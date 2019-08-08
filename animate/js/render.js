@@ -1,4 +1,4 @@
-function Render(fps) {
+function Render(fps, color) {
 	const self = this;
 
 	this.currentFrameCounter = 0; // for when line fps is different from anim fps, counts with floats
@@ -13,6 +13,8 @@ function Render(fps) {
 
 	this.onionSkinNum = 0;
 	this.onionSkinIsVisible = false;
+
+	this.lineColor = color;
 
 	/* l key */
 	this.setOnionSkin = function(n) {
@@ -91,7 +93,7 @@ function Render(fps) {
 
 			if (lns.ui.capture.captureWithBackground) {
 				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
-				lns.canvas.ctx.fillStyle = lns.canvas.bgColor.color;
+				lns.canvas.ctx.fillStyle = lns.canvas.bgColor;
 				lns.canvas.ctx.fill();
 			}
 
@@ -143,7 +145,7 @@ function Render(fps) {
 					x: 0,
 					y: 0,
 					onion: false,
-					color: lns.lineColor.color
+					color: self.lineColor
 				});
 			}
 
