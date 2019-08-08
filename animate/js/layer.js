@@ -57,7 +57,6 @@ class Layer {
 	}
 
 	set endFrame(f) {
-		console.log('set', f);
 		this.f.e = f;
 		this.resetAnims();
 	}
@@ -110,7 +109,6 @@ class Layer {
 	}
 
 	resetAnims() {
-		console.log('reset');
 		for (let i = 0; i < this.a.length; i++) {
 			const a = this.a[i];
 			if (a.sf < this.f.s) a.sf = this.f.s;
