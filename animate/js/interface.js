@@ -252,7 +252,7 @@ function Interface() {
 				params.callback = function(value) {
 					mod[u.set.prop] = u.set.number ? +value : value;
 					if (u.set.layer) {
-						self.updateProperty(u.set.layer, u.set.number ? +value : value)
+						self.layers.updateProperty(u.set.layer, u.set.number ? +value : value);
 					}
 				};
 				params.value = mod[u.set.prop];

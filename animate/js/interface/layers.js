@@ -36,6 +36,21 @@ function Layers(panel) {
 					off: '◑',
 					callback: function() {
 						layer.toggle();
+						/*
+							maybe some ui render setttings function here
+							crazy and repetetive but also useful
+						*/
+						if (layer.toggled) {
+							lns.ui.faces.w.setValue(layer.n);
+							lns.ui.faces.r.setValue(layer.r);
+							lns.ui.faces.w.setValue(layer.w);
+							lns.ui.faces.v.setValue(layer.v);
+						} else {
+							lns.ui.faces.w.setValue(lns.draw.n);
+							lns.ui.faces.r.setValue(lns.draw.r);
+							lns.ui.faces.w.setValue(lns.draw.w);
+							lns.ui.faces.v.setValue(lns.draw.v);
+						}
 					}
 				}), row); /* select */
 
@@ -202,7 +217,6 @@ function Layers(panel) {
 				self.layers[i].c = self.layers[i].prevColor = color;
 		}
 	};
-
 
 	this.canvas = new Canvas("draw-layers", 0, 0, '#F2F4F4');
 
