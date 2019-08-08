@@ -35,7 +35,7 @@ function Data() {
 			}));
 
 			lns.drawings.push(lns.lines); /* add current lines to drawing data */
-			lns.lineColor.addColorBtn(lns.lineColor.color); /* add current color to color choices */
+			// lns.lineColor.addColorBtn(lns.lineColor.color); /* add current color to color choices */
 			lns.lines = []; /* lines are saved, stop drawing? */
 			lns.ui.updateInterface(); /* update interface */
 		}
