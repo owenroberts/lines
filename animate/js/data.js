@@ -122,13 +122,14 @@ function Data() {
 		if (lns.layers.length > 0) {
 			for (let i = lns.layers.length - 1; i >= 0; i--) {
 				lns.layers[i].removeIndex(lns.currentFrame);
-				if (lns.layers[i])
+				if (lns.layers[i]) 
 					lns.layers[i].shiftIndex(lns.currentFrame + 1, -1);
 			}
 			lns.numFrames--;
 		}
+		lns.render.setFrame(lns.currentFrame - 1);
 		lns.ui.updateInterface();
-		self.clearFrame();
+		// self.clearFrame();
 	};
 
 	/* shift-d */

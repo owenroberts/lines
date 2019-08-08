@@ -59,9 +59,9 @@ function Layers(panel) {
 					blur: true,
 					value: layer.f.s,
 					callback: function(value) {
-						layer.f.s = +value;
-						if (layer.f.s > lns.numFrames) lns.numFrames = layer.s;
-						if (layer.f.e < layer.s) layer.e = layer.s;
+						layer.startFrame = +value;
+						if (layer.startFrame > lns.numFrames) lns.numFrames = layer.startFrame;
+						if (layer.endFrame < layer.startFrame) layer.endFrame = layer.startFrame;
 						lns.ui.updateInterface();
 					}
 				}), row);
@@ -71,9 +71,9 @@ function Layers(panel) {
 					blur: true,
 					value: layer.f.e,
 					callback: function(value) {
-						layer.f.e = +value;
-						if (layer.f.e > lns.numFrames) lns.numFrames = layer.f.e;
-						if (layer.f.s > layer.f.e) layer.f.s = layer.f.e;
+						layer.endFrame = +value;
+						if (layer.endFrame > lns.numFrames) lns.numFrames = layer.endFrame;
+						if (layer.startFrame > layer.endFrame) layer.startFrame = layer.endFrame;
 						lns.ui.updateInterface();
 					}
 				}), row);
@@ -124,6 +124,7 @@ function Layers(panel) {
 					self.panel.add(new UIText({
 						label: 'sf',
 						value: a.sf,
+						blur: true,
 						callback: function(value) {
 							a.sf = +value;
 						}
@@ -131,6 +132,7 @@ function Layers(panel) {
 					self.panel.add(new UIText({
 						label: 'ef',
 						value: a.ef,
+						blur: true,
 						callback: function(value) {
 							a.ef = +value;
 						}
@@ -138,6 +140,7 @@ function Layers(panel) {
 					self.panel.add(new UIText({
 						label: 'sv',
 						value: a.sv,
+						blur: true,
 						callback: function(value) {
 							a.sv = +value;
 						}
@@ -145,10 +148,20 @@ function Layers(panel) {
 					self.panel.add(new UIText({
 						label: 'ev',
 						value: a.ev,
+						blur: true,
 						callback: function(value) {
 							a.ev = +value;
 						}
 					}), aRow);
+
+					self.panel.add(new UIButton({
+						title: '↻',
+						callback: function() {
+							a.sv = 0;
+							a.ev = lns.drawings[layer.d].length;
+							lns.ui.updateInterface();
+						}
+					}));
 
 					self.panel.add(new UIButton({
 						title: 'X',
@@ -156,7 +169,7 @@ function Layers(panel) {
 							self.panels['layer'].removeRow(aRow);
 							layer.a.splice(layer.a.indexOf(a));
 						}
-					}))
+					}));
 				}
 
 				self.panel.add(new UIButton({
@@ -178,6 +191,7 @@ function Layers(panel) {
 					addAnimation(layer.a[i]);
 				}
 				// https://unicode.org/charts/PDF/U2600.pdf
+				// https://tutorialzine.com/2014/12/you-dont-need-icons-here-are-100-unicode-symbols-that-you-can-use
 				// ☠ ☰ ☁ ☂ ⛄ ⚆ ⚈ ⚇ ⚉ 
 			}
 		}

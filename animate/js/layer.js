@@ -8,6 +8,7 @@ class Layer {
 		// this.display = true; // display everywhere
 		// drop from frame
 		// delete entirely ? 
+		this.resetAnims();
 	}
 
 	clean() {
@@ -42,15 +43,38 @@ class Layer {
 		}
 	}
 
+	get startFrame() {
+		return this.f.s;
+	}
+
+	set startFrame(f) {
+		this.f.s = f;
+		this.resetAnims();
+	}
+
+	get endFrame() {
+		return this.f.e;
+	}
+
+	set endFrame(f) {
+		console.log('set', f);
+		this.f.e = f;
+		this.resetAnims();
+	}
+
 	removeIndex(index) {
 		if (this.f.s == index && this.f.e == index) 
 			lns.layers.splice(lns.layers.indexOf(this), 1);
 		else if (this.f.s == index) this.f.s += 1;
 		else if (this.f.e == index) this.f.e -= 1;
 		else if (index > this.f.s && index < this.f.e) {
-			lns.layers.push(new Layer({ ...this, f: { s: index + 1, e: this.f.e } }));
+			const newLayer = _.cloneDeep(this);
+			newLayer.f = { s: index + 1, e: this.f.e };
+			lns.layers.push(newLayer);
 			this.f.e = index - 1;
 		}
+
+		this.resetAnims();
 	}
 
 	/* what is n? */
@@ -58,6 +82,8 @@ class Layer {
 		if (!n) n = -1;
 		if (this.f.s >= index) this.f.s += n;
 		if (this.f.e >= index) this.f.e += n;
+
+		this.resetAnims();
 	}
 
 	isInFrame(index) {
@@ -81,5 +107,14 @@ class Layer {
 
 		}
 		return props;
+	}
+
+	resetAnims() {
+		console.log('reset');
+		for (let i = 0; i < this.a.length; i++) {
+			const a = this.a[i];
+			if (a.sf < this.f.s) a.sf = this.f.s;
+			if (a.ef > this.f.e) a.ef = this.f.e;
+		}
 	}
 }

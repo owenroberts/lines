@@ -402,6 +402,7 @@
 				"key": "f",
 				"module": "ui",
 				"face": "frameDisplay",
+				"blur": true,
 				"fromModule": {
 					"callback": "setFrame"
 				},
@@ -418,6 +419,7 @@
 				"type": "text",
 				"key": ";",
 				"face": "fps",
+				"blur": true,
 				"fromModule": {
 					"callback": "setFps",
 					"value": "fps"
@@ -431,6 +433,7 @@
 			{
 				"type": "text",
 				"key": "'",
+				"blur": true,
 				"fromModule": {
 					"callback": "setLps",
 					"value": "lps"
@@ -445,6 +448,7 @@
 				"row": true,
 				"type": "text",
 				"key": "shift-l",
+				"blur": true,
 				"fromModule": {
 					"callback": "setOnionSkin"
 				},

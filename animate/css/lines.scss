@@ -24,19 +24,7 @@ button:focus {
 	outline: none; 
 }
 
-%tool-tip {
-	content: '~ ' attr(title);
-	position: fixed;
-	top: 40px;
-	right: 20px;
-	background: $accent-two;
-	border-radius: 3px;
-	padding: 1px 3px;
-	color: black;
-}
-
 #tool-tip {
-	// content: '~ ' attr(title);
 	position: fixed;
 	top: 40px;
 	right: 20px;
@@ -46,7 +34,6 @@ button:focus {
 	color: black;
 	&.visible {
 		padding: 2px 6px;
-		border: 2px solid $ui-select;
 	}
 }
 
@@ -77,10 +64,6 @@ button:focus {
 	line-height: 1.75;
 	white-space: nowrap;
 	&.press { background-color: $accent-two; }
-}
-
-.desktop *[title]:hover:after, .press:after {
-	// @extend %tool-tip;
 }
 
 #nav {

@@ -32,22 +32,9 @@
 	/*
 		interface.js currently contains the play back and update interface functions ...
 	*/
-	
-	
-	- onion appears to be fucked up ...
 
 
 - issues
-	- color btn update color picker value
-	- double setting color picker
-	- need to set values like canvas on load
-		- files load sets canvas, fps, lps, line color etc.
-		- not modular but can be made modular if this is ever modular ....
-		- loading settings, need to set ui values
-	- fix onion skin lightness
-	- ui interfaces, set vs setValue
-	- layers display confusing because only see that frame ... 
-	- btn to reset animation values
 	- deleting frames need to delete indexs in layers
 	- general issue of setting ui values when various properties changes (lines properties good example)
 		- mutation observer work in the case of elements like canvas with width
@@ -64,6 +51,8 @@
 	- blender like window system????
 	- frames get their own canvas display
 	- support for multiple line widths ... 
+	- layers display confusing because only see that frame ... 
+	- ui impelement getters and setters ? , also in modules?
 
 - possible features
 	- change onion skin color
@@ -106,6 +95,7 @@
 		- interface - duh
 		- render - current frame, canvas, lines, layers, drawings, 
 	- interface.faces with sub modules interfaces.faces.drawingInterface.seg num bla
+	- ui interfaces, set vs setValue - set used by display and text for setting text and placeholder ...
 
 - play rndr - is this is the new way to do it?
 	- maybe for performance, play and game, for animate, doesn't matter as much
