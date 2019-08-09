@@ -8,6 +8,8 @@ class Text {
 		this.letters = letters;
 		this.breaks = [];
 		this.setBreaks();
+		this.count = 0;
+		this.end = 0;
 	}
 
 	setPosition(x, y) {
@@ -39,15 +41,15 @@ class Text {
 		}
 	}
 	
-	display(len, _x, _y) {
-		if (len === undefined)
-			len = this.msg.length;
+	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
+	display(countForward, countBackward, _x, _y) {
+		const len = countForward ? this.count : this.msg.length;
+		const index = countBackward ? this.end : 0;
 		if (this.active) {
 			let x = _x || this.x;
 			let y = _y || this.y;
 			y -= this.breaks.length * 35;
-
-			for (let i = 0; i < len; i++) {
+			for (let i = index; i < len; i++) {
 				var letter = this.msg[i];
 				if (letter == ' ') {
 					x += 30;
@@ -60,6 +62,21 @@ class Text {
 					y += 35;
 					x = _x || this.x;
 				}
+			}
+		}
+		if (this.count >= this.msg.length) this.end++;
+		else this.count++;
+		if (countBackward) {
+			if (this.end >= this.msg.length) {
+				this.end = 0; /* reset */
+				this.count = 0;
+				return true;
+			}
+		} else {
+			if (this.end >= 5) { // how long to wait after completed text // hardcoded?
+				this.end = 0;
+				this.count = 0;
+				return true; // ended
 			}
 		}
 	}

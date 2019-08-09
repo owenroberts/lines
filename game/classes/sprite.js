@@ -3,7 +3,6 @@ class Sprite {
 		this.position = new Cool.Vector(x, y);
 		this.width = w;
 		this.height = h;
-		this.ctx = Game.ctx; /* should ctx be an argument? */
 		this.debug = false; /* argument? */
 		this.debugColor = "#00ffbb";
 		this.drawBackground = false;
@@ -87,22 +86,24 @@ class Sprite {
 		}
 	}
 
+	drawDebug() {
+		Game.ctx.beginPath();
+		Game.ctx.lineWidth = 1;
+		Game.ctx.rect(
+			this.position.x + this.collider.position.x, 
+			this.position.y + this.collider.position.y, 
+			this.collider.width, 
+			this.collider.height
+		);
+		const temp = Game.ctx.strokeStyle;
+		Game.ctx.strokeStyle = this.debugColor;
+		Game.ctx.stroke();
+		Game.ctx.strokeStyle = temp;
+	}
+
 	display(isMap) {
 		if (this.alive && (this.isOnScreen() || isMap)) {
-			if (this.debug) {
-				Game.ctx.beginPath();
-				Game.ctx.lineWidth = 1;
-				Game.ctx.rect(
-					this.position.x + this.collider.position.x, 
-					this.position.y + this.collider.position.y, 
-					this.collider.width, 
-					this.collider.height
-				);
-				const temp = Game.ctx.strokeStyle;
-				Game.ctx.strokeStyle = this.debugColor;
-				Game.ctx.stroke();
-				Game.ctx.strokeStyle = temp;
-			}
+			if (this.debug) this.drawDebug();
 			if (this.animation && this.animation.loaded) {
 				if (this.bkg) this.animation.drawBkg(this.position.x, this.position.y);
 				else this.animation.draw(this.position.x, this.position.y);
@@ -119,7 +120,7 @@ class Sprite {
 			return true;
 		else
 			return false;
-	} /* from idtio item class */
+	} /* from idtio item class - offset from player position ...  */
 
 	center() {
 		this.position.x -= this.width / 2;
