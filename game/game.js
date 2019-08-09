@@ -33,6 +33,26 @@ const Game = {
 
 		this.loaded = {}; /* auto save loaded json sprites */
 	},
+	load: function(files, handler, callback) {
+		Game.assetsLoaded = {};
+		for (const f in files) {
+			const file = files[f];
+			Game.assetsLoaded[f] = false;
+			fetch(file)
+				.then(response => { return response.json() })
+				.then(json => {
+					Game.assetsLoaded[f] = true;
+					handler(f, json);
+				});
+		}
+
+		const loader = setInterval(function() {
+			if (Object.keys(Game.assetsLoaded).every(key => { return Game.assetsLoaded[key]; })) {
+				clearInterval(loader);
+				if (callback) callback();
+			}
+		}, 1000 / 60);
+	},
 	start: function() {
 		if (typeof start === "function") start(); // should be game method?
 		if (typeof sizeCanvas === "function") sizeCanvas();
