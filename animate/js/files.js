@@ -66,7 +66,7 @@ function Files(params) {
 		const filename = title || prompt("Name this file:");
 
 		if (filename) {
-			const blob = new Blob([jsonfile], {type:"application/x-download;charset=utf-8"});
+			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
 			saveAs(blob, `${filename}.json`);
 		}
 
