@@ -1,112 +1,181 @@
-/* use Map object ?? - maybe if using iframes but not for this */
+const edi = {}; /* editor app */
+edi.ui = new Interface(edi);
+edi.ui.load('interface.json');
+edi.ui.settings = new Settings(edi, 'edi');
 
-const zoom = new Zoom();
-const data = new Data({ save: false });
-const ruler = new Ruler();
-const tool = {
-	current: 'zoom',
-	item: undefined,
-	set: function(toolName) {
+edi.zoom = new Zoom();
+edi.data = new Data({ save: false, path: '/drawings/' });
+edi.ruler = new Ruler();
+edi.tool = {
+	set: function(_toolName) {
+		const toolName = _toolName.toolName || _toolName;
+		edi.tool.current = toolName;
+		edi.ui.selectTool.setValue(toolName);
+		Game.canvas.className = '';
 		Game.canvas.classList.add(`${toolName}-tool`);
 	}
 }; /* tools: zoom/pan, transform, ruler - modulize if it gets complicated */
-const ui = {};
+/* move this somewhere else eventually ... */
+edi.ui.selectTool = new UISelect({
+	id: "select-tool",
+	options: [ "zoom", "transform", "ruler" ],
+	label: "tool:",
+	selected: edi.tool.current,
+	callback: edi.tool.set
+});
+
+edi.ui.reset = function() {
+	for (const key in Game.sprites) {
+		Game.sprites[key].removeUI();
+	}
+	for (const key in Game.ui) {
+		Game.ui[key].removeUI();
+	}
+};
+
+
+edi.ui.markers = {};
 
 Game.init({
 	canvas: "map",
-	width: 800,
+	width: 1000,
 	height: 600,
 	lps: 12,
 });
+Game.sprites = {};
+Game.ui = {};
+Game.scenes = [];
 
-/* organize by scene ??? handle loading by scene? */
-// const files = { ui: "ui.json", map: "map.json" };
-// Game.load(files, data.load, function() { Game.start(); });
-Game.start();
+const files = { ui: "/data/ui.json", sprites: "/data/sprites.json" };
+Game.load(files, edi.data.loadSprites, Game.start);
+// edi.data.load(Game.start);
 
 function start() {
-	zoom.canvas.width = zoom.view.width = Game.width;
-	zoom.canvas.height = zoom.view.height = Game.height;
-	tool.set('zoom');
-	ui.center = new Marker(0, 0);
+	edi.zoom.canvas.width = edi.zoom.view.width = Game.width;
+	edi.zoom.canvas.height = edi.zoom.view.height = Game.height;
+	edi.zoom.load();
+	edi.tool.set('zoom');
+	edi.ui.markers.center = new Marker(0, 0);
 
 	Game.canvas.addEventListener("mousewheel", function(ev) {
-		zoom.wheel(ev, function() {
+		edi.zoom.wheel(ev, function() {
 			Game.ctx.miterLimit = 1;
 		});
 	}, false);
 
+	Game.scene = 'game';
+
+	edi.ui.selectScene = new UISelect({
+		id: "select-scene",
+		label: "scene:",
+		options: Game.scenes,
+		selected: Game.scene,
+		callback: function(value) {
+			Game.scene = value;
+			edi.ui.reset();
+		}
+	});
+	
 	//  document.oncontextmenu = function() { return false; } 
 	/* maybe dont need with tool selector */
 }
 
 function draw() {
-	zoom.set(Game.ctx, { x: Game.width/2, y: Game.height/2 });
 
-	for (const key in ui) {
-		ui[key].display();
-	}
+	edi.zoom.clear(Game.ctx);
+	edi.zoom.set(Game.ctx, { x: Game.width/2, y: Game.height/2 });
 
 	/* not sure where to put this .... */
 	Game.ctx.font = '16px monaco';
 	Game.ctx.fillStyle = '#bb11ff';
 
-	/* draw sprites -- data, scenes? */
+	for (const key in edi.ui.markers) {
+		edi.ui.markers[key].display();
+	}
 
-	if (tool.current == 'ruler') ruler.display();
+	/* draw sprites -- data, scenes? */
+	for (const key in Game.sprites) {
+		if (Game.sprites[key].scenes.includes(Game.scene)) 
+			Game.sprites[key].display(edi.zoom.view);
+	}
+
+	if (edi.tool.current == 'ruler') edi.ruler.display();
+
+	edi.zoom.clear(Game.ctx);
+	
+	for (const key in Game.ui) {
+		if (Game.ui[key].scenes.includes(Game.scene)) 
+			Game.ui[key].display(edi.zoom.view);
+	}
 }
 
 /* what module would this be in? */
 function mouseMoved(x, y, button) {
 	if (button == 1) {
 		/* does button exist if no mouse down? */
-		if (zoom.mouseDown) {
-			const delta = zoom.getDelta(x, y);
-			if (tool.current == 'transform' && tool.item) 
-				tool.item.updatePosition(delta.x, delta.y);
+		if (edi.zoom.mouseDown) {
+			const delta = edi.zoom.getDelta(x, y);
+			if (edi.tool.current == 'transform' && edi.tool.item) 
+				edi.tool.item.updatePosition(delta.x, delta.y);
 			else 
-				zoom.updateView(delta.x, delta.y);
+				edi.zoom.updateView(delta.x, delta.y);
 		}
 	}
 
-	zoom.updatePrevious(x, y);
-	if (!tool.item) intersectItems(x, y, false);
+	edi.zoom.updatePrevious(x, y);
+	if (!edi.tool.item) intersectItems(x, y, false);
 }
 
 function mouseDown(x, y, button) {
 	if (button == 1) {
-		if (tool.current == 'transform') tool.item = intersectItems(x, y, true);
-		zoom.mouseDown = true;
+
+		const item = intersectItems(x, y, true);
+
+		if (edi.tool.item) {
+			if (!item) {
+				edi.tool.item.selected = false;
+				edi.tool.item = undefined; /* method ? */
+			}
+		} else if (item) {
+			edi.tool.item = item;;
+		}
+		
+		edi.zoom.mouseDown = true;
 
 		/* can this happen in zoom module probably */
-		if (!zoom.previous.x) zoom.previous.x = x;
-		if (!zoom.previous.y) zoom.previous.y = y;
+		if (!edi.zoom.previous.x) edi.zoom.previous.x = x;
+		if (!edi.zoom.previous.y) edi.zoom.previous.y = y;
 	}
 }
 
 /* does button matter ?? */
 function mouseUp(x, y, button) {
 	if (button == 1) {
-		if (tool.current == 'transform' && tool.item) {
-			tool.item.move = false;
-			tool.item = undefined; /* method ? */
+		if (edi.tool.item) {
+			if (!intersectItems(x,y)) {
+				edi.tool.item.selected = false;
+				edi.tool.item = undefined; /* method ? */
+			}
 		}
-		zoom.mouseDown = false;
+		edi.zoom.mouseDown = false;
 	}
 } 
 
 /* what module should this be in??? */
 function intersectItems(x, y, move) {
-	// for (const interactive in map.interactives) {
-	// 	const intersect = map.interactives[interactive].mouseOver(x, y, move);
-	// 	if (intersect) return intersect;
-	// }
+	for (const key in Game.sprites) {
+		if (Game.sprites[key].scenes.includes(Game.scene)) {
+			const intersect = Game.sprites[key].mouseOver(x, y, edi.zoom, move);
+			if (intersect) return intersect;
+		}
+	}
 
-	// for (const s in map.scenery) {
-	// 	const set = map.scenery[s];
-	// 	for (let i = 0; i < set.length; i++) {
-	// 		const intersect = map.scenery[s][i].mouseOver(x, y, move);
-	// 		if (intersect) return intersect;
-	// 	}
-	// }
+	for (const key in Game.ui) {
+		if (Game.ui[key].scenes.includes(Game.scene)) {
+			const intersect = Game.ui[key].mouseOver(x, y, move);
+			if (intersect) return intersect;
+		}
+	}
+
+	return false;
 }

@@ -23,12 +23,14 @@ const Game = {
 
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
-			this.ctx.miterLimit = 1;
+			
 			this.canvas.width = this.width;
 			this.canvas.height = this.height;
 
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
+
+			this.ctx.miterLimit = 1;
 		}
 
 		this.loaded = {}; /* auto save loaded json sprites */
@@ -42,7 +44,7 @@ const Game = {
 				.then(response => { return response.json() })
 				.then(json => {
 					Game.assetsLoaded[f] = true;
-					handler(f, json);
+					handler(f, json); /* game loaded to specific scenes, editor loads to generic sprites */
 				});
 		}
 

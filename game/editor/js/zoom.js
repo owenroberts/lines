@@ -20,8 +20,11 @@ function Zoom() {
 
 	this.mouseDown = false;
 
-	this.set = function(ctx, offset) {
+	this.clear = function(ctx) {
 		ctx.setTransform(1,0,0,1,0,0);
+	};
+
+	this.set = function(ctx, offset) {
 		ctx.scale(this.canvas.width / this.view.width, this.canvas.height / this.view.height);
 		ctx.translate(offset.x - this.view.x, offset.y - this.view.y);
 		ctx.clearRect(this.view.x - offset.x, this.view.y - offset.y, this.view.width, this.view.height);
@@ -57,6 +60,36 @@ function Zoom() {
 	this.updatePrevious = function(x, y) {
 		this.previous.x = x;
 		this.previous.y = y;
+	};
+
+	this.save = function() {
+		localStorage.zoom = JSON.stringify({ 
+			view: self.view, 
+			previous: self.previous, 
+			canvas: self.canvas 
+		});
+	};
+
+	this.load = function() {
+		if (localStorage.zoom) {
+			const zoom = JSON.parse(localStorage.zoom);
+			for (const key in zoom) {
+				self[key] = zoom[key];
+			}
+		}
+	};
+
+	this.reset = function() {
+		self.canvas = { width: Game.width, height: Game.height };
+		self.view = { x: 0, y: 0, width: Game.width, height: Game.height };
+		self.previous = { x: undefined, y: undefined }; 
+	};
+
+	this.translate = function(x, y) {
+		const scale = self.canvas.width / self.view.width;
+		x = x / scale + self.view.x - Game.width/2;
+		y = y / scale + self.view.y - Game.height/2;
+		return {x: x, y: y};
 	};
 
 	/* based on zoom: http://www.cs.colostate.edu/~anderson/newsite/javascript-zoom.html*/

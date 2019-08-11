@@ -32,19 +32,32 @@ class Sprite {
 		this.height = undefined;
 	}
 
+	/* rewrite later ... */	
+	addJSON(json, callback) {
+		this.animation = new Animation(undefined, this.debug);
+		if (!this.width) { /* load size from animation data */
+			this.animation.loadJSON(json, false, (w, h) => {
+				this.width = this.collider.width = w;
+				this.height = this.collider.height = h;
+				if (callback) callback();
+			});
+		} else { /* size determined by sprite */
+			this.animation.load({w: this.width, h: this.height}); 
+		}
+		if (this.drawBackground) this.animation.drawBackground = true;
+	}
+
 	addAnimation(src, callback) {
 		this.animation = new Animation(src, this.debug);
-		if (!this.width) {
-			/* load size from animation data */
+		if (!this.width) { /* load size from animation data */
 			this.animation.load(false, (w, h) => {
 				this.width = this.collider.width = w;
 				this.height = this.collider.height = h;
 				if (callback) callback();
 			});
-		} else {
-			this.animation.load({w: this.width, h: this.height}); /* size determined by sprite */
+		} else { /* size determined by sprite */
+			this.animation.load({w: this.width, h: this.height}); 
 		}
-		if (this.debug) this.animation.debug = true;
 		if (this.drawBackground) this.animation.drawBackground = true;
 	}
 
@@ -87,8 +100,8 @@ class Sprite {
 	}
 
 	drawDebug() {
-		Game.ctx.beginPath();
 		Game.ctx.lineWidth = 1;
+		Game.ctx.beginPath();
 		Game.ctx.rect(
 			this.position.x + this.collider.position.x, 
 			this.position.y + this.collider.position.y, 

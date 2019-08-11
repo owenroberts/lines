@@ -1,6 +1,6 @@
 class Marker {
 	constructor(x, y) {
-		this.position = Cool.Vector(x, y);
+		this.position = new Cool.Vector(x, y);
 	}
 
 	display() {

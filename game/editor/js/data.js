@@ -4,28 +4,79 @@ function Data(params) {
 	/* from animate/js/files ... combine? */
 	this.saveFiledEnabled = false;
 	this.saveSettingsOnUnload = params.save || false;
-	this.data = {};
-
-	this.load = function(file, json) {
-		/* fancy traverse thing or just use default categories ?? */
-		console.log(file, json);
-	};
 
 	/* one file or multiple files ??? */
 	this.save = function() {
-		const json = JSON.stringify(self.data);
+		const sprites = {};
+		const ui = {};
+
+		for (const key in Game.sprites) {
+			const s = Game.sprites[key];
+			sprites[key] = {
+				src: `${params.path}sprites/${s.label}.json`,
+				x: s.position.x + s.width/2, /* kinda dumb "uncentering" here */
+				y: s.position.y + s.height/2,
+				states: s.animation.states,
+				state: s.animation.state,
+				scenes: s.scenes
+			};
+		}
+
+		for (const key in Game.ui) {
+			const s = Game.ui[key];
+			ui[key] = {
+				src: `${params.path}ui/${s.label}.json`,
+				x: s.x,
+				y: s.y,
+				states: s.animation.states,
+				state: s.animation.state,
+				scenes: s.scenes
+			};
+		}
+
+		const f = self.download(sprites, 'sprites.json');
+		f.onwriteend = function() { 
+			self.download(ui, 'ui.json');
+		};
+		
+	};
+
+	this.download = function(data, fileName) {
+		const json = JSON.stringify(data);
 		const blob = new Blob([json], { type: "application/x-download;charset=utf-8" });
-		saveAs(blob, 'data.json');
+		return saveAs(blob, fileName);
+	};
+
+	this.load = function(callback) {
+	
+	};
+
+	this.loadSprites = function(file, json) {
+		for (const key in json) {
+			const params = { label: key, type: file, ...json[key] }
+			Game[file][key] = file == 'ui' ? new GUI(params) : new Item(params);
+			for (let i = 0; i < json[key].scenes.length; i++) {
+				const scene = json[key].scenes[i];
+				if (!Game.scenes.includes(scene)) Game.scenes.push(scene);
+			}
+		}
+	};
+
+	this.dropSprite = function(fileName, json, x, y) {
+		Game.sprites[fileName] = new Item({ label: fileName, ...edi.zoom.translate(x, y) });
+		Game.sprites[fileName].scenes = [Game.scene];
+		Game.sprites[fileName].addJSON(json, function() {
+			Game.sprites[fileName].center();
+		});
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		self.saveFilesEnabled = true;
 		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
 		
-		/* canvas */
-		// const nav = document.getElementById('nav');
-		// nav.addEventListener('dragover', dragOverHandler);
-		// nav.addEventListener('drop', dropHandler);
+		const nav = document.getElementById('map');
+		nav.addEventListener('dragover', dragOverHandler);
+		nav.addEventListener('drop', dropHandler);
 		// https://gist.github.com/andjosh/7867934
 	}
 
@@ -41,10 +92,9 @@ function Data(params) {
         	const reader = new FileReader();
 			reader.onload = (function(theFile) {
 				return function(e) {
-				/* use for drag/drop sprites */
-				self.fileName = f.name.split('.')[0];
-				self.loadJSON(JSON.parse(e.target.result));
-          	};
+
+					self.dropSprite(f.name.split('.')[0], JSON.parse(e.target.result), ev.offsetX, ev.offsetY);
+          		};
         	})(f);
         	reader.readAsText(f);
         }

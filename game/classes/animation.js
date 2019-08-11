@@ -42,16 +42,16 @@ class Animation {
 		this.overRide = false;
 	}
 
-	load(setAnimSize, callback) {
+	load(spriteSize, callback) {
 		fetch(this.src)
 			.then(response => { return response.json() })
 			.then(data => {
-				this.loadJSON(data, setAnimSize, callback);
+				this.loadJSON(data, spriteSize, callback);
 			})
 			.catch(error => { console.error(error) });
 	}
 
-	loadJSON(json, setAnimSize, callback) {
+	loadJSON(json, spriteSize, callback) {
 		this.loaded = true;
 		this.drawings = [];
 		for (let i = 0; i < json.d.length; i++) {
@@ -70,11 +70,11 @@ class Animation {
 
 		if (this.states.default)
 			this.states.default.end = this.numFrames;
-		if (!setAnimSize) {
+		if (!spriteSize) {
 			if (callback) callback(json.w, json.h);
 		} else {
-			this.widthRatio = setAnimSize.w / json.w;
-			this.heightRatio = setAnimSize.h / json.h;
+			this.widthRatio = spriteSize.w / json.w;
+			this.heightRatio = spriteSize.h / json.h;
 		}
 		this.intervalRatio = Game.lineInterval / (1000 / json.fps);
 
