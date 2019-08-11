@@ -66,8 +66,8 @@ function Canvas(id, width, height, color) {
 
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
-		lns.ui.faces.width.set(self.canvas.width);
-		lns.ui.faces.height.set(self.canvas.height);
+		// lns.ui.faces.width.set(self.canvas.width);
+		// lns.ui.faces.height.set(self.canvas.height);
 
 		for (let i = 0; i < lns.layers.length; i++) {
 			const layer = lns.layers[i];

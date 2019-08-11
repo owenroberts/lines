@@ -4,6 +4,7 @@ class UIText extends UI {
 		super(params);
 		this.el.type = "text";
 		this.el.placeholder = params.placeholder || params.title;
+		if (params.block) this.addClass('block');
 		if (params.display) this.addClass('display');
 		
 		if (params.blur) {

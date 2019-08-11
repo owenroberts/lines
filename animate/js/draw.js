@@ -16,6 +16,7 @@ function Draw(defaults) {
 			lns.ui.faces.v.update(defaults.v);
 		}
 	};
+
 	this.defaults = defaults;
 	this.setDefaults();
 
@@ -137,18 +138,6 @@ function Draw(defaults) {
 				callback(lastTouch);
 			}
 		}
-
-		document.addEventListener('touchstart', ev => {
-			// console.log(ev);
-		});
-
-		document.addEventListener('touchmove', ev => {
-			// console.log(ev);
-		});
-
-		document.addEventListener('touchend', ev => {
-			// console.log(ev);
-		});
 
 		/* apple pencil - safari doesn't support pointer event */
 		lns.canvas.canvas.addEventListener('touchstart', ev => {

@@ -1,8 +1,8 @@
 window.addEventListener("load", function() {
 
-	lns = {};
+	window.lns = {};
 
-	// global parts used everywhere - module? render?
+	// global parts used everywhere
 	lns.lines = []; // lines currently being drawn
 	lns.layers = [];  // keep separate layers references by frames
 	lns.drawings = []; // saved drawings
@@ -22,7 +22,10 @@ window.addEventListener("load", function() {
 		reload: false, /* confirm reload */
 		bg: false /* bg color */
 	});
-	lns.ui = new Interface();
+	
+	lns.ui = new Interface(lns);
+	animateInterface(lns.ui); /* add local ui modules first, not a great pattern */
+	lns.ui.load('./js/interface.json'); 
 
 	const openFile = localStorage.getItem('re-open');
 	if (openFile) {
