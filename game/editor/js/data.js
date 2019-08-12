@@ -14,8 +14,8 @@ function Data(params) {
 			const s = Game.sprites[key];
 			sprites[key] = {
 				src: `${params.path}sprites/${s.label}.json`,
-				x: s.position.x + s.width/2, /* kinda dumb "uncentering" here */
-				y: s.position.y + s.height/2,
+				x: s.position.x, /* kinda dumb "uncentering" here */
+				y: s.position.y,
 				states: s.animation.states,
 				state: s.animation.state,
 				scenes: s.scenes
