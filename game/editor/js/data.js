@@ -53,7 +53,7 @@ function Data(params) {
 
 	this.loadSprites = function(file, json) {
 		for (const key in json) {
-			const params = { label: key, type: file, ...json[key] }
+			const params = { label: key, type: file, center: true, ...json[key] }
 			Game[file][key] = file == 'ui' ? new GUI(params) : new Item(params);
 			for (let i = 0; i < json[key].scenes.length; i++) {
 				const scene = json[key].scenes[i];
@@ -62,8 +62,9 @@ function Data(params) {
 		}
 	};
 
+	/* drop ui ? */
 	this.dropSprite = function(fileName, json, x, y) {
-		Game.sprites[fileName] = new Item({ label: fileName, ...edi.zoom.translate(x, y) });
+		Game.sprites[fileName] = new Item({ label: fileName, center: true, ...edi.zoom.translate(x, y) });
 		Game.sprites[fileName].scenes = [Game.scene];
 		Game.sprites[fileName].addJSON(json, function() {
 			Game.sprites[fileName].center();

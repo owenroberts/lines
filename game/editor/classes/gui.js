@@ -3,9 +3,6 @@ class GUI extends Item {
 		super(params, src, debug);
 		this.x = params.x;
 		this.y = params.y;
-		
-		// this.setXView();
-		// this.setYView();
 	}
 
 	set x(x) {

@@ -9,7 +9,7 @@ class Item extends Sprite {
 		if (this.src) {
 			const self = this;
 			self.addAnimation(self.src, function() {
-				self.center();
+				// self.center();
 			});
 			self.animation.states = params.states || { idle: { start: 0, end: 0 } };
 			self.animation.state = params.state || 'idle';
@@ -19,15 +19,25 @@ class Item extends Sprite {
 		this.scenes = params.scenes;
 		this.type = params.file;
 
+		this.center = params.center || true;
+
 		this.ui = {};
 		this.uiAdded = false;
+
+		this.uiColor = '#ff00ff';
 	}
 
 	display(view) {
 		Game.ctx.strokeStyle = '#000000'; // game colors ???
 		super.display(this.isInMapBounds(view));
+
 		if (this.displayLabel) this.drawLabel();
 		if (this.outline) this.drawOutline();
+
+		Game.ctx.strokeStyle = this.uiColor;
+		Game.ctx.beginPath();
+		Game.ctx.arc(this.position.x, this.position.y, 5, 0, 2 * Math.PI, false);
+		Game.ctx.stroke();
 	}
 
 	isInMapBounds(view) {
@@ -42,20 +52,23 @@ class Item extends Sprite {
 	}
 
 	drawLabel() {
-		Game.ctx.fillText(this.label, this.position.x, this.position.y);
+		const {x, y} = this.getCenter();
+		Game.ctx.fillText(this.label, x, y);
 	}
 
 	drawOutline() {
-		Game.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
+		const {x, y} = this.getCenter();
+		Game.ctx.strokeRect(x, y, this.width, this.height);
 	}
 
 	mouseOver(_x, _y, zoom) {
 		if (this.isInMapBounds(zoom.view)) {
 			const {x, y} = zoom.translate(_x, _y);
-			if (x > this.position.x &&
-				x < this.position.x + this.width &&
-				y > this.position.y &&
-				y < this.position.y + this.height) {
+			const xy = this.getCenter();
+			if (x > xy.x &&
+				x < xy.x + this.width &&
+				y > xy.y &&
+				y < xy.y + this.height) {
 				this.displayLabel = true;
 				this.outline = true;
 				return this;

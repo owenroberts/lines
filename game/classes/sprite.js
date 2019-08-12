@@ -114,12 +114,25 @@ class Sprite {
 		Game.ctx.strokeStyle = temp;
 	}
 
+	getCenter() {
+		if (this.center) {
+			return {
+				x: this.position.x - (this.center ? this.width/2 : 0),
+				y: this.position.y - (this.center ? this.height/2 : 0)
+			}
+		} else {
+			return this.position;
+		}
+		
+	}
+
 	display(isMap) {
 		if (this.alive && (this.isOnScreen() || isMap)) {
 			if (this.debug) this.drawDebug();
 			if (this.animation && this.animation.loaded) {
-				if (this.bkg) this.animation.drawBkg(this.position.x, this.position.y);
-				else this.animation.draw(this.position.x, this.position.y);
+				const {x, y} = this.getCenter();
+				if (this.bkg) this.animation.drawBkg(x, y);
+				else this.animation.draw(x, y);
 			}
 		}
 		if (this.displayFunc) this.displayFunc();
