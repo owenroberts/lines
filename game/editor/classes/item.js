@@ -49,7 +49,7 @@ class Item extends Sprite {
 		Game.ctx.strokeRect(this.position.x, this.position.y, this.width, this.height);
 	}
 
-	mouseOver(_x, _y, zoom, select) {
+	mouseOver(_x, _y, zoom) {
 		if (this.isInMapBounds(zoom.view)) {
 			const {x, y} = zoom.translate(_x, _y);
 			if (x > this.position.x &&
@@ -58,7 +58,6 @@ class Item extends Sprite {
 				y < this.position.y + this.height) {
 				this.displayLabel = true;
 				this.outline = true;
-				if (select) this.selected = true;
 				return this;
 			} else {
 				if (!this.selected) {
@@ -71,9 +70,10 @@ class Item extends Sprite {
 	}
 
 	set selected(select) {
+		console.log('select', select);
 		this._selected = select;
-		this.displayLabel = false;
-		this.outline = false;
+		this.displayLabel = select;
+		this.outline = select;
 		if (select) this.addUI();
 		else this.removeUI();
 	}

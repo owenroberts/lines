@@ -2,6 +2,7 @@ const edi = {}; /* editor app */
 edi.ui = new Interface(edi);
 edi.ui.load('interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
+edi.ui.markers = {};
 
 edi.zoom = new Zoom();
 edi.data = new Data({ save: false, path: '/drawings/' });
@@ -23,7 +24,6 @@ edi.ui.selectTool = new UISelect({
 	selected: edi.tool.current,
 	callback: edi.tool.set
 });
-
 edi.ui.reset = function() {
 	for (const key in Game.sprites) {
 		Game.sprites[key].removeUI();
@@ -34,21 +34,17 @@ edi.ui.reset = function() {
 };
 
 
-edi.ui.markers = {};
-
+Game.sprites = {};
+Game.ui = {};
+Game.scenes = [];
 Game.init({
 	canvas: "map",
 	width: 1000,
 	height: 600,
 	lps: 12,
+	mixedColors: true
 });
-Game.sprites = {};
-Game.ui = {};
-Game.scenes = [];
-
-const files = { ui: "/data/ui.json", sprites: "/data/sprites.json" };
-Game.load(files, edi.data.loadSprites, Game.start);
-// edi.data.load(Game.start);
+Game.load({ ui: "/data/ui.json", sprites: "/data/sprites.json" }, edi.data.loadSprites, Game.start);
 
 function start() {
 	edi.zoom.canvas.width = edi.zoom.view.width = Game.width;
@@ -75,7 +71,7 @@ function start() {
 			edi.ui.reset();
 		}
 	});
-	
+
 	//  document.oncontextmenu = function() { return false; } 
 	/* maybe dont need with tool selector */
 }
@@ -129,15 +125,20 @@ function mouseMoved(x, y, button) {
 function mouseDown(x, y, button) {
 	if (button == 1) {
 
-		const item = intersectItems(x, y, true);
+		const item = intersectItems(x, y);
 
 		if (edi.tool.item) {
-			if (!item) {
+			if (item && edi.tool.item != item) {
 				edi.tool.item.selected = false;
-				edi.tool.item = undefined; /* method ? */
+				edi.tool.item = item;
+				edi.tool.item.selected = true;
+			} else if (!item) {
+				edi.tool.item.selected = false;
+				edi.tool.item = undefined;
 			}
 		} else if (item) {
-			edi.tool.item = item;;
+			edi.tool.item = item;
+			edi.tool.item.selected = true;
 		}
 		
 		edi.zoom.mouseDown = true;
@@ -151,12 +152,6 @@ function mouseDown(x, y, button) {
 /* does button matter ?? */
 function mouseUp(x, y, button) {
 	if (button == 1) {
-		if (edi.tool.item) {
-			if (!intersectItems(x,y)) {
-				edi.tool.item.selected = false;
-				edi.tool.item = undefined; /* method ? */
-			}
-		}
 		edi.zoom.mouseDown = false;
 	}
 } 
@@ -165,14 +160,14 @@ function mouseUp(x, y, button) {
 function intersectItems(x, y, move) {
 	for (const key in Game.sprites) {
 		if (Game.sprites[key].scenes.includes(Game.scene)) {
-			const intersect = Game.sprites[key].mouseOver(x, y, edi.zoom, move);
+			const intersect = Game.sprites[key].mouseOver(x, y, edi.zoom);
 			if (intersect) return intersect;
 		}
 	}
 
 	for (const key in Game.ui) {
 		if (Game.ui[key].scenes.includes(Game.scene)) {
-			const intersect = Game.ui[key].mouseOver(x, y, move);
+			const intersect = Game.ui[key].mouseOver(x, y);
 			if (intersect) return intersect;
 		}
 	}
