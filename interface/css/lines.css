@@ -21,6 +21,17 @@ select {
   margin-top: 0.25em;
 }
 
+*[title]:hover:after, .press:after {
+  content: "~ " attr(title);
+  position: fixed;
+  top: 40px;
+  right: 20px;
+  background: #ffddff;
+  border-radius: 3px;
+  padding: 1px 3px;
+  color: black;
+}
+
 #tool-tip {
   position: fixed;
   top: 40px;
@@ -34,6 +45,7 @@ select {
   padding: 2px 6px;
 }
 
+/* this is kind of doubled up but fix later */
 #container {
   margin: 1em;
   display: flex;

@@ -105,15 +105,37 @@ function Data() {
 	};
 
 	/* x key */
-	this.clearFrame = function() {
-		self.saveState();
-		/* separate lns.lines and layers ? */
+	this.clearLines = function() {
 		lns.lines = [];
+	};
 
-		for (let i = 0; i < lns.layers.length; i++) {
+	this.clearLayers = function() {
+		self.saveState(); /* will save lines ... */
+		for (let i = lns.layers.length - 1; i >= 0; i--) {
 			if (lns.layers[i].isInFrame(lns.currentFrame))
 				lns.layers[i].removeIndex(lns.currentFrame);
 		}
+	};
+
+	this.cutTopLayer = function() {
+		for (let i = lns.layers.length - 1; i >= 0; i--) {
+			if (lns.layers[i].isInFrame(lns.currentFrame))
+				lns.layers[i].removeIndex(lns.currentFrame);
+			break;
+		}
+	};
+
+	this.cutBottomLayer = function() {
+		for (let i = 0; i < lns.layers.length; i++) {
+			if (lns.layers[i].isInFrame(lns.currentFrame))
+				lns.layers[i].removeIndex(lns.currentFrame);
+			break;
+		}
+	};
+
+	this.clearFrame = function() {
+		self.clearLines();
+		self.clearLayers();
 	};
 
 	/* d key */
@@ -165,7 +187,7 @@ function Data() {
 
 	/* shift z */
 	this.cutLastLine = function() {
-		if (lns.ui.layers.length > 0) lns.ui.cutLayerLine();
+		if (lns.ui.layers.length > 0) lns.ui.cutLayerLine(); /* not currently working */
 		if (lns.lines.length > 0) {
 			lns.lines.pop(); // remove end
 			for (let i = lns.lines.length - 1; i > 0; i--) {

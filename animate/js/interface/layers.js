@@ -197,6 +197,25 @@ function Layers(panel) {
 		}
 	};
 
+	this.allToggled = false;
+
+	this.toggleAll = function() {
+		/* match all toggled */
+		for (let i = 0; i < self.layers.length; i++) {
+			if (self.layers[i].toggled != self.allToggled)
+				self.layers[i].toggle();
+		}
+		
+		/* toggle */
+		for (let i = 0; i < self.layers.length; i++) {
+			self.layers[i].toggle();
+		}
+
+		self.allToggled = !self.allToggled; /* set toggle */
+
+		/* how to make ui react here ??? */
+	};
+
 	/* z */
 	this.cutLayerSegment = function() {
 		for (let i = 0; i < self.layers.length; i++) {

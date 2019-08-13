@@ -132,8 +132,8 @@ function Draw(defaults) {
 			ev.preventDefault();
 			if (ev.touches[0]) {
 				const rect = ev.target.getBoundingClientRect();
-				lastTouch.offsetX = ev.targetTouches[0].pageX - rect.left;
-				lastTouch.offsetY = ev.targetTouches[0].pageY - rect.top;
+				lastTouch.offsetX = ev.targetTouches[0].pageX - rect.left - window.scrollX;
+				lastTouch.offsetY = ev.targetTouches[0].pageY - rect.top - window.scrollY;
 				lastTouch.which = 1;
 				callback(lastTouch);
 			}

@@ -190,71 +190,11 @@
 			}
 		]
 	},
-	"data": {
-		"id": "data-menu",
-		"label": "Edit",
+	"copy": {
+		"id": "copy-menu",
+		"label": "Copy/Paste",
 		"module": "data",
 		"list": [
-			{
-				"type": "button",
-				"key": "r",
-				"fromModule": {
-					"callback": "saveLines"
-				},
-				"params": {
-					"title": "Save Lines"
-				}
-			},
-			{
-				"type": "button",
-				"key": "x",
-				"fromModule": {
-					"callback": "clearFrame"
-				},
-				"params": {
-					"title": "Clear Frame"
-				}
-			},
-			{
-				"type": "button",
-				"key": "shift-z",
-				"fromModule": {
-					"callback": "cutLastLine"
-				},
-				"params": {
-					"title": "Cut Last Line"
-				}
-			},
-			{
-				"type": "button",
-				"key": "z",
-				"fromModule": {
-					"callback": "cutLastSegment"
-				},
-				"params": {
-					"title": "Cut Segment"
-				}
-			},
-			{
-				"type": "button",
-				"key": "ctrl-z",
-				"fromModule": {
-					"callback": "undo"
-				},
-				"params": {
-					"title": "Undo"
-				}
-			},
-			{
-				"type": "button",
-				"key": "q",
-				"fromModule": {
-					"callback": "offsetDrawing"
-				},
-				"params": {
-					"title": "Offset"
-				}
-			},
 			{
 				"type": "button",
 				"key": "c",
@@ -273,6 +213,83 @@
 				},
 				"params": {
 					"title": "Multi Copies"
+				}
+			},
+			{
+				"type": "button",
+				"key": "v",
+				"fromModule": {
+					"callback": "paste"
+				},
+				"params": {
+					"title": "Paste"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-v",
+				"fromModule": {
+					"callback": "selectAll"
+				},
+				"params": {
+					"title": "Select All"
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-v",
+				"fromModule": {
+					"callback": "selectRange"
+				},
+				"params": {
+					"title": "Select Range"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-v",
+				"fromModule": {
+					"callback": "clearSelected"
+				},
+				"params": {
+					"title": "Clear Selected"
+				}
+			}
+		]
+	},
+	"cut": {
+		"id": "cut-menu",
+		"label": "Cut",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "x",
+				"fromModule": {
+					"callback": "clearLines"
+				},
+				"params": {
+					"title": "Clear Lines"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-z",
+				"fromModule": {
+					"callback": "cutLastLine"
+				},
+				"params": {
+					"title": "Cut Line"
+				}
+			},
+			{
+				"type": "button",
+				"key": "z",
+				"fromModule": {
+					"callback": "cutLastSegment"
+				},
+				"params": {
+					"title": "Cut Segment"
 				}
 			},
 			{
@@ -297,6 +314,73 @@
 			},
 			{
 				"type": "button",
+				"key": "ctrl-x",
+				"fromModule": {
+					"callback": "cutTopLayer"
+				},
+				"params": {
+					"title": "Cut Top Layer"
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-x",
+				"fromModule": {
+					"callback": "cutBottomLayer"
+				},
+				"params": {
+					"title": "Cut Bottom Layer"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-x",
+				"fromModule": {
+					"callback": "clearFrame"
+				},
+				"params": {
+					"title": "Clear Frame"
+				}
+			}
+		]
+	},
+	"data": {
+		"id": "data-menu",
+		"label": "Data",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "r",
+				"fromModule": {
+					"callback": "saveLines"
+				},
+				"params": {
+					"title": "Save Lines"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-z",
+				"fromModule": {
+					"callback": "undo"
+				},
+				"params": {
+					"title": "Undo"
+				}
+			},
+			{
+				"type": "button",
+				"key": "q",
+				"fromModule": {
+					"callback": "offsetDrawing"
+				},
+				"params": {
+					"title": "Offset"
+				}
+			},
+			{
+				"type": "button",
 				"key": "i",
 				"fromModule": {
 					"callback": "insertFrameBefore"
@@ -313,46 +397,6 @@
 				},
 				"params": {
 					"title": "Insert After"
-				}
-			},
-			{
-				"type": "button",
-				"key": "ctrl-v",
-				"fromModule": {
-					"callback": "clearSelected"
-				},
-				"params": {
-					"title": "Clear Selected"
-				}
-			},
-			{
-				"type": "button",
-				"key": "v",
-				"fromModule": {
-					"callback": "paste"
-				},
-				"params": {
-					"title": "Paste Frames"
-				}
-			},
-			{
-				"type": "button",
-				"key": "shift-v",
-				"fromModule": {
-					"callback": "selectAll"
-				},
-				"params": {
-					"title": "Select All"
-				}
-			},
-			{
-				"type": "button",
-				"key": "alt-v",
-				"fromModule": {
-					"callback": "selectRange"
-				},
-				"params": {
-					"title": "Select Range"
 				}
 			}
 		]
@@ -707,6 +751,16 @@
 				},
 				"params": {
 					"title": "Change Color"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-u",
+				"fromModule": {
+					"callback": "toggleAll"
+				},
+				"params": {
+					"title": "Toggle All"
 				}
 			}
 		]
