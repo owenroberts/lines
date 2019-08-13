@@ -738,29 +738,29 @@
 				"type": "button",
 				"key": "ctrl-s",
 				"fromModule": {
-					"callback": "saveSettings"
+					"callback": "save"
 				},
 				"params": {
-					"title": "Save Settings"
+					"title": "Save"
 				}
 			},
 			{
 				"type": "button",
 				"key": "alt-s",
 				"fromModule": {
-					"callback": "loadSettings"
+					"callback": "load"
 				},
 				"params": {
-					"title": "Load Settings"
+					"title": "Load"
 				}
 			},
 			{
 				"type": "button",
 				"fromModule": {
-					"callback": "clearSettings"
+					"callback": "clear"
 				},
 				"params": {
-					"title": "Clear Settings"
+					"title": "Clear"
 				}
 			},
 			{
@@ -769,8 +769,8 @@
 					"callback": "toggleSaveSettings"
 				},
 				"params": {
-					"on": "Auto Save Settings On",
-					"off": "Auto Save Settings Off"
+					"on": "Auto Save On",
+					"off": "Auto Save Off"
 				}
 			}
 		]
