@@ -14,7 +14,7 @@ function Render(fps, color) {
 	this.onionSkinNum = 0;
 	this.onionSkinIsVisible = false;
 
-	this.lineColor = color;
+	this.lineColor = color || '#000000'; /* default black*/
 
 	/* l key */
 	this.setOnionSkin = function(n) {

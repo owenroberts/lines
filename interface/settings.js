@@ -34,6 +34,6 @@ function Settings(app, name, appSave, appLoad) {
 	};
 
 	this.clear = function() {
-		delete localStorage.settings;
+		delete localStorage[self.name];
 	};
 }

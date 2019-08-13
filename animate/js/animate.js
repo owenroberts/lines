@@ -166,7 +166,7 @@ function animateInterface(ui) {
 			height: lns.canvas.height,
 			fps: lns.render.fps,
 			lps: lns.render.lps,
-			onionSkinVisible: lns.render.onionSkinVisible,
+			onionSkinIsVisible: lns.render.onionSkinIsVisible,
 			onionSkinNum: lns.render.onionSkinNum,
 			palettes: lns.ui.palette.palettes
 		};
@@ -180,12 +180,13 @@ function animateInterface(ui) {
 		lns.render.setFps(settings.fps);
 		lns.render.setLps(settings.lps);
 		lns.render.lineColor = settings.lineColor;
-		lns.render.onionSkinVisible = settings.onionSkinVisible;
+		lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 		lns.render.onionSkinNum = settings.onionSkinNum;
 
 		lns.ui.faces.lineColor.setValue(settings.lineColor);
 		lns.ui.faces.bgColor.setValue(settings.canvasColor);
 		lns.ui.faces.lineWidth.setValue(settings.lineWidth);
+		lns.ui.faces.onionSkinNum.setValue(settings.onionSkinNum);
 
 		lns.ui.palette.palettes = settings.palettes;
 		if (lns.ui.palette.current) 

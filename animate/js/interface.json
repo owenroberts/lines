@@ -197,12 +197,82 @@
 		"list": [
 			{
 				"type": "button",
+				"key": "r",
+				"fromModule": {
+					"callback": "saveLines"
+				},
+				"params": {
+					"title": "Save Lines"
+				}
+			},
+			{
+				"type": "button",
+				"key": "x",
+				"fromModule": {
+					"callback": "clearFrame"
+				},
+				"params": {
+					"title": "Clear Frame"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-z",
+				"fromModule": {
+					"callback": "cutLastLine"
+				},
+				"params": {
+					"title": "Cut Last Line"
+				}
+			},
+			{
+				"type": "button",
+				"key": "z",
+				"fromModule": {
+					"callback": "cutLastSegment"
+				},
+				"params": {
+					"title": "Cut Segment"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-z",
+				"fromModule": {
+					"callback": "undo"
+				},
+				"params": {
+					"title": "Undo"
+				}
+			},
+			{
+				"type": "button",
+				"key": "q",
+				"fromModule": {
+					"callback": "offsetDrawing"
+				},
+				"params": {
+					"title": "Offset"
+				}
+			},
+			{
+				"type": "button",
 				"key": "c",
 				"fromModule": {
 					"callback": "copy"
 				},
 				"params": {
 					"title": "Copy"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-c",
+				"fromModule": {
+					"callback": "addMultipleCopies"
+				},
+				"params": {
+					"title": "Multi Copies"
 				}
 			},
 			{
@@ -243,76 +313,6 @@
 				},
 				"params": {
 					"title": "Insert After"
-				}
-			},
-			{
-				"type": "button",
-				"key": "shift-c",
-				"fromModule": {
-					"callback": "addMultipleCopies"
-				},
-				"params": {
-					"title": "Multi Copies"
-				}
-			},
-			{
-				"type": "button",
-				"key": "q",
-				"fromModule": {
-					"callback": "offsetDrawing"
-				},
-				"params": {
-					"title": "Offset"
-				}
-			},
-			{
-				"type": "button",
-				"key": "r",
-				"fromModule": {
-					"callback": "saveLines"
-				},
-				"params": {
-					"title": "Save Lines"
-				}
-			},
-			{
-				"type": "button",
-				"key": "x",
-				"fromModule": {
-					"callback": "clearFrame"
-				},
-				"params": {
-					"title": "Clear Frame"
-				}
-			},
-			{
-				"type": "button",
-				"key": "z",
-				"fromModule": {
-					"callback": "cutLastSegment"
-				},
-				"params": {
-					"title": "Cut Segment"
-				}
-			},
-			{
-				"type": "button",
-				"key": "shift-z",
-				"fromModule": {
-					"callback": "cutLastLine"
-				},
-				"params": {
-					"title": "Cut Last Line"
-				}
-			},
-			{
-				"type": "button",
-				"key": "ctrl-z",
-				"fromModule": {
-					"callback": "undo"
-				},
-				"params": {
-					"title": "Undo"
 				}
 			},
 			{
@@ -449,6 +449,7 @@
 				"type": "text",
 				"key": "shift-l",
 				"blur": true,
+				"face": "onionSkinNum",
 				"fromModule": {
 					"callback": "setOnionSkin"
 				},
