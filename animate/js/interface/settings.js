@@ -59,6 +59,8 @@ function Settings(panel) {
 		lns.ui.faces.lineColor.setValue(settings.lineColor);
 		lns.ui.faces.bgColor.setValue(settings.canvasColor);
 		lns.ui.faces.lineWidth.setValue(settings.lineWidth);
+		lns.ui.faces.fps.setValue(settings.fps);
+		lns.ui.faces.lps.setValue(settings.lps);
 	};
 
 	this.canvasLoad = function() {

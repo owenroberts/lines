@@ -434,6 +434,7 @@
 				"type": "text",
 				"key": "'",
 				"blur": true,
+				"face": "lps",
 				"fromModule": {
 					"callback": "setLps",
 					"value": "lps"

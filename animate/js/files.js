@@ -115,12 +115,13 @@ function Files(params) {
 
 		lns.numFrames += 1; /* plus frame */
 
-		/* set interface values */
 		lns.canvas.setWidth(data.w);
 		lns.canvas.setHeight(data.h);
 		lns.render.setFps(data.fps);
 		if (data.bg) lns.canvas.setBGColor(data.bg);
 		lns.render.reset();
+
+		lns.ui.faces.fps.setValue(data.fps);
 
 		if (callback) callback(data, params);
 	};
@@ -154,6 +155,7 @@ function Files(params) {
 				return function(e) {
 				self.fileName = f.name.split('.')[0];
 				self.loadJSON(JSON.parse(e.target.result));
+				lns.ui.fio.title.setValue(self.fileName);
           	};
         	})(f);
         	reader.readAsText(f);
