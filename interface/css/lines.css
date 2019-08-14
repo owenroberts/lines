@@ -21,7 +21,7 @@ select {
   margin-top: 0.25em;
 }
 
-*[title]:hover:after, .press:after {
+.desktop *[title]:hover:after, .press:after {
   content: "~ " attr(title);
   position: fixed;
   top: 40px;

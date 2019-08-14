@@ -53,7 +53,7 @@ select {
 }
 
 /* this is kind of doubled up but fix later */
-*[title]:hover:after, .press:after {
+.desktop *[title]:hover:after, .press:after {
 	@extend %tool-tip;
 }
 
@@ -231,7 +231,6 @@ select {
 }
 
 .mobile {
-	
 	.menu-panel {
 		flex-basis: 180px;
 		max-width: 220px;
@@ -240,9 +239,7 @@ select {
 			flex-basis: 50px;
 		}
 	}
-
 	.btn, select, input {
 		font-size: 1.75em;
 	}
-
 }
