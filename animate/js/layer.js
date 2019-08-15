@@ -16,6 +16,10 @@ class Layer {
 		delete this.prevColor;
 	}
 
+	single() {
+		
+	}
+
 	toggle() {
 		this.c = this.toggled ? this.prevColor : "#00CC96";
 		this.toggled = !this.toggled;
