@@ -64,7 +64,7 @@ function start() {
 	edi.ui.selectScene = new UISelect({
 		id: "select-scene",
 		label: "scene:",
-		options: Game.scenes,
+		options: Game.scenes.length || [ 'game' ],
 		selected: Game.scene,
 		callback: function(value) {
 			Game.scene = value;

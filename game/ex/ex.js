@@ -20,7 +20,7 @@ Game.initLettering('letters.json'); // create letters for each game
 
 /* usually in spearate data files */
 const title = new Text(10, 40, "welcome to the game", 10, Game.letters);
-const joinGame = new UI({
+const joinGame = new Button({
 	x: 200,
 	y: 20,
 	src: 'join_game.json',

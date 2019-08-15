@@ -38,7 +38,6 @@ function Data(params) {
 		f.onwriteend = function() { 
 			self.download(ui, 'ui.json');
 		};
-		
 	};
 
 	this.download = function(data, fileName) {
@@ -48,7 +47,6 @@ function Data(params) {
 	};
 
 	this.load = function(callback) {
-	
 	};
 
 	this.loadSprites = function(file, json) {
@@ -66,9 +64,7 @@ function Data(params) {
 	this.dropSprite = function(fileName, json, x, y) {
 		Game.sprites[fileName] = new Item({ label: fileName, center: true, ...edi.zoom.translate(x, y) });
 		Game.sprites[fileName].scenes = [Game.scene];
-		Game.sprites[fileName].addJSON(json, function() {
-			Game.sprites[fileName].center();
-		});
+		Game.sprites[fileName].addJSON(json);
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {

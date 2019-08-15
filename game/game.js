@@ -41,10 +41,18 @@ const Game = {
 			const file = files[f];
 			Game.assetsLoaded[f] = false;
 			fetch(file)
-				.then(response => { return response.json() })
+				.then(response => {
+					if (response.ok) return response.json();
+					// console.log(response);
+					throw new Error('Network response was not ok.');
+				})
 				.then(json => {
 					Game.assetsLoaded[f] = true;
 					handler(f, json); /* game loaded to specific scenes, editor loads to generic sprites */
+				})
+				.catch(error => {
+					console.error(error);
+					Game.assetsLoaded[f] = true;
 				});
 		}
 

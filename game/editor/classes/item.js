@@ -83,7 +83,6 @@ class Item extends Sprite {
 	}
 
 	set selected(select) {
-		console.log('select', select);
 		this._selected = select;
 		this.displayLabel = select;
 		this.outline = select;
