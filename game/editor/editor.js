@@ -2,6 +2,12 @@ const edi = {}; /* editor app */
 edi.ui = new Interface(edi);
 edi.ui.load('interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
+edi.ui.displayTextures = function() {
+	for (const key in Game.sprites.textures) {
+		Game.sprites.textures[key].removeUI();
+		Game.sprites.textures[key].addUI();
+	}
+}; /* needs to go in module */
 edi.ui.markers = {};
 
 edi.zoom = new Zoom();
@@ -90,9 +96,10 @@ function draw() {
 	}
 
 	/* draw sprites -- data, scenes? */
-	for (const key in Game.sprites) {
-		if (Game.sprites[key].scenes.includes(Game.scene)) 
-			Game.sprites[key].display(edi.zoom.view);
+	for (const type in Game.sprites) {
+		for (const key in Game.sprites[type])
+			if (Game.sprites[type][key].scenes.includes(Game.scene)) 
+				Game.sprites[type][key].display(edi.zoom.view);
 	}
 
 	if (edi.tool.current == 'ruler') edi.ruler.display();
@@ -125,43 +132,48 @@ function mouseMoved(x, y, button) {
 function mouseDown(x, y, button) {
 	if (button == 1) {
 
-		const item = intersectItems(x, y);
-
-		if (edi.tool.item) {
-			if (item && edi.tool.item != item) {
-				edi.tool.item.selected = false;
+		if (edi.tool.current == 'location') {
+			const {_x, _y} = edi.zoom.translate(x, y);
+			console.log(_x, _y);
+			edi.tool.callback(_x, _y);
+		} else {
+			const item = intersectItems(x, y);
+			if (edi.tool.item) {
+				if (item && edi.tool.item != item) {
+					edi.tool.item.selected = false;
+					edi.tool.item = item;
+					edi.tool.item.selected = true;
+				} else if (!item) {
+					edi.tool.item.selected = false;
+					edi.tool.item = undefined;
+				}
+			} else if (item) {
 				edi.tool.item = item;
 				edi.tool.item.selected = true;
-			} else if (!item) {
-				edi.tool.item.selected = false;
-				edi.tool.item = undefined;
 			}
-		} else if (item) {
-			edi.tool.item = item;
-			edi.tool.item.selected = true;
+			
+			edi.zoom.mouseDown = true;
+	
+			/* can this happen in zoom module probably */
+			if (!edi.zoom.previous.x) edi.zoom.previous.x = x;
+			if (!edi.zoom.previous.y) edi.zoom.previous.y = y;
 		}
-		
-		edi.zoom.mouseDown = true;
-
-		/* can this happen in zoom module probably */
-		if (!edi.zoom.previous.x) edi.zoom.previous.x = x;
-		if (!edi.zoom.previous.y) edi.zoom.previous.y = y;
 	}
 }
 
 /* does button matter ?? */
 function mouseUp(x, y, button) {
-	if (button == 1) {
-		edi.zoom.mouseDown = false;
-	}
+	if (button == 1) edi.zoom.mouseDown = false;
 } 
 
 /* what module should this be in??? */
 function intersectItems(x, y, move) {
-	for (const key in Game.sprites) {
-		if (Game.sprites[key].scenes.includes(Game.scene)) {
-			const intersect = Game.sprites[key].mouseOver(x, y, edi.zoom);
-			if (intersect) return intersect;
+	for (const type in Game.sprites) {
+		for (const key in Game.sprites[type]) {
+			if (Game.sprites[type][key].scenes.includes(Game.scene)) {
+				const intersect = Game.sprites[type][key].mouseOver(x, y, edi.zoom);
+				if (intersect) return intersect;
+			}
 		}
 	}
 

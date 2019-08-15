@@ -2,22 +2,25 @@ class Item extends Sprite {
 	constructor(params, src, debug) {
 		super(params.x, params.y);
 		this.debug = debug;
+
+		if (debug) console.log(params);
+
 		this.displayLabel = false;
 		this.outline = false;
 		this.label = params.label;
 		this.src = src || params.src;
 		if (this.src) {
 			const self = this;
-			self.addAnimation(self.src, function() {
-				// self.center();
-			});
+			self.addAnimation(self.src);
 			self.animation.states = params.states || { idle: { start: 0, end: 0 } };
 			self.animation.state = params.state || 'idle';
 			self.animation.randomFrames = params.r || false;
+		} else {
+			this.animation = new Animation();
 		}
 
 		this.scenes = params.scenes;
-		this.type = params.file;
+		// this.type = params.file;
 
 		this.center = params.center || true;
 
@@ -33,11 +36,6 @@ class Item extends Sprite {
 
 		if (this.displayLabel) this.drawLabel();
 		if (this.outline) this.drawOutline();
-
-		Game.ctx.strokeStyle = this.uiColor;
-		Game.ctx.beginPath();
-		Game.ctx.arc(this.position.x, this.position.y, 5, 0, 2 * Math.PI, false);
-		Game.ctx.stroke();
 	}
 
 	isInMapBounds(view) {
@@ -52,23 +50,24 @@ class Item extends Sprite {
 	}
 
 	drawLabel() {
-		const {x, y} = this.getCenter();
-		Game.ctx.fillText(this.label, x, y);
+		Game.ctx.fillText(this.label, this.xy.x, this.xy.y);
 	}
 
 	drawOutline() {
-		const {x, y} = this.getCenter();
-		Game.ctx.strokeRect(x, y, this.width, this.height);
+		Game.ctx.strokeRect(this.xy.x, this.xy.y, this.width, this.height);
+		Game.ctx.strokeStyle = this.uiColor;
+		Game.ctx.beginPath();
+		Game.ctx.arc(this.position.x, this.position.y, 5, 0, 2 * Math.PI, false);
+		Game.ctx.stroke();
 	}
 
 	mouseOver(_x, _y, zoom) {
 		if (this.isInMapBounds(zoom.view)) {
 			const {x, y} = zoom.translate(_x, _y);
-			const xy = this.getCenter();
-			if (x > xy.x &&
-				x < xy.x + this.width &&
-				y > xy.y &&
-				y < xy.y + this.height) {
+			if (x > this.xy.x &&
+				x < this.xy.x + this.width &&
+				y > this.xy.y &&
+				y < this.xy.y + this.height) {
 				this.displayLabel = true;
 				this.outline = true;
 				return this;
@@ -82,6 +81,7 @@ class Item extends Sprite {
 		}
 	}
 
+	/* isSelected ? */
 	set selected(select) {
 		this._selected = select;
 		this.displayLabel = select;

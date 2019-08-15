@@ -116,6 +116,7 @@ class Sprite {
 
 	/* better name for this ... */
 	get xy() {
+		// console.log(this.position, this.center, this.width, this.height);
 		if (this.center) {
 			return {
 				x: this.position.x - (this.center ? this.width/2 : 0),
