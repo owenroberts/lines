@@ -89,7 +89,7 @@ function Zoom() {
 		const scale = self.canvas.width / self.view.width;
 		x = x / scale + self.view.x - Game.width/2;
 		y = y / scale + self.view.y - Game.height/2;
-		return {x: x, y: y};
+		return {x: Math.round(x), y: Math.round(y)};
 	};
 
 	/* based on zoom: http://www.cs.colostate.edu/~anderson/newsite/javascript-zoom.html*/

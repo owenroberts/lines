@@ -230,6 +230,18 @@ select {
 	width: 100%;
 }
 
+.modal {
+	position: fixed;
+    background: white;
+    padding: 1em;
+    border-radius: 1em;
+    border: 1px solid $main-color;
+    top: 2em;
+    right: 2em;
+    width: 25%;
+    * { margin: 0 1em; }
+}
+
 .mobile {
 	.menu-panel {
 		flex-basis: 180px;

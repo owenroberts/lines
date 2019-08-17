@@ -43,20 +43,39 @@ function Data(app, params) {
 
 	this.dropSprite = function(fileName, json, x, y) {
 		/* prompts for now, use modal or something ... */
-		const mod = prompt("ui or sprites?");
-		let location, type;
-		if (mod == 'sprites') {
-			type = prompt('type? (scenery, textures)');
-			location = app[mod][type];
-		} else {
-			type = 'ui';
-		}
-		location[fileName] = new classes[type]({ 
-			label: fileName,
-			src: `${params.path}/sprites/${fileName}.json`,
-			scenes: [app.scene],
-			...edi.zoom.translate(x, y) 
+
+		let mod = 'sprites', type = 'scenery';
+		let location; 
+
+		const modal = new Modal("Add Sprite", function() {
+			console.log('callback')
+			if (mod == 'ui') location = app[mod];
+			else location = app[mod][type];
+			
+			location[fileName] = new app.classes[type]({ 
+				label: fileName,
+				src: `${params.path}/sprites/${fileName}.json`,
+				scenes: [app.scene],
+				...edi.zoom.translate(x, y) 
+			});
+			console.log(location[fileName])
 		});
+
+		modal.add(new UISelect({
+			options: ['ui', 'sprites'],
+			selected: mod,
+			callback: function(value) {
+				mod = value;
+			}
+		}));
+
+		modal.add(new UISelect({
+			options: ['scenery', 'textures'],
+			selected: type,
+			callback: function(value) {
+				type = value;
+			}
+		}));
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {

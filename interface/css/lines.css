@@ -229,6 +229,20 @@ select {
   width: 100%;
 }
 
+.modal {
+  position: fixed;
+  background: white;
+  padding: 1em;
+  border-radius: 1em;
+  border: 1px solid lightblue;
+  top: 2em;
+  right: 2em;
+  width: 25%;
+}
+.modal * {
+  margin: 0 1em;
+}
+
 .mobile .menu-panel {
   flex-basis: 180px;
   max-width: 220px;
