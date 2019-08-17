@@ -4,8 +4,8 @@ edi.ui.load('interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
 edi.ui.displayTextures = function() {
 	for (const key in Game.sprites.textures) {
-		Game.sprites.textures[key].removeUI();
-		Game.sprites.textures[key].createUI();
+		Game.sprites.textures[key].ui.removeUI();
+		Game.sprites.textures[key].ui.createUI();
 	}
 }; /* needs to go in module */
 edi.ui.markers = {};
@@ -127,7 +127,7 @@ function mouseMoved(x, y, button) {
 		if (edi.zoom.mouseDown) {
 			const delta = edi.zoom.getDelta(x, y);
 			if (edi.tool.current == 'transform' && edi.tool.item) 
-				edi.tool.item.update(delta);
+				edi.tool.item.update({ x: Math.round(delta.x), y: Math.round(delta.y) });
 			else 
 				edi.zoom.updateView(delta.x, delta.y);
 		}

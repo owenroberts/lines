@@ -6,10 +6,7 @@ class ItemEdit extends Item {
 		this.outline = false;
 		this.label = params.label;
 
-		this.ui = {};
-		this.uiAdded = false;
-
-		this.uiColor = '#ff00ff';
+		this.ui = new EditUI(this.createUI.bind(this), edi.ui.panels.items); /* this is fucked right? */
 	}
 
 	display(view) {
@@ -37,7 +34,7 @@ class ItemEdit extends Item {
 
 	drawOutline() {
 		Game.ctx.strokeRect(this.xy.x, this.xy.y, this.width, this.height);
-		Game.ctx.strokeStyle = this.uiColor;
+		Game.ctx.strokeStyle = this.ui.color; /* ? */
 		Game.ctx.beginPath();
 		Game.ctx.arc(this.position.x, this.position.y, 5, 0, 2 * Math.PI, false);
 		Game.ctx.stroke();
@@ -69,8 +66,8 @@ class ItemEdit extends Item {
 		this._selected = select;
 		this.displayLabel = select;
 		this.outline = select;
-		if (select) this.addUI();
-		else this.removeUI();
+		if (select) this.ui.addUI();
+		else this.ui.removeUI();
 	}
 
 	get selected() {
@@ -78,34 +75,15 @@ class ItemEdit extends Item {
 	}
 
 	update(offset) {
-		this.position.add(offset.round());
-		if (this.ui.x) this.ui.x.setValue(this.position.x);
-		if (this.ui.y) this.ui.y.setValue(this.position.y);
+		this.position.add(offset);
+		this.ui.update({ x: this.position.x, y: this.position.y });
 	}
-
-	addUI() {
-		if (!this.row) this.row = edi.ui.panels.items.addRow();
-		if (this.ui.label && !this.uiAdded) {
-			this.uiAdded = true;
-			for (const key in this.ui) {
-				const ui = this.ui[key];
-				if (Array.isArray(ui)) {
-					for (let i = 0; i < ui.length; i++) {
-						edi.ui.panels.items.add(ui[i], this.row);
-					}
-				} else {
-					edi.ui.panels.items.add(ui, this.row);
-				}
-			}
-		} else if (!this.ui.label) {
-			this.createUI();
-		}
-	}
+	
 
 	createUI() {
 		const self = this;
-		
-		this.ui.label = new UIText({
+
+		this.ui.uis.label = new UIText({
 			title: this.label,
 			block: true,
 			callback: function(value) {
@@ -113,7 +91,7 @@ class ItemEdit extends Item {
 			}
 		});
 		
-		this.ui.x = new UIText({
+		this.ui.uis.x = new UIText({
 			label: "x",
 			value: self.position.x,
 			callback: function(value) {
@@ -121,7 +99,7 @@ class ItemEdit extends Item {
 			}
 		});
 
-		this.ui.y = new UIText({
+		this.ui.uis.y = new UIText({
 			label: "y",
 			value: self.position.y,
 			callback: function(value) {
@@ -129,24 +107,24 @@ class ItemEdit extends Item {
 			}
 		});
 
-		this.ui.sceneSelectors = [];
+		this.ui.uis.sceneSelectors = [];
 
 		function addSceneSelector(scene, index) {
-			self.ui.sceneSelectors[index] = new UISelect({
+			self.ui.uis.sceneSelectors[index] = new UISelect({
 				options: Game.scenes,
 				selected: scene,
 				callback: function(value) {
 					self.scenes[index] = value;
 				}
 			});
-			return self.ui.sceneSelectors[index];
+			return self.ui.uis.sceneSelectors[index];
 		}
 
 		for (let i = 0; i < this.scenes.length; i++) {
-			this.ui.sceneSelectors.push(addSceneSelector(this.scenes[i], i));
+			this.ui.uis.sceneSelectors.push(addSceneSelector(this.scenes[i], i));
 		}
 
-		this.ui.addScene = new UIButton({
+		this.ui.uis.addScene = new UIButton({
 			title: "+ scene",
 			callback: function() {
 				const s = addSceneSelector(Game.scenes[0], self.scenes.length);
@@ -154,12 +132,7 @@ class ItemEdit extends Item {
 			}
 		});
 
-		this.addUI();
-	}
-
-	removeUI() {
-		edi.ui.panels.items.clearComponents(this.row);
-		this.uiAdded = false;
+		this.ui.addUI();
 	}
 
 	get data() {

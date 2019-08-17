@@ -7,8 +7,7 @@ class TextureEdit extends Texture {
 			this.locations = [{x: params.x, y: params.y}];
 		}
 
-		this.ui = {};
-		this.uiAdded = false;
+		this.ui = new EditUI(this.createUI.bind(this), edi.ui.panels.textures); /* this is fucked right? */
 	}
 
 	/* doesn't start over if more locations */
@@ -23,8 +22,8 @@ class TextureEdit extends Texture {
 	addLocation(x, y) {
 		this.addItem(this.locations.length, { x: Math.round(x), y: Math.round(y) }, this.params);		
 		this.locations.push({ x: Math.round(x), y: Math.round(y) });
-		this.removeUI();
-		this.createUI();
+		this.ui.removeUI();
+		this.ui.createUI();
 	}
 
 	display(view) {
@@ -42,31 +41,11 @@ class TextureEdit extends Texture {
 		return item;
 	}
 
-	/* fucked up repeating this shit ... */
-	addUI() {
-		if (!this.row) this.row = edi.ui.panels.textures.addRow();
-		if (this.ui.label && !this.uiAdded) {
-			this.uiAdded = true;
-			for (const key in this.ui) {
-				const ui = this.ui[key];
-				if (Array.isArray(ui)) {
-					for (let i = 0; i < ui.length; i++) {
-						edi.ui.panels.textures.add(ui[i], this.row);
-					}
-				} else {
-					edi.ui.panels.textures.add(ui, this.row);
-				}
-			}
-		} else if (!this.ui.label) {
-			this.createUI();
-		}
-	}
-
 	createUI() {
 		const self = this;
 
 		/* repeated in item */
-		this.ui.label = new UIText({
+		this.ui.uis.label = new UIText({
 			title: this.label,
 			block: true,
 			callback: function(value) {
@@ -74,7 +53,7 @@ class TextureEdit extends Texture {
 			}
 		});
 
-		this.ui.add = new UIButton({
+		this.ui.uis.add = new UIButton({
 			title: "Add",
 			callback: function() {
 				edi.tool.set('location');
@@ -86,7 +65,7 @@ class TextureEdit extends Texture {
 			}
 		});
 
-		this.ui.frame = new UISelect({
+		this.ui.uis.frame = new UISelect({
 			options: [ 'index', 'random' ],
 			selected: self.frame,
 			callback: function(value) {
@@ -106,12 +85,7 @@ class TextureEdit extends Texture {
 			}
 		});
 		
-		this.addUI();
-	}
-
-	removeUI() {
-		edi.ui.panels.textures.clearComponents(this.row);
-		this.uiAdded = false;
+		this.ui.addUI();
 	}
 
 	get data() {
