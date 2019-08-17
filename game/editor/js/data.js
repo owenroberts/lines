@@ -1,4 +1,4 @@
-function Data(app, classes, params) {
+function Data(app, params) {
 	const self = this;
 
 	/* from animate/js/files ... combine? */
@@ -39,37 +39,6 @@ function Data(app, classes, params) {
 		const json = JSON.stringify(data);
 		const blob = new Blob([json], { type: "application/x-download;charset=utf-8" });
 		return saveAs(blob, fileName);
-	};
-
-	function traverse(o, path, callback) {
-		for (const k in o) {
-			if (o[k].src) {
-				callback(k, o[k], [...path]);
-			} else if (o[k] !== null && typeof(o[k]) == 'object') {
-				traverse(o[k], [...path, k], callback);
-			}
-		}
-	}
-
-	/* de couple this shit */
-	this.loadSprites = function(file, json) {
-		traverse(json, [], function(key, value, path) {
-			let location = app[file];
-			for (let i = 0; i < path.length; i++) {
-				const loc = path[i];
-				if (!location[loc]) location[loc] = {};
-				location = location[loc];
-			}
-			const type = path.pop();
-			const params = { label: key, ...value };
-
-			location[key] = new classes[type](params);
-
-			for (let i = 0; i < location[key].scenes.length; i++) {
-				const scene = location[key].scenes[i];
-				if (!app.scenes.includes(scene)) app.scenes.push(scene);
-			}
-		});
 	};
 
 	this.dropSprite = function(fileName, json, x, y) {
@@ -129,7 +98,6 @@ function Data(app, classes, params) {
 	function dragOverHandler(ev) {
 		ev.preventDefault();
 	}
-
 	
 	window.addEventListener("beforeunload", function(ev) {
 		if (self.saveSettingsOnUnload) lns.ui.settings.saveSettings();

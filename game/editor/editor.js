@@ -51,11 +51,8 @@ Game.init({
 	mixedColors: true
 });
 
-edi.data = new Data(Game, 
-	{ ui: GUI, scenery: ItemEdit, textures: TextureEdit },
-	{ save: false, path: '/drawings' }
-); 
-Game.load({ ui: "/data/ui.json", sprites: "/data/sprites.json" }, edi.data.loadSprites, Game.start);
+edi.data = new Data(Game, { save: false, path: '/drawings' }); 
+Game.load({ ui: "/data/ui.json", sprites: "/data/sprites.json" }, { ui: GUI, scenery: ItemEdit, textures: TextureEdit }, Game.start);
 
 function start() {
 	edi.zoom.canvas.width = edi.zoom.view.width = Game.width;

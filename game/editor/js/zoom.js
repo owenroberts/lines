@@ -79,7 +79,7 @@ function Zoom() {
 		}
 	};
 
-	this.reset = function() {
+	this.center = function() {
 		self.canvas = { width: Game.width, height: Game.height };
 		self.view = { x: 0, y: 0, width: Game.width, height: Game.height };
 		self.previous = { x: undefined, y: undefined }; 
