@@ -1,25 +1,10 @@
-class Item extends Sprite {
+class ItemEdit extends Item {
 	constructor(params, src, debug) {
-		super(params.x, params.y);
-		this.debug = debug;
-
-		if (debug) console.log(params);
-
+		super(params, src, debug);
+		
 		this.displayLabel = false;
 		this.outline = false;
 		this.label = params.label;
-		this.src = src || params.src;
-		if (this.src) {
-			const self = this;
-			self.addAnimation(self.src);
-			self.animation.states = params.states || { idle: { start: 0, end: 0 } };
-			self.animation.state = params.state || 'idle';
-		} else {
-			this.animation = new Animation();
-		}
-
-		this.scenes = params.scenes;
-		this.center = params.center || true;
 
 		this.ui = {};
 		this.uiAdded = false;
@@ -92,9 +77,8 @@ class Item extends Sprite {
 		return this._selected;
 	}
 
-	updatePosition(x, y) {
-		this.position.x += Math.round(x);
-		this.position.y += Math.round(y);
+	update(offset) {
+		this.position.add(offset.round());
 		if (this.ui.x) this.ui.x.setValue(this.position.x);
 		if (this.ui.y) this.ui.y.setValue(this.position.y);
 	}

@@ -52,7 +52,7 @@ Game.init({
 });
 
 edi.data = new Data(Game, 
-	{ ui: GUI, scenery: Item, textures: Texture },
+	{ ui: GUI, scenery: ItemEdit, textures: TextureEdit },
 	{ save: false, path: '/drawings' }
 ); 
 Game.load({ ui: "/data/ui.json", sprites: "/data/sprites.json" }, edi.data.loadSprites, Game.start);
@@ -127,7 +127,7 @@ function mouseMoved(x, y, button) {
 		if (edi.zoom.mouseDown) {
 			const delta = edi.zoom.getDelta(x, y);
 			if (edi.tool.current == 'transform' && edi.tool.item) 
-				edi.tool.item.updatePosition(delta.x, delta.y);
+				edi.tool.item.update(delta);
 			else 
 				edi.zoom.updateView(delta.x, delta.y);
 		}

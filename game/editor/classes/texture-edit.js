@@ -1,11 +1,7 @@
-class Texture {
+class TextureEdit extends Texture {
 	constructor(params, debug) {
-		this.params = params;
+		super(params, debug);
 		this.label = params.label;
-		this.scenes = params.scenes;
-		this.locations = params.locations;
-		this.items = [];
-		this.frame = params.frame || 'index';
 
 		if (params.x && !params.locations) {
 			this.locations = [{x: params.x, y: params.y}];
@@ -13,29 +9,11 @@ class Texture {
 
 		this.ui = {};
 		this.uiAdded = false;
-
-		if (params.src) {
-			fetch(params.src)
-				.then(response => { return response.json(); })
-				.then(json => {
-					this.json = json;
-					for (let i = 0; i < this.locations.length; i++) {
-						this.addItem(i, this.locations[i]);
-					}
-			});
-		}
-	}
-
-	addJSON(json) {
-		this.json = json;
-		for (let i = 0; i < this.locations.length; i++) {
-			this.addItem(i, this.locations[i]);
-		}
 	}
 
 	/* doesn't start over if more locations */
 	addItem(index, location) {
-		const item = new Item({label: `${this.label} ${index}`, x: location.x, y: location.y, scenes: this.scenes});
+		const item = new ItemEdit({label: `${this.label} ${index}`, x: location.x, y: location.y, scenes: this.scenes});
 		item.addJSON(this.json);
 		if (this.frame == 'index') item.animation.createNewState('still', index, index);
 		else if (this.frame == 'random') item.animation.randomFrames = true;
