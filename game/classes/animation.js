@@ -67,6 +67,12 @@ class Animation {
 			this.drawings[i] = d;
 		}
 		this.layers = json.l;
+		for (let i = 0; i < this.layers.length; i++) {
+			if (this.numFrames < this.layers[i].f.e)
+				this.numFrames = this.layers[i].f.e;
+		}
+
+
 
 		if (this.states.default)
 			this.states.default.end = this.numFrames;
@@ -234,10 +240,11 @@ class Animation {
 		if (this.currentFrame <= this.states[this.state].end) {
 			this.currentFrameCounter += this.intervalRatio;
 			if (this.randomFrames && this.currentFrame != Math.floor(this.currentFrameCounter)) {
+				console.log('random');
 				if (this.prevFrameCheck) {
 					const prevFrame = this.currentFrame;
 					while (prevFrame == this.currentFrame) {
-						this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
+						this.currentFrame = this.currentFrameCounter = Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);
 					}
 				} else {
 					this.currentFrame = this.currentFrameCounter =  Cool.randomInt(this.states[this.state].start, this.states[this.state].end - 1);

@@ -16,22 +16,17 @@ function Data(params) {
 		const sprites = {};
 		const ui = {};
 
-		for (const key in Game.sprites) {
-			const s = Game.sprites[key];
-			sprites[key] = {
-				src: `${params.path}sprites/${s.label}.json`,
-				x: s.position.x, /* kinda dumb "uncentering" here */
-				y: s.position.y,
-				states: s.animation.states,
-				state: s.animation.state,
-				scenes: s.scenes
-			};
+		for (const type in Game.sprites) {
+			if (!sprites[type]) sprites[type] = {};
+			for (const key in Game.sprites[type]) {
+				sprites[type][key] = Game.sprites[type][key].data;
+			}
 		}
 
 		for (const key in Game.ui) {
 			const s = Game.ui[key];
 			ui[key] = {
-				src: `${params.path}ui/${s.label}.json`,
+				src: `${params.path}/ui/${s.label}.json`,
 				x: s.x,
 				y: s.y,
 				states: s.animation.states,
@@ -57,16 +52,18 @@ function Data(params) {
 
 	function traverse(o, path, callback) {
 		for (const k in o) {
+			console.log(k, path);
 			if (o[k].src) {
 				callback(k, o[k], path);
 			} else if (o[k] !== null && typeof(o[k]) == 'object') {
+				console.log(k, [...path, k]);
 				traverse(o[k], [...path, k], callback);
 			}
 		}
 	}
 
 	this.loadSprites = function(file, json) {
-		
+
 		/* extremely over complicated way of loading things without knowing where they are 
 			doesn't allow for arrays at the moment .... */
 
@@ -79,7 +76,13 @@ function Data(params) {
 			}
 			const type = path.pop();
 			const params = { label: key, ...value };
+
 			location[key] = new self.classes[type](params);
+
+			for (let i = 0; i < location[key].scenes.length; i++) {
+				const scene = location[key].scenes[i];
+				if (!Game.scenes.includes(scene)) Game.scenes.push(scene);
+			}
 		});
 
 		// for (const key in json) {
@@ -92,11 +95,23 @@ function Data(params) {
 		// }
 	};
 
-	/* drop ui ? */
 	this.dropSprite = function(fileName, json, x, y) {
-		Game.sprites[fileName] = new Item({ label: fileName, center: true, ...edi.zoom.translate(x, y) });
-		Game.sprites[fileName].scenes = [Game.scene];
-		Game.sprites[fileName].addJSON(json);
+		/* prompts for now, use modal or something ... */
+		const mod = prompt("ui or sprites?");
+		let location, type;
+		if (mod == 'sprites') {
+			type = prompt('type? (scenery, textures)');
+			location = Game[mod][type];
+		} else {
+			type = 'ui';
+		}
+		location[fileName] = new self.classes[type]({ 
+			label: fileName,
+			src: `${params.path}/sprites/${fileName}.json`,
+			scenes: [Game.scene],
+			...edi.zoom.translate(x, y) 
+		});
+		// location[fileName].addJSON(json);
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -121,8 +136,11 @@ function Data(params) {
         	const reader = new FileReader();
 			reader.onload = (function(theFile) {
 				return function(e) {
-
-					self.dropSprite(f.name.split('.')[0], JSON.parse(e.target.result), ev.offsetX, ev.offsetY);
+					self.dropSprite(
+						f.name.split('.')[0], 
+						JSON.parse(e.target.result), 
+						ev.offsetX, ev.offsetY
+					);
           		};
         	})(f);
         	reader.readAsText(f);

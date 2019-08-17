@@ -13,7 +13,8 @@ class UI {
 		if (params.prompt) this.prompt = params.prompt;
 		if (params.value != undefined) this.el.value = params.value;
 		if (params.key) this.setKey(params.key, params.title || params.label);
-
+		if (params.block) this.addClass('block');
+		
 		if (params.css) {
 			for (const key in params.css) {
 				this.el.style[key] = params.css[key];

@@ -4,7 +4,6 @@ function Settings(app, name, appSave, appLoad) {
 	this.name = `settings-${name}`;
 
 	this.save = function() {
-		
 		const settings = appSave ? { ...appSave() } : {};
 		settings.panels = {};
 		for (const p in app.ui.panels) {

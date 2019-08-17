@@ -14,14 +14,11 @@ class Item extends Sprite {
 			self.addAnimation(self.src);
 			self.animation.states = params.states || { idle: { start: 0, end: 0 } };
 			self.animation.state = params.state || 'idle';
-			self.animation.randomFrames = params.r || false;
 		} else {
 			this.animation = new Animation();
 		}
 
 		this.scenes = params.scenes;
-		// this.type = params.file;
-
 		this.center = params.center || true;
 
 		this.ui = {};
@@ -61,13 +58,14 @@ class Item extends Sprite {
 		Game.ctx.stroke();
 	}
 
-	mouseOver(_x, _y, zoom) {
+	mouseOver(x, y, zoom) {
+		// console.log(this.label);
 		if (this.isInMapBounds(zoom.view)) {
-			const {x, y} = zoom.translate(_x, _y);
-			if (x > this.xy.x &&
-				x < this.xy.x + this.width &&
-				y > this.xy.y &&
-				y < this.xy.y + this.height) {
+			const xy = zoom.translate(x, y);
+			if (xy.x > this.xy.x &&
+				xy.x < this.xy.x + this.width &&
+				xy.y > this.xy.y &&
+				xy.y < this.xy.y + this.height) {
 				this.displayLabel = true;
 				this.outline = true;
 				return this;
@@ -102,6 +100,7 @@ class Item extends Sprite {
 	}
 
 	addUI() {
+		if (!this.row) this.row = edi.ui.panels.items.addRow();
 		if (this.ui.label && !this.uiAdded) {
 			this.uiAdded = true;
 			for (const key in this.ui) {
@@ -115,7 +114,6 @@ class Item extends Sprite {
 				}
 			}
 		} else if (!this.ui.label) {
-			this.row = edi.ui.panels.items.addRow();
 			this.createUI();
 		}
 	}
@@ -151,7 +149,6 @@ class Item extends Sprite {
 
 		function addSceneSelector(scene, index) {
 			self.ui.sceneSelectors[index] = new UISelect({
-				// label: 'scene:',
 				options: Game.scenes,
 				selected: scene,
 				callback: function(value) {
@@ -162,7 +159,7 @@ class Item extends Sprite {
 		}
 
 		for (let i = 0; i < this.scenes.length; i++) {
-			addSceneSelector(this.scenes[i], i);
+			this.ui.sceneSelectors.push(addSceneSelector(this.scenes[i], i));
 		}
 
 		this.ui.addScene = new UIButton({
@@ -179,5 +176,16 @@ class Item extends Sprite {
 	removeUI() {
 		edi.ui.panels.items.clearComponents(this.row);
 		this.uiAdded = false;
+	}
+
+	get data() {
+		return {
+			src: this.src,
+			x: this.position.x,
+			y: this.position.y,
+			states: this.animation.states,
+			state: this.animation.state,
+			scenes: this.scenes
+		};
 	}
 }

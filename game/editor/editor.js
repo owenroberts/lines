@@ -5,13 +5,13 @@ edi.ui.settings = new Settings(edi, 'edi');
 edi.ui.displayTextures = function() {
 	for (const key in Game.sprites.textures) {
 		Game.sprites.textures[key].removeUI();
-		Game.sprites.textures[key].addUI();
+		Game.sprites.textures[key].createUI();
 	}
 }; /* needs to go in module */
 edi.ui.markers = {};
 
 edi.zoom = new Zoom();
-edi.data = new Data({ save: false, path: '/drawings/' });
+edi.data = new Data({ save: false, path: '/drawings' });
 edi.ruler = new Ruler();
 edi.tool = {
 	set: function(_toolName) {
@@ -25,7 +25,7 @@ edi.tool = {
 /* move this somewhere else eventually ... */
 edi.ui.selectTool = new UISelect({
 	id: "select-tool",
-	options: [ "zoom", "transform", "ruler" ],
+	options: [ "zoom", "transform", "ruler", "location" ],
 	label: "tool:",
 	selected: edi.tool.current,
 	callback: edi.tool.set
@@ -70,7 +70,7 @@ function start() {
 	edi.ui.selectScene = new UISelect({
 		id: "select-scene",
 		label: "scene:",
-		options: Game.scenes.length || [ 'game' ],
+		options: Game.scenes.length ? Game.scenes : [ 'game' ],
 		selected: Game.scene,
 		callback: function(value) {
 			Game.scene = value;
@@ -133,9 +133,8 @@ function mouseDown(x, y, button) {
 	if (button == 1) {
 
 		if (edi.tool.current == 'location') {
-			const {_x, _y} = edi.zoom.translate(x, y);
-			console.log(_x, _y);
-			edi.tool.callback(_x, _y);
+			const xy = edi.zoom.translate(x, y);
+			edi.tool.callback(xy.x, xy.y);
 		} else {
 			const item = intersectItems(x, y);
 			if (edi.tool.item) {
