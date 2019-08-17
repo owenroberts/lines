@@ -39,7 +39,6 @@ const Game = {
 		Game.assetsLoaded = {};
 		for (const f in files) {
 			const file = files[f];
-			// console.log('file', f);
 			Game.assetsLoaded[f] = false;
 			fetch(file)
 				.then(response => {

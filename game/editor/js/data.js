@@ -1,30 +1,24 @@
-function Data(params) {
+function Data(app, classes, params) {
 	const self = this;
 
 	/* from animate/js/files ... combine? */
 	this.saveFiledEnabled = false;
 	this.saveSettingsOnUnload = params.save || false;
 
-	this.classes = {
-		ui: GUI,
-		scenery: Item,
-		textures: Texture
-	};
-
 	/* one file or multiple files ??? */
 	this.save = function() {
 		const sprites = {};
 		const ui = {};
 
-		for (const type in Game.sprites) {
+		for (const type in app.sprites) {
 			if (!sprites[type]) sprites[type] = {};
-			for (const key in Game.sprites[type]) {
-				sprites[type][key] = Game.sprites[type][key].data;
+			for (const key in app.sprites[type]) {
+				sprites[type][key] = app.sprites[type][key].data;
 			}
 		}
 
-		for (const key in Game.ui) {
-			const s = Game.ui[key];
+		for (const key in app.ui) {
+			const s = app.ui[key];
 			ui[key] = {
 				src: `${params.path}/ui/${s.label}.json`,
 				x: s.x,
@@ -47,9 +41,6 @@ function Data(params) {
 		return saveAs(blob, fileName);
 	};
 
-	this.load = function(callback) {
-	};
-
 	function traverse(o, path, callback) {
 		for (const k in o) {
 			if (o[k].src) {
@@ -60,10 +51,10 @@ function Data(params) {
 		}
 	}
 
+	/* de couple this shit */
 	this.loadSprites = function(file, json) {
-
 		traverse(json, [], function(key, value, path) {
-			let location = Game[file];
+			let location = app[file];
 			for (let i = 0; i < path.length; i++) {
 				const loc = path[i];
 				if (!location[loc]) location[loc] = {};
@@ -72,11 +63,11 @@ function Data(params) {
 			const type = path.pop();
 			const params = { label: key, ...value };
 
-			location[key] = new self.classes[type](params);
+			location[key] = new classes[type](params);
 
 			for (let i = 0; i < location[key].scenes.length; i++) {
 				const scene = location[key].scenes[i];
-				if (!Game.scenes.includes(scene)) Game.scenes.push(scene);
+				if (!app.scenes.includes(scene)) app.scenes.push(scene);
 			}
 		});
 	};
@@ -87,17 +78,16 @@ function Data(params) {
 		let location, type;
 		if (mod == 'sprites') {
 			type = prompt('type? (scenery, textures)');
-			location = Game[mod][type];
+			location = app[mod][type];
 		} else {
 			type = 'ui';
 		}
-		location[fileName] = new self.classes[type]({ 
+		location[fileName] = new classes[type]({ 
 			label: fileName,
 			src: `${params.path}/sprites/${fileName}.json`,
-			scenes: [Game.scene],
+			scenes: [app.scene],
 			...edi.zoom.translate(x, y) 
 		});
-		// location[fileName].addJSON(json);
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -105,8 +95,11 @@ function Data(params) {
 		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
 		
 		const nav = document.getElementById('map');
-		nav.addEventListener('dragover', dragOverHandler);
-		nav.addEventListener('drop', dropHandler);
+		if (nav) {
+			nav.addEventListener('dragover', dragOverHandler);
+			nav.addEventListener('drop', dropHandler);
+		}
+	
 		// https://gist.github.com/andjosh/7867934
 	}
 

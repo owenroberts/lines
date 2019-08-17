@@ -11,7 +11,7 @@ edi.ui.displayTextures = function() {
 edi.ui.markers = {};
 
 edi.zoom = new Zoom();
-edi.data = new Data({ save: false, path: '/drawings' });
+
 edi.ruler = new Ruler();
 edi.tool = {
 	set: function(_toolName) {
@@ -50,6 +50,11 @@ Game.init({
 	lps: 12,
 	mixedColors: true
 });
+
+edi.data = new Data(Game, 
+	{ ui: GUI, scenery: Item, textures: Texture },
+	{ save: false, path: '/drawings' }
+); 
 Game.load({ ui: "/data/ui.json", sprites: "/data/sprites.json" }, edi.data.loadSprites, Game.start);
 
 function start() {
