@@ -52,20 +52,15 @@ function Data(params) {
 
 	function traverse(o, path, callback) {
 		for (const k in o) {
-			console.log(k, path);
 			if (o[k].src) {
-				callback(k, o[k], path);
+				callback(k, o[k], [...path]);
 			} else if (o[k] !== null && typeof(o[k]) == 'object') {
-				console.log(k, [...path, k]);
 				traverse(o[k], [...path, k], callback);
 			}
 		}
 	}
 
 	this.loadSprites = function(file, json) {
-
-		/* extremely over complicated way of loading things without knowing where they are 
-			doesn't allow for arrays at the moment .... */
 
 		traverse(json, [], function(key, value, path) {
 			let location = Game[file];
@@ -84,15 +79,6 @@ function Data(params) {
 				if (!Game.scenes.includes(scene)) Game.scenes.push(scene);
 			}
 		});
-
-		// for (const key in json) {
-		// 	const params = { label: key, type: file, center: true, ...json[key] }
-		// 	Game[file][key] =  new self.classes[file](params);
-		// 	for (let i = 0; i < json[key].scenes.length; i++) {
-		// 		const scene = json[key].scenes[i];
-		// 		if (!Game.scenes.includes(scene)) Game.scenes.push(scene);
-		// 	}
-		// }
 	};
 
 	this.dropSprite = function(fileName, json, x, y) {

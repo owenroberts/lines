@@ -35,9 +35,7 @@ class Texture {
 
 	/* doesn't start over if more locations */
 	addItem(index, location) {
-		console.log(location);
-		const item = new Item({...this.params, x: location.x, y: location.y});
-		item.label += ` ${index}`;
+		const item = new Item({label: `${this.label} ${index}`, x: location.x, y: location.y, scenes: this.scenes});
 		item.addJSON(this.json);
 		if (this.frame == 'index') item.animation.createNewState('still', index, index);
 		else if (this.frame == 'random') item.animation.randomFrames = true;
@@ -129,35 +127,6 @@ class Texture {
 				/* item method ? */
 			}
 		});
-
-/* can just add don't need to fuck with positions
-		this.ui.locations = new UIDisplay({
-			text: `${this.label} locations`,
-			block: true
-		}); // hide and show locations
-		
-		for (let i = 0; i < this.items.length; i++) {
-			
-			const label = this.items[i].label;
-			const position = this.items[i].position;
-
-			this.ui[`${label}-x`] = new UIText({
-				label: `x`,
-				value: position.x,
-				callback: function(value) {
-					position.x = +value;
-				}
-			});
-
-			this.ui[`${label}-y`] = new UIText({
-				label: `y`,
-				value: position.y,
-				callback: function(value) {
-					position.y = +value;
-				}
-			});
-		}
-*/
 		
 		this.addUI();
 	}
@@ -168,7 +137,6 @@ class Texture {
 	}
 
 	get data() {
-		console.log(this.params.src);
 		return {
 			src: this.params.src,
 			locations: this.items.map(item => item.position),

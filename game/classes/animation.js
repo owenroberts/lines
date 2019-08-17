@@ -72,8 +72,6 @@ class Animation {
 				this.numFrames = this.layers[i].f.e;
 		}
 
-
-
 		if (this.states.default)
 			this.states.default.end = this.numFrames;
 		if (!spriteSize) {

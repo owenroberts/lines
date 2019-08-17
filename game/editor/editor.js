@@ -87,6 +87,9 @@ function draw() {
 	edi.zoom.clear(Game.ctx);
 	edi.zoom.set(Game.ctx, { x: Game.width/2, y: Game.height/2 });
 
+	// const view = edi.zoom.view;
+	// Game.ctx.fillRect(view.x - Game.width/2, view.y - Game.height/2,view.width + Game.width, view.height + Game.height);
+
 	/* not sure where to put this .... */
 	Game.ctx.font = '16px monaco';
 	Game.ctx.fillStyle = '#bb11ff';
@@ -131,7 +134,6 @@ function mouseMoved(x, y, button) {
 
 function mouseDown(x, y, button) {
 	if (button == 1) {
-
 		if (edi.tool.current == 'location') {
 			const xy = edi.zoom.translate(x, y);
 			edi.tool.callback(xy.x, xy.y);

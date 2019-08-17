@@ -36,10 +36,10 @@ class Item extends Sprite {
 	}
 
 	isInMapBounds(view) {
-		if (this.position.x + this.width > view.x - view.width/2 - Game.width/2 &&
-			this.position.x < view.x + view.width/2 + Game.width/2 &&
-			this.position.y + this.height > view.y - view.height/2 - Game.height/2 &&
-			this.position.y < view.y + view.height/2 + Game.height/2 ) {
+		if (this.position.x + this.width > view.x - Game.width/2 &&
+			this.position.x < view.x + view.width + Game.width/2 &&
+			this.position.y + this.height > view.y - Game.height/2 &&
+			this.position.y < view.y + view.height + Game.height/2 ) {
 			return true;
 		} else {
 			return false;
