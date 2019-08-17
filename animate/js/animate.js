@@ -193,7 +193,7 @@ function animateInterface(ui) {
 			self.loadPalette(lns.palettes.current);
 		for (const key in settings.palettes) {
 			if (key != 'current') {
-				lns.palettes.panel.add(new UIButton({
+				lns.ui.panels.palette.add(new UIButton({
 					title: key,
 					callback: function() {
 						self.loadPalette(key);

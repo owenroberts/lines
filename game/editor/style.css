@@ -19,5 +19,10 @@ canvas#map.transform-tool {
 	cursor: move;
 }
 
+canvas#map.location-tool {
+	cursor: -webkit-cell;
+	cursor: cell;
+}
+
 /* ui adjustment */
 /*label { margin-right: 1em; }*/
