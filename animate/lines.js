@@ -2,19 +2,20 @@ window.addEventListener("load", function() {
 
 	window.lns = {};
 
-	// global parts used everywhere
-	lns.lines = []; // lines currently being drawn
-	lns.layers = [];  // keep separate layers references by frames
-	lns.drawings = []; // saved drawings
-	lns.currentFrame = 0;
-	lns.numFrames = 0; // or 1 if 0 frame is one frame .... fml, or frames start at 1
-
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff");
-	lns.render = new Render(); // (fps, lineColor)
+	lns.render = new Render(); // (lps, lineColor)
+
+	lns.lines = new Animation(lns.canvas.ctx);
+	lns.anim = new Animation(lns.canvas.ctx);
+
+	lns.draw = new Draw(lns.lines, { n: 2, r: 1, w: 1, v: 0.1 }); // defaults
+	
+	
 	lns.bgImage = new Background();
-	lns.data = new Data();
-	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1 }); // defaults
+	
+	lns.data = new Data(lns.anim);
+
 	lns.files = new Files({
 		fit: false, /* fit to canvas when saving */
 		save: false, /* save settings on unload  */

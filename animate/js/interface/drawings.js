@@ -3,15 +3,15 @@ function Drawings(panel) {
 
 	this.getDrawingLayer = function(index) {
 		const layers = [];
-		for (let i = 0; i < lns.layers.length; i++) {
-			if (lns.layers[i].d == index) layers.push(lns.layers[i]);
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			if (lns.anim.layers[i].d == index) layers.push(lns.anim.layers[i]);
 		}
 
 		if (layers.length == 0) return false;
 		else if (layers.length == 1) return layers[0];
 		else {
 			for (let i = 0; i < layers.length; i++) {
-				if (layers[i].isInFrame(lns.currentFrame)) {
+				if (layers[i].isInFrame(lns.anim.currentFrame)) {
 					return layers[i];
 				}
 			}
@@ -23,14 +23,14 @@ function Drawings(panel) {
 		lns.ui.layers.resetLayers();
 		self.resetDrawings();
 		panel.addRow('drawings');
-		for (let i = 0; i < lns.drawings.length; i++) {
-			if (lns.drawings[i]) {
+		for (let i = 0; i < lns.anim.drawings.length; i++) {
+			if (lns.anim.drawings[i]) {
 				let toggleOn = false;
-				const drawing = lns.drawings[i];
+				const drawing = lns.anim.drawings[i];
 
 				/* check for existing layer */
 				let layer = self.getDrawingLayer(i);
-				if (layer) toggleOn = layer.isInFrame(lns.currentFrame);
+				if (layer) toggleOn = layer.isInFrame(lns.anim.currentFrame);
 				else toggleOn = false;
 
 				panel.add(new UIToggleButton({
@@ -41,9 +41,9 @@ function Drawings(panel) {
 					callback: function() {
 						layer = self.getDrawingLayer(i);
 						if (layer) {
-							if (layer.isInFrame(lns.currentFrame)) {
-								layer.removeIndex(lns.currentFrame);
-								if (lns.layers.indexOf(layer) == -1) {
+							if (layer.isInFrame(lns.anim.currentFrame)) {
+								layer.removeIndex(lns.anim.currentFrame);
+								if (lns.anim.layers.indexOf(layer) == -1) {
 									layer = undefined;
 								}
 							} else {
@@ -56,10 +56,10 @@ function Drawings(panel) {
 								...lns.draw.defaults,
 								x: 0,
 								y: 0,
-								f: { s: lns.currentFrame, e: lns.currentFrame },
+								f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
 								a: []
 							});
-							lns.layers.push(layer);
+							lns.anim.layers.push(layer);
 						}
 					}
 				}));

@@ -49,9 +49,9 @@ function Canvas(id, width, height, color) {
 		let min = { x: 10000, y: 10000 };
 		let max = { x: 0, y: 0 };
 
-		for (let i = 0; i < lns.layers.length; i++) {
-			const layer = lns.layers[i];
-			const drawing = lns.drawings[layer.d];
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			const drawing = lns.anim.drawings[layer.d];
 			for (let j = 0; j < drawing.length; j++) {
 				const point = drawing[j];
 				if (point != 'end') {
@@ -69,8 +69,8 @@ function Canvas(id, width, height, color) {
 		// lns.ui.faces.width.set(self.canvas.width);
 		// lns.ui.faces.height.set(self.canvas.height);
 
-		for (let i = 0; i < lns.layers.length; i++) {
-			const layer = lns.layers[i];
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
 			const diff = {
 				x: layer.x + (min.x - tolerance),
 				y: layer.y + (min.y - tolerance)

@@ -20,7 +20,7 @@ function animateInterface(ui) {
 		event: "click",
 		callback: function() {
 			/* make frame ui */
-			self.setFrame(lns.numFrames);
+			self.setFrame(lns.anim.numFrames);
 		},
 		key: "+"
 	});
@@ -28,7 +28,8 @@ function animateInterface(ui) {
 
 	/* f key */
 	ui.setFrame = function(f) {
-		if (+f <= lns.numFrames) {
+		console.log(f);
+		if (+f <= lns.anim.numFrames) {
 			self.beforeFrame();
 			lns.render.setFrame(+f);
 			self.afterFrame();
@@ -43,9 +44,9 @@ function animateInterface(ui) {
 		const numFrames = self.frameElems.getLength() - 1;
 		/* this creates frames that don't already exist
 			loop from the num of already made html frames to frames.length */
-		if (lns.numFrames > numFrames) {
+		if (lns.anim.numFrames > numFrames) {
 			/* this seems bad ... */
-			for (let i = numFrames; i < lns.numFrames; i++) {
+			for (let i = numFrames; i < lns.anim.numFrames; i++) {
 				/* should be a ui? */
 				const frameElem = document.createElement("div");
 				frameElem.classList.add("frame");
@@ -71,7 +72,7 @@ function animateInterface(ui) {
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
-			for (let i = numFrames - 1; i >= lns.numFrames; i--){
+			for (let i = numFrames - 1; i >= lns.anim.numFrames; i--){
 				ui.frameElems.remove(i); /* remove html frame */
 			}
 		}
@@ -81,33 +82,35 @@ function animateInterface(ui) {
 	/* update frame display and current frame */
 	ui.updateFrameNum = function() {
 
-		if (lns.currentFrame == lns.numFrames && self.layersInFrame(lns.currentFrame)) {
-			lns.numFrames++;
+		// console.log(lns.anim.currentFrame, lns.anim.numFrames)
+		if (lns.anim.currentFrame == lns.anim.numFrames && self.layersInFrame(lns.anim.currentFrame)) {
+			lns.anim.numFrames++;
 		}
+		// console.log(lns.anim.currentFrame, lns.anim.numFrames);
 
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
-		if (self.frameElems.els[lns.currentFrame]) // also un-ui
-			self.frameElems.setId("current", lns.currentFrame);
+		if (self.frameElems.els[lns.anim.currentFrame]) // also un-ui
+			self.frameElems.setId("current", lns.anim.currentFrame);
 		else
 			self.plusFrame.setId("current");
-		self.faces.frameDisplay.set(lns.currentFrame);
+		self.faces.frameDisplay.set(lns.anim.currentFrame);
 	};
 
 	/* call before changing a frame */
 	ui.beforeFrame = function() {
-		lns.draw.isDrawing = false;
+		lns.draw.isDrawing = false; /* prototype here with render, anim, draw, isActive or something ? */
 		lns.data.saveLines();
 
 		/* determine if add to num frames */
-		if (self.layersInFrame(lns.currentFrame) && lns.numFrames < lns.currentFrame + 1)
-			lns.numFrames++;
+		if (self.layersInFrame(lns.currentFrame) && lns.anim.numFrames < lns.anim.currentFrame + 1)
+			lns.anim.numFrames++;
 	};
 
 	ui.layersInFrame = function(n) {
 		let inFrame = false;
-		for (let i = 0; i < lns.layers.length; i++) {
-			if (lns.layers[i].isInFrame(n)) 
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			if (lns.anim.layers[i].isInFrame(n)) 
 				inFrame = true;
 		}
 		return inFrame;
@@ -115,22 +118,25 @@ function animateInterface(ui) {
 
 	/* call after changing a frame */
 	ui.afterFrame = function() {
+		lns.draw.reset();
 		self.updateInterface();
-		self.layers.resetLayers();
-		self.drawings.resetDrawings();
 	};
 
 	/* e key - go to next frame */
 	ui.nextFrame = function() {
 		self.beforeFrame();
-		if (lns.currentFrame < lns.numFrames) lns.render.setFrame(lns.currentFrame + 1);
+		if (lns.anim.currentFrame < lns.anim.numFrames) {
+			lns.render.setFrame(lns.anim.currentFrame + 1);
+			if (lns.anim.states.default.end != lns.anim.numFrames)
+				lns.anim.states.default.end = lns.anim.numFrames;
+		}
 		self.afterFrame();
 	};
 
 	/* w key - got to previous frame */
 	ui.prevFrame = function() {
 		self.beforeFrame();
-		if (lns.currentFrame > 0) lns.render.setFrame(lns.currentFrame - 1);
+		if (lns.anim.currentFrame > 0) lns.render.setFrame(lns.anim.currentFrame - 1);
 		self.afterFrame();
 	};
 
@@ -164,7 +170,7 @@ function animateInterface(ui) {
 			lineColor: lns.render.lineColor,
 			width: lns.canvas.width,
 			height: lns.canvas.height,
-			fps: lns.render.fps,
+			fps: lns.anim.fps,
 			lps: lns.render.lps,
 			onionSkinIsVisible: lns.render.onionSkinIsVisible,
 			onionSkinNum: lns.render.onionSkinNum,
@@ -183,6 +189,7 @@ function animateInterface(ui) {
 		lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 		lns.render.onionSkinNum = settings.onionSkinNum;
 
+		lns.ui.faces.fps.setValue(settings.fps);
 		lns.ui.faces.lineColor.setValue(settings.lineColor);
 		lns.ui.faces.bgColor.setValue(settings.canvasColor);
 		lns.ui.faces.lineWidth.setValue(settings.lineWidth);

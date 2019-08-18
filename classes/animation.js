@@ -9,7 +9,8 @@ class Animation {
 		this.currentFrameCounter = 0;
 		
 		this.lps = lps || 12;
-		this.lineInterval = 1000 / lps;
+		this.fps = lps || 12;
+		this.lineInterval = 1000 / this.lps;
 		this.intervalRatio = 1;
 
 		this.mixedColors = mixedColors || false;
@@ -21,10 +22,23 @@ class Animation {
 
 		this.state = 'default';
 		this.states = { 'default': {start: 0, end: 0 } };
+
+		this.over = {};
+		this.override = true;
 	}
 
 	set frame(n) {
 		this.currentFrame = this.currentFrameCounter = n;
+	}
+
+	overrideProperty(prop, value) {
+		this.over[prop] = value;
+		this.override = true;
+	}
+
+	cancelOverride() {
+		this.over = {}
+		this.override = false;
 	}
 
 	update() {
@@ -38,6 +52,7 @@ class Animation {
 				this.frame = this.states[this.state].start;
 				if (this.onPlayedState) this.onPlayedState();
 			}
+			if (this.onUpdate) this.onUpdate();
 		}
 	}
 
@@ -66,7 +81,11 @@ class Animation {
 					}
 				}
 
-				/* over ride */
+				if (this.override) {
+					for (const key in this.over) {
+						this.rndr[key] = this.over[key];
+					}
+				}
 
 				if (this.rndr.w > 0) {
 					this.rndr.off.x = Cool.random(0, this.rndr.w);
@@ -99,10 +118,8 @@ class Animation {
 						);
 					}
 
-					if (this.mixedColors) {
-						if (this.ctx.strokeStyle != this.rndr.c)
-							this.ctx.strokeStyle = this.rndr.c;
-					}
+					if (this.ctx.strokeStyle != this.rndr.c)
+						this.ctx.strokeStyle = this.rndr.c;
 
 					if (this.rndr.w > 0) {
 						this.rndr.off.x += this.rndr.speed.x;
@@ -133,6 +150,7 @@ class Animation {
 			if (this.mixedColors) this.ctx.stroke();
 		}
 		if (!this.mixedColors) this.ctx.stroke();
+		if (this.onDraw) this.onDraw();
 	}
 
 	load(src, callback) {

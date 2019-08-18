@@ -41,7 +41,7 @@ function FilesInterface(ui) {
 		self.title.setValue(lns.files.fileName.split('/').pop());
 		lns.ui.faces.fps.setValue(data.fps);
 
-		lns.layers.forEach(layer => {
+		lns.anim.layers.forEach(layer => {
 			if (layer) {
 				lns.ui.faces.lineColor.addColor(layer.c);
 				lns.ui.faces.lineColor.setValue(layer.c);

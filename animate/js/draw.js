@@ -1,13 +1,36 @@
-function Draw(defaults) {
+function Draw(anim, defaults) {
 	const self = this;
 
-	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
+	this.reset = function() {
+		anim.currentFrame = lns.anim.currentFrame;
+		anim.layers = [];
+		anim.drawings = [];
+		self.drawing = [];
+		self.layer = new Layer({
+			d: 0,
+			x: 0,
+			y: 0,
+			f: { s: anim.currentFrame, e: anim.currentFrame },
+			a: [],
+			n: defaults.n,
+			r: defaults.r,
+			w: defaults.w,
+			v: defaults.v,
+			c: lns.render.lineColor
+		});
+		anim.layers.push(self.layer);
+		anim.drawings.push(self.drawing);
+	};
 
+	this.reset();
+
+	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
+	
 	this.setDefaults = function() {
-		self.n = defaults.n; /* default 2 - h key */
-		self.r = defaults.r; /* default 1 - j key */
-		self.w = defaults.w; /* 2 is good */
-		self.v = defaults.v; /* 0.1 good */
+		this.n = defaults.n; /* default 2 - h key */
+		this.r = defaults.r; /* default 1 - j key */
+		this.w = defaults.w; /* 2 is good */
+		this.v = defaults.v; /* 0.1 good */
 
 		if (lns.ui) { 	/* not modular */
 			lns.ui.faces.n.update(defaults.n);
@@ -37,6 +60,24 @@ function Draw(defaults) {
 		}
 	};
 
+	this.pop = function() {
+		if (self.drawing.length > 0) {
+			if (self.drawing.pop() == 'end')
+				self.drawing.pop();
+			self.drawing.push('end');
+		}
+	};
+
+	this.popOff = function() {
+		if (self.drawing.length > 0) {
+			self.drawing.pop(); // remove end
+			for (let i = self.drawing.length - 1; i > 0; i--) {
+				if (self.drawing[i] != 'end') self.drawing.pop();
+				else break;
+			}
+		}
+	};
+
 	this.update = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
@@ -58,20 +99,20 @@ function Draw(defaults) {
 			while (point.dist(origin) > b){
 				point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
 			}
-			lns.lines.push(point);
+			self.drawing.push(point);
 			const points = Cool.randomInt(1,3);
 			for (let i = 0; i < points; i ++) {
-				lns.lines.push(new Cool.Vector(
+				self.drawing.push(new Cool.Vector(
 					point.x + Cool.randomInt(-1, 1),
 					point.y + Cool.randomInt(_y)
 				));
 			}
-			lns.lines.push('end');
+			self.drawing.push('end');
 		}
 	}
 
 	this.addLine = function(x, y) {
-		lns.lines.push(new Cool.Vector(x, y));
+		self.drawing.push(new Cool.Vector(x, y));
 	};
 
 	this.start = function(ev) {
@@ -102,18 +143,18 @@ function Draw(defaults) {
 					const _y = Math.round(y) + Cool.randomInt(-r/2, r/2);
 					const points = Cool.randomInt(1,3);
 					for (let i = 0; i < points; i ++) {
-						lns.lines.push(new Cool.Vector(
+						self.drawing.push(new Cool.Vector(
 							_x + Cool.randomInt(-1, 1),
 							_y + Cool.randomInt(-1, 1)
 						));
 					}
-					lns.lines.push('end');
+					self.drawing.push('end');
 				}
 			}
 			self.startDots = false;
 		} else if (ev.which == 1) {
 			self.isDrawing = false;
-			lns.lines.push("end");
+			self.drawing.push("end");
 		}
 	}
 

@@ -168,9 +168,8 @@
 			{
 				"type": "color",
 				"face": "lineColor",
-				"set": {
-					"prop": "lineColor",
-					"number": false
+				"fromModule": {
+					"callback": "setLineColor"
 				}
 			}
 		]

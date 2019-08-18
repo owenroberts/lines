@@ -22,7 +22,7 @@ class Layer {
 	}
 
 	remove() {
-		lns.layers.splice(lns.layers.indexOf(this), 1);
+		lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
 	}
 
 	addIndex(index) {
@@ -30,7 +30,7 @@ class Layer {
 			if (this.f.s - 1 == index) this.f.s -= 1;
 			else if (this.f.e + 1 == index) this.f.e += 1;
 			else {
-				lns.layers.push(new Layer({
+				lns.anim.layers.push(new Layer({
 					...this,
 					f: { s: index, e: index }
 				}));
@@ -38,8 +38,8 @@ class Layer {
 		}
 
 		/* lns.layers not modular ? */
-		if (lns.layers.indexOf(this) == -1) {
-			lns.layers.push(this);
+		if (lns.anim.layers.indexOf(this) == -1) {
+			lns.anim.layers.push(this);
 		}
 	}
 
@@ -63,13 +63,13 @@ class Layer {
 
 	removeIndex(index) {
 		if (this.f.s == index && this.f.e == index) 
-			lns.layers.splice(lns.layers.indexOf(this), 1);
+			lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
 		else if (this.f.s == index) this.f.s += 1;
 		else if (this.f.e == index) this.f.e -= 1;
 		else if (index > this.f.s && index < this.f.e) {
 			const newLayer = _.cloneDeep(this);
 			newLayer.f = { s: index + 1, e: this.f.e };
-			lns.layers.push(newLayer);
+			lns.anim.layers.push(newLayer);
 			this.f.e = index - 1;
 		}
 
@@ -81,12 +81,11 @@ class Layer {
 		if (!n) n = -1;
 		if (this.f.s >= index) this.f.s += n;
 		if (this.f.e >= index) this.f.e += n;
-
 		this.resetAnims();
 	}
 
 	isInFrame(index) {
-		if (lns.layers.indexOf(this) == -1) return false
+		if (lns.anim.layers.indexOf(this) == -1) return false
 		else if (index >= this.f.s && index <= this.f.e) return true;
 		else return false;
 	}
@@ -94,11 +93,11 @@ class Layer {
 	getProps(f) {
 		const props = {
 			s: 0,
-			e: lns.drawings[this.d].length /* faster to save?? */
+			e: lns.anim.drawings[this.d].length /* faster to save?? */
 		};
 		for (let i = 0; i < this.a.length; i++) {
 			const a = this.a[i];
-			if (a.sf <= lns.currentFrame && a.ef >= lns.currentFrame) {
+			if (a.sf <= lns.anim.currentFrame && a.ef >= lns.anim.currentFrame) {
 				props[a.prop] = Cool.map(f, a.sf, a.ef, a.sv, a.ev);
 				if (a.prop == 's' || a.prop == 'e')
 					props[a.prop] = Math.round(props[a.prop]);
