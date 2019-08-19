@@ -1,6 +1,11 @@
 function animateInterface(ui) {
 	const self = ui;
 
+	// get the plus frame, end frame + 1
+	Object.defineProperty(lns.anim, 'plusFrame', {
+		get: function() { return this.endFrame + 1; }
+	});
+
 	ui.framesPanel = new UI({ id:"frames" });
 	ui.frameElems = new UIList({ class: "frame" });
 
@@ -17,7 +22,7 @@ function animateInterface(ui) {
 		id:"current",
 		event: "click",
 		callback: function() {
-			self.setFrame(lns.anim.endFrame + 1);
+			self.setFrame(lns.anim.plusFrame);
 		},
 		key: "+"
 	});
@@ -25,7 +30,7 @@ function animateInterface(ui) {
 
 	/* f key */
 	ui.setFrame = function(f) {
-		if (+f <= lns.anim.endFrame) {
+		if (+f <= lns.anim.plusFrame) {
 			self.beforeFrame();
 			lns.render.setFrame(+f);
 			self.afterFrame();
@@ -38,7 +43,7 @@ function animateInterface(ui) {
 	ui.updateFramesPanel = function() {
 
 		const numFrames = self.frameElems.length - 1;
-		const animFrames = lns.anim.endFrame + 1;
+		const animFrames = lns.anim.plusFrame;
 		/* this creates frames that don't already exist, end Frame plus plus frame */
 		if (animFrames > numFrames) {
 			/* this seems bad ... */
@@ -78,14 +83,6 @@ function animateInterface(ui) {
 	/* update frame display and current frame */
 	ui.updateFrameNum = function() {
 
-		// // console.log(lns.anim.currentFrame, lns.anim.numFrames)
-		// if (lns.anim.currentFrame == lns.anim.numFrames && self.layersInFrame(lns.anim.currentFrame)) {
-		// 	lns.anim.numFrames++;
-		// }
-		// // console.log(lns.anim.currentFrame, lns.anim.numFrames);
-
-
-
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[lns.anim.currentFrame]) 
@@ -123,7 +120,7 @@ function animateInterface(ui) {
 	/* e key - go to next frame */
 	ui.nextFrame = function() {
 		self.beforeFrame();
-		if (lns.anim.currentFrame < lns.anim.endFrame + 1) {
+		if (lns.anim.currentFrame < lns.anim.plusFrame) {
 			lns.render.setFrame(lns.anim.currentFrame + 1);
 			if (lns.anim.states.default.end != lns.anim.endFrame)
 				lns.anim.states.default.end = lns.anim.endFrame;

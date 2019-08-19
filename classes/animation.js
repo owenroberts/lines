@@ -55,12 +55,12 @@ class Animation {
 
 	update() {
 		if (this.isPlaying) {
-			if (this.currentFrame <= this.states[this.state].end) {
+			if (this.currentFrame <= this.currentState.end) {
 				this.currentFrameCounter += this.intervalRatio;
 				this.currentFrame = Math.floor(this.frame4);
 				if (this.onUpdate) this.onUpdate();
 			}
-			if (this.frame4 >= this.states[this.state].end) {
+			if (this.frame4 > this.states[this.state].end) {
 				this.frame = this.states[this.state].start;
 				if (this.onPlayedState) this.onPlayedState();
 			}

@@ -67,7 +67,7 @@ function Render(lps, color) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
-			lns.anim.update();
+			
 			if (lns.anim.isPlaying) {
 				lns.ui.updateInterface(); /* ui thing */
 			}
@@ -100,6 +100,8 @@ function Render(lps, color) {
 
 			lns.anim.draw();
 			lns.lines.draw();
+
+			lns.anim.update();
 		}
 		if (!lns.ui.capture.capturing) 
 			window.requestAnimFrame(self.update);
