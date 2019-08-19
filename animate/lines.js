@@ -10,12 +10,8 @@ window.addEventListener("load", function() {
 	lns.anim = new Animation(lns.canvas.ctx);
 
 	lns.draw = new Draw(lns.lines, { n: 2, r: 1, w: 1, v: 0.1 }); // defaults
-	
-	
 	lns.bgImage = new Background();
-	
 	lns.data = new Data(lns.anim);
-
 	lns.files = new Files({
 		fit: false, /* fit to canvas when saving */
 		save: false, /* save settings on unload  */

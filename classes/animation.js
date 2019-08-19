@@ -35,6 +35,10 @@ class Animation {
 		return +this.currentFrameCounter.toFixed(4);
 	}
 
+	get endFrame() {
+		return Math.max.apply(Math, this.layers.map(layer => { return layer.f.e; }));
+	}
+
 	get currentState() {
 		return this.states[this.state];
 	}

@@ -12,24 +12,20 @@ function animateInterface(ui) {
 		self.layers.drawLayers();
 		self.updateFramesPanel();
 	};
-
-	/* plus frame is unsaved drawing frame
-		do i need a plus frame? */
+	
 	ui.plusFrame = new UI({
 		id:"current",
 		event: "click",
 		callback: function() {
-			/* make frame ui */
-			self.setFrame(lns.anim.numFrames);
+			self.setFrame(lns.anim.endFrame + 1);
 		},
 		key: "+"
 	});
-	ui.keys['+'] = ui.plusFrame;
+	ui.keys['+'] = ui.plusFrame; /* just ui.keys['+'] ... */
 
 	/* f key */
 	ui.setFrame = function(f) {
-		console.log(f);
-		if (+f <= lns.anim.numFrames) {
+		if (+f <= lns.anim.endFrame) {
 			self.beforeFrame();
 			lns.render.setFrame(+f);
 			self.afterFrame();
@@ -41,12 +37,12 @@ function animateInterface(ui) {
 		sets copy frames */
 	ui.updateFramesPanel = function() {
 
-		const numFrames = self.frameElems.getLength() - 1;
-		/* this creates frames that don't already exist
-			loop from the num of already made html frames to frames.length */
-		if (lns.anim.numFrames > numFrames) {
+		const numFrames = self.frameElems.length - 1;
+		const animFrames = lns.anim.endFrame + 1;
+		/* this creates frames that don't already exist, end Frame plus plus frame */
+		if (animFrames > numFrames) {
 			/* this seems bad ... */
-			for (let i = numFrames; i < lns.anim.numFrames; i++) {
+			for (let i = numFrames; i < animFrames; i++) {
 				/* should be a ui? */
 				const frameElem = document.createElement("div");
 				frameElem.classList.add("frame");
@@ -55,7 +51,7 @@ function animateInterface(ui) {
 
 				/* click on frame, set the current frame */
 				frameElem.onclick = function(ev) {
-					lns.render.setFrame(i);
+					lns.render.setFrame(i); /* use lns.anim ?? */
 					self.updateInterface();
 				};
 
@@ -72,7 +68,7 @@ function animateInterface(ui) {
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
-			for (let i = numFrames - 1; i >= lns.anim.numFrames; i--){
+			for (let i = numFrames - 1; i >= animFrames; i--){
 				ui.frameElems.remove(i); /* remove html frame */
 			}
 		}
@@ -82,15 +78,17 @@ function animateInterface(ui) {
 	/* update frame display and current frame */
 	ui.updateFrameNum = function() {
 
-		// console.log(lns.anim.currentFrame, lns.anim.numFrames)
-		if (lns.anim.currentFrame == lns.anim.numFrames && self.layersInFrame(lns.anim.currentFrame)) {
-			lns.anim.numFrames++;
-		}
-		// console.log(lns.anim.currentFrame, lns.anim.numFrames);
+		// // console.log(lns.anim.currentFrame, lns.anim.numFrames)
+		// if (lns.anim.currentFrame == lns.anim.numFrames && self.layersInFrame(lns.anim.currentFrame)) {
+		// 	lns.anim.numFrames++;
+		// }
+		// // console.log(lns.anim.currentFrame, lns.anim.numFrames);
+
+
 
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
-		if (self.frameElems.els[lns.anim.currentFrame]) // also un-ui
+		if (self.frameElems.els[lns.anim.currentFrame]) 
 			self.frameElems.setId("current", lns.anim.currentFrame);
 		else
 			self.plusFrame.setId("current");
@@ -125,10 +123,10 @@ function animateInterface(ui) {
 	/* e key - go to next frame */
 	ui.nextFrame = function() {
 		self.beforeFrame();
-		if (lns.anim.currentFrame < lns.anim.numFrames) {
+		if (lns.anim.currentFrame < lns.anim.endFrame + 1) {
 			lns.render.setFrame(lns.anim.currentFrame + 1);
-			if (lns.anim.states.default.end != lns.anim.numFrames)
-				lns.anim.states.default.end = lns.anim.numFrames;
+			if (lns.anim.states.default.end != lns.anim.endFrame)
+				lns.anim.states.default.end = lns.anim.endFrame;
 		}
 		self.afterFrame();
 	};
