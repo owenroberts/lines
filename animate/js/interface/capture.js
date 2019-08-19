@@ -47,10 +47,11 @@ function Capture() {
 	this.captureCycle = function() {
 		lns.data.saveLines();
 		/* set animation to last frame because it updates frames before draw */
-		lns.anim.currentFrame = lns.render.currentFrameCounter = lns.anim.numFrames;
-		lns.render.isPlaying = true;
+		lns.anim.frame = lns.anim.numFrames;
+		lns.anim.isPlaying = true;
 		// capture as many frames as necessary for lines ratio or 1 of every frame
-		self.captureFrames = lns.anim.numFrames * Math.max(1, lns.render.lps / lns.render.fps);
+		self.captureFrames = lns.anim.numFrames * Math.max(1, lns.render.lps / lns.anim.fps);
+		self.setCapture();
 	};
 
 	this.capture = function() {

@@ -9,10 +9,10 @@ function Palette(ui) {
 		if (name) {
 			self.palettes[name] = {
 				color: lns.render.lineColor,
-				n: lns.draw.n,
-				r: lns.draw.r,
-				w: lns.draw.w,
-				v: lns.draw.v,
+				n: lns.draw.layer.n,
+				r: lns.draw.layer.r,
+				w: lns.draw.layer.w,
+				v: lns.draw.layer.v,
 				lineWidth: lns.canvas.ctx.lineWidth,
 				mouse: lns.draw.mouseInterval,
 				brush: lns.draw.brush,
@@ -34,14 +34,12 @@ function Palette(ui) {
 		/* this is crazy ... */
 		lns.data.saveLines();
 		self.palettes.current = name;
+		const palette = self.palettes[name];
 		
-		// lns.lineColor.set(); // mutation observer?
-		lns.render.lineColor = self.palettes[name].color;
-		
-		lns.draw.n = self.palettes[name].n;
-		lns.draw.r = self.palettes[name].r;
-		lns.draw.w = self.palettes[name].w;
-		lns.draw.v = self.palettes[name].v;
+		lns.render.lineColor = palette.color;
+
+		lns.draw.setProperties(self.palettes[name]);
+
 		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
 		lns.draw.mouseInterval = self.palettes[name].mouse;
 		lns.draw.brush = self.palettes[name].brush;
@@ -49,15 +47,10 @@ function Palette(ui) {
 		lns.draw.dots = self.palettes[name].dots;
 		lns.draw.grass = self.palettes[name].grass;
 
-		lns.ui.faces.w.setValue(self.palettes[name].n);
-		lns.ui.faces.r.setValue(self.palettes[name].r);
-		lns.ui.faces.w.setValue(self.palettes[name].w);
-		lns.ui.faces.v.setValue(self.palettes[name].v);
-		lns.ui.faces.lineWidth.setValue(self.palettes[name].lineWidth);
-		lns.ui.faces.mouse.setValue(self.palettes[name].mouse);
-		lns.ui.faces.brush.setValue(self.palettes[name].brush);
-		lns.ui.faces.brushSpread.setValue(self.palettes[name].brushSpread);
-		lns.ui.faces.dots.setValue(self.palettes[name].dots);
-		lns.ui.faces.grass.setValue(self.palettes[name].grass);
+		for (prop in palette) {
+			if (lns.ui.faces[prop] !== undefined) {
+				lns.ui.faces[prop].setValue(palette[prop]);
+			}
+		};
 	};
 }

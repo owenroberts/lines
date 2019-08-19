@@ -189,6 +189,7 @@ function animateInterface(ui) {
 		lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 		lns.render.onionSkinNum = settings.onionSkinNum;
 
+		lns.ui.faces.lps.setValue(settings.lps);
 		lns.ui.faces.fps.setValue(settings.fps);
 		lns.ui.faces.lineColor.setValue(settings.lineColor);
 		lns.ui.faces.bgColor.setValue(settings.canvasColor);

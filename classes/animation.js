@@ -31,6 +31,14 @@ class Animation {
 		this.currentFrame = this.currentFrameCounter = n;
 	}
 
+	get frame4() {
+		return +this.currentFrameCounter.toFixed(4);
+	}
+
+	get currentState() {
+		return this.states[this.state];
+	}
+
 	overrideProperty(prop, value) {
 		this.over[prop] = value;
 		this.override = true;
@@ -45,10 +53,10 @@ class Animation {
 		if (this.isPlaying) {
 			if (this.currentFrame <= this.states[this.state].end) {
 				this.currentFrameCounter += this.intervalRatio;
-				this.currentFrame = Math.floor(this.currentFrameCounter.toFixed(4));
+				this.currentFrame = Math.floor(this.frame4);
 				if (this.onUpdate) this.onUpdate();
 			}
-			if (this.currentFrameCounter.toFixed(4) >= this.states[this.state].end) {
+			if (this.frame4 >= this.states[this.state].end) {
 				this.frame = this.states[this.state].start;
 				if (this.onPlayedState) this.onPlayedState();
 			}

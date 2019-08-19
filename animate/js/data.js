@@ -287,13 +287,14 @@ function Data(anim) {
 	/* a key */
 	this.explode = function(params) {
 		self.saveLines();
-		const frames = +prompt('Number of frames?');
+		const n = +prompt('Number of frames?');
 		for (let i = 0; i < anim.layers.length; i++) {
 			const layer = anim.layers[i];
 			if (layer.isInFrame(anim.currentFrame)) {
-				layer.f.e = layer.f.s + frames;
-				if (layer.f.e > anim.numFrames) anim.numFrames = layer.f.e + 1; /* plus frame, is this weird? */
-				layer.draw = params.type;
+				layer.endFrame = layer.startFrame + n;
+				if (layer.endFrame > anim.numFrames) anim.numFrames = layer.endFrame + 1; /* plus frame ? */
+				console.log(layer.currentState);
+				if (anim.currentState.end < anim.numFrames) anim.currentState.end = anim.numFrames - 1;
 				switch(params.type) {
 					case "Explode":
 						layer.a.push({
@@ -314,7 +315,7 @@ function Data(anim) {
 						});
 					break;
 					case "ExRev":
-						const mid = Math.floor(frames / 2);
+						const mid = Math.floor(n / 2);
 						layer.a.push({
 							prop: 'e',
 							sf: layer.f.s,

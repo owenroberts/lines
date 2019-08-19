@@ -1,6 +1,39 @@
 function Draw(anim, defaults) {
 	const self = this;
 
+	self.layer = new Layer({
+		d: 0,
+		x: 0,
+		y: 0,
+		f: { s: anim.currentFrame, e: anim.currentFrame },
+		a: [],
+		n: defaults.n,
+		r: defaults.r,
+		w: defaults.w,
+		v: defaults.v,
+		c: lns.render.lineColor /* just anim/layer color now ??? */
+	});
+
+	this.setProperties = function(props) {
+		for (const prop in props) {
+			if (self.layer[prop] !== undefined) {
+				self.layer[prop] = props[prop];
+				if (lns.ui) lns.ui.faces[prop].update(props[prop]);
+			}
+		}
+		/* n default 2 - h key */
+		/* r default 1 - j key */
+		/* w 2 is good */
+		/* v 0.1 good */
+	};
+
+	this.defaults = defaults;
+	this.setProperties(defaults);
+
+	this.setDefaults = function() {
+		self.setProperties(self.defaults);
+	};
+
 	this.reset = function() {
 		anim.currentFrame = lns.anim.currentFrame;
 		anim.layers = [];
@@ -12,10 +45,10 @@ function Draw(anim, defaults) {
 			y: 0,
 			f: { s: anim.currentFrame, e: anim.currentFrame },
 			a: [],
-			n: defaults.n,
-			r: defaults.r,
-			w: defaults.w,
-			v: defaults.v,
+			n: self.layer.n,
+			r: self.layer.r,
+			w: self.layer.w,
+			v: self.layer.v,
 			c: lns.render.lineColor
 		});
 		anim.layers.push(self.layer);
@@ -25,23 +58,6 @@ function Draw(anim, defaults) {
 	this.reset();
 
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
-	
-	this.setDefaults = function() {
-		this.n = defaults.n; /* default 2 - h key */
-		this.r = defaults.r; /* default 1 - j key */
-		this.w = defaults.w; /* 2 is good */
-		this.v = defaults.v; /* 0.1 good */
-
-		if (lns.ui) { 	/* not modular */
-			lns.ui.faces.n.update(defaults.n);
-			lns.ui.faces.r.update(defaults.r);
-			lns.ui.faces.w.update(defaults.w);
-			lns.ui.faces.v.update(defaults.v);
-		}
-	};
-
-	this.defaults = defaults;
-	this.setDefaults();
 
 	this.brush = 0;
 	this.brushSpread = 1;

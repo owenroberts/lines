@@ -47,7 +47,7 @@ function Drawings(panel) {
 									layer = undefined;
 								}
 							} else {
-								layer.addIndex(lns.currentFrame);
+								layer.addIndex(lns.anim.currentFrame);
 							}
 						} else {
 							layer = new Layer({

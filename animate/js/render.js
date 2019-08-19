@@ -13,7 +13,6 @@ function Render(lps, color) {
 
 	this.setLineColor = function(value) {
 		this.lineColor = value;
-		console.log()
 		lns.draw.layer.c = value;
 	};
 

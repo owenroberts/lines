@@ -477,6 +477,7 @@
 				"type": "text",
 				"key": "'",
 				"blur": true,
+				"face": "lps",
 				"fromModule": {
 					"callback": "setLps",
 					"value": "lps"
@@ -657,6 +658,7 @@
 			{
 				"type": "range",
 				"face": "n",
+				"sub": "layer",
 				"set": {
 					"layer": "n",
 					"prop": "n",
@@ -672,6 +674,7 @@
 			{
 				"type": "range",
 				"face": "r",
+				"sub": "layer",
 				"set": {
 					"layer": "r",
 					"prop": "r",
@@ -687,6 +690,7 @@
 			{
 				"type": "range",
 				"face": "w",
+				"sub": "layer",
 				"set": {
 					"layer": "w",
 					"prop": "w",
@@ -702,6 +706,7 @@
 			{
 				"type": "range",
 				"face": "v",
+				"sub": "layer",
 				"set": {
 					"layer": "v",
 					"prop": "v",
