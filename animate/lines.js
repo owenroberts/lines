@@ -26,7 +26,7 @@ window.addEventListener("load", function() {
 	
 	lns.ui = new Interface(lns);
 	animateInterface(lns.ui); /* add local ui modules first, not a great pattern */
-	lns.ui.load('./js/interface.json'); 
+	lns.ui.load('./interface/interface.json'); 
 
 	const openFile = localStorage.getItem('re-open');
 	if (openFile) {
