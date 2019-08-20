@@ -6,7 +6,7 @@
 		"list": [
 			{
 				"type": "range",
-				"face": "mouse",
+				"face": "mouseInterval",
 				"set": {
 					"prop": "mouseInterval",
 					"number": true

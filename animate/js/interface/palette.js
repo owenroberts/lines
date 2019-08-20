@@ -1,4 +1,4 @@
-function Palette(ui) {
+function Palette() {
 	const self = this;
 	this.palettes = {};
 	this.current = '';
@@ -14,7 +14,7 @@ function Palette(ui) {
 				w: lns.draw.w,
 				v: lns.draw.v,
 				lineWidth: lns.canvas.ctx.lineWidth,
-				mouse: lns.draw.mouseInterval,
+				mouseInterval: lns.draw.mouseInterval,
 				brush: lns.draw.brush,
 				brushSpread: lns.draw.brushSpread,
 				dots: lns.draw.dots,
@@ -34,6 +34,8 @@ function Palette(ui) {
 		/* this is crazy ... */
 		lns.data.saveLines();
 		self.palettes.current = name;
+
+		/* for ... in ? */
 		
 		// lns.lineColor.set(); // mutation observer?
 		lns.render.lineColor = self.palettes[name].color;
@@ -43,7 +45,7 @@ function Palette(ui) {
 		lns.draw.w = self.palettes[name].w;
 		lns.draw.v = self.palettes[name].v;
 		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
-		lns.draw.mouseInterval = self.palettes[name].mouse;
+		
 		lns.draw.brush = self.palettes[name].brush;
 		lns.draw.brushSpread = self.palettes[name].brushSpread;
 		lns.draw.dots = self.palettes[name].dots;
@@ -54,7 +56,9 @@ function Palette(ui) {
 		lns.ui.faces.w.setValue(self.palettes[name].w);
 		lns.ui.faces.v.setValue(self.palettes[name].v);
 		lns.ui.faces.lineWidth.setValue(self.palettes[name].lineWidth);
-		lns.ui.faces.mouse.setValue(self.palettes[name].mouse);
+		
+		lns.ui.faces.mouseInterval.update(self.palettes[name].mouseInterval);
+		
 		lns.ui.faces.brush.setValue(self.palettes[name].brush);
 		lns.ui.faces.brushSpread.setValue(self.palettes[name].brushSpread);
 		lns.ui.faces.dots.setValue(self.palettes[name].dots);
