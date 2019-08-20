@@ -36,7 +36,10 @@ class Animation {
 	}
 
 	get endFrame() {
-		return Math.max.apply(Math, this.layers.map(layer => { return layer.f.e; }));
+		return this.layers.length > 0 ?
+			Math.max.apply(Math, this.layers.map(layer => { return layer.f.e; }))
+			:
+			-1;
 	}
 
 	get currentState() {
@@ -193,15 +196,10 @@ class Animation {
 		}
 		
 		this.layers = json.l;
-		for (let i = 0; i < this.layers.length; i++) {
-			if (this.numFrames < this.layers[i].f.e)
-				this.numFrames = this.layers[i].f.e;
-		}
 
 		this.intervalRatio = this.lineInterval / (1000 / json.fps);
 
-		if (this.states.default)
-			this.states.default.end = this.numFrames;
+		if (this.states.default) this.states.default.end = this.endFrame;
 
 		if (json.mc) this.mixedColors = json.mc; /* hmm .. over ride? */
 

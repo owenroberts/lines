@@ -94,7 +94,6 @@ function Files(params) {
 	};
 
 	this.loadJSON = function(data, callback) {
-		lns.anim.numFrames = 0; /* reset */
 		lns.anim.drawings = [];
 		for (let i = 0; i < data.d.length; i++) {
 			const drawing = data.d[i];
@@ -113,11 +112,9 @@ function Files(params) {
 		for (let i = 0; i < data.l.length; i++) {
 			lns.anim.layers[i] = new Layer(data.l[i]);
 			lns.render.lineColor = lns.anim.layers[i].c;
-			if (lns.anim.numFrames < lns.anim.layers[i].f.e)
-				lns.anim.numFrames = lns.anim.layers[i].f.e;
 		}
 
-		lns.anim.numFrames += 1; /* plus frame */
+		if (lns.anim.states.default) lns.anim.states.default.end = lns.anim.endFrame;
 
 		/* set interface values */
 		lns.canvas.setWidth(data.w);

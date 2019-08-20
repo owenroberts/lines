@@ -135,11 +135,9 @@ function Data(anim) {
 				if (anim.layers[i]) 
 					anim.layers[i].shiftIndex(anim.currentFrame + 1, -1);
 			}
-			anim.numFrames--;
 		}
 		anim.render.setFrame(anim.currentFrame - 1);
 		anim.ui.updateInterface();
-		// self.clearFrame();
 	};
 
 	/* shift-d */
@@ -156,7 +154,6 @@ function Data(anim) {
 				}
 			}
 
-			anim.numFrames -= endFrame - startFrame + 1;
 			if (startFrame > 0) anim.frame = startFrame - 1;
 			else anim.frame = 0;
 			lns.ui.updateFramesPanel();
@@ -218,7 +215,6 @@ function Data(anim) {
 			anim.layers[i].shiftIndex(anim.currentFrame, 1);
 			anim.layers[i].removeIndex(anim.currentFrame);
 		}
-		anim.numFrames++;
 		lns.ui.updateInterface();
 	};
 
@@ -229,7 +225,6 @@ function Data(anim) {
 			anim.layers[i].shiftIndex(anim.currentFrame + 1, 1);
 			anim.layers[i].removeIndex(anim.currentFrame + 1);
 		}
-		anim.numFrames++;
 		anim.frame = anim.currentFrame + 1;
 		lns.ui.updateInterface();
 	};
@@ -292,8 +287,8 @@ function Data(anim) {
 			const layer = anim.layers[i];
 			if (layer.isInFrame(anim.currentFrame)) {
 				layer.endFrame = layer.startFrame + n;
-				if (layer.endFrame > anim.numFrames) anim.numFrames = layer.endFrame + 1; /* plus frame ? */
-				if (anim.currentState.end < anim.numFrames) anim.currentState.end = anim.numFrames - 1;
+				// if (layer.endFrame > anim.numFrames) anim.numFrames = layer.endFrame + 1; /* plus frame ? */
+				// if (anim.currentState.end < anim.numFrames) anim.currentState.end = anim.endFrame;
 				switch(params.type) {
 					case "Explode":
 						layer.a.push({

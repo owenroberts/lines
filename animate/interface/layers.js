@@ -60,7 +60,7 @@ function Layers(panel) {
 					value: layer.f.s,
 					callback: function(value) {
 						layer.startFrame = +value;
-						if (layer.startFrame > lns.anim.numFrames) lns.anim.numFrames = layer.startFrame;
+						if (layer.startFrame > lns.anim.endFrame) lns.anim.endFrame = layer.startFrame;
 						if (layer.endFrame < layer.startFrame) layer.endFrame = layer.startFrame;
 						lns.ui.updateInterface();
 					}
@@ -72,7 +72,7 @@ function Layers(panel) {
 					value: layer.f.e,
 					callback: function(value) {
 						layer.endFrame = +value;
-						if (layer.endFrame > lns.anim.numFrames) lns.anim.numFrames = layer.endFrame;
+						if (layer.endFrame > lns.anim.endFrame) lns.anim.endFrame = layer.endFrame;
 						if (layer.startFrame > layer.endFrame) layer.startFrame = layer.endFrame;
 						lns.ui.updateInterface();
 					}
@@ -259,9 +259,9 @@ function Layers(panel) {
 		const row = 10;
 		const h = row * (lns.anim.layers.length + 1);
 		self.canvas.setHeight(h);
-		const col = w / (lns.anim.numFrames);
+		const col = w / (lns.anim.plusFrame);
 
-		for (let i = 0; i < lns.anim.numFrames; i++) {
+		for (let i = 0; i < lns.anim.plusFrame; i++) {
 			const x = i * col;
 			if (i == lns.anim.currentFrame) self.canvas.ctx.fillStyle = '#FF79FF';
 			else self.canvas.ctx.fillStyle = '#fdf';

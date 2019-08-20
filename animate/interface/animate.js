@@ -96,10 +96,6 @@ function animateInterface(ui) {
 	ui.beforeFrame = function() {
 		lns.draw.isDrawing = false; /* prototype here with render, anim, draw, isActive or something ? */
 		lns.data.saveLines();
-
-		/* determine if add to num frames */
-		if (self.layersInFrame(lns.currentFrame) && lns.anim.numFrames < lns.anim.currentFrame + 1)
-			lns.anim.numFrames++;
 	};
 
 	ui.layersInFrame = function(n) {
