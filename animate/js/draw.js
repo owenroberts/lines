@@ -11,7 +11,7 @@ function Draw(anim, defaults) {
 		r: defaults.r,
 		w: defaults.w,
 		v: defaults.v,
-		c: lns.render.lineColor /* just anim/layer color now ??? */
+		c: defaults.c
 	});
 
 	this.setProperties = function(props) {
@@ -49,7 +49,7 @@ function Draw(anim, defaults) {
 			r: self.layer.r,
 			w: self.layer.w,
 			v: self.layer.v,
-			c: lns.render.lineColor
+			c: self.layer.c
 		});
 		anim.layers.push(self.layer);
 		anim.drawings.push(self.drawing);

@@ -9,13 +9,6 @@ function Render(lps, color) {
 	this.onions = [];
 	this.onionSkinIsVisible = false;
 
-	this.lineColor = color || '#000000'; /* default black*/
-
-	this.setLineColor = function(value) {
-		this.lineColor = value;
-		lns.draw.layer.c = value;
-	};
-
 	/* l key */
 	this.setOnionSkin = function(n) {
 		self.onionSkinNum = +n;

@@ -158,7 +158,7 @@ function animateInterface(ui) {
 		return {
 			canvasColor: lns.canvas.bgColor,
 			lineWidth: lns.canvas.ctx.lineWidth,
-			lineColor: lns.render.lineColor,
+			c: lns.draw.layer.c,
 			width: lns.canvas.width,
 			height: lns.canvas.height,
 			fps: lns.anim.fps,
@@ -176,13 +176,13 @@ function animateInterface(ui) {
 		lns.canvas.setLineWidth(settings.lineWidth);
 		lns.render.setFps(settings.fps);
 		lns.render.setLps(settings.lps);
-		lns.render.lineColor = settings.lineColor;
+		lns.draw.layer.c = settings.c;
 		lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 		lns.render.onionSkinNum = settings.onionSkinNum;
 
 		lns.ui.faces.lps.setValue(settings.lps);
 		lns.ui.faces.fps.setValue(settings.fps);
-		lns.ui.faces.lineColor.setValue(settings.lineColor);
+		lns.ui.faces.c.setValue(settings.c);
 		lns.ui.faces.bgColor.setValue(settings.canvasColor);
 		lns.ui.faces.lineWidth.setValue(settings.lineWidth);
 		lns.ui.faces.onionSkinNum.setValue(settings.onionSkinNum);

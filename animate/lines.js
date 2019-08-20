@@ -4,12 +4,12 @@ window.addEventListener("load", function() {
 
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff");
-	lns.render = new Render(); // (lps, lineColor)
+	lns.render = new Render(12); // (lps)
 
 	lns.lines = new Animation(lns.canvas.ctx);
 	lns.anim = new Animation(lns.canvas.ctx);
 
-	lns.draw = new Draw(lns.lines, { n: 2, r: 1, w: 1, v: 0.1 }); // defaults
+	lns.draw = new Draw(lns.lines, { n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
 	lns.bgImage = new Background();
 	lns.data = new Data(lns.anim);
 	lns.files = new Files({

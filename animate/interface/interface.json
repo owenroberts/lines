@@ -163,13 +163,14 @@
 	"lineColor": {
 		"id": "line-color-menu",
 		"label": "Line Color",
-		"module": "render",
+		"module": "draw",
+		"sub": "layer",
 		"list": [
 			{
 				"type": "color",
-				"face": "lineColor",
-				"fromModule": {
-					"callback": "setLineColor"
+				"face": "c",
+				"set": {
+					"prop": "c"
 				}
 			}
 		]

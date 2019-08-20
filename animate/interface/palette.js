@@ -8,7 +8,7 @@ function Palette(ui) {
 		const name = self.current = prompt('Name this palette.');
 		if (name) {
 			self.palettes[name] = {
-				color: lns.render.lineColor,
+				c: lns.draw.layer.c,
 				n: lns.draw.layer.n,
 				r: lns.draw.layer.r,
 				w: lns.draw.layer.w,
@@ -36,8 +36,6 @@ function Palette(ui) {
 		self.palettes.current = name;
 		const palette = self.palettes[name];
 		
-		lns.render.lineColor = palette.color;
-
 		lns.draw.setProperties(self.palettes[name]);
 
 		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;

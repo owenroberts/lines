@@ -18,12 +18,9 @@ function Files(params) {
 		json.h = Math.floor(+lns.canvas.height);
 		json.fps = +lns.anim.fps;
 		if (params.bg) json.bg = lns.canvas.bgColor;
-		// what if one color isn't used ?
-		// json.mc = lns.lineColor.colors.length > 1 ? true : false;
 		let colors = lns.anim.layers.map(layer => layer.c);
 		colors = [...new Set(colors)];
 		json.mc = colors.length > 1 ? true : false;
-		// set by layers
 
 		/* save current frame */
 		let layers = [];
@@ -111,7 +108,7 @@ function Files(params) {
 		lns.anim.layers = [];
 		for (let i = 0; i < data.l.length; i++) {
 			lns.anim.layers[i] = new Layer(data.l[i]);
-			lns.render.lineColor = lns.anim.layers[i].c;
+			lns.lines.layer.c = lns.anim.layers[i].c;
 		}
 
 		if (lns.anim.states.default) lns.anim.states.default.end = lns.anim.endFrame;
