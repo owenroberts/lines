@@ -27,8 +27,10 @@ class TextureEdit extends Texture {
 	}
 
 	display(view) {
-		for (let i = 0; i < this.items.length; i++) {
-			this.items[i].display(view);
+		if (!this.remove) {
+			for (let i = 0; i < this.items.length; i++) {
+				this.items[i].display(view);
+			}
 		}
 	}
 
@@ -82,6 +84,14 @@ class TextureEdit extends Texture {
 					}
 				}
 				/* item method ? */
+			}
+		});
+
+		this.ui.uis.remove = new UIButton({
+			title: "Remove",
+			callback: function() {
+				self.remove = true;
+				self.ui.removeUI();
 			}
 		});
 		

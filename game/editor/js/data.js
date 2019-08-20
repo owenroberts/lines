@@ -13,7 +13,8 @@ function Data(app, params) {
 		for (const type in app.sprites) {
 			if (!sprites[type]) sprites[type] = {};
 			for (const key in app.sprites[type]) {
-				sprites[type][key] = app.sprites[type][key].data;
+				if (!app.sprites[type][key].remove) 
+					sprites[type][key] = app.sprites[type][key].data;
 			}
 		}
 
@@ -48,7 +49,6 @@ function Data(app, params) {
 		let location; 
 
 		const modal = new Modal("Add Sprite", function() {
-			console.log('callback')
 			if (mod == 'ui') location = app[mod];
 			else location = app[mod][type];
 			
@@ -58,7 +58,6 @@ function Data(app, params) {
 				scenes: [app.scene],
 				...edi.zoom.translate(x, y) 
 			});
-			console.log(location[fileName])
 		});
 
 		modal.add(new UISelect({
