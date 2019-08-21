@@ -227,7 +227,10 @@ select {
 
 #draw-layers {
 	margin-top: 1em;
-	width: 100%;
+	// width: 100%;
+	border-top: 1px solid $ui-color;
+	border-bottom: 1px solid $ui-color;
+	padding: 0.25em 0;
 }
 
 .modal {
@@ -235,10 +238,11 @@ select {
     background: white;
     padding: 1em;
     border-radius: 1em;
-    border: 1px solid $main-color;
-    top: 2em;
-    right: 2em;
-    width: 25%;
+    border: 5px solid $main-color;
+    outline: 10px dotted $accent-two;
+    top: 50%;
+    right: 50%;
+    width: 400px;
     * { margin: 0 1em; }
 }
 

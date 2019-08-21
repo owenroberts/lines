@@ -33,5 +33,9 @@ window.addEventListener("load", function() {
 		localStorage.removeItem('re-open');
 	}
 
+	if (location.search.split('=')[1]) {
+		lns.files.loadFile(location.search.split('=')[1].split('.')[0])
+	}
+
 	lns.render.start(); // necessary ?
 });

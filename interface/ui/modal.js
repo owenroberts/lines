@@ -13,6 +13,18 @@ class Modal {
 			}
 		});
 		this.el.appendChild(this.submit.el);
+		edi.ui.keys['enter'] = this.submit; /* not modular ... */
+
+
+		this.cancel = new UIButton({
+			title: "x",
+			callback: ev => {
+				this.clear();
+			}
+		});
+		edi.ui.keys['escape'] = this.cancel;
+
+		this.el.appendChild(this.cancel.el);
 	}
 
 	add(component) {

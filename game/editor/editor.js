@@ -4,8 +4,8 @@ edi.ui.load('interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
 edi.ui.displayTextures = function() {
 	for (const key in Game.sprites.textures) {
-		Game.sprites.textures[key].ui.removeUI();
-		Game.sprites.textures[key].ui.createUI();
+		Game.sprites.textures[key].ui.remove();
+		Game.sprites.textures[key].ui.create();
 	}
 }; /* needs to go in module */
 edi.ui.markers = {};
@@ -164,7 +164,6 @@ function mouseDown(x, y, button) {
 	}
 }
 
-/* does button matter ?? */
 function mouseUp(x, y, button) {
 	if (button == 1) edi.zoom.mouseDown = false;
 } 

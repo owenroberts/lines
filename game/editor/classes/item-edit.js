@@ -1,20 +1,21 @@
 class ItemEdit extends Item {
 	constructor(params, src, debug) {
 		super(params, src, debug);
-		
+		this.origin = params.src || src;
 		this.displayLabel = false;
 		this.outline = false;
 		this.label = params.label;
 
-		this.ui = new EditUI(this.createUI.bind(this), edi.ui.panels.items); /* this is fucked right? */
+		this.ui = new ItemEditUI(this, edi.ui.panels.items);
 	}
 
 	display(view) {
 		Game.ctx.strokeStyle = '#000000'; // game colors ???
-		super.display(this.isInMapBounds(view));
-
-		if (this.displayLabel) this.drawLabel();
-		if (this.outline) this.drawOutline();
+		if (!this.remove) {
+			super.display(this.isInMapBounds(view));
+			if (this.displayLabel) this.drawLabel();
+			if (this.outline) this.drawOutline();
+		}
 	}
 
 	isInMapBounds(view) {
@@ -66,8 +67,8 @@ class ItemEdit extends Item {
 		this._selected = select;
 		this.displayLabel = select;
 		this.outline = select;
-		if (select) this.ui.addUI();
-		else this.ui.removeUI();
+		if (select) this.ui.add();
+		else this.ui.remove();
 	}
 
 	get selected() {
@@ -77,62 +78,6 @@ class ItemEdit extends Item {
 	update(offset) {
 		this.position.add(offset);
 		this.ui.update({ x: this.position.x, y: this.position.y });
-	}
-	
-
-	createUI() {
-		const self = this;
-
-		this.ui.uis.label = new UIText({
-			title: this.label,
-			block: true,
-			callback: function(value) {
-				self.label = value;
-			}
-		});
-		
-		this.ui.uis.x = new UIText({
-			label: "x",
-			value: self.position.x,
-			callback: function(value) {
-				self.position.x = +value;
-			}
-		});
-
-		this.ui.uis.y = new UIText({
-			label: "y",
-			value: self.position.y,
-			callback: function(value) {
-				self.position.y = +value;
-			}
-		});
-
-		this.ui.uis.sceneSelectors = [];
-
-		function addSceneSelector(scene, index) {
-			self.ui.uis.sceneSelectors[index] = new UISelect({
-				options: Game.scenes,
-				selected: scene,
-				callback: function(value) {
-					self.scenes[index] = value;
-				}
-			});
-			return self.ui.uis.sceneSelectors[index];
-		}
-
-		for (let i = 0; i < this.scenes.length; i++) {
-			this.ui.uis.sceneSelectors.push(addSceneSelector(this.scenes[i], i));
-		}
-
-		this.ui.uis.addScene = new UIButton({
-			title: "+ scene",
-			callback: function() {
-				const s = addSceneSelector(Game.scenes[0], self.scenes.length);
-				edi.ui.panels.items.add(s, self.row);
-			}
-		});
-
-		this.ui.addUI();
 	}
 
 	get data() {

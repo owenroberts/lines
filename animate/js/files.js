@@ -113,6 +113,7 @@ function Files(params) {
 		for (let i = 0; i < data.l.length; i++) {
 			lns.layers[i] = new Layer(data.l[i]);
 			lns.render.lineColor = lns.layers[i].c;
+			lns.ui.faces.lineColor.addColor(lns.layers[i].c);
 			if (lns.numFrames < lns.layers[i].f.e)
 				lns.numFrames = lns.layers[i].f.e;
 		}

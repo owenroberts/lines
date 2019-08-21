@@ -1,13 +1,42 @@
 class EditUI {
-	constructor(createUI, panel) {
+	constructor(item, panel) {
 		this.added = false;
 		this.color = '#ff00ff';
 		this.uis = {};
 		this.panel = panel;
-		this.createUI = createUI;
+		this.item = item;
 	}
 
-	addUI() {
+	create() {
+		const self = this;
+
+		this.uis.label = new UIText({
+			title: self.item.label,
+			block: true,
+			callback: function(value) {
+				self.item.label = value;
+			}
+		});
+
+		this.uis.remove = new UIButton({
+			title: "Remove",
+			callback: function() {
+				self.item.remove = true;
+				self.remove();
+			}
+		});
+
+		this.uis.edit = new UIButton({
+			title: "Edit",
+			callback: function() {
+				window.open(`${location.origin}/${location.pathname.includes('lines') ? 'lines/' : ''}animate/?src=${self.item.origin}`, 'anim');
+			}
+		});
+
+		this.add();
+	}
+
+	add() {
 		if (!this.row) this.row = this.panel.addRow();
 		if (this.uis.label && !this.added) {
 			this.added = true;
@@ -22,13 +51,13 @@ class EditUI {
 				}
 			}
 		} else if (!this.uis.label) {
-			this.createUI();
+			this.create();
 		}
 	}
 
-	removeUI() {
+	remove() {
 		edi.ui.panels.items.clearComponents(this.row);
-		this.uiAdded = false;
+		this.added = false;
 	}
 
 	update(obj) {

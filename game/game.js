@@ -21,6 +21,8 @@ const Game = {
 
 		this.clearBg = true;
 
+		this.bounds = { top: 0, bottom: 0, left: 0, right: 0 };
+
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
 			
@@ -35,7 +37,6 @@ const Game = {
 
 		this.loaded = {}; /* auto save loaded json sprites */
 	},
-	
 	load: function(files, classes, callback) {
 		Game.classes = classes;
 		Game.assetsLoaded = {};
@@ -76,6 +77,17 @@ const Game = {
 			const params = { label: key, ...value };
 
 			location[key] = new Game.classes[type](params);
+
+			if (location[key].position) {
+				if (location[key].position.y < Game.bounds.top) 
+					Game.bounds.top = location[key].position.y - Game.height/2;
+				if (location[key].position.y > Game.bounds.bottom) 
+					Game.bounds.bottom = location[key].position.y + Game.height/2;
+				if (location[key].position.x > Game.bounds.right) 
+					Game.bounds.right = location[key].position.x + Game.width/2;
+				if (location[key].position.x < Game.bounds.left) 
+					Game.bounds.left = location[key].position.x - Game.width/2;
+			}
 
 			for (let i = 0; i < location[key].scenes.length; i++) {
 				const scene = location[key].scenes[i];
