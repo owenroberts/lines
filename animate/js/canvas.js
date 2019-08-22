@@ -8,9 +8,9 @@ function Canvas(id, width, height, color) {
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 
-	this.setBGColor = function(_color) {
-		self.bgColor = _color;
-		self.canvas.style.backgroundColor = _color;
+	this.setBGColor = function(color) {
+		self.bgColor = color;
+		self.canvas.style.backgroundColor = color;
 	};
 
 	this.setBGColor(color);

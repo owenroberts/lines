@@ -5,7 +5,7 @@
 Game.init({
 	width: window.innerWidth, 
 	height: window.innerHeight, 
-	lps:10,
+	lps: 10,
 	stats: true,
 	debug: false,
 	mixedColors: true
@@ -20,15 +20,15 @@ Game.initLettering('letters.json'); // create letters for each game
 
 /* usually in spearate data files */
 const title = new Text(10, 40, "welcome to the game", 10, Game.letters);
-const joinGame = new UI({
-	x: 200,
-	y: 20,
+const joinGame = new Button({
+	x: 400,
+	y: 100,
 	src: 'join_game.json',
 	states: {
 		"idle": { "start": 0, "end": 0 },
-		"over": { "start": 1, "end": 2 },
-		"selected": { "start": 1, "end": 2 },
-		"active": { "start": 2, "end": 3 }
+		"over": { "start": 1, "end": 1 },
+		"selected": { "start": 2, "end": 2 },
+		"active": { "start": 3, "end": 3 }
 	},
 	state: 'idle'
 });
@@ -47,12 +47,19 @@ class Character extends Sprite {
 	update() {
 		this.position.x += this.speed.x;
 		this.position.y += this.speed.y;
-	} /* should be part of sprite already ? */
+	}
 }
 
 const char = new Character(300, 300);
 Game.scenes.walk.characters = [];
 Game.scenes.walk.characters.push(char);
+
+const waves = new Sprite(400, 400);
+waves.addAnimation('waves.json', function() {
+	waves.animation.randomFrames = true;
+});
+
+// const trees = new Texture();
 
 function start() {
 	console.log("game start");
@@ -60,19 +67,19 @@ function start() {
 }
 
 function draw() {
-	/* for loop or for (const key in obj) probably preferable */
-	Game.scenes[Game.currentScene].characters.forEach(function(character) {
-		character.display();
-	});
+	for (let i = 0; i < Game.scenes[Game.currentScene].characters.length; i++) {
+		Game.scenes[Game.currentScene].characters[i].display();
+	}
 
+	waves.display();
 	title.display(); // lettering example
 	joinGame.display(); // ui example
 }
 
 function update() {
-	Game.scenes[Game.currentScene].characters.forEach(function(character) {
-		character.update();
-	});
+	for (let i = 0; i < Game.scenes[Game.currentScene].characters.length; i++) {
+		Game.scenes[Game.currentScene].characters[i].update();
+	}
 }
 
 Game.start();
@@ -129,6 +136,5 @@ function mouseDown(x, y) {
 }
 
 function mouseUp(x, y) {
-	if (joinGame.up(x, y))
-		return;
+	if (joinGame.up(x, y)) return;
 }

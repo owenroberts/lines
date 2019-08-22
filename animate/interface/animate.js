@@ -182,7 +182,10 @@ function animateInterface(ui) {
 
 		lns.ui.faces.lps.setValue(settings.lps);
 		lns.ui.faces.fps.setValue(settings.fps);
+		
 		lns.ui.faces.c.setValue(settings.c);
+		/* this can be done with update, but i dont like lns.ui.faces being the location ... */
+		
 		lns.ui.faces.bgColor.setValue(settings.canvasColor);
 		lns.ui.faces.lineWidth.setValue(settings.lineWidth);
 		lns.ui.faces.onionSkinNum.setValue(settings.onionSkinNum);

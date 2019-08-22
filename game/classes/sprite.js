@@ -5,7 +5,6 @@ class Sprite {
 		this.height = h;
 		this.debug = false; /* argument? */
 		this.debugColor = "#00ffbb";
-		this.drawBackground = false;
 		this.collider = {
 			position: new Cool.Vector(0, 0),
 			width: this.width,
@@ -34,31 +33,21 @@ class Sprite {
 
 	/* rewrite later ... */	
 	addJSON(json, callback) {
-		this.animation = new Animation(undefined, this.debug);
-		if (!this.width) { /* load size from animation data */
-			this.animation.loadJSON(json, false, (w, h) => {
-				this.width = this.collider.width = w;
-				this.height = this.collider.height = h;
-				if (callback) callback();
-			});
-		} else { /* size determined by sprite */
-			this.animation.load({w: this.width, h: this.height}); 
-		}
-		if (this.drawBackground) this.animation.drawBackground = true;
+		this.animation = new Anim();
+		this.animation.loadJSON(json, data => {
+			this.width = this.collider.width = data.w;
+			this.height = this.collider.height = data.h;
+			if (callback) callback();
+		});
 	}
 
 	addAnimation(src, callback) {
-		this.animation = new Animation(src, this.debug);
-		if (!this.width) { /* load size from animation data */
-			this.animation.load(false, (w, h) => {
-				this.width = this.collider.width = w;
-				this.height = this.collider.height = h;
-				if (callback) callback();
-			});
-		} else { /* size determined by sprite */
-			this.animation.load({w: this.width, h: this.height}); 
-		}
-		if (this.drawBackground) this.animation.drawBackground = true;
+		this.animation = new Anim();
+		this.animation.load(src, data => {
+			this.width = this.collider.width = data.w;
+			this.height = this.collider.height = data.h;
+			if (callback) callback();
+		});
 	}
 
 	fit(width) {
@@ -100,11 +89,12 @@ class Sprite {
 	}
 
 	drawDebug() {
+		const {x, y} = this.getCenter();
 		Game.ctx.lineWidth = 1;
 		Game.ctx.beginPath();
 		Game.ctx.rect(
-			this.position.x + this.collider.position.x, 
-			this.position.y + this.collider.position.y, 
+			x + this.collider.position.x, 
+			y + this.collider.position.y, 
 			this.collider.width, 
 			this.collider.height
 		);
@@ -131,8 +121,8 @@ class Sprite {
 			if (this.debug) this.drawDebug();
 			if (this.animation && this.animation.loaded) {
 				const {x, y} = this.getCenter();
-				if (this.bkg) this.animation.drawBkg(x, y);
-				else this.animation.draw(x, y);
+				this.animation.draw(x, y);
+				this.animation.update();
 			}
 		}
 		if (this.displayFunc) this.displayFunc();
@@ -146,25 +136,24 @@ class Sprite {
 			return true;
 		else
 			return false;
-	} /* from idtio item class - offset from player position ...  */
+	} 
 
 	center() {
 		this.position.x -= this.width / 2;
 		this.position.y -= this.height / 2;
 	}
 
-	/* better name for this? interact...  */
 	tap(x, y) {
-		if (x > this.position.x + this.collider.position.x &&
-			x < this.position.x + this.collider.position.x + this.collider.width && 
-			y > this.position.y + this.collider.position.y && 
-			y < this.position.y + this.collider.position.y + this.collider.height) {
+		const xy = this.getCenter();
+		if (x > xy.x + this.collider.position.x &&
+			x < xy.x + this.collider.position.x + this.collider.width && 
+			y > xy.y + this.collider.position.y && 
+			y < xy.y + this.collider.position.y + this.collider.height) {
 			return true;
 		} else 
 			return false;
 	}
 
-	/* physics stuff .... */
 	jump(amount) {
 		this.jumpAmount += Math.min(-amount / 25, 10);
 	}
@@ -206,7 +195,6 @@ class Sprite {
 		}
 	}
 
-	/* not totally sure what this is used for ... */
 	outside(other) {
 		var next = this.position.copy();
 		var nextCollider = this.collider.position.copy();

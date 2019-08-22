@@ -18,7 +18,7 @@ function Draw(anim, defaults) {
 		for (const prop in props) {
 			if (self.layer[prop] !== undefined) {
 				self.layer[prop] = props[prop];
-				if (lns.ui) lns.ui.faces[prop].update(props[prop]);
+				if (lns.ui) lns.ui.faces[prop].update(props[prop]); /* how to do this with ui, setter */
 			}
 		}
 		/* n default 2 - h key */

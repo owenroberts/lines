@@ -1,12 +1,12 @@
 class Animation {
 	constructor(ctx, lps, mixedColors) {
 		this.ctx = ctx;
+		this.loaded = false;
 		this.isPlaying = false;
-		this.numFrames = 0;
 		this.drawings = [];
 		this.layers = [];
 		this.currentFrame = 0;
-		this.currentFrameCounter = 0;
+		this.currentFrameCounter = 0; // floats
 		
 		this.lps = lps || 12;
 		this.fps = lps || 12;
@@ -20,7 +20,7 @@ class Animation {
 			speed: { x: 0, y: 0 }
 		};
 
-		this.state = 'default';
+		this._state = 'default';
 		this.states = { 'default': {start: 0, end: 0 } };
 
 		this.over = {};
@@ -46,6 +46,18 @@ class Animation {
 		return this.states[this.state];
 	}
 
+	set state(state) {
+		if (this._state != state) {
+			this._state = state;
+			if (this.currentState) this.frame = this.currentState.start;
+			if (!this.isPlaying) this.isPlaying = true; /* bad temp fix ... */
+		}
+	}
+
+	get state() {
+		return this._state;
+	}
+
 	overrideProperty(prop, value) {
 		this.over[prop] = value;
 		this.override = true;
@@ -60,18 +72,18 @@ class Animation {
 		if (this.isPlaying) {
 			if (this.currentFrame <= this.currentState.end) {
 				this.currentFrameCounter += this.intervalRatio;
-				this.currentFrame = Math.floor(this.frame4);
+				this.currentFrame = Math.floor(this.currentFrameCounter);
 				if (this.onUpdate) this.onUpdate();
 			}
-			if (this.frame4 > this.states[this.state].end) {
-				this.frame = this.states[this.state].start;
+			if (this.frame4 > this.currentState.end) {
+				this.frame = this.currentState.start;
 				if (this.onPlayedState) this.onPlayedState();
 			}
 			if (this.onUpdate) this.onUpdate();
 		}
 	}
 
-	draw() {
+	draw(x, y) {
 		if (!this.mixedColors) this.ctx.beginPath();
 		for (let i = 0, len = this.layers.length; i < len; i++) {
 			const layer = this.layers[i];
@@ -84,6 +96,9 @@ class Animation {
 				for (const key in layer) {
 					this.rndr[key] = layer[key];
 				}
+
+				if (x) this.rndr.x += x;
+				if (y) this.rndr.y += y;
 
 				if (layer.a) {
 					for (let j = 0; j < layer.a.length; j++) {
@@ -182,6 +197,7 @@ class Animation {
 	}
 
 	loadData(json, callback) {
+		this.loaded = true;
 		for (let i = 0; i < json.d.length; i++) {
 			const drawing = json.d[i];
 			const d = [];
@@ -207,6 +223,11 @@ class Animation {
 
 		if (callback) callback(json);
 		if (this.onLoad) this.onLoad();
+	}
+
+	setOnLoad(callback) {
+		if (this.loaded) callback();
+		else this.onLoad = callback;
 	}
 }
 
