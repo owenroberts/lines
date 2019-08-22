@@ -253,16 +253,27 @@ function Layers(panel) {
 
 	this.canvas = new Canvas("draw-layers", 0, 0, '#F2F4F4');
 
+	/* do this with real ui later*/
+	this.toggleCanvas = new UIToggleButton({
+		id: 'toggle-layers',
+		on: "Close Layers",
+		off: "Open Layers",
+		callback: function() {
+			if (this.isOn) self.canvas.canvas.style.display = 'none';
+			else self.canvas.canvas.style.display = '';
+		}
+	})
+
 	this.drawLayers = function() {
 		const maxWidth = 60;
-		const w = self.canvas.canvas.parentElement.offsetWidth;
+		const w = Math.min(640, self.canvas.canvas.parentElement.offsetWidth);
+		console.log(w);
 		const row = 4;
 		const h = row * (lns.layers.length + 1);
 		self.canvas.setHeight(h);
 		const col = Math.min(maxWidth, w / (lns.numFrames));
+		console.log(col);
 		self.canvas.setWidth(Math.min(w, col * lns.numFrames));
-
-		console.log(w, col);
 
 		for (let i = 0; i < lns.numFrames; i++) {
 			const x = i * col;
