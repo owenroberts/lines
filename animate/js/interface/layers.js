@@ -254,12 +254,15 @@ function Layers(panel) {
 	this.canvas = new Canvas("draw-layers", 0, 0, '#F2F4F4');
 
 	this.drawLayers = function() {
-		const w = self.canvas.canvas.offsetWidth;
-		self.canvas.setWidth(w);
-		const row = 10;
+		const maxWidth = 60;
+		const w = self.canvas.canvas.parentElement.offsetWidth;
+		const row = 4;
 		const h = row * (lns.layers.length + 1);
 		self.canvas.setHeight(h);
-		const col = w / (lns.numFrames);
+		const col = Math.min(maxWidth, w / (lns.numFrames));
+		self.canvas.setWidth(Math.min(w, col * lns.numFrames));
+
+		console.log(w, col);
 
 		for (let i = 0; i < lns.numFrames; i++) {
 			const x = i * col;
@@ -274,8 +277,7 @@ function Layers(panel) {
 			const y = i * row + row/20;
 			const _w = (layer.f.e - layer.f.s + 1) * col - 2;
 			self.canvas.ctx.fillStyle = '#ADD8E6';
-			self.canvas.ctx.fillRect(x, y + row/4, _w, row/2);
+			self.canvas.ctx.fillRect(x, y, _w, row - 1);
 		}
 	};
-
 }

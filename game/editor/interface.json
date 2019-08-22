@@ -62,7 +62,7 @@
 			},
 			{
 				"type": "button",
-				"key": "ctrl-z",
+				"key": "z",
 				"fromModule": {
 					"callback": "load"
 				},
@@ -72,12 +72,12 @@
 			},
 			{
 				"type": "button",
-				"key": "z",
+				"key": "ctrl-z",
 				"fromModule": {
-					"callback": "reset"
+					"callback": "center"
 				},
 				"params": {
-					"title": "Reset"
+					"title": "Center"
 				}
 			}
 		]
@@ -150,5 +150,22 @@
 		"label": "Items",
 		"module": "ui",
 		"list": []
+	},
+	"textures": {
+		"id": "texture-menu",
+		"label": "Textures",
+		"module": "ui",
+		"list": [
+			{
+				"type": "button",
+				"key": "t",
+				"fromModule": {
+					"callback": "displayTextures"
+				},
+				"params": {
+					"title": "Display"
+				}
+			}
+		]
 	}
 }

@@ -29,8 +29,12 @@ function Files(params) {
 		let layers = [];
 		if (single) {
 			for (let i = 0; i < lns.layers.length; i++) {
-				if (lns.layers[i].isInFrame(lns.currentFrame))
-					layers.push(lns.layers[i]);
+				if (lns.layers[i].isInFrame(lns.currentFrame)) {
+					const layer = _.cloneDeep(lns.layers[i]);
+					layer.startFrame = 0;
+					layer.endFrame = 0;
+					layers.push(layer);;
+				}
 			}
 		} else {
 			layers = lns.layers;
@@ -109,6 +113,7 @@ function Files(params) {
 		for (let i = 0; i < data.l.length; i++) {
 			lns.layers[i] = new Layer(data.l[i]);
 			lns.render.lineColor = lns.layers[i].c;
+			lns.ui.faces.lineColor.addColor(lns.layers[i].c);
 			if (lns.numFrames < lns.layers[i].f.e)
 				lns.numFrames = lns.layers[i].f.e;
 		}

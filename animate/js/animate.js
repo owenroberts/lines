@@ -168,6 +168,7 @@ function animateInterface(ui) {
 			lps: lns.render.lps,
 			onionSkinIsVisible: lns.render.onionSkinIsVisible,
 			onionSkinNum: lns.render.onionSkinNum,
+			mouseInterval: lns.draw.mouseInterval,
 			palettes: lns.ui.palette.palettes
 		};
 	}
@@ -188,15 +189,18 @@ function animateInterface(ui) {
 		lns.ui.faces.lineWidth.setValue(settings.lineWidth);
 		lns.ui.faces.onionSkinNum.setValue(settings.onionSkinNum);
 
+		/* update sets value and calls callback ...*/
+		lns.ui.faces.mouseInterval.update(settings.mouseInterval); 
+
 		lns.ui.palette.palettes = settings.palettes;
 		if (lns.ui.palette.current) 
 			self.loadPalette(lns.palettes.current);
 		for (const key in settings.palettes) {
 			if (key != 'current') {
-				lns.palettes.panel.add(new UIButton({
+				lns.ui.panels.palette.add(new UIButton({
 					title: key,
 					callback: function() {
-						self.loadPalette(key);
+						lns.ui.palette.loadPalette(key);
 					}
 				}));
 			}

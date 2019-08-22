@@ -21,6 +21,8 @@ const Game = {
 
 		this.clearBg = true;
 
+		this.bounds = { top: 0, bottom: 0, left: 0, right: 0 };
+
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
 			
@@ -35,16 +37,24 @@ const Game = {
 
 		this.loaded = {}; /* auto save loaded json sprites */
 	},
-	load: function(files, handler, callback) {
+	load: function(files, classes, callback) {
+		Game.classes = classes;
 		Game.assetsLoaded = {};
 		for (const f in files) {
 			const file = files[f];
 			Game.assetsLoaded[f] = false;
 			fetch(file)
-				.then(response => { return response.json() })
+				.then(response => {
+					if (response.ok) return response.json();
+					throw new Error('Network response was not ok.');
+				})
 				.then(json => {
 					Game.assetsLoaded[f] = true;
-					handler(f, json); /* game loaded to specific scenes, editor loads to generic sprites */
+					Game.loadSprites(f, json);
+				})
+				.catch(error => {
+					console.error(error);
+					Game.assetsLoaded[f] = true;
 				});
 		}
 
@@ -54,6 +64,45 @@ const Game = {
 				if (callback) callback();
 			}
 		}, 1000 / 60);
+	},
+	loadSprites: function(file, json) {
+		Game.traverse(json, [], function(key, value, path) {
+			let location = Game[file];
+			for (let i = 0; i < path.length; i++) {
+				const loc = path[i];
+				if (!location[loc]) location[loc] = {};
+				location = location[loc];
+			}
+			const type = path.pop();
+			const params = { label: key, ...value };
+
+			location[key] = new Game.classes[type](params);
+
+			if (location[key].position) {
+				if (location[key].position.y < Game.bounds.top) 
+					Game.bounds.top = location[key].position.y - Game.height/2;
+				if (location[key].position.y > Game.bounds.bottom) 
+					Game.bounds.bottom = location[key].position.y + Game.height/2;
+				if (location[key].position.x > Game.bounds.right) 
+					Game.bounds.right = location[key].position.x + Game.width/2;
+				if (location[key].position.x < Game.bounds.left) 
+					Game.bounds.left = location[key].position.x - Game.width/2;
+			}
+
+			for (let i = 0; i < location[key].scenes.length; i++) {
+				const scene = location[key].scenes[i];
+				if (!Game.scenes.includes(scene)) Game.scenes.push(scene);
+			}
+		});
+	},
+	traverse: function(o, path, callback) {
+		for (const k in o) {
+			if (o[k].src) {
+				callback(k, o[k], [...path]);
+			} else if (o[k] !== null && typeof(o[k]) == 'object') {
+				Game.traverse(o[k], [...path, k], callback);
+			}
+		}
 	},
 	start: function() {
 		if (typeof start === "function") start(); // should be game method?

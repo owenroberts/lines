@@ -103,8 +103,8 @@ class Sprite {
 		Game.ctx.lineWidth = 1;
 		Game.ctx.beginPath();
 		Game.ctx.rect(
-			this.position.x + this.collider.position.x, 
-			this.position.y + this.collider.position.y, 
+			this.xy.x + this.collider.position.x, 
+			this.xy.y + this.collider.position.y, 
 			this.collider.width, 
 			this.collider.height
 		);
@@ -112,6 +112,19 @@ class Sprite {
 		Game.ctx.strokeStyle = this.debugColor;
 		Game.ctx.stroke();
 		Game.ctx.strokeStyle = temp;
+	}
+
+	/* better name for this ... */
+	get xy() {
+		// console.log(this.position, this.center, this.width, this.height);
+		if (this.center) {
+			return {
+				x: this.position.x - (this.center ? this.width/2 : 0),
+				y: this.position.y - (this.center ? this.height/2 : 0)
+			}
+		} else {
+			return this.position;
+		}
 	}
 
 	getCenter() {
@@ -123,34 +136,28 @@ class Sprite {
 		} else {
 			return this.position;
 		}
-		
 	}
 
 	display(isMap) {
 		if (this.alive && (this.isOnScreen() || isMap)) {
 			if (this.debug) this.drawDebug();
 			if (this.animation && this.animation.loaded) {
-				const {x, y} = this.getCenter();
-				if (this.bkg) this.animation.drawBkg(x, y);
-				else this.animation.draw(x, y);
+				// const {x, y} = this.getCenter();
+				if (this.bkg) this.animation.drawBkg(this.xy.x, this.xy.y);
+				else this.animation.draw(this.xy.x, this.xy.y);
 			}
 		}
 		if (this.displayFunc) this.displayFunc();
 	}
 
 	isOnScreen() {
-		if (this.position.x + this.width > 0 && 
-			this.position.y + this.height > 0 &&
-			this.position.x < Game.width &&
-			this.position.y < Game.height)
+		if (this.xy.x + this.width > 0 && 
+			this.xy.y + this.height > 0 &&
+			this.xy.x < Game.width &&
+			this.xy.y < Game.height)
 			return true;
 		else
 			return false;
-	} /* from idtio item class - offset from player position ...  */
-
-	center() {
-		this.position.x -= this.width / 2;
-		this.position.y -= this.height / 2;
 	}
 
 	/* better name for this? interact...  */

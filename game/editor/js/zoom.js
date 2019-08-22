@@ -27,7 +27,7 @@ function Zoom() {
 	this.set = function(ctx, offset) {
 		ctx.scale(this.canvas.width / this.view.width, this.canvas.height / this.view.height);
 		ctx.translate(offset.x - this.view.x, offset.y - this.view.y);
-		ctx.clearRect(this.view.x - offset.x, this.view.y - offset.y, this.view.width, this.view.height);
+		// ctx.clearRect(this.view.x - offset.x, this.view.y - offset.y, this.view.width, this.view.height);
 	};
 
 	this.wheel = function(ev, callback) {
@@ -79,7 +79,7 @@ function Zoom() {
 		}
 	};
 
-	this.reset = function() {
+	this.center = function() {
 		self.canvas = { width: Game.width, height: Game.height };
 		self.view = { x: 0, y: 0, width: Game.width, height: Game.height };
 		self.previous = { x: undefined, y: undefined }; 
@@ -89,7 +89,7 @@ function Zoom() {
 		const scale = self.canvas.width / self.view.width;
 		x = x / scale + self.view.x - Game.width/2;
 		y = y / scale + self.view.y - Game.height/2;
-		return {x: x, y: y};
+		return {x: Math.round(x), y: Math.round(y)};
 	};
 
 	/* based on zoom: http://www.cs.colostate.edu/~anderson/newsite/javascript-zoom.html*/

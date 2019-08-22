@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>map</title>
+	<title>editor</title>
 	<link href="../../interface/css/lines.css" rel="stylesheet" type="text/css">
 	<link href="style.css" rel="stylesheet" type="text/css">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -33,16 +33,24 @@
 
 	<!-- game engine  -->
 	<script src="/lines/game/game.js"></script>
+	<script src="/lines/game/events.js"></script>
+
+	<!-- game classes -->
 	<script src="/lines/game/classes/sprite.js"></script>
 	<script src="/lines/game/classes/animation.js"></script>
-	<script src="/lines/game/events.js"></script> <!-- need this ?  -->
+	<script src="/lines/game/classes/item.js"></script>
+	<script src="/lines/game/classes/texture.js"></script>
 
-	<!-- map classes -->
-	<script src="classes/item.js"></script>
+	<!-- editor classes -->
+	<script src="classes/item-edit.js"></script>
+	<script src="classes/texture-edit.js"></script>
+	<script src="classes/edit-ui.js"></script>
+	<script src="classes/item-edit-ui.js"></script>
+	<script src="classes/texture-edit-ui.js"></script>
 	<script src="classes/gui.js"></script>
 	<script src="classes/marker.js"></script>
 
-	<!-- map modules -->
+	<!-- editor modules -->
 	<script src="js/zoom.js"></script>
 	<script src="js/data.js"></script>
 	<script src="js/ruler.js"></script>
@@ -50,6 +58,7 @@
 	<!-- ui classes -->
 	<script src="/lines/interface/ui/ui.js"></script>
 	<script src="/lines/interface/ui/panel.js"></script>
+	<script src="/lines/interface/ui/modal.js"></script>
 	<script src="/lines/interface/ui/button.js"></script>
 	<script src="/lines/interface/ui/toggle.js"></script>
 	<script src="/lines/interface/ui/display.js"></script>

@@ -1,4 +1,4 @@
-function Data(params) {
+function Data(app, params) {
 	const self = this;
 
 	/* from animate/js/files ... combine? */
@@ -10,22 +10,18 @@ function Data(params) {
 		const sprites = {};
 		const ui = {};
 
-		for (const key in Game.sprites) {
-			const s = Game.sprites[key];
-			sprites[key] = {
-				src: `${params.path}sprites/${s.label}.json`,
-				x: s.position.x, /* kinda dumb "uncentering" here */
-				y: s.position.y,
-				states: s.animation.states,
-				state: s.animation.state,
-				scenes: s.scenes
-			};
+		for (const type in app.sprites) {
+			if (!sprites[type]) sprites[type] = {};
+			for (const key in app.sprites[type]) {
+				if (!app.sprites[type][key].remove) 
+					sprites[type][key] = app.sprites[type][key].data;
+			}
 		}
 
-		for (const key in Game.ui) {
-			const s = Game.ui[key];
+		for (const key in app.ui) {
+			const s = app.ui[key];
 			ui[key] = {
-				src: `${params.path}ui/${s.label}.json`,
+				src: `${params.path}/ui/${s.label}.json`,
 				x: s.x,
 				y: s.y,
 				states: s.animation.states,
@@ -38,7 +34,6 @@ function Data(params) {
 		f.onwriteend = function() { 
 			self.download(ui, 'ui.json');
 		};
-		
 	};
 
 	this.download = function(data, fileName) {
@@ -47,28 +42,39 @@ function Data(params) {
 		return saveAs(blob, fileName);
 	};
 
-	this.load = function(callback) {
-	
-	};
-
-	this.loadSprites = function(file, json) {
-		for (const key in json) {
-			const params = { label: key, type: file, center: true, ...json[key] }
-			Game[file][key] = file == 'ui' ? new GUI(params) : new Item(params);
-			for (let i = 0; i < json[key].scenes.length; i++) {
-				const scene = json[key].scenes[i];
-				if (!Game.scenes.includes(scene)) Game.scenes.push(scene);
-			}
-		}
-	};
-
-	/* drop ui ? */
 	this.dropSprite = function(fileName, json, x, y) {
-		Game.sprites[fileName] = new Item({ label: fileName, center: true, ...edi.zoom.translate(x, y) });
-		Game.sprites[fileName].scenes = [Game.scene];
-		Game.sprites[fileName].addJSON(json, function() {
-			Game.sprites[fileName].center();
+		/* prompts for now, use modal or something ... */
+
+		let mod = 'sprites', type = 'scenery';
+		let location; 
+
+		const modal = new Modal("Add Sprite", function() {
+			if (mod == 'ui') location = app[mod];
+			else location = app[mod][type];
+			
+			location[fileName] = new app.classes[type]({ 
+				label: fileName,
+				src: `${params.path}/sprites/${fileName}.json`,
+				scenes: [app.scene],
+				...edi.zoom.translate(x, y) 
+			});
 		});
+
+		modal.add(new UISelect({
+			options: ['ui', 'sprites'],
+			selected: mod,
+			callback: function(value) {
+				mod = value;
+			}
+		}));
+
+		modal.add(new UISelect({
+			options: ['scenery', 'textures'],
+			selected: type,
+			callback: function(value) {
+				type = value;
+			}
+		}));
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -76,8 +82,11 @@ function Data(params) {
 		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
 		
 		const nav = document.getElementById('map');
-		nav.addEventListener('dragover', dragOverHandler);
-		nav.addEventListener('drop', dropHandler);
+		if (nav) {
+			nav.addEventListener('dragover', dragOverHandler);
+			nav.addEventListener('drop', dropHandler);
+		}
+	
 		// https://gist.github.com/andjosh/7867934
 	}
 
@@ -93,8 +102,11 @@ function Data(params) {
         	const reader = new FileReader();
 			reader.onload = (function(theFile) {
 				return function(e) {
-
-					self.dropSprite(f.name.split('.')[0], JSON.parse(e.target.result), ev.offsetX, ev.offsetY);
+					self.dropSprite(
+						f.name.split('.')[0], 
+						JSON.parse(e.target.result), 
+						ev.offsetX, ev.offsetY
+					);
           		};
         	})(f);
         	reader.readAsText(f);
@@ -104,7 +116,6 @@ function Data(params) {
 	function dragOverHandler(ev) {
 		ev.preventDefault();
 	}
-
 	
 	window.addEventListener("beforeunload", function(ev) {
 		if (self.saveSettingsOnUnload) lns.ui.settings.saveSettings();
