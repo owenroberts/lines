@@ -267,12 +267,10 @@ function Layers(panel) {
 	this.drawLayers = function() {
 		const maxWidth = 60;
 		const w = Math.min(640, self.canvas.canvas.parentElement.offsetWidth);
-		console.log(w);
 		const row = 4;
 		const h = row * (lns.layers.length + 1);
 		self.canvas.setHeight(h);
 		const col = Math.min(maxWidth, w / (lns.numFrames));
-		console.log(col);
 		self.canvas.setWidth(Math.min(w, col * lns.numFrames));
 
 		for (let i = 0; i < lns.numFrames; i++) {

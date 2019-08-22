@@ -191,11 +191,9 @@ select {
 }
 
 #frames {
-  max-width: 100%;
   height: auto;
   padding: 0;
   width: auto;
-  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, 24px);
   grid-template-rows: max-content max-content;

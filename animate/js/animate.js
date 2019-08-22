@@ -4,6 +4,16 @@ function animateInterface(ui) {
 	ui.framesPanel = new UI({ id:"frames" });
 	ui.frameElems = new UIList({ class: "frame" });
 
+	ui.rl = new UIToggleButton({
+		id: "right-left",
+		on: "R/L",
+		off: "L/R",
+		callback: function() {
+			if (this.isOn) lns.canvas.canvas.parentElement.style.order = 2;
+			else lns.canvas.canvas.parentElement.style.order = 0;
+		}		
+	});
+
 	/* update interface */
 	ui.updateInterface = function() {
 		self.updateFrameNum();
@@ -169,7 +179,9 @@ function animateInterface(ui) {
 			onionSkinIsVisible: lns.render.onionSkinIsVisible,
 			onionSkinNum: lns.render.onionSkinNum,
 			mouseInterval: lns.draw.mouseInterval,
-			palettes: lns.ui.palette.palettes
+			palettes: lns.ui.palette.palettes,
+			rl: lns.ui.rl.isOn,
+			displayLayers: lns.ui.layers.canvas.canvas.style.display
 		};
 	}
 
@@ -204,6 +216,16 @@ function animateInterface(ui) {
 					}
 				}));
 			}
+		}
+
+		if (!settings.rl) {
+			ui.rl.callback();
+			ui.rl.toggle();
+		}
+
+		if (settings.displayLayers) {
+			ui.layers.toggleCanvas.callback();
+			ui.layers.toggleCanvas.toggle();
 		}
 	}
 
