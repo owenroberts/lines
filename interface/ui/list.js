@@ -3,7 +3,7 @@ class UIList {
 		this.els = document.getElementsByClassName(params.class);
 	}
 
-	getLength() {
+	get length() {
 		return this.els.length;
 	}
 

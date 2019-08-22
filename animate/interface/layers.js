@@ -23,9 +23,9 @@ function Layers(panel) {
 		self.resetLayers();
 		lns.ui.drawings.resetDrawings();
 
-		for (let i = 0; i < lns.layers.length; i++) {
-			const layer = lns.layers[i];
-			if (layer.isInFrame(lns.currentFrame)) {
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.isInFrame(lns.anim.currentFrame)) {
 				self.layers.push(layer);
 
 				const row = self.panel.addRow(`layer-${i}`);
@@ -60,7 +60,7 @@ function Layers(panel) {
 					value: layer.f.s,
 					callback: function(value) {
 						layer.startFrame = +value;
-						if (layer.startFrame > lns.numFrames) lns.numFrames = layer.startFrame;
+						if (layer.startFrame > lns.anim.endFrame) lns.anim.endFrame = layer.startFrame;
 						if (layer.endFrame < layer.startFrame) layer.endFrame = layer.startFrame;
 						lns.ui.updateInterface();
 					}
@@ -72,7 +72,7 @@ function Layers(panel) {
 					value: layer.f.e,
 					callback: function(value) {
 						layer.endFrame = +value;
-						if (layer.endFrame > lns.numFrames) lns.numFrames = layer.endFrame;
+						if (layer.endFrame > lns.anim.endFrame) lns.anim.endFrame = layer.endFrame;
 						if (layer.startFrame > layer.endFrame) layer.startFrame = layer.endFrame;
 						lns.ui.updateInterface();
 					}
@@ -82,9 +82,9 @@ function Layers(panel) {
 					title: "+",
 					callback: function() {
 						const n = new Layer(_.cloneDeep(layer));
-						n.f.s = n.f.e = lns.currentFrame + 1;
-						layer.f.e = lns.currentFrame;
-						lns.layers.push(n);
+						n.f.s = n.f.e = lns.anim.currentFrame + 1;
+						layer.f.e = lns.anim.currentFrame;
+						lns.anim.layers.push(n);
 						lns.ui.nextFrame();
 					}
 				}), row); /* duplicate */
@@ -117,7 +117,7 @@ function Layers(panel) {
 							a.prop = value;
 							if (value == 's' || value == 'e') {
 								a.sv = 0;
-								a.ev = lns.drawings[layer.d].length
+								a.ev = lns.anim.drawings[layer.d].length
 							}
 						}
 					}), aRow);
@@ -158,7 +158,7 @@ function Layers(panel) {
 						title: '↻',
 						callback: function() {
 							a.sv = 0;
-							a.ev = lns.drawings[layer.d].length;
+							a.ev = lns.anim.drawings[layer.d].length;
 							lns.ui.updateInterface();
 						}
 					}));
@@ -177,8 +177,8 @@ function Layers(panel) {
 					callback: function() {
 						const a = {
 							prop: undefined,
-							sf: lns.currentFrame,
-							ef: lns.currentFrame,
+							sf: lns.anim.currentFrame,
+							ef: lns.anim.currentFrame,
 							sv: 0,
 							ev: 0
 						};
@@ -220,7 +220,7 @@ function Layers(panel) {
 	this.cutLayerSegment = function() {
 		for (let i = 0; i < self.layers.length; i++) {
 			if (self.layers[i].toggled) {
-				const drawing = lns.drawings[self.layers[i].d];
+				const drawing = lns.anim.drawings[self.layers[i].d];
 				drawing.pop(); /* remove "end" */
 				drawing.pop(); /* remove segment */
 				drawing.push('end'); /* new end */
@@ -233,7 +233,7 @@ function Layers(panel) {
 	this.cutLayerLine = function() {
 		for (let i = 0; i < self.layers.length; i++) {
 			if (self.layers[i].toggled) {
-				const drawing = lns.drawings[self.layers[i].d];
+				const drawing = lns.anim.drawings[self.layers[i].d];
 				drawing.pop(); /* remove "end" */
 				for (let i = drawing.length - 1; i > 0; i--) {
 					if (drawing[i] != 'end') drawing.pop();
@@ -257,22 +257,20 @@ function Layers(panel) {
 		const maxWidth = 60;
 		const w = self.canvas.canvas.parentElement.offsetWidth;
 		const row = 4;
-		const h = row * (lns.layers.length + 1);
+		const h = row * (lns.anim.layers.length + 1);
 		self.canvas.setHeight(h);
-		const col = Math.min(maxWidth, w / (lns.numFrames));
-		self.canvas.setWidth(Math.min(w, col * lns.numFrames));
+		const col = Math.min(maxWidth, w / (lns.anim.plusFrame));
+		self.canvas.setWidth(Math.min(w, col * lns.anim.plusFrame));
 
-		console.log(w, col);
-
-		for (let i = 0; i < lns.numFrames; i++) {
+		for (let i = 0; i < lns.anim.plusFrame; i++) {
 			const x = i * col;
-			if (i == lns.currentFrame) self.canvas.ctx.fillStyle = '#FF79FF';
+			if (i == lns.anim.currentFrame) self.canvas.ctx.fillStyle = '#FF79FF';
 			else self.canvas.ctx.fillStyle = '#fdf';
 			self.canvas.ctx.fillRect((i * col) + col/20, h - 5, col - col/10, 4);
 		}
 
-		for (let i = 0; i < lns.layers.length; i++) {
-			const layer = lns.layers[i];
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
 			const x = layer.f.s * col + 1;
 			const y = i * row + row/20;
 			const _w = (layer.f.e - layer.f.s + 1) * col - 2;

@@ -58,10 +58,10 @@ select {
   flex: 1;
 }
 
-#lines {
+#draw #lines {
   border: 1px solid lightgray;
 }
-#lines:active, #lines:hover {
+#draw #lines:active, #draw #lines:hover {
   cursor: crosshair;
 }
 

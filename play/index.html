@@ -5,7 +5,7 @@
 	<meta charset="utf-8" />
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" href="../animate/css/lines.css">
+	<link rel="stylesheet" href="../interface/css/lines.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
@@ -14,13 +14,13 @@
 	<canvas id="lines" data-src="_ex.json"></canvas>
 	<!-- data src thing is for multiple instances
 		but this is not really working -->
-	<script type="text/javascript" src="../lib/cool/cool.js"></script>
-	<script type="text/javascript" src="play.js"></script>
-	<script type="text/javascript">
+	<script src="../lib/cool/cool.js"></script>
+	<script src="../classes/animation.js"></script>
+	<script src="play.js"></script>
+	<script>
 		window.onload = function() {
 			// loadAnimation(document.querySelector('.draw').dataset.src); // fallback
-			const p = new LinesPlayer(document.getElementById("lines"), "ex.json");
-			console.log(p);
+			p = new LinesPlayer(document.getElementById("lines"), "ex.json");
 		}
 	</script>
 </body>

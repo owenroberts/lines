@@ -54,7 +54,7 @@ class Text {
 				if (letter == ' ') {
 					x += 30;
 				} else {
-					this.letters.setState(letter);
+					this.letters.state = letter;
 					this.letters.draw(x, y);
 					x += 18;
 				}

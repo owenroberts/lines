@@ -6,31 +6,34 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 		this.canvas = document.createElement("canvas");
 		document.body.appendChild(this.canvas);
 	}
+
 	this.ctx = this.canvas.getContext('2d');
+	this.lps = lps || 12; // 12  default ?
+	this.lineInterval = 1000 / this.lps; /* needed in both places ?? */
+	this.mixedColors = false; // is this always false?
+	this.drawBg = true; /* where? */
+	this.isTexture = isTexture;
+
+	this.animation = new Animation(this.ctx, this.lps);
+	if (src) this.animation.load(src, data => {
+		this.width = this.canvas.width = data.w;
+		this.height = this.canvas.height = data.h;
+		this.ctx.miterLimit = 1;
+		if (data.bg) this.canvas.style.backgroundColor = data.bg;
+		if (callback) callback();
+		if (!this.isTexture) requestAnimFrame(this.draw.bind(this)); /* three.js stuff */
+		if (this.sizeCanvas) {
+			this.sizeCanvas();
+			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
+		}
+		if (this.color) this.ctx.strokeStyle = this.color;
+	});
+
 	this.ctx.miterLimit = 1;
 	this.width;
 	this.height;
 	
-	this.numFrames = 0;
-	this.currentFrame = 0; // always int, floor cfc
-	this.currentFrameCounter = 0; // uses intervalRatio, so it's a float
-	this.isPlaying = true;
-	
-	this.lps = lps || 12; // default
-	this.lineInterval = 1000 / this.lps;
 	this.timer = performance.now();
-	this.intervalRatio = 1;
-	/* 	initialize to one but this is the math
-	 this.lineInterval / (1000 / this.lps);    */
-
-	this.drawings = [];
-	this.layers = [];
-	this.ctxStrokeColor;
-	this.mixedColors = false;
-	this.isTexture = isTexture || false; /* if used for 3d texture it doesnt animate or resize */
-	this.drawBg = true;
-	this.rndr = {};
-	this.over = {}; /* override drawing props */
 
 	this.override = function(prop, value) {
 		this.over[prop] = value;
@@ -52,165 +55,16 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	};
 
 	this.draw = function() {
-		if (!this.isTexture && this.isPlaying)
+		if (!this.isTexture && this.animation.isPlaying)
 			requestAnimFrame(this.draw.bind(this));
+		
 		if (performance.now() > this.lineInterval + this.timer) {
 			this.timer = performance.now();
-			
-			if (this.isPlaying) {
-				if (this.currentFrameCounter <= this.numFrames) {
-					this.currentFrameCounter += this.intervalRatio;
-					this.currentFrame = Math.floor(this.currentFrameCounter.toFixed(4));
-				}
-				if (this.currentFrameCounter > this.numFrames) {
-					this.currentFrame = this.currentFrameCounter = 0;
-					if (this.onPlayedOnce) {
-						this.onPlayedOnce();
-						this.onPlayedOnce = undefined;
-					}
-				}
-			}
-			
+			this.animation.update();
 			if (this.drawBg) this.ctx.clearRect(0, 0, this.width, this.height);
-			
-			if (!this.mixedColors) this.ctx.beginPath();
-			for (let i = 0, len = this.layers.length; i < len; i++) {
-				const layer = this.layers[i];
-				const drawing = this.drawings[layer.d];
-				if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
-					
-					this.rndr.s = 0;
-					this.rndr.e = drawing.length;
-
-					for (const key in layer) {
-						this.rndr[key] = layer[key];
-					}
-
-					if (layer.a) {
-						for (let j = 0; j < layer.a.length; j++) {
-							const a = layer.a[j];
-							if (a.sf <= this.currentFrame && a.ef >= this.currentFrame) {
-								this.rndr[a.prop] = Cool.map(this.currentFrame, a.sf, a.ef, a.sv, a.ev);
-								if (a.prop == 's' || a.prop == 'e')
-									this.rndr[a.prop] = Math.round(this.rndr[a.prop]);
-							}
-						}
-					}
-
-					for (const key in this.over) {
-						if (this.over[key] != undefined) 
-							this.rndr[key] = this.over[key];
-					}
-
-					// apply wiggle and speed if it exists 
-					if (this.rndr.w > 0) {
-						this.rndr.off.x = Cool.random(0, this.rndr.w);
-						this.rndr.off.y = Cool.random(0, this.rndr.w);
-						this.rndr.speed.x = Cool.random(-this.rndr.v, this.rndr.v);
-						this.rndr.speed.y = Cool.random(-this.rndr.v, this.rndr.v);
-					} else {
-						this.rndr.off.x = 0;
-						this.rndr.off.y = 0;
-						this.rndr.speed.x = 0;
-						this.rndr.speed.y = 0;
-					}
-
-					if (this.mixedColors) this.ctx.beginPath();
-					
-					for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
-						const s = drawing[j];
-						const e = drawing[j + 1];
-						const v = new Cool.Vector(e.x, e.y);
-						v.subtract(s);
-						v.divide(this.rndr.n);
-						this.ctx.moveTo( 
-							this.rndr.x + s.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x, 
-							this.rndr.y + s.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
-						);
-						for (let k = 0; k < this.rndr.n; k++) {
-							const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
-							this.ctx.lineTo( 
-								this.rndr.x + p.x + v.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x, 
-								this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
-							);	
-						}
-
-						if (this.ctxStrokeColor != this.rndr.c && !this.color) {
-							this.ctxStrokeColor = this.rndr.c;
-							this.ctx.strokeStyle = this.ctxStrokeColor;
-						}
-
-						// update wiggle and speed (if exists)
-						if (this.rndr.w > 0) {
-							this.rndr.off.x += this.rndr.speed.x;
-							if (this.rndr.off.x >= this.rndr.w || this.rndr.off.x <= -this.rndr.w)
-								this.rndr.speed.x *= -1;
-
-							this.rndr.off.y += this.rndr.speed.y;
-							if (this.rndr.off.y >= this.rndr.w || this.rndr.off.y <= -this.rndr.w)
-								this.rndr.speed.y *= -1;
-						}
-					}
-					if (this.mixedColors) this.ctx.stroke();
-				}
-				if (!this.mixedColors) this.ctx.stroke();
-				if (this.update) this.update();
-			}
+			this.animation.draw();
 		}
 	};
-
-	this.loadData = function(data, callback) {
-		this.drawings = [];
-		for (let i = 0; i < data.d.length; i++) {
-			const drawing = data.d[i];
-			const d = [];
-			if (drawing) {
-				for (let j = 0; j < drawing.length; j++) {
-					const point = drawing[j];
-					if (point) d.push({ x: point[0], y: point[1] });
-					else d.push('end');
-				}
-			}
-			this.drawings[i] = d;
-		}
-		this.layers = data.l;
-		for (let i = 0; i < this.layers.length; i++) {
-			if (this.numFrames < this.layers[i].f.e)
-				this.numFrames = this.layers[i].f.e;
-		}
-		this.intervalRatio = this.lineInterval / (1000 / data.fps);
-		this.currentFrame = this.currentFrameCounter = 0;
-		this.width = this.canvas.width = data.w;
-		this.height = this.canvas.height = data.h;
-		this.ctxStrokeColor = undefined; // note setting canvas width resets the color
-		this.ctx.miterLimit = 1;
-		if (data.mc) this.mixedColors = data.mc;
-		if (data.bg) this.canvas.style.backgroundColor = data.bg;
-		if (callback) callback(); // callback to do something after drawing loads
-		if (!this.isTexture) requestAnimFrame(this.draw.bind(this));
-
-		/* defined by instance */
-		if (this.sizeCanvas) {
-			this.sizeCanvas();
-			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
-		}
-		if (this.color) this.ctx.strokeStyle = this.color;
-	};
-
-	// original generic name, now is closer to "load file"
-	this.loadAnimation = function(src, callback) {
-		this.reset(); /* reset rndr */
-		fetch(src)
-			.then(response => { return response.json() })
-			.then(json => { this.loadData(json, callback) })
-			.catch(error => {console.log('error', error)});
-	};
-
-	this.loadJSON = function(json, callback) {
-		this.loadData(JSON.parse(json), callback);
-	};
-
-	if (src) this.loadAnimation(src, callback);
 }
 
 function loadAnimation(src, canvas, lps, callback) {

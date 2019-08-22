@@ -8,9 +8,9 @@ function Canvas(id, width, height, color) {
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 
-	this.setBGColor = function(_color) {
-		self.bgColor = _color;
-		self.canvas.style.backgroundColor = _color;
+	this.setBGColor = function(color) {
+		self.bgColor = color;
+		self.canvas.style.backgroundColor = color;
 	};
 
 	this.setBGColor(color);
@@ -48,9 +48,9 @@ function Canvas(id, width, height, color) {
 		let min = { x: 10000, y: 10000 }; // min max size of canvas
 		let max = { x: 0, y: 0 };
 
-		for (let i = 0; i < lns.layers.length; i++) {
-			const layer = lns.layers[i];
-			const drawing = lns.drawings[layer.d];
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			const drawing = lns.anim.drawings[layer.d];
 			for (let j = 0; j < drawing.length; j++) {
 				const point = drawing[j];
 				if (point != 'end') {
@@ -66,9 +66,9 @@ function Canvas(id, width, height, color) {
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
 
-		for (let i = 0; i < lns.layers.length; i++) {
-			lns.layers[i].x -= min.x - tolerance > 0 ? min.x - tolerance : 0;
-			lns.layers[i].y -= min.y - tolerance > 0 ? min.y - tolerance : 0;
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			lns.anim.layers[i].x -= min.x - tolerance > 0 ? min.x - tolerance : 0;
+			lns.anim.layers[i].y -= min.y - tolerance > 0 ? min.y - tolerance : 0;
 		}
 	};
 }
