@@ -2,21 +2,20 @@ class Button extends UI {
 	constructor(params, debug) {
 		super(params, debug);
 		this.selected = params.selected || false;
-
 	}
 
 	toggle(selected) {
 		this.selected = selected;
-		this.animation.setState(selected ? 'selected' : 'idle')
+		this.animation.state = selected ? 'selected' : 'idle';
 	}
 
 	over(x, y) {
 		if (!this.selected) {
 			if (this.tap(x,y)) {
-				this.animation.setState('over');
+				this.animation.state = 'over';
 				return true;
 			} else {
-				this.animation.setState('idle');
+				this.animation.state = 'idle';
 				this.clickStart = false;
 				return false;
 			}
@@ -26,7 +25,7 @@ class Button extends UI {
 	down(x, y) {
 		if (!this.selected) {
 			if (this.tap(x,y)) {
-				this.animation.setState('active');
+				this.animation.state = 'active';
 				document.body.style.cursor = 'pointer'; /* weird - leave for now */
 				this.clickStart = true;
 			}
@@ -36,7 +35,7 @@ class Button extends UI {
 	up(x, y) {
 		if (!this.selected) {
 			if (this.tap(x,y) && this.clickStart) {
-				this.animation.setState('over');
+				this.animation.state = 'over';
 				document.body.style.cursor = 'pointer';
 				if (this.callback) this.callback();
 				if (this.func) this.func();

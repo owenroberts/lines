@@ -7,13 +7,13 @@ class Toggle extends UI {
 	}
 
 	setOnOff() {
-		if (this.toggled) this.animation.setState(this.on);
-		else this.animation.setState(this.off);
+		if (this.toggled) this.animation.state = this.on;
+		else this.animation.state = this.off;
 	}
 
 	over(x, y) {
 		if (this.tap(x,y)) {
-			this.animation.setState('over');
+			this.animation.state = 'over';
 			return true;
 		} else {
 			this.setOnOff();
@@ -24,7 +24,7 @@ class Toggle extends UI {
 
 	down(x, y) {
 		if (this.tap(x,y)) {
-			this.animation.setState('selected');
+			this.animation.state = 'selected';
 			document.body.style.cursor = 'pointer';
 			this.clickStart = true;
 		}

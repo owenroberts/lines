@@ -10,10 +10,11 @@ class UI extends Sprite {
 		
 		super(x, y);
 		this.debug = debug;
+		this.center = true;
 
 		if (params.hidden) this.alive = false; /* alive is more like isVisible */
 		this.addAnimation(params.src, () => {
-			if (params.state) this.animation.setState(params.state);
+			if (params.state) this.animation.state = params.state;
 		});
 		
 		if (params.states) {

@@ -73,7 +73,7 @@ select {
 	#tools { flex: 1; }
 }
 
-#lines {
+#draw #lines {
 	border: 1px solid $ui-color;
 	&:active, &:hover { cursor: crosshair; }
 }

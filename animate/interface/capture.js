@@ -11,16 +11,31 @@ function Capture() {
 	this.capturingVideo = false;
 	this.videoLoops = 0;
 
-	/* hook function into render ?? */
-	
 	/* k key */
 	this.captureOne = function() {
 		self.captureFrames = 1;
+		self.setCapture();
 	};
 
 	/* shift k */
 	this.captureMultiple = function() {
 		self.captureFrames = prompt("Capture how many frames?");
+		self.setCapture();
+	};
+
+	this.setCapture = function() {
+		lns.anim.onDraw = function() {
+			if (self.captureFrames > 0) {
+				self.capture();
+				self.captureFrames--;
+				self.capturing = true;
+			} else if (self.capturing) {
+				self.capturing = false;
+				self.captureWithBackground = false;
+				lns.anim.isPlaying = false;
+				lns.anim.onDraw = undefined;
+			}
+		};
 	};
 
 	/* n key */
@@ -32,17 +47,18 @@ function Capture() {
 	this.captureCycle = function() {
 		lns.data.saveLines();
 		/* set animation to last frame because it updates frames before draw */
-		lns.currentFrame = lns.render.currentFrameCounter = lns.numFrames;
-		lns.render.isPlaying = true;
+		lns.anim.frame = lns.anim.endFrame;
+		lns.anim.isPlaying = true;
 		// capture as many frames as necessary for lines ratio or 1 of every frame
-		self.captureFrames = lns.numFrames * Math.max(1, lns.render.lps / lns.render.fps);
+		self.captureFrames = lns.anim.endFrame * Math.max(1, lns.render.lps / lns.anim.fps);
+		self.setCapture();
 	};
 
 	this.capture = function() {
 		if (lns.files.saveFilesEnabled) {
 			lns.canvas.canvas.toBlob(function(blob) {
 				const title = lns.ui.fio.title.getValue(); // this is a UI
-				const n = Cool.padNumber(lns.currentFrame, 3);
+				const n = Cool.padNumber(lns.anim.currentFrame, 3);
 				let frm = 0;
 				let fileName = `${title}-${n}-${frm}.png`;
 				if (n == self.prevCap.n) {
@@ -68,15 +84,25 @@ function Capture() {
 
 	/* key? */
 	this.startVideoCapture = function() {
-		lns.render.isPlaying = false;
-		lns.render.setFrame(0);
+		lns.anim.isPlaying = false;
+		lns.anim.frame = 0;
 
 		self.videoLoops = +prompt("Number of loops?");
+		lns.anim.onPlayedState = function() {
+			if (self.videoLoops > 1) {
+				self.videoLoops--;
+			} else if (self.capturingVideo) {
+				self.videoCapture();
+				self.capturingVideo = false;
+				lns.anim.isPlaying = false;
+				lns.anim.onPlayedState = undefined;
+			}
+		};
 		self.capturingVideo = true
 		self.captureWithBackground = true;
 		self.videoCapture();
 		
-		lns.render.isPlaying = true;
+		lns.anim.isPlaying = true;
 	};
 
 	this.videoCapture = function() {
