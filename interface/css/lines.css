@@ -52,7 +52,13 @@ select {
   flex-wrap: wrap;
 }
 #container #draw {
+  order: 0;
   padding-right: 1em;
+}
+#container #draw.right {
+  order: 2;
+  padding-left: 1em;
+  padding-right: 0;
 }
 #container #tools {
   flex: 1;

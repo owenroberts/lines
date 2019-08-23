@@ -61,7 +61,15 @@ select {
 	margin:1em;
 	display: flex;
 	flex-wrap: wrap;
-	#draw { padding-right:1em; }
+	#draw {
+		order: 0;
+		padding-right: 1em;
+		&.right {
+			order: 2;
+			padding-left: 1em; 
+			padding-right: 0;
+		}
+	}
 	#tools { flex: 1; }
 }
 

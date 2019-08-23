@@ -9,8 +9,8 @@ function animateInterface(ui) {
 		on: "R/L",
 		off: "L/R",
 		callback: function() {
-			if (this.isOn) lns.canvas.canvas.parentElement.style.order = 2;
-			else lns.canvas.canvas.parentElement.style.order = 0;
+			if (this.isOn) lns.canvas.canvas.parentElement.classList.add('right');
+			else lns.canvas.canvas.parentElement.classList.remove('right');
 		}		
 	});
 
@@ -168,6 +168,7 @@ function animateInterface(ui) {
 	ui.capture = new Capture();
 
 	function appSave() {
+		console.log(lns.render.lineColor);
 		return {
 			canvasColor: lns.canvas.bgColor,
 			lineWidth: lns.canvas.ctx.lineWidth,
@@ -218,7 +219,7 @@ function animateInterface(ui) {
 			}
 		}
 
-		if (!settings.rl) {
+		if (settings.rl == false) {
 			ui.rl.callback();
 			ui.rl.toggle();
 		}

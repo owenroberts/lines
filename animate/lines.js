@@ -34,7 +34,8 @@ window.addEventListener("load", function() {
 	}
 
 	if (location.search.split('=')[1]) {
-		lns.files.loadFile(location.search.split('=')[1].split('.')[0])
+		lns.files.loadFile(location.search.split('=')[1].split('.')[0]);
+		lns.ui.fio.title.setValue(location.search.split('=')[1].split('.')[0].split('/').pop())
 	}
 
 	lns.render.start(); // necessary ?
