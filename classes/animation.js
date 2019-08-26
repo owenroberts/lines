@@ -13,7 +13,7 @@ class Animation {
 		this.lineInterval = 1000 / this.lps;
 		this.intervalRatio = 1;
 
-		this.mixedColors = mixedColors || false;
+		this.mixedColors = mixedColors || true;
 
 		this.rndr = {
 			off: { x: 0, y: 0 },
@@ -89,7 +89,6 @@ class Animation {
 			const layer = this.layers[i];
 			const drawing = this.drawings[layer.d];
 			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
-
 				this.rndr.s = 0;
 				this.rndr.e = drawing.length;
 
@@ -148,7 +147,7 @@ class Animation {
 						);
 					}
 
-					if (this.ctx.strokeStyle != this.rndr.c)
+					if (this.ctx.strokeStyle != this.rndr.c && this.mixedColors)
 						this.ctx.strokeStyle = this.rndr.c;
 
 					if (this.rndr.w > 0) {
@@ -161,23 +160,9 @@ class Animation {
 							this.rndr.speed.y *= -1;
 					}
 				}
-
-				if (this.mixedColors) {
-					if (this.ctx.strokeStyle != this.rndr.c)
-						this.ctx.strokeStyle = this.rndr.c;
-				}
-
-				if (this.rndr.w > 0) {
-					this.rndr.off.x += this.rndr.speed.x;
-					if (this.rndr.off.x >= this.rndr.w || this.rndr.off.x <= -this.rndr.w)
-						this.rndr.speed.x *= -1;
-
-					this.rndr.off.y += this.rndr.speed.y;
-					if (this.rndr.off.y >= this.rndr.w || this.rndr.off.y <= -this.rndr.w)
-						this.rndr.speed.y *= -1;
-				}
+				
+				if (this.mixedColors) this.ctx.stroke();
 			}
-			if (this.mixedColors) this.ctx.stroke();
 		}
 		if (!this.mixedColors) this.ctx.stroke();
 		if (this.onDraw) this.onDraw();

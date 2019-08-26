@@ -1,7 +1,7 @@
 function Draw(anim, defaults) {
 	const self = this;
 
-	self.layer = new Layer({
+	this.layer = new Layer({
 		d: 0,
 		x: 0,
 		y: 0,
@@ -13,6 +13,7 @@ function Draw(anim, defaults) {
 		v: defaults.v,
 		c: defaults.c
 	});
+	anim.layers.push(self.layer);
 
 	this.setProperties = function(props) {
 		for (const prop in props) {
@@ -36,22 +37,18 @@ function Draw(anim, defaults) {
 
 	this.reset = function() {
 		anim.currentFrame = lns.anim.currentFrame;
-		anim.layers = [];
 		anim.drawings = [];
 		self.drawing = [];
-		self.layer = new Layer({
-			d: 0,
-			x: 0,
-			y: 0,
-			f: { s: anim.currentFrame, e: anim.currentFrame },
-			a: [],
-			n: self.layer.n,
-			r: self.layer.r,
-			w: self.layer.w,
-			v: self.layer.v,
-			c: self.layer.c
-		});
-		anim.layers.push(self.layer);
+		self.layer.d = 0;
+		self.layer.x = 0;
+		self.layer.y = 0;
+		self.layer.f = { s: anim.currentFrame, e: anim.currentFrame };
+		self.layer.a = [];
+		self.layer.n = self.layer.n;
+		self.layer.r = self.layer.r;
+		self.layer.w = self.layer.w;
+		self.layer.v = self.layer.v;
+		self.layer.c = self.layer.c;
 		anim.drawings.push(self.drawing);
 	};
 

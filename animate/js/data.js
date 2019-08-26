@@ -46,7 +46,6 @@ function Data(anim) {
 		/* copy one frame onto multiple */
 		for (let i = 0; i < self.pasteFrames.length; i++) {
 			for (let j = 0; j < self.copyFrame.length; j++) {
-				console.log(self.copyFrame[j], self.pasteFrames[i])
 				self.copyFrame[j].addIndex(self.pasteFrames[i]);
 			}
 		}

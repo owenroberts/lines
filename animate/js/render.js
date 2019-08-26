@@ -60,14 +60,13 @@ function Render(lps, color) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
-			
 			if (lns.anim.isPlaying) {
-				lns.ui.updateInterface(); /* ui thing */
+				lns.ui.updateInterface(); 
 			}
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 
-			if (lns.ui.capture.captureWithBackground) {
+			if (lns.ui.capture.captureWithBackground && (lns.ui.capture.captureFrames > 0 || lns.ui.capture.capturingVideo)) {
 				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
 				lns.canvas.ctx.fillStyle = lns.canvas.bgColor;
 				lns.canvas.ctx.fill();
@@ -75,7 +74,6 @@ function Render(lps, color) {
 
 			lns.bgImage.display();
 
-			/* draws onionskin this is first so its under main lines */
 			if (self.onionSkinNum > 0 && self.onionSkinIsVisible) {
 				const temp = lns.anim.currentFrame;
 				for (let o = 1; o <= self.onionSkinNum; o++){
@@ -92,9 +90,8 @@ function Render(lps, color) {
 			}
 
 			lns.anim.draw();
-			lns.lines.draw();
-
 			lns.anim.update();
+			lns.lines.draw();
 		}
 		if (!lns.ui.capture.capturing) 
 			window.requestAnimFrame(self.update);
