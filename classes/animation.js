@@ -75,7 +75,8 @@ class Animation {
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 				if (this.onUpdate) this.onUpdate();
 			}
-			if (this.frame4 > this.currentState.end) {
+
+			if (this.frame4 > this.currentState.end + 1) {
 				this.frame = this.currentState.start;
 				if (this.onPlayedState) this.onPlayedState();
 			}
