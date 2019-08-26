@@ -199,7 +199,6 @@ function Layers(panel) {
 	};
 
 	this.allToggled = false;
-
 	this.toggleAll = function() {
 		/* match all toggled */
 		for (let i = 0; i < self.layers.length; i++) {
@@ -263,7 +262,7 @@ function Layers(panel) {
 			if (this.isOn) self.canvas.canvas.style.display = 'none';
 			else self.canvas.canvas.style.display = '';
 		}
-	})
+	});
 
 	this.drawLayers = function() {
 		const maxWidth = 60;

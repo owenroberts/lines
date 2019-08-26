@@ -8,6 +8,7 @@ window.addEventListener("load", function() {
 
 	lns.lines = new Animation(lns.canvas.ctx);
 	lns.anim = new Animation(lns.canvas.ctx);
+	lns.lines.debug = true;
 
 	lns.draw = new Draw(lns.lines, { n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
 	lns.bgImage = new Background();

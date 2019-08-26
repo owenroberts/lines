@@ -18,8 +18,9 @@ function Data(anim) {
 	/* r key - save lines and add new lines */
 	this.saveLines = function() {
 		if (lns.draw.drawing.length > 0) {
-			lns.draw.layer.d = anim.drawings.length;
-			anim.layers.push(_.cloneDeep(lns.draw.layer));
+			const layer = _.cloneDeep(lns.draw.layer);
+			layer.d = anim.drawings.length;
+			anim.layers.push(layer);
 			anim.drawings.push(_.cloneDeep(lns.draw.drawing));
 			lns.ui.updateInterface(); 
 			self.saveState(); /* save current state - one undo currently */
@@ -288,6 +289,7 @@ function Data(anim) {
 				layer.endFrame = layer.startFrame + n;
 				// if (layer.endFrame > anim.numFrames) anim.numFrames = layer.endFrame + 1; /* plus frame ? */
 				// if (anim.currentState.end < anim.numFrames) anim.currentState.end = anim.endFrame;
+				if (anim.currentState.end < layer.endFrame) anim.currentState.end = layer.endFrame;
 				switch(params.type) {
 					case "Explode":
 						layer.a.push({

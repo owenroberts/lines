@@ -66,6 +66,7 @@ function Render(lps, color) {
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 
+			/* in capture set animation onDraw */
 			if (lns.ui.capture.captureWithBackground && (lns.ui.capture.captureFrames > 0 || lns.ui.capture.capturingVideo)) {
 				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
 				lns.canvas.ctx.fillStyle = lns.canvas.bgColor;

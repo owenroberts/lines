@@ -54,7 +54,8 @@ function Interface(app) {
 		toggle: UIToggleButton,
 		text: UIText,
 		range: UIRange,
-		color: UIColor
+		color: UIColor,
+		select: UISelect
 	};
 
 	function initUI() {
@@ -100,7 +101,7 @@ function Interface(app) {
 				params.callback = function(value) {
 					mod[u.set.prop] = u.set.number ? +value : value;
 					if (u.set.layer) {
-						self.layers.updateProperty(u.set.layer, u.set.number ? +value : value);
+						// self.layers.updateProperty(u.set.layer, u.set.number ? +value : value);
 					} /* need generic version of this ... */
 				};
 				params.value = mod[u.set.prop];

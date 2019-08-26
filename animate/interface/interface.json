@@ -732,6 +732,44 @@
 			}
 		]
 	},
+	"states": {
+		"id": "states-menu",
+		"label": "States",
+		"module": "ui",
+		"sub": "states",
+		"list": [
+			{
+				"type": "select",
+				"face": "stateSelector",
+				"fromModule": {
+					"callback": "setState"
+				},
+				"params": {
+					"options": ["default"]
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-t",
+				"fromModule": {
+					"callback": "createState"
+				},
+				"params": {
+					"title": "Create"
+				}
+			},
+			{
+				"type": "button",
+				"key": "t",
+				"fromModule": {
+					"callback": "displayStates"
+				},
+				"params": {
+					"title": "States"
+				}
+			}
+		]
+	},
 	"layers": {
 		"id": "layers-menu",
 		"label": "Layers",

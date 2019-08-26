@@ -158,14 +158,13 @@ function animateInterface(ui) {
 	ui.panels.drawings = new Panel("drawing-menu", "Drawings");
 	ui.drawings = new Drawings(ui.panels.drawings);
 
-	// ui.panels.settings = new Panel('settings-menu', "Settings");
-	// ui.settings = new Settings(ui.panels.settings);
+	ui.panels.states = new Panel("states-menu", "States");
+	ui.states = new States(ui.panels.states);
 
 	ui.fio = new FilesInterface(ui);
 	ui.capture = new Capture();
 
 	function appSave() {
-		console.log(lns.render.lineColor);
 		return {
 			canvasColor: lns.canvas.bgColor,
 			lineWidth: lns.canvas.ctx.lineWidth,

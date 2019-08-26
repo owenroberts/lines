@@ -63,6 +63,8 @@ function Files(params) {
 			json.d[index] = d;
 		}
 
+		json.s = lns.anim.states;
+
 		const jsonfile = JSON.stringify(json);
 		const filename = title || prompt("Name this file:");
 
@@ -108,12 +110,14 @@ function Files(params) {
 		lns.anim.layers = [];
 		for (let i = 0; i < data.l.length; i++) {
 			lns.anim.layers[i] = new Layer(data.l[i]);
-			lns.lines.layer.c = lns.anim.layers[i].c;
+			lns.draw.layer.c = lns.anim.layers[i].c;
 		}
 
+		if (data.s) lns.anim.states = data.s;
 		if (lns.anim.states.default) lns.anim.states.default.end = lns.anim.endFrame;
 
 		/* set interface values */
+		lns.ui.faces.stateSelector.setOptions(Object.keys(lns.anim.states));
 		lns.canvas.setWidth(data.w);
 		lns.canvas.setHeight(data.h);
 		lns.render.setFps(data.fps);
