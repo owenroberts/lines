@@ -34,4 +34,9 @@ class UIColor extends UI {
 			self.el.parentNode.appendChild(btn.el);
 		}
 	}
+
+	setValue(value) {
+		this.addColor(value);
+		super.setValue(value);
+	}
 }

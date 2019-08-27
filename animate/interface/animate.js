@@ -229,6 +229,8 @@ function animateInterface(ui) {
 			ui.layers.toggleCanvas.callback();
 			ui.layers.toggleCanvas.toggle();
 		}
+
+		
 	}
 
 	ui.settings = new Settings(lns, 'lns', appSave, appLoad);

@@ -4,7 +4,6 @@ class Layer {
 			this[key] = params[key];
 		}
 		this.toggled = false;
-		this.prevColor = this.c;
 		// this.display = true; // display everywhere
 		// drop from frame
 		// delete entirely ? 
@@ -21,6 +20,7 @@ class Layer {
 	}
 
 	toggle() {
+		if (!this.prevColor) this.prevColor = this.c;
 		this.c = this.toggled ? this.prevColor : "#00CC96";
 		this.toggled = !this.toggled;
 	}
@@ -80,9 +80,8 @@ class Layer {
 		this.resetAnims();
 	}
 
-	/* what is n? */
 	shiftIndex(index, n) {
-		if (!n) n = -1;
+		if (!n) n = -1;	/* what is n? */
 		if (this.f.s >= index) this.f.s += n;
 		if (this.f.e >= index) this.f.e += n;
 		this.resetAnims();
