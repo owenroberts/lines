@@ -31,10 +31,12 @@ function Data(anim) {
 	/* c key  */
 	this.copy = function() {
 		self.saveLines();
+		self.copyFrame = [];
 		for (let i = 0; i < anim.layers.length; i++) {
 			if (anim.layers[i].isInFrame(anim.currentFrame))
 				self.copyFrame.push(anim.layers[i]);
 		}
+		console.log(self.copyFrame);
 	};
 
 	/* v key */
@@ -43,6 +45,8 @@ function Data(anim) {
 
 		if (self.pasteFrames.length == 0)
 			self.pasteFrames.push(anim.currentFrame); 
+
+		console.log(self.pasteFrames);
 
 		/* copy one frame onto multiple */
 		for (let i = 0; i < self.pasteFrames.length; i++) {
