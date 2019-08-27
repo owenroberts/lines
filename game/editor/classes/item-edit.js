@@ -82,11 +82,9 @@ class ItemEdit extends Item {
 
 	get data() {
 		return {
-			src: this.animation.src,
+			src: this.origin,
 			x: this.position.x,
 			y: this.position.y,
-			states: this.animation.states,
-			state: this.animation.state,
 			scenes: this.scenes
 		};
 	}

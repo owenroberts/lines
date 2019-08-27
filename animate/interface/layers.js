@@ -36,7 +36,6 @@ function Layers(panel) {
 					off: '◑',
 					callback: function() {
 						layer.toggle();
-						console.log(layer);
 						/*
 							maybe some ui render setttings function here
 							crazy and repetetive but also useful

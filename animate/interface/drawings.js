@@ -50,9 +50,10 @@ function Drawings(panel) {
 								layer.addIndex(lns.anim.currentFrame);
 							}
 						} else {
+							/* fuck */
 							layer = new Layer({
 								d: i,
-								c: lns.lines.layer.c,
+								c: lns.draw.layer.c,
 								...lns.draw.defaults,
 								x: 0,
 								y: 0,

@@ -179,7 +179,7 @@ class Animation {
 	}
 
 	loadJSON(json, callback) {
-		this.loadData(JSON.parse(json), callback);
+		this.loadData(json, callback);
 	}
 
 	loadData(json, callback) {

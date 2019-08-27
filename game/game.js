@@ -76,9 +76,9 @@ const Game = {
 			}
 			const type = path.pop();
 			const params = { label: key, ...value };
-
 			location[key] = new Game.classes[type](params);
 
+			/* update game boundaries */
 			if (location[key].position) {
 				if (location[key].position.y < Game.bounds.top) 
 					Game.bounds.top = location[key].position.y - Game.height/2;
