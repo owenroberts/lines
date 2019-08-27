@@ -33,6 +33,16 @@ class EditUI {
 			}
 		});
 
+		this.uis.lock = new UIToggleButton({
+			title: "🔓",
+			on: "🔓",
+			off: "🔓",
+			isOn: !this.item.locked,
+			callback: function() {
+				self.item.lock();
+			}
+		});
+
 		this.add();
 	}
 

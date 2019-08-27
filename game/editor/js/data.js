@@ -9,12 +9,16 @@ function Data(app, params) {
 	this.save = function() {
 		const sprites = {};
 		const ui = {};
+		const settings = {};
 
 		for (const type in app.sprites) {
 			if (!sprites[type]) sprites[type] = {};
+			if (!settings[type]) settings[type] = {};
 			for (const key in app.sprites[type]) {
 				if (!app.sprites[type][key].remove) 
 					sprites[type][key] = app.sprites[type][key].data;
+				if (app.sprites[type][key].locked)
+					settings[type][key] = { locked: true };
 			}
 		}
 
@@ -32,7 +36,10 @@ function Data(app, params) {
 
 		const f = self.download(sprites, 'sprites.json');
 		f.onwriteend = function() { 
-			self.download(ui, 'ui.json');
+			const _f = self.download(ui, 'ui.json');
+			_f.onwriteend = function() {
+				self.download(settings, 'settings.json');
+			}; /* yes this looks ridiculous */
 		};
 	};
 

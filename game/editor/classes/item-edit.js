@@ -5,8 +5,8 @@ class ItemEdit extends Item {
 		this.displayLabel = false;
 		this.outline = false;
 		this.label = params.label;
-
 		this.ui = new ItemEditUI(this, edi.ui.panels.items);
+		this.locked = false;
 	}
 
 	display(view) {
@@ -42,8 +42,7 @@ class ItemEdit extends Item {
 	}
 
 	mouseOver(x, y, zoom) {
-		// console.log(this.label);
-		if (this.isInMapBounds(zoom.view)) {
+		if (this.isInMapBounds(zoom.view) && !this.locked) {
 			const xy = zoom.translate(x, y);
 			if (xy.x > this.xy.x &&
 				xy.x < this.xy.x + this.width &&
@@ -69,6 +68,8 @@ class ItemEdit extends Item {
 		this.outline = select;
 		if (select) this.ui.add();
 		else this.ui.remove();
+		if (this.texture && select) this.texture.ui.add();
+		else if (this.texture) this.texture.ui.remove();
 	}
 
 	get selected() {
@@ -87,5 +88,10 @@ class ItemEdit extends Item {
 			y: this.position.y,
 			scenes: this.scenes
 		};
+	}
+
+	lock(lockState) {
+		if (lockState !== undefined) this.locked = lockState;
+		else this.locked = !this.locked;
 	}
 }

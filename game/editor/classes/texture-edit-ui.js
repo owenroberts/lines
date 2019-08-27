@@ -18,6 +18,15 @@ class TextureEditUI extends EditUI {
 			}
 		});
 
+		this.uis.selectAll = new UIButton({
+			title: 'All',
+			callback: function() {
+				for (let i = 0; i < self.item.items.length; i++) {
+					self.item.items[i].selected = true;
+				}
+			}
+		});
+
 		this.uis.frame = new UISelect({
 			options: [ 'index', 'random' ],
 			selected: this.item.frame,
@@ -28,7 +37,7 @@ class TextureEditUI extends EditUI {
 					if (item.animation.randomFrames != value) {
 						if (value == 'random') {
 							item.animation.randomFrames = true;
-							item.animation.createNewState('random', 0, item.animation.numFrames);
+							item.animation.createNewState('random', 0, item.animation.endFrame);
 						} else {
 							item.animation.randomFrames = false;
 							item.animation.createNewState('still', i, i);

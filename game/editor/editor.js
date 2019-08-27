@@ -2,6 +2,7 @@ const edi = {}; /* editor app */
 edi.ui = new Interface(edi);
 edi.ui.load('interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
+
 edi.ui.displayTextures = function() {
 	for (const key in Game.sprites.textures) {
 		Game.sprites.textures[key].ui.remove();
@@ -79,6 +80,19 @@ function start() {
 			edi.ui.reset();
 		}
 	});
+
+	fetch('/data/settings.json')
+		.then(response => { return response.json(); })
+		.then(json => {
+			for (const type in json) {
+				for (const key in json[type]) {
+					if (json[type][key].locked) {
+						Game.sprites[type][key].lock(true);
+
+					}
+				}
+			}
+		});
 
 	//  document.oncontextmenu = function() { return false; } 
 	/* maybe dont need with tool selector */

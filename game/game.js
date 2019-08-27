@@ -79,15 +79,23 @@ const Game = {
 			location[key] = new Game.classes[type](params);
 
 			/* update game boundaries */
+			function setBounds(position) {
+				if (position.y < Game.bounds.top) 
+					Game.bounds.top = position.y - Game.height/2;
+				if (position.y > Game.bounds.bottom) 
+					Game.bounds.bottom = position.y + Game.height/2;
+				if (position.x > Game.bounds.right) 
+					Game.bounds.right = position.x + Game.width/2;
+				if (position.x < Game.bounds.left) 
+					Game.bounds.left = position.x - Game.width/2;
+			}
+
 			if (location[key].position) {
-				if (location[key].position.y < Game.bounds.top) 
-					Game.bounds.top = location[key].position.y - Game.height/2;
-				if (location[key].position.y > Game.bounds.bottom) 
-					Game.bounds.bottom = location[key].position.y + Game.height/2;
-				if (location[key].position.x > Game.bounds.right) 
-					Game.bounds.right = location[key].position.x + Game.width/2;
-				if (location[key].position.x < Game.bounds.left) 
-					Game.bounds.left = location[key].position.x - Game.width/2;
+				setBounds(location[key].position);				
+			} else if (location[key].locations) {
+				for (let i = 0; i < location[key].locations.length; i++) {
+					setBounds(location[key].locations[i]);
+				}
 			}
 
 			for (let i = 0; i < location[key].scenes.length; i++) {

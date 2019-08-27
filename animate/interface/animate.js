@@ -123,6 +123,7 @@ function animateInterface(ui) {
 
 	/* e key - go to next frame */
 	ui.nextFrame = function() {
+		lns.anim.isPlaying = false;
 		self.beforeFrame();
 		if (lns.anim.currentFrame < lns.anim.plusFrame) {
 			lns.render.setFrame(lns.anim.currentFrame + 1);
@@ -134,6 +135,7 @@ function animateInterface(ui) {
 
 	/* w key - got to previous frame */
 	ui.prevFrame = function() {
+		lns.anim.isPlaying = false;
 		self.beforeFrame();
 		if (lns.anim.currentFrame > 0) lns.render.setFrame(lns.anim.currentFrame - 1);
 		self.afterFrame();

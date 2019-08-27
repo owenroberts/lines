@@ -140,8 +140,8 @@ function Data(anim) {
 					anim.layers[i].shiftIndex(anim.currentFrame + 1, -1);
 			}
 		}
-		anim.render.setFrame(anim.currentFrame - 1);
-		anim.ui.updateInterface();
+		lns.render.setFrame(anim.currentFrame - 1);
+		lns.ui.updateInterface();
 	};
 
 	/* shift-d */

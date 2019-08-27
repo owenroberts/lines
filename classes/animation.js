@@ -75,9 +75,10 @@ class Animation {
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 				if (this.onUpdate) this.onUpdate();
 			}
-
-			if (this.frame4 > this.currentState.end + 1) {
+			console.log(this.currentFrame, this.frame4, this.currentState.end, this.currentState.end + 1 - this.intervalRatio, this.frame4 > this.currentState.end + 1 - this.intervalRatio);
+			if (this.frame4 > this.currentState.end + 1 - this.intervalRatio) {
 				this.frame = this.currentState.start;
+				/* loop ? */
 				if (this.onPlayedState) this.onPlayedState();
 			}
 			if (this.onUpdate) this.onUpdate();
