@@ -29,7 +29,7 @@ function Layers(panel) {
 				self.layers.push(layer);
 
 				const row = self.panel.addRow(`layer-${i}`);
-				self.panel.add(new UIDisplay({text: `${i}` }), row);
+				self.panel.add(new UIDisplay({text: `${i},${layer.d}` }), row);
 
 				self.panel.add(new UIToggleButton({
 					on: '◐',
@@ -111,8 +111,8 @@ function Layers(panel) {
 					const aRow = self.panel.addRow(`layer-${i}-anim-${layer.a.length}`);
 					self.panel.add(new UISelect({
 						options: ['anim', 's', 'e', 'n', 'r', 'w', 'v'],
-						selected: a.prop || 'anim',
 						value: a.prop || 'anim',
+						selected: a.prop || 'anim',
 						callback: function(value) {
 							a.prop = value;
 							if (value == 's' || value == 'e') {
@@ -135,6 +135,11 @@ function Layers(panel) {
 						blur: true,
 						callback: function(value) {
 							a.ef = +value;
+							/* not DRY ... from explode*/
+							layer.endFrame = +value;
+							if (lns.anim.currentState.end < layer.endFrame) 
+								lns.anim.currentState.end = layer.endFrame;
+							lns.ui.updateInterface(); /* fart */
 						}
 					}), aRow);
 					self.panel.add(new UIText({

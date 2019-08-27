@@ -66,6 +66,7 @@ class Layer {
 	}
 
 	removeIndex(index) {
+		/* removing layer if not in any frame ... maybe just leave it ? f: -1, -1 or something */
 		if (this.f.s == index && this.f.e == index) 
 			lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
 		else if (this.f.s == index) this.f.s += 1;
@@ -76,7 +77,6 @@ class Layer {
 			lns.anim.layers.push(newLayer);
 			this.f.e = index - 1;
 		}
-
 		this.resetAnims();
 	}
 

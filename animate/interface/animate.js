@@ -1,10 +1,9 @@
 function animateInterface(ui) {
 	const self = ui;
 
-	// get the plus frame, end frame + 1
 	Object.defineProperty(lns.anim, 'plusFrame', {
 		get: function() { return this.endFrame + 1; }
-	});
+	}); // get the plus frame, end frame + 1
 
 	ui.framesPanel = new UI({ id:"frames" });
 	ui.frameElems = new UIList({ class: "frame" });
@@ -92,7 +91,6 @@ function animateInterface(ui) {
 
 	/* update frame display and current frame */
 	ui.updateFrameNum = function() {
-
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
 		if (self.frameElems.els[lns.anim.currentFrame]) 

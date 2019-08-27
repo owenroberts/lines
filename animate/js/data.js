@@ -287,8 +287,6 @@ function Data(anim) {
 			const layer = anim.layers[i];
 			if (layer.isInFrame(anim.currentFrame)) {
 				layer.endFrame = layer.startFrame + n;
-				// if (layer.endFrame > anim.numFrames) anim.numFrames = layer.endFrame + 1; /* plus frame ? */
-				// if (anim.currentState.end < anim.numFrames) anim.currentState.end = anim.endFrame;
 				if (anim.currentState.end < layer.endFrame) anim.currentState.end = layer.endFrame;
 				switch(params.type) {
 					case "Explode":

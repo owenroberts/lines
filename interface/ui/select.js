@@ -3,7 +3,7 @@ class UISelect extends UI {
 		params.tag = "select";
 		super(params);
 		
-		this.setOptions(params.options, params.select);
+		this.setOptions(params.options, params.selected);
 
 		if (params.label) this.addLabel(params.label);
 

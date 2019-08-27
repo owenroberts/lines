@@ -30,7 +30,20 @@ function Drawings(panel) {
 
 				/* check for existing layer */
 				let layer = self.getDrawingLayer(i);
-				if (layer) toggleOn = layer.isInFrame(lns.anim.currentFrame);
+				let props;
+				if (layer) {
+					toggleOn = layer.isInFrame(lns.anim.currentFrame);
+					props = {
+						n: layer.n,
+						r: layer.r,
+						w: layer.w, 
+						v: layer.v,
+						c: layer.c,
+						x: layer.x,
+						y: layer.y
+					} /* prob a better way to do this ... 
+						this stops existing when updating interface */
+				}
 				else toggleOn = false;
 
 				panel.add(new UIToggleButton({
@@ -44,13 +57,14 @@ function Drawings(panel) {
 							if (layer.isInFrame(lns.anim.currentFrame)) {
 								layer.removeIndex(lns.anim.currentFrame);
 								if (lns.anim.layers.indexOf(layer) == -1) {
-									layer = undefined;
+									layer = undefined; /* maybe save this as props */
 								}
 							} else {
 								layer.addIndex(lns.anim.currentFrame);
 							}
 						} else {
 							/* fuck */
+							console.log(props); /* save in drawing? */
 							layer = new Layer({
 								d: i,
 								c: lns.draw.layer.c,
@@ -60,6 +74,11 @@ function Drawings(panel) {
 								f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
 								a: []
 							});
+							if (props) {
+								for (key in props) {
+									layer[key] = props[key];
+								}
+							}
 							lns.anim.layers.push(layer);
 						}
 					}
