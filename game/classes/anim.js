@@ -23,7 +23,7 @@ class Anim extends Animation {
 			}
 		}
 
-		if (this.frame4 > this.currentState.end) {
+		if (this.frame4 >= this.currentState.end + 1) { /* not DRY fuck me */
 			if (this.loop) this.frame = this.currentState.start;
 			else this.frame = this.currentState.end;
 			if (this.onPlayedOnce) {

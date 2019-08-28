@@ -75,12 +75,15 @@ class Animation {
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 				if (this.onUpdate) this.onUpdate();
 			}
-			console.log(this.currentFrame, this.frame4, this.currentState.end, this.currentState.end + 1 - this.intervalRatio, this.frame4 > this.currentState.end + 1 - this.intervalRatio);
-			if (this.frame4 > this.currentState.end + 1 - this.intervalRatio) {
+			// console.log(this.frame4, this.currentState.end, this.currentState.end + 1 - this.intervalRatio, this.frame4 > this.currentState.end + 1 - this.intervalRatio);
+			// console.log(this.frame4, this.currentState.end + 1);
+			/* fuck me */
+			if (this.frame4 >= this.currentState.end + 1) {
 				this.frame = this.currentState.start;
 				/* loop ? */
 				if (this.onPlayedState) this.onPlayedState();
 			}
+			// console.log(this.currentFrame)
 			if (this.onUpdate) this.onUpdate();
 		}
 	}
@@ -199,10 +202,10 @@ class Animation {
 		}
 		
 		this.layers = json.l;
+		if (json.s) this.states = json.s;
 
 		this.intervalRatio = this.lineInterval / (1000 / json.fps);
-
-		if (this.states.default) this.states.default.end = this.endFrame;
+		// if (this.states.default) this.states.default.end = this.endFrame;
 
 		if (json.mc) this.mixedColors = json.mc; /* hmm .. over ride? */
 
