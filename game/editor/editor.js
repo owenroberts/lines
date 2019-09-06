@@ -22,7 +22,12 @@ edi.tool = {
 		Game.canvas.className = '';
 		Game.canvas.classList.add(`${toolName}-tool`);
 	},
-	items: []
+	items: [],
+	clear: function() {
+		for (let i = edi.tool.items.length - 1; i >= 0; i--) {
+			edi.tool.items[i].selected = false;
+		}
+	}
 }; /* tools: zoom/pan, transform, ruler - modulize if it gets complicated */
 /* move this somewhere else eventually ... */
 edi.ui.selectTool = new UISelect({
@@ -137,10 +142,9 @@ function mouseMoved(x, y, button) {
 		/* does button exist if no mouse down? */
 		if (edi.zoom.mouseDown) {
 			const delta = edi.zoom.getDelta(x, y);
-			console.log(edi.tool.items.length)
 			if (edi.tool.current == 'transform' && edi.tool.items.length > 0) {
 				edi.tool.items.forEach(item => {
-					item.update({ x: Math.round(delta.x), y: Math.round(delta.y) })
+					item.update({ x: Math.round(delta.x), y: Math.round(delta.y) });
 				});
 			} else {
 				edi.zoom.updateView(delta.x, delta.y);
@@ -164,14 +168,10 @@ function mouseDown(x, y, button, shift) {
 				if (item && shift) {
 					item.selected = true;
 				} else if (item && !shift) {
-					for (let i = edi.tool.items.length - 1; i >= 0; i--) {
-						edi.tool.items[i].selected = false;
-					}
+					edi.tool.clear();
 					item.selected = true;
 				} else if (!item) {
-					for (let i = edi.tool.items.length - 1; i >= 0; i--) {
-						edi.tool.items[i].selected = false;
-					}
+					edi.tool.clear();
 				}
 			} else if (item) {
 				item.selected = true;

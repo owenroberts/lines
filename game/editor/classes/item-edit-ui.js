@@ -4,6 +4,7 @@ class ItemEditUI extends EditUI {
 	}
 
 	create() {
+		const self = this;
 
 		this.uis.x = new UIText({
 			label: "x",
@@ -26,6 +27,14 @@ class ItemEditUI extends EditUI {
 			callback: function() {
 				const s = addSceneSelector(Game.scenes[0], this.item.scenes.length);
 				this.panel.add(s, this.row);
+			}
+		});
+
+		this.uis.focus = new UIButton({
+			title: "📍",
+			callback: function() {
+				edi.zoom.view.x = self.item.position.x;
+				edi.zoom.view.y = self.item.position.y;
 			}
 		});
 

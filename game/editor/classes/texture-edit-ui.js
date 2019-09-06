@@ -24,6 +24,7 @@ class TextureEditUI extends EditUI {
 			on: "All",
 			off: "All",
 			callback: function() {
+				edi.tool.clear();
 				self.allSelected = !self.allSelected;
 				for (let i = 0; i < self.item.items.length; i++) {
 					if (self.item.items[i].selected) self.prevSelected = i;
