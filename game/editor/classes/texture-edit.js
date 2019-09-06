@@ -1,6 +1,7 @@
 class TextureEdit extends Texture {
 	constructor(params, debug) {
 		super(params, debug);
+		if (params.src) this.origin = params.src;
 		this.label = params.label;
 
 		if (params.x && !params.locations) {
@@ -16,7 +17,7 @@ class TextureEdit extends Texture {
 		item.addJSON(this.json);
 		item.origin = this.params.src;
 		item.texture = this;
-		if (this.frame == 'index') item.animation.createNewState('still', index, index);
+		if (this.frame == 'index') item.animation.createNewState(`index-${index}`, index, index);
 		else if (this.frame == 'random') item.animation.randomFrames = true;
 		this.items.push(item);
 	}

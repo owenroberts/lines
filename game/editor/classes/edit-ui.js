@@ -29,6 +29,7 @@ class EditUI {
 		this.uis.edit = new UIButton({
 			title: "Edit",
 			callback: function() {
+				console.log(self);
 				window.open(`${location.origin}/${location.pathname.includes('lines') ? 'lines/' : ''}animate/?src=${self.item.origin}`, 'anim');
 			}
 		});

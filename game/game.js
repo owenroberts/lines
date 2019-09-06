@@ -81,9 +81,9 @@ const Game = {
 			/* update game boundaries */
 			function setBounds(position) {
 				if (position.y < Game.bounds.top) 
-					Game.bounds.top = position.y - Game.height/2;
+					Game.bounds.top = position.y;
 				if (position.y > Game.bounds.bottom) 
-					Game.bounds.bottom = position.y + Game.height/2;
+					Game.bounds.bottom = position.y + Game.height;
 				if (position.x > Game.bounds.right) 
 					Game.bounds.right = position.x + Game.width/2;
 				if (position.x < Game.bounds.left) 

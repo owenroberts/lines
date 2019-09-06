@@ -10,7 +10,7 @@ class ItemEdit extends Item {
 	}
 
 	display(view) {
-		Game.ctx.strokeStyle = '#000000'; // game colors ???
+		 // game colors ???
 		if (!this.remove) {
 			super.display(this.isInMapBounds(view));
 			if (this.displayLabel) this.drawLabel();
@@ -34,6 +34,7 @@ class ItemEdit extends Item {
 	}
 
 	drawOutline() {
+		Game.ctx.strokeStyle = '#000000';
 		Game.ctx.strokeRect(this.xy.x, this.xy.y, this.width, this.height);
 		Game.ctx.strokeStyle = this.ui.color; /* ? */
 		Game.ctx.beginPath();
@@ -70,6 +71,14 @@ class ItemEdit extends Item {
 		else this.ui.remove();
 		if (this.texture && select) this.texture.ui.add();
 		else if (this.texture) this.texture.ui.remove();
+
+		if (select) {
+			if (!edi.tool.items.includes(this))
+				edi.tool.items.push(this);
+		} else {
+			if (edi.tool.items.includes(this))
+				edi.tool.items.splice(edi.tool.items.indexOf(this), 1);
+		}
 	}
 
 	get selected() {
@@ -91,7 +100,9 @@ class ItemEdit extends Item {
 	}
 
 	lock(lockState) {
+		// console.log(this.origin, lockState);
 		if (lockState !== undefined) this.locked = lockState;
 		else this.locked = !this.locked;
+		// console.log(this.locked);
 	}
 }

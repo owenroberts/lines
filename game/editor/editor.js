@@ -21,7 +21,8 @@ edi.tool = {
 		edi.ui.selectTool.setValue(toolName);
 		Game.canvas.className = '';
 		Game.canvas.classList.add(`${toolName}-tool`);
-	}
+	},
+	items: []
 }; /* tools: zoom/pan, transform, ruler - modulize if it gets complicated */
 /* move this somewhere else eventually ... */
 edi.ui.selectTool = new UISelect({
@@ -40,14 +41,13 @@ edi.ui.reset = function() {
 	}
 };
 
-
 Game.sprites = {};
 Game.ui = {};
 Game.scenes = [];
 Game.init({
 	canvas: "map",
-	width: 1000,
-	height: 600,
+	width: 1200,
+	height: 960,
 	lps: 12,
 	mixedColors: true
 });
@@ -61,7 +61,6 @@ function start() {
 	edi.zoom.load();
 	edi.tool.set('zoom');
 	edi.ui.markers.center = new Marker(0, 0);
-
 	Game.canvas.addEventListener("mousewheel", function(ev) {
 		edi.zoom.wheel(ev, function() {
 			Game.ctx.miterLimit = 1;
@@ -81,6 +80,7 @@ function start() {
 		}
 	});
 
+
 	fetch('/data/settings.json')
 		.then(response => { return response.json(); })
 		.then(json => {
@@ -88,11 +88,11 @@ function start() {
 				for (const key in json[type]) {
 					if (json[type][key].locked) {
 						Game.sprites[type][key].lock(true);
-
 					}
 				}
 			}
 		});
+	/* settings loaded before map done loading */
 
 	//  document.oncontextmenu = function() { return false; } 
 	/* maybe dont need with tool selector */
@@ -137,10 +137,14 @@ function mouseMoved(x, y, button) {
 		/* does button exist if no mouse down? */
 		if (edi.zoom.mouseDown) {
 			const delta = edi.zoom.getDelta(x, y);
-			if (edi.tool.current == 'transform' && edi.tool.item) 
-				edi.tool.item.update({ x: Math.round(delta.x), y: Math.round(delta.y) });
-			else 
+			console.log(edi.tool.items.length)
+			if (edi.tool.current == 'transform' && edi.tool.items.length > 0) {
+				edi.tool.items.forEach(item => {
+					item.update({ x: Math.round(delta.x), y: Math.round(delta.y) })
+				});
+			} else {
 				edi.zoom.updateView(delta.x, delta.y);
+			}
 		}
 	}
 
@@ -148,25 +152,29 @@ function mouseMoved(x, y, button) {
 	if (!edi.tool.item) intersectItems(x, y, false);
 }
 
-function mouseDown(x, y, button) {
+function mouseDown(x, y, button, shift) {
 	if (button == 1) {
 		if (edi.tool.current == 'location') {
 			const xy = edi.zoom.translate(x, y);
 			edi.tool.callback(xy.x, xy.y);
 		} else {
 			const item = intersectItems(x, y);
-			if (edi.tool.item) {
-				if (item && edi.tool.item != item) {
-					edi.tool.item.selected = false;
-					edi.tool.item = item;
-					edi.tool.item.selected = true;
+			
+			if (edi.tool.items.length > 0) {
+				if (item && shift) {
+					item.selected = true;
+				} else if (item && !shift) {
+					for (let i = edi.tool.items.length - 1; i >= 0; i--) {
+						edi.tool.items[i].selected = false;
+					}
+					item.selected = true;
 				} else if (!item) {
-					edi.tool.item.selected = false;
-					edi.tool.item = undefined;
+					for (let i = edi.tool.items.length - 1; i >= 0; i--) {
+						edi.tool.items[i].selected = false;
+					}
 				}
 			} else if (item) {
-				edi.tool.item = item;
-				edi.tool.item.selected = true;
+				item.selected = true;
 			}
 			
 			edi.zoom.mouseDown = true;

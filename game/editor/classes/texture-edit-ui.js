@@ -1,6 +1,8 @@
 class TextureEditUI extends EditUI {
 	constructor(item, panel) {
 		super(item, panel);
+		this.allSelected = false;
+		this.prevSelected = undefined;
 	}
 
 	create() {
@@ -18,12 +20,17 @@ class TextureEditUI extends EditUI {
 			}
 		});
 
-		this.uis.selectAll = new UIButton({
-			title: 'All',
+		this.uis.selectAll = new UIToggleButton({
+			on: "All",
+			off: "All",
 			callback: function() {
+				self.allSelected = !self.allSelected;
 				for (let i = 0; i < self.item.items.length; i++) {
-					self.item.items[i].selected = true;
+					if (self.item.items[i].selected) self.prevSelected = i;
+					self.item.items[i].selected = self.allSelected;
 				}
+				if (!self.allSelected && self.prevSelected)
+					self.items[self.prevSelected].selected = true;
 			}
 		});
 

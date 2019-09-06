@@ -31,7 +31,7 @@ class Texture {
 	addItem(index, location) {
 		const item = new Item({x: location.x, y: location.y, scenes: this.scenes});
 		item.addJSON(this.json);
-		if (this.frame == 'index') item.animation.createNewState('still', index, index);
+		if (this.frame == 'index') item.animation.createNewState(`still-${index}`, index, index);
 		else if (this.frame == 'random') item.animation.randomFrames = true;
 		this.items.push(item);
 	}
