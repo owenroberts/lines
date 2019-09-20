@@ -4,11 +4,22 @@ edi.ui.load('interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
 
 edi.ui.displayTextures = function() {
+	edi.ui.removeTextures();
 	for (const key in Game.sprites.textures) {
-		Game.sprites.textures[key].ui.remove();
-		Game.sprites.textures[key].ui.create();
+		const b = new UIButton({
+			title: key,
+			callback: function() {
+				Game.sprites.textures[key].ui.create();
+			}
+		});
+		edi.ui.panels.textures.add(b);
 	}
 }; /* needs to go in module */
+edi.ui.removeTextures = function() {
+	for (const key in Game.sprites.textures) {
+		Game.sprites.textures[key].ui.remove();
+	}
+};
 edi.ui.markers = {};
 
 edi.zoom = new Zoom();
@@ -52,7 +63,7 @@ Game.scenes = [];
 Game.init({
 	canvas: "map",
 	width: 1200,
-	height: 960,
+	height: 800,
 	lps: 12,
 	mixedColors: true
 });

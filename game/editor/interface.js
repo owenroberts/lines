@@ -1,0 +1,3 @@
+function EditorInterface(edi) {
+  /* fuck */	
+}
