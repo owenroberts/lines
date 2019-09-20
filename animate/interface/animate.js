@@ -15,7 +15,7 @@ function animateInterface(ui) {
 		callback: function() {
 			if (this.isOn) lns.canvas.canvas.parentElement.classList.add('right');
 			else lns.canvas.canvas.parentElement.classList.remove('right');
-		}		
+		}
 	});
 
 	/* update interface */
@@ -26,7 +26,7 @@ function animateInterface(ui) {
 		self.layers.drawLayers();
 		self.updateFramesPanel();
 	};
-	
+
 	ui.plusFrame = new UI({
 		id:"current",
 		event: "click",
@@ -151,7 +151,7 @@ function animateInterface(ui) {
 
 	/* external interfaces */
 	ui.palette = new Palette();
-	
+
 	ui.panels.layers = new Panel('layers-menu', 'Layers');
 	ui.layers = new Layers(ui.panels.layers);
 
@@ -195,12 +195,15 @@ function animateInterface(ui) {
 
 		lns.ui.faces.lps.setValue(settings.lps);
 		lns.ui.faces.fps.setValue(settings.fps);
-		
-		lns.ui.faces.c.setValue(settings.c);
-		/* this can be done with update, but i dont like lns.ui.faces being the location ... */
-		
-		lns.ui.faces.bgColor.setValue(settings.canvasColor);
 		lns.ui.faces.lineWidth.setValue(settings.lineWidth);
+		lns.ui.faces.c.setValue(settings.c);
+		/* this can be done with update, but i dont like lns.ui.faces being the location ... 
+			update is also setting value
+			setValue doesn't set the input for range values 
+			lotta ui work left to do! */
+
+		lns.ui.faces.bgColor.setValue(settings.canvasColor);
+		lns.ui.faces.lineWidth.update(settings.lineWidth);
 		lns.ui.faces.onionSkinNum.setValue(settings.onionSkinNum);
 
 		/* update sets value and calls callback ...*/
@@ -229,8 +232,6 @@ function animateInterface(ui) {
 			ui.layers.toggleCanvas.callback();
 			ui.layers.toggleCanvas.toggle();
 		}
-
-		
 	}
 
 	ui.settings = new Settings(lns, 'lns', appSave, appLoad);

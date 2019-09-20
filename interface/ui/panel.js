@@ -77,6 +77,7 @@ class Panel {
 
 	removeRow(row) {
 		const index = this.rows.indexOf(row);
+		this.clearComponents(row);
 		this.rows.splice(index, 1);
 		this.el.removeChild(row);
 	}
@@ -95,6 +96,7 @@ class Panel {
 	clearComponents(row) {
 		if (row) {
 			while (row.firstChild) {
+				row.firstChild.value = null;
 				row.removeChild(row.firstChild);
 			}
 		}
