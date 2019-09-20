@@ -1,0 +1,28 @@
+
+canvas#map { 
+	display: block; 
+	border: 1px solid black;
+}
+
+canvas#map.zoom-tool {
+	cursor: -webkit-grab;
+	cursor: grab;
+}
+
+canvas#map.zoom-tool:active {
+	cursor: -webkit-grabbing;
+	cursor: grabbing;
+}
+
+canvas#map.transform-tool {
+	cursor: -webkit-move;
+	cursor: move;
+}
+
+canvas#map.location-tool {
+	cursor: -webkit-cell;
+	cursor: cell;
+}
+
+/* ui adjustment */
+/*label { margin-right: 1em; }*/

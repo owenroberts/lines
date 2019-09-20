@@ -16,24 +16,25 @@ function Files(params) {
 		json.v = "2.4";
 		json.w = Math.floor(+lns.canvas.width);
 		json.h = Math.floor(+lns.canvas.height);
-		json.fps = +lns.render.fps;
+		json.fps = +lns.anim.fps;
 		if (params.bg) json.bg = lns.canvas.bgColor;
-		// what if one color isn't used ?
-		// json.mc = lns.lineColor.colors.length > 1 ? true : false;
-		let colors = lns.layers.map(layer => layer.c);
+		let colors = lns.anim.layers.map(layer => layer.c);
 		colors = [...new Set(colors)];
 		json.mc = colors.length > 1 ? true : false;
-		// set by layers
 
 		/* save current frame */
 		let layers = [];
 		if (single) {
-			for (let i = 0; i < lns.layers.length; i++) {
-				if (lns.layers[i].isInFrame(lns.currentFrame))
-					layers.push(lns.layers[i]);
+			for (let i = 0; i < lns.anim.layers.length; i++) {
+				if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
+					const layer = _.cloneDeep(lns.anim.layers[i]);
+					layer.startFrame = 0;
+					layer.endFrame = 0;
+					layers.push(layer);;
+				}
 			}
 		} else {
-			layers = lns.layers;
+			layers = lns.anim.layers;
 		}
 
 		for (let i = 0; i < layers.length; i++) {
@@ -52,7 +53,7 @@ function Files(params) {
 		json.d = [];
 		for (let i = 0; i < drawingIndexes.length; i++) {
 			const index = drawingIndexes[i];
-			const drawing = lns.drawings[index];
+			const drawing = lns.anim.drawings[index];
 			const d = [];
 			for (let j = 0; j < drawing.length; j++) {
 				const point = drawing[j];
@@ -62,11 +63,13 @@ function Files(params) {
 			json.d[index] = d;
 		}
 
+		json.s = lns.anim.states;
+
 		const jsonfile = JSON.stringify(json);
 		const filename = title || prompt("Name this file:");
 
 		if (filename) {
-			const blob = new Blob([jsonfile], {type:"application/x-download;charset=utf-8"});
+			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
 			saveAs(blob, `${filename}.json`);
 		}
 
@@ -90,8 +93,7 @@ function Files(params) {
 	};
 
 	this.loadJSON = function(data, callback) {
-		lns.numFrames = 0; /* reset */
-		lns.drawings = [];
+		lns.anim.drawings = [];
 		for (let i = 0; i < data.d.length; i++) {
 			const drawing = data.d[i];
 			const d = [];
@@ -102,18 +104,21 @@ function Files(params) {
 					else d.push('end');
 				}
 			}
-			lns.drawings[i] = d;
+			lns.anim.drawings[i] = d;
 		}
 
-		lns.layers = [];
+		lns.anim.layers = [];
 		for (let i = 0; i < data.l.length; i++) {
-			lns.layers[i] = new Layer(data.l[i]);
-			lns.render.lineColor = lns.layers[i].c;
-			if (lns.numFrames < lns.layers[i].f.e)
-				lns.numFrames = lns.layers[i].f.e;
+			lns.anim.layers[i] = new Layer(data.l[i]);
+			lns.draw.layer.c = lns.anim.layers[i].c;
+			lns.ui.faces.c.addColor(lns.anim.layers[i].c); /* ui */
 		}
 
-		lns.numFrames += 1; /* plus frame */
+		if (data.s) lns.anim.states = data.s;
+		if (lns.anim.states.default) lns.anim.states.default.end = lns.anim.endFrame;
+
+		/* set interface values  */
+		lns.ui.faces.stateSelector.setOptions(Object.keys(lns.anim.states));
 
 		lns.canvas.setWidth(data.w);
 		lns.canvas.setHeight(data.h);

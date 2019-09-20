@@ -1,0 +1,269 @@
+@import 'font.css';
+$main-color: lightblue;
+$accent-color: blue;
+$accent-two: #ffddff;
+$ui-color: lightgray;
+$ui-select: gray;
+
+* { 
+	box-sizing: border-box;
+	touch-action: manipulation;
+}
+
+body {
+	font-family: Verdana, sans-serif;
+	margin: 0;
+	font-size: 11px;
+	-webkit-user-select: none;
+	user-select: none;
+	touch-action: manipulation;
+}
+
+
+button:focus { 
+	outline: none; 
+}
+
+select {
+	margin-top: 0.25em;
+}
+
+%tool-tip {
+	content: '~ ' attr(title);
+	position: fixed;
+	top: 40px;
+	right: 20px;
+	background: $accent-two;
+	border-radius: 3px;
+	padding: 1px 3px;
+	color: black;
+}
+
+#tool-tip {
+	position: fixed;
+	top: 40px;
+	right: 20px;
+	background: $accent-two;
+	border-radius: 3px;
+	font-size: 1em;
+	color: black;
+	&.visible {
+		padding: 2px 6px;
+	}
+}
+
+/* this is kind of doubled up but fix later */
+.desktop *[title]:hover:after, .press:after {
+	@extend %tool-tip;
+}
+
+#container {
+	margin:1em;
+	display: flex;
+	flex-wrap: wrap;
+	#draw {
+		order: 0;
+		padding-right: 1em;
+		&.right {
+			order: 2;
+			padding-left: 1em; 
+			padding-right: 0;
+		}
+	}
+	#tools { flex: 1; }
+}
+
+#draw #lines {
+	border: 1px solid $ui-color;
+	&:active, &:hover { cursor: crosshair; }
+}
+
+.btn {
+	display: inline-block;
+	margin-top: 0.5em;
+	background-color: $ui-color;
+	padding: 0 0.5em;
+	border-radius: 3px;
+	&:hover {
+		background: $accent-two;
+		cursor: pointer;
+	}
+	transition: background-color 150ms ease-in;
+	line-height: 1.75;
+	white-space: nowrap;
+	&.press { background-color: $accent-two; }
+}
+
+#nav {
+	#title {
+		border: none;
+		font-size: 1.5em;
+		display: block;
+		margin-bottom: 0.5em;
+		border-bottom: 1px solid transparent;
+		width: 100%;
+		&:focus {
+			outline: none;
+			border-bottom: 1px solid black;
+		}
+	}
+
+	label { margin-right: 0.25em; }
+}
+
+#panels {
+	/*display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));*/
+	margin-top: 0.5em;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.menu-panel {
+	flex-basis: 120px;
+	flex-grow: 1;
+	max-width: 160px;
+	order: 0;
+	border-top: 1px solid $ui-color;
+	border-right: 1px solid $ui-color;
+	padding: 0.5em;
+	overflow: hidden;
+	position: relative;
+	height: auto;
+
+	&.hide { display: none; }
+
+	.title { margin-bottom: 1em; }
+
+	.toggle, .order, .hide {
+		display: inline-block;
+		position: absolute;
+		right: 34px;
+		top: 0;
+		left: 0;
+		text-align: right;
+		cursor: pointer;
+		font-size: 14px;
+		font-weight: 100;
+		&:hover { background: $accent-two; }
+		opacity: 0.5;
+		border-top-right-radius: 3px;
+		border-bottom-right-radius: 3px;
+	}
+
+	.hide {
+		right: 18px;
+		left: auto;
+	}
+
+	.order {
+		font-size: 1em;
+		right: 2px;
+		left: auto;
+	}
+
+	.row {
+		margin-bottom: 0.5em;
+		display: flex;
+		flex-wrap: wrap;
+		label {
+			line-height: 1.5;
+		}
+		span, label, input, select {
+			// vertical-align: top;
+			// line-height: 2;
+			white-space: nowrap;
+			margin-right: 0.25em;
+			margin-top: 0.25em;
+			flex: 0 1 auto;
+			&.block {
+				flex: auto;
+				text-align: left;
+			}
+		}
+		input {
+			flex: 0 1 40px;
+			width: 100%;
+			text-align: right;
+		}
+		input[type=range], input[type=color] {
+			flex: 1 1 auto;
+		}
+		input[type=text] {
+			border: none;
+			background-color: $ui-color;
+			padding-right: 0.25em;
+		}
+		.display {
+			text-align: right;
+		}
+	}
+
+	.btn {
+		padding: 0 0.25em;
+		margin-right: 3px;
+	}
+}
+
+#frames {
+	// max-width: 100%;
+	height:auto;
+	padding: 0;
+	width: auto;
+	// width: 100%;
+	display: grid;
+    grid-template-columns: repeat(auto-fill, 24px);
+    grid-template-rows: max-content max-content;
+    p {
+    	margin: 0;
+    	grid-column: 1 / span 2;
+    }
+	.frame, .plus, #current {
+		border-radius: 3px;
+		display: inline-block;
+		background-color: $ui-color;
+		transition: background-color 100ms ease-in;
+		margin-right: 1px;
+		margin-top: 1px;
+		padding: 0.5em;
+		cursor: pointer;
+		&:hover { background-color: $ui-select; }
+	}
+	#current { background-color: $main-color !important; }
+	.selected { background-color: $accent-two !important; }
+}
+
+#draw-layers {
+	margin-top: 1em;
+	// width: 100%;
+	border-top: 1px solid $ui-color;
+	border-bottom: 1px solid $ui-color;
+	padding: 0.25em 0;
+}
+
+.modal {
+	position: fixed;
+    background: white;
+    padding: 1em;
+    border-radius: 1em;
+    border: 5px solid $main-color;
+    outline: 10px dotted $accent-two;
+    top: 50%;
+    right: 50%;
+    width: 400px;
+    * { margin: 0 1em; }
+}
+
+.mobile {
+	.menu-panel {
+		flex-basis: 180px;
+		max-width: 220px;
+
+		.row input {
+			flex-basis: 50px;
+		}
+	}
+	.btn, select, input {
+		font-size: 1.75em;
+	}
+}

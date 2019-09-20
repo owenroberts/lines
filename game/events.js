@@ -14,7 +14,7 @@ const Events = {
 		canvas.addEventListener('mousedown', function(ev) {
 			ev.preventDefault();
 			if (typeof mouseDown === "function") 
-				mouseDown(ev.offsetX, ev.offsetY, ev.which);
+				mouseDown(ev.offsetX, ev.offsetY, ev.which, ev.shiftKey);
 			if (typeof startDrag === "function") {
 				dragOffset = startDrag(ev.offsetX, ev.offsetY);
 				if (dragOffset) dragStarted = true;

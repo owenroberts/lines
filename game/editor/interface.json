@@ -1,0 +1,171 @@
+{
+	"tools": {
+		"id": "tools-menu",
+		"label": "tools",
+		"module": "tool",
+		"list": [
+			{
+				"type": "button",
+				"key": "q",
+				"fromModule": {
+					"callback": "set"
+				},
+				"params": {
+					"title": "Zoom",
+					"arguments": {
+						"toolName": "zoom"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "w",
+				"fromModule": {
+					"callback": "set"
+				},
+				"params": {
+					"title": "Transform",
+					"arguments": {
+						"toolName": "transform"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "r",
+				"fromModule": {
+					"callback": "set"
+				},
+				"params": {
+					"title": "Ruler",
+					"arguments": {
+						"toolName": "ruler"
+					}
+				}
+			}
+		]
+	},
+	"zoom": {
+		"id": "zoom-menu",
+		"label": "Zoom/Pan",
+		"module": "zoom",
+		"list": [
+			{
+				"type": "button",
+				"key": "shift-z",
+				"fromModule": {
+					"callback": "save"
+				},
+				"params": {
+					"title": "Save"
+				}
+			},
+			{
+				"type": "button",
+				"key": "z",
+				"fromModule": {
+					"callback": "load"
+				},
+				"params": {
+					"title": "Load"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-z",
+				"fromModule": {
+					"callback": "center"
+				},
+				"params": {
+					"title": "Center"
+				}
+			}
+		]
+	},
+	"settings": {
+		"id": "settings-menu",
+		"label": "Settings",
+		"module": "ui",
+		"sub": "settings",
+		"list": [
+			{
+				"type": "button",
+				"key": "ctrl-s",
+				"fromModule": {
+					"callback": "save"
+				},
+				"params": {
+					"title": "Save"
+				}
+			},
+			{
+				"type": "button",
+				"fromModule": {
+					"callback": "load"
+				},
+				"params": {
+					"title": "Load"
+				}
+			},
+			{
+				"type": "button",
+				"fromModule": {
+					"callback": "clear"
+				},
+				"params": {
+					"title": "Clear"
+				}
+			}
+		]
+	},
+	"data": {
+		"id": "data-menu",
+		"label": "Data",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "s",
+				"fromModule": {
+					"callback": "save"
+				},
+				"params": {
+					"title": "Save"
+				}
+			},
+			{
+				"type": "button",
+				"key": "l",
+				"fromModule": {
+					"callback": "load"
+				},
+				"params": {
+					"title": "Load"
+				}
+			}
+		]
+	},
+	"items": {
+		"id": "item-menu",
+		"label": "Items",
+		"module": "ui",
+		"list": []
+	},
+	"textures": {
+		"id": "texture-menu",
+		"label": "Textures",
+		"module": "ui",
+		"list": [
+			{
+				"type": "button",
+				"key": "t",
+				"fromModule": {
+					"callback": "displayTextures"
+				},
+				"params": {
+					"title": "Display"
+				}
+			}
+		]
+	}
+}

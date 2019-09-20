@@ -1,10 +1,10 @@
 <!doctype html>
 <html>
 <head>
-	<title>lines animate</title>
+	<title>animate</title>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-	<link href="css/lines.css" rel="stylesheet" type="text/css">
+	<link href="../interface/css/lines.css" rel="stylesheet" type="text/css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 <body>
@@ -12,20 +12,25 @@
 		<div id="draw" class="section">
 			<canvas id="lines"></canvas>
 		</div>
+		<div id="tool-tip"></div>
 		<div id="tools" class="section">
-			<div id="tool-tip"></div>
 			<div id="nav">
 				<input id="title" placeholder="title" type="text" autocomplete="off">
 				<span class="btn" id="open" >Open</span>
 				<span class="btn" id="save">Save</span>
 				<span class="btn" id="save-frame">Save frame</span>
 				<span class="btn" id="re-open">Re-Open</span>
+				<span class="btn" id="right-left">R/L</span>
 			<!-- <div id="windows"> -->
 				<select id="add-ui"></select>
 			</div>
 			
 			<div id="panels"></div>
+
+			<div id="layer-display-menu"> <span id="toggle-layers">Close Layers</span></div>
 			<canvas id="draw-layers" height='0'></canvas>
+			
+
 			<div id="frames">
 				<div id="current" class="plus frame">+</div>
 			</div>
@@ -35,46 +40,52 @@
 	<a href="../" style="margin-left: 1em">back</a>
 
 	<!-- libraries -->
-	<script type="text/javascript" src="../lib/cool/cool.js"></script>
-	<script type="text/javascript" src="../lib/lodash.js"></script>
-	<script type="text/javascript" src="../lib/Blob.js"></script>
-	<script type="text/javascript" src="../lib/FileSaver.min.js"></script>
+	<script src="../lib/cool/cool.js"></script>
+	<script src="../lib/lodash.js"></script>
+	<script src="../lib/Blob.js"></script>
+	<script src="../lib/FileSaver.min.js"></script>
 
 	<!-- ui -->
-	<script type="text/javascript" src="js/ui/ui.js"></script>
-	<script type="text/javascript" src="js/ui/panel.js"></script>
-	<script type="text/javascript" src="js/ui/button.js"></script>
-	<script type="text/javascript" src="js/ui/toggle.js"></script>
-	<script type="text/javascript" src="js/ui/display.js"></script>
-	<script type="text/javascript" src="js/ui/list.js"></script>
-	<script type="text/javascript" src="js/ui/text.js"></script>
-	<script type="text/javascript" src="js/ui/select.js"></script>
-	<script type="text/javascript" src="js/ui/range.js"></script>
-	<script type="text/javascript" src="js/ui/color.js"></script>
+	<script src="../interface/ui/ui.js"></script>
+	<script src="../interface/ui/panel.js"></script>
+	<script src="../interface/ui/button.js"></script>
+	<script src="../interface/ui/toggle.js"></script>
+	<script src="../interface/ui/display.js"></script>
+	<script src="../interface/ui/list.js"></script>
+	<script src="../interface/ui/text.js"></script>
+	<script src="../interface/ui/select.js"></script>
+	<script src="../interface/ui/range.js"></script>
+	<script src="../interface/ui/color.js"></script>
 
 	<!-- modules -->
-	<script type="text/javascript" src="js/canvas.js"></script>
-	<script type="text/javascript" src="js/background.js"></script>
-	<script type="text/javascript" src="js/draw.js"></script>
-	<script type="text/javascript" src="js/render.js"></script>
-	<script type="text/javascript" src="js/data.js"></script>
-	<script type="text/javascript" src="js/files.js"></script>
+	<script src="js/canvas.js"></script>
+	<script src="js/background.js"></script>
+	<script src="js/draw.js"></script>
+	<script src="js/render.js"></script>
+	<script src="js/data.js"></script>
+	<script src="js/files.js"></script>
 
 	<!-- classes -->
-	<script type="text/javascript" src="js/layer.js"></script>
+	<script src="js/layer.js"></script>
 
-	<!-- interface -->
-	<script type="text/javascript" src="js/interface/palette.js"></script>
-	<script type="text/javascript" src="js/interface/layers.js"></script>
-	<script type="text/javascript" src="js/interface/drawings.js"></script>
-	<script type="text/javascript" src="js/interface/settings.js"></script>
-	<script type="text/javascript" src="js/interface/files.js"></script>
-	<script type="text/javascript" src="js/interface/capture.js"></script>
+	<!-- animate interface -->
+	<script src="interface/palette.js"></script>
+	<script src="interface/layers.js"></script>
+	<script src="interface/drawings.js"></script>
+	<script src="interface/files.js"></script>
+	<script src="interface/capture.js"></script>
+	<script src="interface/states.js"></script>
+	<script src="interface/animate.js"></script>
 
-	<script type="text/javascript" src="js/interface.js"></script>
+	<!-- lines interface -->
+	<script src="../interface/interface.js"></script>
+	<script src="../interface/settings.js"></script>
+
+	<!-- anim -->
+	<script src="../classes/animation.js"></script>
 
 	<!-- build the lines -->
-	<script type="text/javascript" src="lines.js"></script>
+	<script src="lines.js"></script>
 
 </body>
 </html>

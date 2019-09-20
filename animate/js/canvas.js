@@ -8,9 +8,9 @@ function Canvas(id, width, height, color) {
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
 
-	this.setBGColor = function(_color) {
-		self.bgColor = _color;
-		self.canvas.style.backgroundColor = _color;
+	this.setBGColor = function(color) {
+		self.bgColor = color;
+		self.canvas.style.backgroundColor = color;
 	};
 
 	this.setBGColor(color);
@@ -45,17 +45,16 @@ function Canvas(id, width, height, color) {
 		lns.data.saveLines();
 		
 		let tolerance = 0;
-		// min max size of canvas
-		let min = { x: 10000, y: 10000 };
+		let min = { x: 10000, y: 10000 }; // min max size of canvas
 		let max = { x: 0, y: 0 };
 
-		for (let i = 0; i < lns.layers.length; i++) {
-			const layer = lns.layers[i];
-			const drawing = lns.drawings[layer.d];
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			const drawing = lns.anim.drawings[layer.d];
 			for (let j = 0; j < drawing.length; j++) {
 				const point = drawing[j];
 				if (point != 'end') {
-					tolerance = Math.max(tolerance, layer.r * 4);
+					tolerance = Math.max(tolerance, layer.r * 4); /* account for random jiggle */
 					min.x = Math.min(min.x, point.x + layer.x);
 					min.y = Math.min(min.y, point.y + layer.y);
 					max.x = Math.max(max.x, point.x + layer.x);
@@ -66,17 +65,10 @@ function Canvas(id, width, height, color) {
 
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
-		lns.ui.faces.width.set(self.canvas.width);
-		lns.ui.faces.height.set(self.canvas.height);
 
-		for (let i = 0; i < lns.layers.length; i++) {
-			const layer = lns.layers[i];
-			const diff = {
-				x: layer.x + (min.x - tolerance),
-				y: layer.y + (min.y - tolerance)
-			};
-			if (diff.x > 0) layer.x -= diff.x;
-			if (diff.y > 0) layer.y -= diff.y;
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			lns.anim.layers[i].x -= min.x - tolerance > 0 ? min.x - tolerance : 0;
+			lns.anim.layers[i].y -= min.y - tolerance > 0 ? min.y - tolerance : 0;
 		}
 	};
 }

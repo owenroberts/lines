@@ -1,0 +1,940 @@
+{
+	"mouse": {
+		"id": "mouse-menu",
+		"label": "Mouse",
+		"module": "draw",
+		"list": [
+			{
+				"type": "range",
+				"face": "mouseInterval",
+				"set": {
+					"prop": "mouseInterval",
+					"number": true
+				},
+				"params": {
+					"min": 0,
+					"max": 100,
+					"input": "mouse-range",
+					"label": "Mouse time",
+					"prompt": "Set mouse interval"
+				}
+			}
+		]
+	},
+	"bgImage": {
+		"id": "background-image-menu",
+		"label": "BG image",
+		"module": "bgImage",
+		"list": [
+			{
+				"type": "text",
+				"fromModule": {
+					"callback": "loadImage"
+				},
+				"params": {
+					"title": "Image URL, Enter",
+					"id": "bg-img"
+				}
+			},
+			{
+				"type": "toggle",
+				"key": "b",
+				"fromModule": {
+					"callback": "toggle"
+				},
+				"params": {
+					"on": "Hide",
+					"off": "Show"
+				}
+			},
+			{
+				"row": true,
+				"type": "range",
+				"set": {
+					"prop": "x",
+					"number": true
+				},
+				"params": {
+					"label": "X",
+					"min": -1024,
+					"max": 1024,
+					"value": 0,
+					"input": "x-range"
+				}
+			},
+			{
+				"type": "range",
+				"set": {
+					"prop": "y",
+					"number": true
+				},
+				"params": {
+					"label": "Y",
+					"min": -1024,
+					"max": 1024,
+					"value": 0,
+					"input": "y-range"
+				}
+			},
+			{
+				"type": "range",
+				"set": {
+					"prop": "size",
+					"number": true
+				},
+				"params": {
+					"label": "Size",
+					"input": "size-range",
+					"min": 0.1,
+					"max": 2,
+					"value": 1,
+					"step": 0.1
+				}
+			}
+		]
+	},
+	"canvas": {
+		"id": "canvas-menu",
+		"label": "Canvas",
+		"module": "canvas",
+		"list": [
+			{
+				"type": "button",
+				"key": "shift-f",
+				"params": {
+					"title": "Fit Canvas"
+				},
+				"fromModule": {
+					"callback": "fitCanvasToDrawing"
+				}
+			},
+			{
+				"row": true,
+				"type": "text",
+				"observe": {
+					"elem": "canvas",
+					"attribute": "width"
+				},
+				"fromModule": {
+					"placeholder": "width",
+					"callback": "setWidth"
+				},
+				"params": {
+					"id": "canvas-width",
+					"blur": true,
+					"label": "Width"
+				}
+			},
+			{
+				"row": true,
+				"type": "text",
+				"observe": {
+					"elem": "canvas",
+					"attribute": "height"
+				},
+				"fromModule": {
+					"placeholder": "height",
+					"callback": "setHeight"
+				},
+				"params": {
+					"id": "canvas-height",
+					"blur": true,
+					"label": "Height"
+				}
+			},
+			{
+				"row": true,
+				"type": "range",
+				"face": "lineWidth",
+				"fromModule": {
+					"callback": "setLineWidth"
+				},
+				"params": {
+					"label": "Line Width",
+					"value": 1,
+					"min": 0.25,
+					"max": 4,
+					"step": 0.25,
+					"input": "line-width-range"
+				}
+			}
+		]	
+	},
+	"lineColor": {
+		"id": "line-color-menu",
+		"label": "Line Color",
+		"module": "draw",
+		"sub": "layer",
+		"list": [
+			{
+				"type": "color",
+				"face": "c",
+				"set": {
+					"prop": "c"
+				}
+			}
+		]
+	},
+	"bgColor": {
+		"id": "bg-color-menu",
+		"label": "BG Color",
+		"module": "canvas",
+		"list": [
+			{
+				"type": "color",
+				"face": "bgColor",
+				"fromModule": {
+					"callback": "setBGColor",
+					"value": "bgColor"
+				}
+			}
+		]
+	},
+	"copy": {
+		"id": "copy-menu",
+		"label": "Copy/Paste",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "c",
+				"fromModule": {
+					"callback": "copy"
+				},
+				"params": {
+					"title": "Copy"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-c",
+				"fromModule": {
+					"callback": "addMultipleCopies"
+				},
+				"params": {
+					"title": "Multi Copies"
+				}
+			},
+			{
+				"type": "button",
+				"key": "v",
+				"fromModule": {
+					"callback": "paste"
+				},
+				"params": {
+					"title": "Paste"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-v",
+				"fromModule": {
+					"callback": "selectAll"
+				},
+				"params": {
+					"title": "Select All"
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-v",
+				"fromModule": {
+					"callback": "selectRange"
+				},
+				"params": {
+					"title": "Select Range"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-v",
+				"fromModule": {
+					"callback": "clearSelected"
+				},
+				"params": {
+					"title": "Clear Selected"
+				}
+			}
+		]
+	},
+	"cut": {
+		"id": "cut-menu",
+		"label": "Cut",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "x",
+				"fromModule": {
+					"callback": "clearLines"
+				},
+				"params": {
+					"title": "Clear Lines"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-z",
+				"fromModule": {
+					"callback": "cutLastLine"
+				},
+				"params": {
+					"title": "Cut Line"
+				}
+			},
+			{
+				"type": "button",
+				"key": "z",
+				"fromModule": {
+					"callback": "cutLastSegment"
+				},
+				"params": {
+					"title": "Cut Segment"
+				}
+			},
+			{
+				"type": "button",
+				"key": "d",
+				"fromModule": {
+					"callback": "deleteFrame"
+				},
+				"params": {
+					"title": "Delete Frame"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-d",
+				"fromModule": {
+					"callback": "deleteFrameRange"
+				},
+				"params": {
+					"title": "Delete Frame Range"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-x",
+				"fromModule": {
+					"callback": "cutTopLayer"
+				},
+				"params": {
+					"title": "Cut Top Layer"
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-x",
+				"fromModule": {
+					"callback": "cutBottomLayer"
+				},
+				"params": {
+					"title": "Cut Bottom Layer"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-x",
+				"fromModule": {
+					"callback": "clearFrame"
+				},
+				"params": {
+					"title": "Clear Frame"
+				}
+			}
+		]
+	},
+	"data": {
+		"id": "data-menu",
+		"label": "Data",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "r",
+				"fromModule": {
+					"callback": "saveLines"
+				},
+				"params": {
+					"title": "Save Lines"
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-z",
+				"fromModule": {
+					"callback": "undo"
+				},
+				"params": {
+					"title": "Undo"
+				}
+			},
+			{
+				"type": "button",
+				"key": "q",
+				"fromModule": {
+					"callback": "offsetDrawing"
+				},
+				"params": {
+					"title": "Offset"
+				}
+			},
+			{
+				"type": "button",
+				"key": "i",
+				"fromModule": {
+					"callback": "insertFrameBefore"
+				},
+				"params": {
+					"title": "Insert Before"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-i",
+				"fromModule": {
+					"callback": "insertFrameAfter"
+				},
+				"params": {
+					"title": "Insert After"
+				}
+			}
+		]
+	},
+	"playBack": {
+		"id": "play-back-menu",
+		"label": "Play Back",
+		"module": "render",
+		"list": [
+			{
+				"type": "toggle",
+				"key": "space",
+				"fromModule": {
+					"callback": "toggle"
+				},
+				"params": {
+					"id": "play",
+					"on": "Play",
+					"off": "Pause"
+				}
+			},
+			{
+				"type": "button",
+				"key": "w",
+				"module": "ui",
+				"fromModule": {
+					"callback": "prevFrame"
+				},
+				"params": {
+					"title": "Prev"
+				}
+			},
+			{
+				"type": "button",
+				"key": "e",
+				"module": "ui",
+				"fromModule": {
+					"callback": "nextFrame"
+				},
+				"params": {
+					"title": "Next"
+				}
+			},
+			{
+				"row": true,
+				"type": "text",
+				"key": "f",
+				"module": "ui",
+				"face": "frameDisplay",
+				"blur": true,
+				"fromModule": {
+					"callback": "setFrame"
+				},
+				"params": {
+					"id": "frame",
+					"label": "Frame ",
+					"value": 0,
+					"prompt": "Go To Frame",
+					"display": true
+				}
+			},
+			{
+				"row": true,
+				"type": "text",
+				"key": ";",
+				"face": "fps",
+				"blur": true,
+				"fromModule": {
+					"callback": "setFps",
+					"value": "fps"
+				},
+				"params": {
+					"prompt": "Set FPS",
+					"label": "FPS",
+					"display": true
+				}
+			},
+			{
+				"type": "text",
+				"key": "'",
+				"blur": true,
+				"face": "lps",
+				"fromModule": {
+					"callback": "setLps",
+					"value": "lps"
+				},
+				"params": {
+					"prompt": "Set Lines/Second",
+					"label": "LPS",
+					"display": true
+				}
+			},
+			{
+				"row": true,
+				"type": "text",
+				"key": "shift-l",
+				"blur": true,
+				"face": "onionSkinNum",
+				"fromModule": {
+					"callback": "setOnionSkin"
+				},
+				"params": {
+					"value": 0,
+					"label": "Onion",
+					"prompt": "Onion skin",
+					"display": true
+				}
+			},
+			{
+				"type": "toggle",
+				"key": "l",
+				"fromModule": {
+					"callback": "toggleOnion"
+				},
+				"params": {
+					"on": "Hide",
+					"off": "Show"
+				}
+			}
+		]
+	},
+	"capture": {
+		"id": "capture-menu",
+		"label": "Capture",
+		"module": "ui",
+		"sub": "capture",
+		"list": [
+			{
+				"type": "button",
+				"key": "ctrl-k",
+				"fromModule": {
+					"callback": "captureCycle"
+				},
+				"params": {
+					"title": "Capture Cycle"
+				}
+			},
+			{
+				"type": "button",
+				"key": "k",
+				"fromModule": {
+					"callback": "captureOne"
+				},
+				"params": {
+					"title": "Capture Frame"
+				}
+			},
+			{
+				"type": "toggle",
+				"key": "n",
+				"fromModule": {
+					"callback": "toggleBGCapture"
+				},
+				"params": {
+					"on": "Capture w BG",
+					"off": "Capture no BG"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-k",
+				"fromModule": {
+					"callback": "captureMultiple"
+				},
+				"params": {
+					"title": "Capture Frames"
+				}
+			},
+			{
+				"type": "toggle",
+				"key": "alt-k",
+				"fromModule": {
+					"callback": "videoCapture"
+				},
+				"params": {
+					"on": "Start Video",
+					"off": "Stop Video"
+				}
+			},
+			{
+				"type": "button",
+				"fromModule": {
+					"callback": "startVideoCapture"
+				},
+				"params": {
+					"title": "Capture Video Loops"
+				}
+			}
+		]
+	},
+	"brush": {
+		"id": "brush-menu",
+		"label": "Brush",
+		"module": "draw",
+		"list": [
+			{
+				"type": "range",
+				"face": "brush",
+				"set": {
+					"prop": "brush",
+					"number": true
+				},
+				"params": {
+					"label": "Brush",
+					"min": 0, 
+					"max": 10,
+					"input": "brush-range"
+				}
+			},
+			{
+				"type": "range",
+				"face": "brushSpread",
+				"set": {
+					"prop": "brushSpread",
+					"number": true
+				},
+				"params": {
+					"label": "Brush Spread",
+					"min": 0, 
+					"max": 5,
+					"input": "brush-spread-range"
+				}
+			},
+			{
+				"type": "range",
+				"face": "grass",
+				"set": {
+					"prop": "grass",
+					"number": true
+				},
+				"params": {
+					"label": "Grass",
+					"min": 0, 
+					"max": 20,
+					"input": "grass-range"
+				}
+			},
+			{
+				"type": "range",
+				"face": "dots",
+				"set": {
+					"prop": "dots",
+					"number": true
+				},
+				"params": {
+					"label": "Dots",
+					"min": 10, 
+					"max": 50,
+					"input": "dots-range"
+				}
+			}
+
+		]
+	},
+	"lines": {
+		"id": "lines-menu",
+		"label": "Lines",
+		"module": "draw",
+		"list": [
+			{
+				"type": "range",
+				"face": "n",
+				"sub": "layer",
+				"set": {
+					"layer": "n",
+					"prop": "n",
+					"number": true
+				},
+				"params": {
+					"label": "Segments",
+					"input": "seg-num-range",
+					"min": 1,
+					"max": 10
+				}
+			},
+			{
+				"type": "range",
+				"face": "r",
+				"sub": "layer",
+				"set": {
+					"layer": "r",
+					"prop": "r",
+					"number": true
+				},
+				"params": {
+					"label": "Jiggle",
+					"input": "jiggle-range",
+					"min": 0,
+					"max": 10
+				}
+			},
+			{
+				"type": "range",
+				"face": "w",
+				"sub": "layer",
+				"set": {
+					"layer": "w",
+					"prop": "w",
+					"number": true
+				},
+				"params": {
+					"label": "Wiggle",
+					"input": "wiggle-range",
+					"min": 0,
+					"max": 15
+				}
+			},
+			{
+				"type": "range",
+				"face": "v",
+				"sub": "layer",
+				"set": {
+					"layer": "v",
+					"prop": "v",
+					"number": true
+				},
+				"params": {
+					"label": "Wiggle Speed",
+					"input": "wiggle-speed-range",
+					"min": 0,
+					"max": 5,
+					"step": 0.005
+				}
+			},
+			{
+				"type": "button",
+				"fromModule": {
+					"callback": "setDefaults"
+				},
+				"params": {
+					"title": "Reset Defaults"
+				}
+			}
+		]
+	},
+	"states": {
+		"id": "states-menu",
+		"label": "States",
+		"module": "ui",
+		"sub": "states",
+		"list": [
+			{
+				"type": "select",
+				"face": "stateSelector",
+				"fromModule": {
+					"callback": "setState"
+				},
+				"params": {
+					"options": ["default"]
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-t",
+				"fromModule": {
+					"callback": "createState"
+				},
+				"params": {
+					"title": "Create"
+				}
+			},
+			{
+				"type": "button",
+				"key": "t",
+				"fromModule": {
+					"callback": "displayStates"
+				},
+				"params": {
+					"title": "States"
+				}
+			}
+		]
+	},
+	"layers": {
+		"id": "layers-menu",
+		"label": "Layers",
+		"module": "ui",
+		"sub": "layers",
+		"list": [
+			{
+				"type": "button",
+				"key": "u",
+				"fromModule": {
+					"callback": "displayLayers"
+				},
+				"params": {
+					"title": "Display Layers"
+				}
+			},
+			{
+				"row": true,
+				"type": "color",
+				"fromModule": {
+					"callback": "updateLayerColor"
+				},
+				"params": {
+					"title": "Change Color"
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-u",
+				"fromModule": {
+					"callback": "toggleAll"
+				},
+				"params": {
+					"title": "Toggle All"
+				}
+			}
+		]
+	},
+	"drawings": {
+		"id": "drawing-menu",
+		"label": "Drawings",
+		"module": "ui",
+		"sub": "drawings",
+		"list": [
+			{
+				"type": "button",
+				"key": "y",
+				"fromModule": {
+					"callback": "displayDrawings"
+				},
+				"params": {
+					"title": "Display Drawings"
+				}
+			}
+		]
+	},
+	"settings": {
+		"id": "settings-menu",
+		"label": "Settings",
+		"module": "ui",
+		"sub": "settings",
+		"list": [
+			{
+				"type": "button",
+				"key": "ctrl-s",
+				"fromModule": {
+					"callback": "save"
+				},
+				"params": {
+					"title": "Save"
+				}
+			},
+			{
+				"type": "button",
+				"key": "alt-s",
+				"fromModule": {
+					"callback": "load"
+				},
+				"params": {
+					"title": "Load"
+				}
+			},
+			{
+				"type": "button",
+				"fromModule": {
+					"callback": "clear"
+				},
+				"params": {
+					"title": "Clear"
+				}
+			},
+			{
+				"type": "toggle",
+				"fromModule": {
+					"callback": "toggleSaveSettings"
+				},
+				"params": {
+					"on": "Auto Save On",
+					"off": "Auto Save Off"
+				}
+			}
+		]
+	},
+	"explode": {
+		"id": "explode-menu",
+		"label": "Explode",
+		"module": "data",
+		"list": [
+			{
+				"type": "button",
+				"key": "a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Explode",
+					"arguments": {
+						"type": "Explode"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "shift-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "Reverse",
+					"arguments": {
+						"type": "Reverse"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"key": "ctrl-a",
+				"fromModule": {
+					"callback": "explode"
+				},
+				"params": {
+					"title": "ExRev",
+					"arguments": {
+						"type": "ExRev"
+					}
+				}
+			}
+		]
+	},
+	"palette": {
+		"id": "palette-menu",
+		"label": "Palette",
+		"module": "ui",
+		"sub": "palette",
+		"list": [
+			{
+				"type": "button",
+				"key": "p",
+				"fromModule": {
+					"callback": "addPalette"
+				},
+				"params": {
+					"title": "Add Palette"
+				}
+			}
+		]
+	}
+}

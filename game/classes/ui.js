@@ -1,57 +1,29 @@
 class UI extends Sprite {
 	constructor(params, debug) {
-		super(params.x, params.y);
+		/* xy orientation to game window */
+		let x = params.x;
+		let y = params.y;
+		if (x % 1 != 0) x = Game.width * x; /* decimal / percentage of window */
+		if (x < 0) x = Game.width + x; /* negative x offset from right side */
+		if (y % 1 != 0) y = Game.height * y; /* decimal / percentage of window */
+		if (y < 0) y = Game.height + y; /* negative y offset from bottom */
+		
+		super(x, y);
 		this.debug = debug;
+		this.center = true;
+
+		if (params.hidden) this.alive = false; /* alive is more like isVisible */
 		this.addAnimation(params.src, () => {
-			// this.center();
+			if (params.state) this.animation.state = params.state;
 		});
-		this.selected = false;
-		this.animation.states = params.states;
-		this.animation.state = 'idle';
+		
+		if (params.states) {
+			this.animation.states = params.states;
+			this.animation.state = 'idle';
+		}
+		
 		this.clickStart = false;
-	}
-	toggle(selected) {
-		this.selected = selected;
-		this.animation.setState(selected ? 'selected' : 'idle')
-	}
-	over(x, y) {
-		if (!this.selected) {
-			if (this.tap(x,y)) {
-				this.animation.setState('over');
-				document.body.style.cursor = 'pointer'; /* maybe make this a game or UI method? */
-			} else {
-				this.animation.setState('idle');
-				document.body.style.cursor = 'default';
-				this.clickStart = false;
-			}
-		}
-	}
-	down(x, y) {
-		if (!this.selected) {
-			if (this.tap(x,y)) {
-				this.animation.setState('active');
-				document.body.style.cursor = 'pointer';
-				this.clickStart = true;
-			}
-		}
-	}
-	up(x, y) {
-		let callbacked = false;
-		if (!this.selected) {
-			if (this.tap(x,y) && this.clickStart) {
-				this.animation.setState('over');
-				document.body.style.cursor = 'pointer';
-				this.callback();
-				callbacked = true;
-			}
-		}
-		this.clickStart = false;
-		return callbacked;
-	}
-	event(x, y) {
-		if (this.tap(x, y)) {
-			if (this.callback) 
-				this.callback();
-		}
+		if (params.func) this.func = window[params.func]; 
+		/* shouldnt be attached to window - fine for now */
 	}
 }

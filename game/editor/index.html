@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>editor</title>
+	<link href="../../interface/css/lines.css" rel="stylesheet" type="text/css">
+	<link href="style.css" rel="stylesheet" type="text/css">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel="icon" href="favicon.ico">
+</head>
+<body>
+	<div id="container">
+		<div id="draw" class="section"> <!--  more generic name here -->
+			<canvas id="map">
+				How old is your dang computer???
+			</canvas>
+		</div>
+		<div id="tools" class="section">
+			<div id="tool-tip"></div>
+			<div id="nav">
+				<select id="select-scene"></select>
+				<select id="select-tool"></select>
+				<label>panel:</label><select id="add-ui"></select>
+			</div>
+			
+			<div id="panels"></div>
+		</div>
+	</div>
+	<a href="../" style="margin-left: 1em">back</a>
+
+	<script src="/lines/lib/cool/cool.js"></script>
+	<script src="/lines/lib/FileSaver.min.js"></script>
+	<script src="/lines/classes/animation.js"></script>
+
+	<!-- game engine  -->
+	<script src="/lines/game/game.js"></script>
+	<script src="/lines/game/events.js"></script>
+
+	<!-- game classes -->
+	<script src="/lines/game/classes/sprite.js"></script>
+	<script src="/lines/game/classes/anim.js"></script>
+	<script src="/lines/game/classes/item.js"></script>
+	<script src="/lines/game/classes/texture.js"></script>
+
+	<!-- editor classes -->
+	<script src="classes/item-edit.js"></script>
+	<script src="classes/texture-edit.js"></script>
+	<script src="classes/edit-ui.js"></script>
+	<script src="classes/item-edit-ui.js"></script>
+	<script src="classes/texture-edit-ui.js"></script>
+	<script src="classes/gui.js"></script>
+	<script src="classes/marker.js"></script>
+
+	<!-- editor modules -->
+	<script src="js/zoom.js"></script>
+	<script src="js/data.js"></script>
+	<script src="js/ruler.js"></script>
+
+	<!-- ui classes -->
+	<script src="/lines/interface/ui/ui.js"></script>
+	<script src="/lines/interface/ui/panel.js"></script>
+	<script src="/lines/interface/ui/modal.js"></script>
+	<script src="/lines/interface/ui/button.js"></script>
+	<script src="/lines/interface/ui/toggle.js"></script>
+	<script src="/lines/interface/ui/display.js"></script>
+	<script src="/lines/interface/ui/list.js"></script>
+	<script src="/lines/interface/ui/text.js"></script>
+	<script src="/lines/interface/ui/select.js"></script>
+	<script src="/lines/interface/ui/range.js"></script>
+	<script src="/lines/interface/ui/color.js"></script>
+
+	<!-- interface -->
+	<script src="/lines/interface/interface.js"></script>
+	<script src="/lines/interface/settings.js"></script>
+
+	<script src="editor.js"></script>
+</body>
+</html>
+
+<!-- 
+notes
+8.8.2019
+- sprite.js class - .isAlive is misleading
+- item.js - defaults for game/classes/sprite
+- 
+
+8.10.2019
+- if some panning happens dont unselect the tool
+- selecting progression is a bit weird here ...
+- 
+
+- to add
+	- delete sprites, toggle visible
+
+ -->

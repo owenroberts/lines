@@ -3,10 +3,8 @@ class Sprite {
 		this.position = new Cool.Vector(x, y);
 		this.width = w;
 		this.height = h;
-		this.ctx = Game.ctx; /* should ctx be an argument? */
 		this.debug = false; /* argument? */
 		this.debugColor = "#00ffbb";
-		this.drawBackground = false;
 		this.collider = {
 			position: new Cool.Vector(0, 0),
 			width: this.width,
@@ -33,20 +31,23 @@ class Sprite {
 		this.height = undefined;
 	}
 
+	/* rewrite later ... */	
+	addJSON(json, callback) {
+		this.animation = new Anim();
+		this.animation.loadJSON(json, data => {
+			this.width = this.collider.width = data.w;
+			this.height = this.collider.height = data.h;
+			if (callback) callback();
+		});
+	}
+
 	addAnimation(src, callback) {
-		this.animation = new Animation(src, this.debug);
-		if (!this.width) {
-			/* load size from animation data */
-			this.animation.load(false, (w, h) => {
-				this.width = this.collider.width = w;
-				this.height = this.collider.height = h;
-				if (callback) callback();
-			});
-		} else {
-			this.animation.load({w: this.width, h: this.height}); /* size determined by sprite */
-		}
-		if (this.debug) this.animation.debug = true;
-		if (this.drawBackground) this.animation.drawBackground = true;
+		this.animation = new Anim();
+		this.animation.load(src, data => {
+			this.width = this.collider.width = data.w;
+			this.height = this.collider.height = data.h;
+			if (callback) callback();
+		});
 	}
 
 	fit(width) {
@@ -87,57 +88,75 @@ class Sprite {
 		}
 	}
 
+	drawDebug() {
+		Game.ctx.lineWidth = 1;
+		Game.ctx.beginPath();
+		Game.ctx.rect(
+			this.xy.x + this.collider.position.x,
+			this.xy.y + this.collider.position.y,
+			this.collider.width, 
+			this.collider.height
+		);
+		const temp = Game.ctx.strokeStyle;
+		Game.ctx.strokeStyle = this.debugColor;
+		Game.ctx.stroke();
+		Game.ctx.strokeStyle = temp;
+	}
+
+	/* better name for this ... */
+	get xy() {
+		if (this.center) {
+			return {
+				x: this.position.x - (this.center ? this.width / 2 : 0),
+				y: this.position.y - (this.center ? this.height / 2 : 0)
+			}
+		} else {
+			return this.position;
+		}
+	}
+
+	getCenter() {
+		if (this.center) {
+			return {
+				x: this.position.x - (this.center ? this.width/2 : 0),
+				y: this.position.y - (this.center ? this.height/2 : 0)
+			}
+		} else {
+			return this.position;
+		}
+	}
+
 	display(isMap) {
 		if (this.alive && (this.isOnScreen() || isMap)) {
-			if (this.debug) {
-				Game.ctx.beginPath();
-				Game.ctx.lineWidth = 1;
-				Game.ctx.rect(
-					this.position.x + this.collider.position.x, 
-					this.position.y + this.collider.position.y, 
-					this.collider.width, 
-					this.collider.height
-				);
-				const temp = Game.ctx.strokeStyle;
-				Game.ctx.strokeStyle = this.debugColor;
-				Game.ctx.stroke();
-				Game.ctx.strokeStyle = temp;
-			}
+			if (this.debug) this.drawDebug();
 			if (this.animation && this.animation.loaded) {
-				if (this.bkg) this.animation.drawBkg(this.position.x, this.position.y);
-				else this.animation.draw(this.position.x, this.position.y);
+				this.animation.draw(this.xy.x, this.xy.y);
+				this.animation.update();
 			}
 		}
 		if (this.displayFunc) this.displayFunc();
 	}
 
 	isOnScreen() {
-		if (this.position.x + this.width > 0 && 
-			this.position.y + this.height > 0 &&
-			this.position.x < Game.width &&
-			this.position.y < Game.height)
+		if (this.xy.x + this.width > 0 && 
+			this.xy.y + this.height > 0 &&
+			this.xy.x < Game.width &&
+			this.xy.y < Game.height)
 			return true;
 		else
 			return false;
-	} /* from idtio item class */
+	} 
 
-	center() {
-		this.position.x -= this.width / 2;
-		this.position.y -= this.height / 2;
-	}
-
-	/* better name for this? interact...  */
 	tap(x, y) {
-		if (x > this.position.x + this.collider.position.x &&
-			x < this.position.x + this.collider.position.x + this.collider.width && 
-			y > this.position.y + this.collider.position.y && 
-			y < this.position.y + this.collider.position.y + this.collider.height) {
+		if (x > this.xy.x + this.collider.position.x &&
+			x < this.xy.x + this.collider.position.x + this.collider.width && 
+			y > this.xy.y + this.collider.position.y && 
+			y < this.xy.y + this.collider.position.y + this.collider.height) {
 			return true;
 		} else 
 			return false;
 	}
 
-	/* physics stuff .... */
 	jump(amount) {
 		this.jumpAmount += Math.min(-amount / 25, 10);
 	}
@@ -179,7 +198,6 @@ class Sprite {
 		}
 	}
 
-	/* not totally sure what this is used for ... */
 	outside(other) {
 		var next = this.position.copy();
 		var nextCollider = this.collider.position.copy();
