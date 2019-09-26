@@ -39,7 +39,6 @@ class Panel {
 	}
 
 	setOrder(n) {
-		
 		this.el.style.order = this.order = n;
 	}
 

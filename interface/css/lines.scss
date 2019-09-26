@@ -19,7 +19,6 @@ body {
 	touch-action: manipulation;
 }
 
-
 button:focus { 
 	outline: none; 
 }
@@ -193,9 +192,6 @@ select {
 			border: none;
 			background-color: $ui-color;
 			padding-right: 0.25em;
-		}
-		.display {
-			text-align: right;
 		}
 	}
 

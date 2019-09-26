@@ -10,8 +10,7 @@ class UIRange extends UI {
 			this.input = new UIText({
 				id: params.display, 
 				value: params.value,
-				// label: params.label,
-				placeholder: params.value,
+					placeholder: params.value,
 				blur: true,
 				callback: this.update.bind(this)
 			});
@@ -39,7 +38,6 @@ class UIRange extends UI {
 		this.el.blur();
 		if (this.display) this.display.set(value);
 		if (this.input) this.input.set(value);
-		if (this.toggleText) this.toggleText();
 		this.callback(value);
 	}
 

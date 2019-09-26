@@ -4,6 +4,7 @@ class Modal {
 		this.el.classList.add('modal');
 		this.el.textContent = title;
 		document.getElementById('container').appendChild(this.el);
+		
 		const self = this;
 		this.submit = new UIButton({
 			title: "Submit",
@@ -15,7 +16,6 @@ class Modal {
 		this.el.appendChild(this.submit.el);
 		edi.ui.keys['enter'] = this.submit; /* not modular ... */
 
-
 		this.cancel = new UIButton({
 			title: "x",
 			callback: ev => {
@@ -23,7 +23,6 @@ class Modal {
 			}
 		});
 		edi.ui.keys['escape'] = this.cancel;
-
 		this.el.appendChild(this.cancel.el);
 	}
 

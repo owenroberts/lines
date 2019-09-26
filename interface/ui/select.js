@@ -5,8 +5,6 @@ class UISelect extends UI {
 		
 		this.setOptions(params.options, params.selected);
 
-		if (params.label) this.addLabel(params.label);
-
 		if (params.btn) {
 			const select = this;
 			const btn = new UIButton({

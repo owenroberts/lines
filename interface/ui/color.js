@@ -3,9 +3,8 @@ class UIColor extends UI {
 		params.tag = "input";
 		super(params);
 		this.el.type = "color";
-		this.el.style.backgroundColor = params.color;
-		this.colors = [params.color];
-		this.current = params.color;
+		this.colors = [];
+
 		this.el.addEventListener('input', ev => {
 			const color = ev.target.value;
 			this.current = color;
