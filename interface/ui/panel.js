@@ -1,41 +1,41 @@
-class Panel {
+class UIPanel extends UICollection {
 	constructor(id, label) {
-		this.el = document.getElementById(id);
-		if (!this.el) {
-			this.el = document.createElement("div");
-			this.el.id = id;
-			document.getElementById("panels").appendChild(this.el);
-		}
-		this.el.classList.add("menu-panel");
-		this.el.classList.add("hide");
+		super({id: id});
+		
+		this.addClass("menu-panel");
+		this.addClass("hide");
+		
 		this.open = true;
 		this.rows = [];
 
-		/* why aren't these uis ?? */
-		const title = document.createElement("div");
-		title.textContent = label;
-		title.classList.add("title");
-		this.el.appendChild(title);
-		
-		this.toggleBtn = document.createElement("div");
-		this.toggleBtn.classList.add("toggle");
-		this.toggleBtn.textContent = "△";
-		this.toggleBtn.addEventListener("click", this.toggle.bind(this));
-		this.el.appendChild(this.toggleBtn);
+		const title = new UIElement();
+		title.setTextContent(label);
+		title.addClass('title');
+		this.append(title);
 
-		const hideBtn = document.createElement("div");
-		hideBtn.classList.add('hide');
-		hideBtn.textContent = 'x';
-		hideBtn.addEventListener("click", this.hide.bind(this));
-		this.el.appendChild(hideBtn);
-
-		const orderBtn = document.createElement("div");
-		orderBtn.classList.add("order");
-		orderBtn.textContent = "⥂";
-		orderBtn.addEventListener("click", ev => {
-			this.setOrder(+this.el.style.order + 1)
+		this.toggleBtn = new UIButton({
+			title: "△",
+			callback: this.toggle.bind(this),
+			class: "toggle"
 		});
-		this.el.appendChild(orderBtn);
+		this.append(this.toggleBtn);
+
+		const hideBtn = new UIButton({
+			title: 'x',
+			class: 'hide',
+			callback: this.hide.bind(this)
+		});
+		this.append(hideBtn);
+
+		const orderBtn = new UIButton({
+			title: "⥂",
+			class: "order",
+			callback: function() {
+				console.log(this);
+				this.setOrder(+this.el.style.order + 1)
+			}
+		});
+		this.append(orderBtn);
 	}
 
 	setOrder(n) {
@@ -43,6 +43,7 @@ class Panel {
 	}
 
 	toggle() {
+		// console.log('toggle', this);
 		if (this.open) {
 			this.el.style.height = "25px";
 			this.toggleBtn.innerHTML = "▽";
@@ -58,46 +59,33 @@ class Panel {
 	}
 
 	show() {
-		this.el.classList.remove('hide');
+		// console.log(this);
+		this.removeClass('hide');
 	}
 
 	hide() {
-		this.el.classList.add('hide');
+		this.addClass('hide');
 	}
 
 	addRow(id) {
-		const row = document.createElement("div");
-		row.classList.add("row");
-		if (id) row.id = id;
-		this.el.appendChild(row);
+		const row = new UIRow({
+			id: id
+		});
+		this.append(row);
 		this.rows.push(row);
 		return row;
 	}
 
 	removeRow(row) {
 		const index = this.rows.indexOf(row);
-		this.clearComponents(row);
+		// this.rows[index].clear();
 		this.rows.splice(index, 1);
-		this.el.removeChild(row);
+		this.remove(row);
 	}
 
-	add(component, _row) {
+	add(ui, _row) {
 		let row = _row || this.rows[this.rows.length - 1];
 		if (!row) row = this.addRow();
-		row.appendChild(component.el);
-		if (component.label) component.addLabel();
-		if (component.display) 
-			row.insertBefore(component.display.el, component.el);
-		if (component.input) 
-			row.insertBefore(component.input.el, component.el);
-	}
-
-	clearComponents(row) {
-		if (row) {
-			while (row.firstChild) {
-				row.firstChild.value = null;
-				row.removeChild(row.firstChild);
-			}
-		}
+		row.append(ui);
 	}
 }

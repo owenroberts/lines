@@ -1,40 +1,34 @@
 function Interface(app) {
 	const self = this;
 
+	document.body.classList.add(Cool.mobilecheck() ? 'mobile' : 'desktop');
+
 	this.panels = {};
 	this.keys = {};
 	this.faces = {}; /* references to faces we need to update values ???  */
 
-	/* some version of update interface */
-
-	/* keyboard events and handlers */
+	/* key commands */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
 		if (k == "space") ev.preventDefault();
-		if (ev.shiftKey) k = "shift-" + k;
-		if (ev.ctrlKey) k = "ctrl-" + k;
-		if (ev.altKey) k = "alt-" + k;
+		k = ev.shiftKey ? "shift-" + k : k
+		k = ev.ctrlKey ? "ctrl-" + k : k;
+		k = ev.altKey ? "alt-" + k : k;
 
 		if (k && self.keys[k] && document.activeElement.type != "text") {
-			if (k == "tab") ev.preventDefault(); // works?
+			if (!ev.metaKey) ev.preventDefault(); // works?
 			const key = self.keys[k];
-			if (key.handler) key.handler(ev, key);
-			else key.callback();
-			if (key.press) key.press();
-
-		} else if (document.activeElement.id == 'title') {
-			/* game interface may not have title 
-				maybe there's a key down callback ... */
-			if (k == 'enter') {
-				app.files.saveFramesToFile(self.title.getValue());
-				document.activeElement.blur();
-			}
+			key.handler(ev, key);
+			key.press(); /* js and css tool tip */
 		}
 	}
 	document.addEventListener("keydown", self.keyDown, false);
 
+	this.toolTip = new UILabel({id: 'tool-tip'});
+
+
 	/* build interface */
-	this.data = {};
+	this.data = {}; /* why? */
 	this.load = function(file) {
 		fetch(file)
 			.then(response => { return response.json(); })
@@ -48,73 +42,77 @@ function Interface(app) {
 			});
 	};
 
-	const classes = {
-		ui: UI,
-		button: UIButton,
-		toggle: UIToggleButton,
-		text: UIText,
-		range: UIRange,
-		color: UIColor,
-		select: UISelect
+	const uiClasses = {
+		UIElement,
+		UIRange,
+		UIText,
+		UIBlur,
+		UITextRange,
+		UIToggle,
+		UIButton,
+		UIColor,
+		UISelect,
+		UISelectButton
 	};
 
 	function initUI() {
-		const nav = document.getElementById('nav'); /* nav ?? */
-		this.addPanel = new UISelect({
+		this.addPanel = new UISelectButton({
 			id: 'add-ui',
 			options: Object.keys(self.data),
 			callback: function(value) {
-				self.showUI(value);
+				// self.showUI(value);
+				self.panels[value].show();
 			},
 			btn: '+'
 		});
 	}
 
 	this.showUI = function(key) {
-		self.panels[key].show();
+		
 	};
 
 	this.createPanel = function(key) {
 		const data = self.data[key];
-		let panel;
-		/* grab panel reference if it exists, 
-			create if it doesn't */
-		if (self.panels[key]) {
-			panel = self.panels[key];
-		} else {
-			panel = new Panel(data.id, data.label);
-			self.panels[key] = panel;
-		}
+		
+		const panel = new UIPanel(data.id, data.label);
+		self.panels[key] = panel;
+		
+		document.getElementById("panels").appendChild(panel.el);
 		/* create uis from list */
 		for (let i = 0; i < data.list.length; i++) {
-			const u = data.list[i];
-			const module = u.module || data.module;
-			const sub = u.sub || data.sub;
+			const uiData = data.list[i];
+			const module = uiData.module || data.module;
+			const sub = uiData.sub || data.sub;
 			const mod = sub ? app[module][sub] : app[module];
-			const params = { key: u.key, ...u.params };
-			for (const k in u.fromModule) {
-				params[k] = mod[u.fromModule[k]];
+			const params = { key: uiData.key, ...uiData.params };
+			for (const k in uiData.fromModule) {
+				params[k] = mod[uiData.fromModule[k]];
 			}
 
-			/* setters don't need a callback for one value */
-			if (u.set) {
+			/* setters don't need a callback for one value 
+				class ? UISetter .... */
+			if (uiData.set) {
 				params.callback = function(value) {
-					mod[u.set.prop] = u.set.number ? +value : value;
-					if (u.set.layer) {
+					mod[uiData.set.prop] = uiData.set.number ? +value : value;
+					if (uiData.set.layer) {
 						// self.layers.updateProperty(u.set.layer, u.set.number ? +value : value);
 					} /* need generic version of this ... */
 				};
-				params.value = mod[u.set.prop];
+				params.value = mod[uiData.set.prop];
 			}
 
-			const ui = new classes[u.type](params);
-			if (u.row) panel.addRow();
+			const ui = new uiClasses[u.type](params);
+			if (uiData.row) panel.addRow();
+			if (params.label) {
+				panel.add(new UILabel({ text: params.label}));
+			}
 			panel.add(ui);
-			if (u.key) self.keys[u.key] = ui;
-			if (u.face) self.faces[u.face] = ui;
-			if (u.observe) {
-				const elem = mod[u.observe.elem];
-				const attribute = u.observe.attribute;
+			if (params.prompt) ui.prompt = params.prompt;
+			if (params.key) self.keys[uiData.key] = ui;
+			if (uiData.face) self.faces[uiData.face] = ui;
+			if (uiData.observe) {
+				const elem = mod[uiData.observe.elem];
+				const attribute = uiData.observe.attribute;
 				const observer = new MutationObserver(function(list) {
 					for (const mut of list) {
 						if (mut.type == 'attributes' && mut.attributeName == attribute) {
@@ -123,11 +121,7 @@ function Interface(app) {
 					}
 				});
 				observer.observe(elem, { attributeFilter: [attribute] });
-
 			}
 		}
 	};
-
-	if (Cool.mobilecheck()) document.body.classList.add('mobile');
-	else document.body.classList.add('desktop');
 }

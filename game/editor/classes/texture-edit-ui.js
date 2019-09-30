@@ -20,7 +20,7 @@ class TextureEditUI extends EditUI {
 			}
 		});
 
-		this.uis.selectAll = new UIToggleButton({
+		this.uis.selectAll = new UIToggle({
 			on: "All",
 			off: "All",
 			callback: function() {

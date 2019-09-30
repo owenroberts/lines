@@ -1,9 +1,10 @@
-class UIColor extends UI {
+class UIColor extends UIInput {
 	constructor(params) {
-		params.tag = "input";
 		super(params);
 		this.el.type = "color";
 		this.colors = [];
+
+
 
 		this.el.addEventListener('input', ev => {
 			const color = ev.target.value;
@@ -14,11 +15,12 @@ class UIColor extends UI {
 		this.el.addEventListener('focus', ev => {
 			this.addColor(this.current);
 		});
+
 	}
 
 	addColor(color) {
 		const self = this;
-		if (!this.colors.includes(color)) {
+		if (!this.colors.includes(color) && color) {
 			this.colors.push(color);
 			const btn = new UIButton({
 				title: color,
@@ -30,7 +32,7 @@ class UIColor extends UI {
 				}
 			});
 			/* not great design here ... */
-			self.el.parentNode.appendChild(btn.el);
+			this.el.parentNode.appendChild(btn.el);
 		}
 	}
 

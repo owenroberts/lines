@@ -1,7 +1,12 @@
 function FilesInterface(ui) {
 	const self = this;
 
-	this.title = new UI({ id:"title" });
+	this.title = new UIText({ 
+		id:"title",
+		callback: function() {
+			lns.files.saveFile(self.title.getValue());
+		}
+	});
 
 	ui.keys['s'] = new UIButton({
 		id: "save",

@@ -46,7 +46,7 @@ function Drawings(panel) {
 				}
 				else toggleOn = false;
 
-				panel.add(new UIToggleButton({
+				panel.add(new UIToggle({
 					title: i,
 					on: i,
 					off: i,

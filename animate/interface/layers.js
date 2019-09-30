@@ -30,7 +30,7 @@ function Layers(panel) {
 				const row = panel.addRow(`layer-${i}`);
 				panel.add(new UIDisplay({text: `${i},${layer.d}` }), row);
 
-				panel.add(new UIToggleButton({
+				panel.add(new UIToggle({
 					on: '◐',
 					off: '◑',
 					callback: function() {
@@ -88,7 +88,7 @@ function Layers(panel) {
 					}
 				}), row); /* duplicate */
 
-				panel.add(new UIToggleButton({
+				panel.add(new UIToggle({
 					on: 'x',
 					off: 'x',
 					callback: function() {
@@ -97,7 +97,7 @@ function Layers(panel) {
 					}
 				}), row); /* delete */
 
-				// panels['layer'].add(new UIToggleButton({
+				// panels['layer'].add(new UIToggle({
 				// 	on: '👀',
 				// 	off: '🕶️',
 				// 	callback: function() {
@@ -257,7 +257,7 @@ function Layers(panel) {
 	this.canvas = new Canvas("draw-layers", 0, 0, '#F2F4F4');
 
 	/* do this with real ui later*/
-	this.toggleCanvas = new UIToggleButton({
+	this.toggleCanvas = new UIToggle({
 		id: 'toggle-layers',
 		on: "Close Layers",
 		off: "Open Layers",

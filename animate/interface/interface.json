@@ -5,7 +5,7 @@
 		"module": "draw",
 		"list": [
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "mouseInterval",
 				"key": "m",
 				"set": {
@@ -15,7 +15,7 @@
 				"params": {
 					"min": 0,
 					"max": 100,
-					"input": "mouse-range",
+					"id": "mouse-range",
 					"label": "Mouse time",
 					"prompt": "Set mouse interval"
 				}
@@ -28,7 +28,7 @@
 		"module": "bgImage",
 		"list": [
 			{
-				"type": "text",
+				"type": "UIText",
 				"fromModule": {
 					"callback": "loadImage"
 				},
@@ -38,19 +38,19 @@
 				}
 			},
 			{
-				"type": "toggle",
+				"type": "UIToggle",
 				"key": "b",
 				"fromModule": {
 					"callback": "toggle"
 				},
 				"params": {
-					"on": "Hide",
-					"off": "Show"
+					"onText": "Hide",
+					"offText": "Show"
 				}
 			},
 			{
 				"row": true,
-				"type": "range",
+				"type": "UIRange",
 				"set": {
 					"prop": "x",
 					"number": true
@@ -64,7 +64,7 @@
 				}
 			},
 			{
-				"type": "range",
+				"type": "UIRange",
 				"set": {
 					"prop": "y",
 					"number": true
@@ -78,7 +78,7 @@
 				}
 			},
 			{
-				"type": "range",
+				"type": "UIRange",
 				"set": {
 					"prop": "size",
 					"number": true
@@ -100,7 +100,7 @@
 		"module": "canvas",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-f",
 				"params": {
 					"title": "Fit Canvas"
@@ -111,7 +111,7 @@
 			},
 			{
 				"row": true,
-				"type": "text",
+				"type": "UIBlur",
 				"observe": {
 					"elem": "canvas",
 					"attribute": "width"
@@ -128,7 +128,7 @@
 			},
 			{
 				"row": true,
-				"type": "text",
+				"type": "UIBlur",
 				"observe": {
 					"elem": "canvas",
 					"attribute": "height"
@@ -145,7 +145,7 @@
 			},
 			{
 				"row": true,
-				"type": "range",
+				"type": "UIRange",
 				"face": "lineWidth",
 				"fromModule": {
 					"callback": "setLineWidth"
@@ -168,7 +168,7 @@
 		"sub": "layer",
 		"list": [
 			{
-				"type": "color",
+				"type": "UIColor",
 				"face": "c",
 				"set": {
 					"prop": "c"
@@ -182,7 +182,7 @@
 		"module": "canvas",
 		"list": [
 			{
-				"type": "color",
+				"type": "UIColor",
 				"face": "bgColor",
 				"fromModule": {
 					"callback": "setBGColor",
@@ -197,7 +197,7 @@
 		"module": "data",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "c",
 				"fromModule": {
 					"callback": "copy"
@@ -207,7 +207,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-c",
 				"fromModule": {
 					"callback": "addMultipleCopies"
@@ -217,7 +217,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "v",
 				"fromModule": {
 					"callback": "paste"
@@ -227,7 +227,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-v",
 				"fromModule": {
 					"callback": "selectAll"
@@ -237,7 +237,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "alt-v",
 				"fromModule": {
 					"callback": "selectRange"
@@ -247,7 +247,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "ctrl-v",
 				"fromModule": {
 					"callback": "clearSelected"
@@ -264,7 +264,7 @@
 		"module": "data",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "x",
 				"fromModule": {
 					"callback": "clearLines"
@@ -274,7 +274,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-z",
 				"fromModule": {
 					"callback": "cutLastLine"
@@ -284,7 +284,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "z",
 				"fromModule": {
 					"callback": "cutLastSegment"
@@ -294,7 +294,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "d",
 				"fromModule": {
 					"callback": "deleteFrame"
@@ -304,7 +304,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-d",
 				"fromModule": {
 					"callback": "deleteFrameRange"
@@ -314,7 +314,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "ctrl-x",
 				"fromModule": {
 					"callback": "cutTopLayer"
@@ -324,7 +324,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "alt-x",
 				"fromModule": {
 					"callback": "cutBottomLayer"
@@ -334,7 +334,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-x",
 				"fromModule": {
 					"callback": "clearFrame"
@@ -351,7 +351,7 @@
 		"module": "data",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "r",
 				"fromModule": {
 					"callback": "saveLines"
@@ -361,7 +361,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "ctrl-z",
 				"fromModule": {
 					"callback": "undo"
@@ -371,7 +371,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "q",
 				"fromModule": {
 					"callback": "offsetDrawing"
@@ -381,7 +381,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "i",
 				"fromModule": {
 					"callback": "insertFrameBefore"
@@ -391,7 +391,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-i",
 				"fromModule": {
 					"callback": "insertFrameAfter"
@@ -408,19 +408,19 @@
 		"module": "render",
 		"list": [
 			{
-				"type": "toggle",
+				"type": "UIToggle",
 				"key": "space",
 				"fromModule": {
 					"callback": "toggle"
 				},
 				"params": {
 					"id": "play",
-					"on": "Play",
-					"off": "Pause"
+					"onText": "Play",
+					"offText": "Pause"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "w",
 				"module": "ui",
 				"fromModule": {
@@ -431,7 +431,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "e",
 				"module": "ui",
 				"fromModule": {
@@ -443,42 +443,37 @@
 			},
 			{
 				"row": true,
-				"type": "text",
+				"type": "UIText",
 				"key": "f",
 				"module": "ui",
 				"face": "frameDisplay",
-				"blur": true,
 				"fromModule": {
 					"callback": "setFrame"
 				},
 				"params": {
 					"id": "frame",
-					"label": "Frame ",
+					"label": "Frame",
 					"value": 0,
-					"prompt": "Go To Frame",
-					"display": true
+					"prompt": "Go To Frame"
 				}
 			},
 			{
 				"row": true,
-				"type": "text",
+				"type": "UIText",
 				"key": ";",
 				"face": "fps",
-				"blur": true,
 				"fromModule": {
 					"callback": "setFps",
 					"value": "fps"
 				},
 				"params": {
 					"prompt": "Set FPS",
-					"label": "FPS",
-					"display": true
+					"label": "FPS"
 				}
 			},
 			{
-				"type": "text",
+				"type": "UIText",
 				"key": "'",
-				"blur": true,
 				"face": "lps",
 				"fromModule": {
 					"callback": "setLps",
@@ -486,15 +481,13 @@
 				},
 				"params": {
 					"prompt": "Set Lines/Second",
-					"label": "LPS",
-					"display": true
+					"label": "LPS"
 				}
 			},
 			{
 				"row": true,
-				"type": "text",
+				"type": "UIText",
 				"key": "shift-l",
-				"blur": true,
 				"face": "onionSkinNum",
 				"fromModule": {
 					"callback": "setOnionSkin"
@@ -502,19 +495,18 @@
 				"params": {
 					"value": 0,
 					"label": "Onion",
-					"prompt": "Onion skin",
-					"display": true
+					"prompt": "Onion skin"
 				}
 			},
 			{
-				"type": "toggle",
+				"type": "UIToggle",
 				"key": "l",
 				"fromModule": {
 					"callback": "toggleOnion"
 				},
 				"params": {
-					"on": "Hide",
-					"off": "Show"
+					"onText": "Hide",
+					"offText": "Show"
 				}
 			}
 		]
@@ -526,7 +518,7 @@
 		"sub": "capture",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "ctrl-k",
 				"fromModule": {
 					"callback": "captureCycle"
@@ -536,7 +528,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "k",
 				"fromModule": {
 					"callback": "captureOne"
@@ -546,18 +538,18 @@
 				}
 			},
 			{
-				"type": "toggle",
-				"key": "n",
+				"type": "UIToggle",
+				"key": "shift-b",
 				"fromModule": {
 					"callback": "toggleBGCapture"
 				},
 				"params": {
-					"on": "Capture w BG",
-					"off": "Capture no BG"
+					"onText": "Capture w BG",
+					"offText": "Capture no BG"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-k",
 				"fromModule": {
 					"callback": "captureMultiple"
@@ -567,18 +559,18 @@
 				}
 			},
 			{
-				"type": "toggle",
+				"type": "UIToggle",
 				"key": "alt-k",
 				"fromModule": {
 					"callback": "videoCapture"
 				},
 				"params": {
-					"on": "Start Video",
-					"off": "Stop Video"
+					"onText": "Start Video",
+					"offText": "Stop Video"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"fromModule": {
 					"callback": "startVideoCapture"
 				},
@@ -594,7 +586,7 @@
 		"module": "draw",
 		"list": [
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "brush",
 				"set": {
 					"prop": "brush",
@@ -608,7 +600,7 @@
 				}
 			},
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "brushSpread",
 				"set": {
 					"prop": "brushSpread",
@@ -622,7 +614,7 @@
 				}
 			},
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "grass",
 				"set": {
 					"prop": "grass",
@@ -636,7 +628,7 @@
 				}
 			},
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "dots",
 				"set": {
 					"prop": "dots",
@@ -658,7 +650,7 @@
 		"module": "draw",
 		"list": [
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "n",
 				"sub": "layer",
 				"set": {
@@ -674,7 +666,7 @@
 				}
 			},
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "r",
 				"sub": "layer",
 				"set": {
@@ -690,7 +682,7 @@
 				}
 			},
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "w",
 				"sub": "layer",
 				"set": {
@@ -706,7 +698,7 @@
 				}
 			},
 			{
-				"type": "range",
+				"type": "UITextRange",
 				"face": "v",
 				"sub": "layer",
 				"set": {
@@ -723,7 +715,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"fromModule": {
 					"callback": "setDefaults"
 				},
@@ -738,9 +730,10 @@
 		"label": "States",
 		"module": "ui",
 		"sub": "states",
+		"onLoad": "displayStates",
 		"list": [
 			{
-				"type": "select",
+				"type": "UISelect",
 				"face": "stateSelector",
 				"fromModule": {
 					"callback": "setState"
@@ -750,17 +743,17 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-t",
 				"fromModule": {
 					"callback": "createState"
 				},
 				"params": {
-					"title": "Create"
+					"title": "New"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "t",
 				"fromModule": {
 					"callback": "displayStates"
@@ -778,7 +771,7 @@
 		"sub": "layers",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "u",
 				"fromModule": {
 					"callback": "displayLayers"
@@ -789,7 +782,7 @@
 			},
 			{
 				"row": true,
-				"type": "color",
+				"type": "UIColor",
 				"fromModule": {
 					"callback": "updateLayerColor"
 				},
@@ -798,7 +791,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-u",
 				"fromModule": {
 					"callback": "toggleAll"
@@ -816,7 +809,7 @@
 		"sub": "drawings",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "y",
 				"fromModule": {
 					"callback": "displayDrawings"
@@ -834,7 +827,7 @@
 		"sub": "settings",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "ctrl-s",
 				"fromModule": {
 					"callback": "save"
@@ -844,7 +837,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "alt-s",
 				"fromModule": {
 					"callback": "load"
@@ -854,7 +847,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"fromModule": {
 					"callback": "clear"
 				},
@@ -863,7 +856,7 @@
 				}
 			},
 			{
-				"type": "toggle",
+				"type": "UIToggle",
 				"fromModule": {
 					"callback": "toggleSaveSettings"
 				},
@@ -880,7 +873,7 @@
 		"module": "data",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "a",
 				"fromModule": {
 					"callback": "explode"
@@ -893,7 +886,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-a",
 				"fromModule": {
 					"callback": "explode"
@@ -906,7 +899,7 @@
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "ctrl-a",
 				"fromModule": {
 					"callback": "explode"
@@ -927,7 +920,7 @@
 		"sub": "palette",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "p",
 				"fromModule": {
 					"callback": "addPalette"

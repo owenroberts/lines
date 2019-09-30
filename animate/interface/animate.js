@@ -5,13 +5,12 @@ function animateInterface(ui) {
 		get: function() { return this.endFrame + 1; }
 	}); // get the plus frame, end frame + 1
 
-	ui.framesPanel = new UI({ id:"frames" });
-	ui.frameElems = new UIList({ class: "frame" });
+	ui.framesPanel = new UIList({ id:"frames" });
 
-	ui.rl = new UIToggleButton({
+	ui.rl = new UIToggle({
 		id: "right-left",
-		on: "R/L",
-		off: "L/R",
+		onText: "R/L",
+		offText: "L/R",
 		callback: function() {
 			if (this.isOn) lns.canvas.canvas.parentElement.classList.add('right');
 			else lns.canvas.canvas.parentElement.classList.remove('right');
@@ -27,9 +26,9 @@ function animateInterface(ui) {
 		self.updateFramesPanel();
 	};
 
-	ui.plusFrame = new UI({
+	ui.plusFrame = new UIButton({
 		id:"current",
-		event: "click",
+		class: "plus",
 		callback: function() {
 			self.setFrame(lns.anim.plusFrame);
 		},
@@ -51,39 +50,37 @@ function animateInterface(ui) {
 		sets copy frames */
 	ui.updateFramesPanel = function() {
 
-		const numFrames = self.frameElems.length - 1;
+		const numFrames = self.framesPanel.length - 1;
 		const animFrames = lns.anim.plusFrame;
 		/* this creates frames that don't already exist, end Frame plus plus frame */
 		if (animFrames > numFrames) {
 			/* this seems bad ... */
 			for (let i = numFrames; i < animFrames; i++) {
 				/* should be a ui? */
-				const frameElem = document.createElement("div");
-				frameElem.classList.add("frame");
-				frameElem.textContent = i;
-				frameElem.dataset.index = i;
+				const frameBtn = new UIButton({
+					class: "frame",
+					title: i,
+					callback: function() {
+						lns.render.setFrame(i);
+						self.updateInterface();
+					}	
+				})
+				// frameElem.dataset.index = i;
 
-				/* click on frame, set the current frame */
-				frameElem.onclick = function(ev) {
-					lns.render.setFrame(i); /* use lns.anim ?? */
-					self.updateInterface();
-				};
-
-				/* right click, add/remove from copy frames */
-				frameElem.oncontextmenu = function(ev) {
+				/* right click, add/remove from copy frames 
+					class for this? */
+				frameBtn.el.oncontextmenu = function(ev) {
 					ev.preventDefault();
 					lns.data.selectFrame(ev.currentTarget);
 				};
 
-				/* this is one time un-ui thing */
-				// this.framesPanel.el.appendChild(frameElem);
-				ui.framesPanel.el.insertBefore(frameElem, self.plusFrame.el);
+				ui.framesPanel.insertBefore(frameBtn, self.plusFrame);
 			}
 		} else {
 			/* if there are same number of less then frames than frame divs
 				delete current frame */
 			for (let i = numFrames - 1; i >= animFrames; i--){
-				ui.frameElems.remove(i); /* remove html frame */
+				ui.framesPanel.remove(i); /* remove html frame */
 			}
 		}
 		ui.updateFrameNum();
@@ -93,11 +90,11 @@ function animateInterface(ui) {
 	ui.updateFrameNum = function() {
 		if (document.getElementById("current"))
 			document.getElementById("current").removeAttribute("id");
-		if (self.frameElems.els[lns.anim.currentFrame]) 
-			self.frameElems.setId("current", lns.anim.currentFrame);
+		if (self.framesPanel.children[lns.anim.currentFrame]) 
+			self.framesPanel.setId("current", lns.anim.currentFrame);
 		else
 			self.plusFrame.setId("current");
-		self.faces.frameDisplay.set(lns.anim.currentFrame);
+		self.faces.frameDisplay.setValue(lns.anim.currentFrame);
 	};
 
 	/* call before changing a frame */
@@ -149,16 +146,16 @@ function animateInterface(ui) {
 		};
 	});
 
-	/* external interfaces */
+	/* external interfaces - make these in interface.json/interface.js .... */
 	ui.palette = new Palette();
 
-	ui.panels.layers = new Panel('layers-menu', 'Layers');
+	ui.panels.layers = new UIPanel('layers-menu', 'Layers');
 	ui.layers = new Layers(ui.panels.layers);
 
-	ui.panels.drawings = new Panel("drawing-menu", "Drawings");
+	ui.panels.drawings = new UIPanel("drawing-menu", "Drawings");
 	ui.drawings = new Drawings(ui.panels.drawings);
 
-	ui.panels.states = new Panel("states-menu", "States");
+	ui.panels.states = new UIPanel("states-menu", "States");
 	ui.states = new States(ui.panels.states);
 
 	ui.fio = new FilesInterface(ui);
@@ -207,7 +204,7 @@ function animateInterface(ui) {
 		lns.ui.faces.onionSkinNum.setValue(settings.onionSkinNum);
 
 		/* update sets value and calls callback ...*/
-		lns.ui.faces.mouseInterval.update(settings.mouseInterval); 
+		lns.ui.faces.mouseInterval.update(settings.mouseInterval);
 
 		lns.ui.palette.palettes = settings.palettes;
 		if (lns.ui.palette.current) 

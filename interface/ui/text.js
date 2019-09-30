@@ -1,30 +1,29 @@
-class UIText extends UI {
+class UIText extends UIInput {
 	constructor(params) {
-		params.tag = "input";
 		super(params);
 		this.el.type = "text";
-		this.el.placeholder = params.placeholder || params.title;
-		
-		if (params.blur) {
-			this.el.addEventListener("blur", ev => {
-				if (ev.target.value) this.handler(ev, this);
-			});
-		}
+		this.el.placeholder = this.el.placeholder || params.placeholder || params.title || params.value;
+
+		this.el.addEventListener('focus', ev => {
+			this.el.select();
+		});
 
 		this.el.addEventListener('keyup', ev => {
-			if (ev.which == 13) this.handler(ev, this);
+			if (ev.which == 13) this.update(ev.target.value);
 		});
 	}
 
-	handler(ev, self) {
-		const value = ev.target.value || prompt(self.prompt);
-		self.callback(value);
-		if (value) self.set(value);
+	handler(ev, me) {
+		me.update(ev.target.value || prompt(me.prompt));
 	}
 
-	set(value) {
-		this.el.value = "";
-		this.el.placeholder = value;
+	update(value) {
+		this.callback(value);
+		this.setValue(value);
+	}
+
+	setValue(value) {
+		this.el.value = this.el.placeholder = value;
 		this.el.blur();
 	}
 }

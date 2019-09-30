@@ -1,10 +1,22 @@
-class UIList {
+class UIList extends UICollection {
 	constructor(params) {
-		this.els = document.getElementsByClassName(params.class);
+		super(params);
+	}
+
+	append(ui) {
+		this.el.appendChild(ui.el);
+	}
+
+	insertBefore(ui, before) {
+		this.el.insertBefore(ui.el, before.el);
 	}
 
 	get length() {
-		return this.els.length;
+		return this.el.children.length;
+	}
+
+	get children() {
+		return this.el.children;
 	}
 
 	addClass(c) {
@@ -15,22 +27,20 @@ class UIList {
 	}
 
 	setId(id, index) {
-		if (index != undefined)
-			this.els[index].setAttribute('id', id);
+		this.children[index].id = id;
+		// this.children[index].setAttribute('id', id);
 	}
 
 	remove(index) {
-		this.els[index].remove();
+		this.children[index].remove();
 	}
 
 	looper(callback, start, end) {
-		const len = end || this.els.length - 1;
+		const len = end || this.length - 2;
 		for (let i = start || 0; i <= len; i++) {
-			callback(this.els[i]);
+			callback(this.children[i]);
 		}
 	}
 	
-	append(elem) {
-		this.el.appendChild(elem);
-	}
+	
 }

@@ -52,7 +52,7 @@ select {
 }
 
 /* this is kind of doubled up but fix later */
-.desktop *[title]:hover:after, .press:after {
+.desktop *[title]:hover:after {
 	@extend %tool-tip;
 }
 

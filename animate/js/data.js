@@ -68,7 +68,7 @@ function Data(anim) {
 
 	/* shift v */
 	this.selectAll = function() {
-		lns.ui.frameElems.looper(elem => {
+		lns.ui.framesPanel.looper(elem => {
 			self.selectFrame(elem);
 		});
 	};
@@ -77,7 +77,7 @@ function Data(anim) {
 	this.selectRange = function() {
 		const start = prompt("Start frame:");
 		const end = prompt("end frame:");
-		lns.ui.frameElems.looper(elem => {
+		lns.ui.framesPanel.looper(elem => {
 			self.selectFrame(elem);
 		}, start, end);
 	};

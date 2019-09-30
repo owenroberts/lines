@@ -18,7 +18,6 @@ function Render(lps, color) {
 	/* shift l */
 	this.toggleOnion = function() {
 		self.onionSkinIsVisible = !self.onionSkinIsVisible;
-		/* set onion back? */
 	};
 
 	/* ; key */

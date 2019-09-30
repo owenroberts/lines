@@ -34,7 +34,7 @@ class EditUI {
 			}
 		});
 
-		this.uis.lock = new UIToggleButton({
+		this.uis.lock = new UIToggle({
 			title: "🔓",
 			on: "🔓",
 			off: "🔓",

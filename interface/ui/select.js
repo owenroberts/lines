@@ -1,26 +1,14 @@
-class UISelect extends UI {
+class UISelect extends UIElement {
 	constructor(params) {
 		params.tag = "select";
 		super(params);
-		
-		this.setOptions(params.options, params.selected);
 
-		if (params.btn) {
-			const select = this;
-			const btn = new UIButton({
-				id: `${this.title || this.id}-btn`,
-				title: params.btn,
-				callback: function() {
-					params.callback(select.getValue());
-				}
-			});
-			this.el.parentNode.appendChild(btn.el);
-		} else {
-			this.el.addEventListener('change', function(ev) {
-				params.callback(ev.target.value);
-				ev.target.blur();
-			});
-		}
+		this.setOptions(params.options, params.selected);
+		
+		this.el.addEventListener('change', function(ev) {
+			params.callback(ev.target.value);
+			ev.target.blur();
+		});
 	}
 
 	addOption(value, selected) {
