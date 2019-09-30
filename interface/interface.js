@@ -26,19 +26,17 @@ function Interface(app) {
 
 	this.toolTip = new UILabel({id: 'tool-tip'});
 
-
-	/* build interface */
-	this.data = {}; /* why? */
-	this.load = function(file) {
+	this.load = function(file, callback) {
 		fetch(file)
 			.then(response => { return response.json(); })
 			.then(data => {
 				self.data = data;
 				for (const key in data) {
-					self.createPanel(key);
+					self.createPanel(key, data[key]);
 				}
 				initUI();
 				self.settings.load();
+				if (callback) callback();
 			});
 	};
 
@@ -71,8 +69,7 @@ function Interface(app) {
 		
 	};
 
-	this.createPanel = function(key) {
-		const data = self.data[key];
+	this.createPanel = function(key, data) {
 		
 		const panel = new UIPanel(data.id, data.label);
 		self.panels[key] = panel;
@@ -101,7 +98,7 @@ function Interface(app) {
 				params.value = mod[uiData.set.prop];
 			}
 
-			const ui = new uiClasses[u.type](params);
+			const ui = new uiClasses[uiData.type](params);
 			if (uiData.row) panel.addRow();
 			if (params.label) {
 				panel.add(new UILabel({ text: params.label}));
@@ -123,5 +120,10 @@ function Interface(app) {
 				observer.observe(elem, { attributeFilter: [attribute] });
 			}
 		}
+
+		if (data.module == 'ui') app.ui[data.sub].panel = panel;
+		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
+		
+
 	};
 }

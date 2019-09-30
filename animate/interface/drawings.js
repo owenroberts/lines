@@ -22,7 +22,7 @@ function Drawings(panel) {
 	this.displayDrawings = function() {
 		lns.ui.layers.resetLayers();
 		self.resetDrawings();
-		panel.addRow('drawings');
+		this.panel.addRow('drawings');
 		for (let i = 0; i < lns.anim.drawings.length; i++) {
 			if (lns.anim.drawings[i]) {
 				let toggleOn = false;
@@ -46,7 +46,7 @@ function Drawings(panel) {
 				}
 				else toggleOn = false;
 
-				panel.add(new UIToggle({
+				this.panel.add(new UIToggle({
 					title: i,
 					on: i,
 					off: i,
@@ -88,9 +88,9 @@ function Drawings(panel) {
 	};
 
 	this.resetDrawings = function() {
-		const rows = panel.rows;
+		const rows = this.panel.rows;
 		for (let i = rows.length - 1; i >= 1; i--) {
-			panel.removeRow(rows[i]);
+			this.panel.removeRow(rows[i]);
 		}
 	};
 }

@@ -13,4 +13,8 @@ class UIBlur extends UIText {
 		// this.el.blur();
 	}
 
+	getValue() {
+		return this.el.value || this.el.placeholder;
+	}
+
 }

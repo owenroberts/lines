@@ -11,6 +11,13 @@ class UISelect extends UIElement {
 		});
 	}
 
+	removeOption(value) {
+		for (let i = 0; i < this.el.children.length; i++) {
+			if (this.el.children[i].value == value)
+				this.el.children[i].remove();
+		}
+	}
+
 	addOption(value, selected) {
 		const opt = document.createElement("option");
 		opt.value = opt.textContent = value;

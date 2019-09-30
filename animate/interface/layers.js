@@ -1,4 +1,4 @@
-function Layers(panel) {
+function Layers() {
 	const self = this;
 	this.layers = [];
 
@@ -12,8 +12,8 @@ function Layers(panel) {
 		for (let i = self.layers.length - 1; i >= 0; i--) {
 			if (self.layers[i].toggled) self.layers[i].toggle();
 		}
-		for (let i = panel.rows.length - 1; i > 1; i--) {
-			panel.removeRow(panel.rows[i]);
+		for (let i = this.panel.rows.length - 1; i > 1; i--) {
+			this.panel.removeRow(this.panel.rows[i]);
 		}
 		self.layers = [];
 	};
@@ -27,10 +27,10 @@ function Layers(panel) {
 			if (layer.isInFrame(lns.anim.currentFrame)) {
 				self.layers.push(layer);
 
-				const row = panel.addRow(`layer-${i}`);
-				panel.add(new UIDisplay({text: `${i},${layer.d}` }), row);
+				const row = this.panel.addRow(`layer-${i}`);
+				this.panel.add(new UIDisplay({text: `${i},${layer.d}` }), row);
 
-				panel.add(new UIToggle({
+				this.panel.add(new UIToggle({
 					on: '◐',
 					off: '◑',
 					callback: function() {
@@ -53,7 +53,7 @@ function Layers(panel) {
 					}
 				}), row); /* select */
 
-				panel.add(new UIText({
+				this.panel.add(new UIText({
 					label: 'S',
 					blur: true,
 					value: layer.f.s,
@@ -65,7 +65,7 @@ function Layers(panel) {
 					}
 				}), row);
 
-				panel.add(new UIText({
+				this.panel.add(new UIText({
 					label: 'E',
 					blur: true,
 					value: layer.f.e,
@@ -77,7 +77,7 @@ function Layers(panel) {
 					}
 				}), row);
 
-				panel.add(new UIButton({
+				this.panel.add(new UIButton({
 					title: "+",
 					callback: function() {
 						const n = new Layer(_.cloneDeep(layer));
@@ -88,7 +88,7 @@ function Layers(panel) {
 					}
 				}), row); /* duplicate */
 
-				panel.add(new UIToggle({
+				this.panel.add(new UIToggle({
 					on: 'x',
 					off: 'x',
 					callback: function() {
@@ -107,8 +107,8 @@ function Layers(panel) {
 
 				/* add animation */
 				function addAnimation(a) {
-					const aRow = panel.addRow(`layer-${i}-anim-${layer.a.length}`);
-					panel.add(new UISelect({
+					const aRow = this.panel.addRow(`layer-${i}-anim-${layer.a.length}`);
+					this.panel.add(new UISelect({
 						options: ['anim', 's', 'e', 'n', 'r', 'w', 'v'],
 						value: a.prop || 'anim',
 						selected: a.prop || 'anim',
@@ -120,7 +120,7 @@ function Layers(panel) {
 							}
 						}
 					}), aRow);
-					panel.add(new UIText({
+					this.panel.add(new UIText({
 						label: 'sf',
 						value: a.sf,
 						blur: true,
@@ -128,7 +128,7 @@ function Layers(panel) {
 							a.sf = +value;
 						}
 					}), aRow);
-					panel.add(new UIText({
+					this.panel.add(new UIText({
 						label: 'ef',
 						value: a.ef,
 						blur: true,
@@ -141,7 +141,7 @@ function Layers(panel) {
 							lns.ui.updateInterface(); /* fart ... just update frames? */
 						}
 					}), aRow);
-					panel.add(new UIText({
+					this.panel.add(new UIText({
 						label: 'sv',
 						value: a.sv,
 						blur: true,
@@ -149,7 +149,7 @@ function Layers(panel) {
 							a.sv = +value;
 						}
 					}), aRow);
-					panel.add(new UIText({
+					this.panel.add(new UIText({
 						label: 'ev',
 						value: a.ev,
 						blur: true,
@@ -158,7 +158,7 @@ function Layers(panel) {
 						}
 					}), aRow);
 
-					panel.add(new UIButton({
+					this.panel.add(new UIButton({
 						title: '↻',
 						callback: function() {
 							a.sv = 0;
@@ -167,7 +167,7 @@ function Layers(panel) {
 						}
 					}));
 
-					panel.add(new UIButton({
+					this.panel.add(new UIButton({
 						title: 'X',
 						callback: function() {
 							panels['layer'].removeRow(aRow);
@@ -176,7 +176,7 @@ function Layers(panel) {
 					}));
 				}
 
-				panel.add(new UIButton({
+				this.panel.add(new UIButton({
 					title: '❏',
 					callback: function() {
 						const a = {

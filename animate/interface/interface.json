@@ -744,22 +744,12 @@
 			},
 			{
 				"type": "UIButton",
-				"key": "shift-t",
+				"key": "t",
 				"fromModule": {
 					"callback": "createState"
 				},
 				"params": {
 					"title": "New"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "t",
-				"fromModule": {
-					"callback": "displayStates"
-				},
-				"params": {
-					"title": "States"
 				}
 			}
 		]

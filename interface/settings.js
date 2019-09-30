@@ -35,4 +35,8 @@ function Settings(app, name, appSave, appLoad) {
 	this.clear = function() {
 		delete localStorage[self.name];
 	};
+
+	this.toggleSaveSettings = function() {
+		app.files.saveSettingsOnUnload = !app.files.saveSettingsOnUnload;
+	};
 }
