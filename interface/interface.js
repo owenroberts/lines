@@ -121,7 +121,9 @@ function Interface(app) {
 			}
 		}
 
-		if (data.module == 'ui') app.ui[data.sub].panel = panel;
+		if (data.module == 'ui') {
+			app.ui[data.sub].panel = panel;
+		}
 		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
 		
 

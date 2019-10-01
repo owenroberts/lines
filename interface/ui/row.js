@@ -4,6 +4,10 @@ class UIRow extends UICollection {
 		this.addClass('row');
 	}
 
+	add(ui) {
+		this.append(ui);	
+	}
+
 	/* part of collection? 
 		add ui to row instead of els */
 	clear() {
