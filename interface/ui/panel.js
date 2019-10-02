@@ -16,7 +16,16 @@ class UIPanel extends UICollection {
 			callback: this.toggle.bind(this),
 			class: "toggle"
 		});
-		this.append(this.toggleBtn);
+		// this.append(this.toggleBtn);
+
+		this.append(new UIToggle({
+			title: "△",
+			onText: "△",
+			offText: "▽",
+			callback: this.toggle.bind(this),
+			class: "toggle"
+		}))
+
 
 		this.append(new UIButton({
 			title: 'x',
@@ -41,10 +50,8 @@ class UIPanel extends UICollection {
 		// console.log('toggle', this);
 		if (this.open) {
 			this.el.style.height = "25px";
-			this.toggleBtn.innerHTML = "▽";
 		} else {
 			this.el.style.height = "auto";
-			this.toggleBtn.innerHTML = "△";
 		}
 		this.open = !this.open;
 	}

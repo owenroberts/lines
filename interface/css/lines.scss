@@ -122,6 +122,10 @@ select {
 	flex-wrap: wrap;
 }
 
+/* toggle */
+// .on { background-color: $ui-color; }
+.off { background-color: $ui-select; }
+
 .menu-panel {
 	flex-basis: 120px;
 	flex-grow: 1;
@@ -156,6 +160,8 @@ select {
 		opacity: 0.5;
 		border-top-right-radius: 3px;
 		border-bottom-right-radius: 3px;
+
+		&.off { background-color: inherit; }
 	}
 
 	.hide {

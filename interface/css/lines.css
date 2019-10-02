@@ -105,6 +105,11 @@ select {
   flex-wrap: wrap;
 }
 
+/* toggle */
+.off {
+  background-color: gray;
+}
+
 .menu-panel {
   flex-basis: 120px;
   flex-grow: 1;
@@ -143,6 +148,9 @@ select {
 }
 .menu-panel .toggle:hover, .menu-panel .order:hover, .menu-panel .hide:hover {
   background: #ffddff;
+}
+.menu-panel .toggle.off, .menu-panel .order.off, .menu-panel .hide.off {
+  background-color: inherit;
 }
 .menu-panel .hide {
   right: 18px;

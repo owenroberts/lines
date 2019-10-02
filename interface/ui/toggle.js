@@ -22,11 +22,11 @@ class UIToggle extends UIButton {
 
 	on() {
 		this.el.textContent = this.onText;
-		this.el.style.backgroundColor = "lightgray";
+		this.removeClass('off');
 	}
 
 	off() {
 		this.el.textContent = this.offText;
-		this.el.style.backgroundColor = "gray";
+		this.addClass('off');
 	}
 }
