@@ -1,4 +1,4 @@
-function AnimateInterface(ui) {
+function animateInterface(ui) {
 
 	Object.defineProperty(lns.anim, 'plusFrame', {
 		get: function() { return this.endFrame + 1; }

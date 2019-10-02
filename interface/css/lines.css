@@ -30,11 +30,11 @@ select {
   color: black;
   padding: 2px 6px;
   opacity: 0;
-  transition: opacity 100ms ease-out;
+  transition: opacity 100ms ease-in;
 }
 #tool-tip.visible {
   opacity: 1;
-  transition: opacity 400ms ease-in;
+  transition: opacity 400ms ease-out;
 }
 
 /* this is kind of doubled up but fix later */
@@ -120,8 +120,12 @@ select {
 .menu-panel.hide {
   display: none;
 }
-.menu-panel .title {
+.menu-panel label {
   margin-bottom: 1em;
+  display: block;
+}
+.menu-panel .row label {
+  margin-bottom: 0;
 }
 .menu-panel .toggle, .menu-panel .order, .menu-panel .hide {
   display: inline-block;

@@ -8,11 +8,9 @@ class UIPanel extends UICollection {
 		this.open = true;
 		this.rows = [];
 
-		const title = new UIElement();
-		title.setTextContent(label);
-		title.addClass('title');
-		this.append(title);
+		this.append(new UILabel({text: label}));
 
+		/* make this a UIToggle */
 		this.toggleBtn = new UIButton({
 			title: "△",
 			callback: this.toggle.bind(this),
@@ -20,22 +18,19 @@ class UIPanel extends UICollection {
 		});
 		this.append(this.toggleBtn);
 
-		const hideBtn = new UIButton({
+		this.append(new UIButton({
 			title: 'x',
 			class: 'hide',
 			callback: this.hide.bind(this)
-		});
-		this.append(hideBtn);
+		}));
 
-		const orderBtn = new UIButton({
+		this.append(new UIButton({
 			title: "⥂",
 			class: "order",
-			callback: function() {
-				console.log(this);
+			callback: () =>  {
 				this.setOrder(+this.el.style.order + 1)
 			}
-		});
-		this.append(orderBtn);
+		}));
 	}
 
 	setOrder(n) {

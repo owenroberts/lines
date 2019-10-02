@@ -262,8 +262,8 @@ function Layers() {
 	/* do this with real ui later*/
 	this.toggleCanvas = new UIToggle({
 		id: 'toggle-layers',
-		on: "Close Layers",
-		off: "Open Layers",
+		onText: "Close Layers",
+		offText: "Open Layers",
 		callback: function() {
 			if (this.isOn) self.canvas.canvas.style.display = 'none';
 			else self.canvas.canvas.style.display = '';

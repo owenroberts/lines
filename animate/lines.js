@@ -22,15 +22,14 @@ window.addEventListener("load", function() {
 	});
 	
 	lns.ui = new Interface(lns);
-	
 	lns.ui.capture = new Capture();
 	lns.ui.states = new States();
 	lns.ui.palette = new Palette();
 	lns.ui.layers = new Layers();
 	lns.ui.drawings = new Drawings();
 	lns.ui.fio = new FilesInterface(lns.ui);
+	animateInterface(lns.ui);
 	lns.ui.settings = new Settings(lns, 'lns', appSave, appLoad);
-	lns.ui.ai = new AnimateInterface(lns.ui);
 
 	lns.ui.settings.canvasLoad = function() {
 		if (localStorage['settings-lns']) {
@@ -39,7 +38,14 @@ window.addEventListener("load", function() {
 		}
 	};
 	
-	lns.ui.load('./interface/interface.json');
+	lns.ui.load('./interface/interface.json', function() {
+		
+		if (location.search.split('=')[1]) {
+			lns.files.loadFile(location.search.split('=')[1].split('.')[0], lns.ui.fio.updateInterface);
+		}
+
+		lns.render.start();
+	});
 
 	const openFile = localStorage.getItem('re-open');
 	if (openFile) {
@@ -47,12 +53,9 @@ window.addEventListener("load", function() {
 		localStorage.removeItem('re-open');
 	}
 
-	if (location.search.split('=')[1]) {
-		lns.files.loadFile(location.search.split('=')[1].split('.')[0]);
-		lns.ui.fio.title.setValue(location.search.split('=')[1].split('.')[0].split('/').pop())
-	}
+	
 
-	lns.render.start(); // necessary ?
+	
 });
 
 function appSave() {

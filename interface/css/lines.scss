@@ -48,10 +48,10 @@ select {
 	color: black;
 	padding: 2px 6px;
 	opacity: 0;
-	transition: opacity 100ms ease-out;
+	transition: opacity 100ms ease-in;
 	&.visible {
 		opacity: 1;
-		transition: opacity 400ms ease-in;
+		transition: opacity 400ms ease-out;
 	}
 }
 
@@ -136,7 +136,11 @@ select {
 
 	&.hide { display: none; }
 
-	.title { margin-bottom: 1em; }
+	label { 
+		margin-bottom: 1em; 
+		display: block;
+	}
+	.row label { margin-bottom: 0; }
 
 	.toggle, .order, .hide {
 		display: inline-block;

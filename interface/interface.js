@@ -15,27 +15,34 @@ function Interface(app) {
 		k = ev.ctrlKey ? "ctrl-" + k : k;
 		k = ev.altKey ? "alt-" + k : k;
 
-		if (k && self.keys[k] && document.activeElement.type != "text") {
-			if (!ev.metaKey) ev.preventDefault(); // works?
-			const key = self.keys[k];
+		const key = self.keys[k];
+
+		if (k && key && document.activeElement.type != "text") {
+			if (!ev.metaKey) ev.preventDefault();
 			key.handler(ev, key);
-			key.onPress(true); /* js and css tool tip */
+			key.onPress(true);
 		}
 	}
 	document.addEventListener("keydown", self.keyDown, false);
 
-	// this.toolTip = new UILabel({id: 'tool-tip'});
-	window.toolTip = document.getElementById('tool-tip');
+	window.toolTip = new UILabel({id: 'tool-tip'});
 
 	this.load = function(file, callback) {
 		fetch(file)
 			.then(response => { return response.json(); })
 			.then(data => {
-				self.data = data;
 				for (const key in data) {
 					self.createPanel(key, data[key]);
 				}
-				initUI();
+				this.addPanel = new UISelectButton({
+					id: 'add-ui',
+					options: Object.keys(data),
+					callback: function(value) {
+						self.panels[value].show();
+					},
+					btn: '+'
+				});
+				
 				self.settings.load();
 				if (callback) callback();
 			});
@@ -54,20 +61,44 @@ function Interface(app) {
 		UISelectButton
 	};
 
-	function initUI() {
-		this.addPanel = new UISelectButton({
-			id: 'add-ui',
-			options: Object.keys(self.data),
-			callback: function(value) {
-				// self.showUI(value);
-				self.panels[value].show();
-			},
-			btn: '+'
-		});
-	}
+	this.createUI = function(data, module, panel) {
+		const params = { key: data.key, ...data.params };
+		for (const k in data.fromModule) {
+			params[k] = module[data.fromModule[k]];
+		}
 
-	this.showUI = function(key) {
-		
+		if (data.set) {
+			/* setter, no callback in module, just set prop
+				does'nt work for layers ... need to make a setter or not use these*/
+			params.callback = function(value) {
+				module[data.set.prop] = data.set.number ? +value : value;
+				if (data.set.layer) { } 
+			};
+			params.value = module[data.set.prop];
+		}
+
+		const ui = new uiClasses[data.type](params);
+		if (data.row) panel.addRow();
+		if (params.label) panel.add(new UILabel({ text: params.label}));
+		panel.add(ui);
+
+		if (params.prompt) ui.prompt = params.prompt; /* only key commands */
+		if (params.key) self.keys[data.key] = ui;
+
+		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
+
+		if (data.observe) {
+			const elem = module[data.observe.elem];
+			const attribute = data.observe.attribute;
+			const observer = new MutationObserver(function(list) {
+				for (const mut of list) {
+					if (mut.type == 'attributes' && mut.attributeName == attribute) {
+						ui.setValue(elem[attribute])
+					}
+				}
+			});
+			observer.observe(elem, { attributeFilter: [attribute] });
+		} /* figuring out face should make this obsolete ... canvas only */
 	};
 
 	this.createPanel = function(key, data) {
@@ -76,57 +107,16 @@ function Interface(app) {
 		self.panels[key] = panel;
 		
 		document.getElementById("panels").appendChild(panel.el);
-		/* create uis from list */
-		for (let i = 0; i < data.list.length; i++) {
-			const uiData = data.list[i];
-			const module = uiData.module || data.module;
-			const sub = uiData.sub || data.sub;
-			const mod = sub ? app[module][sub] : app[module];
-			const params = { key: uiData.key, ...uiData.params };
-			for (const k in uiData.fromModule) {
-				params[k] = mod[uiData.fromModule[k]];
-			}
-
-			/* setters don't need a callback for one value 
-				class ? UISetter .... */
-			if (uiData.set) {
-				params.callback = function(value) {
-					mod[uiData.set.prop] = uiData.set.number ? +value : value;
-					if (uiData.set.layer) {
-						// self.layers.updateProperty(u.set.layer, u.set.number ? +value : value);
-					} /* need generic version of this ... */
-				};
-				params.value = mod[uiData.set.prop];
-			}
-
-			const ui = new uiClasses[uiData.type](params);
-			if (uiData.row) panel.addRow();
-			if (params.label) {
-				panel.add(new UILabel({ text: params.label}));
-			}
-			panel.add(ui);
-			if (params.prompt) ui.prompt = params.prompt;
-			if (params.key) self.keys[uiData.key] = ui;
-			if (uiData.face) self.faces[uiData.face] = ui;
-			if (uiData.observe) {
-				const elem = mod[uiData.observe.elem];
-				const attribute = uiData.observe.attribute;
-				const observer = new MutationObserver(function(list) {
-					for (const mut of list) {
-						if (mut.type == 'attributes' && mut.attributeName == attribute) {
-							ui.setValue(elem[attribute])
-						}
-					}
-				});
-				observer.observe(elem, { attributeFilter: [attribute] });
-			}
-		}
-
-		if (data.module == 'ui') {
-			app.ui[data.sub].panel = panel;
-		}
-		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
 		
+		for (let i = 0; i < data.list.length; i++) {
+			const module = data.list[i].module || data.module;
+			const sub = data.list[i].sub || data.sub;
+			const mod = sub ? app[module][sub] : app[module];
+			self.createUI(data.list[i], mod, panel);
+		}
+
+		if (data.module == 'ui') app.ui[data.sub].panel = panel;
+		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
 
 	};
 }

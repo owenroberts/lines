@@ -44,17 +44,17 @@ function FilesInterface(ui) {
 
 	this.updateInterface = function(data, params) {
 		self.title.setValue(lns.files.fileName.split('/').pop());
-		lns.ui.faces.fps.setValue(data.fps);
+		ui.faces.fps.setValue(data.fps);
 
 		lns.anim.layers.forEach(layer => {
 			if (layer) {
-				lns.ui.faces.c.addColor(layer.c);
-				lns.ui.faces.c.setValue(layer.c);
+				ui.faces.c.addColor(layer.c);
+				ui.faces.c.setValue(layer.c);
 			}
 		});
 
 		if (data.bg) lns.ui.faces.bgColor.setValue(data.bg);
 		if (params.load) lns.ui.settings.canvasLoad();
-		lns.ui.updateInterface();
+		ui.updateInterface();
 	};
 }

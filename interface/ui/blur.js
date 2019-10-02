@@ -10,7 +10,6 @@ class UIBlur extends UIText {
 	setValue(value) {
 		if (value !== undefined) this.el.placeholder = value;
 		this.el.value = '';
-		// this.el.blur();
 	}
 
 	getValue() {

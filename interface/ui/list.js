@@ -28,7 +28,6 @@ class UIList extends UICollection {
 
 	setId(id, index) {
 		this.children[index].id = id;
-		// this.children[index].setAttribute('id', id);
 	}
 
 	remove(index) {
@@ -41,6 +40,4 @@ class UIList extends UICollection {
 			callback(this.children[i]);
 		}
 	}
-	
-	
 }

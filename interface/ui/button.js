@@ -9,16 +9,13 @@ class UIButton extends UIElement {
 
 		this.callback = params.callback;
 		
-		/* most btns dont have args, handler for args from key press */
 		this.arguments = params.arguments;
 		this.el.addEventListener('click', this.handler.bind(this));
 		
 		if (params.key) this.setKey(params.key, `${ this.el.textContent }`);
-		/* slightly different from input key ... */
 	}
 	
-	// remove ??
 	handler() {
-		this.callback(this.arguments); // not needed?
+		this.callback(this.arguments);
 	}
 }
