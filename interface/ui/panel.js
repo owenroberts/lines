@@ -59,7 +59,6 @@ class UIPanel extends UICollection {
 	}
 
 	show() {
-		// console.log(this);
 		this.removeClass('hide');
 	}
 

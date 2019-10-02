@@ -1,6 +1,7 @@
 class UIElement {
 	constructor(params) {
-		params = params || {}; 
+		params = params || {};
+
 		this.el = document.getElementById(params.id) ?
 				document.getElementById(params.id) :
 				document.createElement(params.tag || "div");
@@ -9,7 +10,9 @@ class UIElement {
 			this.el.style[prop] = params.css[prop];
 		}
 
-		// id ? 
+		if (params.id) this.el.id = params.id;
+
+		
 	}
 
 	handler() {
@@ -30,6 +33,20 @@ class UIElement {
 
 	setKey(key, text) {
 		this.el.title = `${text ? text : ''} (${key})`; // hover title key text
+		this.el.addEventListener('mouseenter', this.onPress.bind(this));
+		this.el.addEventListener('mouseleave', this.onRelease.bind(this));
+	}
+
+	onPress(triggerRelease) {
+		toolTip.textContent = `~ ${this.el.title}`;
+		toolTip.classList.add('visible');
+		if (triggerRelease) setTimeout(this.onRelease.bind(this), 400);
+	}
+
+	onRelease() {
+		const toolTip = document.getElementById('tool-tip');
+		toolTip.textContent = `~ ${this.el.title}`;
+		toolTip.classList.remove('visible');
 	}
 
 	addClass(_class) {
@@ -44,15 +61,5 @@ class UIElement {
 		this.el.textContent = text;
 	}
 
-	setId(id) {
-		this.el.id = id;
-	}	
 
-	press() {
-		/* tool tip ... what about for key commands with no elements?  is that a thing ... ? */
-		this.addClass('press');
-		setTimeout(function() {
-			this.removeClass('press');
-		}.bind(this), 300);
-	}
 }

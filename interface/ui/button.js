@@ -4,8 +4,8 @@ class UIButton extends UIElement {
 		super(params);
 		this.addClass(params.class || "btn");
 
+		this.setTextContent(this.el.textContent || params.title || params.onText); /* ugly */
 		
-		this.setTextContent(this.el.textContent || params.title); /* ugly */
 
 		this.callback = params.callback;
 		

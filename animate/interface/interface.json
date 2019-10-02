@@ -851,8 +851,8 @@
 					"callback": "toggleSaveSettings"
 				},
 				"params": {
-					"on": "Auto Save On",
-					"off": "Auto Save Off"
+					"onText": "Auto Save On",
+					"offText": "Auto Save Off"
 				}
 			}
 		]

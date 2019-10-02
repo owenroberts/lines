@@ -58,13 +58,12 @@ function AnimateInterface(ui) {
 				/* should be a ui? */
 				const frameBtn = new UIButton({
 					class: "frame",
-					title: i,
+					title: ''+i,
 					callback: function() {
 						lns.render.setFrame(i);
 						ui.updateInterface();
 					}	
 				})
-				// frameElem.dataset.index = i;
 
 				/* right click, add/remove from copy frames 
 					class for this? */

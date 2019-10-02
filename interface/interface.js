@@ -19,12 +19,13 @@ function Interface(app) {
 			if (!ev.metaKey) ev.preventDefault(); // works?
 			const key = self.keys[k];
 			key.handler(ev, key);
-			key.press(); /* js and css tool tip */
+			key.onPress(true); /* js and css tool tip */
 		}
 	}
 	document.addEventListener("keydown", self.keyDown, false);
 
-	this.toolTip = new UILabel({id: 'tool-tip'});
+	// this.toolTip = new UILabel({id: 'tool-tip'});
+	window.toolTip = document.getElementById('tool-tip');
 
 	this.load = function(file, callback) {
 		fetch(file)

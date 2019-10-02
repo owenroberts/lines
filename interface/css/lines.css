@@ -21,28 +21,20 @@ select {
   margin-top: 0.25em;
 }
 
-.desktop *[title]:hover:after, .press:after {
-  content: "~ " attr(title);
-  position: fixed;
-  top: 40px;
-  right: 20px;
-  background: #ffddff;
-  border-radius: 3px;
-  padding: 1px 3px;
-  color: black;
-}
-
 #tool-tip {
   position: fixed;
-  top: 40px;
   right: 20px;
   background: #ffddff;
   border-radius: 3px;
   font-size: 1em;
   color: black;
+  padding: 2px 6px;
+  opacity: 0;
+  transition: opacity 100ms ease-out;
 }
 #tool-tip.visible {
-  padding: 2px 6px;
+  opacity: 1;
+  transition: opacity 400ms ease-in;
 }
 
 /* this is kind of doubled up but fix later */
@@ -187,9 +179,6 @@ select {
   border: none;
   background-color: lightgray;
   padding-right: 0.25em;
-}
-.menu-panel .row .display {
-  text-align: right;
 }
 .menu-panel .btn {
   padding: 0 0.25em;

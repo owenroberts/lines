@@ -30,7 +30,7 @@ select {
 %tool-tip {
 	content: '~ ' attr(title);
 	position: fixed;
-	top: 40px;
+	// top: 40px;
 	right: 20px;
 	background: $accent-two;
 	border-radius: 3px;
@@ -40,20 +40,24 @@ select {
 
 #tool-tip {
 	position: fixed;
-	top: 40px;
+	// top: 40px;
 	right: 20px;
 	background: $accent-two;
 	border-radius: 3px;
 	font-size: 1em;
 	color: black;
+	padding: 2px 6px;
+	opacity: 0;
+	transition: opacity 100ms ease-out;
 	&.visible {
-		padding: 2px 6px;
+		opacity: 1;
+		transition: opacity 400ms ease-in;
 	}
 }
 
 /* this is kind of doubled up but fix later */
 .desktop *[title]:hover:after {
-	@extend %tool-tip;
+	// @extend %tool-tip;
 }
 
 #container {

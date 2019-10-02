@@ -22,7 +22,7 @@ function Drawings(panel) {
 	this.displayDrawings = function() {
 		lns.ui.layers.resetLayers();
 		self.resetDrawings();
-		this.panel.addRow('drawings');
+		self.panel.addRow('drawings');
 		for (let i = 0; i < lns.anim.drawings.length; i++) {
 			if (lns.anim.drawings[i]) {
 				let toggleOn = false;
@@ -46,10 +46,10 @@ function Drawings(panel) {
 				}
 				else toggleOn = false;
 
-				this.panel.add(new UIToggle({
+				self.panel.add(new UIToggle({
 					title: i,
-					on: i,
-					off: i,
+					onText: i,
+					offText: i,
 					isOn: toggleOn,
 					callback: function() {
 						layer = self.getDrawingLayer(i);
@@ -64,7 +64,7 @@ function Drawings(panel) {
 							}
 						} else {
 							/* fuck */
-							console.log(props); /* save in drawing? */
+							// console.log(props); /* save in drawing? */
 							layer = new Layer({
 								d: i,
 								c: lns.draw.layer.c,
