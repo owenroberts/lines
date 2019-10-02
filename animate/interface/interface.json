@@ -596,7 +596,7 @@
 					"label": "Brush",
 					"min": 0, 
 					"max": 10,
-					"input": "brush-range"
+					"id": "brush-range"
 				}
 			},
 			{
@@ -610,7 +610,7 @@
 					"label": "Brush Spread",
 					"min": 0, 
 					"max": 5,
-					"input": "brush-spread-range"
+					"id": "brush-spread-range"
 				}
 			},
 			{
@@ -624,7 +624,7 @@
 					"label": "Grass",
 					"min": 0, 
 					"max": 20,
-					"input": "grass-range"
+					"id": "grass-range"
 				}
 			},
 			{
@@ -638,7 +638,7 @@
 					"label": "Dots",
 					"min": 10, 
 					"max": 50,
-					"input": "dots-range"
+					"id": "dots-range"
 				}
 			}
 
@@ -660,7 +660,7 @@
 				},
 				"params": {
 					"label": "Segments",
-					"input": "seg-num-range",
+					"id": "seg-num-range",
 					"min": 1,
 					"max": 10
 				}
@@ -676,7 +676,7 @@
 				},
 				"params": {
 					"label": "Jiggle",
-					"input": "jiggle-range",
+					"id": "jiggle-range",
 					"min": 0,
 					"max": 10
 				}
@@ -692,7 +692,7 @@
 				},
 				"params": {
 					"label": "Wiggle",
-					"input": "wiggle-range",
+					"id": "wiggle-range",
 					"min": 0,
 					"max": 15
 				}
@@ -708,7 +708,7 @@
 				},
 				"params": {
 					"label": "Wiggle Speed",
-					"input": "wiggle-speed-range",
+					"id": "wiggle-speed-range",
 					"min": 0,
 					"max": 5,
 					"step": 0.005

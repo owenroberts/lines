@@ -36,6 +36,11 @@ class UIColor extends UIInput {
 		}
 	}
 
+	update(value) {
+		this.callback(value);
+		this.setValue(value);
+	}
+
 	setValue(value) {
 		this.addColor(value);
 		super.setValue(value);
