@@ -33,7 +33,7 @@ class UITextRange extends UICollection {
 
 	update(value) {
 		this.callback(value);
-		this.textInput.setValue(value);
-		this.range.setValue(value);
+		this.textInput.value = value;
+		this.range.value = value;
 	}
 }

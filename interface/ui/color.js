@@ -25,7 +25,7 @@ class UIColor extends UIInput {
 				value: color,
 				callback: function() {
 					self.callback(color);
-					self.setValue(color);
+					self.value = color;
 				}
 			});
 			
@@ -36,12 +36,12 @@ class UIColor extends UIInput {
 
 	update(value) {
 		this.callback(value);
-		this.setValue(value);
+		this.value = value;
 	}
 
-	setValue(value) {
-		this.addColor(value);
-		this.current = value;
-		super.setValue(value);
+	set value(_value) {
+		this.addColor(_value);
+		this.current = _value;
+		super.value = _value;
 	}
 }

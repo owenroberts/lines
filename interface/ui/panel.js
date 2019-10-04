@@ -33,7 +33,11 @@ class UIPanel extends UICollection {
 	}
 
 	set order(n) {
-		this.el.style.order = this.order = n;
+		this.el.style.order = n;
+	}
+
+	get order() {
+		return this.el.style.order;
 	}
 
 	get isDocked() {

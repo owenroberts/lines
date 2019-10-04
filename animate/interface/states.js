@@ -18,7 +18,7 @@ function States() {
 					lns.anim.states[value] = state;
 					lns.anim.state = value;
 					lns.ui.faces.stateSelector.addOption(value);
-					lns.ui.faces.stateSelector.setValue(value);
+					lns.ui.faces.stateSelector.value = value;
 				}
 			}
 		})

@@ -19,11 +19,11 @@ class UIText extends UIInput {
 
 	update(value) {
 		this.callback(value);
-		this.setValue(value);
+		this.value = value;
 	}
 
-	setValue(value) {
-		this.el.value = this.el.placeholder = value;
+	set value(_value) {
+		this.el.value = this.el.placeholder = _value;
 		this.el.blur();
 	}
 }

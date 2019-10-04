@@ -87,18 +87,19 @@ function appLoad(settings) {
 	lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 	lns.render.onionSkinNum = settings.onionSkinNum;
 
-	lns.ui.faces.lps.setValue(settings.lps);
-	lns.ui.faces.fps.setValue(settings.fps);
-	lns.ui.faces.lineWidth.setValue(settings.lineWidth);
-	lns.ui.faces.c.setValue(settings.c);
+	lns.ui.faces.lps.value = settings.lps;
+	lns.ui.faces.fps.value = settings.fps;
+	lns.ui.faces.lineWidth.value = settings.lineWidth;
+	lns.ui.faces.c.value = settings.c;
 	/* this can be done with update, but i dont like lns.ui.faces being the location ... 
 		update is also setting value
 		setValue doesn't set the input for range values 
 		lotta ui work left to do! */
 
-	lns.ui.faces.bgColor.setValue(settings.canvasColor);
+	lns.ui.faces.bgColor.value = settings.canvasColor;
+	lns.ui.faces.onionSkinNum.value = settings.onionSkinNum;
+
 	lns.ui.faces.lineWidth.update(settings.lineWidth);
-	lns.ui.faces.onionSkinNum.setValue(settings.onionSkinNum);
 
 	/* update sets value and calls callback ...*/
 	lns.ui.faces.mouseInterval.update(settings.mouseInterval);

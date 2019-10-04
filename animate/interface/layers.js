@@ -40,15 +40,15 @@ function Layers() {
 							crazy and repetetive but also useful
 						*/
 						if (layer.toggled) {
-							lns.ui.faces.w.setValue(layer.n);
-							lns.ui.faces.r.setValue(layer.r);
-							lns.ui.faces.w.setValue(layer.w);
-							lns.ui.faces.v.setValue(layer.v);
+							lns.ui.faces.w.value = layer.n;
+							lns.ui.faces.r.value = layer.r;
+							lns.ui.faces.w.value = layer.w;
+							lns.ui.faces.v.value = layer.v;
 						} else {
-							lns.ui.faces.w.setValue(lns.draw.n);
-							lns.ui.faces.r.setValue(lns.draw.r);
-							lns.ui.faces.w.setValue(lns.draw.w);
-							lns.ui.faces.v.setValue(lns.draw.v);
+							lns.ui.faces.w.value = lns.draw.n;
+							lns.ui.faces.r.value = lns.draw.r;
+							lns.ui.faces.w.value = lns.draw.w;
+							lns.ui.faces.v.value = lns.draw.v;
 						}
 					}
 				})); /* select */

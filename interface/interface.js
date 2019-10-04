@@ -96,7 +96,7 @@ function Interface(app) {
 			const observer = new MutationObserver(function(list) {
 				for (const mut of list) {
 					if (mut.type == 'attributes' && mut.attributeName == attribute) {
-						ui.setValue(elem[attribute])
+						ui.value = elem[attribute];
 					}
 				}
 			});
@@ -122,8 +122,6 @@ function Interface(app) {
 		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
 	};
 }
-
-export { Interface };
 
 /*
 	params vs arguments

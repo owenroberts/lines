@@ -15,20 +15,20 @@ class UIElement {
 		this.el.textContent = _text;
 	}
 
+	set value(_value) {
+		this.el.value = _value;
+	}
+
+	get value() {
+		return this.el.value;
+	}
+
 	handler() {
 		this.callback();
 	}
 
 	getElem() {
 		return this.el;
-	}
-
-	setValue(value) {
-		this.el.value = value;
-	}
-
-	get value() {
-		return this.el.value;
 	}
 
 	addClass(_class) {

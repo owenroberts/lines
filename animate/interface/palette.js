@@ -48,7 +48,7 @@ function Palette() {
 
 		for (prop in palette) {
 			if (lns.ui.faces[prop] !== undefined) {
-				lns.ui.faces[prop].setValue(palette[prop]);
+				lns.ui.faces[prop].value = palette[prop];
 			}
 		};
 	};

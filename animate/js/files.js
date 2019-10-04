@@ -126,7 +126,7 @@ function Files(params) {
 		if (data.bg) lns.canvas.setBGColor(data.bg);
 		lns.render.reset();
 
-		lns.ui.faces.fps.setValue(data.fps);
+		lns.ui.faces.fps.value = data.fps;
 
 		if (callback) callback(data, params);
 	};
@@ -160,7 +160,7 @@ function Files(params) {
 				return function(e) {
 				self.fileName = f.name.split('.')[0];
 				self.loadJSON(JSON.parse(e.target.result));
-				lns.ui.fio.title.setValue(self.fileName);
+				lns.ui.fio.title.value = self.fileName;
           	};
         	})(f);
         	reader.readAsText(f);

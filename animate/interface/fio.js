@@ -12,7 +12,7 @@ function FilesInterface(ui) {
 		id: "save",
 		callback: function() {
 			lns.files.saveFile(self.title.value, false, function(title) {
-				self.title.setValue(title);
+				self.title.value = title;
 			});
 		},
 		key: "s"
@@ -22,7 +22,7 @@ function FilesInterface(ui) {
 		id: "save-frame",
 		callback: function() {
 			lns.files.saveFile(self.title.value, true, function(filename) {
-				self.title.setValue(filename.split("/").pop());
+				self.title.value = filename.split("/").pop();
 			});
 		},
 		key: "shift-s"
@@ -43,17 +43,17 @@ function FilesInterface(ui) {
 	});
 
 	this.updateInterface = function(data, params) {
-		self.title.setValue(lns.files.fileName.split('/').pop());
-		ui.faces.fps.setValue(data.fps);
+		self.title.value = lns.files.fileName.split('/').pop();
+		ui.faces.fps.value = data.fps;
 
 		lns.anim.layers.forEach(layer => {
 			if (layer) {
 				ui.faces.c.addColor(layer.c);
-				ui.faces.c.setValue(layer.c);
+				ui.faces.c.value = layer.c;
 			}
 		});
 
-		if (data.bg) lns.ui.faces.bgColor.setValue(data.bg);
+		if (data.bg) lns.ui.faces.bgColor.value = data.bg;
 		if (params.load) lns.ui.settings.canvasLoad();
 		ui.updateInterface();
 	};

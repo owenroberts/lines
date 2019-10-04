@@ -92,7 +92,7 @@ function animateInterface(ui) {
 			ui.framesPanel.setId("current", lns.anim.currentFrame);
 		else
 			ui.plusFrame.setId("current");
-		ui.faces.frameDisplay.setValue(lns.anim.currentFrame);
+		ui.faces.frameDisplay.value = lns.anim.currentFrame;
 	};
 
 	/* call before changing a frame */
