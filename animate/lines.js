@@ -1,6 +1,6 @@
 window.addEventListener("load", function() {
 
-	lns = {};
+	window.lns = {};
 
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff");

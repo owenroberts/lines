@@ -1,3 +1,5 @@
+
+
 function Interface(app) {
 	const self = this;
 
@@ -43,7 +45,7 @@ function Interface(app) {
 					},
 					btn: '+'
 				});
-				
+
 				self.settings.load();
 				if (callback) callback();
 			});
@@ -118,18 +120,33 @@ function Interface(app) {
 
 		if (data.module == 'ui') app.ui[data.sub].panel = panel;
 		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
-
 	};
 }
 
+export { Interface };
+
 /*
-	title = text
-	setTextContent .. 
 	params vs arguments
+		- need params for interface.json, too complicated to multiple things
+		- no UIElements ... could use args for UiElement, UICollection
+		- no real reason to
+	class names are keys in interface.json
+		- can't repeat class names as keys in json?
 	modules
+		- basically means adding export line to every file, then import line
+		- actually more tedious than html
+		- maybe use a js bundler instead
 	game editor / modal
 	getters / setters
 
-	need ids in interface.json
+	need ids in interface.json?
+
+
+	new things ....
+	- prompt esc - null value -
+		- could check against original
+		- or set to 0
+		- or just leave it as is
+		- or test if (value)
 
 */

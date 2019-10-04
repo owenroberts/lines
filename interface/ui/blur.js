@@ -12,7 +12,7 @@ class UIBlur extends UIText {
 		this.el.value = '';
 	}
 
-	getValue() {
+	get value() {
 		return this.el.value || this.el.placeholder;
 	}
 

@@ -4,14 +4,14 @@ function FilesInterface(ui) {
 	this.title = new UIText({ 
 		id:"title",
 		callback: function() {
-			lns.files.saveFile(self.title.getValue());
+			lns.files.saveFile(self.title.value);
 		}
 	});
 
 	ui.keys['s'] = new UIButton({
 		id: "save",
 		callback: function() {
-			lns.files.saveFile(self.title.getValue(), false, function(title) {
+			lns.files.saveFile(self.title.value, false, function(title) {
 				self.title.setValue(title);
 			});
 		},
@@ -21,7 +21,7 @@ function FilesInterface(ui) {
 	ui.keys['shift-s'] = new UIButton({
 		id: "save-frame",
 		callback: function() {
-			lns.files.saveFile(self.title.getValue(), true, function(filename) {
+			lns.files.saveFile(self.title.value, true, function(filename) {
 				self.title.setValue(filename.split("/").pop());
 			});
 		},

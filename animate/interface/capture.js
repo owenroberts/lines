@@ -57,7 +57,7 @@ function Capture() {
 	this.capture = function() {
 		if (lns.files.saveFilesEnabled) {
 			lns.canvas.canvas.toBlob(function(blob) {
-				const title = lns.ui.fio.title.getValue(); // this is a UI
+				const title = lns.ui.fio.title.value; // this is a UI
 				const n = Cool.padNumber(lns.anim.currentFrame, 3);
 				let frm = 0;
 				let fileName = `${title}-${n}-${frm}.png`;
@@ -119,7 +119,7 @@ function Capture() {
 				const a = document.createElement('a');
 				document.body.appendChild(a);
 				a.href = url;
-				a.download = `${lns.ui.fio.title.getValue()}.webm` || 'lines.webm';
+				a.download = `${lns.ui.fio.title.value}.webm` || 'lines.webm';
 				a.click();
 				// window.URL.revokeObjectURL(url);
 			});

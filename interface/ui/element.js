@@ -27,8 +27,16 @@ class UIElement {
 		this.el.value = value;
 	}
 
-	getValue() {
+	get value() {
 		return this.el.value;
+	}
+
+	addClass(_class) {
+		this.el.classList.add(_class);
+	}
+
+	removeClass(_class) {
+		this.el.classList.remove(_class);
 	}
 
 	setKey(key, text) {
@@ -45,13 +53,5 @@ class UIElement {
 
 	onRelease() {
 		toolTip.removeClass('visible');
-	}
-
-	addClass(_class) {
-		this.el.classList.add(_class);
-	}
-
-	removeClass(_class) {
-		this.el.classList.remove(_class);
 	}
 }

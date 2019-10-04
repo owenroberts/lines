@@ -19,10 +19,10 @@ class UIList extends UICollection {
 		return this.el.children;
 	}
 
-	addClass(c) {
+	addClass(_class) {
 		for (let i = 0; i < this.els.length; i++) {
-			if (!this.els[i].classList.contains(c))
- 				this.els[i].classList.add(c);
+			if (!this.els[i].classList.contains(_class))
+ 				this.els[i].classList.add(_class);
 		}
 	}
 

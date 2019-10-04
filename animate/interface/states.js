@@ -44,9 +44,9 @@ function States() {
 		self.panel.add(new UIButton({
 			text: "x",
 			callback: function() {
-				delete lns.anim.states[title.getValue()];
+				delete lns.anim.states[title.value];
 				self.panel.removeRow(row);
-				lns.ui.faces.stateSelector.removeOption(title.getValue());
+				lns.ui.faces.stateSelector.removeOption(title.value);
 				lns.anim.state = 'default';
 			}
 		}), row);

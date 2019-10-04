@@ -13,7 +13,7 @@ class UISelectButton extends UICollection {
 		this.btn = new UIButton({
 			id: `${params.id}-btn`,
 			callback: () => {
-				params.callback(this.select.getValue());
+				params.callback(this.select.value);
 			}
 		});
 	}

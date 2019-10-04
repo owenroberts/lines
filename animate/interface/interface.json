@@ -15,7 +15,6 @@
 				"params": {
 					"min": 0,
 					"max": 100,
-					"id": "mouse-range",
 					"label": "Mouse time",
 					"prompt": "Set mouse interval"
 				}

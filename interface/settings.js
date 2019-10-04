@@ -38,3 +38,5 @@ function Settings(app, name, appSave, appLoad) {
 		app.files.saveSettingsOnUnload = !app.files.saveSettingsOnUnload;
 	};
 }
+
+export { Settings };
