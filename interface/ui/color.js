@@ -20,7 +20,7 @@ class UIColor extends UIInput {
 		if (!this.colors.includes(color) && color) {
 			this.colors.push(color);
 			const btn = new UIButton({
-				title: color,
+				text: color,
 				css: { "background": color },
 				value: color,
 				callback: function() {

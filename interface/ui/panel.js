@@ -18,13 +18,13 @@ class UIPanel extends UICollection {
 		}));
 
 		this.append(new UIButton({
-			title: 'x',
+			text: 'x',
 			class: 'undock-btn',
 			callback: this.undock.bind(this)
 		}));
 
 		this.append(new UIButton({
-			title: "⥂",
+			text: "⥂",
 			class: "order",
 			callback: () =>  {
 				this.setOrder(+this.el.style.order + 1)

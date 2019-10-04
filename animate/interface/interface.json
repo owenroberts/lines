@@ -33,7 +33,7 @@
 					"callback": "loadImage"
 				},
 				"params": {
-					"title": "Image URL, Enter",
+					"placeholder": "Image URL, Enter",
 					"id": "bg-img"
 				}
 			},
@@ -103,7 +103,7 @@
 				"type": "UIButton",
 				"key": "shift-f",
 				"params": {
-					"title": "Fit Canvas"
+					"text": "Fit Canvas"
 				},
 				"fromModule": {
 					"callback": "fitCanvasToDrawing"
@@ -203,7 +203,7 @@
 					"callback": "copy"
 				},
 				"params": {
-					"title": "Copy"
+					"text": "Copy"
 				}
 			},
 			{
@@ -213,7 +213,7 @@
 					"callback": "addMultipleCopies"
 				},
 				"params": {
-					"title": "Multi Copies"
+					"text": "Multi Copies"
 				}
 			},
 			{
@@ -223,7 +223,7 @@
 					"callback": "paste"
 				},
 				"params": {
-					"title": "Paste"
+					"text": "Paste"
 				}
 			},
 			{
@@ -233,7 +233,7 @@
 					"callback": "selectAll"
 				},
 				"params": {
-					"title": "Select All"
+					"text": "Select All"
 				}
 			},
 			{
@@ -243,7 +243,7 @@
 					"callback": "selectRange"
 				},
 				"params": {
-					"title": "Select Range"
+					"text": "Select Range"
 				}
 			},
 			{
@@ -253,7 +253,7 @@
 					"callback": "clearSelected"
 				},
 				"params": {
-					"title": "Clear Selected"
+					"text": "Clear Selected"
 				}
 			}
 		]
@@ -270,7 +270,7 @@
 					"callback": "clearLines"
 				},
 				"params": {
-					"title": "Clear Lines"
+					"text": "Clear Lines"
 				}
 			},
 			{
@@ -280,7 +280,7 @@
 					"callback": "cutLastLine"
 				},
 				"params": {
-					"title": "Cut Line"
+					"text": "Cut Line"
 				}
 			},
 			{
@@ -290,7 +290,7 @@
 					"callback": "cutLastSegment"
 				},
 				"params": {
-					"title": "Cut Segment"
+					"text": "Cut Segment"
 				}
 			},
 			{
@@ -300,7 +300,7 @@
 					"callback": "deleteFrame"
 				},
 				"params": {
-					"title": "Delete Frame"
+					"text": "Delete Frame"
 				}
 			},
 			{
@@ -310,7 +310,7 @@
 					"callback": "deleteFrameRange"
 				},
 				"params": {
-					"title": "Delete Frame Range"
+					"text": "Delete Frame Range"
 				}
 			},
 			{
@@ -320,7 +320,7 @@
 					"callback": "cutTopLayer"
 				},
 				"params": {
-					"title": "Cut Top Layer"
+					"text": "Cut Top Layer"
 				}
 			},
 			{
@@ -330,7 +330,7 @@
 					"callback": "cutBottomLayer"
 				},
 				"params": {
-					"title": "Cut Bottom Layer"
+					"text": "Cut Bottom Layer"
 				}
 			},
 			{
@@ -340,7 +340,7 @@
 					"callback": "clearFrame"
 				},
 				"params": {
-					"title": "Clear Frame"
+					"text": "Clear Frame"
 				}
 			}
 		]
@@ -357,7 +357,7 @@
 					"callback": "saveLines"
 				},
 				"params": {
-					"title": "Save Lines"
+					"text": "Save Lines"
 				}
 			},
 			{
@@ -367,7 +367,7 @@
 					"callback": "undo"
 				},
 				"params": {
-					"title": "Undo"
+					"text": "Undo"
 				}
 			},
 			{
@@ -377,7 +377,7 @@
 					"callback": "offsetDrawing"
 				},
 				"params": {
-					"title": "Offset"
+					"text": "Offset"
 				}
 			},
 			{
@@ -387,7 +387,7 @@
 					"callback": "insertFrameBefore"
 				},
 				"params": {
-					"title": "Insert Before"
+					"text": "Insert Before"
 				}
 			},
 			{
@@ -397,7 +397,7 @@
 					"callback": "insertFrameAfter"
 				},
 				"params": {
-					"title": "Insert After"
+					"text": "Insert After"
 				}
 			}
 		]
@@ -427,7 +427,7 @@
 					"callback": "prevFrame"
 				},
 				"params": {
-					"title": "Prev"
+					"text": "Prev"
 				}
 			},
 			{
@@ -438,7 +438,7 @@
 					"callback": "nextFrame"
 				},
 				"params": {
-					"title": "Next"
+					"text": "Next"
 				}
 			},
 			{
@@ -524,7 +524,7 @@
 					"callback": "captureCycle"
 				},
 				"params": {
-					"title": "Capture Cycle"
+					"text": "Capture Cycle"
 				}
 			},
 			{
@@ -534,7 +534,7 @@
 					"callback": "captureOne"
 				},
 				"params": {
-					"title": "Capture Frame"
+					"text": "Capture Frame"
 				}
 			},
 			{
@@ -555,7 +555,7 @@
 					"callback": "captureMultiple"
 				},
 				"params": {
-					"title": "Capture Frames"
+					"text": "Capture Frames"
 				}
 			},
 			{
@@ -575,7 +575,7 @@
 					"callback": "startVideoCapture"
 				},
 				"params": {
-					"title": "Capture Video Loops"
+					"text": "Capture Video Loops"
 				}
 			}
 		]
@@ -720,7 +720,7 @@
 					"callback": "setDefaults"
 				},
 				"params": {
-					"title": "Reset Defaults"
+					"text": "Reset Defaults"
 				}
 			}
 		]
@@ -749,7 +749,7 @@
 					"callback": "createState"
 				},
 				"params": {
-					"title": "New"
+					"text": "New"
 				}
 			}
 		]
@@ -767,7 +767,7 @@
 					"callback": "displayLayers"
 				},
 				"params": {
-					"title": "Display Layers"
+					"text": "Display Layers"
 				}
 			},
 			{
@@ -777,7 +777,7 @@
 					"callback": "updateLayerColor"
 				},
 				"params": {
-					"title": "Change Color"
+					"text": "Change Color"
 				}
 			},
 			{
@@ -787,7 +787,7 @@
 					"callback": "toggleAll"
 				},
 				"params": {
-					"title": "Toggle All"
+					"text": "Toggle All"
 				}
 			}
 		]
@@ -805,7 +805,7 @@
 					"callback": "displayDrawings"
 				},
 				"params": {
-					"title": "Display Drawings"
+					"text": "Display Drawings"
 				}
 			}
 		]
@@ -823,7 +823,7 @@
 					"callback": "save"
 				},
 				"params": {
-					"title": "Save"
+					"text": "Save"
 				}
 			},
 			{
@@ -833,7 +833,7 @@
 					"callback": "load"
 				},
 				"params": {
-					"title": "Load"
+					"text": "Load"
 				}
 			},
 			{
@@ -842,7 +842,7 @@
 					"callback": "clear"
 				},
 				"params": {
-					"title": "Clear"
+					"text": "Clear"
 				}
 			},
 			{
@@ -869,7 +869,7 @@
 					"callback": "explode"
 				},
 				"params": {
-					"title": "Explode",
+					"text": "Explode",
 					"arguments": {
 						"type": "Explode"
 					}
@@ -882,7 +882,7 @@
 					"callback": "explode"
 				},
 				"params": {
-					"title": "Reverse",
+					"text": "Reverse",
 					"arguments": {
 						"type": "Reverse"
 					}
@@ -895,7 +895,7 @@
 					"callback": "explode"
 				},
 				"params": {
-					"title": "ExRev",
+					"text": "ExRev",
 					"arguments": {
 						"type": "ExRev"
 					}
@@ -916,7 +916,7 @@
 					"callback": "addPalette"
 				},
 				"params": {
-					"title": "Add Palette"
+					"text": "Add Palette"
 				}
 			}
 		]

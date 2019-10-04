@@ -19,28 +19,12 @@ body {
 	touch-action: manipulation;
 }
 
-button:focus { 
-	outline: none; 
-}
+button:focus { outline: none; }
 
-select {
-	margin-top: 0.25em;
-}
-
-%tool-tip {
-	content: '~ ' attr(title);
-	position: fixed;
-	// top: 40px;
-	right: 20px;
-	background: $accent-two;
-	border-radius: 3px;
-	padding: 1px 3px;
-	color: black;
-}
+select { margin-top: 0.25em; }
 
 #tool-tip {
 	position: fixed;
-	// top: 40px;
 	right: 20px;
 	background: $accent-two;
 	border-radius: 3px;
@@ -53,11 +37,6 @@ select {
 		opacity: 1;
 		transition: opacity 400ms ease-out;
 	}
-}
-
-/* this is kind of doubled up but fix later */
-.desktop *[title]:hover:after {
-	// @extend %tool-tip;
 }
 
 #container {
@@ -115,15 +94,12 @@ select {
 }
 
 #panels {
-	/*display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));*/
 	margin-top: 0.5em;
 	display: flex;
 	flex-wrap: wrap;
 }
 
 /* toggle */
-// .on { background-color: $ui-color; }
 .off { background-color: $ui-select; }
 
 .menu-panel {
@@ -147,7 +123,7 @@ select {
 	}
 	.row label { margin-bottom: 0; }
 
-	.toggle, .order, .undock-btn{
+	.toggle, .order, .undock-btn {
 		display: inline-block;
 		position: absolute;
 		right: 34px;
@@ -180,12 +156,10 @@ select {
 		margin-bottom: 0.5em;
 		display: flex;
 		flex-wrap: wrap;
-		label {
-			line-height: 1.5;
-		}
+		
+		label { line-height: 1.5; }
+		
 		span, label, input, select {
-			// vertical-align: top;
-			// line-height: 2;
 			white-space: nowrap;
 			margin-right: 0.25em;
 			margin-top: 0.25em;
@@ -195,14 +169,17 @@ select {
 				text-align: left;
 			}
 		}
+
 		input {
 			flex: 0 1 40px;
 			width: 100%;
 			text-align: right;
 		}
+		
 		input[type=range], input[type=color] {
 			flex: 1 1 auto;
 		}
+		
 		input[type=text] {
 			border: none;
 			background-color: $ui-color;
@@ -217,18 +194,18 @@ select {
 }
 
 #frames {
-	// max-width: 100%;
 	height:auto;
 	padding: 0;
 	width: auto;
-	// width: 100%;
 	display: grid;
     grid-template-columns: repeat(auto-fill, 24px);
     grid-template-rows: max-content max-content;
+    
     p {
     	margin: 0;
     	grid-column: 1 / span 2;
     }
+	
 	.frame, .plus, #current {
 		border-radius: 3px;
 		display: inline-block;
@@ -240,13 +217,13 @@ select {
 		cursor: pointer;
 		&:hover { background-color: $ui-select; }
 	}
+	
 	#current { background-color: $main-color !important; }
 	.selected { background-color: $accent-two !important; }
 }
 
 #draw-layers {
 	margin-top: 1em;
-	// width: 100%;
 	border-top: 1px solid $ui-color;
 	border-bottom: 1px solid $ui-color;
 	padding: 0.25em 0;
@@ -274,6 +251,7 @@ select {
 			flex-basis: 50px;
 		}
 	}
+	
 	.btn, select, input {
 		font-size: 1.75em;
 	}

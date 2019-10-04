@@ -7,7 +7,7 @@ class Modal {
 		
 		const self = this;
 		this.submit = new UIButton({
-			title: "Submit",
+			text: "Submit",
 			callback: function() {
 				callback();
 				self.clear();
@@ -17,7 +17,7 @@ class Modal {
 		edi.ui.keys['enter'] = this.submit; /* not modular ... */
 
 		this.cancel = new UIButton({
-			title: "x",
+			text: "x",
 			callback: ev => {
 				this.clear();
 			}

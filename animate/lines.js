@@ -109,7 +109,7 @@ function appLoad(settings) {
 	for (const key in settings.palettes) {
 		if (key != 'current') {
 			lns.ui.panels.palette.add(new UIButton({
-				title: key,
+				text: key,
 				callback: function() {
 					lns.ui.palette.loadPalette(key);
 				}

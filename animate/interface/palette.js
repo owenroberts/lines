@@ -22,7 +22,7 @@ function Palette() {
 			};
 			/* is this petter or panel better? */
 			lns.ui.panels.palette.add(new UIButton({
-				title: name,
+				text: name,
 				callback: function() {
 					self.loadPalette(name);
 				}

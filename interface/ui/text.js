@@ -2,7 +2,7 @@ class UIText extends UIInput {
 	constructor(params) {
 		super(params);
 		this.el.type = "text";
-		this.el.placeholder = this.el.placeholder || params.placeholder || params.title || params.value;
+		this.el.placeholder = this.el.placeholder || params.placeholder || params.value;
 
 		this.el.addEventListener('focus', ev => {
 			this.el.select();

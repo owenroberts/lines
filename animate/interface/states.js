@@ -26,7 +26,7 @@ function States() {
 		if (focus) title.el.focus();
 
 		self.panel.add(new UIBlur({
-			title: "Start",
+			text: "Start",
 			value: state.start,
 			callback: function(n) {
 				state.start = +n;
@@ -34,7 +34,7 @@ function States() {
 		}), row);
 
 		self.panel.add(new UIBlur({
-			title: "End",
+			text: "End",
 			value: state.end,
 			callback: function(n) {
 				state.end = +n;
@@ -42,7 +42,7 @@ function States() {
 		}), row);
 
 		self.panel.add(new UIButton({
-			title: "x",
+			text: "x",
 			callback: function() {
 				delete lns.anim.states[title.getValue()];
 				self.panel.removeRow(row);

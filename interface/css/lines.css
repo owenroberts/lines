@@ -37,7 +37,6 @@ select {
   transition: opacity 400ms ease-out;
 }
 
-/* this is kind of doubled up but fix later */
 #container {
   margin: 1em;
   display: flex;
@@ -98,8 +97,6 @@ select {
 }
 
 #panels {
-  /*display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));*/
   margin-top: 0.5em;
   display: flex;
   flex-wrap: wrap;

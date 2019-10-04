@@ -77,7 +77,7 @@ function Layers() {
 				}));
 
 				row.add(new UIButton({
-					title: "+",
+					text: "+",
 					callback: function() {
 						const n = new Layer(_.cloneDeep(layer));
 						n.f.s = n.f.e = lns.anim.currentFrame + 1;
@@ -88,7 +88,7 @@ function Layers() {
 				})); /* duplicate */
 
 				row.add(new UIButton({
-					title: 'x',
+					text: 'x',
 					callback: function() {
 						layer.remove();
 						self.resetLayers();
@@ -162,7 +162,7 @@ function Layers() {
 					}));
 
 					aRow.add(new UIButton({
-						title: '↻',
+						text: '↻',
 						callback: function() {
 							a.sv = 0;
 							a.ev = lns.anim.drawings[layer.d].length;
@@ -171,7 +171,7 @@ function Layers() {
 					}));
 
 					aRow.add(new UIButton({
-						title: 'X',
+						text: 'X',
 						callback: function() {
 							self.panel.removeRow(aRow);
 							layer.a.splice(layer.a.indexOf(a));
@@ -180,7 +180,7 @@ function Layers() {
 				}
 
 				row.add(new UIButton({
-					title: '❏',
+					text: '❏',
 					callback: function() {
 						const a = {
 							prop: undefined,

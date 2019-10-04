@@ -11,6 +11,10 @@ class UIElement {
 		}
 	}
 
+	set text(_text) {
+		this.el.textContent = _text;
+	}
+
 	handler() {
 		this.callback();
 	}
@@ -34,7 +38,7 @@ class UIElement {
 	}
 
 	onPress(triggerRelease) {
-		toolTip.setTextContent(`~ ${this.el.title}`);
+		toolTip.text = `~ ${this.el.title}`;
 		toolTip.addClass('visible');
 		if (triggerRelease === true) setTimeout(this.onRelease.bind(this), 400);
 	}
@@ -49,9 +53,5 @@ class UIElement {
 
 	removeClass(_class) {
 		this.el.classList.remove(_class);
-	}
-
-	setTextContent(text) {
-		this.el.textContent = text;
 	}
 }

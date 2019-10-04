@@ -47,7 +47,6 @@ function Drawings(panel) {
 				else toggleOn = false;
 
 				self.panel.add(new UIToggle({
-					title: i,
 					onText: i,
 					offText: i,
 					isOn: toggleOn,

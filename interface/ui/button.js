@@ -3,15 +3,10 @@ class UIButton extends UIElement {
 		params.tag = "span";
 		super(params);
 		this.addClass(params.class || "btn");
-
-		this.setTextContent(this.el.textContent || params.title || params.onText); /* ugly */
-		
-
+		this.text = this.el.textContent || params.text || params.onText;
 		this.callback = params.callback;
-		
 		this.arguments = params.arguments;
 		this.el.addEventListener('click', this.handler.bind(this));
-		
 		if (params.key) this.setKey(params.key, `${ this.el.textContent }`);
 	}
 	

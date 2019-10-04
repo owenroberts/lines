@@ -3,7 +3,7 @@ class UIToggle extends UIButton {
 		super(params);
 		this.onText = params.onText;
 		this.offText = params.offText;
-		super.setTextContent(this.onText);
+		super.text = this.onText;
 		this.isOn = true;
 		if (params.isOn === false) this.toggle();
 	}
@@ -20,12 +20,12 @@ class UIToggle extends UIButton {
 	}
 
 	on() {
-		this.setTextContent(this.onText);
+		this.text = this.onText;
 		this.removeClass('off');
 	}
 
 	off() {
-		this.setTextContent(this.offText);
+		this.text = this.offText;
 		this.addClass('off');
 	}
 }

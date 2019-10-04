@@ -34,7 +34,7 @@ function Interface(app) {
 				for (const key in data) {
 					self.createPanel(key, data[key]);
 				}
-				console.log(Object.keys(data));
+
 				this.addPanel = new UISelectButton({
 					id: 'add-ui',
 					options: Object.keys(data),
@@ -43,7 +43,7 @@ function Interface(app) {
 					},
 					btn: '+'
 				});
-				console.log(this.addPanel);
+				
 				self.settings.load();
 				if (callback) callback();
 			});
@@ -121,3 +121,15 @@ function Interface(app) {
 
 	};
 }
+
+/*
+	title = text
+	setTextContent .. 
+	params vs arguments
+	modules
+	game editor / modal
+	getters / setters
+
+	need ids in interface.json
+
+*/

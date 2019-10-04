@@ -58,7 +58,7 @@ function animateInterface(ui) {
 				/* should be a ui? */
 				const frameBtn = new UIButton({
 					class: "frame",
-					title: ''+i,
+					text: ''+i,
 					callback: function() {
 						lns.render.setFrame(i);
 						ui.updateInterface();
