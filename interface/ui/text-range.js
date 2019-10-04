@@ -7,7 +7,6 @@ class UITextRange extends UICollection {
 		this.text = new UIBlur({
 			id: `${params.id}-text`,
 			value: params.value,
-			placeholder: params.value,
 			callback: this.handler.bind(this)
 		});
 

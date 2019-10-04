@@ -3,34 +3,24 @@ class UIPanel extends UICollection {
 		super({id: id});
 		
 		this.addClass("menu-panel");
-		this.addClass("hide");
+		this.addClass("undocked");
 		
 		this.open = true;
 		this.rows = [];
 
 		this.append(new UILabel({text: label}));
 
-		/* make this a UIToggle */
-		this.toggleBtn = new UIButton({
-			title: "△",
-			callback: this.toggle.bind(this),
-			class: "toggle"
-		});
-		// this.append(this.toggleBtn);
-
 		this.append(new UIToggle({
-			title: "△",
 			onText: "△",
 			offText: "▽",
 			callback: this.toggle.bind(this),
 			class: "toggle"
-		}))
-
+		}));
 
 		this.append(new UIButton({
 			title: 'x',
-			class: 'hide',
-			callback: this.hide.bind(this)
+			class: 'undock-btn',
+			callback: this.undock.bind(this)
 		}));
 
 		this.append(new UIButton({
@@ -47,31 +37,25 @@ class UIPanel extends UICollection {
 	}
 
 	toggle() {
-		// console.log('toggle', this);
-		if (this.open) {
-			this.el.style.height = "25px";
-		} else {
-			this.el.style.height = "auto";
-		}
+		if (this.open) this.addClass('closed');
+		else this.removeClass('closed');
 		this.open = !this.open;
 	}
 
-	isHidden() {
-		return this.el.classList.contains('hide');
+	isDocked() {
+		return !this.el.classList.contains('undocked');
 	}
 
-	show() {
-		this.removeClass('hide');
+	dock() {
+		this.removeClass('undocked');
 	}
 
-	hide() {
-		this.addClass('hide');
+	undock() {
+		this.addClass('undocked');
 	}
 
 	addRow(id) {
-		const row = new UIRow({
-			id: id
-		});
+		const row = new UIRow({ id: id });
 		this.append(row);
 		this.rows.push(row);
 		return row;
@@ -79,14 +63,12 @@ class UIPanel extends UICollection {
 
 	removeRow(row) {
 		const index = this.rows.indexOf(row);
-		// this.rows[index].clear();
 		this.rows.splice(index, 1);
 		this.remove(row);
 	}
 
 	add(ui, _row) {
-		let row = _row || this.rows[this.rows.length - 1];
-		if (!row) row = this.addRow();
+		let row = _row || this.rows[this.rows.length - 1] || this.addRow();
 		row.append(ui);
 	}
 }

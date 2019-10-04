@@ -138,7 +138,8 @@ select {
 	position: relative;
 	height: auto;
 
-	&.hide { display: none; }
+	&.undocked { display: none; }
+	&.closed { height: 25px; }
 
 	label { 
 		margin-bottom: 1em; 
@@ -146,7 +147,7 @@ select {
 	}
 	.row label { margin-bottom: 0; }
 
-	.toggle, .order, .hide {
+	.toggle, .order, .undock-btn{
 		display: inline-block;
 		position: absolute;
 		right: 34px;
@@ -164,7 +165,7 @@ select {
 		&.off { background-color: inherit; }
 	}
 
-	.hide {
+	.undock-btn {
 		right: 18px;
 		left: auto;
 	}

@@ -5,14 +5,12 @@ class UIRow extends UICollection {
 	}
 
 	add(ui) {
-		this.append(ui);	
+		this.append(ui);
 	}
 
-	/* part of collection? 
-		add ui to row instead of els */
 	clear() {
 		while (this.el.firstChild) {
-			this.el.firstChild.value = null;
+			this.el.firstChild.value = null; /* prevent blur event */
 			this.el.removeChild(this.el.firstChild);
 		}
 	}

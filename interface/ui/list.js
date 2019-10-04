@@ -35,7 +35,7 @@ class UIList extends UICollection {
 	}
 
 	looper(callback, start, end) {
-		const len = end || this.length - 2;
+		const len = end || this.length - 2; /* for plusframe ... */
 		for (let i = start || 0; i <= len; i++) {
 			callback(this.children[i]);
 		}

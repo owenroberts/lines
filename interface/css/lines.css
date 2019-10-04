@@ -122,8 +122,11 @@ select {
   position: relative;
   height: auto;
 }
-.menu-panel.hide {
+.menu-panel.undocked {
   display: none;
+}
+.menu-panel.closed {
+  height: 25px;
 }
 .menu-panel label {
   margin-bottom: 1em;
@@ -132,7 +135,7 @@ select {
 .menu-panel .row label {
   margin-bottom: 0;
 }
-.menu-panel .toggle, .menu-panel .order, .menu-panel .hide {
+.menu-panel .toggle, .menu-panel .order, .menu-panel .undock-btn {
   display: inline-block;
   position: absolute;
   right: 34px;
@@ -146,13 +149,13 @@ select {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-.menu-panel .toggle:hover, .menu-panel .order:hover, .menu-panel .hide:hover {
+.menu-panel .toggle:hover, .menu-panel .order:hover, .menu-panel .undock-btn:hover {
   background: #ffddff;
 }
-.menu-panel .toggle.off, .menu-panel .order.off, .menu-panel .hide.off {
+.menu-panel .toggle.off, .menu-panel .order.off, .menu-panel .undock-btn.off {
   background-color: inherit;
 }
-.menu-panel .hide {
+.menu-panel .undock-btn {
   right: 18px;
   left: auto;
 }
