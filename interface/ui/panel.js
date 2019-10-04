@@ -27,23 +27,23 @@ class UIPanel extends UICollection {
 			text: "⥂",
 			class: "order",
 			callback: () =>  {
-				this.setOrder(+this.el.style.order + 1)
+				this.order = +this.el.style.order + 1;
 			}
 		}));
 	}
 
-	setOrder(n) {
+	set order(n) {
 		this.el.style.order = this.order = n;
+	}
+
+	get isDocked() {
+		return !this.el.classList.contains('undocked');
 	}
 
 	toggle() {
 		if (this.open) this.addClass('closed');
 		else this.removeClass('closed');
 		this.open = !this.open;
-	}
-
-	isDocked() {
-		return !this.el.classList.contains('undocked');
 	}
 
 	dock() {

@@ -10,7 +10,7 @@ function Settings(app, name, appSave, appLoad) {
 		for (const p in app.ui.panels) {
 			settings.panels[p] = {
 				open: app.ui.panels[p].open,
-				docked: app.ui.panels[p].isDocked(),
+				docked: app.ui.panels[p].isDocked,
 				order: app.ui.panels[p].order
 			};
 			if (p == 'settings') settings.panels[p].open = false;
@@ -25,7 +25,7 @@ function Settings(app, name, appSave, appLoad) {
 			for (const p in settings.panels) {
 				if (settings.panels[p].docked) app.ui.panels[p].dock();
 				if (!settings.panels[p].open) app.ui.panels[p].toggle();
-				app.ui.panels[p].setOrder(settings.panels[p].order);
+				app.ui.panels[p].order = settings.panels[p].order;
 			}
 		}
 	};
