@@ -5,6 +5,7 @@ class EditUI {
 		this.uis = {};
 		this.panel = panel;
 		this.item = item;
+		this.docked = false;
 	}
 
 	create() {
@@ -75,5 +76,11 @@ class EditUI {
 		for (const key in obj) {
 			this.uis[key].setValue(obj[key]);
 		}
+	}
+
+	toggle() {
+		if (this.docked) this.remove();
+		else this.add();
+		this.docked = !this.docked;
 	}
 }

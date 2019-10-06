@@ -149,33 +149,14 @@
 		"id": "item-menu",
 		"label": "Items",
 		"module": "ui",
+		"sub": "items",
 		"list": []
 	},
 	"textures": {
 		"id": "texture-menu",
 		"label": "Textures",
 		"module": "ui",
-		"list": [
-			{
-				"type": "UIButton",
-				"key": "t",
-				"fromModule": {
-					"callback": "displayTextures"
-				},
-				"params": {
-					"text": "Display"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-t",
-				"fromModule": {
-					"callback": "removeTextures"
-				},
-				"params": {
-					"text": "Remove"
-				}
-			}
-		]
+		"sub": "textures",
+		"list": []
 	}
 }

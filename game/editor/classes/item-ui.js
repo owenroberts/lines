@@ -1,4 +1,4 @@
-class GUI extends Item {
+class ItemUI extends Item {
 	constructor(params, src, debug) {
 		super(params, src, debug);
 		this.x = params.x;

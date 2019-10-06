@@ -2,29 +2,12 @@ const edi = {}; /* editor app */
 edi.ui = new Interface(edi);
 edi.ui.load('interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
-
-edi.ui.displayTextures = function() {
-	edi.ui.removeTextures();
-	for (const key in Game.sprites.textures) {
-		const b = new UIButton({
-			text: key,
-			callback: function() {
-				Game.sprites.textures[key].ui.create();
-			}
-		});
-		edi.ui.panels.textures.add(b);
-	}
-}; /* needs to go in module */
-edi.ui.removeTextures = function() {
-	for (const key in Game.sprites.textures) {
-		Game.sprites.textures[key].ui.remove();
-	}
-};
+edi.ui.textures = new Textures();
+edi.ui.items = new Items();
 edi.ui.markers = {};
-
 edi.zoom = new Zoom();
-
 edi.ruler = new Ruler();
+
 edi.tool = {
 	set: function(_toolName) {
 		const toolName = _toolName.toolName || _toolName;
@@ -69,9 +52,12 @@ Game.init({
 });
 
 edi.data = new Data(Game, { save: false, path: '/drawings' }); 
-Game.load({ ui: "/data/ui.json", sprites: "/data/sprites.json" }, { ui: GUI, scenery: ItemEdit, textures: TextureEdit }, Game.start);
+Game.load({ ui: "/data/ui.json", sprites: "/data/sprites.json" }, { ui: ItemUI, scenery: ItemEdit, textures: TextureEdit }, Game.start);
 
 function start() {
+
+	edi.ui.textures.display();
+
 	edi.zoom.canvas.width = edi.zoom.view.width = Game.width;
 	edi.zoom.canvas.height = edi.zoom.view.height = Game.height;
 	edi.zoom.load();
@@ -95,6 +81,8 @@ function start() {
 			edi.ui.reset();
 		}
 	});
+
+	// edi.ui.load('interface.json');
 
 	fetch('/data/settings.json')
 		.then(response => { return response.json(); })
