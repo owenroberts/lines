@@ -7,7 +7,7 @@ edi.ui.displayTextures = function() {
 	edi.ui.removeTextures();
 	for (const key in Game.sprites.textures) {
 		const b = new UIButton({
-			title: key,
+			text: key,
 			callback: function() {
 				Game.sprites.textures[key].ui.create();
 			}
@@ -29,7 +29,7 @@ edi.tool = {
 	set: function(_toolName) {
 		const toolName = _toolName.toolName || _toolName;
 		edi.tool.current = toolName;
-		edi.ui.selectTool.setValue(toolName);
+		edi.ui.selectTool.value = toolName;
 		Game.canvas.className = '';
 		Game.canvas.classList.add(`${toolName}-tool`);
 	},
@@ -41,10 +41,10 @@ edi.tool = {
 	}
 }; /* tools: zoom/pan, transform, ruler - modulize if it gets complicated */
 /* move this somewhere else eventually ... */
+
 edi.ui.selectTool = new UISelect({
 	id: "select-tool",
 	options: [ "zoom", "transform", "ruler", "location" ],
-	label: "tool:",
 	selected: edi.tool.current,
 	callback: edi.tool.set
 });
@@ -62,8 +62,8 @@ Game.ui = {};
 Game.scenes = [];
 Game.init({
 	canvas: "map",
-	width: 1200,
-	height: 800,
+	width: 720,
+	height: 400,
 	lps: 12,
 	mixedColors: true
 });
@@ -95,7 +95,6 @@ function start() {
 			edi.ui.reset();
 		}
 	});
-
 
 	fetch('/data/settings.json')
 		.then(response => { return response.json(); })

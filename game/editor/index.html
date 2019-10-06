@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>editor</title>
-	<link href="../../interface/css/lines.css" rel="stylesheet" type="text/css">
+	<link href="/lines/interface/css/lines.css" rel="stylesheet" type="text/css">
 	<link href="style.css" rel="stylesheet" type="text/css">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link rel="icon" href="favicon.ico">
@@ -19,14 +19,17 @@
 			<div id="tool-tip"></div>
 			<div id="nav">
 				<select id="select-scene"></select>
+				<label>tool:</label>
 				<select id="select-tool"></select>
-				<label>panel:</label><select id="add-ui"></select>
+				<label>panel:</label>
+				<select id="add-ui-select"></select>
+				<span  id="add-ui-btn" class="btn">+</span>
 			</div>
 			
 			<div id="panels"></div>
 		</div>
 	</div>
-	<a href="../" style="margin-left: 1em">back</a>
+	<a href="/" style="margin-left: 1em">back</a>
 
 	<script src="/lines/lib/cool/cool.js"></script>
 	<script src="/lines/lib/FileSaver.min.js"></script>
@@ -57,16 +60,21 @@
 	<script src="js/ruler.js"></script>
 
 	<!-- ui classes -->
-	<script src="/lines/interface/ui/ui.js"></script>
+	<script src="/lines/interface/ui/element.js"></script>
+	<script src="/lines/interface/ui/collection.js"></script>
+	<script src="/lines/interface/ui/input.js"></script>
 	<script src="/lines/interface/ui/panel.js"></script>
+	<script src="/lines/interface/ui/row.js"></script>
 	<script src="/lines/interface/ui/modal.js"></script>
 	<script src="/lines/interface/ui/button.js"></script>
 	<script src="/lines/interface/ui/toggle.js"></script>
-	<script src="/lines/interface/ui/display.js"></script>
-	<script src="/lines/interface/ui/list.js"></script>
+	<script src="/lines/interface/ui/label.js"></script>
 	<script src="/lines/interface/ui/text.js"></script>
+	<script src="/lines/interface/ui/blur.js"></script>
 	<script src="/lines/interface/ui/select.js"></script>
+	<script src="/lines/interface/ui/select-button.js"></script>
 	<script src="/lines/interface/ui/range.js"></script>
+	<script src="/lines/interface/ui/text-range.js"></script>
 	<script src="/lines/interface/ui/color.js"></script>
 
 	<!-- interface -->

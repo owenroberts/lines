@@ -32,8 +32,7 @@
 					"callback": "loadImage"
 				},
 				"params": {
-					"placeholder": "Image URL, Enter",
-					"id": "bg-img"
+					"placeholder": "Image URL, Enter"
 				}
 			},
 			{
@@ -120,8 +119,6 @@
 					"callback": "setWidth"
 				},
 				"params": {
-					"id": "canvas-width",
-					"blur": true,
 					"label": "Width"
 				}
 			},
@@ -137,8 +134,6 @@
 					"callback": "setHeight"
 				},
 				"params": {
-					"id": "canvas-height",
-					"blur": true,
 					"label": "Height"
 				}
 			},
@@ -413,7 +408,6 @@
 					"callback": "toggle"
 				},
 				"params": {
-					"id": "play",
 					"onText": "Play",
 					"offText": "Pause"
 				}
@@ -450,7 +444,6 @@
 					"callback": "setFrame"
 				},
 				"params": {
-					"id": "frame",
 					"label": "Frame",
 					"value": 0,
 					"prompt": "Go To Frame"
@@ -594,8 +587,7 @@
 				"params": {
 					"label": "Brush",
 					"min": 0, 
-					"max": 10,
-					"id": "brush-range"
+					"max": 10
 				}
 			},
 			{
@@ -608,8 +600,7 @@
 				"params": {
 					"label": "Brush Spread",
 					"min": 0, 
-					"max": 5,
-					"id": "brush-spread-range"
+					"max": 5
 				}
 			},
 			{
@@ -622,8 +613,7 @@
 				"params": {
 					"label": "Grass",
 					"min": 0, 
-					"max": 20,
-					"id": "grass-range"
+					"max": 20
 				}
 			},
 			{
@@ -636,8 +626,7 @@
 				"params": {
 					"label": "Dots",
 					"min": 10, 
-					"max": 50,
-					"id": "dots-range"
+					"max": 50
 				}
 			}
 
@@ -659,7 +648,6 @@
 				},
 				"params": {
 					"label": "Segments",
-					"id": "seg-num-range",
 					"min": 1,
 					"max": 10
 				}
@@ -675,7 +663,6 @@
 				},
 				"params": {
 					"label": "Jiggle",
-					"id": "jiggle-range",
 					"min": 0,
 					"max": 10
 				}
@@ -691,7 +678,6 @@
 				},
 				"params": {
 					"label": "Wiggle",
-					"id": "wiggle-range",
 					"min": 0,
 					"max": 15
 				}
@@ -707,7 +693,6 @@
 				},
 				"params": {
 					"label": "Wiggle Speed",
-					"id": "wiggle-speed-range",
 					"min": 0,
 					"max": 5,
 					"step": 0.005

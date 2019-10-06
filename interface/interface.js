@@ -1,5 +1,3 @@
-
-
 function Interface(app) {
 	const self = this;
 
@@ -118,7 +116,7 @@ function Interface(app) {
 			self.createUI(data.list[i], mod, panel);
 		}
 
-		if (data.module == 'ui') app.ui[data.sub].panel = panel;
+		// if (data.module == 'ui') app.ui[data.sub].panel = panel;
 		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
 	};
 }
@@ -134,8 +132,6 @@ function Interface(app) {
 		- basically means adding export line to every file, then import line
 		- actually more tedious than html
 		- maybe use a js bundler instead
-	game editor / modal
-	getters / setters
 
 	need ids in interface.json?
 

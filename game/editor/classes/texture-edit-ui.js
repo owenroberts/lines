@@ -9,7 +9,7 @@ class TextureEditUI extends EditUI {
 		const self = this;
 
 		this.uis.add = new UIButton({
-			title: "Add",
+			text: "Add",
 			callback: function() {
 				edi.tool.set('location');
 				edi.tool.callback = function(x, y) {
@@ -21,8 +21,8 @@ class TextureEditUI extends EditUI {
 		});
 
 		this.uis.selectAll = new UIToggle({
-			on: "All",
-			off: "All",
+			onText: "All",
+			offText: "All",
 			callback: function() {
 				edi.tool.clear();
 				self.allSelected = !self.allSelected;

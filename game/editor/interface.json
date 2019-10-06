@@ -5,39 +5,39 @@
 		"module": "tool",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "q",
 				"fromModule": {
 					"callback": "set"
 				},
 				"params": {
-					"title": "Zoom",
+					"text": "Zoom",
 					"arguments": {
 						"toolName": "zoom"
 					}
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "w",
 				"fromModule": {
 					"callback": "set"
 				},
 				"params": {
-					"title": "Transform",
+					"text": "Transform",
 					"arguments": {
 						"toolName": "transform"
 					}
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "r",
 				"fromModule": {
 					"callback": "set"
 				},
 				"params": {
-					"title": "Ruler",
+					"text": "Ruler",
 					"arguments": {
 						"toolName": "ruler"
 					}
@@ -51,33 +51,33 @@
 		"module": "zoom",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "shift-z",
 				"fromModule": {
 					"callback": "save"
 				},
 				"params": {
-					"title": "Save"
+					"text": "Save"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "z",
 				"fromModule": {
 					"callback": "load"
 				},
 				"params": {
-					"title": "Load"
+					"text": "Load"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "ctrl-z",
 				"fromModule": {
 					"callback": "center"
 				},
 				"params": {
-					"title": "Center"
+					"text": "Center"
 				}
 			}
 		]
@@ -89,31 +89,31 @@
 		"sub": "settings",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "ctrl-s",
 				"fromModule": {
 					"callback": "save"
 				},
 				"params": {
-					"title": "Save"
+					"text": "Save"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"fromModule": {
 					"callback": "load"
 				},
 				"params": {
-					"title": "Load"
+					"text": "Load"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"fromModule": {
 					"callback": "clear"
 				},
 				"params": {
-					"title": "Clear"
+					"text": "Clear"
 				}
 			}
 		]
@@ -124,23 +124,23 @@
 		"module": "data",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "s",
 				"fromModule": {
 					"callback": "save"
 				},
 				"params": {
-					"title": "Save"
+					"text": "Save"
 				}
 			},
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "l",
 				"fromModule": {
 					"callback": "load"
 				},
 				"params": {
-					"title": "Load"
+					"text": "Load"
 				}
 			}
 		]
@@ -157,23 +157,23 @@
 		"module": "ui",
 		"list": [
 			{
-				"type": "button",
+				"type": "UIButton",
 				"key": "t",
 				"fromModule": {
 					"callback": "displayTextures"
 				},
 				"params": {
-					"title": "Display"
+					"text": "Display"
 				}
 			},
 			{
-				"type": "button",
-				"key": "t",
+				"type": "UIButton",
+				"key": "shift-t",
 				"fromModule": {
 					"callback": "removeTextures"
 				},
 				"params": {
-					"title": "Remove"
+					"text": "Remove"
 				}
 			}
 		]

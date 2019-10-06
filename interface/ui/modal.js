@@ -1,11 +1,14 @@
-class Modal {
+class Modal extends UICollection {
 	constructor(title, callback) {
-		this.el = document.createElement('div');
-		this.el.classList.add('modal');
-		this.el.textContent = title;
+		super();
+		this.addClass('modal');
+		this.text = title;
+		
+		// better way to do this ?? 
 		document.getElementById('container').appendChild(this.el);
 		
 		const self = this;
+
 		this.submit = new UIButton({
 			text: "Submit",
 			callback: function() {
@@ -13,7 +16,8 @@ class Modal {
 				self.clear();
 			}
 		});
-		this.el.appendChild(this.submit.el);
+
+		this.append(this.submit);
 		edi.ui.keys['enter'] = this.submit; /* not modular ... */
 
 		this.cancel = new UIButton({
@@ -23,7 +27,7 @@ class Modal {
 			}
 		});
 		edi.ui.keys['escape'] = this.cancel;
-		this.el.appendChild(this.cancel.el);
+		this.append(this.cancel);
 	}
 
 	add(component) {

@@ -15,6 +15,7 @@ class UICollection extends UIElement {
 	}
 
 	remove(ui) {
+		console.log(ui);
 		this.el.removeChild(ui.el);
 	}
 }

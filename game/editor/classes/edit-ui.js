@@ -11,15 +11,15 @@ class EditUI {
 		const self = this;
 
 		this.uis.label = new UIText({
-			title: self.item.label,
-			block: true,
+			value: self.item.label,
+			css: { display: 'block' },
 			callback: function(value) {
 				self.item.label = value;
 			}
 		});
 
 		this.uis.remove = new UIButton({
-			title: "Remove",
+			text: "Remove",
 			callback: function() {
 				self.item.remove = true;
 				self.remove();
@@ -27,7 +27,7 @@ class EditUI {
 		});
 
 		this.uis.edit = new UIButton({
-			title: "Edit",
+			text: "Edit",
 			callback: function() {
 				console.log(self);
 				window.open(`${location.origin}/${location.pathname.includes('lines') ? 'lines/' : ''}animate/?src=${self.item.origin}`, 'anim');
@@ -35,9 +35,8 @@ class EditUI {
 		});
 
 		this.uis.lock = new UIToggle({
-			title: "🔓",
-			on: "🔓",
-			off: "🔓",
+			onText: "🔓",
+			offText: "🔓",
 			isOn: !this.item.locked,
 			callback: function() {
 				self.item.lock();
@@ -67,7 +66,8 @@ class EditUI {
 	}
 
 	remove() {
-		edi.ui.panels.items.clearComponents(this.row);
+		// edi.ui.panels.items.clearComponents(this.row);
+		if (this.row) this.row.clear();
 		this.added = false;
 	}
 

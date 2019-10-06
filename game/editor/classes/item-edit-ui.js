@@ -6,16 +6,16 @@ class ItemEditUI extends EditUI {
 	create() {
 		const self = this;
 
+		this.uis.xLabel = new UILabel({ text: "x" });
 		this.uis.x = new UIText({
-			label: "x",
 			value: this.item.position.x,
 			callback: function(value) {
 				this.item.position.x = +value;
 			}
 		});
 
+		this.uis.yLabel = new UILabel({ text: "y" });
 		this.uis.y = new UIText({
-			label: "y",
 			value: this.item.position.y,
 			callback: function(value) {
 				this.item.position.y = +value;
@@ -23,7 +23,7 @@ class ItemEditUI extends EditUI {
 		});
 
 		this.uis.addScene = new UIButton({
-			title: "+ scene",
+			text: "+ scene",
 			callback: function() {
 				const s = addSceneSelector(Game.scenes[0], this.item.scenes.length);
 				this.panel.add(s, this.row);
@@ -31,7 +31,7 @@ class ItemEditUI extends EditUI {
 		});
 
 		this.uis.focus = new UIButton({
-			title: "📍",
+			text: "📍",
 			callback: function() {
 				edi.zoom.view.x = self.item.position.x;
 				edi.zoom.view.y = self.item.position.y;
