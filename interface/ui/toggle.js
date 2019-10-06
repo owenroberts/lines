@@ -1,8 +1,8 @@
 class UIToggle extends UIButton {
 	constructor(params) {
 		super(params);
-		this.onText = params.onText;
-		this.offText = params.offText;
+		this.onText = params.onText || params.text;
+		this.offText = params.offText || params.text;
 		super.text = this.onText;
 		this.isOn = true;
 		if (params.isOn === false) this.toggle();

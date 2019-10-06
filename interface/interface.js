@@ -116,12 +116,17 @@ function Interface(app) {
 			self.createUI(data.list[i], mod, panel);
 		}
 
-		// if (data.module == 'ui') app.ui[data.sub].panel = panel;
+		if (data.module == 'ui') app.ui[data.sub].panel = panel;
 		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
 	};
 }
 
 /*
+
+	fix line ^^
+	fix wonky rendering
+	explore canvas layers/frames ... 
+
 	params vs arguments
 		- need params for interface.json, too complicated to multiple things
 		- no UIElements ... could use args for UiElement, UICollection

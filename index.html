@@ -61,16 +61,12 @@
 	- option to loop back to beginning of frames, option to stop at end, option not to create frames beyond last frame
 	- center lines canvas in larger area
 	- set panel order more sophisticated - live with the idiosyncracy for now ... 
-	- cut layer segment / line ... 
-	- save layouts
 	- panel use uis
 	- styling interface
 
 - layers, adding drawings
 	- new added drawing always make new layers if non contiguous with original layer
 	- need to check for multiple layers - not high priority tho
-
-	
 
 - interface 
 	- go back later
@@ -145,12 +141,8 @@
 
 - game thoughts 
 	- animation class doesn't automatically load src, maybe need protocol for this
-	- setanimsize is confusing, better protocol here
 	- combine loaded json and file
-	- Game.start - needed something like this before
 	- canvas.getContext - still necessary?
-
-
 
 idtio - lines 
 - render module
@@ -190,6 +182,7 @@ idtio - lines
 		- double select all items
 		- click to locate item from game to editor
 		- too many textures in panel
+			- collapsible hierarcy ie unity
 		- key command to "add" texture - better word for texture?
 	- animate
 		- title saving on enter key command thing
@@ -223,5 +216,6 @@ idtio - lines
 10.6.2019
 - fixing layers/other interfaces so they're not being deleted and rebuilt
 - this maybe conflicts with making canvas based layers system
-- making ui values that are automatically updated more easily 
+- making ui values that are automatically updated more easily
+- rendering in lines is very choppy at the moment ....  
  -->
