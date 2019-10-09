@@ -46,15 +46,13 @@
 	- rndr object in layer { r, n, w, v } ... xy?
 	- persistent layer interface? key commands?
 	- object for layers and drawings with hash keys
-	- remove fonts.css?
-	- frame ui
 	- frames and layers??
 	- blender like window system????
 	- frames get their own canvas display
 	- support for multiple line widths ... 
 	- layers display confusing because only see that frame ... 
-	- ui impelement getters and setters ? , also in modules?
-	- classes for drawing, animation?
+	- draing class?
+	- better layer highlighting?
 
 - possible features
 	- change onion skin color
@@ -83,19 +81,7 @@
 			- don't really care can fix later
 			- callback on animation load
 
-	- modules vs program
-	- any reference to Lines/lns is technically non-modular
-		- background - ctx argument
-		- canvas has a ton - sort of part of interface
-			- fio
-			- bg color
-			- capture
-		- color - add color btn - should be part of interface ... too complicated for json tho
-		- data - every function - basically interface
-		- draw - interface for parameters, lines to add lines, canvas
-		- fio - everything  - also "interface"
-		- interface - duh
-		- render - current frame, canvas, lines, layers, drawings, 
+
 	- interface.faces with sub modules interfaces.faces.drawingInterface.seg num bla
 	- ui interfaces, set vs setValue - set used by display and text for setting text and placeholder ...
 
@@ -115,7 +101,6 @@
 - saved wrong color ffffff
 - frame layer toggled in file
 - clear settings doesn't really work if settings just gets saved on reload
-- onion skin color line color
 - layer resetting not working
 - display layer in layers panel? or drawing
 - plus frame key command doesn't disappear
