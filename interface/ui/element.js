@@ -9,6 +9,8 @@ class UIElement {
 		for (const prop in params.css) {
 			this.el.style[prop] = params.css[prop];
 		}
+
+		if (params.class) this.addClass(params.class);
 	}
 
 	set text(_text) {

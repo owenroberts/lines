@@ -10,6 +10,7 @@ class TextureEditUI extends EditUI {
 
 		this.uis.add = new UIButton({
 			text: "Add",
+			class: "add",
 			callback: function() {
 				edi.tool.set('location');
 				edi.tool.callback = function(x, y) {
@@ -21,8 +22,8 @@ class TextureEditUI extends EditUI {
 		});
 
 		this.uis.selectAll = new UIToggle({
-			onText: "All",
-			offText: "All",
+			text: "All",
+			class: "all",
 			callback: function() {
 				edi.tool.clear();
 				self.allSelected = !self.allSelected;
@@ -38,6 +39,7 @@ class TextureEditUI extends EditUI {
 		this.uis.frame = new UISelect({
 			options: [ 'index', 'random' ],
 			selected: this.item.frame,
+			class: "frame-type",
 			callback: function(value) {
 				self.item.frame = value;
 				for (let i = 0; i < self.item.items.length; i++) {

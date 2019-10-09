@@ -1,4 +1,3 @@
-@import 'font.css';
 * {
   box-sizing: border-box;
   touch-action: manipulation;
@@ -173,7 +172,7 @@ select {
   white-space: nowrap;
   margin-right: 0.25em;
   margin-top: 0.25em;
-  flex: 0 1 auto;
+  flex: 0 1 12%;
 }
 .menu-panel .row span.block, .menu-panel .row label.block, .menu-panel .row input.block, .menu-panel .row select.block {
   flex: auto;
@@ -191,6 +190,9 @@ select {
   border: none;
   background-color: lightgray;
   padding-right: 0.25em;
+}
+.menu-panel .row input[type=text]:focus {
+  outline: 1px solid blue;
 }
 .menu-panel .btn {
   padding: 0 0.25em;

@@ -1,0 +1,57 @@
+/* cursor areas */
+canvas#map {
+  display: block;
+  border: 1px solid black;
+}
+
+canvas#map.zoom-tool {
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+canvas#map.zoom-tool:active {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+canvas#map.transform-tool {
+  cursor: -webkit-move;
+  cursor: move;
+}
+
+canvas#map.location-tool {
+  cursor: -webkit-cell;
+  cursor: cell;
+}
+
+/* item layout */
+.item {
+  border-bottom: 1px solid lightblue;
+  padding: 3px;
+  justify-content: space-between;
+}
+.item input.label {
+  order: 1;
+  flex: auto;
+  text-align: left;
+  padding: 3px;
+}
+.item .x-label, .item .x-input, .item .y-label, .item .y-input,
+.item .add {
+  order: 2;
+  flex: 25%;
+}
+.item .focus, .item .remove, .item .lock, .item .all {
+  order: 3;
+}
+.item .scene-selector, .item .frame-type {
+  order: 4;
+}
+.item .add-scene {
+  order: 5;
+}
+.item .edit {
+  order: 6;
+}
+
+/*# sourceMappingURL=editor.css.map */

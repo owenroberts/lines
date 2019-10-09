@@ -14,18 +14,18 @@ class UIPanel extends UICollection {
 			onText: "△",
 			offText: "▽",
 			callback: this.toggle.bind(this),
-			class: "toggle"
+			type: "toggle"
 		}));
 
 		this.append(new UIButton({
 			text: 'x',
-			class: 'undock-btn',
+			type: 'undock-btn',
 			callback: this.undock.bind(this)
 		}));
 
 		this.append(new UIButton({
 			text: "⥂",
-			class: "order",
+			type: "order",
 			callback: () =>  {
 				this.order = +this.el.style.order + 1;
 			}

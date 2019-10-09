@@ -13,7 +13,7 @@ class EditUI {
 
 		this.uis.label = new UIText({
 			value: self.item.label,
-			css: { display: 'block' },
+			class: 'label',
 			callback: function(value) {
 				self.item.label = value;
 			}
@@ -21,6 +21,7 @@ class EditUI {
 
 		this.uis.remove = new UIButton({
 			text: "Remove",
+			class: 'remove',
 			callback: function() {
 				self.item.remove = true;
 				self.remove();
@@ -29,6 +30,7 @@ class EditUI {
 
 		this.uis.edit = new UIButton({
 			text: "Edit",
+			class: 'edit',
 			callback: function() {
 				console.log(self);
 				window.open(`${location.origin}/${location.pathname.includes('lines') ? 'lines/' : ''}animate/?src=${self.item.origin}`, 'anim');
@@ -36,8 +38,8 @@ class EditUI {
 		});
 
 		this.uis.lock = new UIToggle({
-			onText: "🔓",
-			offText: "🔓",
+			text: "🔓",
+			class: 'lock',
 			isOn: !this.item.locked,
 			callback: function() {
 				self.item.lock();
@@ -48,7 +50,10 @@ class EditUI {
 	}
 
 	add() {
-		if (!this.row) this.row = this.panel.addRow();
+		if (!this.row) {
+			this.row = this.panel.addRow();
+			this.row.addClass("item");
+		}
 		if (this.uis.label && !this.added) {
 			this.added = true;
 			for (const key in this.uis) {
@@ -74,7 +79,7 @@ class EditUI {
 
 	update(obj) {
 		for (const key in obj) {
-			this.uis[key].setValue(obj[key]);
+			this.uis[key].value = obj[key];
 		}
 	}
 

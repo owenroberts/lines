@@ -1,9 +1,4 @@
-@import 'font.css';
-$main-color: lightblue;
-$accent-color: blue;
-$accent-two: #ffddff;
-$ui-color: lightgray;
-$ui-select: gray;
+@import "colors";
 
 * { 
 	box-sizing: border-box;
@@ -163,7 +158,7 @@ select { margin-top: 0.25em; }
 			white-space: nowrap;
 			margin-right: 0.25em;
 			margin-top: 0.25em;
-			flex: 0 1 auto;
+			flex: 0 1 12%;
 			&.block {
 				flex: auto;
 				text-align: left;
@@ -184,6 +179,9 @@ select { margin-top: 0.25em; }
 			border: none;
 			background-color: $ui-color;
 			padding-right: 0.25em;
+			&:focus {
+				outline: 1px solid $accent-color;
+			}
 		}
 	}
 
