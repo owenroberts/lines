@@ -11,6 +11,12 @@ class UIText extends UIInput {
 		this.el.addEventListener('keyup', ev => {
 			if (ev.which == 13) this.update(ev.target.value);
 		});
+
+
+		this.el.onblur = ev => {
+			this.value = this.el.placeholder;
+			/* shows that value wasn't taken without enter */
+		};
 	}
 
 	handler(ev, me) {

@@ -451,7 +451,7 @@
 			},
 			{
 				"row": true,
-				"type": "UIText",
+				"type": "UIBlur",
 				"key": ";",
 				"face": "fps",
 				"fromModule": {
@@ -464,7 +464,7 @@
 				}
 			},
 			{
-				"type": "UIText",
+				"type": "UIBlur",
 				"key": "'",
 				"face": "lps",
 				"fromModule": {
