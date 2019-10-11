@@ -3,7 +3,7 @@ window.addEventListener("load", function() {
 	window.lns = {};
 
 	// modules
-	lns.canvas = new Canvas("lines", 512, 512, "#ffffff");
+	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
 	lns.render = new Render(12); // (lps)
 
 	lns.lines = new Animation(lns.canvas.ctx);

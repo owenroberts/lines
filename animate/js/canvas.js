@@ -1,9 +1,10 @@
-function Canvas(id, width, height, color) {
+function Canvas(id, width, height, color, retina) {
 	const self = this;
 
 	this.width = width;
 	this.height = height;
 	this.canvas = document.getElementById(id); // lns.canvas.canvas is html elem
+	this.dpr = retina ?  window.devicePixelRatio || 1 : 1;
 
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
@@ -26,13 +27,20 @@ function Canvas(id, width, height, color) {
 
 	/* update canvas width */
 	this.setWidth = function(width) {
-		self.width = self.canvas.width = +width;
-		self.ctx.miterLimit = 1;
+		self.width = self.canvas.width = +width * this.dpr;
+		this.reset();
 	};
 
 	/* update canvas height */
 	this.setHeight = function(height) {
-		self.height = self.canvas.height = +height;
+		self.height = self.canvas.height = +height * this.dpr;
+		this.reset();
+	};
+
+	this.reset = function() {
+		// https://www.html5rocks.com/en/tutorials/canvas/hidpi/
+		self.ctx.scale(this.dpr, this.dpr);
+		self.canvas.style.zoom = 1 / this.dpr;
 		self.ctx.miterLimit = 1;
 	};
 	
