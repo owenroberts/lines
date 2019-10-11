@@ -250,4 +250,18 @@ select {
   font-size: 1.75em;
 }
 
-/*# sourceMappingURL=lines.css.map */
+#draw #lines {
+  border: 1px solid lightgray;
+}
+#draw #lines:active, #draw #lines:hover {
+  cursor: crosshair;
+}
+
+#draw-layers {
+  margin-top: 1em;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  padding: 0.25em 0;
+}
+
+/*# sourceMappingURL=animate.css.map */

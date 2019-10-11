@@ -24,7 +24,6 @@ function Render(lps, color) {
 	this.setFps = function(fps) {
 		lns.anim.fps = +fps;
 		lns.anim.intervalRatio = self.interval / (1000 / +fps);
-		console.log(fps, lns.anim.intervalRatio);
 	};
 
 	/* ' key */
@@ -32,8 +31,6 @@ function Render(lps, color) {
 		self.lps = +lps;
 		self.interval = 1000 / self.lps;
 		lns.anim.intervalRatio = self.interval / (1000 / lns.anim.fps);
-
-		console.log(lps, self.interval, lns.anim.intervalRatio);
 	};
 
 	/* just set drawing back to 0 but might do other things */

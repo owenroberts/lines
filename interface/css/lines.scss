@@ -50,11 +50,6 @@ select { margin-top: 0.25em; }
 	#tools { flex: 1; }
 }
 
-#draw #lines {
-	border: 1px solid $ui-color;
-	&:active, &:hover { cursor: crosshair; }
-}
-
 .btn {
 	display: inline-block;
 	margin-top: 0.5em;
@@ -218,13 +213,6 @@ select { margin-top: 0.25em; }
 	
 	#current { background-color: $main-color !important; }
 	.selected { background-color: $accent-two !important; }
-}
-
-#draw-layers {
-	margin-top: 1em;
-	border-top: 1px solid $ui-color;
-	border-bottom: 1px solid $ui-color;
-	padding: 0.25em 0;
 }
 
 .modal {
