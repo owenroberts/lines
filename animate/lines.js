@@ -52,10 +52,6 @@ window.addEventListener("load", function() {
 		lns.files.loadFile(openFile, lns.ui.fio.updateInterface);
 		localStorage.removeItem('re-open');
 	}
-
-	
-
-	
 });
 
 function appSave() {
@@ -71,8 +67,8 @@ function appSave() {
 		onionSkinNum: lns.render.onionSkinNum,
 		mouseInterval: lns.draw.mouseInterval,
 		palettes: lns.ui.palette.palettes,
-		rl: lns.ui.rl.isOn,
-		displayLayers: lns.ui.layers.canvas.canvas.style.display
+		rl: lns.ui.rl.isOn
+		// displayLayers: lns.ui.layers.canvas.canvas.style.display
 	};
 }
 

@@ -1,10 +1,60 @@
 @import "../../interface/css/colors";
 @import "../../interface/css/lines";
 
+$column-width: 40px;
+
 
 #draw #lines {
 	border: 1px solid $ui-color;
 	&:active, &:hover { cursor: crosshair; }
+}
+
+#frames, #layers {
+	margin-top: 1px;
+}
+
+#layers {
+	display: grid;
+	grid-auto-columns: minmax(auto, $column-width);
+
+	.layer {
+		// max-width: 40px;
+		display: flex;
+
+		.left, .right, .toggle {
+			background-color: $ui-color;
+			&:hover { background-color: $ui-select; }
+			&.off { background-color: $accent-two; }
+		}
+		
+		// .left { flex: 1; }
+		// .right { flex: 1; }
+		.toggle { flex: 5; }
+	}
+}
+
+#frames {
+	height:auto;
+	padding: 0;
+	width: 100%;
+	display: flex;
+	// grid-template-columns: repeat(auto-fill, 24px);
+	// grid-template-rows: max-content max-content;
+
+	.frame {
+		flex: 1;
+		max-width: $column-width;
+		padding: 1px;
+		background-color: $ui-color;
+		transition: background-color 100ms ease-in;
+		cursor: pointer;
+		&:hover { background-color: $ui-select; }
+		&.plus { background-color: $accent-two; }
+		&.plus:hover { background-color: $ui-highlight; }
+	}
+	
+	#current { background-color: $main-color !important; }
+	.selected { background-color: $accent-two !important; }
 }
 
 #draw-layers {

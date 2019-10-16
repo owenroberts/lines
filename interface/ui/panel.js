@@ -72,7 +72,9 @@ class UIPanel extends UICollection {
 	}
 
 	add(ui, _row) {
-		let row = _row || this.rows[this.rows.length - 1] || this.addRow();
+		let row = _row 
+			|| this.rows[this.rows.length - 1] 
+			|| this.addRow();
 		row.append(ui);
 	}
 }

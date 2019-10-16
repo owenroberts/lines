@@ -153,75 +153,43 @@ select {
   right: 2px;
   left: auto;
 }
-.menu-panel .row {
+.menu-panel .row, .menu-panel .row .collection {
   margin-bottom: 0.5em;
   display: flex;
   flex-wrap: wrap;
 }
-.menu-panel .row label {
+.menu-panel .row label, .menu-panel .row .collection label {
   line-height: 1.5;
 }
-.menu-panel .row span, .menu-panel .row label, .menu-panel .row input, .menu-panel .row select {
+.menu-panel .row span, .menu-panel .row label, .menu-panel .row input, .menu-panel .row select, .menu-panel .row .collection span, .menu-panel .row .collection label, .menu-panel .row .collection input, .menu-panel .row .collection select {
   white-space: nowrap;
   margin-right: 0.25em;
   margin-top: 0.25em;
   flex: 0 1 12%;
 }
-.menu-panel .row span.block, .menu-panel .row label.block, .menu-panel .row input.block, .menu-panel .row select.block {
+.menu-panel .row span.block, .menu-panel .row label.block, .menu-panel .row input.block, .menu-panel .row select.block, .menu-panel .row .collection span.block, .menu-panel .row .collection label.block, .menu-panel .row .collection input.block, .menu-panel .row .collection select.block {
   flex: auto;
   text-align: left;
 }
-.menu-panel .row input {
+.menu-panel .row input, .menu-panel .row .collection input {
   flex: 0 1 40px;
   width: 100%;
   text-align: right;
 }
-.menu-panel .row input[type=range], .menu-panel .row input[type=color] {
+.menu-panel .row input[type=range], .menu-panel .row input[type=color], .menu-panel .row .collection input[type=range], .menu-panel .row .collection input[type=color] {
   flex: 1 1 auto;
 }
-.menu-panel .row input[type=text] {
+.menu-panel .row input[type=text], .menu-panel .row .collection input[type=text] {
   border: none;
   background-color: lightgray;
   padding-right: 0.25em;
 }
-.menu-panel .row input[type=text]:focus {
+.menu-panel .row input[type=text]:focus, .menu-panel .row .collection input[type=text]:focus {
   outline: 1px solid blue;
 }
 .menu-panel .btn {
   padding: 0 0.25em;
   margin-right: 3px;
-}
-
-#frames {
-  height: auto;
-  padding: 0;
-  width: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 24px);
-  grid-template-rows: max-content max-content;
-}
-#frames p {
-  margin: 0;
-  grid-column: 1/span 2;
-}
-#frames .frame, #frames .plus, #frames #current {
-  border-radius: 3px;
-  display: inline-block;
-  background-color: lightgray;
-  transition: background-color 100ms ease-in;
-  margin-right: 1px;
-  margin-top: 1px;
-  padding: 0.5em;
-  cursor: pointer;
-}
-#frames .frame:hover, #frames .plus:hover, #frames #current:hover {
-  background-color: gray;
-}
-#frames #current {
-  background-color: lightblue !important;
-}
-#frames .selected {
-  background-color: #ffddff !important;
 }
 
 .modal {
@@ -255,6 +223,60 @@ select {
 }
 #draw #lines:active, #draw #lines:hover {
   cursor: crosshair;
+}
+
+#frames, #layers {
+  margin-top: 1px;
+}
+
+#layers {
+  display: grid;
+  grid-auto-columns: minmax(auto, 40px);
+}
+#layers .layer {
+  display: flex;
+}
+#layers .layer .left, #layers .layer .right, #layers .layer .toggle {
+  background-color: lightgray;
+}
+#layers .layer .left:hover, #layers .layer .right:hover, #layers .layer .toggle:hover {
+  background-color: gray;
+}
+#layers .layer .left.off, #layers .layer .right.off, #layers .layer .toggle.off {
+  background-color: #ffddff;
+}
+#layers .layer .toggle {
+  flex: 5;
+}
+
+#frames {
+  height: auto;
+  padding: 0;
+  width: 100%;
+  display: flex;
+}
+#frames .frame {
+  flex: 1;
+  max-width: 40px;
+  padding: 1px;
+  background-color: lightgray;
+  transition: background-color 100ms ease-in;
+  cursor: pointer;
+}
+#frames .frame:hover {
+  background-color: gray;
+}
+#frames .frame.plus {
+  background-color: #ffddff;
+}
+#frames .frame.plus:hover {
+  background-color: #FF79FF;
+}
+#frames #current {
+  background-color: lightblue !important;
+}
+#frames .selected {
+  background-color: #ffddff !important;
 }
 
 #draw-layers {

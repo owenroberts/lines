@@ -27,10 +27,11 @@
 			
 			<div id="panels"></div>
 
-			<div id="layer-display-menu"> <span id="toggle-layers">Close Layers</span></div>
-			<canvas id="draw-layers" height='0'></canvas>
+			<div id="layer-display-menu"> 
+				<span id="toggle-layers">Close Layers</span>
+				<div id="layers"></div>
+			</div>
 			
-
 			<div id="frames">
 				<div id="current" class="plus frame">+</div>
 			</div>
@@ -60,6 +61,7 @@
 	<script src="../interface/ui/select.js"></script>
 	<script src="../interface/ui/select-button.js"></script>
 	<script src="../interface/ui/range.js"></script>
+	<script src="../interface/ui/drag-button.js"></script>
 	<script src="../interface/ui/text-range.js"></script>
 	<script src="../interface/ui/color.js"></script>
 
@@ -73,6 +75,9 @@
 
 	<!-- classes -->
 	<script src="js/layer.js"></script>
+
+	<script src="interface/ui-layer.js"></script>
+
 
 	<!-- animate interface -->
 	<script src="interface/palette.js"></script>

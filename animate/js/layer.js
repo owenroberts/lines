@@ -1,22 +1,26 @@
 class Layer {
-	constructor(params) {
+	constructor(params, index) {
 		for (const key in params) {
 			this[key] = params[key];
 		}
 		this.toggled = false;
-		// this.display = true; // display everywhere
-		// drop from frame
-		// delete entirely ? 
+
 		this.resetAnims();
+
+		this.ui = new UILayer({
+			type: 'layer',
+			text: ''+index,
+			index: index,
+			callback: this.toggle.bind(this),
+			ondrag: function() {
+				console.log(fart)
+			}
+		}, this);
 	}
 
 	clean() {
 		delete this.toggled;
 		delete this.prevColor;
-	}
-
-	single() {
-		
 	}
 
 	toggle() {

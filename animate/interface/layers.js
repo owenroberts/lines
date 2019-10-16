@@ -257,8 +257,6 @@ function Layers() {
 		}
 	};
 
-	this.canvas = new Canvas("draw-layers", 0, 0, '#F2F4F4');
-
 	/* do this with real ui later*/
 	this.toggleCanvas = new UIToggle({
 		id: 'toggle-layers',
@@ -295,4 +293,15 @@ function Layers() {
 			self.canvas.ctx.fillRect(x, y, _w, row - 1);
 		}
 	};
+
+	this.update = function() {
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			self.layerPanel.append(lns.anim.layers[i].ui);
+		}
+	};
+
+	this.layerPanel = new UICollection({
+		id: 'layers'
+	});
+
 }

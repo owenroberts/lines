@@ -4,10 +4,6 @@ class UIRow extends UICollection {
 		this.addClass('row');
 	}
 
-	add(ui) {
-		this.append(ui);
-	}
-
 	clear() {
 		while (this.el.firstChild) {
 			this.el.firstChild.value = null; /* prevent blur event */

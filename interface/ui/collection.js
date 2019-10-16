@@ -4,18 +4,16 @@ class UICollection extends UIElement {
 	}
 
 	append(ui) {
-		const elem = ui.getElem();
-		if (Array.isArray(elem)) {
-			for (let i = 0; i < elem.length; i++) {
-				this.el.appendChild(elem[i]);
-			}
+		if (Array.isArray(ui.elems)) {
+			ui.elems.forEach(el => {
+				this.el.appendChild(el);
+			});
 		} else {
-			this.el.appendChild(elem);
+			this.el.appendChild(ui.el);
 		}
 	}
 
 	remove(ui) {
-		console.log(ui);
 		this.el.removeChild(ui.el);
 	}
 }

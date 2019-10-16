@@ -17,10 +17,9 @@ class UITextRange extends UICollection {
 			max: params.max,
 			callback: this.handler.bind(this)
 		});
-
 	}
 
-	getElem() {
+	get elems() {
 		return [this.textInput.el, this.range.el];
 	}
 

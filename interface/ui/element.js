@@ -29,10 +29,6 @@ class UIElement {
 		this.callback();
 	}
 
-	getElem() {
-		return this.el;
-	}
-
 	addClass(_class) {
 		this.el.classList.add(_class);
 	}

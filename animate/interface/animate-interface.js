@@ -21,13 +21,14 @@ function animateInterface(ui) {
 		ui.updateFrameNum();
 		ui.layers.resetLayers();
 		ui.drawings.resetDrawings();
-		ui.layers.drawLayers();
+		// ui.layers.drawLayers();
+		ui.layers.update();
 		ui.updateFramesPanel();
 	};
 
 	ui.plusFrame = new UIButton({
 		id:"current",
-		class: "plus",
+		type: "plus",
 		callback: function() {
 			ui.setFrame(lns.anim.plusFrame);
 		},
@@ -57,7 +58,7 @@ function animateInterface(ui) {
 			for (let i = numFrames; i < animFrames; i++) {
 				/* should be a ui? */
 				const frameBtn = new UIButton({
-					class: "frame",
+					type: "frame",
 					text: ''+i,
 					callback: function() {
 						lns.render.setFrame(i);
@@ -138,6 +139,8 @@ function animateInterface(ui) {
 
 	['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].forEach(key => {
 		ui.keys[key] = new UIButton({
+			type: "frame",
+			key: key,
 			callback: function() {
 				ui.setFrame(+key);
 			}
