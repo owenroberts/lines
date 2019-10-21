@@ -11,7 +11,7 @@ class UILayer extends UICollection {
 			type: 'left',
 			callback: ev => {
 				if (layer.startFrame > 0)
-					layer.startFrame++;
+					layer.startFrame--;
 				this.update(layer);
 			}		
 		});
@@ -40,7 +40,7 @@ class UILayer extends UICollection {
 	}
 
 	update(layer) {
-		this.el.style.gridColumnStart = layer.startFrame - 1;
+		this.el.style.gridColumnStart = layer.startFrame + 1;
 		this.el.style.gridColumnEnd = layer.endFrame + 2;
 	}
 }
