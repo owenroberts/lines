@@ -109,7 +109,7 @@ function Files(params) {
 
 		lns.anim.layers = [];
 		for (let i = 0; i < data.l.length; i++) {
-			lns.anim.layers[i] = new Layer(data.l[i], i);
+			lns.anim.layers[i] = new Layer(data.l[i]);
 			lns.draw.layer.c = lns.anim.layers[i].c;
 			lns.ui.faces.c.addColor(lns.anim.layers[i].c); /* ui */
 		}

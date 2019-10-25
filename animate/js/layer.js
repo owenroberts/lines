@@ -4,18 +4,7 @@ class Layer {
 			this[key] = params[key];
 		}
 		this.toggled = false;
-
 		this.resetAnims();
-
-		this.ui = new UILayer({
-			type: 'layer',
-			text: ''+index,
-			index: index,
-			callback: this.toggle.bind(this),
-			ondrag: function() {
-				console.log(fart)
-			}
-		}, this);
 	}
 
 	clean() {
@@ -49,6 +38,12 @@ class Layer {
 		if (lns.anim.layers.indexOf(this) == -1) {
 			lns.anim.layers.push(this);
 		}
+	}
+
+	addAnimation(a) {
+		this.a.push(a);
+		if (a.sf < this.startFrame) this.startFrame = a.sf;
+		if (a.ef > this.endFrame) this.endFrame = a.ef;
 	}
 
 	get startFrame() {
@@ -117,8 +112,8 @@ class Layer {
 	resetAnims() {
 		for (let i = 0; i < this.a.length; i++) {
 			const a = this.a[i];
-			if (a.sf < this.f.s) a.sf = this.f.s;
-			if (a.ef > this.f.e) a.ef = this.f.e;
+			if (a.sf < this.startFrame) a.sf = this.startFrame;
+			if (a.ef > this.endFrame) a.ef = this.endFrame;
 		}
 	}
 }

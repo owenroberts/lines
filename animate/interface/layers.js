@@ -257,16 +257,128 @@ function Layers() {
 		}
 	};
 
+	// this.panel = new UIPanel('layer-display-menu', "Layers");
+	// this.panel.dock();
+
 	/* do this with real ui later*/
 	this.toggleCanvas = new UIToggle({
 		id: 'toggle-layers',
 		onText: "Close Layers",
 		offText: "Open Layers",
 		callback: function() {
-			if (this.isOn) self.canvas.canvas.style.display = 'none';
-			else self.canvas.canvas.style.display = '';
+			if (this.isOn) self.layerPanel.el.style.display = 'none';
+			else self.layerPanel.el.style.display = '';
 		}
 	});
+
+	this.clone = function() { 
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.toggled) {
+				layer.toggle();
+				layer.ui.toggle.on(); /* ick */
+				
+				const n = new Layer(_.cloneDeep(layer));
+				delete n.ui;
+				n.startFrame = n.endFrame = layer.endFrame + 1;
+				lns.anim.layers.push(n);
+				self.update();
+				layer.ui.update();
+				n.ui.update();
+				lns.ui.setFrame(layer.endFrame + 1);
+			}
+		}
+	};
+
+	this.split = function() { 
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.toggled && layer.isInFrame(lns.anim.currentFrame)) {
+				layer.toggle();
+				layer.ui.toggle.on(); /* ick */
+				const n = new Layer(_.cloneDeep(layer), lns.anim.layers.length);
+				n.startFrame = lns.anim.currentFrame + 1;
+				delete n.ui;
+				layer.endFrame = lns.anim.currentFrame;
+				lns.anim.layers.push(n);
+				self.update();
+				n.ui.update();
+				layer.ui.update();
+				lns.ui.setFrame(layer.endFrame + 1);
+			}
+		}
+	};
+
+	this.addAnimation = function() {
+
+		const a = {
+			prop: 's',
+			sf: lns.anim.currentFrame,
+			ef: lns.anim.currentFrame + 10,
+			sv: 0,
+			ev: 'end'
+		};
+
+		const modal = new UIModal('Add Animation', lns, function() {
+			for (let i = 0; i < lns.anim.layers.length; i++) {
+				const layer = lns.anim.layers[i];
+				console.log(layer);
+				if (layer.toggled) {
+					if (a.ev == 'end') a.ev = lns.anim.drawings[layer.d].length;
+					layer.addAnimation(a);
+					layer.ui.update();
+					
+					
+
+					layer.toggle();
+					layer.ui.toggle.on(); /* ick */
+				}
+			}
+		});
+
+		modal.add(new UILabel({ text: 'Property:' }));
+		modal.add(new UISelect({
+			options: ['s', 'e', 'n', 'r', 'w', 'v'],
+			value: 's',
+			selected: 's',
+			callback: function(value) {
+				a.prop = value;
+			}
+		}));
+
+		modal.add(new UILabel({ text: 'Start:' }));
+
+		modal.add(new UIBlur({
+			value: a.sf,
+			callback: function(value) {
+				a.sf = +value;
+			}
+		}));
+
+		modal.add(new UILabel({ text: 'End:' }));
+		modal.add(new UIBlur({
+			value: a.ef,
+			callback: function(value) {
+				a.ef = +value;
+			}
+		}));
+
+		modal.add(new UILabel({ text: 'Begin:' }));
+		modal.add(new UIBlur({
+			value: a.sv,
+			callback: function(value) {
+				a.sv = +value;
+			}
+		}));
+
+		modal.add(new UILabel({ text: 'End:' }));
+		modal.add(new UIBlur({
+			value: a.ev,
+			callback: function(value) {
+				a.ev = +value;
+			}
+		}));
+	};
 
 	this.drawLayers = function() {
 		const maxWidth = 60;
@@ -296,12 +408,39 @@ function Layers() {
 
 	this.update = function() {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
-			self.layerPanel.append(lns.anim.layers[i].ui);
+			const layer = lns.anim.layers[i];
+			if (!layer.ui) {
+				layer.ui = new UILayer({
+					type: 'layer',
+					text: ''+i,
+					index: i,
+					callback: layer.toggle.bind(layer)
+				}, layer);
+				self.layerPanel.append(layer.ui);
+			}
 		}
 	};
 
 	this.layerPanel = new UICollection({
 		id: 'layers'
+	});
+
+	this.cloneButton = new UIButton({
+		id: 'clone',
+		text: 'clone', 
+		callback: this.clone
+	});
+
+	this.splitButton = new UIButton({
+		id: 'split',
+		text: 'split', 
+		callback: this.split
+	});
+
+	this.animButton = new UIButton({
+		id: 'anim',
+		text: 'Add Animatino', 
+		callback: this.addAnimation
 	});
 
 }

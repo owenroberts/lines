@@ -2,34 +2,34 @@ class UILayer extends UICollection {
 	constructor(params, layer) {
 		super(params);
 		this.el.classList.add('layer');
+		this.layer = layer;
 		this.el.style.gridColumnStart = layer.startFrame + 1;
-		this.el.style.gridColumnEnd = layer.endFrame + 1;
+		this.el.style.gridColumnEnd = layer.endFrame + 2;
 		this.el.style.gridRow = params.index + 1;
-
-		this.left = new UIDragButton({
-			text: '<',
-			type: 'left',
-			callback: ev => {
-				if (layer.startFrame > 0)
-					layer.startFrame--;
-				this.update(layer);
-			}		
-		});
-		this.append(this.left);
 
 		this.toggle = new UIToggle({
 			type: 'toggle',
-			text: `d${layer.d}`,
+			text: `✎${layer.d}`,
 			callback: params.callback
 		});
+
+		this.left = new UIDragButton({
+			text: '+',
+			type: 'left',
+			callback: (dir, num) => {
+				layer.startFrame += (dir ? dir : -1) * (num ? num : 1);
+				this.update();
+			}		
+		});
+		this.append(this.left);
 		this.append(this.toggle);
 
 		this.right = new UIDragButton({
-			text: '>',
+			text: '+',
 			type: 'right',
-			callback: ev => {
-				layer.endFrame++;
-				this.update(layer);
+			callback: (dir, num) => {
+				layer.endFrame += (dir ? dir : 1) * (num ? num : 1);
+				this.update();
 			}		
 		});
 		this.append(this.right);
@@ -39,8 +39,8 @@ class UILayer extends UICollection {
 		return this.el;
 	}
 
-	update(layer) {
-		this.el.style.gridColumnStart = layer.startFrame + 1;
-		this.el.style.gridColumnEnd = layer.endFrame + 2;
+	update() {
+		this.el.style.gridColumnStart = this.layer.startFrame + 1;
+		this.el.style.gridColumnEnd = this.layer.endFrame + 2;
 	}
 }

@@ -195,6 +195,10 @@ select { margin-top: 0.25em; }
 	right: 50%;
 	width: 400px;
 	* { margin: 0 1em; }
+
+	input {
+		max-width: 40px;
+	}
 }
 
 .mobile {

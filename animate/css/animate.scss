@@ -3,7 +3,6 @@
 
 $column-width: 40px;
 
-
 #draw #lines {
 	border: 1px solid $ui-color;
 	&:active, &:hover { cursor: crosshair; }
@@ -16,20 +15,41 @@ $column-width: 40px;
 #layers {
 	display: grid;
 	grid-auto-columns: minmax(auto, $column-width);
+	grid-gap: 1px;
 
 	.layer {
 		// max-width: 40px;
 		display: flex;
+		// flex-wrap: wrap;
 
 		.left, .right, .toggle {
 			background-color: $ui-color;
 			&:hover { background-color: $ui-select; }
 			&.off { background-color: $accent-two; }
 		}
+
+		.left, .right {
+			cursor: pointer;
+			// &:active { cursor: grabbing; }
+			// font-family: "Comic Sans MS";
+			line-height: 1;
+		}
+
+		.right {
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+		}
+
+		.left {
+			border-top-left-radius: 3px;
+			border-bottom-left-radius: 3px;
+		}
 		
-		// .left { flex: 1; }
-		// .right { flex: 1; }
-		.toggle { flex: 5; }
+		.toggle { 
+			flex: 5; 
+			cursor: pointer;
+		}
+
 	}
 }
 

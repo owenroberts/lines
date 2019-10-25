@@ -153,38 +153,38 @@ select {
   right: 2px;
   left: auto;
 }
-.menu-panel .row, .menu-panel .row .collection {
+.menu-panel .row {
   margin-bottom: 0.5em;
   display: flex;
   flex-wrap: wrap;
 }
-.menu-panel .row label, .menu-panel .row .collection label {
+.menu-panel .row label {
   line-height: 1.5;
 }
-.menu-panel .row span, .menu-panel .row label, .menu-panel .row input, .menu-panel .row select, .menu-panel .row .collection span, .menu-panel .row .collection label, .menu-panel .row .collection input, .menu-panel .row .collection select {
+.menu-panel .row span, .menu-panel .row label, .menu-panel .row input, .menu-panel .row select {
   white-space: nowrap;
   margin-right: 0.25em;
   margin-top: 0.25em;
   flex: 0 1 12%;
 }
-.menu-panel .row span.block, .menu-panel .row label.block, .menu-panel .row input.block, .menu-panel .row select.block, .menu-panel .row .collection span.block, .menu-panel .row .collection label.block, .menu-panel .row .collection input.block, .menu-panel .row .collection select.block {
+.menu-panel .row span.block, .menu-panel .row label.block, .menu-panel .row input.block, .menu-panel .row select.block {
   flex: auto;
   text-align: left;
 }
-.menu-panel .row input, .menu-panel .row .collection input {
+.menu-panel .row input {
   flex: 0 1 40px;
   width: 100%;
   text-align: right;
 }
-.menu-panel .row input[type=range], .menu-panel .row input[type=color], .menu-panel .row .collection input[type=range], .menu-panel .row .collection input[type=color] {
+.menu-panel .row input[type=range], .menu-panel .row input[type=color] {
   flex: 1 1 auto;
 }
-.menu-panel .row input[type=text], .menu-panel .row .collection input[type=text] {
+.menu-panel .row input[type=text] {
   border: none;
   background-color: lightgray;
   padding-right: 0.25em;
 }
-.menu-panel .row input[type=text]:focus, .menu-panel .row .collection input[type=text]:focus {
+.menu-panel .row input[type=text]:focus {
   outline: 1px solid blue;
 }
 .menu-panel .btn {
@@ -205,6 +205,9 @@ select {
 }
 .modal * {
   margin: 0 1em;
+}
+.modal input {
+  max-width: 40px;
 }
 
 .mobile .menu-panel {
@@ -232,6 +235,7 @@ select {
 #layers {
   display: grid;
   grid-auto-columns: minmax(auto, 40px);
+  grid-gap: 1px;
 }
 #layers .layer {
   display: flex;
@@ -245,8 +249,21 @@ select {
 #layers .layer .left.off, #layers .layer .right.off, #layers .layer .toggle.off {
   background-color: #ffddff;
 }
+#layers .layer .left, #layers .layer .right {
+  cursor: pointer;
+  line-height: 1;
+}
+#layers .layer .right {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+#layers .layer .left {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
 #layers .layer .toggle {
   flex: 5;
+  cursor: pointer;
 }
 
 #frames {

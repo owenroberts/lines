@@ -1,5 +1,5 @@
-class Modal extends UICollection {
-	constructor(title, callback) {
+class UIModal extends UICollection {
+	constructor(title, app, callback) {
 		super();
 		this.addClass('modal');
 		this.text = title;
@@ -18,7 +18,7 @@ class Modal extends UICollection {
 		});
 
 		this.append(this.submit);
-		edi.ui.keys['enter'] = this.submit; /* not modular ... */
+		app.ui.keys['enter'] = this.submit; /* not modular ... */
 
 		this.cancel = new UIButton({
 			text: "x",
@@ -26,7 +26,7 @@ class Modal extends UICollection {
 				this.clear();
 			}
 		});
-		edi.ui.keys['escape'] = this.cancel;
+		app.ui.keys['escape'] = this.cancel;
 		this.append(this.cancel);
 	}
 

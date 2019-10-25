@@ -22,7 +22,7 @@ function Data(anim) {
 			layer.d = anim.drawings.length;
 			anim.layers.push(layer);
 			anim.drawings.push(_.cloneDeep(lns.draw.drawing));
-			lns.ui.updateInterface(); 
+			lns.ui.updateInterface();
 			self.saveState(); /* save current state - one undo currently */
 			lns.draw.reset();
 		}
