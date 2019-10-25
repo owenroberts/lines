@@ -4,6 +4,7 @@ class UICollection extends UIElement {
 	}
 
 	append(ui) {
+		// console.log(ui);
 		if (Array.isArray(ui.elems)) {
 			ui.elems.forEach(el => {
 				this.el.appendChild(el);

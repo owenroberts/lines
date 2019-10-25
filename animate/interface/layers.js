@@ -312,23 +312,25 @@ function Layers() {
 	this.addAnimation = function() {
 
 		const a = {
-			prop: 's',
+			prop: 'e',
 			sf: lns.anim.currentFrame,
 			ef: lns.anim.currentFrame + 10,
 			sv: 0,
 			ev: 'end'
 		};
 
-		const modal = new UIModal('Add Animation', lns, function() {
+
+		const modal = new UIModal('Add Animation', lns, { left: this.el.offsetLeft,  top: this.el.offsetTop }, function() {
 			for (let i = 0; i < lns.anim.layers.length; i++) {
 				const layer = lns.anim.layers[i];
-				console.log(layer);
 				if (layer.toggled) {
 					if (a.ev == 'end') a.ev = lns.anim.drawings[layer.d].length;
 					layer.addAnimation(a);
 					layer.ui.update();
-					
-					
+
+					// const animUI = new UIAnimation(i, a);
+					// console.log(animUI);
+					// layer.ui.append();
 
 					layer.toggle();
 					layer.ui.toggle.on(); /* ick */
@@ -338,9 +340,9 @@ function Layers() {
 
 		modal.add(new UILabel({ text: 'Property:' }));
 		modal.add(new UISelect({
-			options: ['s', 'e', 'n', 'r', 'w', 'v'],
-			value: 's',
-			selected: 's',
+			options: ['e', 's', 'n', 'r', 'w', 'v'],
+			value: 'e',
+			selected: 'e',
 			callback: function(value) {
 				a.prop = value;
 			}

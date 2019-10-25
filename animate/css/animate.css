@@ -195,13 +195,11 @@ select {
 .modal {
   position: fixed;
   background: white;
-  padding: 1em;
+  padding: 0.5em;
   border-radius: 1em;
-  border: 5px solid lightblue;
-  outline: 10px dotted #ffddff;
-  top: 50%;
-  right: 50%;
-  width: 400px;
+  border: 2px solid lightblue;
+  box-shadow: 2px 2px 2px #FF79FF;
+  max-width: 400px;
 }
 .modal * {
   margin: 0 1em;
@@ -239,6 +237,16 @@ select {
 }
 #layers .layer {
   display: flex;
+}
+#layers .layer .anim {
+  flex: 5;
+  background-color: lightgreen;
+}
+#layers .layer .anim:hover {
+  background-color: green;
+}
+#layers .layer .anim.off {
+  background-color: darkgreen;
 }
 #layers .layer .left, #layers .layer .right, #layers .layer .toggle {
   background-color: lightgray;

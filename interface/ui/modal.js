@@ -1,8 +1,12 @@
 class UIModal extends UICollection {
-	constructor(title, app, callback) {
+	constructor(title, app, position, callback) {
 		super();
 		this.addClass('modal');
 		this.text = title;
+
+		this.el.style.top = `${position.top - 20}px`;
+		this.el.style.left = `${position.left - 100}px`;
+
 		
 		// better way to do this ?? 
 		document.getElementById('container').appendChild(this.el);

@@ -1,6 +1,10 @@
 @import "../../interface/css/colors";
 @import "../../interface/css/lines";
 
+$anim-color: lightgreen;
+$anim-select: green;
+$anim-off: darkgreen;
+
 $column-width: 40px;
 
 #draw #lines {
@@ -21,6 +25,13 @@ $column-width: 40px;
 		// max-width: 40px;
 		display: flex;
 		// flex-wrap: wrap;
+
+		.anim {
+			flex: 5;
+			background-color: $anim-color;
+			&:hover { background-color: $anim-select; }
+			&.off { background-color: $anim-off; }
+		}
 
 		.left, .right, .toggle {
 			background-color: $ui-color;

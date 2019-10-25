@@ -187,18 +187,15 @@ select { margin-top: 0.25em; }
 .modal {
 	position: fixed;
 	background: white;
-	padding: 1em;
+	padding: 0.5em;
 	border-radius: 1em;
-	border: 5px solid $main-color;
-	outline: 10px dotted $accent-two;
-	top: 50%;
-	right: 50%;
-	width: 400px;
+	border: 2px solid $main-color;
+	box-shadow: 1px 1px 4px $ui-highlight;
+	
+	max-width: 400px;
 	* { margin: 0 1em; }
 
-	input {
-		max-width: 40px;
-	}
+	input { max-width: 40px; }
 }
 
 .mobile {
