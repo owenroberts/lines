@@ -32,9 +32,10 @@ class UILayer extends UICollection {
 		});
 		this.append(this.right);
 
+		this.anims = [];
 		for (let i = 0; i < layer.a.length; i++) {
-			this.anim = new UIAnimation(layer.a[i]);
-			this.append(this.anim );
+			this.anims[i] = new UIAnimation(layer.a[i]);
+			this.append(this.anims[i]);
 		}
 
 		this.update();
@@ -42,6 +43,12 @@ class UILayer extends UICollection {
 
 	get elems() {
 		return this.el;
+	}
+
+	addAnimation(a) {
+		const anim = new UIAnimation(a);
+		this.anims.push(anim);
+		this.append(anim);
 	}
 
 	update() {
@@ -54,6 +61,8 @@ class UILayer extends UICollection {
 
 		this.toggle.el.style['grid-column'] = `2 / span ${this.layer.endFrame - this.layer.startFrame + 1}`;
 
-		this.anim.update();
+		for (let i = 0; i < this.anims.length; i++) {
+			this.anims[i].update();
+		}
 	}
 }

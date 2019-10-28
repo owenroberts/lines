@@ -36,6 +36,7 @@ class UIAnimation extends UICollection {
 	}
 
 	update() {
+		console.log(this.anim);
 
 		this.left.el.style['grid-column'] = `${this.anim.sf + 1} / span 1`;
 		this.label.el.style['grid-column'] = `${this.anim.sf + 2} / span ${this.anim.ef - this.anim.sf + 1}`;

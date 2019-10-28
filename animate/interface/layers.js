@@ -328,8 +328,7 @@ function Layers() {
 					layer.addAnimation(a);
 					layer.ui.update();
 
-					const animUI = new UIAnimation(i, a);
-					layer.ui.append(animUI);
+					layer.ui.addAnimation(a);
 
 					layer.toggle();
 					layer.ui.toggle.on(); /* ick */
