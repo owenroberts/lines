@@ -10,6 +10,7 @@ class Layer {
 	clean() {
 		delete this.toggled;
 		delete this.prevColor;
+		delete this.ui;
 	}
 
 	toggle() {
@@ -62,6 +63,9 @@ class Layer {
 	set endFrame(f) {
 		this.f.e = f;
 		this.resetAnims();
+
+		if (lns.anim.state == 'default' && lns.anim.currentState.end != f) 
+			lns.anim.currentState.end = f;
 	}
 
 	removeIndex(index) {

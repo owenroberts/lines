@@ -1,17 +1,14 @@
 class UIAnimation extends UICollection {
-	constructor(index, anim) {
+	constructor(anim) {
 		super({});
-		// console.log(this);
 		this.el.classList.add('anim');
 		this.anim = anim;
-		this.el.style.gridColumnStart = anim.sf + 1;
-		this.el.style.gridColumnEnd = anim.ef + 2;
-		this.el.style.gridRow = index + 1;
+		
 
 		this.label = new UILabel({
-			type: 'anim',
-			text: `anim`
+			text: anim.prop
 		});
+		this.label.addClass('anim');
 
 		this.left = new UIDragButton({
 			text: '+',
@@ -21,28 +18,26 @@ class UIAnimation extends UICollection {
 				this.update();
 			}		
 		});
-		this.append(this.left);
-		this.append(this.labels);
 
 		this.right = new UIDragButton({
 			text: '+',
 			type: 'right',
 			callback: (dir, num) => {
-				anim.ef += (dir ? dir : 1) * (num ? num : 1);
+				this.anim.ef += (dir ? dir : 1) * (num ? num : 1);
 				this.update();
 			}		
 		});
-		this.append(this.right);
 
-		console.log(this);
+		this.update();
 	}
 
 	get elems() {
-		return this.el;
+		return [this.left.el, this.label.el, this.right.el];
 	}
 
 	update() {
-		this.el.style.gridColumnStart = this.anim.sf + 1;
-		this.el.style.gridColumnEnd = this.anim.ef + 2;
+
+		this.left.el.style['grid-column'] = `${this.anim.sf + 1} / span 1`;
+		this.label.el.style['grid-column'] = `${this.anim.sf + 2} / span ${this.anim.ef - this.anim.sf + 1}`;
 	}
 }

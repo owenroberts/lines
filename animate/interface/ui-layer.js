@@ -3,8 +3,6 @@ class UILayer extends UICollection {
 		super(params);
 		this.el.classList.add('layer');
 		this.layer = layer;
-		this.el.style.gridColumnStart = layer.startFrame + 1;
-		this.el.style.gridColumnEnd = layer.endFrame + 2;
 		this.el.style.gridRow = params.index + 1;
 
 		this.toggle = new UIToggle({
@@ -33,6 +31,13 @@ class UILayer extends UICollection {
 			}		
 		});
 		this.append(this.right);
+
+		for (let i = 0; i < layer.a.length; i++) {
+			this.anim = new UIAnimation(layer.a[i]);
+			this.append(this.anim );
+		}
+
+		this.update();
 	}
 
 	get elems() {
@@ -40,7 +45,15 @@ class UILayer extends UICollection {
 	}
 
 	update() {
+		/* position in grid */
 		this.el.style.gridColumnStart = this.layer.startFrame + 1;
 		this.el.style.gridColumnEnd = this.layer.endFrame + 2;
+
+		/* grid for children */
+		this.el.style['grid-template-columns'] = `auto repeat(${this.layer.endFrame - this.layer.startFrame + 1}, 1fr) auto`;
+
+		this.toggle.el.style['grid-column'] = `2 / span ${this.layer.endFrame - this.layer.startFrame + 1}`;
+
+		this.anim.update();
 	}
 }

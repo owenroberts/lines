@@ -23,14 +23,13 @@ $column-width: 40px;
 
 	.layer {
 		// max-width: 40px;
-		display: flex;
-		// flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
 
 		.anim {
-			flex: 5;
 			background-color: $anim-color;
-			&:hover { background-color: $anim-select; }
-			&.off { background-color: $anim-off; }
+			// &:hover { background-color: $anim-select; }
+			// &.off { background-color: $anim-off; }
 		}
 
 		.left, .right, .toggle {
@@ -44,6 +43,7 @@ $column-width: 40px;
 			// &:active { cursor: grabbing; }
 			// font-family: "Comic Sans MS";
 			line-height: 1;
+			max-width: max-content;
 		}
 
 		.right {
@@ -52,12 +52,12 @@ $column-width: 40px;
 		}
 
 		.left {
+			justify-self: end;
 			border-top-left-radius: 3px;
 			border-bottom-left-radius: 3px;
 		}
 		
 		.toggle { 
-			flex: 5; 
 			cursor: pointer;
 		}
 

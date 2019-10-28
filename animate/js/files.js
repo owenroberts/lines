@@ -14,8 +14,8 @@ function Files(params) {
 
 		const json = {};
 		json.v = "2.4";
-		json.w = Math.floor(+lns.canvas.width);
-		json.h = Math.floor(+lns.canvas.height);
+		json.w = Math.floor(+lns.canvas.width) / lns.canvas.dpr;
+		json.h = Math.floor(+lns.canvas.height) / lns.canvas.dpr;
 		json.fps = +lns.anim.fps;
 		if (params.bg) json.bg = lns.canvas.bgColor;
 		let colors = lns.anim.layers.map(layer => layer.c);

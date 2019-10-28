@@ -193,9 +193,16 @@ select { margin-top: 0.25em; }
 	box-shadow: 1px 1px 4px $ui-highlight;
 	
 	max-width: 400px;
-	* { margin: 0 1em; }
+	* { margin-right: 1em; }
 
 	input { max-width: 40px; }
+
+	display: flex;
+	flex-wrap: wrap;
+
+	label:first-child {
+		flex: 100%;
+	}
 }
 
 .mobile {

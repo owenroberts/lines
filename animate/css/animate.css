@@ -198,14 +198,19 @@ select {
   padding: 0.5em;
   border-radius: 1em;
   border: 2px solid lightblue;
-  box-shadow: 2px 2px 2px #FF79FF;
+  box-shadow: 1px 1px 4px #FF79FF;
   max-width: 400px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .modal * {
-  margin: 0 1em;
+  margin-right: 1em;
 }
 .modal input {
   max-width: 40px;
+}
+.modal label:first-child {
+  flex: 100%;
 }
 
 .mobile .menu-panel {
@@ -236,17 +241,11 @@ select {
   grid-gap: 1px;
 }
 #layers .layer {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
 }
 #layers .layer .anim {
-  flex: 5;
   background-color: lightgreen;
-}
-#layers .layer .anim:hover {
-  background-color: green;
-}
-#layers .layer .anim.off {
-  background-color: darkgreen;
 }
 #layers .layer .left, #layers .layer .right, #layers .layer .toggle {
   background-color: lightgray;
@@ -260,17 +259,18 @@ select {
 #layers .layer .left, #layers .layer .right {
   cursor: pointer;
   line-height: 1;
+  max-width: max-content;
 }
 #layers .layer .right {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
 #layers .layer .left {
+  justify-self: end;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
 #layers .layer .toggle {
-  flex: 5;
   cursor: pointer;
 }
 

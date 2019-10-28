@@ -328,12 +328,13 @@ function Layers() {
 					layer.addAnimation(a);
 					layer.ui.update();
 
-					// const animUI = new UIAnimation(i, a);
-					// console.log(animUI);
-					// layer.ui.append();
+					const animUI = new UIAnimation(i, a);
+					layer.ui.append(animUI);
 
 					layer.toggle();
 					layer.ui.toggle.on(); /* ick */
+
+					lns.ui.updateInterface();
 				}
 			}
 		});
@@ -419,6 +420,8 @@ function Layers() {
 					callback: layer.toggle.bind(layer)
 				}, layer);
 				self.layerPanel.append(layer.ui);
+
+				
 			}
 		}
 	};
