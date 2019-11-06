@@ -744,16 +744,7 @@
 		"module": "ui",
 		"sub": "layers",
 		"list": [
-			{
-				"type": "UIButton",
-				"key": "u",
-				"fromModule": {
-					"callback": "displayLayers"
-				},
-				"params": {
-					"text": "Display Layers"
-				}
-			},
+			
 			{
 				"row": true,
 				"type": "UIColor",
@@ -762,16 +753,6 @@
 				},
 				"params": {
 					"text": "Change Color"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-u",
-				"fromModule": {
-					"callback": "toggleAll"
-				},
-				"params": {
-					"text": "Toggle All"
 				}
 			}
 		]
