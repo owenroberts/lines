@@ -52,7 +52,11 @@ function Render(lps, color) {
 
 	/* f key */
 	this.setFrame = function(f) {
-		if (+f >= 0) lns.anim.frame = +f;
+		if (+f >= 0) {
+			lns.anim.frame = +f;
+			lns.draw.setFrame(+f);
+
+		}
 	};
 
 	this.update = function(time) {

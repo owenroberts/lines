@@ -204,24 +204,6 @@ function Layers() {
 		}
 	};
 
-	this.allToggled = false;
-	this.toggleAll = function() {
-		/* match all toggled */
-		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled != self.allToggled)
-				self.layers[i].toggle();
-		}
-		
-		/* toggle */
-		for (let i = 0; i < self.layers.length; i++) {
-			self.layers[i].toggle();
-		}
-
-		self.allToggled = !self.allToggled; /* set toggle */
-
-		/* how to make ui react here ??? */
-	};
-
 	/* z */
 	this.cutLayerSegment = function() {
 		for (let i = 0; i < self.layers.length; i++) {
@@ -327,12 +309,9 @@ function Layers() {
 					if (a.ev == 'end') a.ev = lns.anim.drawings[layer.d].length;
 					layer.addAnimation(a);
 					layer.ui.update();
-
 					layer.ui.addAnimation(a);
-
 					layer.toggle();
 					layer.ui.toggle.on(); /* ick */
-
 					lns.ui.updateInterface();
 				}
 			}
@@ -380,6 +359,18 @@ function Layers() {
 				a.ev = +value;
 			}
 		}));
+	};
+
+	this.selectedAll = false;
+	this.selectAll = function() {
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.isInFrame(lns.anim.currentFrame)) {
+				if (layer.toggled != self.selectedAll) layer.toggle();
+				layer.toggle();
+			}
+		}
+		self.selectedAll = !self.selectedAll;
 	};
 
 	this.drawLayers = function() {
@@ -443,8 +434,12 @@ function Layers() {
 
 	this.animButton = new UIButton({
 		id: 'anim',
-		text: 'Add Animatino', 
 		callback: this.addAnimation
+	});
+
+	this.selectButton = new UIButton({
+		id: 'select',
+		callback: this.selectAll
 	});
 
 }

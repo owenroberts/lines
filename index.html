@@ -29,11 +29,19 @@
 
 <!-- 
 
-- new interface
-	/*
-		interface.js currently contains the play back and update interface functions ...
-	*/
+11.6.2019
+- drawings interface - 0 issue 
+- update "animation" to "tween"
+- deprecate "re-open" and make it crate the src= link
+- update cssFrames with ui panel
+	- buttons in the layer panel in HTML
+- fixing layers/other interfaces so they're not being deleted and rebuilt
+- making ui values that are automatically updated more easily
+- key command - f, then number, then just goes? no enter?
 
+- new interface
+	- interface.js currently contains the play back and update interface functions ...
+	- system for adding and removing ui components - frames, layers, drawings ... 
 
 - issues
 	- general issue of setting ui values when various properties changes (lines properties good example)
@@ -41,6 +49,7 @@
 		- moving them to callback in ui files
 		- setting with ui.faces ... 
 		- getters??? setters???
+	- old color values need #
 
 - thinkers
 	- rndr object in layer { r, n, w, v } ... xy?
@@ -51,7 +60,7 @@
 	- frames get their own canvas display
 	- support for multiple line widths ... 
 	- layers display confusing because only see that frame ... 
-	- draing class?
+	- drawing class?
 	- better layer highlighting?
 	- editor own directory
 
@@ -62,6 +71,8 @@
 	- set panel order more sophisticated - live with the idiosyncracy for now ... 
 	- panel use uis
 	- styling interface
+	- range slider for offset ? 
+	- no more drawing indexes, random keys, or name drawing
 
 - layers, adding drawings
 	- new added drawing always make new layers if non contiguous with original layer
@@ -91,24 +102,18 @@
 	- use lines player as animation class for game?
 	- game separates the canvas/render from animation ... 
 	- animation in games should use rndr, would be nice to have ONE draw/render func for all three 
-
-- "animation" class with layers, drawings, etc?
-- range slider for offset ? 
 	
-- old color values need #
 - add drawings if fucked up
 - handler undefined interface 161
 - bg color wtf
 - saved wrong color ffffff
 - frame layer toggled in file
 - clear settings doesn't really work if settings just gets saved on reload
-- layer resetting not working
 - display layer in layers panel? or drawing
 - plus frame key command doesn't disappear
 - toggle just toggles values? no callback?
 - open with same drawing 
 - separate settings for drawing lines ? 
-
 
 - game notes
 	- item has text label, is that just relevant to idtio?
@@ -130,22 +135,10 @@
 	- combine loaded json and file
 	- canvas.getContext - still necessary?
 
-idtio - lines 
-- render module
-- no more drawing indexes, random keys, or name drawing
-
-- draw/data ui code
-- generic update ui function
-
-- system for adding and removing ui components - frames, layers, drawings ... 
-
 
 - layers issues for later 
 	- copy with frame between then add to previous frame, makes two layers ... not that big of a deal, not super common
 	- pasting on multiple frames adds consecutive layers ...
-
-- layer display design
-	- max width for one layer
 
 - ios safari
 	- un focus buttons - not focus, hover - worry about this later ...
@@ -172,9 +165,7 @@ idtio - lines
 		- key command to "add" texture - better word for texture?
 	- animate
 		- title saving on enter key command thing
-		- blur event issue
 		- lineWidth not applied from settings to actual drawing
-		- addColor error, inconsistent, loading time
 		- consolidate "update interface"
 		- copy/paste/cut fucked up still
 		- lines props dont change with layers toggled
@@ -199,22 +190,14 @@ idtio - lines
 		- big set/update version ...
 		- range class?
 
-10.6.2019
-- fixing layers/other interfaces so they're not being deleted and rebuilt
-- this maybe conflicts with making canvas based layers system
-- making ui values that are automatically updated more easily
-- rendering in lines is very choppy at the moment ....  
 
 todo/interesting
 - item window for game
 - collapsible hierarchy for game
 	- hide textures, items, or instances
 	- groups?
-
 - ui layouts for layers
 - game/editor delayed loading
 - game item/class render toggle 
 
-other branch
-- canvas ui for layers
  -->
