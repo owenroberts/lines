@@ -1,6 +1,8 @@
 class UIPanel extends UICollection {
 	constructor(id, label) {
 		super({id: id});
+
+		this.el.id = id;
 		
 		this.addClass("menu-panel");
 		this.addClass("undocked");

@@ -1,7 +1,9 @@
 class UICollection extends UIElement {
 	constructor(params) {
 		super(params);
+		if (params.id) this.el.id = params.id;
 	}
+
 
 	append(ui) {
 		if (Array.isArray(ui.elems)) {

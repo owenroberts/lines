@@ -165,7 +165,6 @@ select {
   white-space: nowrap;
   margin-right: 0.25em;
   margin-top: 0.25em;
-  flex: 0 1 12%;
 }
 .menu-panel .row span.block, .menu-panel .row label.block, .menu-panel .row input.block, .menu-panel .row select.block {
   flex: auto;
@@ -233,6 +232,11 @@ select {
 
 #frames, #layers {
   margin-top: 1px;
+}
+
+#layers-menu {
+  min-width: 100%;
+  order: 99;
 }
 
 #layers {

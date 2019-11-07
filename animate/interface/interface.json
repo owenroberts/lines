@@ -744,9 +744,43 @@
 		"module": "ui",
 		"sub": "layers",
 		"list": [
-			
 			{
-				"row": true,
+				"type": "UIButton",
+				"fromModule": {
+					"callback": "clone"
+				},
+				"params": {
+					"text": "Clone"
+				}
+			},
+			{
+				"type": "UIButton",
+				"fromModule": {
+					"callback": "split"
+				},
+				"params": {
+					"text": "Split"
+				}
+			},
+			{
+				"type": "UIButton",
+				"fromModule": {
+					"callback": "addAnimation"
+				},
+				"params": {
+					"text": "Tween"
+				}
+			},
+			{
+				"type": "UIButton",
+				"fromModule": {
+					"callback": "selectAll"
+				},
+				"params": {
+					"text": "Select"
+				}
+			},
+			{
 				"type": "UIColor",
 				"fromModule": {
 					"callback": "updateLayerColor"
@@ -754,6 +788,10 @@
 				"params": {
 					"text": "Change Color"
 				}
+			},
+			{
+				"type": "UICollection",
+				"id": "layers"
 			}
 		]
 	},

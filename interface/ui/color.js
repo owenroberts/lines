@@ -30,7 +30,7 @@ class UIColor extends UIInput {
 			});
 			
 			/* only reference like this in elements */
-			this.el.parentNode.appendChild(btn.el);
+			this.el.parentNode.insertBefore(btn.el, this.el.nextSibling);
 		}
 	}
 

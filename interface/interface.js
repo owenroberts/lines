@@ -59,7 +59,8 @@ function Interface(app) {
 		UIButton,
 		UIColor,
 		UISelect,
-		UISelectButton
+		UISelectButton,
+		UICollection
 	};
 
 	this.createUI = function(data, module, panel) {
@@ -67,6 +68,8 @@ function Interface(app) {
 		for (const k in data.fromModule) {
 			params[k] = module[data.fromModule[k]];
 		}
+
+		if (data.id) params.id = data.id;
 
 		if (data.set) {
 			/* setter, no callback in module, just set prop
@@ -82,6 +85,7 @@ function Interface(app) {
 		if (data.row) panel.addRow();
 		if (params.label) panel.add(new UILabel({ text: params.label}));
 		panel.add(ui);
+
 
 		if (params.prompt) ui.prompt = params.prompt; /* only key commands */
 		if (params.key) self.keys[data.key] = ui;

@@ -16,6 +16,11 @@ $column-width: 40px;
 	margin-top: 1px;
 }
 
+#layers-menu {
+	min-width: 100%;
+	order: 99;
+}
+
 #layers {
 	display: grid;
 	grid-auto-columns: minmax(auto, $column-width);
