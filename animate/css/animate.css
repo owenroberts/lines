@@ -238,6 +238,8 @@ select {
   order: 99;
   min-width: 100%;
   width: max-content;
+  padding: 0;
+  border: none;
 }
 #layers-menu input[type=color] {
   width: auto;

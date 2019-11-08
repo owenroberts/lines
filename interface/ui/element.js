@@ -25,6 +25,10 @@ class UIElement {
 		return this.el.value;
 	}
 
+	get position() {
+		return { x: this.el.getBoundingClientRect().x, y: this.el.getBoundingClientRect().y };
+	}
+
 	handler() {
 		this.callback();
 	}

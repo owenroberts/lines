@@ -103,8 +103,9 @@ function Layers() {
 			ev: 'end'
 		};
 
+		console.log(this.position);
 
-		const modal = new UIModal('Add Animation', lns, { left: this.el.offsetLeft,  top: this.el.offsetTop }, function() {
+		const modal = new UIModal('Add Animation', lns, this.position, function() {
 			for (let i = 0; i < lns.anim.layers.length; i++) {
 				const layer = lns.anim.layers[i];
 				if (layer.toggled) {
@@ -215,9 +216,4 @@ function Layers() {
 			}
 		}
 	};
-
-	// this.layerPanel = new UICollection({
-	// 	id: 'layers'
-	// });
-
 }

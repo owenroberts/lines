@@ -21,6 +21,8 @@ $column-width: 40px;
 	order: 99;
 	min-width: 100%;
 	width: max-content;
+	padding: 0;
+	border: none;
 
 	input[type=color] {
 		width: auto;
@@ -33,6 +35,7 @@ $column-width: 40px;
 	display: grid;
 	grid-auto-columns: minmax(auto, $column-width);
 	grid-gap: 1px;
+
 
 	.layer {
 		// max-width: 40px;

@@ -1,11 +1,12 @@
 class UIModal extends UICollection {
 	constructor(title, app, position, callback) {
-		super();
+		super({});
 		this.addClass('modal');
 		this.append(new UILabel({ text: title }));
 
-		this.el.style.top = `${position.top - 20}px`;
-		this.el.style.left = `${position.left - 100}px`;
+		
+		this.el.style.left = `${position.x - 100}px`;
+		this.el.style.top = `${position.y - 20}px`;
 
 		
 		// better way to do this ?? 
