@@ -78,5 +78,7 @@ class UIPanel extends UICollection {
 			|| this.rows[this.rows.length - 1] 
 			|| this.addRow();
 		row.append(ui);
+
+		if (ui.el.id) this[ui.el.id] = ui; /* sub panel from collection */
 	}
 }

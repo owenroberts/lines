@@ -790,6 +790,7 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "UICollection",
 				"id": "layers"
 			}

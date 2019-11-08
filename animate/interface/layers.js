@@ -211,15 +211,13 @@ function Layers() {
 					index: i,
 					callback: layer.toggle.bind(layer)
 				}, layer);
-				self.layerPanel.append(layer.ui);
-
-				
+				self.panel.layers.append(layer.ui);
 			}
 		}
 	};
 
-	this.layerPanel = new UICollection({
-		id: 'layers'
-	});
+	// this.layerPanel = new UICollection({
+	// 	id: 'layers'
+	// });
 
 }

@@ -235,8 +235,15 @@ select {
 }
 
 #layers-menu {
-  min-width: 100%;
   order: 99;
+  min-width: 100%;
+  width: max-content;
+}
+#layers-menu input[type=color] {
+  width: auto;
+  flex: 0 1 40px;
+  height: 1.75em;
+  /* temp fix til main color selector works */
 }
 
 #layers {
@@ -249,15 +256,18 @@ select {
   grid-template-columns: auto 1fr auto;
 }
 #layers .layer .anim {
+  margin: 0;
+  line-height: 1;
   background-color: lightgreen;
 }
-#layers .layer .left, #layers .layer .right, #layers .layer .toggle {
+#layers .layer .left, #layers .layer .right, #layers .layer .layer-toggle {
+  margin: 0;
   background-color: lightgray;
 }
-#layers .layer .left:hover, #layers .layer .right:hover, #layers .layer .toggle:hover {
+#layers .layer .left:hover, #layers .layer .right:hover, #layers .layer .layer-toggle:hover {
   background-color: gray;
 }
-#layers .layer .left.off, #layers .layer .right.off, #layers .layer .toggle.off {
+#layers .layer .left.off, #layers .layer .right.off, #layers .layer .layer-toggle.off {
   background-color: #ffddff;
 }
 #layers .layer .left, #layers .layer .right {
@@ -274,7 +284,7 @@ select {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-#layers .layer .toggle {
+#layers .layer .layer-toggle {
   cursor: pointer;
 }
 

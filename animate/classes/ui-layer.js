@@ -6,7 +6,7 @@ class UILayer extends UICollection {
 		this.el.style.gridRow = params.index + 1;
 
 		this.toggle = new UIToggle({
-			type: 'toggle',
+			type: 'layer-toggle',
 			text: `✎${layer.d}`,
 			callback: params.callback
 		});
