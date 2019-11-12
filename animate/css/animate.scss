@@ -32,9 +32,12 @@ $column-width: 40px;
 }
 
 #layers {
-	display: grid;
-	grid-auto-columns: minmax(auto, $column-width);
-	grid-gap: 1px;
+	// display: grid;
+	// grid-auto-columns: minmax(auto, $column-width);
+	// grid-gap: 1px;
+
+	display: flex;
+	flex-direction: column;
 
 
 	.layer {

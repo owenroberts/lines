@@ -184,6 +184,9 @@ function Layers() {
 	};
 
 	this.update = function() {
+		// is this crazy ? 
+		self.panel.layers.el.style.width = `${lns.ui.plusFrame.el.getBoundingClientRect().width * lns.anim.plusFrame}px`
+		
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];
 			if (!layer.ui) self.addUI(layer, i);

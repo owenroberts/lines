@@ -249,9 +249,8 @@ select {
 }
 
 #layers {
-  display: grid;
-  grid-auto-columns: minmax(auto, 40px);
-  grid-gap: 1px;
+  display: flex;
+  flex-direction: column;
 }
 #layers .layer {
   display: grid;
