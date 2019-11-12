@@ -133,8 +133,9 @@ function Files(params) {
 
 	/* shift o */
 	this.reOpenFile = function() {
-		if (self.fileName) localStorage.setItem('re-open', self.fileName);
-		location.reload();
+		self.saveFile(undefined, undefined, function(filename) {
+			location.href += `?src=${ prompt("Enter location:") }/${ filename }`;
+		});
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {

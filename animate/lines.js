@@ -44,12 +44,6 @@ window.addEventListener("load", function() {
 
 		lns.render.start();
 	});
-
-	const openFile = localStorage.getItem('re-open');
-	if (openFile) {
-		lns.files.loadFile(openFile, lns.ui.fio.updateInterface);
-		localStorage.removeItem('re-open');
-	}
 });
 
 function appSave() {
