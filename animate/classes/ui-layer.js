@@ -32,10 +32,10 @@ class UILayer extends UICollection {
 		});
 		this.append(this.right);
 
-		this.anims = [];
-		for (let i = 0; i < layer.a.length; i++) {
-			this.anims[i] = new UIAnimation(layer.a[i]);
-			this.append(this.anims[i]);
+		this.tweens = [];
+		for (let i = 0; i < layer.t.length; i++) {
+			this.tweens[i] = new UITween(layer.t[i]);
+			this.append(this.tweens[i]);
 		}
 
 		this.update();
@@ -45,10 +45,10 @@ class UILayer extends UICollection {
 		return this.el;
 	}
 
-	addAnimation(a) {
-		const anim = new UIAnimation(a);
-		this.anims.push(anim);
-		this.append(anim);
+	addTween(tween) {
+		const tweenUI = new UITween(tween);
+		this.tweens.push(tween);
+		this.append(tweenUI);
 	}
 
 	update() {
@@ -63,8 +63,8 @@ class UILayer extends UICollection {
 		this.left.el.style['grid-column'] = `${this.layer.startFrame + 1} / span 1`;
 		this.toggle.el.style['grid-column'] = `${this.layer.startFrame + 2} / span ${this.layer.endFrame - this.layer.startFrame + 1}`;
 
-		for (let i = 0; i < this.anims.length; i++) {
-			this.anims[i].update();
+		for (let i = 0; i < this.tweens.length; i++) {
+			this.tweens[i].update();
 		}
 	}
 }

@@ -257,7 +257,7 @@ select {
   display: grid;
   grid-template-columns: auto 1fr auto;
 }
-#layers .layer .anim {
+#layers .layer .tween {
   margin: 0;
   line-height: 1;
   background-color: lightgreen;

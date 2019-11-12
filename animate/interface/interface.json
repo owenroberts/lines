@@ -765,7 +765,7 @@
 			{
 				"type": "UIButton",
 				"fromModule": {
-					"callback": "addAnimation"
+					"callback": "addTween"
 				},
 				"params": {
 					"text": "Tween"

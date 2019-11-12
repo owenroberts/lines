@@ -6,7 +6,7 @@ function Draw(anim, defaults) {
 		x: 0,
 		y: 0,
 		f: { s: anim.currentFrame, e: anim.currentFrame },
-		a: [],
+		t: [],
 		n: defaults.n,
 		r: defaults.r,
 		w: defaults.w,
@@ -49,7 +49,7 @@ function Draw(anim, defaults) {
 		self.layer.x = 0;
 		self.layer.y = 0;
 		self.layer.f = { s: anim.currentFrame, e: anim.currentFrame };
-		self.layer.a = [];
+		self.layer.t = [];
 		self.layer.n = self.layer.n;
 		self.layer.r = self.layer.r;
 		self.layer.w = self.layer.w;

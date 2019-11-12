@@ -4,7 +4,7 @@ class Layer {
 			this[key] = params[key];
 		}
 		this.toggled = false;
-		this.resetAnims();
+		this.resetTweens();
 		if (this.ui) delete this.ui; /* fix for adding layers in add index or remove index etc */
 	}
 
@@ -24,10 +24,11 @@ class Layer {
 		lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
 	}
 
-	addAnimation(a) {
-		this.a.push(a);
-		if (a.sf < this.startFrame) this.startFrame = a.sf;
-		if (a.ef > this.endFrame) this.endFrame = a.ef;
+	addTween(tween) {
+		this.t.push(tween);
+		if (tween.sf < this.startFrame) this.startFrame = tween.sf;
+		if (tween.ef > this.endFrame) this.endFrame = tween.ef;
+		this.ui.addTween(tween);
 	}
 
 	get startFrame() {
@@ -36,7 +37,7 @@ class Layer {
 
 	set startFrame(f) {
 		this.f.s = f;
-		this.resetAnims();
+		this.resetTweens();
 	}
 
 	get endFrame() {
@@ -45,7 +46,7 @@ class Layer {
 
 	set endFrame(f) {
 		this.f.e = f;
-		this.resetAnims();
+		this.resetTweens();
 
 		if (lns.anim.state == 'default' && lns.anim.currentState.end != f) 
 			lns.anim.currentState.end = f;
@@ -84,7 +85,7 @@ class Layer {
 			this.f.e = index - 1;
 		}
 
-		this.resetAnims();
+		this.resetTweens();
 		this.ui.update();
 	}
 
@@ -92,7 +93,7 @@ class Layer {
 		if (!n) n = -1;	/* what is n? */
 		if (this.f.s >= index) this.f.s += n;
 		if (this.f.e >= index) this.f.e += n;
-		this.resetAnims();
+		this.resetTweens();
 		this.ui.update();
 	}
 
@@ -107,23 +108,23 @@ class Layer {
 			s: 0,
 			e: lns.anim.drawings[this.d].length /* faster to save?? */
 		};
-		for (let i = 0; i < this.a.length; i++) {
-			const a = this.a[i];
-			if (a.sf <= lns.anim.currentFrame && a.ef >= lns.anim.currentFrame) {
-				props[a.prop] = Cool.map(f, a.sf, a.ef, a.sv, a.ev);
-				if (a.prop == 's' || a.prop == 'e')
-					props[a.prop] = Math.round(props[a.prop]);
+		for (let i = 0; i < this.t.length; i++) {
+			const tween = this.t[i];
+			if (tween.sf <= lns.anim.currentFrame && tween.ef >= lns.anim.currentFrame) {
+				props[tween.prop] = Cool.map(f, tween.sf, tween.ef, tween.sv, tween.ev);
+				if (tween.prop == 's' || tween.prop == 'e')
+					props[tween.prop] = Math.round(props[tween.prop]);
 			}
 
 		}
 		return props;
 	}
 
-	resetAnims() {
-		for (let i = 0; i < this.a.length; i++) {
-			const a = this.a[i];
-			if (a.sf < this.startFrame) a.sf = this.startFrame;
-			if (a.ef > this.endFrame) a.ef = this.endFrame;
+	resetTweens() {
+		for (let i = 0; i < this.t.length; i++) {
+			const tween = this.t[i];
+			if (tween.sf < this.startFrame) tween.sf = this.startFrame;
+			if (tween.ef > this.endFrame) tween.ef = this.endFrame;
 		}
 	}
 }

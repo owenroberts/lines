@@ -93,9 +93,9 @@ function Layers() {
 		}
 	};
 
-	this.addAnimation = function() {
+	this.addTween = function() {
 
-		const a = {
+		const tween = {
 			prop: 'e',
 			sf: lns.anim.currentFrame,
 			ef: lns.anim.currentFrame + 10,
@@ -103,16 +103,14 @@ function Layers() {
 			ev: 'end'
 		};
 
-		console.log(this.position);
-
 		const modal = new UIModal('Add Animation', lns, this.position, function() {
 			for (let i = 0; i < lns.anim.layers.length; i++) {
 				const layer = lns.anim.layers[i];
 				if (layer.toggled) {
-					if (a.ev == 'end') a.ev = lns.anim.drawings[layer.d].length;
-					layer.addAnimation(a);
+					if (tween.ev == 'end') tween.ev = lns.anim.drawings[layer.d].length;
+					layer.addTween(tween);
 					layer.ui.update();
-					layer.ui.addAnimation(a);
+					layer.ui.addTween(tween);
 					layer.toggle();
 					layer.ui.toggle.on(); /* ick */
 					lns.ui.updateInterface();
@@ -126,40 +124,40 @@ function Layers() {
 			value: 'e',
 			selected: 'e',
 			callback: function(value) {
-				a.prop = value;
+				tween.prop = value;
 			}
 		}));
 
 		modal.add(new UILabel({ text: 'Start:' }));
 
 		modal.add(new UIBlur({
-			value: a.sf,
+			value: tween.sf,
 			callback: function(value) {
-				a.sf = +value;
+				tween.sf = +value;
 			}
 		}));
 
 		modal.add(new UILabel({ text: 'End:' }));
 		modal.add(new UIBlur({
-			value: a.ef,
+			value: tween.ef,
 			callback: function(value) {
-				a.ef = +value;
+				tween.ef = +value;
 			}
 		}));
 
 		modal.add(new UILabel({ text: 'Begin:' }));
 		modal.add(new UIBlur({
-			value: a.sv,
+			value: tween.sv,
 			callback: function(value) {
-				a.sv = +value;
+				tween.sv = +value;
 			}
 		}));
 
 		modal.add(new UILabel({ text: 'End:' }));
 		modal.add(new UIBlur({
-			value: a.ev,
+			value: tween.ev,
 			callback: function(value) {
-				a.ev = +value;
+				tween.ev = +value;
 			}
 		}));
 	};

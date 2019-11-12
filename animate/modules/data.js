@@ -292,7 +292,7 @@ function Data(anim) {
 				if (anim.currentState.end < layer.endFrame) anim.currentState.end = layer.endFrame;
 				switch(params.type) {
 					case "Explode":
-						layer.a.push({
+						layer.addTween({
 							prop: 'e',
 							sf: layer.f.s,
 							ef: layer.f.e,
@@ -301,7 +301,7 @@ function Data(anim) {
 						});
 					break;
 					case "Reverse":
-						layer.a.push({
+						layer.addTween({
 							prop: 's',
 							sf: layer.f.s,
 							ef: layer.f.e,
@@ -311,14 +311,14 @@ function Data(anim) {
 					break;
 					case "ExRev":
 						const mid = Math.floor(n / 2);
-						layer.a.push({
+						layer.addTween({
 							prop: 'e',
 							sf: layer.f.s,
 							ef: layer.f.s + mid,
 							sv: 0,
 							ev: anim.drawings[layer.d].length
 						});
-						layer.a.push({
+						layer.addTween({
 							prop: 's',
 							sf: layer.f.s + mid,
 							ef: layer.f.e,
@@ -327,6 +327,7 @@ function Data(anim) {
 						});
 					break;
 				}
+				layer.ui.update();
 			}
 		}
 		lns.ui.updateInterface();

@@ -103,13 +103,13 @@ class Animation {
 				if (x) this.rndr.x += x;
 				if (y) this.rndr.y += y;
 
-				if (layer.a) {
-					for (let j = 0; j < layer.a.length; j++) {
-						const a = layer.a[j];
-						if (a.sf <= this.currentFrame && a.ef >= this.currentFrame) {
-							this.rndr[a.prop] = Cool.map(this.currentFrame, a.sf, a.ef, a.sv, a.ev);
-							if (a.prop == 's' || a.prop == 'e')
-								this.rndr[a.prop] = Math.round(this.rndr[a.prop]);
+				if (layer.t) {
+					for (let j = 0; j < layer.t.length; j++) {
+						const tween = layer.t[j];
+						if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
+							this.rndr[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
+							if (tween.prop == 's' || tween.prop == 'e')
+								this.rndr[tween.prop] = Math.round(this.rndr[tween.prop]);
 						}
 					}
 				}
