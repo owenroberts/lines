@@ -790,8 +790,7 @@
 				}
 			},
 			{
-				"row": true,
-				"type": "UICollection",
+				"type": "UIRow",
 				"id": "layers"
 			}
 		]
@@ -803,14 +802,9 @@
 		"sub": "drawings",
 		"list": [
 			{
-				"type": "UIButton",
-				"key": "y",
-				"fromModule": {
-					"callback": "displayDrawings"
-				},
-				"params": {
-					"text": "Display Drawings"
-				}
+				"type": "UIRow",
+				"id": "drawings"
+				
 			}
 		]
 	},

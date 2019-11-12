@@ -19,10 +19,11 @@ function animateInterface(ui) {
 	/* update interface */
 	ui.updateInterface = function() {
 		ui.updateFrameNum();
-		ui.layers.resetLayers();
-		ui.drawings.resetDrawings();
+		// ui.layers.resetLayers();
+		// ui.drawings.resetDrawings();
 		// ui.layers.drawLayers();
 		ui.layers.update();
+		ui.drawings.update();
 		ui.updateFramesPanel();
 	};
 
@@ -92,7 +93,7 @@ function animateInterface(ui) {
 		if (ui.framesPanel.children[lns.anim.currentFrame]) 
 			ui.framesPanel.setId("current", lns.anim.currentFrame);
 		else
-			ui.plusFrame.setId("current");
+			ui.plusFrame.id = "current";
 		ui.faces.frameDisplay.value = lns.anim.currentFrame;
 	};
 

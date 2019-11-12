@@ -5,6 +5,7 @@ class Layer {
 		}
 		this.toggled = false;
 		this.resetAnims();
+		if (this.ui) delete this.ui; /* fix for adding layers in add index or remove index etc */
 	}
 
 	clean() {
@@ -21,24 +22,6 @@ class Layer {
 
 	remove() {
 		lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
-	}
-
-	addIndex(index) {
-		if (!this.isInFrame(index)) {
-			if (this.f.s - 1 == index) this.f.s -= 1;
-			else if (this.f.e + 1 == index) this.f.e += 1;
-			else {
-				lns.anim.layers.push(new Layer({
-					...this,
-					f: { s: index, e: index }
-				}));
-			}
-		}
-
-		/* lns.layers not modular ? */
-		if (lns.anim.layers.indexOf(this) == -1) {
-			lns.anim.layers.push(this);
-		}
 	}
 
 	addAnimation(a) {
@@ -68,6 +51,26 @@ class Layer {
 			lns.anim.currentState.end = f;
 	}
 
+	addIndex(index) {
+		if (!this.isInFrame(index)) {
+			if (this.f.s - 1 == index) this.f.s -= 1;
+			else if (this.f.e + 1 == index) this.f.e += 1;
+			else {
+				lns.anim.layers.push(new Layer({
+					...this,
+					f: { s: index, e: index }
+				}));
+			}
+		}
+
+		/* lns.layers not modular ? */
+		if (lns.anim.layers.indexOf(this) == -1) {
+			lns.anim.layers.push(this);
+		}
+
+		this.ui.update();
+	}
+
 	removeIndex(index) {
 		/* removing layer if not in any frame ... maybe just leave it ? f: -1, -1 or something */
 		if (this.f.s == index && this.f.e == index) 
@@ -80,7 +83,9 @@ class Layer {
 			lns.anim.layers.push(newLayer);
 			this.f.e = index - 1;
 		}
+
 		this.resetAnims();
+		this.ui.update();
 	}
 
 	shiftIndex(index, n) {
@@ -88,6 +93,7 @@ class Layer {
 		if (this.f.s >= index) this.f.s += n;
 		if (this.f.e >= index) this.f.e += n;
 		this.resetAnims();
+		this.ui.update();
 	}
 
 	isInFrame(index) {

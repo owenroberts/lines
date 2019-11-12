@@ -36,7 +36,8 @@ class UIAnimation extends UICollection {
 	}
 
 	update() {
+		// console.log('anim start frame', this.anim.sf); // fuck always starts at 2 because layer moves ....
 		this.left.el.style['grid-column'] = `${this.anim.sf + 1} / span 1`;
-		this.label.el.style['grid-column'] = `${this.anim.sf + 2} / span ${this.anim.ef - this.anim.sf + 1}`;
+		this.label.el.style['grid-column'] = `${this.anim.sf + 2} / span ${this.anim.ef - this.anim.sf }`;
 	}
 }

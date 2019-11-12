@@ -53,13 +53,15 @@ class UILayer extends UICollection {
 
 	update() {
 		/* position in grid */
-		this.el.style.gridColumnStart = this.layer.startFrame + 1;
-		this.el.style.gridColumnEnd = this.layer.endFrame + 2;
+		this.el.style.gridColumnStart = 1; // this.layer.startFrame + 1;
+		this.el.style.gridColumnEnd = lns.anim.endFrame + 2; // this.layer.endFrame + 2;
+
 
 		/* grid for children */
-		this.el.style['grid-template-columns'] = `auto repeat(${this.layer.endFrame - this.layer.startFrame + 1}, 1fr) auto`;
+		this.el.style['grid-template-columns'] = `auto repeat(${lns.anim.endFrame + 1}, 1fr) auto`;
 
-		this.toggle.el.style['grid-column'] = `2 / span ${this.layer.endFrame - this.layer.startFrame + 1}`;
+		this.left.el.style['grid-column'] = `${this.layer.startFrame + 1} / span 1`;
+		this.toggle.el.style['grid-column'] = `${this.layer.startFrame + 2} / span ${this.layer.endFrame - this.layer.startFrame + 1}`;
 
 		for (let i = 0; i < this.anims.length; i++) {
 			this.anims[i].update();

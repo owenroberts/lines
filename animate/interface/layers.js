@@ -176,44 +176,19 @@ function Layers() {
 		self.selectedAll = !self.selectedAll;
 	};
 
-	this.drawLayers = function() {
-		const maxWidth = 60;
-		const w = Math.min(640, self.canvas.canvas.parentElement.offsetWidth);
-		const row = 4;
-		const h = row * (lns.anim.layers.length + 1);
-		self.canvas.setHeight(h);
-		const col = Math.min(maxWidth, w / (lns.anim.plusFrame));
-		self.canvas.setWidth(Math.min(w, col * lns.anim.plusFrame));
-
-		for (let i = 0; i < lns.anim.plusFrame; i++) {
-			const x = i * col;
-			if (i == lns.anim.currentFrame) self.canvas.ctx.fillStyle = '#FF79FF';
-			else self.canvas.ctx.fillStyle = '#fdf';
-			self.canvas.ctx.fillRect((i * col) + col/20, h - 5, col - col/10, 4);
-		}
-
-		for (let i = 0; i < lns.anim.layers.length; i++) {
-			const layer = lns.anim.layers[i];
-			const x = layer.f.s * col + 1;
-			const y = i * row + row/20;
-			const _w = (layer.f.e - layer.f.s + 1) * col - 2;
-			self.canvas.ctx.fillStyle = '#ADD8E6';
-			self.canvas.ctx.fillRect(x, y, _w, row - 1);
-		}
+	this.addUI = function(layer, index) {
+		layer.ui = new UILayer({
+			type: 'layer',
+			index: index,
+			callback: layer.toggle.bind(layer)
+		}, layer);
+		self.panel.layers.append(layer.ui);
 	};
 
 	this.update = function() {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];
-			if (!layer.ui) {
-				layer.ui = new UILayer({
-					type: 'layer',
-					text: ''+i,
-					index: i,
-					callback: layer.toggle.bind(layer)
-				}, layer);
-				self.panel.layers.append(layer.ui);
-			}
+			if (!layer.ui) self.addUI(layer, i);
 		}
 	};
 }

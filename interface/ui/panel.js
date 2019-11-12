@@ -64,6 +64,7 @@ class UIPanel extends UICollection {
 		const row = new UIRow({ id: id });
 		this.append(row);
 		this.rows.push(row);
+		if (id) this[id] = row; /* sub panel from collection */
 		return row;
 	}
 
@@ -78,7 +79,5 @@ class UIPanel extends UICollection {
 			|| this.rows[this.rows.length - 1] 
 			|| this.addRow();
 		row.append(ui);
-
-		if (ui.el.id) this[ui.el.id] = ui; /* sub panel from collection */
 	}
 }

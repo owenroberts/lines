@@ -39,10 +39,8 @@ window.addEventListener("load", function() {
 	};
 	
 	lns.ui.load('./interface/interface.json', function() {
-		
-		if (location.search.split('=')[1]) {
-			lns.files.loadFile(location.search.split('=')[1].split('.')[0], lns.ui.fio.updateInterface);
-		}
+		const url = location.search.split('=')[1]
+		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.fio.updateInterface);
 
 		lns.render.start();
 	});

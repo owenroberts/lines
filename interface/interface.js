@@ -1,6 +1,19 @@
 function Interface(app) {
 	const self = this;
-
+	const uiClasses = {
+		UIElement,
+		UIRange,
+		UIText,
+		UIBlur,
+		UITextRange,
+		UIToggle,
+		UIButton,
+		UIColor,
+		UISelect,
+		UISelectButton,
+		UICollection,
+		UIRow
+	};
 	document.body.classList.add(Cool.mobilecheck() ? 'mobile' : 'desktop');
 
 	this.panels = {};
@@ -49,20 +62,6 @@ function Interface(app) {
 			});
 	};
 
-	const uiClasses = {
-		UIElement,
-		UIRange,
-		UIText,
-		UIBlur,
-		UITextRange,
-		UIToggle,
-		UIButton,
-		UIColor,
-		UISelect,
-		UISelectButton,
-		UICollection
-	};
-
 	this.createUI = function(data, module, panel) {
 		const params = { key: data.key, ...data.params };
 		for (const k in data.fromModule) {
@@ -84,7 +83,8 @@ function Interface(app) {
 		const ui = new uiClasses[data.type](params);
 		if (data.row) panel.addRow();
 		if (params.label) panel.add(new UILabel({ text: params.label}));
-		panel.add(ui);
+		if (data.type == "UIRow") panel.addRow(data.id);
+		else panel.add(ui);
 
 
 		if (params.prompt) ui.prompt = params.prompt; /* only key commands */

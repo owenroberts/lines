@@ -1,4 +1,4 @@
-function Drawings(panel) {
+function Drawings() {
 	const self = this;
 
 	this.getDrawingLayer = function(index) {
@@ -19,12 +19,9 @@ function Drawings(panel) {
 		}
 	};
 
-	this.displayDrawings = function() {
-		lns.ui.layers.resetLayers();
-		self.resetDrawings();
-		self.panel.addRow('drawings');
+	this.update = function() {
 		for (let i = 0; i < lns.anim.drawings.length; i++) {
-			if (lns.anim.drawings[i]) {
+			if (lns.anim.drawings[i] && !self.panel.drawings[i]) {
 				let toggleOn = false;
 				const drawing = lns.anim.drawings[i];
 
@@ -43,12 +40,13 @@ function Drawings(panel) {
 						y: layer.y
 					} /* prob a better way to do this ... 
 						this stops existing when updating interface */
+				} else {
+					toggleOn = false;
 				}
-				else toggleOn = false;
 
-				self.panel.add(new UIToggle({
-					onText: i,
-					offText: i,
+				self.panel.drawings.append(new UIToggle({
+					id: i,
+					text: i,
 					isOn: toggleOn,
 					callback: function() {
 						layer = self.getDrawingLayer(i);
@@ -80,16 +78,10 @@ function Drawings(panel) {
 							}
 							lns.anim.layers.push(layer);
 						}
+						lns.ui.layers.update();
 					}
 				}));
 			}
-		}
-	};
-
-	this.resetDrawings = function() {
-		const rows = this.panel.rows;
-		for (let i = rows.length - 1; i >= 1; i--) {
-			this.panel.removeRow(rows[i]);
 		}
 	};
 }
