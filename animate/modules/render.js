@@ -38,7 +38,7 @@ function Render(lps, color) {
 		lns.anim.frame = 0;
 		lns.anim.isPlaying = false;
 		lns.canvas.ctx.miterLimit = 1;
-		lns.ui.updateInterface();
+		lns.ui.update();
 	};
 
 	/* toggle play animation */
@@ -64,7 +64,7 @@ function Render(lps, color) {
 			self.timer = performance.now();
 
 			if (lns.anim.isPlaying) {
-				lns.ui.updateInterface(); 
+				lns.ui.update(); 
 			}
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);

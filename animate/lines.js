@@ -40,7 +40,7 @@ window.addEventListener("load", function() {
 	
 	lns.ui.load('./interface/interface.json', function() {
 		const url = location.search.split('=')[1]
-		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.fio.updateInterface);
+		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.fio.update);
 
 		lns.render.start();
 	});

@@ -17,6 +17,7 @@ class UILayer extends UICollection {
 			callback: (dir, num) => {
 				layer.startFrame += (dir ? dir : -1) * (num ? num : 1);
 				this.update();
+				lns.ui.update();
 			}		
 		});
 		this.append(this.left);
@@ -28,6 +29,7 @@ class UILayer extends UICollection {
 			callback: (dir, num) => {
 				layer.endFrame += (dir ? dir : 1) * (num ? num : 1);
 				this.update();
+				lns.ui.update();
 			}		
 		});
 		this.append(this.right);
@@ -47,7 +49,7 @@ class UILayer extends UICollection {
 
 	addTween(tween) {
 		const tweenUI = new UITween(tween);
-		this.tweens.push(tween);
+		this.tweens.push(tweenUI);
 		this.append(tweenUI);
 	}
 
@@ -56,13 +58,13 @@ class UILayer extends UICollection {
 		this.el.style.gridColumnStart = 1; // this.layer.startFrame + 1;
 		this.el.style.gridColumnEnd = lns.anim.endFrame + 2; // this.layer.endFrame + 2;
 
-
 		/* grid for children */
 		this.el.style['grid-template-columns'] = `auto repeat(${lns.anim.endFrame + 1}, 1fr) auto`;
 
 		this.left.el.style['grid-column'] = `${this.layer.startFrame + 1} / span 1`;
 		this.toggle.el.style['grid-column'] = `${this.layer.startFrame + 2} / span ${this.layer.endFrame - this.layer.startFrame + 1}`;
 
+		
 		for (let i = 0; i < this.tweens.length; i++) {
 			this.tweens[i].update();
 		}

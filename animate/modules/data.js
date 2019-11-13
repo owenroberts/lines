@@ -23,7 +23,7 @@ function Data(anim) {
 			// console.log(layer);
 			anim.layers.push(layer);
 			anim.drawings.push(_.cloneDeep(lns.draw.drawing));
-			lns.ui.updateInterface();
+			lns.ui.update();
 			self.saveState(); /* save current state - one undo currently */
 			lns.draw.reset();
 		}
@@ -139,7 +139,7 @@ function Data(anim) {
 			}
 		}
 		lns.render.setFrame(anim.currentFrame - 1);
-		lns.ui.updateInterface();
+		lns.ui.update();
 	};
 
 	/* shift-d */
@@ -207,7 +207,7 @@ function Data(anim) {
 		} else {
 			console.log("%c Can't undo ", "color:lightblue;background:gray;");
 		}
-		lns.ui.updateInterface();
+		lns.ui.update();
 	};
 
 	/* i key */
@@ -217,7 +217,7 @@ function Data(anim) {
 			anim.layers[i].shiftIndex(anim.currentFrame, 1);
 			anim.layers[i].removeIndex(anim.currentFrame);
 		}
-		lns.ui.updateInterface();
+		lns.ui.update();
 	};
 
 	/* shift-i key */
@@ -228,7 +228,7 @@ function Data(anim) {
 			anim.layers[i].removeIndex(anim.currentFrame + 1);
 		}
 		anim.frame = anim.currentFrame + 1;
-		lns.ui.updateInterface();
+		lns.ui.update();
 	};
 
 	/* m key */
@@ -243,7 +243,7 @@ function Data(anim) {
 				self.paste();
 			}
 		}
-		lns.ui.updateInterface();
+		lns.ui.update();
 	};
 
 	/* q key  */
@@ -330,6 +330,6 @@ function Data(anim) {
 				layer.ui.update();
 			}
 		}
-		lns.ui.updateInterface();
+		lns.ui.update();
 	};
 }

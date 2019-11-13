@@ -79,10 +79,12 @@ class Layer {
 		else if (this.f.s == index) this.f.s += 1;
 		else if (this.f.e == index) this.f.e -= 1;
 		else if (index > this.f.s && index < this.f.e) {
-			const newLayer = _.cloneDeep(this);
-			newLayer.f = { s: index + 1, e: this.f.e };
-			lns.anim.layers.push(newLayer);
-			this.f.e = index - 1;
+			const layer = _.cloneDeep(this);
+			layer.f = { s: index + 1, e: this.f.e };
+			delete layer.ui;
+			layer.resetTweens();
+			lns.anim.layers.push(layer);
+			this.f.e = index;
 		}
 
 		this.resetTweens();
@@ -121,6 +123,7 @@ class Layer {
 	}
 
 	resetTweens() {
+		if (this.t.length > 0) console.log(this.f, this.ui);
 		for (let i = 0; i < this.t.length; i++) {
 			const tween = this.t[i];
 			if (tween.sf < this.startFrame) tween.sf = this.startFrame;

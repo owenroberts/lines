@@ -17,7 +17,7 @@ function animateInterface(ui) {
 	});
 
 	/* update interface */
-	ui.updateInterface = function() {
+	ui.update = function() {
 		ui.updateFrameNum();
 		// ui.layers.resetLayers();
 		// ui.drawings.resetDrawings();
@@ -63,7 +63,7 @@ function animateInterface(ui) {
 					text: ''+i,
 					callback: function() {
 						lns.render.setFrame(i);
-						ui.updateInterface();
+						ui.update();
 					}	
 				})
 
@@ -115,7 +115,7 @@ function animateInterface(ui) {
 	/* call after changing a frame */
 	ui.afterFrame = function() {
 		lns.draw.reset();
-		ui.updateInterface();
+		ui.update();
 	};
 
 	/* e key - go to next frame */

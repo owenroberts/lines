@@ -31,7 +31,7 @@ function FilesInterface(ui) {
 	ui.keys['o'] = new UIButton({
 		id: "open",
 		callback: function() {
-			lns.files.loadFile(undefined, self.updateInterface);
+			lns.files.loadFile(undefined, self.update);
 		},
 		key: "o"
 	});
@@ -42,7 +42,7 @@ function FilesInterface(ui) {
 		key: 'shift-o'
 	});
 
-	this.updateInterface = function(data, params) {
+	this.update = function(data, params) {
 		self.title.value = lns.files.fileName.split('/').pop();
 		ui.faces.fps.value = data.fps;
 
@@ -55,6 +55,6 @@ function FilesInterface(ui) {
 
 		if (data.bg) lns.ui.faces.bgColor.value = data.bg;
 		if (params.load) lns.ui.settings.canvasLoad();
-		ui.updateInterface();
+		ui.update();
 	};
 }

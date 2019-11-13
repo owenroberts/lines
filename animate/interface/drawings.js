@@ -1,7 +1,7 @@
 function Drawings() {
 	const self = this;
 
-	this.getDrawingLayer = function(index) {
+	this.getLayer = function(index) {
 		const layers = [];
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			if (lns.anim.layers[i].d == index) layers.push(lns.anim.layers[i]);
@@ -26,7 +26,7 @@ function Drawings() {
 				const drawing = lns.anim.drawings[i];
 
 				/* check for existing layer */
-				let layer = self.getDrawingLayer(i);
+				let layer = self.getLayer(i);
 				let props;
 				if (layer) {
 					toggleOn = layer.isInFrame(lns.anim.currentFrame);
@@ -49,7 +49,7 @@ function Drawings() {
 					text: i,
 					isOn: toggleOn,
 					callback: function() {
-						layer = self.getDrawingLayer(i);
+						layer = self.getLayer(i);
 						if (layer) {
 							if (layer.isInFrame(lns.anim.currentFrame)) {
 								layer.removeIndex(lns.anim.currentFrame);

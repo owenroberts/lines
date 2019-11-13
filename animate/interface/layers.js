@@ -113,7 +113,7 @@ function Layers() {
 					layer.ui.addTween(tween);
 					layer.toggle();
 					layer.ui.toggle.on(); /* ick */
-					lns.ui.updateInterface();
+					lns.ui.update();
 				}
 			}
 		});
@@ -190,6 +190,7 @@ function Layers() {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];
 			if (!layer.ui) self.addUI(layer, i);
+			else layer.ui.update();
 		}
 	};
 }
