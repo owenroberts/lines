@@ -10,7 +10,8 @@ class UIElement {
 			this.el.style[prop] = params.css[prop];
 		}
 
-		if (params.id !== undefined) this.el.id = params.id;
+		
+		// if (params.id !== undefined) this.el.id = params.id;
 		if (params.class) this.addClass(params.class);
 	}
 
