@@ -52,10 +52,10 @@ function Render(lps, color) {
 
 	/* f key */
 	this.setFrame = function(f) {
+		// console.log(f);
 		if (+f >= 0) {
 			lns.anim.frame = +f;
 			lns.draw.setFrame(+f);
-
 		}
 	};
 

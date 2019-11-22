@@ -32,6 +32,9 @@ function animateInterface(ui) {
 		type: "plus",
 		callback: function() {
 			ui.setFrame(lns.anim.plusFrame);
+			/* for beginning no layer -1 state */
+			if (lns.anim.currentFrame != lns.anim.plusFrame)
+				ui.setFrame(lns.anim.plusFrame);
 		},
 		key: "+"
 	});

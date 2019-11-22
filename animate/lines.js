@@ -34,14 +34,15 @@ window.addEventListener("load", function() {
 	lns.ui.settings.canvasLoad = function() {
 		if (localStorage['settings-lns']) {
 			const settings = JSON.parse(localStorage['settings-lns']);
-			if (settings) lns.canvas.setLineWidth(settings.lineWidth);
+
+			/* wtf */
+			if (settings) lns.canvas.setLineWidth(settings.lineWidth); 
 		}
 	};
 	
 	lns.ui.load('./interface/interface.json', function() {
 		const url = location.search.split('=')[1]
 		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.fio.update);
-
 		lns.render.start();
 	});
 });
@@ -51,8 +52,8 @@ function appSave() {
 		canvasColor: lns.canvas.bgColor,
 		lineWidth: lns.canvas.ctx.lineWidth,
 		c: lns.draw.layer.c,
-		width: lns.canvas.width,
-		height: lns.canvas.height,
+		width: lns.canvas.width / lns.canvas.dpr,
+		height: lns.canvas.height / lns.canvas.dpr,
 		fps: lns.anim.fps,
 		lps: lns.render.lps,
 		onionSkinIsVisible: lns.render.onionSkinIsVisible,
