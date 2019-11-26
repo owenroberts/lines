@@ -121,11 +121,12 @@ function Files(params) {
 
 		lns.canvas.setWidth(data.w);
 		lns.canvas.setHeight(data.h);
-		lns.render.setFps(data.fps);
+		
+		// lns.anim.fps = data.fps;
+		lns.ui.faces.fps.update(data.fps);
+		
 		if (data.bg) lns.canvas.setBGColor(data.bg);
 		lns.render.reset();
-
-		lns.ui.faces.fps.value = data.fps;
 
 		if (callback) callback(data, params);
 	};
@@ -153,7 +154,6 @@ function Files(params) {
 			})(f);
 			reader.readAsText(f);
 		}
-		
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {

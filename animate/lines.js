@@ -75,10 +75,13 @@ function appLoad(settings) {
 	lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 	lns.render.onionSkinNum = settings.onionSkinNum;
 
-	lns.anim.fps = settings.fps;
-	lns.anim.lps = settings.lps;
-	lns.ui.faces.lps.value = settings.lps;
-	lns.ui.faces.fps.value = settings.fps;
+	// lns.anim.fps = settings.fps;
+	// lns.anim.lps = settings.lps;
+	lns.ui.faces.lps.update(settings.lps);
+	lns.ui.faces.fps.update(settings.fps);
+
+	/* still annoying to have "faces" but better than using both 
+		maybe call faces props */
 
 	lns.ui.faces.lineWidth.value = settings.lineWidth;
 	lns.ui.faces.c.value = settings.c;
