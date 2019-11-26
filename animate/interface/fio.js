@@ -31,7 +31,11 @@ function FilesInterface(ui) {
 	ui.keys['o'] = new UIButton({
 		id: "open",
 		callback: function() {
-			lns.files.loadFile(undefined, self.update);
+			const openFile = document.getElementById('open-file');
+			openFile.click();
+			openFile.onchange = function() {
+				lns.files.readFile(openFile.files, self.update);
+			};
 		},
 		key: "o"
 	});

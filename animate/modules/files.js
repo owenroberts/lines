@@ -66,23 +66,26 @@ function Files(params) {
 		json.s = lns.anim.states;
 
 		const jsonfile = JSON.stringify(json);
-		const filename = title || prompt("Name this file:");
+		const fileName = title || prompt("Name this file:");
 
-		if (filename) {
+		if (fileName) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
 			saveAs(blob, `${filename}.json`);
+			
+			if (callback) callback(filename); /* to set values ... */
 		}
 
-		/* to set values ... */
-		if (callback) callback(filename);
+	
+		
 	};
 
-	/* o key */
+	/* loads from src url */
 	this.loadFile = function(fileName, callback) {
-		self.fileName = fileName || prompt("Open file:");
+		self.fileName = fileName;
 		if (self.fileName) {
-			// if (callback) callback(self.fileName);
-			fetch(self.fileName + '.json')
+			if (self.fileName.slice(self.fileName.length - 5) != '.json') 
+				self.fileName += '.json';
+			fetch(self.fileName)
 				.then(response => { return response.json() })
 				.then(data => { self.loadJSON(data, callback); })
 				.catch(error => {
@@ -133,9 +136,28 @@ function Files(params) {
 
 	/* shift o */
 	this.reOpenFile = function() {
-		self.saveFile(undefined, undefined, function(filename) {
-			location.href += `?src=${ prompt("Enter location:") }/${ filename }`;
+		console.log(self.fileName);
+		self.saveFile(undefined, undefined, function(fileName) {
+			location.href += `?src=${ prompt("Enter location:") }/${ fileName }`;
 		});
+	};
+
+	/* o key */
+	this.readFile = function(files, callback) {
+		for (let i = 0, f; f = files[i]; i++) {
+			if (!f.type.match('application/json')) {
+				continue;
+			}
+			const reader = new FileReader();
+			reader.onload = (function(theFile) {
+				return function(e) {
+				self.fileName = f.name.split('.')[0];
+				self.loadJSON(JSON.parse(e.target.result), callback);
+			};
+			})(f);
+			reader.readAsText(f);
+		}
+		
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -150,22 +172,7 @@ function Files(params) {
 	function dropHandler(ev) {
  		ev.preventDefault();
  		ev.stopPropagation();
-
- 		const files = ev.dataTransfer.files;
-     	for (let i = 0, f; f = files[i]; i++) {
-			if (!f.type.match('application/json')) {
-          		continue;
-        	}
-        	const reader = new FileReader();
-			reader.onload = (function(theFile) {
-				return function(e) {
-				self.fileName = f.name.split('.')[0];
-				self.loadJSON(JSON.parse(e.target.result));
-				lns.ui.fio.title.value = self.fileName;
-          	};
-        	})(f);
-        	reader.readAsText(f);
-        }
+ 		self.readFile(ev.dataTransfer.files, lns.ui.fio.update);
 	}
 
 	function dragOverHandler(ev) {
