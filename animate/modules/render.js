@@ -20,19 +20,6 @@ function Render(lps, color) {
 		self.onionSkinIsVisible = !self.onionSkinIsVisible;
 	};
 
-	/* ; key */
-	this.setFps = function(fps) {
-		lns.anim.fps = +fps;
-		lns.anim.intervalRatio = self.interval / (1000 / +fps);
-	};
-
-	/* ' key */
-	this.setLps = function(lps) {
-		self.lps = +lps;
-		self.interval = 1000 / self.lps;
-		lns.anim.intervalRatio = self.interval / (1000 / lns.anim.fps);
-	};
-
 	/* just set drawing back to 0 but might do other things */
 	this.reset = function() {
 		lns.anim.frame = 0;

@@ -45,7 +45,7 @@ function animateInterface(ui) {
 		if (+f <= lns.anim.plusFrame && +f >= 0) {
 			ui.beforeFrame();
 			lns.anim.frame = +f;
-			lns.draw.setFrame(+f);
+			// lns.draw.setFrame(+f);
 			ui.afterFrame();
 		}
 	};

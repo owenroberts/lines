@@ -70,14 +70,16 @@ function appLoad(settings) {
 	lns.canvas.setWidth(settings.width);
 	lns.canvas.setHeight(settings.height);
 	lns.canvas.setLineWidth(settings.lineWidth);
-	lns.render.setFps(settings.fps);
-	lns.render.setLps(settings.lps);
+	
 	lns.draw.layer.c = settings.c;
 	lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 	lns.render.onionSkinNum = settings.onionSkinNum;
 
+	lns.anim.fps = settings.fps;
+	lns.anim.lps = settings.lps;
 	lns.ui.faces.lps.value = settings.lps;
 	lns.ui.faces.fps.value = settings.fps;
+
 	lns.ui.faces.lineWidth.value = settings.lineWidth;
 	lns.ui.faces.c.value = settings.c;
 	/* this can be done with update, but i dont like lns.ui.faces being the location ... 

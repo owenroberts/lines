@@ -395,6 +395,39 @@
 			}
 		]
 	},
+	"anim": {
+		"id": "anim-menu",
+		"label": "Animation",
+		"module": "anim",
+		"list": [
+			{
+				"type": "UIBlur",
+				"key": ";",
+				"face": "fps",
+				"set": {
+					"prop": "fps",
+					"number": true
+				},
+				"params": {
+					"prompt": "Set FPS",
+					"label": "FPS"
+				}
+			},
+			{
+				"type": "UIBlur",
+				"key": "'",
+				"face": "lps",
+				"set": {
+					"prop": "lps",
+					"number": true
+				},
+				"params": {
+					"prompt": "Set Lines/Second",
+					"label": "LPS"
+				}
+			}
+		]
+	},
 	"playBack": {
 		"id": "play-back-menu",
 		"label": "Play Back",
@@ -450,35 +483,8 @@
 			},
 			{
 				"row": true,
-				"type": "UIBlur",
-				"key": ";",
-				"face": "fps",
-				"fromModule": {
-					"callback": "setFps",
-					"value": "fps"
-				},
-				"params": {
-					"prompt": "Set FPS",
-					"label": "FPS"
-				}
-			},
-			{
-				"type": "UIBlur",
-				"key": "'",
-				"face": "lps",
-				"fromModule": {
-					"callback": "setLps",
-					"value": "lps"
-				},
-				"params": {
-					"prompt": "Set Lines/Second",
-					"label": "LPS"
-				}
-			},
-			{
-				"row": true,
 				"type": "UIText",
-				"key": "shift-l",
+				"key": "l",
 				"face": "onionSkinNum",
 				"fromModule": {
 					"callback": "setOnionSkin"
@@ -491,7 +497,7 @@
 			},
 			{
 				"type": "UIToggle",
-				"key": "l",
+				"key": "shift-l",
 				"fromModule": {
 					"callback": "toggleOnion"
 				},

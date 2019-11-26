@@ -27,6 +27,25 @@ class Animation {
 		this.override = true;
 	}
 
+	set fps(fps) {
+		this._fps = +fps;
+		this.intervalRatio = this.lineInterval / (1000 / +fps);
+	}
+
+	get fps() {
+		return this._fps;
+	}
+
+	set lps(lps) {
+		this._lps = +lps;
+		this.lineInterval = 1000 / +lps;
+		this.intervalRatio = this.lineInterval / (1000 / this.fps);
+	}
+
+	get lps() {
+		return this._lps;
+	}
+
 	set frame(n) {
 		this.currentFrame = this.currentFrameCounter = n;
 	}
