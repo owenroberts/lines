@@ -11,7 +11,13 @@ class UIElement {
 		}
 
 		
-		// if (params.id !== undefined) this.el.id = params.id;
+		if (params.id !== undefined) {
+			this.el.id = params.id;
+			if (params.id == 'layers') {
+				// console.trace();
+				// console.log(this.el);
+			}
+		}
 		if (params.class) this.addClass(params.class);
 	}
 

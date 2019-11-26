@@ -80,11 +80,19 @@ function Interface(app) {
 			params.value = module[data.set.prop];
 		}
 
-		const ui = new uiClasses[data.type](params);
 		if (data.row) panel.addRow();
 		if (params.label) panel.add(new UILabel({ text: params.label}));
-		if (data.type == "UIRow") panel.addRow(data.id);
-		else panel.add(ui);
+		
+		let ui;
+		if (data.type == "UIRow") {
+			ui = panel.addRow(data.id);
+		} else {
+			ui = new uiClasses[data.type](params);
+			panel.add(ui);
+		}
+
+		/* could do this in module but addRow vs add(ui) is not super adaptable 
+		  and all this may change ... */
 
 
 		if (params.prompt) ui.prompt = params.prompt; /* only key commands */
