@@ -47,7 +47,7 @@ function FilesInterface(ui) {
 	});
 
 	this.update = function(data, params) {
-		self.title.value = lns.files.fileName.split('/').pop();
+		self.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
 		ui.faces.fps.value = data.fps;
 
 		lns.anim.layers.forEach(layer => {

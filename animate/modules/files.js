@@ -70,13 +70,9 @@ function Files(params) {
 
 		if (fileName) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
-			saveAs(blob, `${filename}.json`);
-			
-			if (callback) callback(filename); /* to set values ... */
+			saveAs(blob, `${fileName}.json`);
+			if (callback) callback(fileName); /* to set values ... */
 		}
-
-	
-		
 	};
 
 	/* loads from src url */
