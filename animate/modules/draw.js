@@ -36,10 +36,10 @@ function Draw(anim, defaults) {
 	};
 
 	this.setFrame = function(n) {
-		// console.log(n);
-		anim.currentFrame = n;
-		self.layer.startFrame = n;
-		self.layer.endFrame = n;
+		console.log(self.layer);
+		// anim.currentFrame = n;
+		// self.layer.startFrame = n;
+		// self.layer.endFrame = n;
 	};
 
 	this.reset = function() {

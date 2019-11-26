@@ -50,15 +50,6 @@ function Render(lps, color) {
 		lns.anim.isPlaying = !lns.anim.isPlaying;
 	};
 
-	/* f key */
-	this.setFrame = function(f) {
-		// console.log(f);
-		if (+f >= 0) {
-			lns.anim.frame = +f;
-			lns.draw.setFrame(+f);
-		}
-	};
-
 	this.update = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();

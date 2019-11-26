@@ -48,8 +48,10 @@ class Layer {
 		this.f.e = f;
 		this.resetTweens();
 
-		if (lns.anim.state == 'default' && lns.anim.currentState.end != f) 
-			lns.anim.currentState.end = f;
+		// if (lns.anim.state == 'default' && lns.anim.currentState.end != f) 
+			// lns.anim.currentState.end = f;
+		/* this is not modular, fucks up when setting layer of draw anim 
+		  not sure what it was a fix for */
 	}
 
 	addIndex(index) {

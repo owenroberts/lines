@@ -138,7 +138,7 @@ function Data(anim) {
 					anim.layers[i].shiftIndex(anim.currentFrame + 1, -1);
 			}
 		}
-		lns.render.setFrame(anim.currentFrame - 1);
+		lns.ui.setFrame(anim.currentFrame - 1);
 		lns.ui.update();
 	};
 

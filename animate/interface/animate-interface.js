@@ -42,9 +42,10 @@ function animateInterface(ui) {
 
 	/* f key */
 	ui.setFrame = function(f) {
-		if (+f <= lns.anim.plusFrame) {
+		if (+f <= lns.anim.plusFrame && +f >= 0) {
 			ui.beforeFrame();
-			lns.render.setFrame(+f);
+			lns.anim.frame = +f;
+			lns.draw.setFrame(+f);
 			ui.afterFrame();
 		}
 	};
@@ -65,7 +66,7 @@ function animateInterface(ui) {
 					type: "frame",
 					text: ''+i,
 					callback: function() {
-						lns.render.setFrame(i);
+						ui.setFrame(i);
 						ui.update();
 					}	
 				})
@@ -126,7 +127,7 @@ function animateInterface(ui) {
 		lns.anim.isPlaying = false;
 		ui.beforeFrame();
 		if (lns.anim.currentFrame < lns.anim.plusFrame) {
-			lns.render.setFrame(lns.anim.currentFrame + 1);
+			ui.setFrame(lns.anim.currentFrame + 1);
 			if (lns.anim.states.default.end != lns.anim.endFrame)
 				lns.anim.states.default.end = lns.anim.endFrame;
 		}
@@ -137,7 +138,8 @@ function animateInterface(ui) {
 	ui.prevFrame = function() {
 		lns.anim.isPlaying = false;
 		ui.beforeFrame();
-		if (lns.anim.currentFrame > 0) lns.render.setFrame(lns.anim.currentFrame - 1);
+		if (lns.anim.currentFrame > 0) 
+			ui.setFrame(lns.anim.currentFrame - 1);
 		ui.afterFrame();
 	};
 
