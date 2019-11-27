@@ -128,8 +128,6 @@ function animateInterface(ui) {
 		ui.beforeFrame();
 		if (lns.anim.currentFrame < lns.anim.plusFrame) {
 			ui.setFrame(lns.anim.currentFrame + 1);
-			if (lns.anim.states.default.end != lns.anim.endFrame)
-				lns.anim.states.default.end = lns.anim.endFrame;
 		}
 		ui.afterFrame();
 	};

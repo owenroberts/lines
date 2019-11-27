@@ -46,8 +46,10 @@ class Animation {
 		return this._lps;
 	}
 
-	set frame(n) {
-		this.currentFrame = this.currentFrameCounter = n;
+	set frame(index) {
+		this.currentFrame = this.currentFrameCounter = index;
+		if (this.states.default.end != this.endFrame)
+			this.states.default.end = this.endFrame;
 	}
 
 	get frame4() {
