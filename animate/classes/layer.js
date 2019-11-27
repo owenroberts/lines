@@ -37,7 +37,7 @@ class Layer {
 	}
 
 	set startFrame(f) {
-		this.f.s = f;
+		this.f.s = Math.max(0, +f);
 		this.resetTweens();
 	}
 
@@ -46,13 +46,8 @@ class Layer {
 	}
 
 	set endFrame(f) {
-		this.f.e = f;
+		this.f.e = Math.max(0, +f);
 		this.resetTweens();
-
-		// if (lns.anim.state == 'default' && lns.anim.currentState.end != f) 
-			// lns.anim.currentState.end = f;
-		/* this is not modular, fucks up when setting layer of draw anim 
-		  not sure what it was a fix for */
 	}
 
 	addIndex(index) {
@@ -77,10 +72,8 @@ class Layer {
 
 	removeIndex(index) {
 		/* removing layer if not in any frame ... maybe just leave it ? f: -1, -1 or something */
-		console.log(index);
 		if (this.startFrame == index && this.endFrame == index) {
 			this.remove();
-			console.log('removed');
 			return;
 		}
 		else if (this.startFrame == index) this.startFrame += 1;
@@ -95,7 +88,6 @@ class Layer {
 			this.endFrame = index;
 		}
 
-		console.log(this);
 		this.resetTweens();
 		this.ui.update();
 	}
