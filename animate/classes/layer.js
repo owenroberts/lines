@@ -77,26 +77,39 @@ class Layer {
 
 	removeIndex(index) {
 		/* removing layer if not in any frame ... maybe just leave it ? f: -1, -1 or something */
-		if (this.f.s == index && this.f.e == index) this.remove();
-		else if (this.f.s == index) this.f.s += 1;
-		else if (this.f.e == index) this.f.e -= 1;
-		else if (index > this.f.s && index < this.f.e) {
+		console.log(index);
+		if (this.startFrame == index && this.endFrame == index) {
+			this.remove();
+			console.log('removed');
+			return;
+		}
+		else if (this.startFrame == index) this.startFrame += 1;
+		else if (this.endFrame == index) this.endFrame -= 1;
+		else if (index > this.startFrame && index < this.endFrame) {
 			const layer = _.cloneDeep(this);
-			layer.f = { s: index + 1, e: this.f.e };
+			layer.startFrame = index + 1;
+			layer.endFrame = this.endFrame
 			delete layer.ui;
 			layer.resetTweens();
 			lns.anim.layers.push(layer);
-			this.f.e = index;
+			this.endFrame = index;
 		}
 
+		console.log(this);
 		this.resetTweens();
 		this.ui.update();
 	}
 
 	shiftIndex(index, n) {
-		if (!n) n = -1;	/* what is n? */
-		if (this.f.s >= index) this.f.s += n;
-		if (this.f.e >= index) this.f.e += n;
+		if (!n) n = -1;	/* n is shift num, negative or positive */
+		if (this.startFrame >= index) this.startFrame += n;
+		if (this.endFrame >= index) this.endFrame += n;
+
+		/* what if shifting the only frame ... */
+		if (this.startFrame == this.endFrame && this.startFrame == index) {
+			this.removeIndex(index);
+		}
+
 		this.resetTweens();
 		this.ui.update();
 	}

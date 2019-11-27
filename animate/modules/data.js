@@ -55,6 +55,7 @@ function Data(anim) {
 
 		self.clearSelected();
 		self.saveLines();
+		lns.ui.update();
 	};
 
 	this.selectFrame = function(elem) {
@@ -132,15 +133,16 @@ function Data(anim) {
 	};
 
 	/* d key */
-	this.deleteFrame = function() {
+	this.deleteFrame = function(index) {
+		if (!index) index = lns.anim.currentFrame;
 		self.saveState();
 		if (anim.layers.length > 0) {
 			for (let i = anim.layers.length - 1; i >= 0; i--) {
-				anim.layers[i].removeIndex(anim.currentFrame);
-				if (anim.layers[i]) 
-					anim.layers[i].shiftIndex(anim.currentFrame + 1, -1);
+				if (anim.layers[i].isInFrame(index)) 
+					anim.layers[i].shiftIndex(index, -1);
 			}
 		}
+		console.log(lns.anim.currentState);
 		lns.ui.setFrame(anim.currentFrame - 1);
 		lns.ui.update();
 	};
@@ -152,15 +154,12 @@ function Data(anim) {
 		const endFrame = +prompt("End frame:");
 
 		if (endFrame > 0) {
-			for (let i = 0; i < anim.layers.length; i++) {
-				for (let j = endFrame; j >= startFrame; j--) {
-					anim.layers[i].removeIndex(j);
-					anim.layers[i].shiftIndex(j + 1, -1);
-				}
+			for (let j = endFrame; j >= startFrame; j--) {
+				self.deleteFrame(j);
 			}
 
-			if (startFrame > 0) anim.frame = startFrame - 1;
-			else anim.frame = 0;
+			/* change the current frame in case its missing  */
+			anim.frame = startFrame > 0 ? startFrame - 1 : 0;
 			lns.ui.updateFramesPanel();
 		}
 	};
