@@ -97,21 +97,22 @@ function Interface(app) {
 
 		if (params.prompt) ui.prompt = params.prompt; /* only key commands */
 		if (params.key) self.keys[data.key] = ui;
-
 		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
 
+		/*
 		if (data.observe) {
 			const elem = module[data.observe.elem];
 			const attribute = data.observe.attribute;
 			const observer = new MutationObserver(function(list) {
 				for (const mut of list) {
 					if (mut.type == 'attributes' && mut.attributeName == attribute) {
+						console.log(elem[attribute])
 						ui.value = elem[attribute];
 					}
 				}
 			});
 			observer.observe(elem, { attributeFilter: [attribute] });
-		} /* figuring out face should make this obsolete ... canvas only */
+		}  figuring out face should make this obsolete ... canvas only */
 	};
 
 	this.createPanel = function(key, data) {

@@ -1,8 +1,10 @@
-function Canvas(id, width, height, color, retina) {
+function Canvas(id, _width, _height, color, retina) {
 	const self = this;
 
-	this.width = width;
-	this.height = height;
+	this.width = _width;
+	this.height = _height;
+	/* width and height are pixel dimensions
+		canvas width and height are dependent on dpr */
 	this.canvas = document.getElementById(id); // lns.canvas.canvas is html elem
 	this.dpr = retina ?  window.devicePixelRatio || 1 : 1;
 
@@ -27,14 +29,16 @@ function Canvas(id, width, height, color, retina) {
 
 	/* update canvas width */
 	this.setWidth = function(width) {
-		self.width = self.canvas.width = +width * this.dpr;
-		this.reset();
+		self.width = +width;
+		self.canvas.width = +width * self.dpr;
+		self.reset();
 	};
 
 	/* update canvas height */
 	this.setHeight = function(height) {
-		self.height = self.canvas.height = +height * this.dpr;
-		this.reset();
+		self.height = +height;
+		self.canvas.height = +height * self.dpr;
+		self.reset();
 	};
 
 	this.reset = function() {
@@ -45,8 +49,8 @@ function Canvas(id, width, height, color, retina) {
 	};
 	
 	/* set initial width and height */
-	this.setWidth(this.width);
-	this.setHeight(this.height);
+	this.setWidth(_width);
+	this.setHeight(_height);
 
 	/* shift-f key */
 	this.fitCanvasToDrawing = function() {

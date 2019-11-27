@@ -66,10 +66,13 @@ function appSave() {
 }
 
 function appLoad(settings) {
+	
 	lns.canvas.setBGColor(settings.canvasColor);
 	lns.canvas.setWidth(settings.width);
 	lns.canvas.setHeight(settings.height);
-	lns.canvas.setLineWidth(settings.lineWidth);
+
+	lns.ui.faces.bgColor.value = settings.canvasColor;
+	lns.ui.faces.lineWidth.update(settings.lineWidth);
 	
 	lns.draw.layer.c = settings.c;
 	lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
@@ -90,10 +93,7 @@ function appLoad(settings) {
 		setValue doesn't set the input for range values 
 		lotta ui work left to do! */
 
-	lns.ui.faces.bgColor.value = settings.canvasColor;
 	lns.ui.faces.onionSkinNum.value = settings.onionSkinNum;
-
-	lns.ui.faces.lineWidth.update(settings.lineWidth);
 
 	/* update sets value and calls callback ...*/
 	lns.ui.faces.mouseInterval.update(settings.mouseInterval);
