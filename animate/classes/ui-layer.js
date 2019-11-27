@@ -69,4 +69,8 @@ class UILayer extends UICollection {
 			this.tweens[i].update();
 		}
 	}
+
+	remove() {
+		this.el.remove();
+	}
 }
