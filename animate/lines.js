@@ -52,8 +52,8 @@ function appSave() {
 		canvasColor: lns.canvas.bgColor,
 		lineWidth: lns.canvas.ctx.lineWidth,
 		c: lns.draw.layer.c,
-		width: lns.canvas.width / lns.canvas.dpr,
-		height: lns.canvas.height / lns.canvas.dpr,
+		width: lns.canvas.width,
+		height: lns.canvas.height,
 		fps: lns.anim.fps,
 		lps: lns.render.lps,
 		onionSkinIsVisible: lns.render.onionSkinIsVisible,
@@ -68,7 +68,8 @@ function appSave() {
 function appLoad(settings) {
 	
 	lns.canvas.setBGColor(settings.canvasColor);
-	lns.canvas.setWidth(settings.width);
+	
+	lns.canvas.setWidth(settings.width); /* needs face now */
 	lns.canvas.setHeight(settings.height);
 
 	lns.ui.faces.bgColor.value = settings.canvasColor;

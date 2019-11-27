@@ -5,7 +5,7 @@ class UIBlur extends UIText {
 		this.el.onblur = ev => {
 			if (ev.target.value) this.handler(ev, this);
 		};
-		
+
 		this.value = params.value;
 	}
 

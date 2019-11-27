@@ -60,16 +60,19 @@ function Data(anim) {
 	this.selectFrame = function(elem) {
 		if (!elem.classList.contains("selected")) {
  			elem.classList.add("selected");
- 			self.pasteFrames.push(+elem.dataset.index);
+ 			self.pasteFrames.push(+elem.textContent);
  		} else {
- 			self.pasteFrames.splice(self.pasteFrames.indexOf(+elem.dataset.index), 1);
+ 			self.pasteFrames.splice(self.pasteFrames.indexOf(+elem.textContent), 1);
  			elem.classList.remove("selected");
  		}
 	};
 
 	/* shift v */
 	this.selectAll = function() {
+		/* if less than all are selected deselect those first */
+		const someSelected = Array.from(lns.ui.framesPanel.children).filter(elem => elem.classList.contains('selected')).length < lns.ui.framesPanel.children.length - 1;
 		lns.ui.framesPanel.looper(elem => {
+			if (someSelected) elem.classList.remove('selected');
 			self.selectFrame(elem);
 		});
 	};

@@ -68,8 +68,8 @@ function animateInterface(ui) {
 					callback: function() {
 						ui.setFrame(i);
 						ui.update();
-					}	
-				})
+					}
+				});
 
 				/* right click, add/remove from copy frames 
 					class for this? */
