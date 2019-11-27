@@ -191,6 +191,11 @@ function Layers() {
 			const layer = lns.anim.layers[i];
 			if (!layer.ui) self.addUI(layer, i);
 			else layer.ui.update();
+
+			if (!document.body.contains(layer.ui.el)) {
+				self.panel.layers.append(layer.ui);
+			}
+			/* gotta be a better way to organize this so layer creates its own ui */
 		}
 	};
 }
