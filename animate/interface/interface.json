@@ -718,13 +718,13 @@
 		"label": "States",
 		"module": "ui",
 		"sub": "states",
-		"onLoad": "displayStates",
+		"onLoad": "display",
 		"list": [
 			{
 				"type": "UISelect",
 				"face": "stateSelector",
 				"fromModule": {
-					"callback": "setState"
+					"callback": "set"
 				},
 				"params": {
 					"options": ["default"]
@@ -734,10 +734,10 @@
 				"type": "UIButton",
 				"key": "t",
 				"fromModule": {
-					"callback": "createState"
+					"callback": "create"
 				},
 				"params": {
-					"text": "New"
+					"text": "+"
 				}
 			}
 		]

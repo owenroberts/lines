@@ -117,6 +117,7 @@ function Files(params) {
 		if (lns.anim.states.default) lns.anim.states.default.end = lns.anim.endFrame;
 
 		/* set interface values  */
+		// console.log(lns.ui.states.panel);
 		lns.ui.faces.stateSelector.setOptions(Object.keys(lns.anim.states));
 
 		lns.canvas.setWidth(data.w);

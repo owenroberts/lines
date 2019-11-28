@@ -1,14 +1,16 @@
 function States() {
 	const self = this;
 
-	this.displayStates = function() {
+	/* could be module, could be state ui class */
+
+	this.display = function() {
 		for (const key in lns.anim.states) {
 			const state = lns.anim.states[key];
-			self.addStateUI(key, state, false);
+			self.addUI(key, state, false);
 		}
 	};
 
-	this.addStateUI = function(name, state, focus) {
+	this.addUI = function(name, state, focus) {
 		const states = lns.anim.states;
 		const row = self.panel.addRow(`state-${name}`);
 		const title = new UIBlur({
@@ -21,7 +23,8 @@ function States() {
 					lns.ui.faces.stateSelector.value = value;
 				}
 			}
-		})
+		});
+		
 		self.panel.add(title, row);
 		if (focus) title.el.focus();
 
@@ -53,12 +56,12 @@ function States() {
 	};
 
 	/* not DRY */
-	this.setState = function(state) {
-		
+	this.set = function(state) {
+		lns.anim.state = state;
 	};
 
-	this.createState = function() {
-		self.addStateUI('new state', { 
+	this.create = function() {
+		self.addUI('new state', { 
 			start: lns.anim.currentFrame, 
 			end: lns.anim.currentFrame 
 		}, true);
