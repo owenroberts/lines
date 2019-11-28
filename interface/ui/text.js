@@ -34,4 +34,8 @@ class UIText extends UIInput {
 		this.el.value = this.el.placeholder = _value;
 		this.el.blur();
 	}
+
+	get value() {
+		return super.value;
+	}
 }
