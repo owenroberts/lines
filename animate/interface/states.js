@@ -55,7 +55,6 @@ function States() {
 		}), row);
 	};
 
-	/* not DRY */
 	this.set = function(state) {
 		lns.anim.state = state;
 	};
