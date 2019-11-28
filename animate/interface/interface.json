@@ -412,19 +412,6 @@
 					"prompt": "Set FPS",
 					"label": "FPS"
 				}
-			},
-			{
-				"type": "UIBlur",
-				"key": "'",
-				"face": "lps",
-				"set": {
-					"prop": "lps",
-					"number": true
-				},
-				"params": {
-					"prompt": "Set Lines/Second",
-					"label": "LPS"
-				}
 			}
 		]
 	},
@@ -479,6 +466,18 @@
 					"label": "Frame",
 					"value": 0,
 					"prompt": "Go To Frame"
+				}
+			},
+			{
+				"type": "UIBlur",
+				"key": "'",
+				"face": "lps",
+				"fromModule": {
+					"callback": "setLps"
+				},
+				"params": {
+					"prompt": "Set Lines/Second",
+					"label": "LPS"
 				}
 			},
 			{

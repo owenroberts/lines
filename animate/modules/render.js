@@ -37,6 +37,13 @@ function Render(lps, color) {
 		lns.anim.isPlaying = !lns.anim.isPlaying;
 	};
 
+	/* ' - lps is property of render engine, not individual animations */
+	this.setLps = function(lps) {
+		self.lps = +lps;
+		self.interval = 1000 / self.lps;
+		lns.anim.lps = self.lps;
+	};
+
 	this.update = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
