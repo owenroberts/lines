@@ -48,14 +48,12 @@ function Render(lps, color) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
-			if (lns.anim.isPlaying) {
-				lns.ui.update(); 
-			}
+			if (lns.anim.isPlaying) lns.ui.update(); 
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 
 			/* in capture set animation onDraw */
-			if (lns.ui.capture.captureWithBackground && (lns.ui.capture.captureFrames > 0 || lns.ui.capture.capturingVideo)) {
+			if (lns.ui.capture.bg && (lns.ui.capture.frames > 0 || lns.ui.capture.isVideo)) {
 				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
 				lns.canvas.ctx.fillStyle = lns.canvas.bgColor;
 				lns.canvas.ctx.fill();

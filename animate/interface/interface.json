@@ -517,38 +517,38 @@
 				"type": "UIButton",
 				"key": "ctrl-k",
 				"fromModule": {
-					"callback": "captureCycle"
+					"callback": "cycle"
 				},
 				"params": {
-					"text": "Capture Cycle"
+					"text": "Cycle"
 				}
 			},
 			{
 				"type": "UIButton",
 				"key": "k",
 				"fromModule": {
-					"callback": "captureOne"
+					"callback": "one"
 				},
 				"params": {
-					"text": "Capture Frame"
+					"text": "Frame"
 				}
 			},
 			{
 				"type": "UIToggle",
 				"key": "shift-b",
 				"fromModule": {
-					"callback": "toggleBGCapture"
+					"callback": "toggleBG"
 				},
 				"params": {
-					"onText": "Capture w BG",
-					"offText": "Capture no BG"
+					"onText": "With BG",
+					"offText": "No BG"
 				}
 			},
 			{
 				"type": "UIButton",
 				"key": "shift-k",
 				"fromModule": {
-					"callback": "captureMultiple"
+					"callback": "multiple"
 				},
 				"params": {
 					"text": "Capture Frames"
@@ -558,7 +558,7 @@
 				"type": "UIToggle",
 				"key": "alt-k",
 				"fromModule": {
-					"callback": "videoCapture"
+					"callback": "video"
 				},
 				"params": {
 					"onText": "Start Video",
@@ -568,10 +568,10 @@
 			{
 				"type": "UIButton",
 				"fromModule": {
-					"callback": "startVideoCapture"
+					"callback": "startVideo"
 				},
 				"params": {
-					"text": "Capture Video Loops"
+					"text": "Video Loops"
 				}
 			}
 		]
