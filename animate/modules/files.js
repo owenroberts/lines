@@ -63,7 +63,11 @@ function Files(params) {
 			json.d[index] = d;
 		}
 
-		json.s = lns.anim.states;
+		/* don't save default state */
+		if (Object.keys(lns.anim.states).length > 1) {
+			json.s = _.cloneDeep(lns.anim.states);
+			delete json.s.default;
+		}
 
 		const jsonfile = JSON.stringify(json);
 		const fileName = title || prompt("Name this file:");

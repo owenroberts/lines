@@ -918,7 +918,7 @@
 					"callback": "addPalette"
 				},
 				"params": {
-					"text": "Add Palette"
+					"text": "+"
 				}
 			}
 		]
