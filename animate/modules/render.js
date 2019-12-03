@@ -12,12 +12,14 @@ function Render(lps, color) {
 	/* l key */
 	this.setOnionSkin = function(n) {
 		self.onionSkinNum = +n;
-		self.onionSkinIsVisible = true;
+		self.onionSkinIsVisible = +n > 0 ? true : false;
 	};
 
 	/* shift l */
 	this.toggleOnion = function() {
+		console.log('toggle');
 		self.onionSkinIsVisible = !self.onionSkinIsVisible;
+		console.log(self.onionSkinIsVisible);
 	};
 
 	/* just set drawing back to 0 but might do other things */

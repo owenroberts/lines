@@ -1,10 +1,10 @@
-function Canvas(id, _width, _height, color, retina) {
+function Canvas(id, _width, _height, color, checkRetina) {
 	const self = this;
 
 	/* width and height are pixel dimensions
 		canvas width and height are dependent on dpr */
 	this.canvas = document.getElementById(id); // lns.canvas.canvas is html elem
-	this.dpr = retina ?  window.devicePixelRatio || 1 : 1;
+	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
 
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;

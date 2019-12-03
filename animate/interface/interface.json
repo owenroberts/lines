@@ -463,6 +463,7 @@
 				}
 			},
 			{
+				"row": true,
 				"type": "UIBlur",
 				"key": "'",
 				"face": "lps",
@@ -491,6 +492,7 @@
 			{
 				"type": "UIToggle",
 				"key": "shift-l",
+				"face": "onionSkinIsVisible",
 				"fromModule": {
 					"callback": "toggleOnion"
 				},

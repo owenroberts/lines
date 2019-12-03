@@ -1,7 +1,6 @@
 function Palette() {
 	const self = this;
 	this.palettes = {};
-	this.current = '';
 
 	this.addPalette = function() {
 		lns.data.saveLines();
@@ -20,14 +19,27 @@ function Palette() {
 				dots: lns.draw.dots,
 				grass: lns.draw.grass
 			};
-			/* is this petter or panel better? */
-			lns.ui.panels.palette.add(new UIButton({
-				text: name,
-				callback: function() {
-					self.loadPalette(name);
-				}
-			}));
+			self.addUI(name);
 		}
+	};
+
+	this.addUI = function(name) {
+		self.panel.add(new UIButton({
+			text: name,
+			callback: function() {
+				self.loadPalette(name);
+			}
+		}));
+	};
+
+	this.load = function(palettes) {
+		for (const key in palettes) {
+			if (key != 'current') {
+				self.addUI(key);
+				self.palettes[key] = palettes[key];
+			}
+		}
+		if (palettes.current) self.loadPalette(palettes.current);
 	};
 
 	this.loadPalette = function(name) {
@@ -40,6 +52,8 @@ function Palette() {
 		lns.draw.setProperties(self.palettes[name]);
 
 		lns.canvas.ctx.lineWidth = self.palettes[name].lineWidth;
+
+		/* ui.update ? */
 		
 		lns.draw.brush = self.palettes[name].brush;
 		lns.draw.brushSpread = self.palettes[name].brushSpread;

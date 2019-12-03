@@ -66,60 +66,38 @@ function appSave() {
 }
 
 function appLoad(settings) {
-	
-	lns.canvas.setBGColor(settings.canvasColor);
-	
-	lns.canvas.setWidth(settings.width); /* needs face now */
-	lns.canvas.setHeight(settings.height);
-
-	lns.ui.faces.bgColor.value = settings.canvasColor;
-	lns.ui.faces.lineWidth.update(settings.lineWidth);
-	
-	lns.draw.layer.c = settings.c;
-	lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
-	lns.render.onionSkinNum = settings.onionSkinNum;
-
-	// lns.anim.fps = settings.fps;
-	// lns.anim.lps = settings.lps;
-	lns.ui.faces.lps.update(settings.lps);
-	lns.ui.faces.fps.update(settings.fps);
 
 	/* still annoying to have "faces" but better than using both 
 		maybe call faces props */
+	
+	/* environment */
+	// lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 
-	lns.ui.faces.lineWidth.value = settings.lineWidth;
-	lns.ui.faces.c.value = settings.c;
-	/* this can be done with update, but i dont like lns.ui.faces being the location ... 
-		update is also setting value
-		setValue doesn't set the input for range values 
-		lotta ui work left to do! */
+	/* environment + ui + lns.anim */
+	lns.ui.faces.lps.update(settings.lps); // not lns.lines bc only in one frame 
 
-	lns.ui.faces.onionSkinNum.value = settings.onionSkinNum;
-
-	/* update sets value and calls callback ...*/
+	/* environment + ui */
+	// lns.ui.faces.onionSkinIsVisible.update(settings.onionSkinIsVisible);
+	/* in new ui maybe the toggle knows the property and can check to update ... ? 
+		also don't really need this ... */
+	lns.ui.faces.onionSkinNum.update(settings.onionSkinNum);
 	lns.ui.faces.mouseInterval.update(settings.mouseInterval);
+	lns.ui.faces.width.update(settings.width);
+	lns.ui.faces.height.update(settings.height);
+	lns.ui.faces.bgColor.update(settings.canvasColor);
+	// has to be called last bc of reset ... 
+	// update ui from canvas, or callback ... fml
+	lns.ui.faces.lineWidth.update(settings.lineWidth);
 
-	lns.ui.palette.palettes = settings.palettes;
-	if (lns.ui.palette.current) 
-		self.loadPalette(lns.palettes.current);
-	for (const key in settings.palettes) {
-		if (key != 'current') {
-			lns.ui.panels.palette.add(new UIButton({
-				text: key,
-				callback: function() {
-					lns.ui.palette.loadPalette(key);
-				}
-			}));
-		}
-	}
+	/* lns.anim + ui */
+	lns.ui.faces.fps.update(settings.fps);
 
-	if (settings.rl == false) {
-		lns.ui.rl.callback();
-		lns.ui.rl.toggle();
-	}
+	/* lns.lines + ui */
+	lns.ui.faces.c.update(settings.c);
 
-	if (settings.displayLayers) {
-		lns.ui.layers.toggleCanvas.callback();
-		lns.ui.layers.toggleCanvas.toggle();
-	}
+	// palettes - no need to separate module from ui bc its all ui - only one not a ui with update ... 
+	lns.ui.palette.load(settings.palettes);
+
+	/* ui only */
+	lns.ui.rl.update(settings.rl);  // toggle not dependent on another value
 }
