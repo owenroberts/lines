@@ -46,9 +46,17 @@ function FilesInterface(ui) {
 		key: 'shift-o'
 	});
 
+	/* params from files module - does it need to be separate? */
 	this.update = function(data, params) {
+
+		/* rename faces to props? also could use module ids */
+
 		self.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
 		ui.faces.fps.value = data.fps;
+		lns.ui.faces.stateSelector.setOptions(Object.keys(data.s));
+
+		lns.ui.faces.width.value = data.w;
+		lns.ui.faces.height.value = data.h;
 
 		lns.anim.layers.forEach(layer => {
 			if (layer) {

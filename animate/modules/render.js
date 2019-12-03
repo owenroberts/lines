@@ -24,7 +24,7 @@ function Render(lps, color) {
 	this.reset = function() {
 		lns.anim.frame = 0;
 		lns.anim.isPlaying = false;
-		lns.canvas.ctx.miterLimit = 1;
+		lns.canvas.ctx.miterLimit = 1; /* maybe not needed? happens in canvas reset*/
 		lns.ui.update();
 	};
 

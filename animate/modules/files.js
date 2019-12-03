@@ -96,44 +96,28 @@ function Files(params) {
 	};
 
 	this.loadJSON = function(data, callback) {
-		lns.anim.drawings = [];
-		for (let i = 0; i < data.d.length; i++) {
-			const drawing = data.d[i];
-			const d = [];
-			if (drawing) {
-				for (let j = 0; j < drawing.length; j++) {
-					const point = drawing[j];
-					if (point) d.push({ x: point[0], y: point[1] });
-					else d.push('end');
-				}
-			}
-			lns.anim.drawings[i] = d;
-		}
 
+		lns.anim.drawings = [];
 		lns.anim.layers = [];
+		lns.anim.loadData(data);
+		
+		// set layers to classes 
 		for (let i = 0; i < data.l.length; i++) {
 			lns.anim.layers[i] = new Layer(data.l[i]);
-			lns.draw.layer.c = lns.anim.layers[i].c;
-			lns.ui.faces.c.addColor(lns.anim.layers[i].c); /* ui - loading func? */
 		}
 
-		if (data.s) lns.anim.states = data.s;
-		if (lns.anim.states.default) lns.anim.states.default.end = lns.anim.endFrame;
-
 		/* set interface values  */
-		// console.log(lns.ui.states.panel);
-		lns.ui.faces.stateSelector.setOptions(Object.keys(lns.anim.states));
 
+		// was handled with mutation observer ...
+		// should these be handled by uis with update?
 		lns.canvas.setWidth(data.w);
 		lns.canvas.setHeight(data.h);
-		
-		// lns.anim.fps = data.fps;
-		lns.ui.faces.fps.update(data.fps);
 		
 		if (data.bg) lns.canvas.setBGColor(data.bg);
 		lns.render.reset();
 
-		if (callback) callback(data, params);
+		if (callback) callback(data, params); 
+		/* this is just lns.ui.update ? */
 	};
 
 	/* shift o */

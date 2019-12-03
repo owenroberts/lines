@@ -5,6 +5,7 @@ function States() {
 
 	this.display = function() {
 		for (const key in lns.anim.states) {
+			// console.log(key);
 			const state = lns.anim.states[key];
 			self.addUI(key, state, false);
 		}

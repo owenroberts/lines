@@ -1,8 +1,6 @@
 function Canvas(id, _width, _height, color, retina) {
 	const self = this;
 
-	this.width = _width;
-	this.height = _height;
 	/* width and height are pixel dimensions
 		canvas width and height are dependent on dpr */
 	this.canvas = document.getElementById(id); // lns.canvas.canvas is html elem

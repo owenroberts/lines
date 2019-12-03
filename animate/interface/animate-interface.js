@@ -19,9 +19,6 @@ function animateInterface(ui) {
 	/* update interface */
 	ui.update = function() {
 		ui.updateFrameNum();
-		// ui.layers.resetLayers();
-		// ui.drawings.resetDrawings();
-		// ui.layers.drawLayers();
 		ui.layers.update();
 		ui.drawings.update();
 		ui.updateFramesPanel();
