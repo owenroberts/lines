@@ -167,7 +167,13 @@ function Draw(anim, defaults) {
 			self.startDots = false;
 		} else if (ev.which == 1) {
 			self.isDrawing = false;
-			self.drawing.push("end");
+			/* prevent saving single point drawing segments */
+			if (self.drawing[self.drawing.length-2] != 'end' &&
+				self.drawing.length > 1) {
+				self.drawing.push("end");
+			} else {
+				self.drawing.pop();
+			}
 		}
 	}
 
