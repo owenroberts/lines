@@ -21,6 +21,7 @@ function animateInterface(ui) {
 		ui.updateFrameNum();
 		ui.layers.update();
 		ui.drawings.update();
+		ui.states.update();
 		ui.updateFramesPanel();
 	};
 

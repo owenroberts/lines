@@ -5,17 +5,32 @@ function States() {
 
 	this.display = function() {
 		for (const key in lns.anim.states) {
-			// console.log(key);
 			const state = lns.anim.states[key];
 			self.addUI(key, state, false);
 		}
 	};
 
+	this.update = function() {
+		for (const key in lns.anim.states) {
+			const state = lns.anim.states[key];
+			const ui = self.panel[key];
+			for (const part in state) {
+				if (ui[part].value != state[part])
+					ui[part].value = state[part];
+			}
+		}
+	};
+
 	this.addUI = function(name, state, focus) {
-		const states = lns.anim.states;
-		const row = self.panel.addRow(`state-${name}`);
+
+		/*
+			use ids to update values ?? 
+		*/
+
+		const row = self.panel.addRow(name);
 		const title = new UIBlur({
 			value: name,
+			id: 'title',
 			callback: function(value) {
 				if (!Object.keys(lns.anim.states).includes(value)) {
 					lns.anim.states[value] = state;
@@ -31,6 +46,7 @@ function States() {
 
 		self.panel.add(new UIBlur({
 			text: "Start",
+			id: "start",
 			value: state.start,
 			callback: function(n) {
 				state.start = +n;
@@ -39,6 +55,7 @@ function States() {
 
 		self.panel.add(new UIBlur({
 			text: "End",
+			id: "end",
 			value: state.end,
 			callback: function(n) {
 				state.end = +n;
