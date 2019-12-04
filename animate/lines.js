@@ -31,15 +31,6 @@ window.addEventListener("load", function() {
 	animateInterface(lns.ui);
 	lns.ui.settings = new Settings(lns, 'lns', appSave, appLoad);
 
-	lns.ui.settings.canvasLoad = function() {
-		if (localStorage['settings-lns']) {
-			const settings = JSON.parse(localStorage['settings-lns']);
-
-			/* wtf */
-			if (settings) lns.canvas.setLineWidth(settings.lineWidth); 
-		}
-	};
-	
 	lns.ui.load('./interface/interface.json', function() {
 		const url = location.search.split('=')[1]
 		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.fio.update);

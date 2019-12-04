@@ -66,7 +66,6 @@ function FilesInterface(ui) {
 		});
 
 		if (data.bg) lns.ui.faces.bgColor.value = data.bg;
-		if (params.load) lns.ui.settings.canvasLoad();
 		ui.update();
 	};
 }
