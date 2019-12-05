@@ -7,10 +7,7 @@ class UIButton extends UIElement {
 		this.callback = params.callback;
 		this.arguments = params.arguments;
 		this.el.addEventListener('click', this.handler.bind(this));
-		if (params.key) {
-			this.setKey(params.key, `${ this.el.textContent }`);
-			this.el.title = `${params.key}`;
-		}
+		if (params.key) this.setKey(params.key, `${ this.el.textContent }`);
 	}
 	
 	handler() {
