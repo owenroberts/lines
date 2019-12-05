@@ -1,6 +1,6 @@
 class UIPanel extends UICollection {
 	constructor(id, label) {
-		super({id: id});
+		super({id: id}); // id become k
 
 		this.el.id = id;
 		
@@ -60,11 +60,10 @@ class UIPanel extends UICollection {
 		this.addClass('undocked');
 	}
 
-	addRow(id) {
-		const row = new UIRow({ id: id });
-		this.append(row);
+	addRow(k) {
+		const row = new UIRow();
+		this.append(row, k);
 		this.rows.push(row);
-		if (id) this[id] = row; /* sub panel from collection */
 		return row;
 	}
 
@@ -74,10 +73,10 @@ class UIPanel extends UICollection {
 		this.remove(row);
 	}
 
-	add(ui, _row) {
+	add(ui, _row, k) {
 		let row = _row 
 			|| this.rows[this.rows.length - 1] 
 			|| this.addRow();
-		row.append(ui);
+		row.append(ui, k);
 	}
 }

@@ -25,12 +25,15 @@ function States() {
 
 		/*
 			use ids to update values ?? 
+			cant resuse ids dumbass
+			maybe just "children" or something??
+			doesn't really need CSS id
+			YES need to separate CSS from js structure
 		*/
 
 		const row = self.panel.addRow(name);
 		const title = new UIBlur({
 			value: name,
-			id: 'title',
 			callback: function(value) {
 				if (!Object.keys(lns.anim.states).includes(value)) {
 					lns.anim.states[value] = state;
@@ -41,26 +44,24 @@ function States() {
 			}
 		});
 		
-		self.panel.add(title, row);
+		self.panel.add(title, row, 'title');
 		if (focus) title.el.focus();
 
 		self.panel.add(new UIBlur({
 			text: "Start",
-			id: "start",
 			value: state.start,
 			callback: function(n) {
 				state.start = +n;
 			}
-		}), row);
+		}), row, 'start');
 
 		self.panel.add(new UIBlur({
 			text: "End",
-			id: "end",
 			value: state.end,
 			callback: function(n) {
 				state.end = +n;
 			}
-		}), row);
+		}), row, 'end');
 
 		self.panel.add(new UIButton({
 			text: "x",
