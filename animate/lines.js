@@ -28,7 +28,7 @@ window.addEventListener("load", function() {
 	lns.ui.layers = new Layers();
 	lns.ui.drawings = new Drawings();
 	lns.ui.fio = new FilesInterface(lns.ui);
-	animateInterface(lns.ui);
+	setupAnimateInterface(lns.ui);
 	lns.ui.settings = new Settings(lns, 'lns', appSave, appLoad);
 
 	lns.ui.load('./interface/interface.json', function() {

@@ -714,7 +714,6 @@
 		"label": "States",
 		"module": "ui",
 		"sub": "states",
-		"onLoad": "display",
 		"list": [
 			{
 				"type": "UISelect",
@@ -791,7 +790,7 @@
 			},
 			{
 				"type": "UIRow",
-				"id": "layers"
+				"k": "layers"
 			}
 		]
 	},
@@ -803,7 +802,7 @@
 		"list": [
 			{
 				"type": "UIRow",
-				"id": "drawings"
+				"k": "drawings"
 				
 			}
 		]
