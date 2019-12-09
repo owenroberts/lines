@@ -907,9 +907,19 @@
 		"list": [
 			{
 				"type": "UIButton",
+				"key": "shift-p",
+				"fromModule": {
+					"callback": "buildFromAnimation"
+				},
+				"params": {
+					"text": "Build"
+				}
+			},
+			{
+				"type": "UIButton",
 				"key": "p",
 				"fromModule": {
-					"callback": "addPalette"
+					"callback": "add"
 				},
 				"params": {
 					"text": "+"

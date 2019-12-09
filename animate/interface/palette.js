@@ -2,7 +2,7 @@ function Palette() {
 	const self = this;
 	this.palettes = {};
 
-	this.addPalette = function() {
+	this.add = function() {
 		lns.data.saveLines();
 		const name = self.current = prompt('Name this palette.');
 		if (name) {
@@ -65,5 +65,26 @@ function Palette() {
 				lns.ui.faces[prop].value = palette[prop];
 			}
 		};
+	};
+
+	this.buildFromAnimation = function() {
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const name = `Layer ${i}`;
+			const layer = lns.anim.layers[i];
+			self.palettes[name] = {
+				c: layer.c,
+				n: layer.n,
+				r: layer.r,
+				w: layer.w,
+				v: layer.v,
+				lineWidth: lns.canvas.ctx.lineWidth,
+				mouseInterval: lns.draw.mouseInterval,
+				brush: 0,
+				brushSpread: lns.draw.brushSpread,
+				dots: lns.draw.dots,
+				grass: lns.draw.grass
+			};
+			self.addUI(name);
+		}
 	};
 }

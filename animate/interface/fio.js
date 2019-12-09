@@ -54,7 +54,10 @@ function FilesInterface(ui) {
 
 		self.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
 		ui.faces.fps.value = data.fps;
-		lns.ui.faces.stateSelector.setOptions(Object.keys(data.s));
+
+		for (const state in data.s) {
+			lns.ui.faces.stateSelector.addOption(state);
+		}
 
 		lns.ui.faces.width.value = data.w;
 		lns.ui.faces.height.value = data.h;

@@ -222,26 +222,15 @@ class Animation {
 		
 		this.layers = json.l;
 		for (const key in json.s) {
-<<<<<<< HEAD
-			lns.anim.states[key] = json.s[key];
-		}
-		lns.anim.states.default.end = this.endFrame;
-=======
 			this.states[key] = json.s[key];
 		}
 		this.states.default.end = this.endFrame;
-		// console.log(this.states);
->>>>>>> 42c775a5f3bf51c0ca26deeac1227cb0f9e6eef2
 
 		this.intervalRatio = this.lineInterval / (1000 / json.fps);
 
 		if (json.mc) this.mixedColors = json.mc; /* hmm .. over ride? */
 
-<<<<<<< HEAD
-		this.isPlaying = true; /* off for animate ? */
-=======
 		// this.isPlaying = true; /* off for animate ? */
->>>>>>> 42c775a5f3bf51c0ca26deeac1227cb0f9e6eef2
 
 		if (callback) callback(json);
 		if (this.onLoad) this.onLoad();
