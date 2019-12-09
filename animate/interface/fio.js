@@ -49,7 +49,8 @@ function FilesInterface(ui) {
 	/* params from files module - does it need to be separate? */
 	this.update = function(data, params) {
 
-		/* rename faces to props? also could use module ids */
+		/* rename faces to props? also could use module ids 
+			this updates a lot more than just the files interface , not the right place */
 
 		self.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
 		ui.faces.fps.value = data.fps;

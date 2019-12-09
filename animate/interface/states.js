@@ -3,17 +3,10 @@ function States() {
 
 	/* could be module, could be state ui class */
 
-	this.display = function() {
-		for (const key in lns.anim.states) {
-			const state = lns.anim.states[key];
-			self.addUI(key, state, false);
-		}
-	};
-
 	this.update = function() {
 		for (const key in lns.anim.states) {
 			const state = lns.anim.states[key];
-			const ui = self.panel[key];
+			const ui = self.panel[key] ? self.panel[key] : self.addUI(key, state, false);
 			for (const part in state) {
 				if (ui[part].value != state[part])
 					ui[part].value = state[part];
@@ -22,14 +15,6 @@ function States() {
 	};
 
 	this.addUI = function(name, state, focus) {
-
-		/*
-			use ids to update values ?? 
-			cant resuse ids dumbass
-			maybe just "children" or something??
-			doesn't really need CSS id
-			YES need to separate CSS from js structure
-		*/
 
 		const row = self.panel.addRow(name);
 		const title = new UIBlur({
@@ -72,6 +57,7 @@ function States() {
 				lns.anim.state = 'default';
 			}
 		}), row);
+		return row;
 	};
 
 	this.set = function(state) {

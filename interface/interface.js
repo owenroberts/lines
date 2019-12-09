@@ -62,58 +62,6 @@ function Interface(app) {
 			});
 	};
 
-	this.createUI = function(data, module, panel) {
-		const params = { key: data.key, ...data.params };
-		for (const k in data.fromModule) {
-			params[k] = module[data.fromModule[k]];
-		}
-
-		if (data.id) params.id = data.id;
-
-		if (data.set) {
-			/* setter, no callback in module, just set prop
-				does'nt work for layers ... need to make a setter or not use these*/
-			params.callback = function(value) {
-				module[data.set.prop] = data.set.number ? +value : value;
-				if (data.set.layer) { } 
-			};
-			params.value = module[data.set.prop];
-		}
-
-		if (data.row) panel.addRow();
-		if (params.label) panel.add(new UILabel({ text: params.label}));
-		
-		let ui;
-		if (data.type == "UIRow") {
-			ui = panel.addRow(data.id);
-		} else {
-			ui = new uiClasses[data.type](params);
-			panel.add(ui);
-		}
-
-		/* could do this in module but addRow vs add(ui) is not super adaptable 
-		  and all this may change ... */
-
-
-		if (params.prompt) ui.prompt = params.prompt; /* only key commands */
-		if (params.key) self.keys[data.key] = ui;
-		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
-
-		/*
-		if (data.observe) {
-			const elem = module[data.observe.elem];
-			const attribute = data.observe.attribute;
-			const observer = new MutationObserver(function(list) {
-				for (const mut of list) {
-					if (mut.type == 'attributes' && mut.attributeName == attribute) {
-						console.log(elem[attribute])
-						ui.value = elem[attribute];
-					}
-				}
-			});
-			observer.observe(elem, { attributeFilter: [attribute] });
-		}  figuring out face should make this obsolete ... canvas only */
-	};
 
 	this.createPanel = function(key, data) {
 		
@@ -130,7 +78,44 @@ function Interface(app) {
 		}
 
 		if (data.module == 'ui') app.ui[data.sub].panel = panel;
-		if (data.onLoad) app[data.module][data.sub][data.onLoad]();
+
+		// this doesn't happen, needs animation first
+		// if (data.onLoad) app[data.module][data.sub][data.onLoad]();
+	};
+
+	this.createUI = function(data, module, panel) {
+		const params = { key: data.key, ...data.params };
+		for (const k in data.fromModule) {
+			params[k] = module[data.fromModule[k]];
+		}
+
+		if (data.set) {
+			/* setter, no callback in module, just set prop
+				does'nt work for layers ... need to make a setter or not use these*/
+			params.callback = function(value) {
+				module[data.set.prop] = data.set.number ? +value : value;
+				if (data.set.layer) { } 
+			};
+			params.value = module[data.set.prop];
+		}
+
+		if (data.row) panel.addRow();
+		if (params.label) panel.add(new UILabel({ text: params.label}));
+		
+		let ui;
+		if (data.type == "UIRow") {
+			ui = panel.addRow(data.k);
+		} else {
+			ui = new uiClasses[data.type](params);
+			panel.add(ui, undefined, data.k);
+		}
+
+		/* could do this in module but addRow vs add(ui) is not super adaptable 
+		  and all this may change ... */
+
+		if (params.prompt) ui.prompt = params.prompt; /* only key commands */
+		if (params.key) self.keys[data.key] = ui;
+		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
 	};
 }
 

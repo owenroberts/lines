@@ -29,9 +29,7 @@ $column-width: 40px;
 		flex: 0 1 40px;
 		height: 1.75em; /* temp fix til main color selector works */
 	}
-}
 
-#layers {
 	// display: grid;
 	// grid-auto-columns: minmax(auto, $column-width);
 	// grid-gap: 1px;
@@ -42,6 +40,8 @@ $column-width: 40px;
 
 	.layer {
 		// max-width: 40px;
+
+		width: 100%;
 		display: grid;
 		grid-template-columns: auto 1fr auto;
 

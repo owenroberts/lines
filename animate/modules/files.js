@@ -114,10 +114,10 @@ function Files(params) {
 		lns.canvas.setHeight(data.h);
 		
 		if (data.bg) lns.canvas.setBGColor(data.bg);
-		lns.render.reset();
+		// lns.render.reset(); why here? 
 
 		if (callback) callback(data, params); 
-		/* this is just lns.ui.update ? */
+		/* this is just lns.ui.fio.update ? */
 	};
 
 	/* shift o */

@@ -240,6 +240,8 @@ select {
   width: max-content;
   padding: 0;
   border: none;
+  display: flex;
+  flex-direction: column;
 }
 #layers-menu input[type=color] {
   width: auto;
@@ -247,45 +249,41 @@ select {
   height: 1.75em;
   /* temp fix til main color selector works */
 }
-
-#layers {
-  display: flex;
-  flex-direction: column;
-}
-#layers .layer {
+#layers-menu .layer {
+  width: 100%;
   display: grid;
   grid-template-columns: auto 1fr auto;
 }
-#layers .layer .tween {
+#layers-menu .layer .tween {
   margin: 0;
   line-height: 1;
   background-color: lightgreen;
 }
-#layers .layer .left, #layers .layer .right, #layers .layer .layer-toggle {
+#layers-menu .layer .left, #layers-menu .layer .right, #layers-menu .layer .layer-toggle {
   margin: 0;
   background-color: lightgray;
 }
-#layers .layer .left:hover, #layers .layer .right:hover, #layers .layer .layer-toggle:hover {
+#layers-menu .layer .left:hover, #layers-menu .layer .right:hover, #layers-menu .layer .layer-toggle:hover {
   background-color: gray;
 }
-#layers .layer .left.off, #layers .layer .right.off, #layers .layer .layer-toggle.off {
+#layers-menu .layer .left.off, #layers-menu .layer .right.off, #layers-menu .layer .layer-toggle.off {
   background-color: #ffddff;
 }
-#layers .layer .left, #layers .layer .right {
+#layers-menu .layer .left, #layers-menu .layer .right {
   cursor: pointer;
   line-height: 1;
   max-width: max-content;
 }
-#layers .layer .right {
+#layers-menu .layer .right {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-#layers .layer .left {
+#layers-menu .layer .left {
   justify-self: end;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-#layers .layer .layer-toggle {
+#layers-menu .layer .layer-toggle {
   cursor: pointer;
 }
 

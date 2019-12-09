@@ -1,7 +1,10 @@
 function Layers() {
 	const self = this;
-	this.layers = [];
 
+	
+ 	/* these are still */
+	this.layers = [];
+	
 	this.updateProperty = function(prop, value) {
 		for (let i = 0; i < self.layers.length; i++) {
 			if (self.layers[i].toggled) self.layers[i][prop] = value;
@@ -45,6 +48,7 @@ function Layers() {
 			}
 		}
 	};
+	/* all fucked */
 
 	this.updateLayerColor = function(color) {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
