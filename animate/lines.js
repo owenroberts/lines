@@ -87,7 +87,7 @@ function appLoad(settings) {
 	lns.ui.faces.c.update(settings.c);
 
 	// palettes - no need to separate module from ui bc its all ui - only one not a ui with update ... 
-	lns.ui.palette.load(settings.palettes);
+	lns.ui.palette.setup(settings.palettes);
 
 	/* ui only */
 	lns.ui.rl.update(settings.rl);  // toggle not dependent on another value

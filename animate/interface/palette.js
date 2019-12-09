@@ -27,22 +27,22 @@ function Palette() {
 		self.panel.add(new UIButton({
 			text: name,
 			callback: function() {
-				self.loadPalette(name);
+				self.load(name);
 			}
 		}));
 	};
 
-	this.load = function(palettes) {
+	this.setup = function(palettes) {
 		for (const key in palettes) {
 			if (key != 'current') {
 				self.addUI(key);
 				self.palettes[key] = palettes[key];
 			}
 		}
-		if (palettes.current) self.loadPalette(palettes.current);
+		if (palettes.current) self.load(palettes.current);
 	};
 
-	this.loadPalette = function(name) {
+	this.load = function(name) {
 		/* this is crazy ... */
 		lns.data.saveLines();
 		self.palettes.current = name;
