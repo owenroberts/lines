@@ -48,14 +48,24 @@
 
 	- changing layer values, toggled layers
 		- nrvwc
-		- can move c to lines
-		- if (data.sub == 'layer') this is specific to animate
 		- just updating toggled layers, don't need to NOT update current values
 		- layer toggle is fuuucked
 			- try just changing the color but don't use prevColor
 			- try rendering little squares at each vector, or every third or something ... 
+		- can't set properties based on values - but prob get updated from settings/load
+		- props don't take on the values of toggled layer
+			- this is helpful to see what the value are ...
+			- need to use "faces" code wise ... better way, better way??
+			- complicated by selecting more than one layer
+			- return to previous state before ?? 
+			- over rides properties of current lines ... 
+	- set ui that still exist
+		- environment - draw, bg image, brush properties
+		- animation - fps
 
-	- toggle setter ... 
+	- FUCK saving on wrong frames ... 
+
+	- toggle set ui ... 
 	- canvas/env values vs anim values/props
 - making ui values that are automatically updated more easily
 - key command - f, then number, then just goes? no enter?
@@ -72,9 +82,12 @@
 - comments in lines.js, animatation.js, interface.js
 - addColor - this.el.parentNode ... 
 - move collapse x and order buttons to left .. 
+- layers hidden in smaller window 
+- layer.getProps ever used?? 
 
 after cssF
 - just lns.anim? and change "active layer" ... 
+	- fuck me this makes a lot more sense ... 
 
 
 - load order - just info 

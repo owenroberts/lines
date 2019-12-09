@@ -18,8 +18,9 @@ function Draw(anim, defaults) {
 	this.setProperties = function(props) {
 		for (const prop in props) {
 			if (self.layer[prop] !== undefined) {
-				self.layer[prop] = props[prop];
-				if (lns.ui) lns.ui.faces[prop].update(props[prop]); /* how to do this with ui, setter */
+				// self.layer[prop] = props[prop];
+				if (lns.ui) lns.ui.faces[prop].update(props[prop]); 
+				/* how to do this with ui, setter */
 			}
 		}
 		/* n default 2 - h key */
@@ -28,9 +29,9 @@ function Draw(anim, defaults) {
 		/* v 0.1 good */
 	};
 
-	this.setProp = function(value, params) {
-		lns.ui.layers.updateProperty(params.prop, value);
-		self.layer[params.prop] = value;
+	this.setProp = function(value, args) {
+		lns.ui.layers.updateProperty(args.prop, value);
+		self.layer[args.prop] = value;
 	};
 
 	this.defaults = defaults;

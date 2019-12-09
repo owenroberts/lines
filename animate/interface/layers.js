@@ -163,7 +163,10 @@ function Layers() {
 		layer.ui = new UILayer({
 			type: 'layer',
 			index: index,
-			callback: layer.toggle.bind(layer)
+			callback: function() {
+				layer.toggle.bind(layer)
+				lns.draw.setProperties(layer.props);
+			}
 		}, layer);
 		self.panel.layers.append(layer.ui);
 	};

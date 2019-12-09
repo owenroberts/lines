@@ -3,6 +3,7 @@ class UIInput extends UIElement {
 		params.tag = "input";
 		super(params);
 		this.callback = params.callback;
+		this.arguments = params.arguments;
 		if (params.key) this.setKey(params.key, params.label);
 	}
 }

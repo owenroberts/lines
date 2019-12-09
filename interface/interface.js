@@ -89,7 +89,6 @@ function Interface(app) {
 		}
 
 		if (data.set) {
-			console.log(data.sub);
 			/* setter, no callback in module, just set prop
 				does'nt work for layers ... need to make a setter or not use these */
 			params.callback = function(value) {

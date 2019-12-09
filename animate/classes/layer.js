@@ -116,6 +116,15 @@ class Layer {
 		else return false;
 	}
 
+	get props() {
+		return {
+			n: this.n,
+			r: this.r,
+			w: this.w,
+			v: this.v
+		}
+	}
+
 	getProps(f) {
 		const props = {
 			s: 0,
