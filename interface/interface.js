@@ -62,7 +62,6 @@ function Interface(app) {
 			});
 	};
 
-
 	this.createPanel = function(key, data) {
 		
 		const panel = new UIPanel(data.id, data.label);
@@ -90,8 +89,9 @@ function Interface(app) {
 		}
 
 		if (data.set) {
+			console.log(data.sub);
 			/* setter, no callback in module, just set prop
-				does'nt work for layers ... need to make a setter or not use these*/
+				does'nt work for layers ... need to make a setter or not use these */
 			params.callback = function(value) {
 				module[data.set.prop] = data.set.number ? +value : value;
 				if (data.set.layer) { } 

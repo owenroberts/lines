@@ -28,6 +28,11 @@ function Draw(anim, defaults) {
 		/* v 0.1 good */
 	};
 
+	this.setProp = function(value, params) {
+		lns.ui.layers.updateProperty(params.prop, value);
+		self.layer[params.prop] = value;
+	};
+
 	this.defaults = defaults;
 	this.setProperties(defaults);
 
@@ -209,7 +214,6 @@ function Draw(anim, defaults) {
 		lns.canvas.canvas.addEventListener('touchend', ev => {
 			self.end(lastTouch);
 		});
-
 	}
 	document.addEventListener('mousemove', self.outSideCanvas);
 }

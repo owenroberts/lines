@@ -152,13 +152,17 @@
 		"id": "line-color-menu",
 		"label": "Line Color",
 		"module": "draw",
-		"sub": "layer",
 		"list": [
 			{
 				"type": "UIColor",
 				"face": "c",
-				"set": {
-					"prop": "c"
+				"fromModule": {
+					"callback": "setProp"
+				},
+				"params": {
+					"arguments": {
+						"prop": "c"
+					}
 				}
 			}
 		]
@@ -777,15 +781,6 @@
 				},
 				"params": {
 					"text": "Select"
-				}
-			},
-			{
-				"type": "UIColor",
-				"fromModule": {
-					"callback": "updateLayerColor"
-				},
-				"params": {
-					"text": "Change Color"
 				}
 			},
 			{

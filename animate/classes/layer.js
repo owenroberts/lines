@@ -15,8 +15,12 @@ class Layer {
 	}
 
 	toggle() {
-		if (!this.prevColor) this.prevColor = this.c;
-		this.c = this.toggled ? this.prevColor : "#00CC96";
+		if (!this.toggled) {
+			this.pc = this.c;
+			this.c = "#00CC96";
+		} else if (this.c == "#00CC96") {
+			this.c = this.pc;
+		}
 		this.toggled = !this.toggled;
 	}
 

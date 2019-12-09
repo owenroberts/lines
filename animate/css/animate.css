@@ -104,8 +104,10 @@ select {
   flex-grow: 1;
   max-width: 160px;
   order: 0;
-  border-top: 1px solid lightgray;
-  border-right: 1px solid lightgray;
+  background-color: #eae1ff;
+  border-radius: 3px;
+  margin-right: 3px;
+  margin-bottom: 3px;
   padding: 0.5em;
   overflow: hidden;
   position: relative;
@@ -239,7 +241,6 @@ select {
   min-width: 100%;
   width: max-content;
   padding: 0;
-  border: none;
   display: flex;
   flex-direction: column;
 }

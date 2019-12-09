@@ -5,13 +5,13 @@ class UITextRange extends UICollection {
 		this.callback = params.callback;
 
 		this.textInput = new UIBlur({
-			// id: `${params.id}-text`,
+			// id: `${params.id}-text`, use k?
 			value: params.value,
 			callback: this.handler.bind(this)
 		});
 
 		this.range = new UIRange({
-			// id: `${params.id}-range`,
+			// id: `${params.id}-range`, use k?
 			value: params.value,
 			min: params.min,
 			max: params.max,

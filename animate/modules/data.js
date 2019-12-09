@@ -20,7 +20,6 @@ function Data(anim) {
 		if (lns.draw.drawing.length > 0) {
 			const layer = _.cloneDeep(lns.draw.layer);
 			layer.d = anim.drawings.length;
-			// console.log(layer);
 			anim.layers.push(layer);
 			anim.drawings.push(_.cloneDeep(lns.draw.drawing));
 			lns.ui.update();

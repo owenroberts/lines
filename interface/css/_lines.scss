@@ -95,8 +95,17 @@ select { margin-top: 0.25em; }
 	flex-grow: 1;
 	max-width: 160px;
 	order: 0;
-	border-top: 1px solid $ui-color;
-	border-right: 1px solid $ui-color;
+	// border-top: 1px solid $ui-color;
+	// border-right: 1px solid $ui-color;
+
+	// margin: 1px;
+	background-color: $bg-color;
+	// border: 1px solid $border-color;
+	border-radius: 3px;
+	margin-right: 3px;
+	margin-bottom: 3px;
+
+
 	padding: 0.5em;
 	overflow: hidden;
 	position: relative;

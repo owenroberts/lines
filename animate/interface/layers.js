@@ -1,24 +1,14 @@
 function Layers() {
 	const self = this;
-
 	
  	/* these are still */
 	this.layers = [];
 	
 	this.updateProperty = function(prop, value) {
-		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled) self.layers[i][prop] = value;
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.toggled) layer[prop] = value;
 		}
-	};
-
-	this.resetLayers = function() {
-		for (let i = self.layers.length - 1; i >= 0; i--) {
-			if (self.layers[i].toggled) self.layers[i].toggle();
-		}
-		for (let i = this.panel.rows.length - 1; i > 1; i--) {
-			this.panel.removeRow(this.panel.rows[i]);
-		}
-		self.layers = [];
 	};
 
 	/* z */
@@ -49,15 +39,6 @@ function Layers() {
 		}
 	};
 	/* all fucked */
-
-	this.updateLayerColor = function(color) {
-		for (let i = 0; i < lns.anim.layers.length; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.toggled && layer.isInFrame(lns.anim.currentFrame)) {
-				layer.c = layer.prevColor = color;
-			}
-		}
-	};
 
 	this.clone = function() { 
 		for (let i = 0; i < lns.anim.layers.length; i++) {

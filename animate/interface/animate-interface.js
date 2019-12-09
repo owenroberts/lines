@@ -116,7 +116,6 @@ function setupAnimateInterface(ui) {
 
 	/* call after changing a frame */
 	ui.afterFrame = function() {
-		lns.draw.reset();
 		ui.update();
 	};
 

@@ -3,10 +3,11 @@ class UIColor extends UIInput {
 		super(params);
 		this.el.type = "color";
 		this.colors = [];
+		this.arguments = params.arguments;
 
 		this.el.addEventListener('input', ev => {
 			this.current = ev.target.value;
-			this.callback(ev.target.value);
+			this.callback(ev.target.value, this.arguments);
 		});
 
 		this.el.addEventListener('focus', ev => {
@@ -24,18 +25,18 @@ class UIColor extends UIInput {
 				css: { "background": color },
 				value: color,
 				callback: function() {
-					self.callback(color);
+					self.callback(color, self.arguments);
 					self.value = color;
 				}
 			});
-			
+
 			/* only reference like this in elements */
 			this.el.parentNode.insertBefore(btn.el, this.el.nextSibling);
 		}
 	}
 
 	update(value) {
-		this.callback(value);
+		this.callback(value, this.arguments);
 		this.value = value;
 	}
 
