@@ -6,15 +6,10 @@ function setupAnimateInterface(ui) {
 
 	ui.framesPanel = new UIList({ id:"frames" });
 
-	ui.rl = new UIToggle({
-		id: "right-left",
-		onText: "R/L",
-		offText: "L/R",
-		callback: function() {
-			if (this.isOn) lns.canvas.canvas.parentElement.classList.add('right');
-			else lns.canvas.canvas.parentElement.classList.remove('right');
-		}
-	});
+	ui.toggleRL = function() {
+		if (this.isOn) lns.canvas.canvas.parentElement.classList.add('right');
+		else lns.canvas.canvas.parentElement.classList.remove('right');
+	};
 
 	/* update interface */
 	ui.update = function() {

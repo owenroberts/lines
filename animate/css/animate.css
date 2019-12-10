@@ -236,6 +236,27 @@ select {
   margin-top: 1px;
 }
 
+#fio-menu {
+  order: 0;
+  min-width: 100%;
+  width: max-content;
+}
+#fio-menu #title {
+  border: none;
+  font-size: 1.5em;
+  display: block;
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid transparent;
+  flex: 100%;
+  text-align: left;
+  padding: 3px;
+  background-color: white;
+}
+#fio-menu #title:focus {
+  outline: none;
+  border-bottom: 1px solid black;
+}
+
 #layers-menu {
   order: 99;
   min-width: 100%;

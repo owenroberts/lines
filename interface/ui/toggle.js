@@ -35,4 +35,8 @@ class UIToggle extends UIButton {
 		this.text = this.offText;
 		this.addClass('off');
 	}
+
+	get value() {
+		return this.isOn;
+	}
 }

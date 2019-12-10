@@ -51,7 +51,7 @@ function appSave() {
 		onionSkinNum: lns.render.onionSkinNum,
 		mouseInterval: lns.draw.mouseInterval,
 		palettes: lns.ui.palette.palettes,
-		rl: lns.ui.rl.isOn
+		rl: lns.ui.faces.rl.value
 		// displayLayers: lns.ui.layers.canvas.canvas.style.display
 	};
 }
@@ -90,5 +90,5 @@ function appLoad(settings) {
 	lns.ui.palette.setup(settings.palettes);
 
 	/* ui only */
-	lns.ui.rl.update(settings.rl);  // toggle not dependent on another value
+	lns.ui.faces.rl.update(settings.rl);  // toggle not dependent on another value
 }

@@ -1,4 +1,80 @@
 {
+	"fio": {
+		"id": "fio-menu",
+		"label": "Fio",
+		"module": "files",
+		"list": [
+			{
+				"type": "UIText",
+				"face": "title",
+				"fromModule": {
+					"callback": "saveFile"
+				},
+				"params": {
+					"placeholder": "title",
+					"id": "title"
+				}
+			},
+			{
+				"type": "UIButton",
+				"key": "s",
+				"fromModule": {
+					"callback": "saveFile"
+				},
+				"params": {
+					"text": "Save",
+					"arguments": {
+						"single": false
+					}
+				}
+			},
+			{
+				"type": "UIButton",
+				"key": "shift-s",
+				"fromModule": {
+					"callback": "saveFile"
+				},
+				"params": {
+					"text": "Save Frame",
+					"arguments": {
+						"single": true
+					}
+				}
+			},
+			{
+				"type": "UIButton",
+				"key": "o",
+				"fromModule": {
+					"callback": "openFile"
+				},
+				"params": {
+					"text": "Open"
+				}
+			},
+			{
+				"type": "UIButton",
+				"key": "shift-o",
+				"fromModule": {
+					"callback": "reOpenFile"
+				},
+				"params": {
+					"text": "Re-Open"
+				}
+			},
+			{
+				"type": "UIToggle",
+				"module": "ui",
+				"face": "rl",
+				"fromModule": {
+					"callback": "toggleRL"
+				},
+				"params": {
+					"onText": "R/L",
+					"offText": "L/R"
+				}
+			}
+		]
+	},
 	"mouse": {
 		"id": "mouse-menu",
 		"label": "Mouse",

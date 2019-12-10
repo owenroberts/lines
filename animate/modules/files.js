@@ -6,8 +6,10 @@ function Files(params) {
 	this.fileName = undefined;
 
 	/* s key - shift-s for single */
-	this.saveFile = function(title, single, callback) {
+	this.saveFile = function(args, callback) {
 		lns.data.saveLines();
+
+		self.fileName = lns.ui.faces.title.value || prompt("Name this file:");
 
 		if (params.fit && confirm("Fit canvas?"))
 			lns.canvas.fitCanvasToDrawing();
@@ -24,7 +26,7 @@ function Files(params) {
 
 		/* save current frame */
 		let layers = [];
-		if (single) {
+		if (args.single) {
 			for (let i = 0; i < lns.anim.layers.length; i++) {
 				if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
 					const layer = _.cloneDeep(lns.anim.layers[i]);
@@ -70,12 +72,13 @@ function Files(params) {
 		}
 
 		const jsonfile = JSON.stringify(json);
-		const fileName = title || prompt("Name this file:");
 
-		if (fileName) {
+		if (self.fileName) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
-			saveAs(blob, `${fileName}.json`);
-			if (callback) callback(fileName); /* to set values ... */
+			saveAs(blob, `${self.fileName}.json`);
+			if (callback) callback(self.fileName); /* to set values ... */
+			// lns.ui.fio.update();
+			lns.ui.faces.title = self.fileName;
 		}
 	};
 
@@ -117,18 +120,27 @@ function Files(params) {
 		// lns.render.reset(); why here? 
 
 		if (callback) callback(data, params); 
-		/* this is just lns.ui.fio.update ? */
+		/* this is just lns.ui.fio.update ? 
+			starting to seem that way ... */
 	};
 
 	/* shift o */
 	this.reOpenFile = function() {
-		console.log(self.fileName);
-		self.saveFile(undefined, undefined, function(fileName) {
-			location.href += `?src=${ prompt("Enter location:") }/${ fileName }`;
+		self.saveFile({}, function(fileName) {
+			location.href += `?src=${ prompt("Enter location:") }/${ fileName }.json`;
 		});
 	};
 
 	/* o key */
+	this.openFile = function() {
+		const openFile = document.createElement('input');
+		openFile.type = "file";
+		openFile.click();
+		openFile.onchange = function() {
+			self.readFile(openFile.files, lns.ui.fio.update);
+		};
+	};
+
 	this.readFile = function(files, callback) {
 		for (let i = 0, f; f = files[i]; i++) {
 			if (!f.type.match('application/json')) {
@@ -148,9 +160,8 @@ function Files(params) {
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		self.saveFilesEnabled = true;
 		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
-		const nav = document.getElementById('nav');
-		nav.addEventListener('dragover', dragOverHandler);
-		nav.addEventListener('drop', dropHandler);
+		lns.canvas.canvas.addEventListener('dragover', dragOverHandler);
+		lns.canvas.canvas.addEventListener('drop', dropHandler);
 		// https://gist.github.com/andjosh/7867934
 	}
 
