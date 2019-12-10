@@ -495,10 +495,7 @@
 			{
 				"type": "UIToggle",
 				"key": "shift-l",
-				"face": "onionSkinIsVisible",
-				"fromModule": {
-					"callback": "toggleOnion"
-				},
+				"toggle": "onionSkinIsVisible",
 				"params": {
 					"onText": "Hide",
 					"offText": "Show"

@@ -15,13 +15,6 @@ function Render(lps, color) {
 		self.onionSkinIsVisible = +n > 0 ? true : false;
 	};
 
-	/* shift l */
-	this.toggleOnion = function() {
-		console.log('toggle');
-		self.onionSkinIsVisible = !self.onionSkinIsVisible;
-		console.log(self.onionSkinIsVisible);
-	};
-
 	/* just set drawing back to 0 but might do other things */
 	this.reset = function() {
 		lns.anim.frame = 0;
