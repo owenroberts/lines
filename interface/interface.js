@@ -97,6 +97,13 @@ function Interface(app) {
 			params.value = module[data.set.prop];
 		}
 
+		/* direct set properties, toggle, number */
+		if (data.number) {
+			params.callback = function(value) {
+				module[data.number] = +value;
+			};
+		}
+
 		if (data.toggle) {
 			params.callback = function() {
 				module[data.toggle] = !module[data.toggle];

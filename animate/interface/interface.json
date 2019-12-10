@@ -8,13 +8,11 @@
 				"type": "UITextRange",
 				"face": "mouseInterval",
 				"key": "m",
-				"set": {
-					"prop": "mouseInterval",
-					"number": true
-				},
+				"number": "mouseInterval",
 				"params": {
 					"min": 0,
 					"max": 100,
+					"value": 30,
 					"label": "Mouse time",
 					"prompt": "Set mouse interval"
 				}
@@ -48,10 +46,7 @@
 			{
 				"row": true,
 				"type": "UIRange",
-				"set": {
-					"prop": "x",
-					"number": true
-				},
+				"number":  "x",
 				"params": {
 					"label": "X",
 					"min": -1024,
@@ -62,10 +57,7 @@
 			},
 			{
 				"type": "UIRange",
-				"set": {
-					"prop": "y",
-					"number": true
-				},
+				"number": "y",
 				"params": {
 					"label": "Y",
 					"min": -1024,
@@ -76,10 +68,7 @@
 			},
 			{
 				"type": "UIRange",
-				"set": {
-					"prop": "size",
-					"number": true
-				},
+				"number": "size",
 				"params": {
 					"label": "Size",
 					"input": "size-range",
@@ -401,13 +390,11 @@
 				"type": "UIBlur",
 				"key": ";",
 				"face": "fps",
-				"set": {
-					"prop": "fps",
-					"number": true
-				},
+				"number": "fps",
 				"params": {
 					"prompt": "Set FPS",
-					"label": "FPS"
+					"label": "FPS",
+					"value": 10
 				}
 			}
 		]
@@ -580,53 +567,45 @@
 			{
 				"type": "UITextRange",
 				"face": "brush",
-				"set": {
-					"prop": "brush",
-					"number": true
-				},
+				"number": "brush",
 				"params": {
 					"label": "Brush",
 					"min": 0, 
-					"max": 10
+					"max": 10,
+					"value": 0
 				}
 			},
 			{
 				"type": "UITextRange",
 				"face": "brushSpread",
-				"set": {
-					"prop": "brushSpread",
-					"number": true
-				},
+				"number":  "brushSpread",
 				"params": {
 					"label": "Brush Spread",
 					"min": 0, 
-					"max": 5
+					"max": 5,
+					"value": 0
 				}
 			},
 			{
 				"type": "UITextRange",
 				"face": "grass",
-				"set": {
-					"prop": "grass",
-					"number": true
-				},
+				"number":  "grass",
 				"params": {
 					"label": "Grass",
 					"min": 0, 
-					"max": 20
+					"max": 20,
+					"value": 0
 				}
 			},
 			{
 				"type": "UITextRange",
 				"face": "dots",
-				"set": {
-					"prop": "dots",
-					"number": true
-				},
+				"number": "dots",
 				"params": {
 					"label": "Dots",
 					"min": 10, 
-					"max": 50
+					"max": 50,
+					"value": 10
 				}
 			}
 
@@ -738,54 +717,6 @@
 				"params": {
 					"text": "+"
 				}
-			}
-		]
-	},
-	"layers": {
-		"id": "layers-menu",
-		"label": "Layers",
-		"module": "ui",
-		"sub": "layers",
-		"list": [
-			{
-				"type": "UIButton",
-				"fromModule": {
-					"callback": "clone"
-				},
-				"params": {
-					"text": "Clone"
-				}
-			},
-			{
-				"type": "UIButton",
-				"fromModule": {
-					"callback": "split"
-				},
-				"params": {
-					"text": "Split"
-				}
-			},
-			{
-				"type": "UIButton",
-				"fromModule": {
-					"callback": "addTween"
-				},
-				"params": {
-					"text": "+Tween"
-				}
-			},
-			{
-				"type": "UIButton",
-				"fromModule": {
-					"callback": "selectAll"
-				},
-				"params": {
-					"text": "Select"
-				}
-			},
-			{
-				"type": "UIRow",
-				"k": "layers"
 			}
 		]
 	},
@@ -919,6 +850,54 @@
 				"params": {
 					"text": "+"
 				}
+			}
+		]
+	},
+	"layers": {
+		"id": "layers-menu",
+		"label": "Layers",
+		"module": "ui",
+		"sub": "layers",
+		"list": [
+			{
+				"type": "UIButton",
+				"fromModule": {
+					"callback": "clone"
+				},
+				"params": {
+					"text": "Clone"
+				}
+			},
+			{
+				"type": "UIButton",
+				"fromModule": {
+					"callback": "split"
+				},
+				"params": {
+					"text": "Split"
+				}
+			},
+			{
+				"type": "UIButton",
+				"fromModule": {
+					"callback": "addTween"
+				},
+				"params": {
+					"text": "+Tween"
+				}
+			},
+			{
+				"type": "UIButton",
+				"fromModule": {
+					"callback": "selectAll"
+				},
+				"params": {
+					"text": "Select"
+				}
+			},
+			{
+				"type": "UIRow",
+				"k": "layers"
 			}
 		]
 	}

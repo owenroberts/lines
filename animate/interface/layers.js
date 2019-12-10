@@ -164,7 +164,7 @@ function Layers() {
 			type: 'layer',
 			index: index,
 			callback: function() {
-				layer.toggle.bind(layer)
+				layer.toggle();
 				lns.draw.setProperties(layer.props);
 			}
 		}, layer);
