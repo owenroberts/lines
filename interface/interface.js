@@ -1,6 +1,7 @@
 function Interface(app) {
 	const self = this;
 	const uiClasses = {
+		UILabel,
 		UIElement,
 		UIRange,
 		UIText,
@@ -89,13 +90,17 @@ function Interface(app) {
 		}
 
 		if (data.set) {
-			/* setter, no callback in module, just set prop
-				does'nt work for layers ... need to make a setter or not use these */
+			/* setter, no callback in module, just set prop */
 			params.callback = function(value) {
 				module[data.set.prop] = data.set.number ? +value : value;
-				if (data.set.layer) { } 
 			};
 			params.value = module[data.set.prop];
+		}
+
+		if (data.toggle) {
+			params.callback = function() {
+				module[data.toggle] = !module[data.toggle];
+			};
 		}
 
 		if (data.row) panel.addRow();

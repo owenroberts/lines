@@ -32,15 +32,14 @@
 					"callback": "loadImage"
 				},
 				"params": {
-					"placeholder": "Image URL, Enter"
+					"placeholder": "URL",
+					"label": "Add URL, Enter"
 				}
 			},
 			{
 				"type": "UIToggle",
 				"key": "b",
-				"fromModule": {
-					"callback": "toggle"
-				},
+				"toggle":  "show",
 				"params": {
 					"onText": "Hide",
 					"offText": "Show"
