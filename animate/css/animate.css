@@ -16,13 +16,10 @@ button:focus {
   outline: none;
 }
 
-select {
-  margin-top: 0.25em;
-}
-
 #tool-tip {
   position: fixed;
-  right: 20px;
+  right: 1em;
+  top: 1em;
   background: #ffddff;
   border-radius: 3px;
   font-size: 1em;
@@ -50,13 +47,12 @@ select {
   padding-left: 1em;
   padding-right: 0;
 }
-#container #tools {
+#container #interface {
   flex: 1;
 }
 
 .btn {
   display: inline-block;
-  margin-top: 0.5em;
   background-color: lightgray;
   padding: 0 0.5em;
   border-radius: 3px;
@@ -72,24 +68,8 @@ select {
   background-color: #ffddff;
 }
 
-#nav #title {
-  border: none;
-  font-size: 1.5em;
-  display: block;
-  margin-bottom: 0.5em;
-  border-bottom: 1px solid transparent;
-  width: 100%;
-}
-#nav #title:focus {
-  outline: none;
-  border-bottom: 1px solid black;
-}
-#nav label {
-  margin-right: 0.25em;
-}
-
 #panels {
-  margin-top: 0.5em;
+  margin-top: 0.25em;
   display: flex;
   flex-wrap: wrap;
 }
@@ -99,7 +79,7 @@ select {
   background-color: gray;
 }
 
-.menu-panel {
+.panel {
   flex-basis: 120px;
   flex-grow: 1;
   max-width: 160px;
@@ -113,20 +93,20 @@ select {
   position: relative;
   height: auto;
 }
-.menu-panel.undocked {
+.panel.undocked {
   display: none;
 }
-.menu-panel.closed {
+.panel.closed {
   height: 25px;
 }
-.menu-panel label {
+.panel label {
   margin-bottom: 1em;
   display: block;
 }
-.menu-panel .row label {
+.panel .row label {
   margin-bottom: 0;
 }
-.menu-panel .toggle, .menu-panel .order, .menu-panel .undock-btn {
+.panel .toggle, .panel .order, .panel .undock-btn {
   display: inline-block;
   position: absolute;
   right: 34px;
@@ -140,57 +120,61 @@ select {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-.menu-panel .toggle:hover, .menu-panel .order:hover, .menu-panel .undock-btn:hover {
+.panel .toggle:hover, .panel .order:hover, .panel .undock-btn:hover {
   background: #ffddff;
 }
-.menu-panel .toggle.off, .menu-panel .order.off, .menu-panel .undock-btn.off {
+.panel .toggle.off, .panel .order.off, .panel .undock-btn.off {
   background-color: inherit;
 }
-.menu-panel .undock-btn {
+.panel .undock-btn {
   right: 18px;
   left: auto;
 }
-.menu-panel .order {
+.panel .order {
   font-size: 1em;
   right: 2px;
   left: auto;
 }
-.menu-panel .row {
+.panel .row {
   margin-bottom: 0.5em;
   display: flex;
   flex-wrap: wrap;
 }
-.menu-panel .row label {
+.panel .row label {
   line-height: 1.5;
 }
-.menu-panel .row span, .menu-panel .row label, .menu-panel .row input, .menu-panel .row select {
+.panel .row span, .panel .row label, .panel .row input, .panel .row select {
   white-space: nowrap;
   margin-right: 0.25em;
   margin-top: 0.25em;
 }
-.menu-panel .row span.block, .menu-panel .row label.block, .menu-panel .row input.block, .menu-panel .row select.block {
+.panel .row span.block, .panel .row label.block, .panel .row input.block, .panel .row select.block {
   flex: auto;
   text-align: left;
 }
-.menu-panel .row input {
+.panel .row input {
   flex: 0 1 40px;
   width: 100%;
   text-align: right;
 }
-.menu-panel .row input[type=range], .menu-panel .row input[type=color] {
+.panel .row input[type=range], .panel .row input[type=color] {
   flex: 1 1 auto;
 }
-.menu-panel .row input[type=text] {
+.panel .row input[type=text] {
   border: none;
   background-color: lightgray;
   padding-right: 0.25em;
 }
-.menu-panel .row input[type=text]:focus {
+.panel .row input[type=text]:focus {
   outline: 1px solid blue;
 }
-.menu-panel .btn {
+.panel .btn {
   padding: 0 0.25em;
   margin-right: 3px;
+  margin-top: 0.5em;
+}
+.panel select {
+  margin-top: 0.25em;
 }
 
 .modal {

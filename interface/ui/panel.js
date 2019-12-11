@@ -4,7 +4,7 @@ class UIPanel extends UICollection {
 
 		this.el.id = id;
 		
-		this.addClass("menu-panel");
+		this.addClass("panel");
 		this.addClass("undocked");
 		
 		this.open = true;

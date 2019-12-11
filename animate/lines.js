@@ -52,7 +52,6 @@ function appSave() {
 		mouseInterval: lns.draw.mouseInterval,
 		palettes: lns.ui.palette.palettes,
 		rl: lns.ui.faces.rl.value
-		// displayLayers: lns.ui.layers.canvas.canvas.style.display
 	};
 }
 

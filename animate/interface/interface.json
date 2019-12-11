@@ -1,7 +1,7 @@
 {
 	"fio": {
 		"id": "fio-menu",
-		"label": "Fio",
+		"label": "Files IO",
 		"module": "files",
 		"list": [
 			{
@@ -475,7 +475,7 @@
 			}
 		]
 	},
-	"playBack": {
+	"play": {
 		"id": "play-back-menu",
 		"label": "Play Back",
 		"module": "render",

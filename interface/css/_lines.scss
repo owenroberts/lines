@@ -14,11 +14,10 @@ body {
 
 button:focus { outline: none; }
 
-select { margin-top: 0.25em; }
-
 #tool-tip {
 	position: fixed;
-	right: 20px;
+	right: 1em;
+	top: 1em;
 	background: $accent-two;
 	border-radius: 3px;
 	font-size: 1em;
@@ -45,12 +44,11 @@ select { margin-top: 0.25em; }
 			padding-right: 0;
 		}
 	}
-	#tools { flex: 1; }
+	#interface { flex: 1; }
 }
 
 .btn {
 	display: inline-block;
-	margin-top: 0.5em;
 	background-color: $ui-color;
 	padding: 0 0.5em;
 	border-radius: 3px;
@@ -64,25 +62,8 @@ select { margin-top: 0.25em; }
 	&.press { background-color: $accent-two; }
 }
 
-#nav {
-	#title {
-		border: none;
-		font-size: 1.5em;
-		display: block;
-		margin-bottom: 0.5em;
-		border-bottom: 1px solid transparent;
-		width: 100%;
-		&:focus {
-			outline: none;
-			border-bottom: 1px solid black;
-		}
-	}
-
-	label { margin-right: 0.25em; }
-}
-
 #panels {
-	margin-top: 0.5em;
+	margin-top: 0.25em;
 	display: flex;
 	flex-wrap: wrap;
 }
@@ -90,7 +71,7 @@ select { margin-top: 0.25em; }
 /* toggle */
 .off { background-color: $ui-select; }
 
-.menu-panel {
+.panel {
 	flex-basis: 120px;
 	flex-grow: 1;
 	max-width: 160px;
@@ -190,7 +171,10 @@ select { margin-top: 0.25em; }
 	.btn {
 		padding: 0 0.25em;
 		margin-right: 3px;
+		margin-top: 0.5em;
 	}
+
+	select { margin-top: 0.25em; }
 }
 
 .modal {

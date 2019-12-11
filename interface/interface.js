@@ -40,6 +40,7 @@ function Interface(app) {
 	document.addEventListener("keydown", self.keyDown, false);
 
 	window.toolTip = new UILabel({id: 'tool-tip'});
+	document.getElementById('interface').appendChild(window.toolTip.el);
 
 	this.load = function(file, callback) {
 		fetch(file)
@@ -49,18 +50,21 @@ function Interface(app) {
 					self.createPanel(key, data[key]);
 				}
 
-				this.addPanel = new UISelectButton({
-					id: 'add-ui',
-					options: Object.keys(data),
-					callback: function(value) {
-						self.panels[value].dock();
-					},
-					btn: '+'
-				});
-
+				this.addSelect(Object.keys(data));
 				self.settings.load();
 				if (callback) callback();
 			});
+	};
+
+	this.addSelect = function(panelList) {
+		const selector = new UICollection({id: 'selector'});
+		selector.append(new UISelectButton({
+			options: panelList,
+			callback: function(value) {
+				self.panels[value].dock();
+			},
+			btn: '+'
+		}));
 	};
 
 	this.createPanel = function(key, data) {
