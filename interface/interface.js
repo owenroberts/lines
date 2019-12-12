@@ -69,7 +69,7 @@ function Interface(app) {
 
 	this.createPanel = function(key, data) {
 		
-		const panel = new UIPanel(data.id, data.label);
+		const panel = new UIPanel(key, data.label);
 		self.panels[key] = panel;
 		
 		document.getElementById("panels").appendChild(panel.el);
@@ -91,14 +91,6 @@ function Interface(app) {
 		const params = { key: data.key, ...data.params };
 		for (const k in data.fromModule) {
 			params[k] = module[data.fromModule[k]];
-		}
-
-		if (data.set) {
-			/* setter, no callback in module, just set prop */
-			params.callback = function(value) {
-				module[data.set.prop] = data.set.number ? +value : value;
-			};
-			params.value = module[data.set.prop];
 		}
 
 		/* direct set properties, toggle, number */

@@ -1,6 +1,5 @@
 {
 	"fio": {
-		"id": "fio-menu",
 		"label": "Files IO",
 		"module": "files",
 		"list": [
@@ -76,7 +75,6 @@
 		]
 	},
 	"mouse": {
-		"id": "mouse-menu",
 		"label": "Mouse",
 		"module": "draw",
 		"list": [
@@ -96,7 +94,6 @@
 		]
 	},
 	"bgImage": {
-		"id": "background-image-menu",
 		"label": "BG image",
 		"module": "bgImage",
 		"list": [
@@ -157,7 +154,6 @@
 		]
 	},
 	"canvas": {
-		"id": "canvas-menu",
 		"label": "Canvas",
 		"module": "canvas",
 		"list": [
@@ -213,7 +209,6 @@
 		]	
 	},
 	"lineColor": {
-		"id": "line-color-menu",
 		"label": "Line Color",
 		"module": "draw",
 		"list": [
@@ -232,7 +227,6 @@
 		]
 	},
 	"bgColor": {
-		"id": "bg-color-menu",
 		"label": "BG Color",
 		"module": "canvas",
 		"list": [
@@ -247,7 +241,6 @@
 		]
 	},
 	"copy": {
-		"id": "copy-menu",
 		"label": "Copy/Paste",
 		"module": "data",
 		"list": [
@@ -314,7 +307,6 @@
 		]
 	},
 	"cut": {
-		"id": "cut-menu",
 		"label": "Cut",
 		"module": "data",
 		"list": [
@@ -401,7 +393,6 @@
 		]
 	},
 	"data": {
-		"id": "data-menu",
 		"label": "Data",
 		"module": "data",
 		"list": [
@@ -458,7 +449,6 @@
 		]
 	},
 	"anim": {
-		"id": "anim-menu",
 		"label": "Animation",
 		"module": "anim",
 		"list": [
@@ -476,7 +466,6 @@
 		]
 	},
 	"play": {
-		"id": "play-back-menu",
 		"label": "Play Back",
 		"module": "render",
 		"list": [
@@ -567,7 +556,6 @@
 		]
 	},
 	"capture": {
-		"id": "capture-menu",
 		"label": "Capture",
 		"module": "ui",
 		"sub": "capture",
@@ -636,7 +624,6 @@
 		]
 	},
 	"brush": {
-		"id": "brush-menu",
 		"label": "Brush",
 		"module": "draw",
 		"list": [
@@ -688,7 +675,6 @@
 		]
 	},
 	"lines": {
-		"id": "lines-menu",
 		"label": "Lines",
 		"module": "draw",
 		"list": [
@@ -769,7 +755,6 @@
 		]
 	},
 	"states": {
-		"id": "states-menu",
 		"label": "States",
 		"module": "ui",
 		"sub": "states",
@@ -797,7 +782,6 @@
 		]
 	},
 	"drawings": {
-		"id": "drawing-menu",
 		"label": "Drawings",
 		"module": "ui",
 		"sub": "drawings",
@@ -809,7 +793,6 @@
 		]
 	},
 	"settings": {
-		"id": "settings-menu",
 		"label": "Settings",
 		"module": "ui",
 		"sub": "settings",
@@ -856,7 +839,6 @@
 		]
 	},
 	"explode": {
-		"id": "explode-menu",
 		"label": "Explode",
 		"module": "data",
 		"list": [
@@ -902,7 +884,6 @@
 		]
 	},
 	"palette": {
-		"id": "palette-menu",
 		"label": "Palette",
 		"module": "ui",
 		"sub": "palette",
@@ -930,7 +911,6 @@
 		]
 	},
 	"layers": {
-		"id": "layers-menu",
 		"label": "Layers",
 		"module": "ui",
 		"sub": "layers",

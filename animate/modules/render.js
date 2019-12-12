@@ -71,6 +71,7 @@ function Render(lps, color) {
 				lns.anim.currentFrame = temp;
 			}
 
+			/* draw before update is cool for now ... */
 			lns.anim.draw();
 			lns.anim.update();
 			

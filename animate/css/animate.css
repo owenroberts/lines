@@ -234,12 +234,12 @@ select {
   margin-top: 1px;
 }
 
-#fio-menu {
+#fio-panel {
   order: 0;
   min-width: 100%;
   width: max-content;
 }
-#fio-menu #title {
+#fio-panel #title {
   border: none;
   font-size: 1.5em;
   display: block;
@@ -250,58 +250,58 @@ select {
   padding: 3px;
   background-color: white;
 }
-#fio-menu #title:focus {
+#fio-panel #title:focus {
   outline: none;
   border-bottom: 1px solid black;
 }
 
-#layers-menu {
+#layers-panel {
   order: 99;
   min-width: 100%;
   width: max-content;
   padding: 0;
 }
-#layers-menu input[type=color] {
+#layers-panel input[type=color] {
   width: auto;
   flex: 0 1 40px;
   height: 1.75em;
   /* temp fix til main color selector works */
 }
-#layers-menu .layer {
+#layers-panel .layer {
   width: 100%;
   display: grid;
   grid-template-columns: auto 1fr auto;
 }
-#layers-menu .layer .tween {
+#layers-panel .layer .tween {
   margin: 0;
   line-height: 1;
   background-color: lightgreen;
 }
-#layers-menu .layer .left, #layers-menu .layer .right, #layers-menu .layer .layer-toggle {
+#layers-panel .layer .left, #layers-panel .layer .right, #layers-panel .layer .layer-toggle {
   margin: 0;
   background-color: lightgray;
 }
-#layers-menu .layer .left:hover, #layers-menu .layer .right:hover, #layers-menu .layer .layer-toggle:hover {
+#layers-panel .layer .left:hover, #layers-panel .layer .right:hover, #layers-panel .layer .layer-toggle:hover {
   background-color: gray;
 }
-#layers-menu .layer .left.off, #layers-menu .layer .right.off, #layers-menu .layer .layer-toggle.off {
+#layers-panel .layer .left.off, #layers-panel .layer .right.off, #layers-panel .layer .layer-toggle.off {
   background-color: #ffddff;
 }
-#layers-menu .layer .left, #layers-menu .layer .right {
+#layers-panel .layer .left, #layers-panel .layer .right {
   cursor: pointer;
   line-height: 1;
   max-width: max-content;
 }
-#layers-menu .layer .right {
+#layers-panel .layer .right {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-#layers-menu .layer .left {
+#layers-panel .layer .left {
   justify-self: end;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
-#layers-menu .layer .layer-toggle {
+#layers-panel .layer .layer-toggle {
   cursor: pointer;
 }
 
