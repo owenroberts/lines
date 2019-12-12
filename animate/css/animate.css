@@ -1,3 +1,7 @@
+/* light pink */
+/* lighter pink */
+/* light purple */
+/* light bluish purple */
 * {
   box-sizing: border-box;
   touch-action: manipulation;
@@ -12,8 +16,14 @@ body {
   touch-action: manipulation;
 }
 
-button:focus {
+button:focus,
+select:focus {
   outline: none;
+}
+
+select {
+  vertical-align: middle;
+  height: 1.75em;
 }
 
 #tool-tip {
@@ -58,11 +68,15 @@ button:focus {
   border-radius: 3px;
   transition: background-color 150ms ease-in;
   line-height: 1.75;
+  vertical-align: middle;
   white-space: nowrap;
 }
 .btn:hover {
   background: #ffddff;
   cursor: pointer;
+}
+.btn:active {
+  background-color: #FF79FF;
 }
 .btn.press {
   background-color: #ffddff;
@@ -136,7 +150,7 @@ button:focus {
   left: auto;
 }
 .panel .row {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
   display: flex;
   flex-wrap: wrap;
 }
@@ -246,8 +260,6 @@ button:focus {
   min-width: 100%;
   width: max-content;
   padding: 0;
-  display: flex;
-  flex-direction: column;
 }
 #layers-menu input[type=color] {
   width: auto;

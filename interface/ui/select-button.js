@@ -11,6 +11,7 @@ class UISelectButton extends UICollection {
 
 		this.btn = new UIButton({
 			text: "+",
+			css: { 'margin-left': '1px' },
 			callback: () => {
 				params.callback(this.select.value);
 			}

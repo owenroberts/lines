@@ -50,14 +50,6 @@ $column-width: 40px;
 		height: 1.75em; /* temp fix til main color selector works */
 	}
 
-	// display: grid;
-	// grid-auto-columns: minmax(auto, $column-width);
-	// grid-gap: 1px;
-
-	display: flex;
-	flex-direction: column;
-
-
 	.layer {
 		// max-width: 40px;
 
