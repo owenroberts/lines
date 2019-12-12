@@ -59,7 +59,7 @@ class Animation {
 	get endFrame() {
 		return this.layers.length > 0 ?
 			Math.max.apply(Math, this.layers.map(layer => { return layer.f.e; }))
-			: -1;
+			: 0;
 	}
 
 	get currentState() {

@@ -45,7 +45,7 @@ function Drawings() {
 				}
 
 				self.panel.drawings.append(new UIToggle({
-					id: i,
+					k: i,
 					text: i,
 					isOn: toggleOn,
 					callback: function() {

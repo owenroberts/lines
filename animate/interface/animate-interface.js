@@ -1,11 +1,5 @@
 function setupAnimateInterface(ui) {
 
-	Object.defineProperty(lns.anim, 'plusFrame', {
-		get: function() { return this.endFrame + 1; }
-	}); // get the plus frame, end frame + 1
-
-	ui.framesPanel = new UIList({ id:"frames" });
-
 	ui.toggleRL = function() {
 		if (this.isOn) lns.canvas.canvas.parentElement.classList.add('right');
 		else lns.canvas.canvas.parentElement.classList.remove('right');
@@ -13,29 +7,65 @@ function setupAnimateInterface(ui) {
 
 	/* update interface */
 	ui.update = function() {
-		ui.updateFrameNum();
+		// console.log('update');
+		ui.updateFrames();
+		ui.updateFrame();
 		ui.layers.update();
-		ui.drawings.update();
+		// ui.drawings.update();
 		ui.states.update();
-		ui.updateFramesPanel();
 	};
 
 	ui.plusFrame = new UIButton({
-		id:"current",
-		type: "plus",
+		text: '+',
+		type: "frame",
 		callback: function() {
-			ui.setFrame(lns.anim.plusFrame);
-			/* for beginning no layer -1 state */
-			if (lns.anim.currentFrame != lns.anim.plusFrame)
-				ui.setFrame(lns.anim.plusFrame);
+			console.log('plus')
+			ui.setFrame(lns.anim.endFrame + 1);
 		},
 		key: "+"
 	});
 	ui.keys['+'] = ui.plusFrame; /* just ui.keys['+'] ... */
 
+
+	// ui.framesPanel = new UIList({ id:"frames" });
+	const panel = new UIPanel("frames", "Frames");
+	// ui.panels.frames = panel;
+	console.log(panel);
+	const list = new UICollection({ id: 'frames' });
+	// ui.panels.frames.add(list);
+	console.log(list);
+
+
+	ui.updateFrames = function() {
+		const numFrames = lns.anim.endFrame + 1;
+		// console.log(numFrames);
+		for (let i = 0; i < numFrames; i++) {
+			if (!list[i]) {
+				const frameBtn = new UIButton({
+					type: "frame",
+					text: `${i}`,
+					callback: function() {
+						ui.setFrame(i);
+						ui.update();
+					}	
+				});
+				list.append(frameBtn, i);
+			}
+		}
+	};
+
+	ui.updateFrame = function() {
+		const currentFrame = document.getElementById("current")
+		if (currentFrame) currentFrame.removeAttribute("id");
+		list[lns.anim.currentFrame].el.id = 'current';
+	};
+
+
+	/* prob need to get rid of the special lns.draw anim ... */
+
 	/* f key */
 	ui.setFrame = function(f) {
-		if (+f <= lns.anim.plusFrame && +f >= 0) {
+		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			ui.beforeFrame();
 			lns.anim.frame = +f;
 			// lns.draw.setFrame(+f);
@@ -50,19 +80,20 @@ function setupAnimateInterface(ui) {
 
 		const numFrames = ui.framesPanel.length - 1;
 		const animFrames = lns.anim.plusFrame;
+		console.log(numFrames, animFrames);
 		/* this creates frames that don't already exist, end Frame plus plus frame */
 		if (animFrames > numFrames) {
 			/* this seems bad ... */
 			for (let i = numFrames; i < animFrames; i++) {
-				/* should be a ui? */
+				
 				const frameBtn = new UIButton({
 					type: "frame",
-					text: ''+i,
+					text: `${i}`,
 					callback: function() {
 						ui.setFrame(i);
 						ui.update();
 					}	
-				})
+				});
 
 				/* right click, add/remove from copy frames 
 					class for this? */
@@ -85,13 +116,14 @@ function setupAnimateInterface(ui) {
 
 	/* update frame display and current frame */
 	ui.updateFrameNum = function() {
-		if (document.getElementById("current"))
-			document.getElementById("current").removeAttribute("id");
-		if (ui.framesPanel.children[lns.anim.currentFrame]) 
-			ui.framesPanel.setId("current", lns.anim.currentFrame);
-		else
-			ui.plusFrame.id = "current";
-		ui.faces.frameDisplay.value = lns.anim.currentFrame;
+		
+		// if (document.getElementById("current"))
+		// 	document.getElementById("current").removeAttribute("id");
+		// if (ui.framesPanel.children[lns.anim.currentFrame]) 
+		// 	ui.framesPanel.setId("current", lns.anim.currentFrame);
+		// else
+		// 	ui.plusFrame.id = "current";
+		// ui.faces.frameDisplay.value = lns.anim.currentFrame;
 	};
 
 	/* call before changing a frame */
@@ -110,7 +142,8 @@ function setupAnimateInterface(ui) {
 	ui.nextFrame = function() {
 		lns.anim.isPlaying = false;
 		ui.beforeFrame();
-		if (lns.anim.currentFrame < lns.anim.plusFrame) {
+		console.log(lns.anim.currentFrame, lns.anim.endFrame)
+		if (lns.anim.currentFrame < lns.anim.endFrame) {
 			ui.setFrame(lns.anim.currentFrame + 1);
 		}
 		ui.afterFrame();
@@ -160,4 +193,5 @@ function setupAnimateInterface(ui) {
 		if (data.bg) ui.faces.bgColor.value = data.bg;
 		ui.update();
 	};
+
 }
