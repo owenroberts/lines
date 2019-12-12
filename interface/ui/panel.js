@@ -1,9 +1,6 @@
 class UIPanel extends UICollection {
 	constructor(id, label) {
-		console.log(id, label);
-		super({id: `${id}-panel`}); // id become k
-
-		// this.el.id = id;
+		super({id: `${id}-panel`});
 		
 		this.addClass("panel");
 		this.addClass("undocked");

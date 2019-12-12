@@ -77,7 +77,7 @@ function Files(params) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
 			saveAs(blob, `${self.fileName}.json`);
 			if (callback) callback(self.fileName); /* to set values ... */
-			// lns.ui.fio.update();
+			// lns.ui.updateFIO();
 			lns.ui.faces.title = self.fileName;
 		}
 	};
@@ -137,7 +137,7 @@ function Files(params) {
 		openFile.type = "file";
 		openFile.click();
 		openFile.onchange = function() {
-			self.readFile(openFile.files, lns.ui.fio.update);
+			self.readFile(openFile.files, lns.ui.updateFIO);
 		};
 	};
 
@@ -168,7 +168,7 @@ function Files(params) {
 	function dropHandler(ev) {
  		ev.preventDefault();
  		ev.stopPropagation();
- 		self.readFile(ev.dataTransfer.files, lns.ui.fio.update);
+ 		self.readFile(ev.dataTransfer.files, lns.ui.updateFIO);
 	}
 
 	function dragOverHandler(ev) {

@@ -27,13 +27,12 @@ window.addEventListener("load", function() {
 	lns.ui.palette = new Palette();
 	lns.ui.layers = new Layers();
 	lns.ui.drawings = new Drawings();
-	lns.ui.fio = new FilesInterface(lns.ui);
 	setupAnimateInterface(lns.ui);
 	lns.ui.settings = new Settings(lns, 'lns', appSave, appLoad);
 
 	lns.ui.load('./interface/interface.json', function() {
 		const url = location.search.split('=')[1]
-		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.fio.update);
+		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.updateFIO);
 		lns.render.start();
 	});
 });

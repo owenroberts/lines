@@ -100,15 +100,6 @@ function setupAnimateInterface(ui) {
 		lns.data.saveLines();
 	};
 
-	ui.layersInFrame = function(n) {
-		let inFrame = false;
-		for (let i = 0; i < lns.anim.layers.length; i++) {
-			if (lns.anim.layers[i].isInFrame(n)) 
-				inFrame = true;
-		}
-		return inFrame;
-	};
-
 	/* call after changing a frame */
 	ui.afterFrame = function() {
 		ui.update();
@@ -143,4 +134,30 @@ function setupAnimateInterface(ui) {
 			}
 		});
 	});
+
+	ui.updateFIO = function(data, params) {
+		/* rename faces to props? also could use module ids 
+			this updates a lot more than just the files interface , not the right place */
+
+		// self.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
+		ui.faces.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
+		ui.faces.fps.value = data.fps;
+
+		for (const state in data.s) {
+			ui.faces.stateSelector.addOption(state);
+		}
+
+		ui.faces.width.value = data.w;
+		ui.faces.height.value = data.h;
+
+		lns.anim.layers.forEach(layer => {
+			if (layer) {
+				ui.faces.c.addColor(layer.c);
+				ui.faces.c.value = layer.c;
+			}
+		});
+
+		if (data.bg) ui.faces.bgColor.value = data.bg;
+		ui.update();
+	};
 }
