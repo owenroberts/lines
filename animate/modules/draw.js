@@ -1,19 +1,24 @@
-function Draw(anim, defaults) {
+function Draw(defaults) {
 	const self = this;
 
-	this.layer = new Layer({
-		d: 0,
-		x: 0,
-		y: 0,
-		f: { s: anim.currentFrame, e: anim.currentFrame },
-		t: [],
-		n: defaults.n,
-		r: defaults.r,
-		w: defaults.w,
-		v: defaults.v,
-		c: defaults.c
+	Object.defineProperty(this, 'layer', {
+		get: function() {
+			return lns.anim.layers[lns.anim.layers.length -1];
+		}
 	});
-	anim.layers.push(self.layer);
+
+	Object.defineProperty(this, 'drawing', {
+		get: function() {
+			return lns.anim.drawings[lns.anim.drawings.length - 1];
+		}
+	});
+
+	lns.anim.drawings.push([]);
+	lns.anim.layers.push(new Layer({ 
+		...defaults, 
+		d: Math.max(lns.anim.drawings.length - 1, 0),  
+		f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame }
+	}));
 
 	this.setProperties = function(props) {
 		for (const prop in props) {
@@ -23,10 +28,6 @@ function Draw(anim, defaults) {
 				/* how to do this with ui, setter */
 			}
 		}
-		/* n default 2 - h key */
-		/* r default 1 - j key */
-		/* w 2 is good */
-		/* v 0.1 good */
 	};
 
 	this.setProp = function(value, args) {
@@ -34,33 +35,22 @@ function Draw(anim, defaults) {
 		self.layer[args.prop] = value;
 	};
 
-	this.defaults = defaults;
-	this.setProperties(defaults);
+	// this.setProperties(defaults);
 
 	this.setDefaults = function() {
-		self.setProperties(self.defaults);
+		self.setProperties(defaults);
 	};
 
-	this.reset = function() {
-		anim.currentFrame = lns.anim.currentFrame;
-		anim.drawings = [];
-		self.drawing = [];
-		self.layer.d = 0;
-		self.layer.x = 0;
-		self.layer.y = 0;
-		self.layer.f = { s: anim.currentFrame, e: anim.currentFrame };
-		self.layer.t = [];
-		self.layer.n = self.layer.n;
-		self.layer.r = self.layer.r;
-		self.layer.w = self.layer.w;
-		self.layer.v = self.layer.v;
-		self.layer.c = self.layer.c;
-		anim.drawings.push(self.drawing);
+	this.reset = function(f) {
+		console.log('reset', f);
+		lns.anim.drawings.push([]);
+		lns.anim.layers.push(new Layer({ 
+			...defaults, 
+			d: lns.anim.drawings.length - 1,  
+			f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
+		}));
+		console.log(self.layer.f);
 	};
-
-	this.reset();
-
-	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 
 	this.brush = 0;
 	this.brushSpread = 1;
@@ -71,6 +61,7 @@ function Draw(anim, defaults) {
 	// how often the mousemove records, default 30ms
 	this.mouseTimer = performance.now();  //  independent of draw timer
 	this.mouseInterval = 30;
+	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != lns.canvas.canvas) {

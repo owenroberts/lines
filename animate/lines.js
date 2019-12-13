@@ -6,11 +6,10 @@ window.addEventListener("load", function() {
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
 	lns.render = new Render(10); // (lps)
 
-	lns.lines = new Animation(lns.canvas.ctx);
+	// lns.lines = new Animation(lns.canvas.ctx);
 	lns.anim = new Animation(lns.canvas.ctx);
-	lns.lines.debug = true;
 
-	lns.draw = new Draw(lns.lines, { n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
+	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
 	lns.bgImage = new Background();
 	lns.data = new Data(lns.anim);
 	lns.files = new Files({

@@ -399,8 +399,9 @@
 			{
 				"type": "UIButton",
 				"key": "r",
+				"module": "draw",
 				"fromModule": {
-					"callback": "saveLines"
+					"callback": "reset"
 				},
 				"params": {
 					"text": "Save Lines"
@@ -677,6 +678,7 @@
 	"lines": {
 		"label": "Lines",
 		"module": "draw",
+		"sub": "layer",
 		"list": [
 			{
 				"type": "UITextRange",

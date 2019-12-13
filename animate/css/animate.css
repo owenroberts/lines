@@ -2,6 +2,7 @@
 /* lighter pink */
 /* light purple */
 /* light bluish purple */
+/* dark bluish purple */
 * {
   box-sizing: border-box;
   touch-action: manipulation;
@@ -14,6 +15,11 @@ body {
   -webkit-user-select: none;
   user-select: none;
   touch-action: manipulation;
+  color: #110263;
+}
+
+select, input {
+  color: #110263;
 }
 
 button:focus,

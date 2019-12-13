@@ -74,8 +74,6 @@ function Render(lps, color) {
 			/* draw before update is cool for now ... */
 			lns.anim.draw();
 			lns.anim.update();
-			
-			lns.lines.draw();
 		}
 		if (!lns.ui.capture.capturing) 
 			window.requestAnimFrame(self.update);

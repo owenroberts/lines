@@ -38,7 +38,7 @@ function setupAnimateInterface(ui) {
 
 	ui.updateFrames = function() {
 		const numFrames = lns.anim.endFrame + 1;
-		// console.log(numFrames);
+		// console.log(lns.anim.endFrame);
 		for (let i = 0; i < numFrames; i++) {
 			if (!list[i]) {
 				const frameBtn = new UIButton({
@@ -60,101 +60,74 @@ function setupAnimateInterface(ui) {
 		list[lns.anim.currentFrame].el.id = 'current';
 	};
 
-
 	/* prob need to get rid of the special lns.draw anim ... */
 
 	/* f key */
 	ui.setFrame = function(f) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
-			ui.beforeFrame();
+			// ui.beforeFrame();
 			lns.anim.frame = +f;
 			// lns.draw.setFrame(+f);
 			ui.afterFrame();
 		}
 	};
 
-	/* updates the frame panel representation of frames,
-		sets current frame,
-		sets copy frames */
-	ui.updateFramesPanel = function() {
-
-		const numFrames = ui.framesPanel.length - 1;
-		const animFrames = lns.anim.plusFrame;
-		console.log(numFrames, animFrames);
-		/* this creates frames that don't already exist, end Frame plus plus frame */
-		if (animFrames > numFrames) {
-			/* this seems bad ... */
-			for (let i = numFrames; i < animFrames; i++) {
-				
-				const frameBtn = new UIButton({
-					type: "frame",
-					text: `${i}`,
-					callback: function() {
-						ui.setFrame(i);
-						ui.update();
-					}	
-				});
-
-				/* right click, add/remove from copy frames 
-					class for this? */
-				frameBtn.el.oncontextmenu = function(ev) {
-					ev.preventDefault();
-					lns.data.selectFrame(ev.currentTarget);
-				};
-
-				ui.framesPanel.insertBefore(frameBtn, ui.plusFrame);
-			}
+	/* call before changing a frame */
+	ui.beforeFrame = function(dir) {
+		lns.draw.isDrawing = false; /* prototype here with render, anim, draw, isActive or something ? */
+		
+		if (lns.draw.drawing.length > 0) {
+			// drawing to save - can add frame
+			lns.draw.reset(lns.anim.currentFrame + dir);
+			lns.anim.currentFrame = lns.anim.currentFrame + dir;
 		} else {
-			/* if there are same number of less then frames than frame divs
-				delete current frame */
-			for (let i = numFrames - 1; i >= animFrames; i--){
-				ui.framesPanel.remove(i); /* remove html frame */
+			// put in reset? 
+			if (dir > 0) {
+				/* prob use map or reduce or soemthing or make a fn in layer*/
+				let hasDrawing = false;
+				for (let i = 0; i < lns.anim.layers.length; i++) {
+					const layer = lns.anim.layers[i];
+					if (layer.isInFrame(lns.anim.currentFrame)) {
+						const drawing = lns.anim.drawings[layer.d];
+						if (drawing.length > 0) {
+							hasDrawing = true;
+						}
+					}
+				}
+
+				if (lns.anim.currentFrame < lns.anim.endFrame || hasDrawing) {
+					lns.anim.currentFrame = lns.anim.currentFrame + dir;
+					lns.draw.layer.startFrame = lns.anim.currentFrame;
+					lns.draw.layer.endFrame = lns.anim.currentFrame;
+				}
+			}
+
+			if (dir < 0 && lns.anim.currentFrame > 0) {
+				lns.anim.currentFrame = lns.anim.currentFrame + dir;
+				lns.draw.layer.startFrame = lns.anim.currentFrame;
+				lns.draw.layer.endFrame = lns.anim.currentFrame;
 			}
 		}
-		ui.updateFrameNum();
-	};
 
-	/* update frame display and current frame */
-	ui.updateFrameNum = function() {
-		
-		// if (document.getElementById("current"))
-		// 	document.getElementById("current").removeAttribute("id");
-		// if (ui.framesPanel.children[lns.anim.currentFrame]) 
-		// 	ui.framesPanel.setId("current", lns.anim.currentFrame);
-		// else
-		// 	ui.plusFrame.id = "current";
-		// ui.faces.frameDisplay.value = lns.anim.currentFrame;
-	};
-
-	/* call before changing a frame */
-	ui.beforeFrame = function() {
-		lns.draw.isDrawing = false; /* prototype here with render, anim, draw, isActive or something ? */
-		lns.data.saveLines();
+		lns.data.saveState();
 	};
 
 	/* call after changing a frame */
 	ui.afterFrame = function() {
 		ui.update();
-		lns.draw.reset();
 	};
 
 	/* e key - go to next frame */
 	ui.nextFrame = function() {
 		lns.anim.isPlaying = false;
-		ui.beforeFrame();
-		console.log(lns.anim.currentFrame, lns.anim.endFrame)
-		if (lns.anim.currentFrame < lns.anim.endFrame) {
-			ui.setFrame(lns.anim.currentFrame + 1);
-		}
+		ui.beforeFrame(1);
 		ui.afterFrame();
 	};
 
 	/* w key - got to previous frame */
 	ui.prevFrame = function() {
 		lns.anim.isPlaying = false;
-		ui.beforeFrame();
-		if (lns.anim.currentFrame > 0) 
-			ui.setFrame(lns.anim.currentFrame - 1);
+		ui.beforeFrame(-1);
 		ui.afterFrame();
 	};
 

@@ -10,6 +10,11 @@ body {
 	-webkit-user-select: none;
 	user-select: none;
 	touch-action: manipulation;
+	color: $text-color;
+}
+
+select, input {
+	color: $text-color;
 }
 
 button:focus, 

@@ -16,17 +16,17 @@ function Data(anim) {
 	};
 
 	/* r key - save lines and add new lines */
-	this.saveLines = function() {
-		if (lns.draw.drawing.length > 0) {
-			const layer = _.cloneDeep(lns.draw.layer);
-			layer.d = anim.drawings.length;
-			anim.layers.push(layer);
-			anim.drawings.push(_.cloneDeep(lns.draw.drawing));
-			lns.ui.update();
-			self.saveState(); /* save current state - one undo currently */
-			lns.draw.reset();
-		}
-	};
+	// this.saveLines = function() {
+	// 	if (lns.draw.drawing.length > 0) {
+	// 		// const layer = _.cloneDeep(lns.draw.layer);
+	// 		// layer.d = anim.drawings.length;
+	// 		// anim.layers.push(layer);
+	// 		// anim.drawings.push(_.cloneDeep(lns.draw.drawing));
+	// 		lns.draw.reset();
+			
+	// 		self.saveState(); /* save current state - one undo currently */
+	// 	}
+	// };
 
 	/* c key  */
 	this.copy = function() {

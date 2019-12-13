@@ -1,8 +1,16 @@
 class Layer {
 	constructor(params, index) {
-		for (const key in params) {
-			this[key] = params[key];
-		}
+		this.d =  params.d;
+		this.x =  0;
+		this.y =  0;
+		this.f =  params.f;
+		this.t =  [];
+		this.n =  params.n;
+		this.r =  params.r;
+		this.w =  params.w;
+		this.v =  params.v;
+		this.c =  params.c;
+
 		this.toggled = false;
 		this.resetTweens();
 		if (this.ui) delete this.ui; /* fix for adding layers in add index or remove index etc */
