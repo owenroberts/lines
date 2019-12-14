@@ -3,7 +3,8 @@ function Drawings() {
 
 	this.getLayer = function(index) {
 		const layers = [];
-		for (let i = 0; i < lns.anim.layers.length; i++) {
+		// - 1 for draw layer
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			if (lns.anim.layers[i].d == index) layers.push(lns.anim.layers[i]);
 		}
 
@@ -20,67 +21,59 @@ function Drawings() {
 	};
 
 	this.update = function() {
-		for (let i = 0; i < lns.anim.drawings.length; i++) {
-			if (lns.anim.drawings[i] && !self.panel.drawings[i]) {
-				let toggleOn = false;
+		// -1 to ignore draw drawing
+		for (let i = 0; i < lns.anim.drawings.length - 1; i++) {
+			if (lns.anim.drawings[i]) {
 				const drawing = lns.anim.drawings[i];
+				let layer = self.getLayer(i); /* check for existing layer */
+				let inFrame = layer ? layer.isInFrame(lns.anim.currentFrame) : false;
+				if (!self.panel.drawings[i]) {
+					let props;
+					if (layer) {
+						// user layer.props ?? 
+						props = {
+							n: layer.n,
+							r: layer.r,
+							w: layer.w, 
+							v: layer.v,
+							c: layer.c,
+							x: layer.x,
+							y: layer.y
+						} /* prob a better way to do this ... 
+							this stops existing when updating interface */
+					}
 
-				/* check for existing layer */
-				let layer = self.getLayer(i);
-				let props;
-				if (layer) {
-					toggleOn = layer.isInFrame(lns.anim.currentFrame);
-					props = {
-						n: layer.n,
-						r: layer.r,
-						w: layer.w, 
-						v: layer.v,
-						c: layer.c,
-						x: layer.x,
-						y: layer.y
-					} /* prob a better way to do this ... 
-						this stops existing when updating interface */
-				} else {
-					toggleOn = false;
-				}
-
-				self.panel.drawings.append(new UIToggle({
-					k: i,
-					text: i,
-					isOn: toggleOn,
-					callback: function() {
-						layer = self.getLayer(i);
-						if (layer) {
-							if (layer.isInFrame(lns.anim.currentFrame)) {
-								layer.removeIndex(lns.anim.currentFrame);
-								if (lns.anim.layers.indexOf(layer) == -1) {
-									layer = undefined; /* maybe save this as props */
+					self.panel.drawings.append(new UIToggle({
+						text: i,
+						isOn: inFrame,
+						callback: function() {
+							let layer = self.getLayer(i);
+							if (layer) {
+								if (layer.isInFrame(lns.anim.currentFrame)) {
+									layer.removeIndex(lns.anim.currentFrame);
+									if (lns.anim.layers.indexOf(layer) == -1) {
+										layer = undefined; /* maybe save this as props */
+									}
+								} else {
+									layer.addIndex(lns.anim.currentFrame);
 								}
 							} else {
-								layer.addIndex(lns.anim.currentFrame);
+								/* fuck */
+								// console.log(props); /* save in drawing? */
+								layer = new Layer({
+									...props,
+									d: i,
+									f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
+								});
+								lns.anim.layers.unshift(layer);
 							}
-						} else {
-							/* fuck */
-							// console.log(props); /* save in drawing? */
-							layer = new Layer({
-								d: i,
-								c: lns.draw.layer.c,
-								...lns.draw.defaults,
-								x: 0,
-								y: 0,
-								f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
-								a: []
-							});
-							if (props) {
-								for (key in props) {
-									layer[key] = props[key];
-								}
-							}
-							lns.anim.layers.push(layer);
+							lns.ui.layers.update();
 						}
-						lns.ui.layers.update();
-					}
-				}));
+					}), i);
+				} else {
+					if (inFrame) self.panel.drawings[i].on();
+					else self.panel.drawings[i].off();
+				}
 			}
 		}
 	};

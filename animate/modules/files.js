@@ -7,7 +7,13 @@ function Files(params) {
 
 	/* s key - shift-s for single */
 	this.saveFile = function(args, callback) {
-		lns.data.saveLines();
+		// lns.data.saveLines();
+
+		lns.draw.reset();
+		lns.ui.checkEnd();
+		
+		lns.anim.drawings.pop();
+		lns.anim.layers.pop();
 
 		self.fileName = lns.ui.faces.title.value || prompt("Name this file:");
 
@@ -42,6 +48,7 @@ function Files(params) {
 		for (let i = 0; i < layers.length; i++) {
 			layers[i].clean();
 		}
+		console.log(layers);
 		json.l = layers;
 
 		/* search frames for layers and drawings used */
@@ -78,7 +85,7 @@ function Files(params) {
 			saveAs(blob, `${self.fileName}.json`);
 			if (callback) callback(self.fileName); /* to set values ... */
 			// lns.ui.updateFIO();
-			lns.ui.faces.title = self.fileName;
+			lns.ui.faces.title.value = self.fileName;
 		}
 	};
 

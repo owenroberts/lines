@@ -6,7 +6,6 @@ function Render(lps, color) {
 	this.timer = performance.now();
 
 	this.onionSkinNum = 0;
-	this.onions = [];
 	this.onionSkinIsVisible = false;
 
 	/* l key */
@@ -26,7 +25,7 @@ function Render(lps, color) {
 	/* toggle play animation */
 	this.toggle = function() {
 		if (!lns.anim.isPlaying) {
-			lns.ui.beforeFrame();
+			lns.ui.checkEnd();
 			lns.ui.afterFrame();
 		}
 		lns.anim.isPlaying = !lns.anim.isPlaying;

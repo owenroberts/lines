@@ -46,8 +46,11 @@ class Animation {
 		return this._lps;
 	}
 
-	set frame(index) {
-		this.currentFrame = this.currentFrameCounter = index;
+	set frame(n) {
+		this.currentFrame = this.currentFrameCounter = n;
+		// console.log(n);
+		// console.log(this.currentFrame);
+		// console.log(this.endFrame);
 		if (this.states.default.end != this.endFrame)
 			this.states.default.end = this.endFrame;
 	}
@@ -57,6 +60,7 @@ class Animation {
 	}
 
 	get endFrame() {
+		// console.log('end f', this.layers.map(layer => { return layer.f.e; }));
 		return this.layers.length > 0 ?
 			Math.max.apply(Math, this.layers.map(layer => { return layer.f.e; }))
 			: 0;

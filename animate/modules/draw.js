@@ -10,6 +10,9 @@ function Draw(defaults) {
 	Object.defineProperty(this, 'drawing', {
 		get: function() {
 			return lns.anim.drawings[lns.anim.drawings.length - 1];
+		},
+		set: function(drawing) {
+			lns.anim.drawings[lns.anim.drawings.length - 1] = drawing;
 		}
 	});
 
@@ -39,15 +42,15 @@ function Draw(defaults) {
 		self.setProperties(defaults);
 	};
 
-
 	this.reset = function(f) {
-		console.log('reset');
-		lns.anim.drawings.push([]);
-		lns.anim.layers.push(new Layer({ 
-			...defaults, 
-			d: lns.anim.drawings.length - 1,  
-			f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
-		}));
+		if (self.drawing.length > 0) {
+			lns.anim.drawings.push([]);
+			lns.anim.layers.push(new Layer({ 
+				...defaults, 
+				d: lns.anim.drawings.length - 1,  
+				f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
+			}));
+		}
 		lns.ui.update();
 	};
 
@@ -77,6 +80,8 @@ function Draw(defaults) {
 		}
 	};
 
+
+	/* could be drawing class */
 	this.popOff = function() {
 		if (self.drawing.length > 0) {
 			self.drawing.pop(); // remove end

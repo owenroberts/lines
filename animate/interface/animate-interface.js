@@ -11,7 +11,7 @@ function setupAnimateInterface(ui) {
 		ui.updateFrames();
 		ui.updateFrame();
 		ui.layers.update();
-		// ui.drawings.update();
+		ui.drawings.update();
 		ui.states.update();
 	};
 
@@ -26,14 +26,13 @@ function setupAnimateInterface(ui) {
 	});
 	ui.keys['+'] = ui.plusFrame; /* just ui.keys['+'] ... */
 
-
 	// ui.framesPanel = new UIList({ id:"frames" });
 	const panel = new UIPanel("frames", "Frames");
 	// ui.panels.frames = panel;
-	console.log(panel);
+	// console.log(panel);
 	ui.list = new UIList({ id: 'frames' });
 	// ui.panels.frames.add(list);
-	console.log(ui.list);
+	// console.log(ui.list);
 
 
 	ui.updateFrames = function() {
@@ -70,10 +69,23 @@ function setupAnimateInterface(ui) {
 	ui.setFrame = function(f) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// ui.beforeFrame();
+			console.log(f);
 			lns.anim.frame = +f;
 			// lns.draw.setFrame(+f);
 			ui.afterFrame();
 		}
+	};
+
+	ui.hasDrawing = function() {
+		return lns.anim.layers.some(layer => {
+			return layer.isInFrame(lns.anim.currentFrame) && lns.anim.drawings[layer.d].length > 0; 
+			});
+	};
+
+	// fix for playing animation with nothing in the final frame
+	ui.checkEnd = function() {
+		if (lns.anim.currentFrame == lns.anim.endFrame && !ui.hasDrawing()) 
+			ui.prevFrame();
 	};
 
 	/* call before changing a frame */
@@ -83,27 +95,25 @@ function setupAnimateInterface(ui) {
 		if (lns.draw.drawing.length > 0) {
 			// drawing to save - can add frame
 			lns.draw.reset(lns.anim.currentFrame + dir);
-			lns.anim.currentFrame = lns.anim.currentFrame + dir;
+			lns.anim.frame = lns.anim.currentFrame + dir;
 		} else {
 			// put in reset? 
 			if (dir > 0) {
-				/* prob use map or reduce or soemthing or make a fn in layer*/
-				let hasDrawing = lns.anim.layers.some(layer => {
-					return layer.isInFrame(lns.anim.currentFrame) && lns.anim.drawings[layer.d].length > 0; 
-				});
-
-
-				if (lns.anim.currentFrame < lns.anim.endFrame || hasDrawing) {
-					lns.anim.currentFrame = lns.anim.currentFrame + dir;
-					lns.draw.layer.startFrame = lns.anim.currentFrame;
-					lns.draw.layer.endFrame = lns.anim.currentFrame;
+				if (lns.anim.currentFrame < lns.anim.endFrame || 
+					ui.hasDrawing()) {
+					lns.draw.layer.startFrame = lns.anim.currentFrame + dir;
+					lns.draw.layer.endFrame = lns.anim.currentFrame + dir;	
+					lns.anim.frame = lns.anim.currentFrame + dir;
 				}
 			}
 
 			if (dir < 0 && lns.anim.currentFrame > 0) {
-				lns.anim.currentFrame = lns.anim.currentFrame + dir;
-				lns.draw.layer.startFrame = lns.anim.currentFrame;
-				lns.draw.layer.endFrame = lns.anim.currentFrame;
+				lns.draw.layer.startFrame = lns.anim.currentFrame + dir;
+				lns.draw.layer.endFrame = lns.anim.currentFrame + dir;
+				// console.log('dir', dir, lns.anim.currentFrame)
+				lns.anim.frame = lns.anim.currentFrame + dir;
+				// console.log(lns.anim.currentFrame)
+				
 			}
 		}
 

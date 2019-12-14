@@ -11,7 +11,7 @@ function Layers() {
 		}
 	};
 
-	/* z */
+	/* z */ HERE
 	this.cutLayerSegment = function() {
 		for (let i = 0; i < self.layers.length; i++) {
 			if (self.layers[i].toggled) {
@@ -23,23 +23,23 @@ function Layers() {
 			}
 		}
 	};
-
-	/* shift z */
+	/* all fucked */
+	
 	this.cutLayerLine = function() {
-		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled) {
-				const drawing = lns.anim.drawings[self.layers[i].d];
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.toggled) {
+				const drawing = lns.anim.drawings[layer.d];
 				drawing.pop(); /* remove "end" */
 				for (let i = drawing.length - 1; i > 0; i--) {
 					if (drawing[i] != 'end') drawing.pop();
 					else break;
 				}
-				self.layers[i].e = drawing.length; /* update layer end num */
 			}
 		}
-	};
-	/* all fucked */
-
+		/* what about when there's no more lines ?? */
+	}; /* shift z */
+	
 	this.clone = function() { 
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];

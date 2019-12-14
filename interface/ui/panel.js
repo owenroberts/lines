@@ -55,7 +55,6 @@ class UIPanel extends UICollection {
 	}
 
 	undock() {
-		console.log('undock!')
 		this.addClass('undocked');
 	}
 

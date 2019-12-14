@@ -15,30 +15,17 @@ function Data(anim) {
 		}
 	};
 
-	/* r key - save lines and add new lines */
-	// this.saveLines = function() {
-	// 	if (lns.draw.drawing.length > 0) {
-	// 		// const layer = _.cloneDeep(lns.draw.layer);
-	// 		// layer.d = anim.drawings.length;
-	// 		// anim.layers.push(layer);
-	// 		// anim.drawings.push(_.cloneDeep(lns.draw.drawing));
-	// 		lns.draw.reset();
-			
-	// 		self.saveState(); /* save current state - one undo currently */
-	// 	}
-	// };
-
-	/* c key  */
 	this.copy = function() {
-		self.saveLines();
+		lns.draw.reset();
 		self.copyFrame = [];
-		for (let i = 0; i < anim.layers.length; i++) {
+
+		// -1 dont copy draw frame 
+		for (let i = 0; i < anim.layers.length - 1; i++) {
 			if (anim.layers[i].isInFrame(anim.currentFrame))
 				self.copyFrame.push(anim.layers[i]);
 		}
-	};
+	}; /* c key */
 
-	/* v key */
 	this.paste = function() {
 		self.saveState();
 
@@ -53,9 +40,9 @@ function Data(anim) {
 		}
 
 		self.clearSelected();
-		self.saveLines();
+		lns.draw.reset();
 		lns.ui.update();
-	};
+	}; /* v key */
 
 	this.selectFrame = function(elem) {
 		if (!elem.classList.contains("selected")) {
@@ -66,27 +53,24 @@ function Data(anim) {
  			elem.classList.remove("selected");
  		}
 	};
-
-	/* shift v */
+	
 	this.selectAll = function() {
 		/* if less than all are selected deselect those first */
-		const someSelected = Array.from(lns.ui.framesPanel.children).filter(elem => elem.classList.contains('selected')).length < lns.ui.framesPanel.children.length - 1;
-		lns.ui.framesPanel.looper(elem => {
+		const someSelected = Array.from(lns.ui.list.children).filter(elem => elem.classList.contains('selected')).length < lns.ui.list.children.length - 1;
+		lns.ui.list.looper(elem => {
 			if (someSelected) elem.classList.remove('selected');
 			self.selectFrame(elem);
 		});
-	};
+	}; /* shift v */
 
-	/* alt v */
 	this.selectRange = function() {
 		const start = prompt("Start frame:");
 		const end = prompt("end frame:");
-		lns.ui.framesPanel.looper(elem => {
+		lns.ui.list.looper(elem => {
 			self.selectFrame(elem);
 		}, start, end);
-	};
-
-	/* ctrl v */
+	}; /* alt v */
+	
 	this.clearSelected = function() {
 		self.pasteFrames = [];
 
@@ -95,11 +79,11 @@ function Data(anim) {
 		for (let i = copyFrameElems.length - 1; i >= 0; i--) {
 			copyFrameElems[i].classList.remove("selected");
 		}
-	};
+	}; /* ctrl v */
 
 	/* x key */
 	this.clearLines = function() {
-		lns.draw.reset();
+		lns.draw.drawing = [];
 	};
 
 	this.clearLayers = function() {
@@ -158,7 +142,7 @@ function Data(anim) {
 
 			/* change the current frame in case its missing  */
 			anim.frame = startFrame > 0 ? startFrame - 1 : 0;
-			lns.ui.updateFramesPanel();
+			lns.ui.updateFrames();
 		}
 	};
 
@@ -167,12 +151,11 @@ function Data(anim) {
 		if (lns.ui.layers.length > 0) lns.ui.cutLayerSegment();
 		else lns.draw.pop(); 
 	};
-
-	/* shift z */
+		
 	this.cutLastLine = function() {
-		if (lns.ui.layers.length > 0) lns.ui.cutLayerLine(); /* not currently working */
-		else lns.draw.popOff();
-	};
+		lns.ui.layers.cutLayerLine(); /* not currently working */
+		lns.draw.popOff();
+	}; /* shift z */
 
 	/* save current state of frames and drawing - one undo */
 	this.saveState = function() {
