@@ -35,21 +35,20 @@ function Draw(defaults) {
 		self.layer[args.prop] = value;
 	};
 
-	// this.setProperties(defaults);
-
 	this.setDefaults = function() {
 		self.setProperties(defaults);
 	};
 
+
 	this.reset = function(f) {
-		console.log('reset', f);
+		console.log('reset');
 		lns.anim.drawings.push([]);
 		lns.anim.layers.push(new Layer({ 
 			...defaults, 
 			d: lns.anim.drawings.length - 1,  
 			f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
 		}));
-		console.log(self.layer.f);
+		lns.ui.update();
 	};
 
 	this.brush = 0;

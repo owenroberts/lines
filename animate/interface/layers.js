@@ -159,6 +159,7 @@ function Layers() {
 		self.selectedAll = !self.selectedAll;
 	};
 
+	/* this doesn't get called anywhere else ... can be in update */
 	this.addUI = function(layer, index) {
 		layer.ui = new UILayer({
 			type: 'layer',
@@ -173,9 +174,10 @@ function Layers() {
 
 	this.update = function() {
 		// is this crazy ? 
-		// self.panel.layers.el.style.width = `${lns.ui.plusFrame.el.getBoundingClientRect().width * lns.anim.plusFrame}px`
+		self.panel.layers.el.style.width = `${lns.ui.list[0].el.getBoundingClientRect().width * (lns.anim.endFrame + 1)}px`
 		
-		for (let i = 0; i < lns.anim.layers.length; i++) {
+		/* -1 to not show draw layer */
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
 			if (!layer.ui) self.addUI(layer, i);
 			else layer.ui.update();

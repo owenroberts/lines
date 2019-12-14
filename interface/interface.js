@@ -31,8 +31,10 @@ function Interface(app) {
 
 		const key = self.keys[k];
 
-		if (k && key && document.activeElement.type != "text") {
-			if (!ev.metaKey) ev.preventDefault();
+		if (k && key && 
+			document.activeElement.type != "text" && 
+			!ev.metaKey) {
+			ev.preventDefault();
 			key.handler(ev, key);
 			key.onPress(true);
 		}

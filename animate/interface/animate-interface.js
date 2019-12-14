@@ -31,16 +31,15 @@ function setupAnimateInterface(ui) {
 	const panel = new UIPanel("frames", "Frames");
 	// ui.panels.frames = panel;
 	console.log(panel);
-	const list = new UICollection({ id: 'frames' });
+	ui.list = new UIList({ id: 'frames' });
 	// ui.panels.frames.add(list);
-	console.log(list);
+	console.log(ui.list);
 
 
 	ui.updateFrames = function() {
 		const numFrames = lns.anim.endFrame + 1;
-		// console.log(lns.anim.endFrame);
 		for (let i = 0; i < numFrames; i++) {
-			if (!list[i]) {
+			if (!ui.list[i]) {
 				const frameBtn = new UIButton({
 					type: "frame",
 					text: `${i}`,
@@ -49,15 +48,20 @@ function setupAnimateInterface(ui) {
 						ui.update();
 					}	
 				});
-				list.append(frameBtn, i);
+				ui.list.append(frameBtn, i);
 			}
+		}
+
+		const numFrameBtns = ui.list.children.length;
+		for (let i = numFrameBtns - 1; i >= numFrames; i--) {
+			ui.list.remove(ui.list[i], i);
 		}
 	};
 
 	ui.updateFrame = function() {
 		const currentFrame = document.getElementById("current")
 		if (currentFrame) currentFrame.removeAttribute("id");
-		list[lns.anim.currentFrame].el.id = 'current';
+		ui.list.setId('current', lns.anim.currentFrame);
 	};
 
 	/* prob need to get rid of the special lns.draw anim ... */
@@ -84,16 +88,10 @@ function setupAnimateInterface(ui) {
 			// put in reset? 
 			if (dir > 0) {
 				/* prob use map or reduce or soemthing or make a fn in layer*/
-				let hasDrawing = false;
-				for (let i = 0; i < lns.anim.layers.length; i++) {
-					const layer = lns.anim.layers[i];
-					if (layer.isInFrame(lns.anim.currentFrame)) {
-						const drawing = lns.anim.drawings[layer.d];
-						if (drawing.length > 0) {
-							hasDrawing = true;
-						}
-					}
-				}
+				let hasDrawing = lns.anim.layers.some(layer => {
+					return layer.isInFrame(lns.anim.currentFrame) && lns.anim.drawings[layer.d].length > 0; 
+				});
+
 
 				if (lns.anim.currentFrame < lns.anim.endFrame || hasDrawing) {
 					lns.anim.currentFrame = lns.anim.currentFrame + dir;

@@ -3,10 +3,6 @@ class UIList extends UICollection {
 		super(params);
 	}
 
-	append(ui) {
-		this.el.appendChild(ui.el);
-	}
-
 	insertBefore(ui, before) {
 		this.el.insertBefore(ui.el, before.el);
 	}
@@ -30,7 +26,7 @@ class UIList extends UICollection {
 		this.children[index].id = id;
 	}
 
-	remove(index) {
+	removeIndex(index) {
 		this.children[index].remove();
 	}
 

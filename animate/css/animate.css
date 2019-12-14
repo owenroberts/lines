@@ -1,3 +1,4 @@
+/* light blue */
 /* light pink */
 /* lighter pink */
 /* light purple */
@@ -202,7 +203,7 @@ select {
   background: white;
   padding: 0.5em;
   border-radius: 1em;
-  border: 2px solid lightblue;
+  border: 2px solid #bee4ff;
   box-shadow: 1px 1px 4px #FF79FF;
   max-width: 400px;
   display: flex;
@@ -335,7 +336,7 @@ select {
   background-color: #FF79FF;
 }
 #frames #current {
-  background-color: lightblue !important;
+  background-color: #bee4ff !important;
 }
 #frames .selected {
   background-color: #ffddff !important;
