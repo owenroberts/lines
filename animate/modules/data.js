@@ -15,6 +15,42 @@ function Data(anim) {
 		}
 	};
 
+	/* save current state of frames and drawing - one undo */
+	this.saveState = function() {
+		/*
+			if save state already exists, save current to previous state
+			if not save previous to new
+			always save current to new
+		*/
+		if (self.saveStates.current.drawings) {
+			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
+			self.saveStates.prev.layers = _.cloneDeep(self.saveStates.current.layers);
+		} else {
+			self.saveStates.prev.drawings = _.cloneDeep(anim.drawings);
+			self.saveStates.prev.layers = _.cloneDeep(anim.layers);
+		}
+
+		self.saveStates.current.drawings = _.cloneDeep(anim.drawings);
+		self.saveStates.current.layers = _.cloneDeep(anim.layers);
+	};
+
+	/* ctrl z - undo one save state */
+	this.undo = function() {
+		if (self.saveStates.prev.drawings) {
+			anim.drawings = _.cloneDeep(self.saveStates.prev.drawings);
+			anim.layers = _.cloneDeep(self.saveStates.prev.layers);
+			
+			self.saveStates.current.drawings = _.cloneDeep(self.saveStates.prev.drawings);
+			self.saveStates.current.layers = _.cloneDeep(self.saveStates.prev.layers);
+
+			self.saveStates.prev.drawings = undefined;
+			self.saveStates.prev.layers = undefined;
+		} else {
+			console.log("%c Can't undo ", "color:lightblue;background:gray;");
+		}
+		lns.ui.update();
+	};
+
 	this.copy = function() {
 		lns.draw.reset();
 		self.copyFrame = [];
@@ -94,6 +130,8 @@ function Data(anim) {
 		}
 	};
 
+	FUCK
+
 	this.cutTopLayer = function() {
 		for (let i = anim.layers.length - 1; i >= 0; i--) {
 			if (anim.layers[i].isInFrame(anim.currentFrame))
@@ -115,83 +153,42 @@ function Data(anim) {
 		self.clearLayers();
 	};
 
-	/* d key */
+	
 	this.deleteFrame = function(index) {
 		if (!index) index = lns.anim.currentFrame;
 		self.saveState();
-		if (anim.layers.length > 0) {
-			for (let i = anim.layers.length - 1; i >= 0; i--) {
-				if (anim.layers[i].isInFrame(index)) 
-					anim.layers[i].shiftIndex(index, -1);
-			}
-		}
-		lns.ui.setFrame(anim.currentFrame - 1);
-		lns.ui.update();
-	};
 
-	/* shift-d */
+		// -2 to skip draw layer
+		for (let i = anim.layers.length - 2; i >= 0; i--) {
+			anim.layers[i].shiftIndex(index, -1);
+		}
+		lns.ui.update();
+	}; /* d key */
+	
 	this.deleteFrameRange = function() {
 		self.saveState();
 		const startFrame = +prompt("Start frame:");
 		const endFrame = +prompt("End frame:");
 
 		if (endFrame > 0) {
-			for (let j = endFrame; j >= startFrame; j--) {
-				self.deleteFrame(j);
+			for (let i = endFrame; i >= startFrame; i--) {
+				self.deleteFrame(i);
 			}
 
-			/* change the current frame in case its missing  */
-			anim.frame = startFrame > 0 ? startFrame - 1 : 0;
-			lns.ui.updateFrames();
+			lns.draw.cutEnd();
+			lns.ui.setFrame(0);
 		}
-	};
+	}; /* shift-d */
 
-	/* z key */
 	this.cutLastSegment = function() {
-		if (lns.ui.layers.length > 0) lns.ui.cutLayerSegment();
-		else lns.draw.pop(); 
-	};
+		lns.ui.layers.cutLayerSegment();
+		lns.draw.pop(); 
+	}; /* z key */
 		
 	this.cutLastLine = function() {
-		lns.ui.layers.cutLayerLine(); /* not currently working */
+		lns.ui.layers.cutLayerLine(); 
 		lns.draw.popOff();
 	}; /* shift z */
-
-	/* save current state of frames and drawing - one undo */
-	this.saveState = function() {
-		/*
-			if save state already exists, save current to previous state
-			if not save previous to new
-			always save current to new
-		*/
-		if (self.saveStates.current.drawings) {
-			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
-			self.saveStates.prev.layers = _.cloneDeep(self.saveStates.current.layers);
-		} else {
-			self.saveStates.prev.drawings = _.cloneDeep(anim.drawings);
-			self.saveStates.prev.layers = _.cloneDeep(anim.layers);
-		}
-
-		self.saveStates.current.drawings = _.cloneDeep(anim.drawings);
-		self.saveStates.current.layers = _.cloneDeep(anim.layers);
-	};
-
-	/* ctrl z - undo one save state */
-	this.undo = function() {
-		if (self.saveStates.prev.drawings) {
-			anim.drawings = _.cloneDeep(self.saveStates.prev.drawings);
-			anim.layers = _.cloneDeep(self.saveStates.prev.layers);
-			
-			self.saveStates.current.drawings = _.cloneDeep(self.saveStates.prev.drawings);
-			self.saveStates.current.layers = _.cloneDeep(self.saveStates.prev.layers);
-
-			self.saveStates.prev.drawings = undefined;
-			self.saveStates.prev.layers = undefined;
-		} else {
-			console.log("%c Can't undo ", "color:lightblue;background:gray;");
-		}
-		lns.ui.update();
-	};
 
 	/* i key */
 	this.insertFrameBefore = function() {

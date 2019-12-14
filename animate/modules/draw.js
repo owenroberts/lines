@@ -54,6 +54,27 @@ function Draw(defaults) {
 		lns.ui.update();
 	};
 
+	this.cutEnd = function() {
+		/* make sure draw layer doesn't extend to far */
+		let endFrame = 0;
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.endFrame > endFrame) endFrame = layer.endFrame;
+		}
+		if (lns.draw.layer.endFrame > endFrame) 
+			lns.draw.layer.endFrame = endFrame;
+		/* layer loop function?? its called forEach dumbass */
+	};
+
+	this.hasDrawing = function() {
+		return lns.anim.layers.some(layer => {
+			return layer.isInFrame(lns.anim.currentFrame) && 
+				lns.anim.drawings[layer.d].length > 0; 
+			});
+	};
+
+	
+
 	this.brush = 0;
 	this.brushSpread = 1;
 	this.startDots = false;

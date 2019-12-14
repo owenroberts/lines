@@ -11,15 +11,15 @@ function Layers() {
 		}
 	};
 
-	/* z */ HERE
+	/* z */ 
 	this.cutLayerSegment = function() {
-		for (let i = 0; i < self.layers.length; i++) {
-			if (self.layers[i].toggled) {
-				const drawing = lns.anim.drawings[self.layers[i].d];
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.toggled) {
+				const drawing = lns.anim.drawings[layer.d];
 				drawing.pop(); /* remove "end" */
 				drawing.pop(); /* remove segment */
 				drawing.push('end'); /* new end */
-				self.layers[i].e = drawing.length; /* update layer end num */
 			}
 		}
 	};

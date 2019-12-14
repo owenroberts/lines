@@ -106,13 +106,12 @@ class Layer {
 
 	shiftIndex(index, n) {
 		if (!n) n = -1;	/* n is shift num, negative or positive */
+
+		if (this.startFrame == index && this.startFrame == index)
+			this.removeIndex(index);
+
 		if (this.startFrame >= index) this.startFrame += n;
 		if (this.endFrame >= index) this.endFrame += n;
-
-		/* what if shifting the only frame ... */
-		if (this.startFrame == this.endFrame && this.startFrame == index) {
-			this.removeIndex(index);
-		}
 
 		this.resetTweens();
 		this.ui.update();

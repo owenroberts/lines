@@ -36,6 +36,7 @@ function setupAnimateInterface(ui) {
 
 
 	ui.updateFrames = function() {
+
 		const numFrames = lns.anim.endFrame + 1;
 		for (let i = 0; i < numFrames; i++) {
 			if (!ui.list[i]) {
@@ -63,28 +64,19 @@ function setupAnimateInterface(ui) {
 		ui.list.setId('current', lns.anim.currentFrame);
 	};
 
-	/* prob need to get rid of the special lns.draw anim ... */
-
-	/* f key */
 	ui.setFrame = function(f) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// ui.beforeFrame();
-			console.log(f);
 			lns.anim.frame = +f;
 			// lns.draw.setFrame(+f);
 			ui.afterFrame();
 		}
-	};
+	}; /* f key */
 
-	ui.hasDrawing = function() {
-		return lns.anim.layers.some(layer => {
-			return layer.isInFrame(lns.anim.currentFrame) && lns.anim.drawings[layer.d].length > 0; 
-			});
-	};
 
 	// fix for playing animation with nothing in the final frame
 	ui.checkEnd = function() {
-		if (lns.anim.currentFrame == lns.anim.endFrame && !ui.hasDrawing()) 
+		if (lns.anim.currentFrame == lns.anim.endFrame && !lns.draw.hasDrawing()) 
 			ui.prevFrame();
 	};
 
@@ -100,7 +92,7 @@ function setupAnimateInterface(ui) {
 			// put in reset? 
 			if (dir > 0) {
 				if (lns.anim.currentFrame < lns.anim.endFrame || 
-					ui.hasDrawing()) {
+					lns.draw.hasDrawing()) {
 					lns.draw.layer.startFrame = lns.anim.currentFrame + dir;
 					lns.draw.layer.endFrame = lns.anim.currentFrame + dir;	
 					lns.anim.frame = lns.anim.currentFrame + dir;
@@ -110,10 +102,7 @@ function setupAnimateInterface(ui) {
 			if (dir < 0 && lns.anim.currentFrame > 0) {
 				lns.draw.layer.startFrame = lns.anim.currentFrame + dir;
 				lns.draw.layer.endFrame = lns.anim.currentFrame + dir;
-				// console.log('dir', dir, lns.anim.currentFrame)
 				lns.anim.frame = lns.anim.currentFrame + dir;
-				// console.log(lns.anim.currentFrame)
-				
 			}
 		}
 
@@ -174,5 +163,4 @@ function setupAnimateInterface(ui) {
 		if (data.bg) ui.faces.bgColor.value = data.bg;
 		ui.update();
 	};
-
 }
