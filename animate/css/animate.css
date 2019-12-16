@@ -298,6 +298,7 @@ select {
   cursor: pointer;
   line-height: 1;
   max-width: max-content;
+  background-color: #9898ff;
 }
 #layers-panel .layer .right {
   border-top-right-radius: 3px;

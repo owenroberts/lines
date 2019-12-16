@@ -15,7 +15,12 @@ class UICollection extends UIElement {
 	}
 
 	remove(ui, k) {
-		this.el.removeChild(ui.el);
 		if (k) delete this[k];
+		this.el.removeChild(ui.el);
+	}
+
+	removeK(k) {
+		this.el.removeChild(this[k].el);
+		delete this[k];
 	}
 }

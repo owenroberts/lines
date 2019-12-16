@@ -50,12 +50,13 @@ function Drawings() {
 							let layer = self.getLayer(i);
 							if (layer) {
 								if (layer.isInFrame(lns.anim.currentFrame)) {
-									layer.removeIndex(lns.anim.currentFrame);
-									if (lns.anim.layers.indexOf(layer) == -1) {
-										layer = undefined; /* maybe save this as props */
-									}
+									layer = layer.removeIndex(lns.anim.currentFrame);
+									if (!layer) lns.ui.layers.remove(i);
 								} else {
-									layer.addIndex(lns.anim.currentFrame);
+									layer = layer.addIndex(lns.anim.currentFrame);
+									if (lns.anim.layers.indexOf(layer) == -1) {
+										lns.anim.layers.push(layer);
+									}
 								}
 							} else {
 								/* fuck */
@@ -67,6 +68,7 @@ function Drawings() {
 								});
 								lns.anim.layers.unshift(layer);
 							}
+							
 							lns.ui.layers.update();
 						}
 					}), i);
@@ -77,4 +79,8 @@ function Drawings() {
 			}
 		}
 	};
+
+	this.clear = function() {
+		self.panel.drawings.clear();
+	}
 }

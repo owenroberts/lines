@@ -36,6 +36,7 @@ function Data(anim) {
 
 	/* ctrl z - undo one save state */
 	this.undo = function() {
+
 		if (self.saveStates.prev.drawings) {
 			anim.drawings = _.cloneDeep(self.saveStates.prev.drawings);
 			anim.layers = _.cloneDeep(self.saveStates.prev.layers);
@@ -48,6 +49,10 @@ function Data(anim) {
 		} else {
 			console.log("%c Can't undo ", "color:lightblue;background:gray;");
 		}
+
+		/* these functions just call one function, should just call directly .. but this is still being worked on*/
+		lns.ui.drawings.clear();
+		lns.ui.layers.clear();
 		lns.ui.update();
 	};
 
@@ -117,50 +122,54 @@ function Data(anim) {
 		}
 	}; /* ctrl v */
 
-	/* x key */
+	
 	this.clearLines = function() {
 		lns.draw.drawing = [];
-	};
+	}; /* x key */
 
 	this.clearLayers = function() {
 		self.saveState(); /* will save lines ... */
-		for (let i = anim.layers.length - 1; i >= 0; i--) {
-			if (anim.layers[i].isInFrame(anim.currentFrame))
-				anim.layers[i].removeIndex(anim.currentFrame);
+		for (let i = anim.layers.length - 2; i >= 0; i--) {
+			if (anim.layers[i].isInFrame(anim.currentFrame)) {
+				const layer = anim.layers[i].removeIndex(anim.currentFrame);
+				if (!layer) lns.ui.layers.remove(i);
+			}
 		}
-	};
-
-	FUCK
+	}; 
 
 	this.cutTopLayer = function() {
-		for (let i = anim.layers.length - 1; i >= 0; i--) {
-			if (anim.layers[i].isInFrame(anim.currentFrame))
-				anim.layers[i].removeIndex(anim.currentFrame);
+		for (let i = anim.layers.length - 2; i >= 0; i--) {
+			if (anim.layers[i].isInFrame(anim.currentFrame)) {
+				const layer = anim.layers[i].removeIndex(anim.currentFrame);
+				if (!layer) lns.ui.layers.remove(i);
+			}
 			break;
 		}
-	};
+	}; /* ctrl - x */
 
 	this.cutBottomLayer = function() {
 		for (let i = 0; i < anim.layers.length; i++) {
-			if (anim.layers[i].isInFrame(anim.currentFrame))
-				anim.layers[i].removeIndex(anim.currentFrame);
+			if (anim.layers[i].isInFrame(anim.currentFrame)) {
+				const layer = anim.layers[i].removeIndex(anim.currentFrame);
+				if (!layer) lns.ui.layers.remove(i);
+			}
 			break;
 		}
-	};
+	}; /* alt - x */
 
 	this.clearFrame = function() {
 		self.clearLines();
 		self.clearLayers();
-	};
+	};	/* shift - x*/
 
-	
 	this.deleteFrame = function(index) {
 		if (!index) index = lns.anim.currentFrame;
 		self.saveState();
 
 		// -2 to skip draw layer
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
-			anim.layers[i].shiftIndex(index, -1);
+			layer = anim.layers[i].shiftIndex(index, -1);
+			if (!layer) lns.ui.layers.remove(i);
 		}
 		lns.ui.update();
 	}; /* d key */

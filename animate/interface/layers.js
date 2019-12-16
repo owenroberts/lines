@@ -1,9 +1,6 @@
 function Layers() {
 	const self = this;
 	
- 	/* these are still */
-	this.layers = [];
-	
 	this.updateProperty = function(prop, value) {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];
@@ -11,7 +8,6 @@ function Layers() {
 		}
 	};
 
-	/* z */ 
 	this.cutLayerSegment = function() {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];
@@ -22,8 +18,7 @@ function Layers() {
 				drawing.push('end'); /* new end */
 			}
 		}
-	};
-	/* all fucked */
+	}; 	/* z */ 
 	
 	this.cutLayerLine = function() {
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
@@ -159,33 +154,37 @@ function Layers() {
 		self.selectedAll = !self.selectedAll;
 	};
 
-	/* this doesn't get called anywhere else ... can be in update */
-	this.addUI = function(layer, index) {
-		layer.ui = new UILayer({
-			type: 'layer',
-			index: index,
-			callback: function() {
-				layer.toggle();
-				lns.draw.setProperties(layer.props);
-			}
-		}, layer);
-		self.panel.layers.append(layer.ui);
-	};
-
 	this.update = function() {
+
 		// is this crazy ? 
 		self.panel.layers.el.style.width = `${lns.ui.list[0].el.getBoundingClientRect().width * (lns.anim.endFrame + 1)}px`
 		
 		/* -1 to not show draw layer */
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
-			if (!layer.ui) self.addUI(layer, i);
-			else layer.ui.update();
-
-			if (!document.body.contains(layer.ui.el)) {
-				self.panel.layers.append(layer.ui);
+			if (!self.panel.layers[i]) {
+				const ui = new UILayer({
+					type: 'layer',
+					index: i,
+					callback: function() {
+						layer.toggle();
+						lns.draw.setProperties(layer.props);
+					}
+				}, layer);
+				self.panel.layers.append(ui, i);
+			} else {
+				self.panel.layers[i].update();
 			}
-			/* gotta be a better way to organize this so layer creates its own ui */
 		}
+	};
+
+	this.remove = function(index) {
+		lns.anim.layers.splice(index, 1);
+		self.panel.layers.removeK(index);
+	};
+
+	this.clear = function() {
+		self.panel.layers.clear();
+		console.log(self.panel.layers);
 	};
 }

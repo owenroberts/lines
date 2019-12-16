@@ -76,7 +76,8 @@ function setupAnimateInterface(ui) {
 
 	// fix for playing animation with nothing in the final frame
 	ui.checkEnd = function() {
-		if (lns.anim.currentFrame == lns.anim.endFrame && !lns.draw.hasDrawing()) 
+		if (lns.anim.currentFrame == lns.anim.endFrame && 
+			!lns.draw.hasDrawing()) 
 			ui.prevFrame();
 	};
 

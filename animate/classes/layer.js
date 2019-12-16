@@ -13,13 +13,11 @@ class Layer {
 
 		this.toggled = false;
 		this.resetTweens();
-		if (this.ui) delete this.ui; /* fix for adding layers in add index or remove index etc */
 	}
 
 	clean() {
 		delete this.toggled;
 		delete this.prevColor;
-		delete this.ui;
 	}
 
 	toggle() {
@@ -33,7 +31,8 @@ class Layer {
 	}
 
 	remove() {
-		this.ui.remove();
+		console.log(this);
+		console.log(lns.ui.layers.panel.layers);
 		lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
 	}
 
@@ -41,7 +40,7 @@ class Layer {
 		this.t.push(tween);
 		if (tween.sf < this.startFrame) this.startFrame = tween.sf;
 		if (tween.ef > this.endFrame) this.endFrame = tween.ef;
-		this.ui.addTween(tween);
+		// this.ui.addTween(tween);
 	}
 
 	get startFrame() {
@@ -73,48 +72,37 @@ class Layer {
 				}));
 			}
 		}
-
-		/* lns.layers not modular ? */
-		if (lns.anim.layers.indexOf(this) == -1) {
-			lns.anim.layers.push(this);
-		}
-
-		this.ui.update();
+		return this;
 	}
 
 	removeIndex(index) {
-		/* removing layer if not in any frame ... maybe just leave it ? f: -1, -1 or something */
-		if (this.startFrame == index && this.endFrame == index) {
-			this.remove();
-			return;
-		}
+		if (this.startFrame == index && this.endFrame == index) return undefined;
 		else if (this.startFrame == index) this.startFrame += 1;
 		else if (this.endFrame == index) this.endFrame -= 1;
 		else if (index > this.startFrame && index < this.endFrame) {
 			const layer = _.cloneDeep(this);
 			layer.startFrame = index + 1;
 			layer.endFrame = this.endFrame
-			delete layer.ui;
 			layer.resetTweens();
-			lns.anim.layers.push(layer);
 			this.endFrame = index;
+			return layer;
 		}
 
 		this.resetTweens();
-		this.ui.update();
+		return this;
 	}
 
 	shiftIndex(index, n) {
 		if (!n) n = -1;	/* n is shift num, negative or positive */
 
 		if (this.startFrame == index && this.startFrame == index)
-			this.removeIndex(index);
+			return this.removeIndex(index);
 
 		if (this.startFrame >= index) this.startFrame += n;
 		if (this.endFrame >= index) this.endFrame += n;
 
 		this.resetTweens();
-		this.ui.update();
+		return this;
 	}
 
 	isInFrame(index) {

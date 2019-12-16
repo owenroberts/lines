@@ -50,9 +50,10 @@ function Draw(defaults) {
 				d: lns.anim.drawings.length - 1,  
 				f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
 			}));
+			lns.data.saveState();
 		}
 		lns.ui.update();
-	};
+	}; /* r key */
 
 	this.cutEnd = function() {
 		/* make sure draw layer doesn't extend to far */
