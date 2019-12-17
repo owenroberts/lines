@@ -64,9 +64,9 @@ class UILayer extends UICollection {
 		this.left.el.style['grid-column'] = `${this.layer.startFrame + 1} / span 1`;
 		this.toggle.el.style['grid-column'] = `${this.layer.startFrame + 2} / span ${this.layer.endFrame - this.layer.startFrame + 1}`;
 
-		
-		for (let i = 0; i < this.tweens.length; i++) {
-			this.tweens[i].update();
+		for (let i = 0; i < this.layer.t.length; i++) {
+			if (this.tweens[i]) this.tweens[i].update();
+			else this.addTween(this.layer.t[i])
 		}
 	}
 

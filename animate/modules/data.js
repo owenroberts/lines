@@ -87,14 +87,14 @@ function Data(anim) {
 
 	this.selectFrame = function(elem) {
 		if (!elem.classList.contains("selected")) {
- 			elem.classList.add("selected");
- 			self.pasteFrames.push(+elem.textContent);
- 		} else {
- 			self.pasteFrames.splice(self.pasteFrames.indexOf(+elem.textContent), 1);
- 			elem.classList.remove("selected");
- 		}
+			elem.classList.add("selected");
+			self.pasteFrames.push(+elem.textContent);
+		} else {
+			self.pasteFrames.splice(self.pasteFrames.indexOf(+elem.textContent), 1);
+			elem.classList.remove("selected");
+		}
 	};
-	
+
 	this.selectAll = function() {
 		/* if less than all are selected deselect those first */
 		const someSelected = Array.from(lns.ui.list.children).filter(elem => elem.classList.contains('selected')).length < lns.ui.list.children.length - 1;
@@ -111,7 +111,7 @@ function Data(anim) {
 			self.selectFrame(elem);
 		}, start, end);
 	}; /* alt v */
-	
+
 	this.clearSelected = function() {
 		self.pasteFrames = [];
 
@@ -122,7 +122,6 @@ function Data(anim) {
 		}
 	}; /* ctrl v */
 
-	
 	this.clearLines = function() {
 		lns.draw.drawing = [];
 	}; /* x key */
@@ -135,7 +134,7 @@ function Data(anim) {
 				if (!layer) lns.ui.layers.remove(i);
 			}
 		}
-	}; 
+	};
 
 	this.cutTopLayer = function() {
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
@@ -160,7 +159,7 @@ function Data(anim) {
 	this.clearFrame = function() {
 		self.clearLines();
 		self.clearLayers();
-	};	/* shift - x*/
+	};	/* shift - x */
 
 	this.deleteFrame = function(index) {
 		if (!index) index = lns.anim.currentFrame;
@@ -173,7 +172,7 @@ function Data(anim) {
 		}
 		lns.ui.update();
 	}; /* d key */
-	
+
 	this.deleteFrameRange = function() {
 		self.saveState();
 		const startFrame = +prompt("Start frame:");
@@ -193,7 +192,7 @@ function Data(anim) {
 		lns.ui.layers.cutLayerSegment();
 		lns.draw.pop(); 
 	}; /* z key */
-		
+
 	this.cutLastLine = function() {
 		lns.ui.layers.cutLayerLine(); 
 		lns.draw.popOff();
@@ -212,7 +211,7 @@ function Data(anim) {
 		}
 		lns.ui.update();
 	}; /* i, shift-i key */
-	
+
 	this.addMultipleCopies = function() {
 		self.copyFrame = [];
 		self.clearSelected();
@@ -226,7 +225,7 @@ function Data(anim) {
 		}
 		lns.ui.update();
 	}; /* shift -c  */
-	
+
 	this.offsetDrawing = function(offset) {
 		lns.draw.reset();
 		const _layers = [];
@@ -261,9 +260,8 @@ function Data(anim) {
 		}
 	}; /* q key  */
 
-	/* a key */
 	this.explode = function(params) {
-		self.saveLines();
+		lns.draw.reset();
 		const n = +prompt('Number of frames?');
 		for (let i = 0; i < anim.layers.length; i++) {
 			const layer = anim.layers[i];
@@ -307,9 +305,8 @@ function Data(anim) {
 						});
 					break;
 				}
-				layer.ui.update();
 			}
 		}
 		lns.ui.update();
-	};
+	}; /* a key */
 }
