@@ -5,11 +5,13 @@ function Capture() {
 	this.prev = { n: '', f: 0 }; /* keeps track of image names */
 
 	this.frames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
-	this.bg = true; /* default capture bg */
+	this.bg = true; /*  n key  default capture bg */
 	this.isCapturing = false;
 
 	this.isVideo = false;
 	this.videoLoops = 0;
+
+
 
 	/* k key */
 	this.one = function() {
@@ -38,17 +40,9 @@ function Capture() {
 		};
 	};
 
-	/* n key */
-	this.toggleBG = function() {
-		console.log(self.bg);
-		self.bg = !self.bg;
-		console.log(self.bg);
-
-	};
-
 	/* ctrl-k - start at beginning and capture one of every frame */
 	this.cycle = function() {
-		lns.data.saveLines();
+		lns.draw.reset();
 		/* set animation to last frame because it updates frames before draw */
 		lns.anim.frame = 0;
 		lns.anim.isPlaying = true;
@@ -60,7 +54,7 @@ function Capture() {
 	this.capture = function() {
 		if (lns.files.saveFilesEnabled) {
 			lns.canvas.canvas.toBlob(function(blob) {
-				const title = lns.ui.fio.title.value; // this is a UI
+				const title = lns.ui.faces.title.value; // this is a UI
 				const n = Cool.padNumber(lns.anim.currentFrame, 3);
 				let frm = 0;
 				let fileName = `${title}-${n}-${frm}.png`;
@@ -121,7 +115,7 @@ function Capture() {
 				const a = document.createElement('a');
 				document.body.appendChild(a);
 				a.href = url;
-				a.download = `${lns.ui.fio.title.value}.webm` || 'lines.webm';
+				a.download = `${lns.ui.faces.title.value}.webm` || 'lines.webm';
 				a.click();
 				// window.URL.revokeObjectURL(url);
 			});

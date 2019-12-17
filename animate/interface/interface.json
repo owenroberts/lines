@@ -590,9 +590,7 @@
 			{
 				"type": "UIToggle",
 				"key": "shift-b",
-				"fromModule": {
-					"callback": "toggleBG"
-				},
+				"toggle": "bg",
 				"params": {
 					"onText": "With BG",
 					"offText": "No BG"
