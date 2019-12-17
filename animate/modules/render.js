@@ -42,7 +42,8 @@ function Render(lps, color) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
-			if (lns.anim.isPlaying) lns.ui.update(); 
+			// what actually need to be update here ?
+			if (lns.anim.isPlaying) lns.ui.updateFrame(); 
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 

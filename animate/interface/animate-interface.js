@@ -7,12 +7,11 @@ function setupAnimateInterface(ui) {
 
 	/* update interface */
 	ui.update = function() {
-		// console.log('update');
 		ui.updateFrames();
 		ui.updateFrame();
 		ui.layers.update();
 		ui.drawings.update();
-		ui.states.update();
+		ui.states.update(); 
 	};
 
 	ui.plusFrame = new UIButton({
