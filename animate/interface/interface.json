@@ -431,20 +431,26 @@
 				"type": "UIButton",
 				"key": "i",
 				"fromModule": {
-					"callback": "insertFrameBefore"
+					"callback": "insert"
 				},
 				"params": {
-					"text": "Insert Before"
+					"text": "Insert Before",
+					"arguments": {
+						"dir": 0
+					}
 				}
 			},
 			{
 				"type": "UIButton",
 				"key": "shift-i",
 				"fromModule": {
-					"callback": "insertFrameAfter"
+					"callback": "insert"
 				},
 				"params": {
-					"text": "Insert After"
+					"text": "Insert After",
+					"arguments": {
+						"dir": 1
+					}
 				}
 			}
 		]

@@ -66,7 +66,8 @@ function Drawings() {
 									d: i,
 									f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
 								});
-								lns.anim.layers.unshift(layer);
+								// lns.anim.layers.unshift(layer);
+								lns.anim.layers.splice(lns.anim.layers.length - 1, 0, layer);
 							}
 							
 							lns.ui.layers.update();

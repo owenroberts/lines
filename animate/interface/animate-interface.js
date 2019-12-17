@@ -68,7 +68,9 @@ function setupAnimateInterface(ui) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// ui.beforeFrame();
 			lns.anim.frame = +f;
-			// lns.draw.setFrame(+f);
+			lns.draw.layer.startFrame = lns.anim.currentFrame;
+			lns.draw.layer.endFrame = lns.anim.currentFrame;
+			// lns.draw.setFrame(+f); - set frame 
 			ui.afterFrame();
 		}
 	}; /* f key */

@@ -199,28 +199,20 @@ function Data(anim) {
 		lns.draw.popOff();
 	}; /* shift z */
 
-	/* i key */
-	this.insertFrameBefore = function() {
-		self.saveLines();
-		for (let i = 0; i < anim.layers.length; i++) {
-			anim.layers[i].shiftIndex(anim.currentFrame, 1);
-			anim.layers[i].removeIndex(anim.currentFrame);
+	this.insert = function(args) {
+		lns.draw.reset();
+		self.saveState();
+		for (let i = 0, len = anim.layers.length - 1; i < len; i++) {
+			anim.layers[i].shiftIndex(anim.currentFrame + args.dir, 1);
+			const layer = anim.layers[i].removeIndex(anim.currentFrame + args.dir);
+			if (!layer) lns.ui.layers.remove(i);
+			else if (anim.layers.indexOf(layer) == -1)
+				lns.anim.layers.splice(lns.anim.layers.length - 1, 0, layer);
+			anim.frame = anim.currentFrame + args.dir;
 		}
 		lns.ui.update();
-	};
-
-	/* shift-i key */
-	this.insertFrameAfter = function() {
-		self.saveLines();
-		for (let i = 0, len = anim.layers.length; i < len; i++) {
-			anim.layers[i].shiftIndex(anim.currentFrame + 1, 1);
-			anim.layers[i].removeIndex(anim.currentFrame + 1);
-		}
-		anim.frame = anim.currentFrame + 1;
-		lns.ui.update();
-	};
-
-	/* m key */
+	}; /* i, shift-i key */
+	
 	this.addMultipleCopies = function() {
 		self.copyFrame = [];
 		self.clearSelected();
@@ -233,22 +225,21 @@ function Data(anim) {
 			}
 		}
 		lns.ui.update();
-	};
-
-	/* q key  */
+	}; /* shift -c  */
+	
 	this.offsetDrawing = function(offset) {
-		self.saveLines();
+		lns.draw.reset();
 		const _layers = [];
-		for (let i = 0; i < anim.layers.length; i++) {
-			if (anim.layers[i].isInFrame(anim.currentFrame)) 
-				_layers.push(anim.layers[i]);
+		const togs = lns.anim.layers.some(layer => { return layer.toggled });
+		for (let i = 0; i < anim.layers.length - 1; i++) {
+			const layer = anim.layers[i];
+			if (layer.isInFrame(anim.currentFrame) && !togs || togs && layer.toggled) 
+					_layers.push(anim.layers[i]);
 		}
 		if (_layers) {
-			self.saveLines();
 			self.saveState();
 			if (!offset) offset = new Cool.Vector(+prompt("x"), +prompt("y"));
 			if (offset) {
-				
 				// check to see if layers are selected
 				let layers = [];
 				if (lns.ui.layers.length > 0) {
@@ -268,7 +259,7 @@ function Data(anim) {
 		} else {
 			console.log("%c No layers in frame ", "color:yellow; background:black;");
 		}
-	};
+	}; /* q key  */
 
 	/* a key */
 	this.explode = function(params) {

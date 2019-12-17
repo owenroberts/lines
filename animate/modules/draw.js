@@ -89,7 +89,7 @@ function Draw(defaults) {
 
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != lns.canvas.canvas) {
-			if (self.isDrawing) lns.data.saveLines();
+			if (self.isDrawing) self.reset();
 			self.isDrawing = false;
 		}
 	};
@@ -101,7 +101,6 @@ function Draw(defaults) {
 			self.drawing.push('end');
 		}
 	};
-
 
 	/* could be drawing class */
 	this.popOff = function() {

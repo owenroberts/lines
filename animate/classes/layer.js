@@ -82,12 +82,15 @@ class Layer {
 		else if (index > this.startFrame && index < this.endFrame) {
 			const layer = _.cloneDeep(this);
 			layer.startFrame = index + 1;
-			layer.endFrame = this.endFrame
+			layer.endFrame = this.endFrame;
 			layer.resetTweens();
-			this.endFrame = index;
+
+			this.endFrame = index - 1;
+			this.resetTweens();
+
 			return layer;
 		}
-
+		
 		this.resetTweens();
 		return this;
 	}
@@ -95,6 +98,7 @@ class Layer {
 	shiftIndex(index, n) {
 		if (!n) n = -1;	/* n is shift num, negative or positive */
 
+		/* what about insert ... */
 		if (this.startFrame == index && this.startFrame == index)
 			return this.removeIndex(index);
 
