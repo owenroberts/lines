@@ -14,16 +14,10 @@ function setupAnimateInterface(ui) {
 		ui.states.update(); 
 	};
 
-	ui.plusFrame = new UIButton({
-		text: '+',
-		type: "frame",
-		callback: function() {
-			console.log('plus')
-			ui.setFrame(lns.anim.endFrame + 1);
-		},
-		key: "+"
-	});
-	ui.keys['+'] = ui.plusFrame; /* just ui.keys['+'] ... */
+	ui.plus = function() {
+		ui.setFrame(lns.anim.endFrame);
+		ui.nextFrame();
+	}; /* + key */
 
 	// ui.framesPanel = new UIList({ id:"frames" });
 	const panel = new UIPanel("frames", "Frames");
@@ -33,20 +27,20 @@ function setupAnimateInterface(ui) {
 	// ui.panels.frames.add(list);
 	// console.log(ui.list);
 
-
 	ui.updateFrames = function() {
-
 		const numFrames = lns.anim.endFrame + 1;
 		for (let i = 0; i < numFrames; i++) {
 			if (!ui.list[i]) {
 				const frameBtn = new UIButton({
 					type: "frame",
 					text: `${i}`,
+					key: i,
 					callback: function() {
 						ui.setFrame(i);
 						ui.update();
 					}	
 				});
+				ui.keys[i] = frameBtn;
 				ui.list.append(frameBtn, i);
 			}
 		}
@@ -73,7 +67,6 @@ function setupAnimateInterface(ui) {
 			ui.afterFrame();
 		}
 	}; /* f key */
-
 
 	// fix for playing animation with nothing in the final frame
 	ui.checkEnd = function() {
@@ -129,16 +122,6 @@ function setupAnimateInterface(ui) {
 		ui.beforeFrame(-1);
 		ui.afterFrame();
 	};
-
-	['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].forEach(key => {
-		ui.keys[key] = new UIButton({
-			type: "frame",
-			key: key,
-			callback: function() {
-				ui.setFrame(+key);
-			}
-		});
-	});
 
 	ui.updateFIO = function(data, params) {
 		/* rename faces to props? also could use module ids 

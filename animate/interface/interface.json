@@ -510,6 +510,17 @@
 				}
 			},
 			{
+				"type": "UIButton",
+				"key": "+",
+				"module": "ui",
+				"fromModule": {
+					"callback": "plus"
+				},
+				"params": {
+					"text": "+"
+				}
+			},
+			{
 				"row": true,
 				"type": "UIText",
 				"key": "f",
