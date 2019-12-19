@@ -161,8 +161,8 @@ function Data(anim) {
 		self.clearLayers();
 	};	/* shift - x */
 
-	this.deleteFrame = function(index) {
-		if (!index) index = lns.anim.currentFrame;
+	this.deleteFrame = function(_index) {
+		const index = _index !== undefined ? _index : lns.anim.currentFrame;
 		self.saveState();
 
 		// -2 to skip draw layer

@@ -45,23 +45,21 @@ function Layers() {
 		});
 	}; /* test ? */
 
-	this.split = function() { 
-		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.toggled && layer.isInFrame(lns.anim.currentFrame)) {
+	this.split = function() {
+		self.loop((layer, index) => {
+			if (layer.isInFrame(lns.anim.currentFrame)) {
 				layer.toggle();
-				layer.ui.toggle.on(); /* ick */
-				const n = new Layer(_.cloneDeep(layer), lns.anim.layers.length);
-				n.startFrame = lns.anim.currentFrame + 1;
-				delete n.ui;
+				self.panel.layers[index].toggle.toggle();
+				const newLayer = new Layer(_.cloneDeep(layer));
+				newLayer.startFrame = lns.anim.currentFrame + 1;
 				layer.endFrame = lns.anim.currentFrame;
-				lns.anim.layers.push(n);
+
+				lns.anim.layers.splice(lns.anim.layers.length - 1, 0, newLayer); /* func ? */
+
 				self.update();
-				n.ui.update();
-				layer.ui.update();
 				lns.ui.setFrame(layer.endFrame + 1);
 			}
-		}
+		});
 	};
 
 	this.addTween = function() {
