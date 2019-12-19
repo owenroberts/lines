@@ -263,7 +263,7 @@ function Data(anim) {
 	this.explode = function(params) {
 		lns.draw.reset();
 		const n = +prompt('Number of frames?');
-		for (let i = 0; i < anim.layers.length; i++) {
+		for (let i = 0; i < anim.layers.length - 1; i++) {
 			const layer = anim.layers[i];
 			if (layer.isInFrame(anim.currentFrame)) {
 				layer.endFrame = layer.startFrame + n;

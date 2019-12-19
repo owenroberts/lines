@@ -216,7 +216,7 @@
 				"type": "UIColor",
 				"face": "c",
 				"fromModule": {
-					"callback": "setProp"
+					"callback": "setProperty"
 				},
 				"params": {
 					"arguments": {
@@ -357,7 +357,7 @@
 					"callback": "deleteFrameRange"
 				},
 				"params": {
-					"text": "Delete Frame Range"
+					"text": "Delete Range"
 				}
 			},
 			{
@@ -698,7 +698,7 @@
 				"type": "UITextRange",
 				"face": "n",
 				"fromModule": {
-					"callback": "setProp"
+					"callback": "setProperty"
 				},
 				"params": {
 					"label": "Segments",
@@ -714,7 +714,7 @@
 				"type": "UITextRange",
 				"face": "r",
 				"fromModule": {
-					"callback": "setProp"
+					"callback": "setProperty"
 				},
 				"params": {
 					"label": "Jiggle",
@@ -730,7 +730,7 @@
 				"type": "UITextRange",
 				"face": "w",
 				"fromModule": {
-					"callback": "setProp"
+					"callback": "setProperty"
 				},
 				"params": {
 					"label": "Wiggle",
@@ -746,7 +746,7 @@
 				"type": "UITextRange",
 				"face": "v",
 				"fromModule": {
-					"callback": "setProp"
+					"callback": "setProperty"
 				},
 				"params": {
 					"label": "Wiggle Speed",
@@ -930,6 +930,7 @@
 		"list": [
 			{
 				"type": "UIButton",
+				"key": "g",
 				"fromModule": {
 					"callback": "clone"
 				},
@@ -948,6 +949,7 @@
 			},
 			{
 				"type": "UIButton",
+				"key": "alt-a",
 				"fromModule": {
 					"callback": "addTween"
 				},
@@ -957,11 +959,32 @@
 			},
 			{
 				"type": "UIButton",
+				"key": "h",
 				"fromModule": {
 					"callback": "selectAll"
 				},
 				"params": {
 					"text": "Select"
+				}
+			},
+			{
+				"type": "UIButton",
+				"key": "alt-d",
+				"fromModule": {
+					"callback": "remove"
+				},
+				"params": {
+					"text": "X"
+				}
+			},
+			{
+				"type": "UIButton",
+				"key": "ctrl-d",
+				"fromModule": {
+					"callback": "removeSelected"
+				},
+				"params": {
+					"text": "XX"
 				}
 			},
 			{

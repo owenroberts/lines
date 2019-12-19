@@ -33,7 +33,7 @@ function Draw(defaults) {
 		}
 	};
 
-	this.setProp = function(value, args) {
+	this.setProperty = function(value, args) {
 		lns.ui.layers.updateProperty(args.prop, value);
 		self.layer[args.prop] = value;
 	};
@@ -73,8 +73,6 @@ function Draw(defaults) {
 				lns.anim.drawings[layer.d].length > 0; 
 			});
 	};
-
-	
 
 	this.brush = 0;
 	this.brushSpread = 1;

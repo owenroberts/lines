@@ -1,61 +1,52 @@
 function Layers() {
 	const self = this;
+
+	this.loop = function(callback) {
+		/* -1 to not show draw layer */
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
+			if (lns.anim.layers[i].toggled) 
+				callback(lns.anim.layers[i], i);
+		}
+	};
 	
 	this.updateProperty = function(prop, value) {
-		for (let i = 0; i < lns.anim.layers.length; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.toggled) layer[prop] = value;
-		}
+		self.loop(layer => { layer[prop] = value; });
 	};
 
 	this.cutLayerSegment = function() {
-		for (let i = 0; i < lns.anim.layers.length; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.toggled) {
-				const drawing = lns.anim.drawings[layer.d];
-				drawing.pop(); /* remove "end" */
-				drawing.pop(); /* remove segment */
-				drawing.push('end'); /* new end */
-			}
-		}
+		self.loop(layer => {
+			const drawing = lns.anim.drawings[layer.d];
+			drawing.pop(); /* remove "end" */
+			drawing.pop(); /* remove segment */
+			drawing.push('end'); /* new end */
+		})
 	}; 	/* z */ 
 	
 	this.cutLayerLine = function() {
-		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.toggled) {
-				const drawing = lns.anim.drawings[layer.d];
-				drawing.pop(); /* remove "end" */
-				for (let i = drawing.length - 1; i > 0; i--) {
-					if (drawing[i] != 'end') drawing.pop();
-					else break;
-				}
+		self.loop(layer => {
+			const drawing = lns.anim.drawings[layer.d];
+			drawing.pop(); /* remove "end" */
+			for (let i = drawing.length - 1; i > 0; i--) {
+				if (drawing[i] != 'end') drawing.pop();
+				else break;
 			}
-		}
-		/* what about when there's no more lines ?? */
+		});
 	}; /* shift z */
 	
 	this.clone = function() { 
-		for (let i = 0; i < lns.anim.layers.length; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.toggled) {
-				layer.toggle();
-				layer.ui.toggle.on(); /* ick */
-				
-				const n = new Layer(_.cloneDeep(layer));
-				delete n.ui;
-				n.startFrame = n.endFrame = layer.endFrame + 1;
-				lns.anim.layers.push(n);
-				self.update();
-				layer.ui.update();
-				n.ui.update();
-				lns.ui.setFrame(layer.endFrame + 1);
-			}
-		}
-	};
+		self.loop((layer, index) => {
+			self.panel.layers[index].toggle.toggle();
+			layer.toggle();
+			const newLayer = new Layer(_.cloneDeep(layer));
+			newLayer.startFrame = newLayer.endFrame = layer.endFrame + 1;
+			lns.anim.layers.splice(lns.anim.layers.length - 1, 0, newLayer);
+			self.update();
+			lns.ui.setFrame(layer.endFrame + 1);
+		});
+	}; /* test ? */
 
 	this.split = function() { 
-		for (let i = 0; i < lns.anim.layers.length; i++) {
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
 			if (layer.toggled && layer.isInFrame(lns.anim.currentFrame)) {
 				layer.toggle();
@@ -84,18 +75,14 @@ function Layers() {
 		};
 
 		const modal = new UIModal('Add Animation', lns, this.position, function() {
-			for (let i = 0; i < lns.anim.layers.length; i++) {
-				const layer = lns.anim.layers[i];
-				if (layer.toggled) {
-					if (tween.ev == 'end') tween.ev = lns.anim.drawings[layer.d].length;
+			self.loop((layer, index) => {
+				if (tween.ev == 'end') 
+					tween.ev = lns.anim.drawings[layer.d].length;
 					layer.addTween(tween);
-					layer.ui.update();
-					layer.ui.addTween(tween);
 					layer.toggle();
-					layer.ui.toggle.on(); /* ick */
+					self.panel.layers[index].toggle.toggle();
 					lns.ui.update();
-				}
-			}
+			});
 		});
 
 		modal.add(new UILabel({ text: 'Property:' }));
@@ -140,15 +127,19 @@ function Layers() {
 				tween.ev = +value;
 			}
 		}));
-	};
+	}; /* alt - a */
 
 	this.selectedAll = false;
 	this.selectAll = function() {
-		for (let i = 0; i < lns.anim.layers.length; i++) {
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
 			if (layer.isInFrame(lns.anim.currentFrame)) {
-				if (layer.toggled != self.selectedAll) layer.toggle();
+				if (layer.toggled != self.selectedAll) {
+					layer.toggle();
+					self.panel.layers[i].toggle.toggle();
+				}
 				layer.toggle();
+				self.panel.layers[i].toggle.toggle();
 			}
 		}
 		self.selectedAll = !self.selectedAll;
@@ -178,13 +169,20 @@ function Layers() {
 		}
 	};
 
-	this.remove = function(index) {
+	this.remove = function(_index) {
+		const index = _index !== undefined ? _index : prompt('Layer number?');
 		lns.anim.layers.splice(index, 1);
 		self.panel.layers.removeK(index);
+	};  /* alt d */
+
+	this.removeSelected = function() {
+		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
+			const layer = lns.anim.layers[i];
+			if (layer.toggled) self.remove(i);
+		}
 	};
 
 	this.clear = function() {
 		self.panel.layers.clear();
-		console.log(self.panel.layers);
 	};
 }

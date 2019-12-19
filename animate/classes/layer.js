@@ -1,5 +1,5 @@
 class Layer {
-	constructor(params, index) {
+	constructor(params) {
 		this.d =  params.d;
 		this.x =  0;
 		this.y =  0;
