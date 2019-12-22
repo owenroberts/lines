@@ -6,7 +6,6 @@ window.addEventListener("load", function() {
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
 	lns.render = new Render(10); // (lps)
 
-	// lns.lines = new Animation(lns.canvas.ctx);
 	lns.anim = new Animation(lns.canvas.ctx);
 
 	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
@@ -58,30 +57,20 @@ function appLoad(settings) {
 
 	/* still annoying to have "faces" but better than using both 
 		maybe call faces props */
-	
-	/* environment */
-	// lns.render.onionSkinIsVisible = settings.onionSkinIsVisible;
 
 	/* environment + ui + lns.anim */
-	lns.ui.faces.lps.update(settings.lps); // not lns.lines bc only in one frame 
+	lns.ui.faces.lps.update(settings.lps);
 
 	/* environment + ui */
-	// lns.ui.faces.onionSkinIsVisible.update(settings.onionSkinIsVisible);
-	/* in new ui maybe the toggle knows the property and can check to update ... ? 
-		also don't really need this ... */
 	lns.ui.faces.onionSkinNum.update(settings.onionSkinNum);
 	lns.ui.faces.mouseInterval.update(settings.mouseInterval);
 	lns.ui.faces.width.update(settings.width);
 	lns.ui.faces.height.update(settings.height);
-	lns.ui.faces.bgColor.update(settings.canvasColor);
-	// has to be called last bc of reset ... 
-	// update ui from canvas, or callback ... fml
-	lns.ui.faces.lineWidth.update(settings.lineWidth);
+	lns.ui.faces.bgColor.update(settings.canvasColor);	
+	lns.ui.faces.lineWidth.update(settings.lineWidth); // has to be called last bc of reset ... 
 
 	/* lns.anim + ui */
 	lns.ui.faces.fps.update(settings.fps);
-
-	/* lns.lines + ui */
 	lns.ui.faces.c.update(settings.c);
 
 	// palettes - no need to separate module from ui bc its all ui - only one not a ui with update ... 

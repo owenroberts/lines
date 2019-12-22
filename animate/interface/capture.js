@@ -10,20 +10,16 @@ function Capture() {
 
 	this.isVideo = false;
 	this.videoLoops = 0;
-
-
-
-	/* k key */
+	
 	this.one = function() {
 		self.frames = 1;
 		self.start();
-	};
+	}; /* k key */
 
-	/* shift k */
 	this.multiple = function() {
 		self.frames = prompt("Capture how many frames?");
 		self.start();
-	};
+	}; /* shift k */
 
 	this.start = function() {
 		lns.anim.onDraw = function() {
@@ -39,8 +35,7 @@ function Capture() {
 			}
 		};
 	};
-
-	/* ctrl-k - start at beginning and capture one of every frame */
+	
 	this.cycle = function() {
 		lns.draw.reset();
 		/* set animation to last frame because it updates frames before draw */
@@ -49,7 +44,7 @@ function Capture() {
 		// capture as many frames as necessary for lines ratio or 1 of every frame
 		self.frames = lns.anim.endFrame * Math.max(1, lns.render.lps / lns.anim.fps);
 		self.start();
-	};
+	}; /* ctrl-k - start at beginning and capture one of every frame */
 
 	this.capture = function() {
 		if (lns.files.saveFilesEnabled) {
@@ -78,8 +73,7 @@ function Capture() {
 			window.location.href = cap;
 		}
 	};
-
-	/* key? */
+	
 	this.startVideo = function() {
 		lns.anim.isPlaying = false;
 		lns.anim.frame = 0;
@@ -100,7 +94,7 @@ function Capture() {
 		self.video();
 		
 		lns.anim.isPlaying = true;
-	};
+	}; /* key? */
 
 	this.video = function() {
 		if (self.ready) {

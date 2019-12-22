@@ -127,32 +127,3 @@ function Interface(app) {
 		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
 	};
 }
-
-/*
-
-	fix line ^^
-	fix wonky rendering
-	explore canvas layers/frames ... 
-
-	params vs arguments
-		- need params for interface.json, too complicated to multiple things
-		- no UIElements ... could use args for UiElement, UICollection
-		- no real reason to
-	class names are keys in interface.json
-		- can't repeat class names as keys in json?
-	modules
-		- basically means adding export line to every file, then import line
-		- actually more tedious than html
-		- maybe use a js bundler instead
-
-	need ids in interface.json?
-
-
-	new things ....
-	- prompt esc - null value -
-		- could check against original
-		- or set to 0
-		- or just leave it as is
-		- or test if (value)
-
-*/

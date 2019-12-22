@@ -247,18 +247,25 @@ class Animation {
 
 /* questions 
 	- use A/Anim to make Animation availabe in contexts?
-	- do i need canvas reference?
-		- for lines player ...
-	- do i need ctx reference?
-		- yes for each probably
-
-	- xy, width height
-		- set get in each class extension ??
-		- remove for now
-
+		- only really in game
+		- maybe Animation and GameAnimation
+		- or Sprite Animation
+		- Anim is not good ... 
 	rndr	
 		- wierd to rndr as only abbreivation?
+		- yes used so often its okay to abbreviate
 		- animate just rests every time ...
+			- do i need rndr at all, just layer values and over ride?
+			- yeah as is rndr is stupid because it never doesn't reset the values
+				- what were issues with that?
+				- 0 undefined at first but there was others ... 
+				- using layers instead of frames makes this better
+				- maybe keep track of layers chaning?
+				- that happens with currentFrame between endFrame startFrame
+				- think more on this
+			- otherwise just use const
+				const e = over.e !== undefined ? over.e : layer.e;
+			- do some performance tests with garden
 
 
 	anim/game
@@ -266,23 +273,13 @@ class Animation {
 		- loop is assumed for other anims ...
 		- random frames prob only in game
 
-	states 
-		- states are separate info unless used in play.js
-		- pre update?
-
-	override - 
-		- play/game only, add to animate anyway?
-		- middle func ... 
-
 	load -- issues 
 		- game saves loaded sprites, not necessary for others
 		- game setting sprite size
 		- whole separate loader class?
 
-	draw 
-		- xy arguments? only needed for game ...
-
 	pre/post draw, needed but should be handled by sub classes?
+	- onupdate - on draw
 
 	update
 		- comes at the end for game, beginning for anim and animate/play
@@ -292,19 +289,11 @@ class Animation {
 		- more for interface stuff ...
 		- only useful method isInFrame
 		- mm ... start frame, end frame ... 
+		- anim one is useful but probab not necessary for game
 
 	range class
 		- start and end
 		- end can't be smaller than start
 		- what about saving data???  method ... 
-
-	performance
-		- currently always resetting ...
-
-	animation 
-		- use sub class?
-
-	play
-		- is texture just make a sub class for that ...
-
+		- is this actually usedful? 
 */

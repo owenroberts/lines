@@ -984,7 +984,7 @@
 					"callback": "removeSelected"
 				},
 				"params": {
-					"text": "XX"
+					"text": "X Selected"
 				}
 			},
 			{
