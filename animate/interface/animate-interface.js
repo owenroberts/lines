@@ -5,129 +5,8 @@ function setupAnimateInterface(ui) {
 		else lns.canvas.canvas.parentElement.classList.remove('right');
 	};
 
-	/* update interface */
-	ui.update = function() {
-		ui.updateFrames();
-		ui.updateFrame();
-		ui.layers.update();
-		ui.drawings.update();
-		ui.states.update(); 
-	};
-
-	ui.plus = function() {
-		ui.setFrame(lns.anim.endFrame);
-		ui.nextFrame();
-	}; /* + key */
-
-	// ui.framesPanel = new UIList({ id:"frames" });
-	const panel = new UIPanel("frames", "Frames");
-	// ui.panels.frames = panel;
-	// console.log(panel);
-	ui.list = new UIList({ id: 'frames' });
-	// ui.panels.frames.add(list);
-	// console.log(ui.list);
-
-	ui.updateFrames = function() {
-		const numFrames = lns.anim.endFrame + 1;
-		for (let i = 0; i < numFrames; i++) {
-			if (!ui.list[i]) {
-				const frameBtn = new UIButton({
-					type: "frame",
-					text: `${i}`,
-					key: i,
-					callback: function() {
-						ui.setFrame(i);
-						ui.update();
-					}	
-				});
-				ui.keys[i] = frameBtn;
-				ui.list.append(frameBtn, i);
-			}
-		}
-
-		const numFrameBtns = ui.list.children.length;
-		for (let i = numFrameBtns - 1; i >= numFrames; i--) {
-			ui.list.remove(ui.list[i], i);
-		}
-	};
-
-	ui.updateFrame = function() {
-		const currentFrame = document.getElementById("current")
-		if (currentFrame) currentFrame.removeAttribute("id");
-		ui.list.setId('current', lns.anim.currentFrame);
-	};
-
-	ui.setFrame = function(f) {
-		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
-			// ui.beforeFrame();
-			lns.anim.frame = +f;
-			lns.draw.layer.startFrame = lns.anim.currentFrame;
-			lns.draw.layer.endFrame = lns.anim.currentFrame;
-			// lns.draw.setFrame(+f); - set frame 
-			ui.afterFrame();
-		}
-	}; /* f key */
-
-	// fix for playing animation with nothing in the final frame
-	ui.checkEnd = function() {
-		if (lns.anim.currentFrame == lns.anim.endFrame && 
-			!lns.draw.hasDrawing()) 
-			ui.prevFrame();
-	};
-
-	/* call before changing a frame */
-	ui.beforeFrame = function(dir) {
-		lns.draw.isDrawing = false; /* prototype here with render, anim, draw, isActive or something ? */
-		
-		if (lns.draw.drawing.length > 0) {
-			// drawing to save - can add frame
-			lns.draw.reset(lns.anim.currentFrame + dir);
-			lns.anim.frame = lns.anim.currentFrame + dir;
-		} else {
-			// put in reset? 
-			if (dir > 0) {
-				if (lns.anim.currentFrame < lns.anim.endFrame || 
-					lns.draw.hasDrawing()) {
-					lns.draw.layer.startFrame = lns.anim.currentFrame + dir;
-					lns.draw.layer.endFrame = lns.anim.currentFrame + dir;	
-					lns.anim.frame = lns.anim.currentFrame + dir;
-				}
-			}
-
-			if (dir < 0 && lns.anim.currentFrame > 0) {
-				lns.draw.layer.startFrame = lns.anim.currentFrame + dir;
-				lns.draw.layer.endFrame = lns.anim.currentFrame + dir;
-				lns.anim.frame = lns.anim.currentFrame + dir;
-			}
-		}
-
-		lns.data.saveState();
-	};
-
-	/* call after changing a frame */
-	ui.afterFrame = function() {
-		ui.update();
-	};
-
-	/* e key - go to next frame */
-	ui.nextFrame = function() {
-		lns.anim.isPlaying = false;
-		ui.beforeFrame(1);
-		ui.afterFrame();
-	};
-
-	/* w key - got to previous frame */
-	ui.prevFrame = function() {
-		lns.anim.isPlaying = false;
-		ui.beforeFrame(-1);
-		ui.afterFrame();
-	};
-
 	ui.updateFIO = function(data, params) {
-		/* rename faces to props? also could use module ids 
-			this updates a lot more than just the files interface , not the right place */
 
-		// self.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
 		ui.faces.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
 		ui.faces.fps.value = data.fps;
 
@@ -148,4 +27,100 @@ function setupAnimateInterface(ui) {
 		if (data.bg) ui.faces.bgColor.value = data.bg;
 		ui.update();
 	};
+
+	ui.update = function() {
+		ui.updateFrames();
+		ui.updateFrame();
+		ui.layers.update();
+		ui.drawings.update();
+		ui.states.update(); 
+	};
+
+	ui.frames = new UIList({ id: 'frames' });
+
+	ui.updateFrames = function() {
+		const numFrames = lns.anim.endFrame + 1;
+		for (let i = 0; i < numFrames; i++) {
+			if (!ui.frames[i]) {
+				const frameBtn = new UIButton({
+					type: "frame",
+					text: `${i}`,
+					key: i,
+					callback: function() {
+						ui.setFrame(i);
+						ui.update();
+					}	
+				});
+				ui.keys[i] = frameBtn;
+				ui.frames.append(frameBtn, i);
+			}
+		}
+
+		const numFrameBtns = ui.frames.children.length;
+		for (let i = numFrameBtns - 1; i >= numFrames; i--) {
+			ui.frames.remove(ui.frames[i], i);
+		}
+	};
+
+	ui.updateFrame = function() {
+		const currentFrame = document.getElementById("current")
+		if (currentFrame) currentFrame.removeAttribute("id");
+		ui.frames.setId('current', lns.anim.currentFrame);
+	};
+
+	ui.setFrame = function(f) {
+		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
+			// no before ?? 
+			lns.anim.frame = +f;
+			lns.draw.layer.startFrame = lns.anim.currentFrame;
+			lns.draw.layer.endFrame = lns.anim.currentFrame;
+			ui.update();
+		}
+	}; /* f key */
+
+	// fix for playing animation with nothing in the final frame
+	ui.checkEnd = function() {
+		if (lns.anim.currentFrame == lns.anim.endFrame && 
+			!lns.draw.hasDrawing()) 
+			ui.next(-1);
+	};
+
+	/* call before changing a frame */
+	ui.next = function(args) {
+		
+		const next = lns.anim.currentFrame + args.dir;
+		
+		if (lns.anim.isPlaying) ui.faces.play.update();
+		lns.draw.isDrawing = false; /* prototype here with render, anim, draw, isActive or something ? */
+		
+		if (lns.draw.drawing.length > 0) {
+			// drawing to save - can add frame
+			lns.draw.reset(next);
+			lns.anim.frame = next;
+		} else {
+			// put in reset? 
+			if (args.dir > 0) {
+				if (lns.anim.currentFrame < lns.anim.endFrame || 
+					lns.draw.hasDrawing()) {
+					lns.draw.layer.startFrame = next;
+					lns.draw.layer.endFrame = next;	
+					lns.anim.frame = next;
+				}
+			}
+
+			if (args.dir < 0 && lns.anim.currentFrame > 0) {
+				lns.draw.layer.startFrame = next;
+				lns.draw.layer.endFrame = next;
+				lns.anim.frame = next;
+			}
+		}
+
+		lns.data.saveState();
+		ui.update();
+	}; /* e/w key - got to next/previous frame */
+
+	ui.plus = function() {
+		ui.setFrame(lns.anim.endFrame);
+		ui.next(1);
+	}; /* + key */
 }

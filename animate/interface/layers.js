@@ -146,7 +146,7 @@ function Layers() {
 	this.update = function() {
 
 		// is this crazy ? 
-		self.panel.layers.el.style.width = `${lns.ui.list[0].el.getBoundingClientRect().width * (lns.anim.endFrame + 1)}px`
+		self.panel.layers.el.style.width = `${lns.ui.frames[0].el.getBoundingClientRect().width * (lns.anim.endFrame + 1)}px`
 		
 		/* -1 to not show draw layer */
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {

@@ -97,8 +97,8 @@ function Data(anim) {
 
 	this.selectAll = function() {
 		/* if less than all are selected deselect those first */
-		const someSelected = Array.from(lns.ui.list.children).filter(elem => elem.classList.contains('selected')).length < lns.ui.list.children.length - 1;
-		lns.ui.list.looper(elem => {
+		const someSelected = Array.from(lns.ui.frames.children).filter(elem => elem.classList.contains('selected')).length < lns.ui.frames.children.length - 1;
+		lns.ui.frames.looper(elem => {
 			if (someSelected) elem.classList.remove('selected');
 			self.selectFrame(elem);
 		});
@@ -107,7 +107,7 @@ function Data(anim) {
 	this.selectRange = function() {
 		const start = prompt("Start frame:");
 		const end = prompt("end frame:");
-		lns.ui.list.looper(elem => {
+		lns.ui.frames.looper(elem => {
 			self.selectFrame(elem);
 		}, start, end);
 	}; /* alt v */
@@ -219,7 +219,7 @@ function Data(anim) {
 		self.copy();
 		if (n) {
 			for (let i = 0; i < n; i++) {
-				lns.ui.nextFrame();
+				lns.ui.next(1);
 				self.paste();
 			}
 		}

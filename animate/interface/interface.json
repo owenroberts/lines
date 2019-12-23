@@ -479,6 +479,7 @@
 			{
 				"type": "UIToggle",
 				"key": "space",
+				"face": "play",
 				"fromModule": {
 					"callback": "toggle"
 				},
@@ -492,10 +493,13 @@
 				"key": "w",
 				"module": "ui",
 				"fromModule": {
-					"callback": "prevFrame"
+					"callback": "next"
 				},
 				"params": {
-					"text": "Prev"
+					"text": "Prev",
+					"arguments": {
+						"dir": -1
+					}
 				}
 			},
 			{
@@ -503,10 +507,13 @@
 				"key": "e",
 				"module": "ui",
 				"fromModule": {
-					"callback": "nextFrame"
+					"callback": "next"
 				},
 				"params": {
-					"text": "Next"
+					"text": "Next",
+					"arguments": {
+						"dir": 1
+					}
 				}
 			},
 			{
