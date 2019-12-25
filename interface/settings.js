@@ -23,9 +23,11 @@ function Settings(app, name, appSave, appLoad) {
 			const settings = JSON.parse(localStorage[self.name]);
 			if (appLoad) appLoad(settings);
 			for (const p in settings.panels) {
-				if (settings.panels[p].docked) app.ui.panels[p].dock();
-				if (!settings.panels[p].open) app.ui.panels[p].toggle();
-				app.ui.panels[p].order = settings.panels[p].order;
+				if (p != 'el') { /* fix later */
+					if (settings.panels[p].docked) app.ui.panels[p].dock();
+					if (!settings.panels[p].open) app.ui.panels[p].toggle();
+					app.ui.panels[p].order = settings.panels[p].order;
+				}
 			}
 		}
 	};

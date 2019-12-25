@@ -14,10 +14,12 @@ class UIColor extends UIInput {
 			this.addColor(this.current);
 		});
 
+		this.palette = new UICollection();
 	}
 
 	addColor(color) {
 		const self = this;
+		console.log(this.palette);
 		if (!this.colors.includes(color) && color) {
 			this.colors.push(color);
 			const btn = new UIButton({
@@ -29,9 +31,7 @@ class UIColor extends UIInput {
 					self.value = color;
 				}
 			});
-
-			/* only reference like this in elements */
-			this.el.parentNode.insertBefore(btn.el, this.el.nextSibling);
+			self.palette.append(btn);
 		}
 	}
 
@@ -44,5 +44,9 @@ class UIColor extends UIInput {
 		this.addColor(_value);
 		this.current = _value;
 		super.value = _value;
+	}
+
+	get elems() {
+		return [this.el, this.palette.el];
 	}
 }
