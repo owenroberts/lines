@@ -1,3 +1,5 @@
+@import "colors";
+
 * { 
 	box-sizing: border-box;
 	touch-action: manipulation;
@@ -93,16 +95,11 @@ select {
 	flex-grow: 1;
 	max-width: 160px;
 	order: 0;
-	// border-top: 1px solid $ui-color;
-	// border-right: 1px solid $ui-color;
 
-	// margin: 1px;
 	background-color: $bg-color;
-	// border: 1px solid $border-color;
 	border-radius: 3px;
 	margin-right: 3px;
 	margin-bottom: 3px;
-
 
 	padding: 0.5em;
 	overflow: hidden;
@@ -112,40 +109,12 @@ select {
 	&.undocked { display: none; }
 	&.closed { height: 25px; }
 
-	label { 
-		margin-bottom: 1em; 
-		display: block;
+	&.block {
+		min-width: 100%;
+		width: max-content;
 	}
+
 	.row label { margin-bottom: 0; }
-
-	.toggle, .order, .undock-btn {
-		display: inline-block;
-		position: absolute;
-		right: 34px;
-		top: 0;
-		left: 0;
-		text-align: right;
-		cursor: pointer;
-		font-size: 14px;
-		font-weight: 100;
-		&:hover { background: $accent-two; }
-		opacity: 0.5;
-		border-top-right-radius: 3px;
-		border-bottom-right-radius: 3px;
-
-		&.off { background-color: inherit; }
-	}
-
-	.undock-btn {
-		right: 18px;
-		left: auto;
-	}
-
-	.order {
-		font-size: 1em;
-		right: 2px;
-		left: auto;
-	}
 
 	.row {
 		margin-bottom: 0.25em;
@@ -192,6 +161,41 @@ select {
 	}
 
 	select { margin-top: 0.25em; }
+
+	.header {
+		// align-items: center;
+		// line-height: 1;
+		label { 
+			font-size: 12px;
+		}
+		span, label {
+			margin-top: 0;
+			// flex: 1;
+		}
+
+		.undock-btn {
+			align-self: flex-start;
+			margin-left: auto;
+		}
+
+		.order-btn {
+			align-self: flex-start;
+		}
+
+		.toggle, .order-btn, .undock-btn, .block-btn {
+			display: inline-block;
+			cursor: pointer;
+			font-size: 12px;
+			&:hover { background: $accent-two; }
+			&.off { background-color: inherit; }
+		}
+
+		.block-btn {
+			align-self: flex-start;
+			font-size: 11px;
+		}
+	}
+
 }
 
 .modal {

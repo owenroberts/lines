@@ -19,7 +19,6 @@ class UIColor extends UIInput {
 
 	addColor(color) {
 		const self = this;
-		console.log(this.palette);
 		if (!this.colors.includes(color) && color) {
 			this.colors.push(color);
 			const btn = new UIButton({

@@ -1,5 +1,5 @@
 @import "../../interface/css/colors";
-@import "../../interface/css/lines";
+@import "../../interface/css/lines.css";
 
 $anim-color: lightgreen;
 $anim-select: green;
@@ -17,9 +17,6 @@ $column-width: 40px;
 }
 
 #fio-panel {
-	order: 0;
-	min-width: 100%;
-	width: max-content;
 
 	#title {
 		border: none;
@@ -39,9 +36,6 @@ $column-width: 40px;
 }
 
 #layers-panel {
-	order: 98;
-	min-width: 100%;
-	width: max-content;
 	// padding: 0;
 
 	input[type=color] {
@@ -95,12 +89,7 @@ $column-width: 40px;
 	}
 }
 
-
 #play-panel {
-
-	order: 99;
-	min-width: 100%;
-	width: max-content;
 
 	#frames {
 		height:auto;

@@ -8,31 +8,49 @@ class UIPanel extends UICollection {
 		this.open = true;
 		this.rows = [];
 
-		this.append(new UILabel({text: label}));
+		this.header = new UIRow();
+		this.header.addClass('header');
+		this.append(this.header);
 
-		this.append(new UIToggle({
-			onText: "△",
-			offText: "▽",
+		this.header.append(new UIToggle({
+			onText: "^",
+			offText: ".",
 			callback: this.toggle.bind(this),
 			type: "toggle"
 		}));
 
-		this.append(new UIButton({
+		this.header.append(new UILabel({text: label}));
+
+		this.header.append(new UIButton({
 			text: 'x',
 			type: 'undock-btn',
 			callback: this.undock.bind(this)
 		}));
 
-		this.append(new UIButton({
-			text: "⥂",
-			type: "order",
-			callback: () =>  {
+		this.orderBtn = new UIButton({
+			text: this.order || "0",
+			type: "order-btn",
+			callback: () => {
 				this.order = +this.el.style.order + 1;
+				orderBtn.text = this.order;
 			}
+		});
+		this.header.append(this.orderBtn);
+
+		this.header.append(new UIButton({
+			text: "[]",
+			type: "block-btn",
+			callback: () =>  {
+				if (this.el.classList.contains('block')) 
+					this.el.classList.remove('block');
+				else 
+					this.el.classList.add('block');
+			}	
 		}));
 	}
 
 	set order(n) {
+		this.orderBtn.text = n;
 		this.el.style.order = n;
 	}
 
@@ -44,10 +62,18 @@ class UIPanel extends UICollection {
 		return !this.el.classList.contains('undocked');
 	}
 
+	get isBlock() {
+		return this.el.classList.contains('block');
+	}
+
 	toggle() {
 		if (this.open) this.addClass('closed');
 		else this.removeClass('closed');
 		this.open = !this.open;
+	}
+
+	block() {
+		this.el.classList.add('block')
 	}
 
 	dock() {

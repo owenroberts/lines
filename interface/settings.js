@@ -11,7 +11,8 @@ function Settings(app, name, appSave, appLoad) {
 			settings.panels[p] = {
 				open: app.ui.panels[p].open,
 				docked: app.ui.panels[p].isDocked,
-				order: app.ui.panels[p].order
+				order: app.ui.panels[p].order,
+				block: app.ui.panels[p].isBlock
 			};
 			if (p == 'settings') settings.panels[p].open = false;
 		}
@@ -26,6 +27,7 @@ function Settings(app, name, appSave, appLoad) {
 				if (p != 'el') { /* fix later */
 					if (settings.panels[p].docked) app.ui.panels[p].dock();
 					if (!settings.panels[p].open) app.ui.panels[p].toggle();
+					if (settings.panels[p].block) app.ui.panels[p].block();
 					app.ui.panels[p].order = settings.panels[p].order;
 				}
 			}
