@@ -18,9 +18,9 @@ function Interface(app) {
 	};
 	document.body.classList.add(Cool.mobilecheck() ? 'mobile' : 'desktop');
 
-	this.panels = {};
 	this.keys = {};
 	this.faces = {}; /* references to faces we need to update values ???  */
+	this.panels = new UICollection({ id: "panels" });
 
 	/* key commands */
 	this.keyDown = function(ev) {
@@ -39,7 +39,7 @@ function Interface(app) {
 			key.handler(ev, key);
 			key.onPress(true);
 		}
-	}
+	};
 	document.addEventListener("keydown", self.keyDown, false);
 
 	window.toolTip = new UILabel({id: 'tool-tip'});
@@ -73,9 +73,7 @@ function Interface(app) {
 	this.createPanel = function(key, data) {
 		
 		const panel = new UIPanel(key, data.label);
-		self.panels[key] = panel;
-		
-		document.getElementById("panels").appendChild(panel.el);
+		this.panels.append(panel, key);
 		
 		for (let i = 0; i < data.uis.length; i++) {
 			const uis = data.uis[i];

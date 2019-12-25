@@ -83,28 +83,8 @@
 	- or just lns.ui.darwings.panel
 	- this isn't the end of the world
 	- but do we need lns.ui.panels - YES for settings recreating interface
-- maybe have multiple panel sections - nav section, panels, block/timeline section ... 
-	- headless panel?
-	- is nav same for all applicationns? game and animate?
-	- this is chill but making files more and more tied to lns app and ui, but really that's basically what its for, uses anim.load where possible, and saveFile is very lns specific
-	- good to have the panel selector a default to the interface, but could be added by interface js rather than using the elements in index.html
-- draw before update, update before draw ....
-	- ack fine whatever
 
-- clean up animate functions
-	- frames panel ... 
-		- where am i ...
-		- using just lines.anim means there's always a layer ...
 
-	- frames is a panel with the play back buttons ... 
-		- ui.next, ui.prev vs ui.frames.next, ui.frames.prev
-		- fits with draw is a panel
-
-	- animate-interface is just setup
-	- lines.js interface stuff goes there
-	- frames becomes its own thing ... 
-
-- comments in lines.js, animatation.js, interface.js
 - addColor - this.el.parentNode ... 
 - move collapse x and order buttons to left .. 
 - layers hidden in smaller window - also frames
@@ -113,7 +93,6 @@
 - fromModule just callback?
 - headless panel
 - set panels to block display instead of specific styles
-- even draw is a panel ???
 - get html instead of get elems
 
 after cssF
@@ -132,6 +111,9 @@ after cssF
 	- will not be as organized but then can be panel independent ...
 - ah fuck should i really rewrite modules as class?
 - toggle changing size is annoying
+- consolidate lines.js with setup.js
+- even draw is a panel ??? - panels are multiple panel sections
+
 
 - load order - just info 
 	- loads modules
