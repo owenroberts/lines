@@ -25,6 +25,7 @@ window.addEventListener("load", function() {
 	lns.ui.palette = new Palette();
 	lns.ui.layers = new Layers();
 	lns.ui.drawings = new Drawings();
+	lns.ui.play = new Play();
 	setupAnimateInterface(lns.ui);
 	lns.ui.settings = new Settings(lns, 'lns', appSave, appLoad);
 

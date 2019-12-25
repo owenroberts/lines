@@ -1,1002 +1,1103 @@
 {
 	"fio": {
 		"label": "Files IO",
-		"module": "files",
-		"list": [
+		"uis": [
 			{
-				"type": "UIText",
-				"face": "title",
-				"fromModule": {
-					"callback": "saveFile"
-				},
-				"params": {
-					"placeholder": "title",
-					"id": "title"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "s",
-				"fromModule": {
-					"callback": "saveFile"
-				},
-				"params": {
-					"text": "Save",
-					"arguments": {
-						"single": false
+				"module": "files",
+				"list": [
+					{
+						"type": "UIText",
+						"face": "title",
+						"fromModule": {
+							"callback": "saveFile"
+						},
+						"params": {
+							"placeholder": "title",
+							"id": "title"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "s",
+						"fromModule": {
+							"callback": "saveFile"
+						},
+						"params": {
+							"text": "Save",
+							"arguments": {
+								"single": false
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-s",
+						"fromModule": {
+							"callback": "saveFile"
+						},
+						"params": {
+							"text": "Save Frame",
+							"arguments": {
+								"single": true
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "o",
+						"fromModule": {
+							"callback": "openFile"
+						},
+						"params": {
+							"text": "Open"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-o",
+						"fromModule": {
+							"callback": "reOpenFile"
+						},
+						"params": {
+							"text": "Re-Open"
+						}
 					}
-				}
+				]
 			},
 			{
-				"type": "UIButton",
-				"key": "shift-s",
-				"fromModule": {
-					"callback": "saveFile"
-				},
-				"params": {
-					"text": "Save Frame",
-					"arguments": {
-						"single": true
-					}
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "o",
-				"fromModule": {
-					"callback": "openFile"
-				},
-				"params": {
-					"text": "Open"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-o",
-				"fromModule": {
-					"callback": "reOpenFile"
-				},
-				"params": {
-					"text": "Re-Open"
-				}
-			},
-			{
-				"type": "UIToggle",
 				"module": "ui",
-				"face": "rl",
-				"fromModule": {
-					"callback": "toggleRL"
-				},
-				"params": {
-					"onText": "R/L",
-					"offText": "L/R"
-				}
+				"list": [
+					{
+						"type": "UIToggle",
+						"face": "rl",
+						"fromModule": {
+							"callback": "toggleRL"
+						},
+						"params": {
+							"onText": "R/L",
+							"offText": "L/R"
+						}
+					}
+				]
 			}
 		]
 	},
 	"mouse": {
 		"label": "Mouse",
-		"module": "draw",
-		"list": [
+		"uis": [
 			{
-				"type": "UITextRange",
-				"face": "mouseInterval",
-				"key": "m",
-				"number": "mouseInterval",
-				"params": {
-					"min": 0,
-					"max": 100,
-					"value": 30,
-					"label": "Mouse time",
-					"prompt": "Set mouse interval"
-				}
+				"module": "draw",
+				"list": [
+					{
+						"type": "UITextRange",
+						"face": "mouseInterval",
+						"key": "m",
+						"number": "mouseInterval",
+						"params": {
+							"min": 0,
+							"max": 100,
+							"value": 30,
+							"label": "Mouse time",
+							"prompt": "Set mouse interval"
+						}
+					}
+				]
 			}
 		]
 	},
 	"bgImage": {
 		"label": "BG image",
-		"module": "bgImage",
-		"list": [
+		"uis": [
 			{
-				"type": "UIText",
-				"fromModule": {
-					"callback": "loadImage"
-				},
-				"params": {
-					"placeholder": "URL",
-					"label": "Add URL, Enter"
-				}
-			},
-			{
-				"type": "UIToggle",
-				"key": "b",
-				"toggle":  "show",
-				"params": {
-					"onText": "Hide",
-					"offText": "Show"
-				}
-			},
-			{
-				"row": true,
-				"type": "UIRange",
-				"number":  "x",
-				"params": {
-					"label": "X",
-					"min": -1024,
-					"max": 1024,
-					"value": 0,
-					"input": "x-range"
-				}
-			},
-			{
-				"type": "UIRange",
-				"number": "y",
-				"params": {
-					"label": "Y",
-					"min": -1024,
-					"max": 1024,
-					"value": 0,
-					"input": "y-range"
-				}
-			},
-			{
-				"type": "UIRange",
-				"number": "size",
-				"params": {
-					"label": "Size",
-					"input": "size-range",
-					"min": 0.1,
-					"max": 2,
-					"value": 1,
-					"step": 0.1
-				}
+				"module": "bgImage",
+				"list": [
+					{
+						"type": "UIText",
+						"fromModule": {
+							"callback": "loadImage"
+						},
+						"params": {
+							"placeholder": "URL",
+							"label": "Add URL, Enter"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "b",
+						"toggle":  "show",
+						"params": {
+							"onText": "Hide",
+							"offText": "Show"
+						}
+					},
+					{
+						"row": true,
+						"type": "UIRange",
+						"number":  "x",
+						"params": {
+							"label": "X",
+							"min": -1024,
+							"max": 1024,
+							"value": 0,
+							"input": "x-range"
+						}
+					},
+					{
+						"type": "UIRange",
+						"number": "y",
+						"params": {
+							"label": "Y",
+							"min": -1024,
+							"max": 1024,
+							"value": 0,
+							"input": "y-range"
+						}
+					},
+					{
+						"type": "UIRange",
+						"number": "size",
+						"params": {
+							"label": "Size",
+							"input": "size-range",
+							"min": 0.1,
+							"max": 2,
+							"value": 1,
+							"step": 0.1
+						}
+					}
+				]
 			}
 		]
 	},
 	"canvas": {
 		"label": "Canvas",
-		"module": "canvas",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "shift-f",
-				"params": {
-					"text": "Fit Canvas"
-				},
-				"fromModule": {
-					"callback": "fitCanvasToDrawing"
-				}
-			},
-			{
-				"row": true,
-				"type": "UIBlur",
-				"face": "width",
-				"fromModule": {
-					"placeholder": "width",
-					"callback": "setWidth"
-				},
-				"params": {
-					"label": "Width"
-				}
-			},
-			{
-				"row": true,
-				"type": "UIBlur",
-				"face": "height",
-				"fromModule": {
-					"placeholder": "height",
-					"callback": "setHeight"
-				},
-				"params": {
-					"label": "Height"
-				}
-			},
-			{
-				"row": true,
-				"type": "UITextRange",
-				"face": "lineWidth",
-				"fromModule": {
-					"callback": "setLineWidth"
-				},
-				"params": {
-					"label": "Line Width",
-					"value": 1,
-					"min": 0.25,
-					"max": 4,
-					"step": 0.25
-				}
+				"module": "canvas",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "shift-f",
+						"params": {
+							"text": "Fit Canvas"
+						},
+						"fromModule": {
+							"callback": "fitCanvasToDrawing"
+						}
+					},
+					{
+						"row": true,
+						"type": "UIBlur",
+						"face": "width",
+						"fromModule": {
+							"placeholder": "width",
+							"callback": "setWidth"
+						},
+						"params": {
+							"label": "Width"
+						}
+					},
+					{
+						"row": true,
+						"type": "UIBlur",
+						"face": "height",
+						"fromModule": {
+							"placeholder": "height",
+							"callback": "setHeight"
+						},
+						"params": {
+							"label": "Height"
+						}
+					},
+					{
+						"row": true,
+						"type": "UITextRange",
+						"face": "lineWidth",
+						"fromModule": {
+							"callback": "setLineWidth"
+						},
+						"params": {
+							"label": "Line Width",
+							"value": 1,
+							"min": 0.25,
+							"max": 4,
+							"step": 0.25
+						}
+					}
+				]
 			}
-		]	
+		]
 	},
 	"lineColor": {
 		"label": "Line Color",
-		"module": "draw",
-		"list": [
+		"uis": [
 			{
-				"type": "UIColor",
-				"face": "c",
-				"fromModule": {
-					"callback": "setProperty"
-				},
-				"params": {
-					"arguments": {
-						"prop": "c"
+				"module": "draw",
+				"list": [
+					{
+						"type": "UIColor",
+						"face": "c",
+						"fromModule": {
+							"callback": "setProperty"
+						},
+						"params": {
+							"arguments": {
+								"prop": "c"
+							}
+						}
 					}
-				}
+				]
 			}
 		]
 	},
 	"bgColor": {
 		"label": "BG Color",
-		"module": "canvas",
-		"list": [
+		"uis": [
 			{
-				"type": "UIColor",
-				"face": "bgColor",
-				"fromModule": {
-					"callback": "setBGColor",
-					"value": "bgColor"
-				}
+				"module": "canvas",
+				"list": [
+					{
+						"type": "UIColor",
+						"face": "bgColor",
+						"fromModule": {
+							"callback": "setBGColor",
+							"value": "bgColor"
+						}
+					}
+				]
 			}
 		]
 	},
 	"copy": {
 		"label": "Copy/Paste",
-		"module": "data",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "c",
-				"fromModule": {
-					"callback": "copy"
-				},
-				"params": {
-					"text": "Copy"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-c",
-				"fromModule": {
-					"callback": "addMultipleCopies"
-				},
-				"params": {
-					"text": "Multi Copies"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "v",
-				"fromModule": {
-					"callback": "paste"
-				},
-				"params": {
-					"text": "Paste"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-v",
-				"fromModule": {
-					"callback": "selectAll"
-				},
-				"params": {
-					"text": "Select All"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "alt-v",
-				"fromModule": {
-					"callback": "selectRange"
-				},
-				"params": {
-					"text": "Select Range"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "ctrl-v",
-				"fromModule": {
-					"callback": "clearSelected"
-				},
-				"params": {
-					"text": "Clear Selected"
-				}
+				"module": "data",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "c",
+						"fromModule": {
+							"callback": "copy"
+						},
+						"params": {
+							"text": "Copy"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-c",
+						"fromModule": {
+							"callback": "addMultipleCopies"
+						},
+						"params": {
+							"text": "Multi Copies"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "v",
+						"fromModule": {
+							"callback": "paste"
+						},
+						"params": {
+							"text": "Paste"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-v",
+						"fromModule": {
+							"callback": "selectAll"
+						},
+						"params": {
+							"text": "Select All"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-v",
+						"fromModule": {
+							"callback": "selectRange"
+						},
+						"params": {
+							"text": "Select Range"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "ctrl-v",
+						"fromModule": {
+							"callback": "clearSelected"
+						},
+						"params": {
+							"text": "Clear Selected"
+						}
+					}
+				]
 			}
 		]
 	},
 	"cut": {
 		"label": "Cut",
-		"module": "data",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "x",
-				"fromModule": {
-					"callback": "clearLines"
-				},
-				"params": {
-					"text": "Clear Lines"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-z",
-				"fromModule": {
-					"callback": "cutLastLine"
-				},
-				"params": {
-					"text": "Cut Line"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "z",
-				"fromModule": {
-					"callback": "cutLastSegment"
-				},
-				"params": {
-					"text": "Cut Segment"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "d",
-				"fromModule": {
-					"callback": "deleteFrame"
-				},
-				"params": {
-					"text": "Delete Frame"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-d",
-				"fromModule": {
-					"callback": "deleteFrameRange"
-				},
-				"params": {
-					"text": "Delete Range"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "ctrl-x",
-				"fromModule": {
-					"callback": "cutTopLayer"
-				},
-				"params": {
-					"text": "Cut Top Layer"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "alt-x",
-				"fromModule": {
-					"callback": "cutBottomLayer"
-				},
-				"params": {
-					"text": "Cut Bottom Layer"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-x",
-				"fromModule": {
-					"callback": "clearFrame"
-				},
-				"params": {
-					"text": "Clear Frame"
-				}
+				"module": "data",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "x",
+						"fromModule": {
+							"callback": "clearLines"
+						},
+						"params": {
+							"text": "Clear Lines"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-z",
+						"fromModule": {
+							"callback": "cutLastLine"
+						},
+						"params": {
+							"text": "Cut Line"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "z",
+						"fromModule": {
+							"callback": "cutLastSegment"
+						},
+						"params": {
+							"text": "Cut Segment"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "d",
+						"fromModule": {
+							"callback": "deleteFrame"
+						},
+						"params": {
+							"text": "Delete Frame"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-d",
+						"fromModule": {
+							"callback": "deleteFrameRange"
+						},
+						"params": {
+							"text": "Delete Range"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "ctrl-x",
+						"fromModule": {
+							"callback": "cutTopLayer"
+						},
+						"params": {
+							"text": "Cut Top Layer"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-x",
+						"fromModule": {
+							"callback": "cutBottomLayer"
+						},
+						"params": {
+							"text": "Cut Bottom Layer"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-x",
+						"fromModule": {
+							"callback": "clearFrame"
+						},
+						"params": {
+							"text": "Clear Frame"
+						}
+					}
+				]
 			}
 		]
 	},
 	"data": {
 		"label": "Data",
-		"module": "data",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "r",
 				"module": "draw",
-				"fromModule": {
-					"callback": "reset"
-				},
-				"params": {
-					"text": "Save Lines"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "ctrl-z",
-				"fromModule": {
-					"callback": "undo"
-				},
-				"params": {
-					"text": "Undo"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "q",
-				"fromModule": {
-					"callback": "offsetDrawing"
-				},
-				"params": {
-					"text": "Offset"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "i",
-				"fromModule": {
-					"callback": "insert"
-				},
-				"params": {
-					"text": "Insert Before",
-					"arguments": {
-						"dir": 0
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "r",
+						"fromModule": {
+							"callback": "reset"
+						},
+						"params": {
+							"text": "Save Lines"
+						}
 					}
-				}
+				]
 			},
 			{
-				"type": "UIButton",
-				"key": "shift-i",
-				"fromModule": {
-					"callback": "insert"
-				},
-				"params": {
-					"text": "Insert After",
-					"arguments": {
-						"dir": 1
+				"module": "data",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "ctrl-z",
+						"fromModule": {
+							"callback": "undo"
+						},
+						"params": {
+							"text": "Undo"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "q",
+						"fromModule": {
+							"callback": "offsetDrawing"
+						},
+						"params": {
+							"text": "Offset"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "i",
+						"fromModule": {
+							"callback": "insert"
+						},
+						"params": {
+							"text": "Insert Before",
+							"arguments": {
+								"dir": 0
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-i",
+						"fromModule": {
+							"callback": "insert"
+						},
+						"params": {
+							"text": "Insert After",
+							"arguments": {
+								"dir": 1
+							}
+						}
 					}
-				}
-			}
-		]
-	},
-	"anim": {
-		"label": "Animation",
-		"module": "anim",
-		"list": [
-			{
-				"type": "UIBlur",
-				"key": ";",
-				"face": "fps",
-				"number": "fps",
-				"params": {
-					"prompt": "Set FPS",
-					"label": "FPS",
-					"value": 10
-				}
+				]
 			}
 		]
 	},
 	"play": {
 		"label": "Play Back",
-		"module": "render",
-		"list": [
+		"uis": [
 			{
-				"type": "UIToggle",
-				"key": "space",
-				"face": "play",
-				"fromModule": {
-					"callback": "toggle"
-				},
-				"params": {
-					"onText": "Play",
-					"offText": "Pause"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "w",
-				"module": "ui",
-				"fromModule": {
-					"callback": "next"
-				},
-				"params": {
-					"text": "Prev",
-					"arguments": {
-						"dir": -1
+				"module": "render",
+				"list": [
+					{
+						"type": "UIToggle",
+						"key": "space",
+						"face": "play",
+						"fromModule": {
+							"callback": "toggle"
+						},
+						"params": {
+							"onText": "Play",
+							"offText": "Pause"
+						}
 					}
-				}
+				]
 			},
 			{
-				"type": "UIButton",
-				"key": "e",
 				"module": "ui",
-				"fromModule": {
-					"callback": "next"
-				},
-				"params": {
-					"text": "Next",
-					"arguments": {
-						"dir": 1
+				"sub": "play",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "w",
+						"fromModule": {
+							"callback": "next"
+						},
+						"params": {
+							"text": "Prev",
+							"arguments": {
+								"dir": -1
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "e",
+						"fromModule": {
+							"callback": "next"
+						},
+						"params": {
+							"text": "Next",
+							"arguments": {
+								"dir": 1
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "+",
+						"fromModule": {
+							"callback": "plus"
+						},
+						"params": {
+							"text": "+"
+						}
 					}
-				}
+				]
 			},
 			{
-				"type": "UIButton",
-				"key": "+",
+				"module": "render",
+				"list": [
+					{
+						"type": "UIText",
+						"key": "l",
+						"face": "onionSkinNum",
+						"fromModule": {
+							"callback": "setOnionSkin"
+						},
+						"params": {
+							"value": 0,
+							"label": "Onion",
+							"prompt": "Onion skin"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "shift-l",
+						"toggle": "onionSkinIsVisible",
+						"params": {
+							"onText": "Hide",
+							"offText": "Show"
+						}
+					},
+					{
+						"row": true,
+						"type": "UIBlur",
+						"key": "'",
+						"face": "lps",
+						"fromModule": {
+							"callback": "setLps"
+						},
+						"params": {
+							"prompt": "Set Lines/Second",
+							"label": "LPS"
+						}
+					}
+				]
+			},
+			{
+				"module": "anim",
+				"list": [
+					{
+						"type": "UIBlur",
+						"key": ";",
+						"face": "fps",
+						"number": "fps",
+						"params": {
+							"prompt": "Set FPS",
+							"label": "FPS",
+							"value": 10
+						}
+					}
+				]
+			},
+			{	
 				"module": "ui",
-				"fromModule": {
-					"callback": "plus"
-				},
-				"params": {
-					"text": "+"
-				}
-			},
-			{
-				"row": true,
-				"type": "UIText",
-				"key": "f",
-				"module": "ui",
-				"face": "frameDisplay",
-				"fromModule": {
-					"callback": "setFrame"
-				},
-				"params": {
-					"label": "Frame",
-					"value": 0,
-					"prompt": "Go To Frame"
-				}
-			},
-			{
-				"row": true,
-				"type": "UIBlur",
-				"key": "'",
-				"face": "lps",
-				"fromModule": {
-					"callback": "setLps"
-				},
-				"params": {
-					"prompt": "Set Lines/Second",
-					"label": "LPS"
-				}
-			},
-			{
-				"row": true,
-				"type": "UIText",
-				"key": "l",
-				"face": "onionSkinNum",
-				"fromModule": {
-					"callback": "setOnionSkin"
-				},
-				"params": {
-					"value": 0,
-					"label": "Onion",
-					"prompt": "Onion skin"
-				}
-			},
-			{
-				"type": "UIToggle",
-				"key": "shift-l",
-				"toggle": "onionSkinIsVisible",
-				"params": {
-					"onText": "Hide",
-					"offText": "Show"
-				}
+				"sub": "play",
+				"list": [
+					
+					{
+						"type": "UIText",
+						"key": "f",
+						"face": "frameDisplay",
+						"fromModule": {
+							"callback": "setFrame"
+						},
+						"params": {
+							"label": "Frame",
+							"value": 0,
+							"prompt": "Go To Frame"
+						}
+					},
+					{
+						"type": "UIList",
+						"params": {
+							"id": "frames"
+						},
+						"k": "frames"
+					}
+				]
 			}
 		]
 	},
 	"capture": {
 		"label": "Capture",
-		"module": "ui",
-		"sub": "capture",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "ctrl-k",
-				"fromModule": {
-					"callback": "cycle"
-				},
-				"params": {
-					"text": "Cycle"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "k",
-				"fromModule": {
-					"callback": "one"
-				},
-				"params": {
-					"text": "Frame"
-				}
-			},
-			{
-				"type": "UIToggle",
-				"key": "shift-b",
-				"toggle": "bg",
-				"params": {
-					"onText": "With BG",
-					"offText": "No BG"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-k",
-				"fromModule": {
-					"callback": "multiple"
-				},
-				"params": {
-					"text": "Capture Frames"
-				}
-			},
-			{
-				"type": "UIToggle",
-				"key": "alt-k",
-				"fromModule": {
-					"callback": "video"
-				},
-				"params": {
-					"onText": "Start Video",
-					"offText": "Stop Video"
-				}
-			},
-			{
-				"type": "UIButton",
-				"fromModule": {
-					"callback": "startVideo"
-				},
-				"params": {
-					"text": "Video Loops"
-				}
+				"module": "ui",
+				"sub": "capture",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "ctrl-k",
+						"fromModule": {
+							"callback": "cycle"
+						},
+						"params": {
+							"text": "Cycle"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "k",
+						"fromModule": {
+							"callback": "one"
+						},
+						"params": {
+							"text": "Frame"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "shift-b",
+						"toggle": "bg",
+						"params": {
+							"onText": "With BG",
+							"offText": "No BG"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-k",
+						"fromModule": {
+							"callback": "multiple"
+						},
+						"params": {
+							"text": "Capture Frames"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "alt-k",
+						"fromModule": {
+							"callback": "video"
+						},
+						"params": {
+							"onText": "Start Video",
+							"offText": "Stop Video"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "startVideo"
+						},
+						"params": {
+							"text": "Video Loops"
+						}
+					}
+				]
 			}
 		]
 	},
 	"brush": {
 		"label": "Brush",
-		"module": "draw",
-		"list": [
+		"uis": [
 			{
-				"type": "UITextRange",
-				"face": "brush",
-				"number": "brush",
-				"params": {
-					"label": "Brush",
-					"min": 0, 
-					"max": 10,
-					"value": 0
-				}
-			},
-			{
-				"type": "UITextRange",
-				"face": "brushSpread",
-				"number":  "brushSpread",
-				"params": {
-					"label": "Brush Spread",
-					"min": 0, 
-					"max": 5,
-					"value": 0
-				}
-			},
-			{
-				"type": "UITextRange",
-				"face": "grass",
-				"number":  "grass",
-				"params": {
-					"label": "Grass",
-					"min": 0, 
-					"max": 20,
-					"value": 0
-				}
-			},
-			{
-				"type": "UITextRange",
-				"face": "dots",
-				"number": "dots",
-				"params": {
-					"label": "Dots",
-					"min": 10, 
-					"max": 50,
-					"value": 10
-				}
+				"module": "draw",
+				"list": [
+					{
+						"type": "UITextRange",
+						"face": "brush",
+						"number": "brush",
+						"params": {
+							"label": "Brush",
+							"min": 0, 
+							"max": 10,
+							"value": 0
+						}
+					},
+					{
+						"type": "UITextRange",
+						"face": "brushSpread",
+						"number":  "brushSpread",
+						"params": {
+							"label": "Brush Spread",
+							"min": 0, 
+							"max": 5,
+							"value": 0
+						}
+					},
+					{
+						"type": "UITextRange",
+						"face": "grass",
+						"number":  "grass",
+						"params": {
+							"label": "Grass",
+							"min": 0, 
+							"max": 20,
+							"value": 0
+						}
+					},
+					{
+						"type": "UITextRange",
+						"face": "dots",
+						"number": "dots",
+						"params": {
+							"label": "Dots",
+							"min": 10, 
+							"max": 50,
+							"value": 10
+						}
+					}
+				]
 			}
-
 		]
 	},
 	"lines": {
 		"label": "Lines",
-		"module": "draw",
-		"list": [
+		"uis": [
 			{
-				"type": "UITextRange",
-				"face": "n",
-				"fromModule": {
-					"callback": "setProperty"
-				},
-				"params": {
-					"label": "Segments",
-					"min": 1,
-					"max": 10,
-					"value": 2,
-					"arguments": {
-						"prop": "n"
+				"module": "draw",
+				"list": [
+					{
+						"type": "UITextRange",
+						"face": "n",
+						"fromModule": {
+							"callback": "setProperty"
+						},
+						"params": {
+							"label": "Segments",
+							"min": 1,
+							"max": 10,
+							"value": 2,
+							"arguments": {
+								"prop": "n"
+							}
+						}
+					},
+					{
+						"type": "UITextRange",
+						"face": "r",
+						"fromModule": {
+							"callback": "setProperty"
+						},
+						"params": {
+							"label": "Jiggle",
+							"min": 0,
+							"max": 10,
+							"value": 1,
+							"arguments": {
+								"prop": "r"
+							}
+						}
+					},
+					{
+						"type": "UITextRange",
+						"face": "w",
+						"fromModule": {
+							"callback": "setProperty"
+						},
+						"params": {
+							"label": "Wiggle",
+							"min": 0,
+							"max": 15,
+							"value": 0,
+							"arguments": {
+								"prop": "w"
+							}
+						}
+					},
+					{
+						"type": "UITextRange",
+						"face": "v",
+						"fromModule": {
+							"callback": "setProperty"
+						},
+						"params": {
+							"label": "Wiggle Speed",
+							"min": 0,
+							"max": 5,
+							"step": 0.005,
+							"value": 0,
+							"arguments": {
+								"prop": "v"
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "setDefaults"
+						},
+						"params": {
+							"text": "Reset Defaults"
+						}
 					}
-				}
-			},
-			{
-				"type": "UITextRange",
-				"face": "r",
-				"fromModule": {
-					"callback": "setProperty"
-				},
-				"params": {
-					"label": "Jiggle",
-					"min": 0,
-					"max": 10,
-					"value": 1,
-					"arguments": {
-						"prop": "r"
-					}
-				}
-			},
-			{
-				"type": "UITextRange",
-				"face": "w",
-				"fromModule": {
-					"callback": "setProperty"
-				},
-				"params": {
-					"label": "Wiggle",
-					"min": 0,
-					"max": 15,
-					"value": 0,
-					"arguments": {
-						"prop": "w"
-					}
-				}
-			},
-			{
-				"type": "UITextRange",
-				"face": "v",
-				"fromModule": {
-					"callback": "setProperty"
-				},
-				"params": {
-					"label": "Wiggle Speed",
-					"min": 0,
-					"max": 5,
-					"step": 0.005,
-					"value": 0,
-					"arguments": {
-						"prop": "v"
-					}
-				}
-			},
-			{
-				"type": "UIButton",
-				"fromModule": {
-					"callback": "setDefaults"
-				},
-				"params": {
-					"text": "Reset Defaults"
-				}
+				]
 			}
 		]
 	},
 	"states": {
 		"label": "States",
-		"module": "ui",
-		"sub": "states",
-		"list": [
+		"uis": [
 			{
-				"type": "UISelect",
-				"face": "stateSelector",
-				"fromModule": {
-					"callback": "set"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "t",
-				"fromModule": {
-					"callback": "create"
-				},
-				"params": {
-					"text": "+"
-				}
+				"module": "ui",
+				"sub": "states",
+				"list": [
+					{
+						"type": "UISelect",
+						"face": "stateSelector",
+						"fromModule": {
+							"callback": "set"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "t",
+						"fromModule": {
+							"callback": "create"
+						},
+						"params": {
+							"text": "+"
+						}
+					}
+				]
 			}
 		]
 	},
 	"drawings": {
 		"label": "Drawings",
-		"module": "ui",
-		"sub": "drawings",
-		"list": [
+		"uis": [
 			{
-				"type": "UIRow",
-				"k": "drawings"
+				"module": "ui",
+				"sub": "drawings",
+				"list": [
+					{
+						"type": "UIRow",
+						"k": "drawings"
+					}
+				]
 			}
 		]
 	},
 	"settings": {
 		"label": "Settings",
-		"module": "ui",
-		"sub": "settings",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "ctrl-s",
-				"fromModule": {
-					"callback": "save"
-				},
-				"params": {
-					"text": "Save"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "alt-s",
-				"fromModule": {
-					"callback": "load"
-				},
-				"params": {
-					"text": "Load"
-				}
-			},
-			{
-				"type": "UIButton",
-				"fromModule": {
-					"callback": "clear"
-				},
-				"params": {
-					"text": "Clear"
-				}
-			},
-			{
-				"type": "UIToggle",
-				"fromModule": {
-					"callback": "toggleSaveSettings"
-				},
-				"params": {
-					"onText": "Auto Save On",
-					"offText": "Auto Save Off"
-				}
+				"module": "ui",
+				"sub": "settings",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "ctrl-s",
+						"fromModule": {
+							"callback": "save"
+						},
+						"params": {
+							"text": "Save"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-s",
+						"fromModule": {
+							"callback": "load"
+						},
+						"params": {
+							"text": "Load"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "clear"
+						},
+						"params": {
+							"text": "Clear"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"fromModule": {
+							"callback": "toggleSaveSettings"
+						},
+						"params": {
+							"onText": "Auto Save On",
+							"offText": "Auto Save Off"
+						}
+					}
+				]
 			}
 		]
 	},
 	"explode": {
 		"label": "Explode",
-		"module": "data",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "a",
-				"fromModule": {
-					"callback": "explode"
-				},
-				"params": {
-					"text": "Explode",
-					"arguments": {
-						"type": "Explode"
+				"module": "data",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "a",
+						"fromModule": {
+							"callback": "explode"
+						},
+						"params": {
+							"text": "Explode",
+							"arguments": {
+								"type": "Explode"
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-a",
+						"fromModule": {
+							"callback": "explode"
+						},
+						"params": {
+							"text": "Reverse",
+							"arguments": {
+								"type": "Reverse"
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "ctrl-a",
+						"fromModule": {
+							"callback": "explode"
+						},
+						"params": {
+							"text": "ExRev",
+							"arguments": {
+								"type": "ExRev"
+							}
+						}
 					}
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "shift-a",
-				"fromModule": {
-					"callback": "explode"
-				},
-				"params": {
-					"text": "Reverse",
-					"arguments": {
-						"type": "Reverse"
-					}
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "ctrl-a",
-				"fromModule": {
-					"callback": "explode"
-				},
-				"params": {
-					"text": "ExRev",
-					"arguments": {
-						"type": "ExRev"
-					}
-				}
+				]
 			}
 		]
 	},
 	"palette": {
 		"label": "Palette",
-		"module": "ui",
-		"sub": "palette",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "shift-p",
-				"fromModule": {
-					"callback": "buildFromAnimation"
-				},
-				"params": {
-					"text": "Build"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "p",
-				"fromModule": {
-					"callback": "add"
-				},
-				"params": {
-					"text": "+"
-				}
+				"module": "ui",
+				"sub": "palette",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "shift-p",
+						"fromModule": {
+							"callback": "buildFromAnimation"
+						},
+						"params": {
+							"text": "Build"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "p",
+						"fromModule": {
+							"callback": "add"
+						},
+						"params": {
+							"text": "+"
+						}
+					}
+				]
 			}
 		]
 	},
 	"layers": {
 		"label": "Layers",
-		"module": "ui",
-		"sub": "layers",
-		"list": [
+		"uis": [
 			{
-				"type": "UIButton",
-				"key": "g",
-				"fromModule": {
-					"callback": "clone"
-				},
-				"params": {
-					"text": "Clone"
-				}
-			},
-			{
-				"type": "UIButton",
-				"fromModule": {
-					"callback": "split"
-				},
-				"params": {
-					"text": "Split"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "alt-a",
-				"fromModule": {
-					"callback": "addTween"
-				},
-				"params": {
-					"text": "+Tween"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "h",
-				"fromModule": {
-					"callback": "selectAll"
-				},
-				"params": {
-					"text": "Select"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "alt-d",
-				"fromModule": {
-					"callback": "remove"
-				},
-				"params": {
-					"text": "X"
-				}
-			},
-			{
-				"type": "UIButton",
-				"key": "ctrl-d",
-				"fromModule": {
-					"callback": "removeSelected"
-				},
-				"params": {
-					"text": "X Selected"
-				}
-			},
-			{
-				"type": "UIRow",
-				"k": "layers"
+				"module": "ui",
+				"sub": "layers",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "g",
+						"fromModule": {
+							"callback": "clone"
+						},
+						"params": {
+							"text": "Clone"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "split"
+						},
+						"params": {
+							"text": "Split"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-a",
+						"fromModule": {
+							"callback": "addTween"
+						},
+						"params": {
+							"text": "+Tween"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "h",
+						"fromModule": {
+							"callback": "selectAll"
+						},
+						"params": {
+							"text": "Select"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-d",
+						"fromModule": {
+							"callback": "remove"
+						},
+						"params": {
+							"text": "X"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "ctrl-d",
+						"fromModule": {
+							"callback": "removeSelected"
+						},
+						"params": {
+							"text": "X Selected"
+						}
+					},
+					{
+						"type": "UIRow",
+						"k": "layers"
+					}
+				]
 			}
 		]
 	}

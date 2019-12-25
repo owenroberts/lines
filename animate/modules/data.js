@@ -219,7 +219,7 @@ function Data(anim) {
 		self.copy();
 		if (n) {
 			for (let i = 0; i < n; i++) {
-				lns.ui.next(1);
+				lns.ui.play.next(1);
 				self.paste();
 			}
 		}

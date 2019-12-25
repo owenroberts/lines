@@ -1,6 +1,6 @@
 function Interface(app) {
 	const self = this;
-	const uiClasses = {
+	const uiTypes = {
 		UILabel,
 		UIElement,
 		UIRange,
@@ -13,6 +13,7 @@ function Interface(app) {
 		UISelect,
 		UISelectButton,
 		UICollection,
+		UIList,
 		UIRow
 	};
 	document.body.classList.add(Cool.mobilecheck() ? 'mobile' : 'desktop');
@@ -76,21 +77,23 @@ function Interface(app) {
 		
 		document.getElementById("panels").appendChild(panel.el);
 		
-		for (let i = 0; i < data.list.length; i++) {
-			const module = data.list[i].module || data.module;
-			const sub = data.list[i].sub || data.sub;
-			const mod = sub ? app[module][sub] : app[module];
-			self.createUI(data.list[i], mod, panel);
+		for (let i = 0; i < data.uis.length; i++) {
+			const uis = data.uis[i];
+			const mod = uis.sub ? app[uis.module][uis.sub] : app[uis.module];
+			for (let j = 0; j < uis.list.length; j++) {
+				self.createUI(uis.list[j], mod, panel);
+			}
+			if (uis.module == 'ui' && uis.sub) 
+				app.ui[uis.sub].panel = panel;
 		}
-
-		if (data.module == 'ui') app.ui[data.sub].panel = panel;
-
-		// this doesn't happen, needs animation first
-		// if (data.onLoad) app[data.module][data.sub][data.onLoad]();
 	};
 
 	this.createUI = function(data, module, panel) {
-		const params = { key: data.key, ...data.params };
+
+		const params = { ...data.params };
+		if (data.key) params.key = data.key;
+
+
 		for (const k in data.fromModule) {
 			params[k] = module[data.fromModule[k]];
 		}
@@ -111,16 +114,11 @@ function Interface(app) {
 		if (data.row) panel.addRow();
 		if (params.label) panel.add(new UILabel({ text: params.label}));
 		
-		let ui;
-		if (data.type == "UIRow") {
-			ui = panel.addRow(data.k);
-		} else {
-			ui = new uiClasses[data.type](params);
-			panel.add(ui, undefined, data.k);
-		}
+		let ui = new uiTypes[data.type](params);
+		if (data.k) panel.append(ui, data.k);
+		else panel.add(ui);
 
-		/* could do this in module but addRow vs add(ui) is not super adaptable 
-		  and all this may change ... */
+		/* add is to row, append is adding it straight there */
 
 		if (params.prompt) ui.prompt = params.prompt; /* only key commands */
 		if (params.key) self.keys[data.key] = ui;

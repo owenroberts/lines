@@ -263,10 +263,9 @@ select {
 }
 
 #layers-panel {
-  order: 99;
+  order: 98;
   min-width: 100%;
   width: max-content;
-  padding: 0;
 }
 #layers-panel input[type=color] {
   width: auto;
@@ -313,13 +312,19 @@ select {
   cursor: pointer;
 }
 
-#frames {
+#play-panel {
+  order: 99;
+  min-width: 100%;
+  width: max-content;
+}
+#play-panel #frames {
   height: auto;
   padding: 0;
   width: 100%;
   display: flex;
 }
-#frames .frame {
+#play-panel .frame {
+  display: inline-block;
   flex: 1;
   max-width: 40px;
   padding: 1px;
@@ -327,19 +332,19 @@ select {
   transition: background-color 100ms ease-in;
   cursor: pointer;
 }
-#frames .frame:hover {
+#play-panel .frame:hover {
   background-color: gray;
 }
-#frames .frame.plus {
+#play-panel .frame.plus {
   background-color: #ffddff;
 }
-#frames .frame.plus:hover {
+#play-panel .frame.plus:hover {
   background-color: #FF79FF;
 }
-#frames #current {
+#play-panel #current {
   background-color: #bee4ff !important;
 }
-#frames .selected {
+#play-panel .selected {
   background-color: #ffddff !important;
 }
 

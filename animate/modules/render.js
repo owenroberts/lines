@@ -25,8 +25,8 @@ function Render(lps, color) {
 	/* toggle play animation */
 	this.toggle = function() {
 		if (!lns.anim.isPlaying) {
-			lns.ui.checkEnd();
-			lns.ui.afterFrame();
+			lns.ui.play.checkEnd();
+			lns.ui.play.update();
 		}
 		lns.anim.isPlaying = !lns.anim.isPlaying;
 	};
@@ -43,7 +43,7 @@ function Render(lps, color) {
 			self.timer = performance.now();
 
 			// what actually need to be update here ?
-			if (lns.anim.isPlaying) lns.ui.updateFrame(); 
+			if (lns.anim.isPlaying) lns.ui.play.update(); 
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 

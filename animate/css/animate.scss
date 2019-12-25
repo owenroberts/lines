@@ -39,10 +39,10 @@ $column-width: 40px;
 }
 
 #layers-panel {
-	order: 99;
+	order: 98;
 	min-width: 100%;
 	width: max-content;
-	padding: 0;
+	// padding: 0;
 
 	input[type=color] {
 		width: auto;
@@ -95,15 +95,22 @@ $column-width: 40px;
 	}
 }
 
-#frames {
-	height:auto;
-	padding: 0;
-	width: 100%;
-	display: flex;
-	// grid-template-columns: repeat(auto-fill, 24px);
-	// grid-template-rows: max-content max-content;
+
+#play-panel {
+
+	order: 99;
+	min-width: 100%;
+	width: max-content;
+
+	#frames {
+		height:auto;
+		padding: 0;
+		width: 100%;
+		display: flex;
+	}
 
 	.frame {
+		display: inline-block;
 		flex: 1;
 		max-width: $column-width;
 		padding: 1px;
