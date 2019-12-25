@@ -12,10 +12,6 @@
   cursor: crosshair;
 }
 
-#frames, #layers {
-  margin-top: 1px;
-}
-
 #fio-panel #title {
   border: none;
   font-size: 1.5em;
@@ -82,10 +78,11 @@
   padding: 0;
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
 }
 #play-panel .frame {
   display: inline-block;
-  flex: 1;
+  flex: 1 1 auto;
   max-width: 40px;
   padding: 1px;
   background-color: lightgray;

@@ -19,7 +19,7 @@ class UIPanel extends UICollection {
 			type: "toggle"
 		}));
 
-		this.header.append(new UILabel({text: label}));
+		this.header.append(new UILabel({ text: label }));
 
 		this.header.append(new UIButton({
 			text: 'x',
@@ -47,10 +47,21 @@ class UIPanel extends UICollection {
 					this.el.classList.add('block');
 			}	
 		}));
+
+		this.header.append(new UIButton({
+			text: "<",
+			type: "headless-btn",
+			callback: () => {
+				if (this.el.classList.contains('headless')) 
+					this.el.classList.remove('headless');
+				else 
+					this.el.classList.add('headless');
+			}
+		}));
 	}
 
 	set order(n) {
-		this.orderBtn.text = n;
+		this.orderBtn.text = n || "0";
 		this.el.style.order = n;
 	}
 
@@ -66,6 +77,10 @@ class UIPanel extends UICollection {
 		return this.el.classList.contains('block');
 	}
 
+	get isHeadless() {
+		return this.el.classList.contains('headless');
+	}
+
 	toggle() {
 		if (this.open) this.addClass('closed');
 		else this.removeClass('closed');
@@ -73,7 +88,11 @@ class UIPanel extends UICollection {
 	}
 
 	block() {
-		this.el.classList.add('block')
+		this.el.classList.add('block');
+	}
+
+	headless() {
+		this.el.classList.add('headless');
 	}
 
 	dock() {

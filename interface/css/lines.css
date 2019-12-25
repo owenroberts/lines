@@ -107,8 +107,8 @@ select {
   order: 0;
   background-color: #eae1ff;
   border-radius: 3px;
-  margin-right: 3px;
-  margin-bottom: 3px;
+  margin: 3px;
+  margin-left: 0;
   padding: 0.5em;
   overflow: hidden;
   position: relative;
@@ -195,6 +195,22 @@ select {
 .panel .header .block-btn {
   align-self: flex-start;
   font-size: 11px;
+}
+.panel.headless {
+  padding: 0;
+  border-radius: 0;
+  margin: 0;
+}
+.panel.headless .header {
+  margin-bottom: 0;
+  height: 0px;
+}
+.panel.headless .header .toggle, .panel.headless .header .order-btn, .panel.headless .header .undock-btn, .panel.headless .header .block-btn {
+  display: none;
+}
+.panel.headless .header label {
+  margin-left: auto;
+  font-size: 10px;
 }
 
 .modal {

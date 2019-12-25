@@ -12,10 +12,6 @@ $column-width: 40px;
 	&:active, &:hover { cursor: crosshair; }
 }
 
-#frames, #layers {
-	margin-top: 1px;
-}
-
 #fio-panel {
 
 	#title {
@@ -96,11 +92,13 @@ $column-width: 40px;
 		padding: 0;
 		width: 100%;
 		display: flex;
+		flex-wrap: wrap;
 	}
 
 	.frame {
 		display: inline-block;
-		flex: 1;
+		flex: 1 1 auto;
+		// min-width: 0;
 		max-width: $column-width;
 		padding: 1px;
 		background-color: $ui-color;

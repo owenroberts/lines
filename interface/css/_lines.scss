@@ -98,8 +98,8 @@ select {
 
 	background-color: $bg-color;
 	border-radius: 3px;
-	margin-right: 3px;
-	margin-bottom: 3px;
+	margin: 3px;
+	margin-left: 0;
 
 	padding: 0.5em;
 	overflow: hidden;
@@ -163,15 +163,8 @@ select {
 	select { margin-top: 0.25em; }
 
 	.header {
-		// align-items: center;
-		// line-height: 1;
-		label { 
-			font-size: 12px;
-		}
-		span, label {
-			margin-top: 0;
-			// flex: 1;
-		}
+		label {  font-size: 12px; }
+		span, label { margin-top: 0; }
 
 		.undock-btn {
 			align-self: flex-start;
@@ -194,6 +187,30 @@ select {
 			align-self: flex-start;
 			font-size: 11px;
 		}
+	}
+
+	&.headless {
+		padding: 0;
+		border-radius: 0;
+		margin: 0;
+
+		.btn, input {
+			// margin-top: 0;
+		}
+
+		.header {
+			margin-bottom: 0;
+			height: 0px;
+			.toggle, .order-btn, .undock-btn, .block-btn {
+				display: none;
+			}
+			label {
+				margin-left: auto;
+				font-size: 10px;
+			}
+		}
+
+		
 	}
 
 }
