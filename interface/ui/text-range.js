@@ -21,7 +21,7 @@ class UITextRange extends UICollection {
 		});
 	}
 
-	get elems() {
+	get html() {
 		return [this.textInput.el, this.range.el];
 	}
 

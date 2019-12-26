@@ -18,7 +18,7 @@ class UISelectButton extends UICollection {
 		});
 	}
 
-	get elems() {
+	get html() {
 		return [this.select.el, this.btn.el];
 	}
 }

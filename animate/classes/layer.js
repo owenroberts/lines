@@ -124,23 +124,6 @@ class Layer {
 		}
 	}
 
-	getProps(f) {
-		const props = {
-			s: 0,
-			e: lns.anim.drawings[this.d].length /* faster to save?? */
-		};
-		for (let i = 0; i < this.t.length; i++) {
-			const tween = this.t[i];
-			if (tween.sf <= lns.anim.currentFrame && tween.ef >= lns.anim.currentFrame) {
-				props[tween.prop] = Cool.map(f, tween.sf, tween.ef, tween.sv, tween.ev);
-				if (tween.prop == 's' || tween.prop == 'e')
-					props[tween.prop] = Math.round(props[tween.prop]);
-			}
-
-		}
-		return props;
-	}
-
 	resetTweens() {
 		for (let i = 0; i < this.t.length; i++) {
 			const tween = this.t[i];

@@ -43,7 +43,7 @@ class UILayer extends UICollection {
 		this.update();
 	}
 
-	get elems() {
+	get html() {
 		return this.el;
 	}
 

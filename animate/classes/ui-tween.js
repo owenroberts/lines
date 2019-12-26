@@ -31,7 +31,7 @@ class UITween extends UICollection {
 		this.update();
 	}
 
-	get elems() {
+	get html() {
 		return [this.left.el, this.label.el, this.right.el];
 	}
 
