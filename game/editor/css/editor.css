@@ -1,3 +1,17 @@
+/* light blue */
+/* light pink */
+/* lighter pink */
+/* light purple */
+/* light bluish purple */
+/* dark bluish purple */
+@import "../../../interface/css/lines.css";
+#nav {
+  margin-bottom: 0.25em;
+  display: grid;
+  grid-template-columns: 40px 60px;
+  row-gap: 0.25em;
+}
+
 /* cursor areas */
 canvas#map {
   display: block;
@@ -26,7 +40,7 @@ canvas#map.location-tool {
 
 /* item layout */
 .item {
-  border-bottom: 1px solid lightblue;
+  border-bottom: 1px solid #bee4ff;
   padding: 3px;
   justify-content: space-between;
 }

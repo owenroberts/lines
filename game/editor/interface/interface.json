@@ -1,0 +1,180 @@
+{
+	"tools": {
+		"label": "tools",
+		"uis": [
+			{
+				"module": "tool",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "q",
+						"fromModule": {
+							"callback": "set"
+						},
+						"params": {
+							"text": "Zoom",
+							"arguments": {
+								"toolName": "zoom"
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "w",
+						"fromModule": {
+							"callback": "set"
+						},
+						"params": {
+							"text": "Transform",
+							"arguments": {
+								"toolName": "transform"
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "r",
+						"fromModule": {
+							"callback": "set"
+						},
+						"params": {
+							"text": "Ruler",
+							"arguments": {
+								"toolName": "ruler"
+							}
+						}
+					}
+				]
+			}
+		]
+	},
+	"zoom": {
+		"label": "Zoom/Pan",
+		"uis": [
+			{
+				"module": "zoom",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "shift-z",
+						"fromModule": {
+							"callback": "save"
+						},
+						"params": {
+							"text": "Save"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "z",
+						"fromModule": {
+							"callback": "load"
+						},
+						"params": {
+							"text": "Load"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "ctrl-z",
+						"fromModule": {
+							"callback": "center"
+						},
+						"params": {
+							"text": "Center"
+						}
+					}
+				]
+			}
+		]
+	},
+	"settings": {
+		"label": "Settings",
+		"uis": [
+			{
+				"module": "ui",
+				"sub": "settings",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "ctrl-s",
+						"fromModule": {
+							"callback": "save"
+						},
+						"params": {
+							"text": "Save"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "load"
+						},
+						"params": {
+							"text": "Load"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "clear"
+						},
+						"params": {
+							"text": "Clear"
+						}
+					}
+				]
+			}
+		]
+	},
+	"data": {
+		"label": "Data",
+		"uis": [
+			{
+				"module": "data",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "s",
+						"fromModule": {
+							"callback": "save"
+						},
+						"params": {
+							"text": "Save"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "l",
+						"fromModule": {
+							"callback": "load"
+						},
+						"params": {
+							"text": "Load"
+						}
+					}
+				]
+			}
+		]
+	},
+	"items": {
+		"label": "Items",
+		"uis": [
+			{
+				"module": "ui",
+				"sub": "items",
+				"list": []
+			}
+		]
+	},
+	"textures": {
+		"label": "Textures",
+		"uis": [
+			{
+				"module": "ui",
+				"sub": "textures",
+				"list": []
+			}
+		]
+	}
+}

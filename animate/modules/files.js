@@ -112,6 +112,7 @@ function Files(params) {
 		lns.anim.loadData(data, function() {
 			// set layers to classes 
 			for (let i = 0; i < data.l.length; i++) {
+				// console.log(data.l[i])
 				lns.anim.layers[i] = new Layer(data.l[i]);
 			}
 			lns.canvas.setWidth(data.w);

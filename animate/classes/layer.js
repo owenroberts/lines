@@ -1,8 +1,8 @@
 class Layer {
 	constructor(params) {
 		this.d =  params.d;
-		this.x =  0;
-		this.y =  0;
+		this.x =  params.x || 0;
+		this.y =  params.y || 0;
 		this.f =  params.f;
 		this.t =  [];
 		this.n =  params.n;

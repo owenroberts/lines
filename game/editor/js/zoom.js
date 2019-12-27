@@ -25,9 +25,9 @@ function Zoom() {
 	};
 
 	this.set = function(ctx, offset) {
-		ctx.scale(this.canvas.width / this.view.width, this.canvas.height / this.view.height);
+		console.log(Game.dpr);
+		ctx.scale((this.canvas.width / this.view.width) * Game.dpr, (this.canvas.height / this.view.height) * Game.dpr);
 		ctx.translate(offset.x - this.view.x, offset.y - this.view.y);
-		// ctx.clearRect(this.view.x - offset.x, this.view.y - offset.y, this.view.width, this.view.height);
 	};
 
 	this.wheel = function(ev, callback) {

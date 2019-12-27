@@ -130,7 +130,7 @@ const Game = {
 	draw: function() {
 		const time = performance.now();
 		if (time > Game.drawTime + Game.lineInterval) {
-			if (Game.clearBg) Game.ctx.clearRect(0, 0, Game.width, Game.height);
+			if (Game.clearBg) Game.ctx.clearRect(0, 0, Game.width * Game.dpr, Game.height * Game.dpr);
 			draw(); // draw defined in each game js file
 			if (Game.stats) {
 				Game.drawFrameRates.push( 1000 / (time - Game.drawTime) );

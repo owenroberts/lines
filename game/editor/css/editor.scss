@@ -1,4 +1,12 @@
 @import "../../../interface/css/colors";
+@import "../../../interface/css/lines.css";
+
+#nav {
+	margin-bottom: 0.25em;
+	display: grid;
+	grid-template-columns: 40px 60px;
+	row-gap: 0.25em;
+}
 
 /* cursor areas */
 canvas#map { 

@@ -1,6 +1,6 @@
 const edi = {}; /* editor app */
 edi.ui = new Interface(edi);
-edi.ui.load('interface.json');
+edi.ui.load('interface/interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
 edi.ui.textures = new Textures();
 edi.ui.items = new Items();
@@ -48,7 +48,8 @@ Game.init({
 	width: 720,
 	height: 400,
 	lps: 12,
-	mixedColors: true
+	mixedColors: true,
+	checkRetina: true
 });
 
 edi.data = new Data(Game, { save: false, path: '/drawings' }); 
