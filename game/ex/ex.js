@@ -8,7 +8,8 @@ Game.init({
 	lps: 10,
 	stats: true,
 	debug: false,
-	mixedColors: true
+	mixedColors: true,
+	checkRetina: true
 });
 /* scenes 0: move character around */
 Game.scenes = {

@@ -48,8 +48,10 @@ class Animation {
 
 	set frame(n) {
 		this.currentFrame = this.currentFrameCounter = n;
-		if (this.states.default.end != this.endFrame)
-			this.states.default.end = this.endFrame;
+		if (this.states.default) {
+			if (this.states.default.end != this.endFrame)
+				this.states.default.end = this.endFrame;
+		}
 	}
 
 	get frame4() {
@@ -225,7 +227,8 @@ class Animation {
 		for (const key in json.s) {
 			this.states[key] = json.s[key];
 		}
-		this.states.default.end = this.endFrame;
+		if (this.states.default)
+			this.states.default.end = this.endFrame;
 
 		this.intervalRatio = this.lineInterval / (1000 / json.fps);
 

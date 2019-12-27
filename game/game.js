@@ -26,9 +26,12 @@ const Game = {
 
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
-			
-			this.canvas.width = this.width;
-			this.canvas.height = this.height;
+			this.dpr = params.checkRetina ? window.devicePixelRatio || 1 : 1;
+
+			this.canvas.width = this.width * this.dpr;
+			this.canvas.height = this.height * this.dpr;
+			this.ctx.scale(this.dpr, this.dpr);
+			this.canvas.style.zoom = 1 / this.dpr;
 
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);

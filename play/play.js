@@ -17,10 +17,8 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 
 	this.animation = new Animation(this.ctx, this.lps);
 	if (src) this.animation.load(src, data => {
-		console.log(data.w, this.dpr);
 		this.width = data.w;
 		this.canvas.width = data.w * this.dpr;
-		console.log(this.width, this.canvas.width);
 		this.height = data.h;
 		this.canvas.height = data.h * this.dpr;
 		this.ctx.scale(this.dpr, this.dpr);
