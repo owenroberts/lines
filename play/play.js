@@ -1,5 +1,5 @@
-/* play module */
-function LinesPlayer(canvas, src, lps, callback, isTexture) {
+/* play module - need to use params too many args */
+function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
@@ -13,11 +13,19 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 	this.mixedColors = false; // is this always false?
 	this.drawBg = true; /* where? */
 	this.isTexture = isTexture;
+	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
 
 	this.animation = new Animation(this.ctx, this.lps);
 	if (src) this.animation.load(src, data => {
-		this.width = this.canvas.width = data.w;
-		this.height = this.canvas.height = data.h;
+		console.log(data.w, this.dpr);
+		this.width = data.w;
+		this.canvas.width = data.w * this.dpr;
+		console.log(this.width, this.canvas.width);
+		this.height = data.h;
+		this.canvas.height = data.h * this.dpr;
+		this.ctx.scale(this.dpr, this.dpr);
+		this.canvas.style.zoom = 1 / this.dpr;
+
 		this.ctx.miterLimit = 1;
 		if (data.bg) this.canvas.style.backgroundColor = data.bg;
 		if (callback) callback();
@@ -27,6 +35,7 @@ function LinesPlayer(canvas, src, lps, callback, isTexture) {
 			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
 		}
 		if (this.color) this.ctx.strokeStyle = this.color;
+		this.animation.isPlaying = true;
 	});
 
 	this.ctx.miterLimit = 1;

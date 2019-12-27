@@ -112,7 +112,7 @@ class Animation {
 		for (let i = 0, len = this.layers.length; i < len; i++) {
 			const layer = this.layers[i];
 			const drawing = this.drawings[layer.d];
-			if (this.currentFrame >= layer.startFrame && this.currentFrame <= layer.endFrame) {
+			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
 				this.rndr.s = 0;
 				this.rndr.e = drawing.length;
 
