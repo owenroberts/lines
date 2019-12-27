@@ -8,6 +8,13 @@ class UIToggle extends UIButton {
 		if (params.isOn === false) this.toggle();
 	}
 
+	update(isOn) {
+		if (!isOn) {
+			this.callback();
+			this.toggle();
+		}
+	}
+
 	handler() {
 		this.callback();
 		this.toggle();
@@ -27,5 +34,9 @@ class UIToggle extends UIButton {
 	off() {
 		this.text = this.offText;
 		this.addClass('off');
+	}
+
+	get value() {
+		return this.isOn;
 	}
 }

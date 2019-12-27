@@ -1,9 +1,13 @@
-class Modal extends UICollection {
-	constructor(title, callback) {
-		super();
+class UIModal extends UICollection {
+	constructor(title, app, position, callback) {
+		super({});
 		this.addClass('modal');
-		this.text = title;
+		this.append(new UILabel({ text: title }));
+
 		
+		this.el.style.left = `${position.x - 100}px`;
+		this.el.style.top = `${position.y - 20}px`;
+
 		// better way to do this ?? 
 		document.getElementById('container').appendChild(this.el);
 		
@@ -18,7 +22,7 @@ class Modal extends UICollection {
 		});
 
 		this.append(this.submit);
-		edi.ui.keys['enter'] = this.submit; /* not modular ... */
+		app.ui.keys['enter'] = this.submit; /* not modular ... */
 
 		this.cancel = new UIButton({
 			text: "x",
@@ -26,7 +30,8 @@ class Modal extends UICollection {
 				this.clear();
 			}
 		});
-		edi.ui.keys['escape'] = this.cancel;
+
+		app.ui.keys['escape'] = this.cancel;
 		this.append(this.cancel);
 	}
 

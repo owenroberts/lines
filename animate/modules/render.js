@@ -6,67 +6,49 @@ function Render(lps, color) {
 	this.timer = performance.now();
 
 	this.onionSkinNum = 0;
-	this.onions = [];
 	this.onionSkinIsVisible = false;
 
 	/* l key */
 	this.setOnionSkin = function(n) {
 		self.onionSkinNum = +n;
-		self.onionSkinIsVisible = true;
-	};
-
-	/* shift l */
-	this.toggleOnion = function() {
-		self.onionSkinIsVisible = !self.onionSkinIsVisible;
-	};
-
-	/* ; key */
-	this.setFps = function(fps) {
-		lns.anim.fps = +fps;
-		lns.anim.intervalRatio = self.interval / (1000 / +fps);
-	};
-
-	/* ' key */
-	this.setLps = function(lps) {
-		self.lps = +lps;
-		self.interval = 1000 / self.lps;
-		lns.anim.intervalRatio = self.interval / (1000 / lns.anim.fps);
+		self.onionSkinIsVisible = +n > 0 ? true : false;
 	};
 
 	/* just set drawing back to 0 but might do other things */
 	this.reset = function() {
 		lns.anim.frame = 0;
 		lns.anim.isPlaying = false;
-		lns.canvas.ctx.miterLimit = 1;
-		lns.ui.updateInterface();
+		lns.canvas.ctx.miterLimit = 1; /* maybe not needed? happens in canvas reset*/
+		lns.ui.update();
 	};
 
 	/* toggle play animation */
 	this.toggle = function() {
 		if (!lns.anim.isPlaying) {
-			lns.ui.beforeFrame();
-			lns.ui.afterFrame();
+			lns.ui.play.checkEnd();
+			lns.ui.play.update();
 		}
 		lns.anim.isPlaying = !lns.anim.isPlaying;
 	};
 
-	/* f key */
-	this.setFrame = function(f) {
-		if (+f >= 0) lns.anim.frame = +f;
+	/* ' - lps is property of render engine, not individual animations */
+	this.setLps = function(lps) {
+		self.lps = +lps;
+		self.interval = 1000 / self.lps;
+		lns.anim.lps = self.lps;
 	};
 
 	this.update = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
-			if (lns.anim.isPlaying) {
-				lns.ui.updateInterface(); 
-			}
+			// what actually need to be update here ?
+			if (lns.anim.isPlaying) lns.ui.play.update(); 
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 
 			/* in capture set animation onDraw */
-			if (lns.ui.capture.captureWithBackground && (lns.ui.capture.captureFrames > 0 || lns.ui.capture.capturingVideo)) {
+			if (lns.ui.capture.bg && (lns.ui.capture.frames > 0 || lns.ui.capture.isVideo)) {
 				lns.canvas.ctx.rect(0, 0, lns.canvas.width, lns.canvas.height);
 				lns.canvas.ctx.fillStyle = lns.canvas.bgColor;
 				lns.canvas.ctx.fill();
@@ -89,10 +71,9 @@ function Render(lps, color) {
 				lns.anim.currentFrame = temp;
 			}
 
+			/* draw before update is cool for now ... */
 			lns.anim.draw();
 			lns.anim.update();
-			
-			lns.lines.draw();
 		}
 		if (!lns.ui.capture.capturing) 
 			window.requestAnimFrame(self.update);

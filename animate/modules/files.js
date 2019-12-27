@@ -6,16 +6,24 @@ function Files(params) {
 	this.fileName = undefined;
 
 	/* s key - shift-s for single */
-	this.saveFile = function(title, single, callback) {
-		lns.data.saveLines();
+	this.saveFile = function(args, callback) {
+		// lns.data.saveLines();
+
+		lns.draw.reset();
+		lns.ui.checkEnd();
+		
+		lns.anim.drawings.pop();
+		lns.anim.layers.pop();
+
+		self.fileName = lns.ui.faces.title.value || prompt("Name this file:");
 
 		if (params.fit && confirm("Fit canvas?"))
 			lns.canvas.fitCanvasToDrawing();
 
 		const json = {};
 		json.v = "2.4";
-		json.w = Math.floor(+lns.canvas.width);
-		json.h = Math.floor(+lns.canvas.height);
+		json.w = +lns.canvas.width;
+		json.h = +lns.canvas.height;
 		json.fps = +lns.anim.fps;
 		if (params.bg) json.bg = lns.canvas.bgColor;
 		let colors = lns.anim.layers.map(layer => layer.c);
@@ -24,7 +32,7 @@ function Files(params) {
 
 		/* save current frame */
 		let layers = [];
-		if (single) {
+		if (args.single) {
 			for (let i = 0; i < lns.anim.layers.length; i++) {
 				if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
 					const layer = _.cloneDeep(lns.anim.layers[i]);
@@ -40,6 +48,7 @@ function Files(params) {
 		for (let i = 0; i < layers.length; i++) {
 			layers[i].clean();
 		}
+		console.log(layers);
 		json.l = layers;
 
 		/* search frames for layers and drawings used */
@@ -63,26 +72,30 @@ function Files(params) {
 			json.d[index] = d;
 		}
 
-		json.s = lns.anim.states;
-
-		const jsonfile = JSON.stringify(json);
-		const filename = title || prompt("Name this file:");
-
-		if (filename) {
-			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
-			saveAs(blob, `${filename}.json`);
+		/* don't save default state */
+		if (Object.keys(lns.anim.states).length > 1) {
+			json.s = _.cloneDeep(lns.anim.states);
+			delete json.s.default;
 		}
 
-		/* to set values ... */
-		if (callback) callback(filename);
+		const jsonfile = JSON.stringify(json);
+
+		if (self.fileName) {
+			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
+			saveAs(blob, `${self.fileName}.json`);
+			if (callback) callback(self.fileName); /* to set values ... */
+			// lns.ui.updateFIO();
+			lns.ui.faces.title.value = self.fileName;
+		}
 	};
 
-	/* o key */
+	/* loads from src url */
 	this.loadFile = function(fileName, callback) {
-		self.fileName = fileName || prompt("Open file:");
+		self.fileName = fileName;
 		if (self.fileName) {
-			// if (callback) callback(self.fileName);
-			fetch(self.fileName + '.json')
+			if (self.fileName.slice(self.fileName.length - 5) != '.json') 
+				self.fileName += '.json';
+			fetch(self.fileName)
 				.then(response => { return response.json() })
 				.then(data => { self.loadJSON(data, callback); })
 				.catch(error => {
@@ -93,78 +106,67 @@ function Files(params) {
 	};
 
 	this.loadJSON = function(data, callback) {
+
 		lns.anim.drawings = [];
-		for (let i = 0; i < data.d.length; i++) {
-			const drawing = data.d[i];
-			const d = [];
-			if (drawing) {
-				for (let j = 0; j < drawing.length; j++) {
-					const point = drawing[j];
-					if (point) d.push({ x: point[0], y: point[1] });
-					else d.push('end');
-				}
-			}
-			lns.anim.drawings[i] = d;
-		}
-
 		lns.anim.layers = [];
-		for (let i = 0; i < data.l.length; i++) {
-			lns.anim.layers[i] = new Layer(data.l[i]);
-			lns.draw.layer.c = lns.anim.layers[i].c;
-			lns.ui.faces.c.addColor(lns.anim.layers[i].c); /* ui */
-		}
-
-		if (data.s) lns.anim.states = data.s;
-		if (lns.anim.states.default) lns.anim.states.default.end = lns.anim.endFrame;
-
-		/* set interface values  */
-		lns.ui.faces.stateSelector.setOptions(Object.keys(lns.anim.states));
-
-		lns.canvas.setWidth(data.w);
-		lns.canvas.setHeight(data.h);
-		lns.render.setFps(data.fps);
-		if (data.bg) lns.canvas.setBGColor(data.bg);
-		lns.render.reset();
-
-		lns.ui.faces.fps.value = data.fps;
-
-		if (callback) callback(data, params);
+		lns.anim.loadData(data, function() {
+			// set layers to classes 
+			for (let i = 0; i < data.l.length; i++) {
+				lns.anim.layers[i] = new Layer(data.l[i]);
+			}
+			lns.canvas.setWidth(data.w);
+			lns.canvas.setHeight(data.h);
+			if (data.bg) lns.canvas.setBGColor(data.bg);
+			lns.draw.reset(); 
+			if (callback) callback(data, params); 
+		});
 	};
 
 	/* shift o */
 	this.reOpenFile = function() {
-		if (self.fileName) localStorage.setItem('re-open', self.fileName);
-		location.reload();
+		self.saveFile({}, function(fileName) {
+			location.href += `?src=${ prompt("Enter location:") }/${ fileName }.json`;
+		});
+	};
+
+	/* o key */
+	this.openFile = function() {
+		const openFile = document.createElement('input');
+		openFile.type = "file";
+		openFile.click();
+		openFile.onchange = function() {
+			self.readFile(openFile.files, lns.ui.updateFIO);
+		};
+	};
+
+	this.readFile = function(files, callback) {
+		for (let i = 0, f; f = files[i]; i++) {
+			if (!f.type.match('application/json')) {
+				continue;
+			}
+			const reader = new FileReader();
+			reader.onload = (function(theFile) {
+				return function(e) {
+				self.fileName = f.name.split('.')[0];
+				self.loadJSON(JSON.parse(e.target.result), callback);
+			};
+			})(f);
+			reader.readAsText(f);
+		}
 	};
 
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		self.saveFilesEnabled = true;
 		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
-		const nav = document.getElementById('nav');
-		nav.addEventListener('dragover', dragOverHandler);
-		nav.addEventListener('drop', dropHandler);
+		lns.canvas.canvas.addEventListener('dragover', dragOverHandler);
+		lns.canvas.canvas.addEventListener('drop', dropHandler);
 		// https://gist.github.com/andjosh/7867934
 	}
 
 	function dropHandler(ev) {
  		ev.preventDefault();
  		ev.stopPropagation();
-
- 		const files = ev.dataTransfer.files;
-     	for (let i = 0, f; f = files[i]; i++) {
-			if (!f.type.match('application/json')) {
-          		continue;
-        	}
-        	const reader = new FileReader();
-			reader.onload = (function(theFile) {
-				return function(e) {
-				self.fileName = f.name.split('.')[0];
-				self.loadJSON(JSON.parse(e.target.result));
-				lns.ui.fio.title.value = self.fileName;
-          	};
-        	})(f);
-        	reader.readAsText(f);
-        }
+ 		self.readFile(ev.dataTransfer.files, lns.ui.updateFIO);
 	}
 
 	function dragOverHandler(ev) {

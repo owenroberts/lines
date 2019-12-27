@@ -1,9 +1,10 @@
-function Drawings(panel) {
+function Drawings() {
 	const self = this;
 
-	this.getDrawingLayer = function(index) {
+	this.getLayer = function(index) {
 		const layers = [];
-		for (let i = 0; i < lns.anim.layers.length; i++) {
+		// - 1 for draw layer
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			if (lns.anim.layers[i].d == index) layers.push(lns.anim.layers[i]);
 		}
 
@@ -19,77 +20,68 @@ function Drawings(panel) {
 		}
 	};
 
-	this.displayDrawings = function() {
-		lns.ui.layers.resetLayers();
-		self.resetDrawings();
-		self.panel.addRow('drawings');
-		for (let i = 0; i < lns.anim.drawings.length; i++) {
+	this.update = function() {
+		// -1 to ignore draw drawing
+		for (let i = 0; i < lns.anim.drawings.length - 1; i++) {
 			if (lns.anim.drawings[i]) {
-				let toggleOn = false;
 				const drawing = lns.anim.drawings[i];
+				let layer = self.getLayer(i); /* check for existing layer */
+				let inFrame = layer ? layer.isInFrame(lns.anim.currentFrame) : false;
+				if (!self.panel.drawings[i]) {
+					let props;
+					if (layer) {
+						// user layer.props ?? 
+						props = {
+							n: layer.n,
+							r: layer.r,
+							w: layer.w, 
+							v: layer.v,
+							c: layer.c,
+							x: layer.x,
+							y: layer.y
+						} /* prob a better way to do this ... 
+							this stops existing when updating interface */
+					}
 
-				/* check for existing layer */
-				let layer = self.getDrawingLayer(i);
-				let props;
-				if (layer) {
-					toggleOn = layer.isInFrame(lns.anim.currentFrame);
-					props = {
-						n: layer.n,
-						r: layer.r,
-						w: layer.w, 
-						v: layer.v,
-						c: layer.c,
-						x: layer.x,
-						y: layer.y
-					} /* prob a better way to do this ... 
-						this stops existing when updating interface */
-				}
-				else toggleOn = false;
-
-				self.panel.add(new UIToggle({
-					onText: i,
-					offText: i,
-					isOn: toggleOn,
-					callback: function() {
-						layer = self.getDrawingLayer(i);
-						if (layer) {
-							if (layer.isInFrame(lns.anim.currentFrame)) {
-								layer.removeIndex(lns.anim.currentFrame);
-								if (lns.anim.layers.indexOf(layer) == -1) {
-									layer = undefined; /* maybe save this as props */
+					self.panel.drawings.append(new UIToggle({
+						text: i,
+						isOn: inFrame,
+						callback: function() {
+							let layer = self.getLayer(i);
+							if (layer) {
+								if (layer.isInFrame(lns.anim.currentFrame)) {
+									layer = layer.removeIndex(lns.anim.currentFrame);
+									if (!layer) lns.ui.layers.remove(i);
+								} else {
+									layer = layer.addIndex(lns.anim.currentFrame);
+									if (lns.anim.layers.indexOf(layer) == -1) {
+										lns.anim.layers.push(layer);
+									}
 								}
 							} else {
-								layer.addIndex(lns.anim.currentFrame);
+								/* fuck */
+								// console.log(props); /* save in drawing? */
+								layer = new Layer({
+									...props,
+									d: i,
+									f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
+								});
+								// lns.anim.layers.unshift(layer);
+								lns.anim.layers.splice(lns.anim.layers.length - 1, 0, layer);
 							}
-						} else {
-							/* fuck */
-							// console.log(props); /* save in drawing? */
-							layer = new Layer({
-								d: i,
-								c: lns.draw.layer.c,
-								...lns.draw.defaults,
-								x: 0,
-								y: 0,
-								f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
-								a: []
-							});
-							if (props) {
-								for (key in props) {
-									layer[key] = props[key];
-								}
-							}
-							lns.anim.layers.push(layer);
+							
+							lns.ui.layers.update();
 						}
-					}
-				}));
+					}), i);
+				} else {
+					if (inFrame) self.panel.drawings[i].on();
+					else self.panel.drawings[i].off();
+				}
 			}
 		}
 	};
 
-	this.resetDrawings = function() {
-		const rows = this.panel.rows;
-		for (let i = rows.length - 1; i >= 1; i--) {
-			this.panel.removeRow(rows[i]);
-		}
+	this.clear = function() {
+		self.panel.drawings.clear();
 	};
 }

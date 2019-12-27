@@ -3,7 +3,6 @@ class UISelectButton extends UICollection {
 		super(params);
 
 		this.select = new UISelect({
-			id: `${params.id}-select`,
 			options: params.options,
 			callback: function() {
 				// do nothing ? to prevent error 
@@ -11,10 +10,15 @@ class UISelectButton extends UICollection {
 		});
 
 		this.btn = new UIButton({
-			id: `${params.id}-btn`,
+			text: "+",
+			css: { 'margin-left': '1px' },
 			callback: () => {
 				params.callback(this.select.value);
 			}
 		});
+	}
+	
+	get html() {
+		return [this.select.el, this.btn.el];
 	}
 }

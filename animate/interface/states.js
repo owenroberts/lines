@@ -1,29 +1,28 @@
 function States() {
 	const self = this;
 
-	this.displayStates = function() {
+	/* could be module, could be state ui class */
+
+	this.update = function() {
 		for (const key in lns.anim.states) {
 			const state = lns.anim.states[key];
-			self.addStateUI(key, state, false);
+			const ui = self.panel[key] ? self.panel[key] : self.addUI(key, state, false);
+			for (const part in state) {
+				if (ui[part].value != state[part])
+					ui[part].value = state[part];
+			}
 		}
 	};
 
-	this.addStateUI = function(name, state, focus) {
-		const states = lns.anim.states;
-		const row = self.panel.addRow(`state-${name}`);
-		const title = new UIBlur({
-			value: name,
-			callback: function(value) {
-				if (!Object.keys(lns.anim.states).includes(value)) {
-					lns.anim.states[value] = state;
-					lns.anim.state = value;
-					lns.ui.faces.stateSelector.addOption(value);
-					lns.ui.faces.stateSelector.value = value;
-				}
-			}
-		})
-		self.panel.add(title, row);
-		if (focus) title.el.focus();
+	this.addUI = function(name, state, focus) {
+
+		const row = self.panel.addRow(name);
+		lns.anim.states[name] = state;
+		lns.ui.faces.stateSelector.addOption(name);
+
+		self.panel.add(new UILabel({
+			text: name
+		}), row);
 
 		self.panel.add(new UIBlur({
 			text: "Start",
@@ -31,7 +30,7 @@ function States() {
 			callback: function(n) {
 				state.start = +n;
 			}
-		}), row);
+		}), row, 'start');
 
 		self.panel.add(new UIBlur({
 			text: "End",
@@ -39,28 +38,32 @@ function States() {
 			callback: function(n) {
 				state.end = +n;
 			}
-		}), row);
+		}), row, 'end');
 
 		self.panel.add(new UIButton({
 			text: "x",
 			callback: function() {
-				delete lns.anim.states[title.value];
+				delete lns.anim.states[name];
 				self.panel.removeRow(row);
-				lns.ui.faces.stateSelector.removeOption(title.value);
+				lns.ui.faces.stateSelector.removeOption(name);
 				lns.anim.state = 'default';
+				lns.ui.faces.stateSelector.value = 'default';
 			}
 		}), row);
+		return row;
 	};
 
-	/* not DRY */
-	this.setState = function(state) {
-		
+	this.set = function(state) {
+		lns.anim.state = state;
 	};
 
-	this.createState = function() {
-		self.addStateUI('new state', { 
+	this.create = function() {
+		const name = prompt('Name?');
+		self.addUI(name, { 
 			start: lns.anim.currentFrame, 
 			end: lns.anim.currentFrame 
 		}, true);
+		lns.anim.state = name;
+		lns.ui.faces.stateSelector.value = name;
 	};
 }

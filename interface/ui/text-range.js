@@ -3,24 +3,23 @@ class UITextRange extends UICollection {
 		super(params);
 
 		this.callback = params.callback;
+		this.arguments = params.arguments;
 
 		this.textInput = new UIBlur({
-			id: `${params.id}-text`,
 			value: params.value,
 			callback: this.handler.bind(this)
 		});
 
 		this.range = new UIRange({
-			id: `${params.id}-range`,
 			value: params.value,
 			min: params.min,
 			max: params.max,
+			step: params.step,
 			callback: this.handler.bind(this)
 		});
-
 	}
 
-	getElem() {
+	get html() {
 		return [this.textInput.el, this.range.el];
 	}
 
@@ -32,7 +31,7 @@ class UITextRange extends UICollection {
 	}
 
 	update(value) {
-		this.callback(value);
+		this.callback(value, this.arguments);
 		this.textInput.value = value;
 		this.range.value = value;
 	}

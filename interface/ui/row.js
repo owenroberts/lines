@@ -4,11 +4,15 @@ class UIRow extends UICollection {
 		this.addClass('row');
 	}
 
-	add(ui) {
-		this.append(ui);
-	}
-
 	clear() {
+
+		/* remove keys */
+		for (const key in this) {
+			if (key !== undefined && key !== 'el') {
+				delete this[key];
+			}
+		}
+
 		while (this.el.firstChild) {
 			this.el.firstChild.value = null; /* prevent blur event */
 			this.el.removeChild(this.el.firstChild);

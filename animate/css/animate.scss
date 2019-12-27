@@ -1,10 +1,116 @@
 @import "../../interface/css/colors";
-@import "../../interface/css/lines";
+@import "../../interface/css/lines.css";
 
+$anim-color: lightgreen;
+$anim-select: green;
+$anim-off: darkgreen;
+
+$column-width: 40px;
 
 #draw #lines {
 	border: 1px solid $ui-color;
 	&:active, &:hover { cursor: crosshair; }
+}
+
+#fio-panel {
+
+	#title {
+		border: none;
+		font-size: 1.5em;
+		display: block;
+		margin-bottom: 0.5em;
+		border-bottom: 1px solid transparent;
+		flex: 100%;
+		text-align: left;
+		padding: 3px;
+		background-color: white;
+		&:focus {
+			outline: none;
+			border-bottom: 1px solid black;
+		}
+	}
+}
+
+#layers-panel {
+	// padding: 0;
+
+	input[type=color] {
+		width: auto;
+		flex: 0 1 40px;
+		height: 1.75em; /* temp fix til main color selector works */
+	}
+
+	.layer {
+		// max-width: 40px;
+
+		width: 100%;
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+
+		.tween {
+			margin: 0;
+			line-height: 1;
+			background-color: $anim-color;
+		}
+
+		.left, .right, .layer-toggle {
+			margin: 0;
+			background-color: $ui-color;
+			&:hover { background-color: $ui-select; }
+			&.off { background-color: $accent-two; }
+		}
+
+		.left, .right {
+			cursor: pointer;
+			line-height: 1;
+			max-width: max-content;
+			background-color: #9898ff;
+		}
+
+		.right {
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+		}
+
+		.left {
+			justify-self: end;
+			border-top-left-radius: 3px;
+			border-bottom-left-radius: 3px;
+		}
+		
+		.layer-toggle { 
+			cursor: pointer;
+		}
+
+	}
+}
+
+#frames-panel {
+
+	#frames {
+		height:auto;
+		padding: 0;
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.frame {
+		display: inline-block;
+		flex: 1 1 auto;
+		// min-width: 0;
+		max-width: $column-width;
+		padding: 1px;
+		background-color: $ui-color;
+		transition: background-color 100ms ease-in;
+		cursor: pointer;
+		&:hover { background-color: $ui-select; }
+		&.plus { background-color: $accent-two; }
+		&.plus:hover { background-color: $ui-highlight; }
+	}
+	
+	#current { background-color: $main-color !important; }
+	.selected { background-color: $accent-two !important; }
 }
 
 #draw-layers {

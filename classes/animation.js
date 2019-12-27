@@ -27,8 +27,29 @@ class Animation {
 		this.override = true;
 	}
 
+	set fps(fps) {
+		this._fps = +fps;
+		this.intervalRatio = this.lineInterval / (1000 / +fps);
+	}
+
+	get fps() {
+		return this._fps;
+	}
+
+	set lps(lps) {
+		this._lps = +lps;
+		this.lineInterval = 1000 / +lps;
+		this.intervalRatio = this.lineInterval / (1000 / this.fps);
+	}
+
+	get lps() {
+		return this._lps;
+	}
+
 	set frame(n) {
 		this.currentFrame = this.currentFrameCounter = n;
+		if (this.states.default.end != this.endFrame)
+			this.states.default.end = this.endFrame;
 	}
 
 	get frame4() {
@@ -38,8 +59,7 @@ class Animation {
 	get endFrame() {
 		return this.layers.length > 0 ?
 			Math.max.apply(Math, this.layers.map(layer => { return layer.f.e; }))
-			:
-			-1;
+			: 0;
 	}
 
 	get currentState() {
@@ -92,7 +112,7 @@ class Animation {
 		for (let i = 0, len = this.layers.length; i < len; i++) {
 			const layer = this.layers[i];
 			const drawing = this.drawings[layer.d];
-			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
+			if (this.currentFrame >= layer.startFrame && this.currentFrame <= layer.endFrame) {
 				this.rndr.s = 0;
 				this.rndr.e = drawing.length;
 
@@ -103,13 +123,13 @@ class Animation {
 				if (x) this.rndr.x += x;
 				if (y) this.rndr.y += y;
 
-				if (layer.a) {
-					for (let j = 0; j < layer.a.length; j++) {
-						const a = layer.a[j];
-						if (a.sf <= this.currentFrame && a.ef >= this.currentFrame) {
-							this.rndr[a.prop] = Cool.map(this.currentFrame, a.sf, a.ef, a.sv, a.ev);
-							if (a.prop == 's' || a.prop == 'e')
-								this.rndr[a.prop] = Math.round(this.rndr[a.prop]);
+				if (layer.t) {
+					for (let j = 0; j < layer.t.length; j++) {
+						const tween = layer.t[j];
+						if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
+							this.rndr[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
+							if (tween.prop == 's' || tween.prop == 'e')
+								this.rndr[tween.prop] = Math.round(this.rndr[tween.prop]);
 						}
 					}
 				}
@@ -201,14 +221,17 @@ class Animation {
 		}
 		
 		this.layers = json.l;
-		if (json.s) this.states = json.s;
+
+		for (const key in json.s) {
+			this.states[key] = json.s[key];
+		}
+		this.states.default.end = this.endFrame;
 
 		this.intervalRatio = this.lineInterval / (1000 / json.fps);
-		// if (this.states.default) this.states.default.end = this.endFrame;
 
 		if (json.mc) this.mixedColors = json.mc; /* hmm .. over ride? */
 
-		this.isPlaying = true;
+		// this.isPlaying = true; /* off for animate ? */
 
 		if (callback) callback(json);
 		if (this.onLoad) this.onLoad();
@@ -222,18 +245,25 @@ class Animation {
 
 /* questions 
 	- use A/Anim to make Animation availabe in contexts?
-	- do i need canvas reference?
-		- for lines player ...
-	- do i need ctx reference?
-		- yes for each probably
-
-	- xy, width height
-		- set get in each class extension ??
-		- remove for now
-
+		- only really in game
+		- maybe Animation and GameAnimation
+		- or Sprite Animation
+		- Anim is not good ... 
 	rndr	
 		- wierd to rndr as only abbreivation?
+		- yes used so often its okay to abbreviate
 		- animate just rests every time ...
+			- do i need rndr at all, just layer values and over ride?
+			- yeah as is rndr is stupid because it never doesn't reset the values
+				- what were issues with that?
+				- 0 undefined at first but there was others ... 
+				- using layers instead of frames makes this better
+				- maybe keep track of layers chaning?
+				- that happens with currentFrame between endFrame startFrame
+				- think more on this
+			- otherwise just use const
+				const e = over.e !== undefined ? over.e : layer.e;
+			- do some performance tests with garden
 
 
 	anim/game
@@ -241,23 +271,12 @@ class Animation {
 		- loop is assumed for other anims ...
 		- random frames prob only in game
 
-	states 
-		- states are separate info unless used in play.js
-		- pre update?
-
-	override - 
-		- play/game only, add to animate anyway?
-		- middle func ... 
-
 	load -- issues 
 		- game saves loaded sprites, not necessary for others
 		- game setting sprite size
 		- whole separate loader class?
-
-	draw 
-		- xy arguments? only needed for game ...
-
 	pre/post draw, needed but should be handled by sub classes?
+	- onupdate - on draw
 
 	update
 		- comes at the end for game, beginning for anim and animate/play
@@ -267,19 +286,11 @@ class Animation {
 		- more for interface stuff ...
 		- only useful method isInFrame
 		- mm ... start frame, end frame ... 
+		- anim one is useful but probab not necessary for game
 
 	range class
 		- start and end
 		- end can't be smaller than start
 		- what about saving data???  method ... 
-
-	performance
-		- currently always resetting ...
-
-	animation 
-		- use sub class?
-
-	play
-		- is texture just make a sub class for that ...
-
+		- is this actually usedful? 
 */

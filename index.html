@@ -29,86 +29,45 @@
 
 <!-- 
 
-- new interface
-	/*
-		interface.js currently contains the play back and update interface functions ...
-	*/
 
+after cssF
+- just lns.anim? and change "active layer" ... 
+	- fuck me this makes a lot more sense ... 
+- rewrite anim.plusFrame bullshit - just make it a button
+	- piskel, clone/new frame 
+- "masonry" layout
+- still unclear on what is module vs ui
+	- ui have their own panel so they need to have 'ui' as module
+	- loaded with interface, panels don't work until after load (like modules)
+- do i really need interface uiClasses - yes
+- try a js bundler or es6 modules again
+	- alias could be useful for app/lns/edi
+- modules paths instead of structural ... 
+	- will not be as organized but then can be panel independent ...
+- ah fuck should i really rewrite modules as class?
+- toggle changing size is annoying
+- consolidate lines.js with setup.js
+- even draw is a panel ??? - panels are multiple panel sections
+- fancy frame scrolling ? prob not worth the time
+- headless doesn't really work when they're not block
+- layer saving probably need better props, not clean
+- ui - technically don't even need this.mouseInterval ... that's dangerous?
+- fromModule vs callback - save 100 lines of interface.json, vs rewriting and using if statements
 
-- issues
-	- general issue of setting ui values when various properties changes (lines properties good example)
-		- mutation observer work in the case of elements like canvas with width
-		- moving them to callback in ui files
-		- setting with ui.faces ... 
-		- getters??? setters???
 
 - thinkers
 	- rndr object in layer { r, n, w, v } ... xy?
-	- persistent layer interface? key commands?
-	- object for layers and drawings with hash keys
-	- frames and layers??
 	- blender like window system????
-	- frames get their own canvas display
-	- support for multiple line widths ... 
-	- layers display confusing because only see that frame ... 
-	- draing class?
 	- better layer highlighting?
 	- editor own directory
+	- range class?
 
 - possible features
 	- change onion skin color
 	- option to loop back to beginning of frames, option to stop at end, option not to create frames beyond last frame
 	- center lines canvas in larger area
 	- set panel order more sophisticated - live with the idiosyncracy for now ... 
-	- panel use uis
-	- styling interface
-
-- layers, adding drawings
-	- new added drawing always make new layers if non contiguous with original layer
-	- need to check for multiple layers - not high priority tho
-
-- interface 
-	- go back later
-		- canvas, capture references fio ui
-			- capture is separate module? or part of fio?
-			- kind of fine either way?
-			- leads into bigger classes, animation etc. questions
-			- same with fit frames to canvas
-		- draw events, reset defaults
-			- affiliate functions? idk how to do this, maybe not worth it
-		- layer 
-			- add/use color btns
-		- fio setting interface values with width/height/fps/lps on open
-			- don't really care can fix later
-			- callback on animation load
-
-
-	- interface.faces with sub modules interfaces.faces.drawingInterface.seg num bla
-	- ui interfaces, set vs setValue - set used by display and text for setting text and placeholder ...
-
-- play rndr - is this is the new way to do it?
-	- maybe for performance, play and game, for animate, doesn't matter as much
-	- use lines player as animation class for game?
-	- game separates the canvas/render from animation ... 
-	- animation in games should use rndr, would be nice to have ONE draw/render func for all three 
-
-- "animation" class with layers, drawings, etc?
-- range slider for offset ? 
-	
-- old color values need #
-- add drawings if fucked up
-- handler undefined interface 161
-- bg color wtf
-- saved wrong color ffffff
-- frame layer toggled in file
-- clear settings doesn't really work if settings just gets saved on reload
-- layer resetting not working
-- display layer in layers panel? or drawing
-- plus frame key command doesn't disappear
-- toggle just toggles values? no callback?
-- open with same drawing 
-- separate settings for drawing lines ? 
-
+	- range slider for offset ? 
 
 - game notes
 	- item has text label, is that just relevant to idtio?
@@ -123,29 +82,11 @@
 	- loading module???
 		- load ui, map
 	- user class or module
-	- 
 
 - game thoughts 
 	- animation class doesn't automatically load src, maybe need protocol for this
 	- combine loaded json and file
 	- canvas.getContext - still necessary?
-
-idtio - lines 
-- render module
-- no more drawing indexes, random keys, or name drawing
-
-- draw/data ui code
-- generic update ui function
-
-- system for adding and removing ui components - frames, layers, drawings ... 
-
-
-- layers issues for later 
-	- copy with frame between then add to previous frame, makes two layers ... not that big of a deal, not super common
-	- pasting on multiple frames adds consecutive layers ...
-
-- layer display design
-	- max width for one layer
 
 - ios safari
 	- un focus buttons - not focus, hover - worry about this later ...
@@ -161,7 +102,7 @@ idtio - lines
 	- game
 		- loading doesn't wait for sprites to actually load
 			- sprites jump on load
-		- 
+
 	- game editor 
 		- fill page with game, floating ui?
 		- empty lines filling up tool menus
@@ -171,50 +112,24 @@ idtio - lines
 			- collapsible hierarcy ie unity
 		- key command to "add" texture - better word for texture?
 	- animate
-		- title saving on enter key command thing
-		- blur event issue
-		- lineWidth not applied from settings to actual drawing
-		- addColor error, inconsistent, loading time
-		- consolidate "update interface"
-		- copy/paste/cut fucked up still
-		- lines props dont change with layers toggled
-		- too many layers visible in panel
-		- cut top/bottom layer not working correctly
 		- frame number switches when switching tabs (number key commands)
-		- capture seconds of video
+		- capture seconds of videos
 		- reset defaults error / palette error
 		- item/texture edit go to frame number
 		- drawing that doesnt have layer ...
-		- rndr module?
-		- lots of layer toggle issues
 		- edit palette
-		- generate/load/save palettes
 		- custom ui panel
-		- states panel - state editor, naming
-		- still working on decent frame counting ... 
 		- video capture countdown
-		- visual layer editor
 		- saving empty layers .. ?
-	- interface
-		- big set/update version ...
-		- range class?
 
-10.6.2019
-- fixing layers/other interfaces so they're not being deleted and rebuilt
-- this maybe conflicts with making canvas based layers system
-- making ui values that are automatically updated more easily
-- rendering in lines is very choppy at the moment ....  
 
 todo/interesting
 - item window for game
 - collapsible hierarchy for game
 	- hide textures, items, or instances
 	- groups?
-
 - ui layouts for layers
 - game/editor delayed loading
 - game item/class render toggle 
 
-other branch
-- canvas ui for layers
  -->

@@ -3,16 +3,17 @@ class UIColor extends UIInput {
 		super(params);
 		this.el.type = "color";
 		this.colors = [];
+		this.arguments = params.arguments;
 
 		this.el.addEventListener('input', ev => {
 			this.current = ev.target.value;
-			this.callback(ev.target.value);
+			this.callback(ev.target.value, this.arguments);
 		});
 
 		this.el.addEventListener('focus', ev => {
 			this.addColor(this.current);
 		});
-
+		this.palette = new UICollection();
 	}
 
 	addColor(color) {
@@ -24,18 +25,16 @@ class UIColor extends UIInput {
 				css: { "background": color },
 				value: color,
 				callback: function() {
-					self.callback(color);
+					self.callback(color, self.arguments);
 					self.value = color;
 				}
 			});
-			
-			/* only reference like this in elements */
-			this.el.parentNode.appendChild(btn.el);
+			self.palette.append(btn);
 		}
 	}
 
 	update(value) {
-		this.callback(value);
+		this.callback(value, this.arguments);
 		this.value = value;
 	}
 
@@ -43,5 +42,9 @@ class UIColor extends UIInput {
 		this.addColor(_value);
 		this.current = _value;
 		super.value = _value;
+	}
+
+	get html() {
+		return [this.el, this.palette.el];
 	}
 }

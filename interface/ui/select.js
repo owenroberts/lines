@@ -2,7 +2,7 @@ class UISelect extends UIElement {
 	constructor(params) {
 		params.tag = "select";
 		super(params);
-		this.setOptions(params.options, params.selected);
+		this.setOptions(params.options || [], params.selected);
 		
 		this.el.addEventListener('change', function(ev) {
 			params.callback(ev.target.value);

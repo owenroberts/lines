@@ -10,6 +10,7 @@ class UIElement {
 			this.el.style[prop] = params.css[prop];
 		}
 
+		if (params.id !== undefined) this.el.id = params.id;
 		if (params.class) this.addClass(params.class);
 	}
 
@@ -25,12 +26,12 @@ class UIElement {
 		return this.el.value;
 	}
 
-	handler() {
-		this.callback();
+	get position() {
+		return { x: this.el.getBoundingClientRect().x, y: this.el.getBoundingClientRect().y };
 	}
 
-	getElem() {
-		return this.el;
+	handler() {
+		this.callback();
 	}
 
 	addClass(_class) {
@@ -42,13 +43,13 @@ class UIElement {
 	}
 
 	setKey(key, text) {
-		this.el.title = `${text ? text : ''} (${key})`;
+		this.el.title = `${text ? text : ''} ~ ${key}`;
 		this.el.addEventListener('mouseenter', this.onPress.bind(this));
 		this.el.addEventListener('mouseleave', this.onRelease.bind(this));
 	}
 
 	onPress(triggerRelease) {
-		toolTip.text = `~ ${this.el.title}`;
+		toolTip.text = `${this.el.title}`;
 		toolTip.addClass('visible');
 		if (triggerRelease === true) setTimeout(this.onRelease.bind(this), 400);
 	}

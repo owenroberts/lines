@@ -12,15 +12,27 @@ body {
 	-webkit-user-select: none;
 	user-select: none;
 	touch-action: manipulation;
+	color: $text-color;
 }
 
-button:focus { outline: none; }
+select, input {
+	color: $text-color;
+}
 
-select { margin-top: 0.25em; }
+button:focus, 
+select:focus { 
+	outline: none; 
+}
+
+select {
+	vertical-align: middle;
+	height: 1.75em;
+}
 
 #tool-tip {
 	position: fixed;
-	right: 20px;
+	right: 1em;
+	top: 1em;
 	background: $accent-two;
 	border-radius: 3px;
 	font-size: 1em;
@@ -47,12 +59,11 @@ select { margin-top: 0.25em; }
 			padding-right: 0;
 		}
 	}
-	#tools { flex: 1; }
+	#interface { flex: 1; }
 }
 
 .btn {
 	display: inline-block;
-	margin-top: 0.5em;
 	background-color: $ui-color;
 	padding: 0 0.5em;
 	border-radius: 3px;
@@ -60,31 +71,18 @@ select { margin-top: 0.25em; }
 		background: $accent-two;
 		cursor: pointer;
 	}
+	&:active {
+		background-color: $ui-highlight;
+	}
 	transition: background-color 150ms ease-in;
 	line-height: 1.75;
+	vertical-align: middle;
 	white-space: nowrap;
 	&.press { background-color: $accent-two; }
 }
 
-#nav {
-	#title {
-		border: none;
-		font-size: 1.5em;
-		display: block;
-		margin-bottom: 0.5em;
-		border-bottom: 1px solid transparent;
-		width: 100%;
-		&:focus {
-			outline: none;
-			border-bottom: 1px solid black;
-		}
-	}
-
-	label { margin-right: 0.25em; }
-}
-
 #panels {
-	margin-top: 0.5em;
+	margin-top: 0.25em;
 	display: flex;
 	flex-wrap: wrap;
 }
@@ -92,13 +90,17 @@ select { margin-top: 0.25em; }
 /* toggle */
 .off { background-color: $ui-select; }
 
-.menu-panel {
+.panel {
 	flex-basis: 120px;
 	flex-grow: 1;
 	max-width: 160px;
 	order: 0;
-	border-top: 1px solid $ui-color;
-	border-right: 1px solid $ui-color;
+
+	background-color: $bg-color;
+	border-radius: 3px;
+	margin: 3px;
+	margin-left: 0;
+
 	padding: 0.5em;
 	overflow: hidden;
 	position: relative;
@@ -107,43 +109,15 @@ select { margin-top: 0.25em; }
 	&.undocked { display: none; }
 	&.closed { height: 25px; }
 
-	label { 
-		margin-bottom: 1em; 
-		display: block;
+	&.block {
+		min-width: 100%;
+		width: max-content;
 	}
+
 	.row label { margin-bottom: 0; }
 
-	.toggle, .order, .undock-btn {
-		display: inline-block;
-		position: absolute;
-		right: 34px;
-		top: 0;
-		left: 0;
-		text-align: right;
-		cursor: pointer;
-		font-size: 14px;
-		font-weight: 100;
-		&:hover { background: $accent-two; }
-		opacity: 0.5;
-		border-top-right-radius: 3px;
-		border-bottom-right-radius: 3px;
-
-		&.off { background-color: inherit; }
-	}
-
-	.undock-btn {
-		right: 18px;
-		left: auto;
-	}
-
-	.order {
-		font-size: 1em;
-		right: 2px;
-		left: auto;
-	}
-
 	.row {
-		margin-bottom: 0.5em;
+		margin-bottom: 0.25em;
 		display: flex;
 		flex-wrap: wrap;
 		
@@ -153,7 +127,7 @@ select { margin-top: 0.25em; }
 			white-space: nowrap;
 			margin-right: 0.25em;
 			margin-top: 0.25em;
-			flex: 0 1 12%;
+			// flex: 0 1 12%;
 			&.block {
 				flex: auto;
 				text-align: left;
@@ -183,49 +157,83 @@ select { margin-top: 0.25em; }
 	.btn {
 		padding: 0 0.25em;
 		margin-right: 3px;
+		margin-top: 0.5em;
 	}
-}
 
-#frames {
-	height:auto;
-	padding: 0;
-	width: auto;
-	display: grid;
-    grid-template-columns: repeat(auto-fill, 24px);
-    grid-template-rows: max-content max-content;
-    
-    p {
-    	margin: 0;
-    	grid-column: 1 / span 2;
-    }
-	
-	.frame, .plus, #current {
-		border-radius: 3px;
-		display: inline-block;
-		background-color: $ui-color;
-		transition: background-color 100ms ease-in;
-		margin-right: 1px;
-		margin-top: 1px;
-		padding: 0.5em;
-		cursor: pointer;
-		&:hover { background-color: $ui-select; }
+	select { margin-top: 0.25em; }
+
+	.header {
+		label {  font-size: 12px; }
+		span, label { margin-top: 0; }
+
+		.undock-btn {
+			align-self: flex-start;
+			margin-left: auto;
+		}
+
+		.order-btn {
+			align-self: flex-start;
+		}
+
+		.toggle, .order-btn, .undock-btn, .block-btn, .headless-btn {
+			display: inline-block;
+			cursor: pointer;
+			font-size: 12px;
+			&:hover { background: $accent-two; }
+			&.off { background-color: inherit; }
+		}
+
+		.block-btn {
+			align-self: flex-start;
+			font-size: 11px;
+		}
 	}
-	
-	#current { background-color: $main-color !important; }
-	.selected { background-color: $accent-two !important; }
+
+	&.headless {
+		padding: 0;
+		border-radius: 0;
+		margin: 0;
+
+		.btn, input {
+			// margin-top: 0;
+		}
+
+		.header {
+			margin-bottom: 0;
+			height: 0px;
+			.toggle, .order-btn, .undock-btn, .block-btn {
+				display: none;
+			}
+			label {
+				margin-left: auto;
+				font-size: 10px;
+			}
+		}
+
+		
+	}
+
 }
 
 .modal {
 	position: fixed;
-    background: white;
-    padding: 1em;
-    border-radius: 1em;
-    border: 5px solid $main-color;
-    outline: 10px dotted $accent-two;
-    top: 50%;
-    right: 50%;
-    width: 400px;
-    * { margin: 0 1em; }
+	background: white;
+	padding: 0.5em;
+	border-radius: 1em;
+	border: 2px solid $main-color;
+	box-shadow: 1px 1px 4px $ui-highlight;
+	
+	max-width: 400px;
+	* { margin-right: 1em; }
+
+	input { max-width: 40px; }
+
+	display: flex;
+	flex-wrap: wrap;
+
+	label:first-child {
+		flex: 100%;
+	}
 }
 
 .mobile {
