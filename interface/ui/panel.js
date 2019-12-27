@@ -32,7 +32,7 @@ class UIPanel extends UICollection {
 			type: "order-btn",
 			callback: () => {
 				this.order = +this.el.style.order + 1;
-				orderBtn.text = this.order;
+				this.orderBtn.text = this.order;
 			}
 		});
 		this.header.append(this.orderBtn);

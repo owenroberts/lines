@@ -109,26 +109,17 @@ function Files(params) {
 
 		lns.anim.drawings = [];
 		lns.anim.layers = [];
-		lns.anim.loadData(data);
-		
-		// set layers to classes 
-		for (let i = 0; i < data.l.length; i++) {
-			lns.anim.layers[i] = new Layer(data.l[i]);
-		}
-
-		/* set interface values  */
-
-		// was handled with mutation observer ...
-		// should these be handled by uis with update?
-		lns.canvas.setWidth(data.w);
-		lns.canvas.setHeight(data.h);
-		
-		if (data.bg) lns.canvas.setBGColor(data.bg);
-		// lns.render.reset(); why here? 
-
-		if (callback) callback(data, params); 
-		/* this is just lns.ui.fio.update ? 
-			starting to seem that way ... */
+		lns.anim.loadData(data, function() {
+			// set layers to classes 
+			for (let i = 0; i < data.l.length; i++) {
+				lns.anim.layers[i] = new Layer(data.l[i]);
+			}
+			lns.canvas.setWidth(data.w);
+			lns.canvas.setHeight(data.h);
+			if (data.bg) lns.canvas.setBGColor(data.bg);
+			lns.draw.reset(); 
+			if (callback) callback(data, params); 
+		});
 	};
 
 	/* shift o */

@@ -18,9 +18,7 @@ function States() {
 
 		const row = self.panel.addRow(name);
 		lns.anim.states[name] = state;
-		lns.anim.state = name;
 		lns.ui.faces.stateSelector.addOption(name);
-		lns.ui.faces.stateSelector.value = name;
 
 		self.panel.add(new UILabel({
 			text: name
@@ -60,9 +58,12 @@ function States() {
 	};
 
 	this.create = function() {
-		self.addUI(prompt('Name?'), { 
+		const name = prompt('Name?');
+		self.addUI(name, { 
 			start: lns.anim.currentFrame, 
 			end: lns.anim.currentFrame 
 		}, true);
+		lns.anim.state = name;
+		lns.ui.faces.stateSelector.value = name;
 	};
 }

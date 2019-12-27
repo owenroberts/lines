@@ -10,10 +10,6 @@ function setupAnimateInterface(ui) {
 		ui.faces.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
 		ui.faces.fps.value = data.fps;
 
-		for (const state in data.s) {
-			ui.faces.stateSelector.addOption(state);
-		}
-
 		ui.faces.width.value = data.w;
 		ui.faces.height.value = data.h;
 

@@ -634,7 +634,18 @@
 							"value": 0,
 							"prompt": "Go To Frame"
 						}
-					},
+					}
+				]
+			}
+		]
+	},
+	"frames": {
+		"label": "Frames",
+		"uis": [
+			{	
+				"module": "ui",
+				"sub": "play",
+				"list": [
 					{
 						"type": "UIList",
 						"params": {

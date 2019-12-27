@@ -73,14 +73,14 @@
   cursor: pointer;
 }
 
-#play-panel #frames {
+#frames-panel #frames {
   height: auto;
   padding: 0;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
 }
-#play-panel .frame {
+#frames-panel .frame {
   display: inline-block;
   flex: 1 1 auto;
   max-width: 40px;
@@ -89,19 +89,19 @@
   transition: background-color 100ms ease-in;
   cursor: pointer;
 }
-#play-panel .frame:hover {
+#frames-panel .frame:hover {
   background-color: gray;
 }
-#play-panel .frame.plus {
+#frames-panel .frame.plus {
   background-color: #ffddff;
 }
-#play-panel .frame.plus:hover {
+#frames-panel .frame.plus:hover {
   background-color: #FF79FF;
 }
-#play-panel #current {
+#frames-panel #current {
   background-color: #bee4ff !important;
 }
-#play-panel .selected {
+#frames-panel .selected {
   background-color: #ffddff !important;
 }
 

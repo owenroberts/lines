@@ -29,70 +29,6 @@
 
 <!-- 
 
-11.6.2019
-- test layers / drawings
-	- loading an animation
-		- animation vs environment
-		- lines - nrvw, c
-		- canvas - bgColor, width, height, lineWidth
-			- lineWidth is renderer level (at least for now)
-			- canvas color?
-		- anim - fps, 
-		- states, drawings, layers
-	- combine appLoad, appSave with files ... 
-		- settings are mostly for the environment
-		- ven diagram with files 
-			- all settings are env
-			- files effects anim and env ... 
-			- current system makes sense, anim loads anim, fio updates interface, appLoad does settings/environment
-	- changing layer values, toggled layers
-		- nrvwc
-		- just updating toggled layers, don't need to NOT update current values
-		- layer toggle is fuuucked
-			- try just changing the color but don't use prevColor
-			- try rendering little squares at each vector, or every third or something ... 
-		- can't set properties based on values - but prob get updated from settings/load
-		- props don't take on the values of toggled layer
-			- this is helpful to see what the value are ...
-			- need to use "faces" code wise ... better way, better way??
-			- complicated by selecting more than one layer
-			- return to previous state before ?? 
-			- over rides properties of current lines ... 
-	- set ui that still exist
-		- environment - draw, bg image, brush properties
-		- animation - fps
-	- toggle set ui ... 
-	- canvas/env values vs anim values/props
-- making ui values that are automatically updated more easily
-	- env props, set and then updated by settings (appLoad)
-	- anim props, set by loading data or default values 
-	- mouseInterval
-		- either needs setter in module that updates ui
-		- or
-		- prop/faces in lns.ui
-		- what if every ui has a prop, then its not if
-			- are all "faces" separate (yes, in faces)
-			- good to decide that faces are available for update
-		- part of it is looping through faces, not really saving THAT much code
-		- part of it is easily adding properties
-		- as is is kind of ... fine?
-		- technically don't even need this.mouseInterval ... that's dangerous?
-- panel tied to module?
-	- k instead of panel? - still have to go lns.ui.
-	- drawings, layers, palette, states
-	- or just lns.ui.darwings.panel
-	- this isn't the end of the world
-	- but do we need lns.ui.panels - YES for settings recreating interface
-- fromModule just callback?
-	- don't have callback
-		- toggle onion, toggle bg
-		- UIRow, UIList
-	- have more than callback
-		- canvas height and width, placeholder
-		- bgColor - value
-	- saving some lines in interface.json vs adding if statement ... 
-	- not important enough revisit later 
-
 after cssF
 - just lns.anim? and change "active layer" ... 
 	- fuck me this makes a lot more sense ... 
@@ -114,93 +50,23 @@ after cssF
 - fancy frame scrolling ? prob not worth the time
 - headless doesn't really work when they're not block
 - layer saving probably need better props, not clean
+- ui - technically don't even need this.mouseInterval ... that's dangerous?
+- fromModule vs callback - save 100 lines of interface.json, vs rewriting and using if statements
 
-
-- load order - just info 
-	- loads modules
-	- loads interface
-	- load settings
-	- loads animation
-	- updates interface with animation
-
-- loading update
-	- layers are just data in playback vs classes in animate
-
-- new interface
-	- interface.js currently contains the play back and update interface functions ...
-	- system for adding and removing ui components - frames, layers, drawings ... 
-
-- issues
-	- general issue of setting ui values when various properties changes (lines properties good example)
-		- mutation observer work in the case of elements like canvas with width
-		- moving them to callback in ui files
-		- setting with ui.faces ... 
-		- getters??? setters???
-	- old color values need #
 
 - thinkers
 	- rndr object in layer { r, n, w, v } ... xy?
-	- persistent layer interface? key commands?
-	- object for layers and drawings with hash keys
-	- frames and layers??
 	- blender like window system????
-	- frames get their own canvas display
-	- support for multiple line widths ... 
-	- layers display confusing because only see that frame ... 
-	- drawing class?
 	- better layer highlighting?
 	- editor own directory
+	- range class?
 
 - possible features
 	- change onion skin color
 	- option to loop back to beginning of frames, option to stop at end, option not to create frames beyond last frame
 	- center lines canvas in larger area
 	- set panel order more sophisticated - live with the idiosyncracy for now ... 
-	- panel use uis
-	- styling interface
 	- range slider for offset ? 
-	- no more drawing indexes, random keys, or name drawing
-
-- layers, adding drawings
-	- new added drawing always make new layers if non contiguous with original layer
-	- need to check for multiple layers - not high priority tho
-
-- interface 
-	- go back later
-		- canvas, capture references fio ui
-			- capture is separate module? or part of fio?
-			- kind of fine either way?
-			- leads into bigger classes, animation etc. questions
-			- same with fit frames to canvas
-		- draw events, reset defaults
-			- affiliate functions? idk how to do this, maybe not worth it
-		- layer 
-			- add/use color btns
-		- fio setting interface values with width/height/fps/lps on open
-			- don't really care can fix later
-			- callback on animation load
-
-
-	- interface.faces with sub modules interfaces.faces.drawingInterface.seg num bla
-	- ui interfaces, set vs setValue - set used by display and text for setting text and placeholder ...
-
-- play rndr - is this is the new way to do it?
-	- maybe for performance, play and game, for animate, doesn't matter as much
-	- use lines player as animation class for game?
-	- game separates the canvas/render from animation ... 
-	- animation in games should use rndr, would be nice to have ONE draw/render func for all three 
-	
-- add drawings if fucked up
-- handler undefined interface 161
-- bg color wtf
-- saved wrong color ffffff
-- frame layer toggled in file
-- clear settings doesn't really work if settings just gets saved on reload
-- display layer in layers panel? or drawing
-- plus frame key command doesn't disappear
-- toggle just toggles values? no callback?
-- open with same drawing 
-- separate settings for drawing lines ? 
 
 - game notes
 	- item has text label, is that just relevant to idtio?
@@ -215,7 +81,6 @@ after cssF
 	- loading module???
 		- load ui, map
 	- user class or module
-	- 
 
 - game thoughts 
 	- animation class doesn't automatically load src, maybe need protocol for this
@@ -223,17 +88,12 @@ after cssF
 	- canvas.getContext - still necessary?
 
 
-- layers issues for later 
-	- copy with frame between then add to previous frame, makes two layers ... not that big of a deal, not super common
-	- pasting on multiple frames adds consecutive layers ...
-
 - ios safari
 	- un focus buttons - not focus, hover - worry about this later ...
 	- touch event type, stylus or direct
 	- hidable menu
 	- custom menu with added buttons that are large
 	- mobile styles use Cool.mobilecheck
-
 	- saving files with names/extension - ios issue
 	- always airdrop - not doable
 
@@ -241,7 +101,6 @@ after cssF
 	- game
 		- loading doesn't wait for sprites to actually load
 			- sprites jump on load
-		- 
 	- game editor 
 		- fill page with game, floating ui?
 		- empty lines filling up tool menus
@@ -251,31 +110,15 @@ after cssF
 			- collapsible hierarcy ie unity
 		- key command to "add" texture - better word for texture?
 	- animate
-		- title saving on enter key command thing
-		- lineWidth not applied from settings to actual drawing
-		- consolidate "update interface"
-		- copy/paste/cut fucked up still
-		- lines props dont change with layers toggled
-		- too many layers visible in panel
-		- cut top/bottom layer not working correctly
 		- frame number switches when switching tabs (number key commands)
-		- capture seconds of video
+		- capture seconds of videos
 		- reset defaults error / palette error
 		- item/texture edit go to frame number
 		- drawing that doesnt have layer ...
-		- rndr module?
-		- lots of layer toggle issues
 		- edit palette
-		- generate/load/save palettes
 		- custom ui panel
-		- states panel - state editor, naming
-		- still working on decent frame counting ... 
 		- video capture countdown
-		- visual layer editor
 		- saving empty layers .. ?
-	- interface
-		- big set/update version ...
-		- range class?
 
 
 todo/interesting
