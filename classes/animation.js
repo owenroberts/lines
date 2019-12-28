@@ -161,16 +161,35 @@ class Animation {
 					const v = new Cool.Vector(e.x, e.y);
 					v.subtract(s);
 					v.divide(this.rndr.n);
-					this.ctx.moveTo(
+
+					const radius = 5;
+
+					this.ctx.beginPath();
+					this.ctx.arc(
 						this.rndr.x + s.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x, 
-						this.rndr.y + s.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
-					);
+						this.rndr.y + s.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y, 
+						radius, 0, 2 * Math.PI, false);
+					this.ctx.fillStyle = this.rndr.c;
+					this.ctx.fill();
+					
+					// this.ctx.moveTo(
+					// 	this.rndr.x + s.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x, 
+					// 	this.rndr.y + s.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
+					// );
+					
 					for (let k = 0; k < this.rndr.n; k++) {
 						const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
-						this.ctx.lineTo( 
+						// this.ctx.lineTo( 
+						// 	this.rndr.x + p.x + v.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x,
+						// 	this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
+						// );
+
+						this.ctx.beginPath();
+						this.ctx.arc(
 							this.rndr.x + p.x + v.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x,
-							this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
-						);
+							this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y,
+							radius, 0, 2 * Math.PI, false);
+						this.ctx.fill();
 					}
 
 					if (this.ctx.strokeStyle != this.rndr.c && this.mixedColors)
