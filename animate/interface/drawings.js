@@ -43,31 +43,41 @@ function Drawings() {
 							this stops existing when updating interface */
 					}
 
+					// console.log(i);
 					self.panel.drawings.append(new UIToggle({
 						text: i,
 						isOn: inFrame,
 						callback: function() {
 							let layer = self.getLayer(i);
-							if (layer) {
-								if (layer.isInFrame(lns.anim.currentFrame)) {
-									layer = layer.removeIndex(lns.anim.currentFrame);
-									if (!layer) lns.ui.layers.remove(i);
-								} else {
+
+							/* add */
+							if (!this.isOn) {
+								if (layer) {
 									layer = layer.addIndex(lns.anim.currentFrame);
 									if (lns.anim.layers.indexOf(layer) == -1) {
-										lns.anim.layers.push(layer);
+										lns.anim.layers.splice(lns.anim.layers.length - 1, 0, layer);
 									}
+								} else {
+									layer = new Layer({
+										...props,
+										d: i,
+										f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
+									});
+									lns.anim.layers.splice(lns.anim.layers.length - 1, 0, layer);
 								}
 							} else {
-								/* fuck */
-								// console.log(props); /* save in drawing? */
-								layer = new Layer({
-									...props,
-									d: i,
-									f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame },
-								});
-								// lns.anim.layers.unshift(layer);
-								lns.anim.layers.splice(lns.anim.layers.length - 1, 0, layer);
+								if (layer) {
+									if (layer.isInFrame(lns.anim.currentFrame)) {
+										const newLayer = layer.removeIndex(lns.anim.currentFrame);
+										if (newLayer) {
+											if (lns.anim.layers.indexOf(layer) == -1) {
+												lns.anim.layers.splice(lns.anim.layers.length - 1, 0, layer);
+											}
+										} else {
+											lns.ui.layers.remove(lns.anim.layers.indexOf(layer));
+										}
+									} 
+								} 
 							}
 							
 							lns.ui.layers.update();

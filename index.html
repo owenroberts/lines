@@ -29,21 +29,23 @@
 
 <!-- 
 
+2.3.2020
+- lots of issues with layers ui, repeated layers, missing layers, selecting, adding more frames
+	- deleted layers not removed
+	- adding and removing drawings all fucked up
+- insert with the current stuff
+- width of layers doesnt change
+- key command for copy next paste
+- clicking layer moves frame to beginning of layer if not already
+- layer saved with debug color ...
 
 after cssF
-- just lns.anim? and change "active layer" ... 
-	- fuck me this makes a lot more sense ... 
-- rewrite anim.plusFrame bullshit - just make it a button
-	- piskel, clone/new frame 
 - "masonry" layout
 - still unclear on what is module vs ui
 	- ui have their own panel so they need to have 'ui' as module
 	- loaded with interface, panels don't work until after load (like modules)
-- do i really need interface uiClasses - yes
 - try a js bundler or es6 modules again
 	- alias could be useful for app/lns/edi
-- modules paths instead of structural ... 
-	- will not be as organized but then can be panel independent ...
 - ah fuck should i really rewrite modules as class?
 - toggle changing size is annoying
 - consolidate lines.js with setup.js
@@ -53,6 +55,9 @@ after cssF
 - layer saving probably need better props, not clean
 - ui - technically don't even need this.mouseInterval ... that's dangerous?
 - fromModule vs callback - save 100 lines of interface.json, vs rewriting and using if statements
+
+- splitting or cloning multiple layers, tweens
+	- meta layers?
 
 
 - thinkers

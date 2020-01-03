@@ -5,8 +5,48 @@ class UITween extends UICollection {
 		this.tween = tween;
 		
 
-		this.label = new UILabel({
-			text: tween.prop
+		this.label = new UIButton({
+			text: tween.prop,
+			callback: () => {
+				const modal = new UIModal('Edit Tween', lns, this.label.position, function() {
+					lns.ui.layers.update();
+				});	
+
+				/* not DRY maybe make an animate class tween-modal */
+
+				modal.add(new UILabel({ text: 'Start Frame:' }));
+				modal.add(new UIBlur({
+					value: tween.sf,
+					callback: function(value) {
+						tween.sf = +value;
+					}
+				}));
+
+				modal.add(new UILabel({ text: 'End Frame:' }));
+				modal.add(new UIBlur({
+					value: tween.ef,
+					callback: function(value) {
+						console.log(tween);
+						tween.ef = +value;
+					}
+				}));
+
+				modal.add(new UILabel({ text: 'Start Value:' }));
+				modal.add(new UIBlur({
+					value: tween.sv,
+					callback: function(value) {
+						tween.sv = +value;
+					}
+				}));
+
+				modal.add(new UILabel({ text: 'End Value:' }));
+				modal.add(new UIBlur({
+					value: tween.ev,
+					callback: function(value) {
+						tween.ev = +value;
+					}
+				}));
+			}
 		});
 		this.label.addClass('tween');
 

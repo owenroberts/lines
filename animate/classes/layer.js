@@ -4,7 +4,7 @@ class Layer {
 		this.x =  params.x || 0;
 		this.y =  params.y || 0;
 		this.f =  params.f;
-		this.t =  [];
+		this.t =  params.t || [];
 		this.n =  params.n;
 		this.r =  params.r;
 		this.w =  params.w;
@@ -17,7 +17,7 @@ class Layer {
 
 	clean() {
 		delete this.toggled;
-		delete this.prevColor;
+		delete this.pc;
 	}
 
 	toggle() {
@@ -31,8 +31,6 @@ class Layer {
 	}
 
 	remove() {
-		console.log(this);
-		console.log(lns.ui.layers.panel.layers);
 		lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
 	}
 
@@ -40,7 +38,6 @@ class Layer {
 		this.t.push(tween);
 		if (tween.sf < this.startFrame) this.startFrame = tween.sf;
 		if (tween.ef > this.endFrame) this.endFrame = tween.ef;
-		// this.ui.addTween(tween);
 	}
 
 	get startFrame() {
@@ -66,10 +63,10 @@ class Layer {
 			if (this.f.s - 1 == index) this.f.s -= 1;
 			else if (this.f.e + 1 == index) this.f.e += 1;
 			else {
-				lns.anim.layers.push(new Layer({
+				return new Layer({
 					...this,
 					f: { s: index, e: index }
-				}));
+				});
 			}
 		}
 		return this;

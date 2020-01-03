@@ -4,9 +4,8 @@ class UIModal extends UICollection {
 		this.addClass('modal');
 		this.append(new UILabel({ text: title }));
 
-		
-		this.el.style.left = `${position.x - 100}px`;
-		this.el.style.top = `${position.y - 20}px`;
+		this.el.style.left = `${Math.max(0, position.x - 100)}px`;
+		this.el.style.top = `${Math.max(0, position.y - 20)}px`;
 
 		// better way to do this ?? 
 		document.getElementById('container').appendChild(this.el);

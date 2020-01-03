@@ -85,7 +85,7 @@ function Layers() {
 
 		modal.add(new UILabel({ text: 'Property:' }));
 		modal.add(new UISelect({
-			options: ['e', 's', 'n', 'r', 'w', 'v'],
+			options: ['e', 's', 'n', 'r', 'w', 'v', 'x', 'y'],
 			value: 'e',
 			selected: 'e',
 			callback: function(value) {
@@ -93,8 +93,7 @@ function Layers() {
 			}
 		}));
 
-		modal.add(new UILabel({ text: 'Start:' }));
-
+		modal.add(new UILabel({ text: 'Start Frame:' }));
 		modal.add(new UIBlur({
 			value: tween.sf,
 			callback: function(value) {
@@ -102,7 +101,7 @@ function Layers() {
 			}
 		}));
 
-		modal.add(new UILabel({ text: 'End:' }));
+		modal.add(new UILabel({ text: 'End Frame:' }));
 		modal.add(new UIBlur({
 			value: tween.ef,
 			callback: function(value) {
@@ -110,7 +109,7 @@ function Layers() {
 			}
 		}));
 
-		modal.add(new UILabel({ text: 'Begin:' }));
+		modal.add(new UILabel({ text: 'Start Value:' }));
 		modal.add(new UIBlur({
 			value: tween.sv,
 			callback: function(value) {
@@ -118,7 +117,7 @@ function Layers() {
 			}
 		}));
 
-		modal.add(new UILabel({ text: 'End:' }));
+		modal.add(new UILabel({ text: 'End Value:' }));
 		modal.add(new UIBlur({
 			value: tween.ev,
 			callback: function(value) {
@@ -153,10 +152,10 @@ function Layers() {
 		/* -1 to not show draw layer */
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
+			// console.log(i, self.panel.layers[i])
 			if (!self.panel.layers[i]) {
 				const ui = new UILayer({
 					type: 'layer',
-					index: i,
 					callback: function() {
 						layer.toggle();
 						lns.draw.setProperties(layer.props);
@@ -171,8 +170,12 @@ function Layers() {
 
 	this.remove = function(_index) {
 		const index = _index !== undefined ? _index : prompt('Layer number?');
+		// console.log(index);
 		lns.anim.layers.splice(index, 1);
-		self.panel.layers.removeK(index);
+		// self.panel.layers.removeK(index);
+		// console.log(self.panel.layers);
+		self.clear();
+		self.update();
 	};  /* alt d */
 
 	this.removeSelected = function() {

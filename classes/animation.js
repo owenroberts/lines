@@ -211,13 +211,16 @@ class Animation {
 		this.loaded = true;
 		for (let i = 0; i < json.d.length; i++) {
 			const drawing = json.d[i];
-			const d = [];
+			let d;
 			if (drawing) {
+				d = [];
 				for (let j = 0; j < drawing.length; j++) {
 					const point = drawing[j];
 					if (point) d.push({ x: point[0], y: point[1] });
 					else d.push('end');
 				}
+			} else {
+				d = null;
 			}
 			this.drawings[i] = d;
 		}
