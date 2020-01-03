@@ -44,6 +44,10 @@ class UIColor extends UIInput {
 		super.value = _value;
 	}
 
+	get value() {
+		return this.el.value;
+	}
+
 	get html() {
 		return [this.el, this.palette.el];
 	}

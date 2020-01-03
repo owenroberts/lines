@@ -14,11 +14,9 @@
 
 #fio-panel #title {
   border: none;
-  font-size: 1.5em;
-  display: block;
-  margin-bottom: 0.5em;
+  max-width: 120px;
   border-bottom: 1px solid transparent;
-  flex: 100%;
+  flex-basis: 100%;
   text-align: left;
   padding: 3px;
   background-color: white;

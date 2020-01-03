@@ -46,7 +46,8 @@ function Draw(defaults) {
 		if (self.drawing.length > 0) {
 			lns.anim.drawings.push([]);
 			lns.anim.layers.push(new Layer({ 
-				...defaults, 
+				...defaults,
+				c: lns.ui.faces.c.value,
 				d: lns.anim.drawings.length - 1,  
 				f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
 			}));

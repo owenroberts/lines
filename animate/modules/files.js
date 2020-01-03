@@ -7,10 +7,9 @@ function Files(params) {
 
 	/* s key - shift-s for single */
 	this.saveFile = function(args, callback) {
-		// lns.data.saveLines();
 
 		lns.draw.reset();
-		lns.ui.checkEnd();
+		lns.ui.play.checkEnd();
 		
 		lns.anim.drawings.pop();
 		lns.anim.layers.pop();
@@ -48,7 +47,6 @@ function Files(params) {
 		for (let i = 0; i < layers.length; i++) {
 			layers[i].clean();
 		}
-		console.log(layers);
 		json.l = layers;
 
 		/* search frames for layers and drawings used */
@@ -126,7 +124,7 @@ function Files(params) {
 	/* shift o */
 	this.reOpenFile = function() {
 		self.saveFile({}, function(fileName) {
-			location.href += `?src=${ prompt("Enter location:") }/${ fileName }.json`;
+			location.href += `?src=/${ prompt("Enter location:") }/${ fileName }.json`;
 		});
 	};
 

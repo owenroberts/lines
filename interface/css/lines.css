@@ -168,6 +168,9 @@ select {
 .panel select {
   margin-top: 0.25em;
 }
+.panel .header {
+  flex-wrap: nowrap;
+}
 .panel .header label {
   font-size: 12px;
 }
@@ -195,6 +198,9 @@ select {
 .panel .header .block-btn {
   align-self: flex-start;
   font-size: 11px;
+}
+.panel .header .headless-btn {
+  margin-right: 0;
 }
 .panel.headless {
   padding: 0;

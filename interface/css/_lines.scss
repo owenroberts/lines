@@ -163,6 +163,7 @@ select {
 	select { margin-top: 0.25em; }
 
 	.header {
+		flex-wrap: nowrap;
 		label {  font-size: 12px; }
 		span, label { margin-top: 0; }
 
@@ -186,6 +187,10 @@ select {
 		.block-btn {
 			align-self: flex-start;
 			font-size: 11px;
+		}
+
+		.headless-btn {
+			margin-right: 0;
 		}
 	}
 
