@@ -8,6 +8,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
+	this.lw = 1; // to keep value from getting reset
 
 	this.setBGColor = function(color) {
 		self.bgColor = color;
@@ -17,7 +18,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 	this.setBGColor(color);
 
 	this.setLineWidth = function(n) {
-		self.ctx.lineWidth = +n;
+		self.ctx.lineWidth = self.lw = +n;
 	};
 
 	/* set line color */
@@ -44,6 +45,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 		self.ctx.scale(this.dpr, this.dpr);
 		self.canvas.style.zoom = 1 / this.dpr;
 		self.ctx.miterLimit = 1;
+		self.ctx.lineWidth = self.lw;
 	};
 	
 	/* set initial width and height */

@@ -75,7 +75,7 @@ function Render(lps, color) {
 			lns.anim.draw();
 			lns.anim.update();
 		}
-		if (!lns.ui.capture.capturing) 
+		if (!lns.ui.capture.isCapturing) 
 			window.requestAnimFrame(self.update);
 	};
 

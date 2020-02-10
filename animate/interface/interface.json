@@ -685,22 +685,22 @@
 						}
 					},
 					{
-						"type": "UIToggle",
-						"key": "shift-b",
-						"toggle": "bg",
-						"params": {
-							"onText": "With BG",
-							"offText": "No BG"
-						}
-					},
-					{
 						"type": "UIButton",
 						"key": "shift-k",
 						"fromModule": {
 							"callback": "multiple"
 						},
 						"params": {
-							"text": "Capture Frames"
+							"text": "Frames"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "shift-b",
+						"toggle": "bg",
+						"params": {
+							"onText": "With BG",
+							"offText": "No BG"
 						}
 					},
 					{

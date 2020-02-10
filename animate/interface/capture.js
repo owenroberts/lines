@@ -39,16 +39,16 @@ function Capture() {
 	this.cycle = function() {
 		lns.draw.reset();
 		/* set animation to last frame because it updates frames before draw */
-		lns.anim.frame = 0;
+		lns.anim.frame = lns.anim.endFrame;
 		lns.anim.isPlaying = true;
 		// capture as many frames as necessary for lines ratio or 1 of every frame
-		self.frames = lns.anim.endFrame * Math.max(1, lns.render.lps / lns.anim.fps);
+		self.frames = lns.anim.endFrame * Math.max(1, lns.render.lps / lns.anim.fps) + 1;
 		self.start();
 	}; /* ctrl-k - start at beginning and capture one of every frame */
 
 	this.capture = function() {
 		if (lns.files.saveFilesEnabled) {
-			lns.canvas.canvas.toBlob(function(blob) {
+			lns.canvas.canvas.toBlob(blob =>  {
 				const title = lns.ui.faces.title.value; // this is a UI
 				const n = Cool.padNumber(lns.anim.currentFrame, 3);
 				let frm = 0;
@@ -62,9 +62,12 @@ function Capture() {
 
 				const f = saveAs(blob, fileName);
 				f.onwriteend = function() { 
-					window.requestAnimFrame(() => {
-						lns.render.update('cap'); 
-					});
+					setTimeout(() => {
+						window.requestAnimFrame(() => {
+							console.log(fileName);
+							lns.render.update('cap'); 
+						});
+					}, 100); // delay fixes bug where is stops after 10-12 frames
 				};
 					
 			});
