@@ -7,8 +7,35 @@ class UILayer extends UICollection {
 
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
-			text: `✎${layer.d}`,
+			text: `${layer.d}`,
 			callback: params.callback
+		});
+
+		this.edit = new UIButton({
+			type: 'layer-edit',
+			text: "✎",
+			callback: () => {
+				const modal = new UIModal('Edit Layer', lns, this.position, () => {
+					this.update();
+					lns.ui.update();
+				});
+
+				modal.add(new UILabel({ text: "Start Frame:"}));
+				modal.add(new UIBlur({
+					value: layer.startFrame,
+					callback: function(value) {
+						layer.startFrame = +value;
+					}
+				}));
+
+				modal.add(new UILabel({ text: "End Frame:"}));
+				modal.add(new UIBlur({
+					value: layer.endFrame,
+					callback: function(value) {
+						layer.endFrame = +value;
+					}
+				}));
+			}
 		});
 
 		this.left = new UIDragButton({
@@ -20,8 +47,6 @@ class UILayer extends UICollection {
 				lns.ui.update();
 			}		
 		});
-		this.append(this.left);
-		this.append(this.toggle);
 
 		this.right = new UIDragButton({
 			text: '+',
@@ -32,6 +57,10 @@ class UILayer extends UICollection {
 				lns.ui.update();
 			}		
 		});
+
+		this.append(this.left);
+		this.append(this.edit);
+		this.append(this.toggle);
 		this.append(this.right);
 
 		this.tweens = [];
@@ -59,10 +88,10 @@ class UILayer extends UICollection {
 		this.el.style.gridColumnEnd = lns.anim.endFrame + 2; // this.layer.endFrame + 2;
 
 		/* grid for children */
-		this.el.style['grid-template-columns'] = `auto repeat(${lns.anim.endFrame + 1}, 1fr) auto`;
+		this.el.style['grid-template-columns'] = `auto auto repeat(${lns.anim.endFrame}, 1fr) auto`;
 
 		this.left.el.style['grid-column'] = `${this.layer.startFrame + 1} / span 1`;
-		this.toggle.el.style['grid-column'] = `${this.layer.startFrame + 2} / span ${this.layer.endFrame - this.layer.startFrame + 1}`;
+		this.toggle.el.style['grid-column'] = `${this.layer.startFrame + 3} / span ${this.layer.endFrame - this.layer.startFrame}`;
 
 		for (let i = 0; i < this.layer.t.length; i++) {
 			if (this.tweens[i]) this.tweens[i].update();

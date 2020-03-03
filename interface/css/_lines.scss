@@ -68,7 +68,7 @@ select {
 	padding: 0 0.5em;
 	border-radius: 3px;
 	&:hover {
-		background: $accent-two;
+		background: $ui-select;
 		cursor: pointer;
 	}
 	&:active {
@@ -180,7 +180,8 @@ select {
 			display: inline-block;
 			cursor: pointer;
 			font-size: 12px;
-			&:hover { background: $accent-two; }
+			padding: 1px;
+			&:hover { background: $ui-select; }
 			&.off { background-color: inherit; }
 		}
 
@@ -217,7 +218,6 @@ select {
 
 		
 	}
-
 }
 
 .modal {

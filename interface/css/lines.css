@@ -79,7 +79,7 @@ select {
   white-space: nowrap;
 }
 .btn:hover {
-  background: #ffddff;
+  background: gray;
   cursor: pointer;
 }
 .btn:active {
@@ -188,9 +188,10 @@ select {
   display: inline-block;
   cursor: pointer;
   font-size: 12px;
+  padding: 1px;
 }
 .panel .header .toggle:hover, .panel .header .order-btn:hover, .panel .header .undock-btn:hover, .panel .header .block-btn:hover, .panel .header .headless-btn:hover {
-  background: #ffddff;
+  background: gray;
 }
 .panel .header .toggle.off, .panel .header .order-btn.off, .panel .header .undock-btn.off, .panel .header .block-btn.off, .panel .header .headless-btn.off {
   background-color: inherit;

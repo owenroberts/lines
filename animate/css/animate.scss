@@ -51,17 +51,19 @@ $column-width: 40px;
 			background-color: $anim-color;
 		}
 
-		.left, .right, .layer-toggle {
+		.left, .right, .layer-toggle, .layer-edit {
 			margin: 0;
+			cursor: pointer;
 			background-color: $ui-color;
 			&:hover { background-color: $ui-select; }
 			&.off { background-color: $accent-two; }
 		}
 
-		.left, .right {
-			cursor: pointer;
+		.left, .right, .layer-edit {
 			line-height: 1;
 			max-width: max-content;
+		}
+		.left, .right {
 			background-color: #9898ff;
 		}
 
@@ -74,10 +76,6 @@ $column-width: 40px;
 			justify-self: end;
 			border-top-left-radius: 3px;
 			border-bottom-left-radius: 3px;
-		}
-		
-		.layer-toggle { 
-			cursor: pointer;
 		}
 
 	}

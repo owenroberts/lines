@@ -3,7 +3,6 @@ class UITween extends UICollection {
 		super({});
 		this.el.classList.add('tween');
 		this.tween = tween;
-		
 
 		this.label = new UIButton({
 			text: tween.prop,

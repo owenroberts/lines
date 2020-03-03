@@ -42,20 +42,22 @@
   line-height: 1;
   background-color: lightgreen;
 }
-#layers-panel .layer .left, #layers-panel .layer .right, #layers-panel .layer .layer-toggle {
+#layers-panel .layer .left, #layers-panel .layer .right, #layers-panel .layer .layer-toggle, #layers-panel .layer .layer-edit {
   margin: 0;
+  cursor: pointer;
   background-color: lightgray;
 }
-#layers-panel .layer .left:hover, #layers-panel .layer .right:hover, #layers-panel .layer .layer-toggle:hover {
+#layers-panel .layer .left:hover, #layers-panel .layer .right:hover, #layers-panel .layer .layer-toggle:hover, #layers-panel .layer .layer-edit:hover {
   background-color: gray;
 }
-#layers-panel .layer .left.off, #layers-panel .layer .right.off, #layers-panel .layer .layer-toggle.off {
+#layers-panel .layer .left.off, #layers-panel .layer .right.off, #layers-panel .layer .layer-toggle.off, #layers-panel .layer .layer-edit.off {
   background-color: #ffddff;
 }
-#layers-panel .layer .left, #layers-panel .layer .right {
-  cursor: pointer;
+#layers-panel .layer .left, #layers-panel .layer .right, #layers-panel .layer .layer-edit {
   line-height: 1;
   max-width: max-content;
+}
+#layers-panel .layer .left, #layers-panel .layer .right {
   background-color: #9898ff;
 }
 #layers-panel .layer .right {
@@ -66,9 +68,6 @@
   justify-self: end;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
-}
-#layers-panel .layer .layer-toggle {
-  cursor: pointer;
 }
 
 #frames-panel #frames {
