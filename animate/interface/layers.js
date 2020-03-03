@@ -146,7 +146,9 @@ function Layers() {
 
 		// is this crazy ? 
 		self.panel.layers.el.style.width = 'auto';
-		const width = Math.min(self.panel.layers.el.clientWidth, lns.ui.play.panel.frames[0].el.getBoundingClientRect().width * (lns.anim.endFrame + 1));
+		const framesWidth = lns.ui.play.panel.frames[0].el.getBoundingClientRect().width * (lns.anim.endFrame + 1);
+		const clientWidth = self.panel.layers.el.clientWidth
+		const width = framesWidth ? Math.min(clientWidth, framesWidth) : clientWidth;
 		self.panel.layers.el.style.width = `${width}px`;
 		
 		/* -1 to not show draw layer */
