@@ -115,6 +115,7 @@ function Files(params) {
 			}
 			lns.canvas.setWidth(data.w);
 			lns.canvas.setHeight(data.h);
+			lns.ui.faces.fps.update(data.fps);
 			if (data.bg) lns.canvas.setBGColor(data.bg);
 			lns.draw.reset(); 
 			if (callback) callback(data, params); 

@@ -2,7 +2,7 @@ function Capture() {
 	const self = this;
 
 	this.ready = true; /* ready to start */
-	this.prev = { n: '', f: 0 }; /* keeps track of image names */
+	this.prev = { f: undefined, n: 0 }; /* keeps track of image names */
 
 	this.frames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
 	this.bg = true; /*  n key  default capture bg */
@@ -50,21 +50,19 @@ function Capture() {
 		if (lns.files.saveFilesEnabled) {
 			lns.canvas.canvas.toBlob(blob =>  {
 				const title = lns.ui.faces.title.value; // this is a UI
-				const n = Cool.padNumber(lns.anim.currentFrame, 3);
-				let frm = 0;
-				let fileName = `${title}-${n}-${frm}.png`;
-				if (n == self.prev.n) {
-					frm = self.prev.f + 1;
-					fileName = `${title}-${n}-${frm}.png`;
-					self.prev.f = frm;
-				}
-				self.prev.n = n;
+				const frm = Cool.padNumber(lns.anim.currentFrame, 3);
+
+				
+				if (frm == self.prev.f) self.prev.n += 1;
+				else self.prev.n = 0;
+
+				let fileName = `${title}-${frm}-${self.prev.n}.png`;
+				self.prev.f = frm;
 
 				const f = saveAs(blob, fileName);
 				f.onwriteend = function() { 
 					setTimeout(() => {
 						window.requestAnimFrame(() => {
-							console.log(fileName);
 							lns.render.update('cap'); 
 						});
 					}, 100); // delay fixes bug where is stops after 10-12 frames
