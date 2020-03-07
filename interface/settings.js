@@ -1,4 +1,4 @@
-function Settings(app, name, appSave, appLoad) {
+function Settings(app, name, appSave) {
 	const self = this;
 
 	this.name = `settings-${name}`;
@@ -20,7 +20,7 @@ function Settings(app, name, appSave, appLoad) {
 		localStorage[self.name] = JSON.stringify(settings);
 	};
 
-	this.load = function() {
+	this.load = function(appLoad) {
 		if (localStorage[self.name]) {
 			const settings = JSON.parse(localStorage[self.name]);
 			if (appLoad) appLoad(settings);
