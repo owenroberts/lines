@@ -33,6 +33,7 @@ window.addEventListener("load", function() {
 		const url = location.search.split('=')[1]
 		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.updateFIO);
 		lns.ui.update();
+		lns.draw.setDefaults();
 		lns.render.start();
 	});
 });

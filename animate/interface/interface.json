@@ -797,7 +797,6 @@
 							"label": "Segments",
 							"min": 1,
 							"max": 10,
-							"value": 2,
 							"arguments": {
 								"prop": "n"
 							}
@@ -813,7 +812,6 @@
 							"label": "Jiggle",
 							"min": 0,
 							"max": 10,
-							"value": 1,
 							"arguments": {
 								"prop": "r"
 							}
@@ -829,7 +827,6 @@
 							"label": "Wiggle",
 							"min": 0,
 							"max": 15,
-							"value": 0,
 							"arguments": {
 								"prop": "w"
 							}
@@ -846,7 +843,6 @@
 							"min": 0,
 							"max": 5,
 							"step": 0.005,
-							"value": 0,
 							"arguments": {
 								"prop": "v"
 							}
