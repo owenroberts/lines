@@ -15,6 +15,7 @@ function Play() {
 					text: `${i}`,
 					key: i,
 					callback: function() {
+						lns.draw.reset();
 						self.setFrame(i);
 						lns.ui.update();
 					}	
