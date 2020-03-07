@@ -54,7 +54,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 
 	/* shift-f key */
 	this.fitCanvasToDrawing = function() {
-		lns.data.saveLines();
+		lns.draw.reset();
 		
 		let tolerance = 0;
 		let min = { x: 10000, y: 10000 }; // min max size of canvas

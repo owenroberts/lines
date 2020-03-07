@@ -21,5 +21,7 @@ class Item extends Sprite {
 	update(offset) {
 		this.position.x = this.origin.x + offset.x;
 		this.position.y = this.origin.y + offset.y;
+
+		// console.log(this.position.x, this.position.y);
 	}
 }

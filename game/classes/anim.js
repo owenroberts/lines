@@ -1,11 +1,13 @@
 class Anim extends Animation {
-	constructor(src, debug) {
+	constructor(src, callback, debug) {
 		super(Game.ctx, Game.lps, Game.mixedColors);
 		this.src = src;
 		this.debug = debug;
 		this.loaded = false;
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */
+
+		if (this.src) this.load(this.src, callback);
 	}
 
 	update() { /* too many things to stick in onPlayedState etc */

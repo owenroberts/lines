@@ -41,19 +41,22 @@ const Game = {
 
 		this.loaded = {}; /* auto save loaded json sprites */
 	},
-	load: function(files, classes, callback) {
-		Game.classes = classes;
+	load: function(files, callback) {
 		Game.assetsLoaded = {};
+		const numFiles = Object.keys(files).length;
 		for (const f in files) {
 			const file = files[f];
-			Game.assetsLoaded[f] = false;
 			fetch(file)
 				.then(response => {
 					if (response.ok) return response.json();
 					throw new Error('Network response was not ok.');
 				})
 				.then(json => {
-					Game.assetsLoaded[f] = true;
+					Game[f] = {};
+					Game.assetsLoaded[f] = {};
+					for (const key in json) {
+						Game.assetsLoaded[f][key] = false;
+					}
 					Game.loadSprites(f, json);
 				})
 				.catch(error => {
@@ -63,57 +66,26 @@ const Game = {
 		}
 
 		const loader = setInterval(function() {
-			if (Object.keys(Game.assetsLoaded).every(key => { return Game.assetsLoaded[key]; })) {
+			let loaded = Object.keys(Game.assetsLoaded).length == numFiles;
+			for (const f in Game.assetsLoaded) {
+				for (const k in Game.assetsLoaded[f]) {
+					if (!Game.assetsLoaded[f][k]) loaded = false;
+				}
+			}
+			if (loaded) {
 				clearInterval(loader);
 				if (callback) callback();
 			}
 		}, 1000 / 60);
 	},
 	loadSprites: function(file, json) {
-		Game.traverse(json, [], function(key, value, path) {
-			let location = Game[file];
-			for (let i = 0; i < path.length; i++) {
-				const loc = path[i];
-				if (!location[loc]) location[loc] = {};
-				location = location[loc];
-			}
-			const type = path.pop();
-			const params = { label: key, ...value };
-			location[key] = new Game.classes[type](params);
-
-			/* update game boundaries */
-			function setBounds(position) {
-				if (position.y < Game.bounds.top) 
-					Game.bounds.top = position.y;
-				if (position.y > Game.bounds.bottom) 
-					Game.bounds.bottom = position.y + Game.height;
-				if (position.x > Game.bounds.right) 
-					Game.bounds.right = position.x + Game.width/2;
-				if (position.x < Game.bounds.left) 
-					Game.bounds.left = position.x - Game.width/2;
-			}
-
-			if (location[key].position) {
-				setBounds(location[key].position);				
-			} else if (location[key].locations) {
-				for (let i = 0; i < location[key].locations.length; i++) {
-					setBounds(location[key].locations[i]);
-				}
-			}
-
-			for (let i = 0; i < location[key].scenes.length; i++) {
-				const scene = location[key].scenes[i];
-				if (!Game.scenes.includes(scene)) Game.scenes.push(scene);
-			}
-		});
-	},
-	traverse: function(o, path, callback) {
-		for (const k in o) {
-			if (o[k].src) {
-				callback(k, o[k], [...path]);
-			} else if (o[k] !== null && typeof(o[k]) == 'object') {
-				Game.traverse(o[k], [...path, k], callback);
-			}
+		for (const key in json) {
+			fetch(json[key].src)
+				.then(response => { return response.json(); })
+				.then(json => {
+					Game[file][key] = json;
+					Game.assetsLoaded[file][key] = true;
+				});
 		}
 	},
 	start: function() {
@@ -171,7 +143,7 @@ const Game = {
 		Game.ctx.fillStyle = 'rgba(100,255,200)';
 		Game.ctx.fillText(s, x + 5, y + 15);
 	},
-	initLettering: function(src) {
+	lettering: function(src) {
 		/* data should be in json file or something */
 		const map = { "a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "f":5, "g":6, "h":7, "i":8, "j":9, "k":10, "l":11, "m":12, "n":13, "o":14, "p":15, "q":16, "r":17, "s":18, "t":19, "u":20, "v":21, "w":22, "x":23, "y":24, "z":25, "0":26, "1":27, "2":28, "3":29, "4":30, "5":31, "6":32, "7":33, "8":34, "9":35, ".":36, ",":37, ":":38, "?":39, "E":40, "F":41, "A":42, "S":43, "D":44, "W":45, "{" :46, "}": 47, "-": 48, "+": 49, "M": 50, "J": 51, "K": 52, "L": 53, "Q": 54, "'": 55 };
 		
@@ -180,6 +152,9 @@ const Game = {
 		for (const key in map) {
 			Game.letters.createNewState(key, map[key], map[key]);
 		}
+	},
+	setBounds: function(dir, value) {
+		Game.bounds[dir] = value;
 	}
 }
 

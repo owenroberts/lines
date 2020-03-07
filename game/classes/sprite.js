@@ -127,6 +127,7 @@ class Sprite {
 	}
 
 	display(isMap) {
+		// if (this.debug) console.log(this.xy);
 		if (this.alive && (this.isOnScreen() || isMap)) {
 			if (this.debug) this.drawDebug();
 			if (this.animation && this.animation.loaded) {

@@ -33,6 +33,10 @@ class Texture {
 		item.addJSON(this.json);
 		if (this.frame == 'index') item.animation.createNewState(`still-${index}`, index, index);
 		else if (this.frame == 'random') item.animation.randomFrames = true;
+		else if (this.frame == 'randomIndex') {
+			let randomIndex = Cool.randomInt(0, item.animation.endFrame);
+			item.animation.createNewState(`still-${randomIndex}`, randomIndex, randomIndex);
+		}
 		this.items.push(item);
 	}
 

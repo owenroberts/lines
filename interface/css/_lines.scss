@@ -181,7 +181,7 @@ select {
 			cursor: pointer;
 			font-size: 12px;
 			padding: 1px;
-			&:hover { background: $ui-select; }
+			&:hover { background: $main-color; }
 			&.off { background-color: inherit; }
 		}
 

@@ -239,6 +239,10 @@ class Animation {
 
 		// this.isPlaying = true; /* off for animate ? */
 
+		/* need width and height for infinite hell */
+		this.width = json.w;
+		this.height = json.h;
+
 		if (callback) callback(json);
 		if (this.onLoad) this.onLoad();
 	}

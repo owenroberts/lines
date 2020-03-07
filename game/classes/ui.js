@@ -1,5 +1,6 @@
 class UI extends Sprite {
 	constructor(params, debug) {
+		console.log(params);
 		/* xy orientation to game window */
 		let x = params.x;
 		let y = params.y;
@@ -21,6 +22,8 @@ class UI extends Sprite {
 			this.animation.states = params.states;
 			this.animation.state = 'idle';
 		}
+
+		this.scenes = params.scenes;
 		
 		this.clickStart = false;
 		if (params.func) this.func = window[params.func]; 
