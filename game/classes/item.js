@@ -15,6 +15,7 @@ class Item extends Sprite {
 		}
 
 		this.scenes = params.scenes;
+		// console.log(params.center)
 		this.center = params.center || true;
 	}
 

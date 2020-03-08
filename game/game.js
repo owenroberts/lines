@@ -93,20 +93,24 @@ const Game = {
 		if (typeof sizeCanvas === "function") sizeCanvas();
 
 		/* draw and update are separates functions 
-			because lines draw at relatively slow rate (10fps) */
-		if (typeof draw === "function") requestAnimFrame(Game.draw);
+			because lines draw at relatively slow rate (10fps) 
+		*/
+		if (Game.stats) Game.initStats();
 		if (typeof update === "function") requestAnimFrame(Game.update);
+		if (typeof draw === "function") requestAnimFrame(Game.draw);
 		if (typeof Events != "undefined") Events.init(Game.canvas);
-		if (this.stats) this.initStats();
+		
 	},
 	draw: function() {
 		const time = performance.now();
-		if (time > Game.drawTime + Game.lineInterval) {
+		if (time >= Game.drawTime + Game.lineInterval) {
 			if (Game.clearBg) Game.ctx.clearRect(0, 0, Game.width * Game.dpr, Game.height * Game.dpr);
 			draw(); // draw defined in each game js file
 			if (Game.stats) {
 				Game.drawFrameRates.push( 1000 / (time - Game.drawTime) );
-				Game.drawStat('lps: ' + Math.round( Game.drawFrameRates.reduce((n,s) => n + s) / Game.drawFrameRates.length ), Game.width - 65, 20);
+				Game.statBG();
+				Game.drawStat('draw: ' + Math.round( Game.drawFrameRates.reduce((n,s) => n + s) / Game.drawFrameRates.length ), Game.width - 65, 20);
+				Game.drawStat('FPS: ' + Math.round( Game.updateFrameRates.reduce((n,s) => n + s) / Game.updateFrameRates.length ), Game.width - 65, 0);
 				if (Game.drawFrameRates.length > 20)
 					Game.drawFrameRates.shift();
 			}
@@ -120,7 +124,7 @@ const Game = {
 			update(); // update defined in each game js file
 			if (Game.stats) {
 				Game.updateFrameRates.push( 1000 / (time - Game.updateTime) );
-				Game.drawStat('fps: ' + Math.round( Game.updateFrameRates.reduce((n,s) => n + s) / Game.updateFrameRates.length ), Game.width - 65, 0);
+				
 				if (Game.updateFrameRates.length > 20)
 					Game.updateFrameRates.shift();
 			}
@@ -133,13 +137,16 @@ const Game = {
 		Game.updateFrameRates = [];
 		Game.drawFrameRates = [];
 	},
+	statBG: function() {
+		Game.ctx.fillStyle = 'rgba(0,0,0,0.75)';
+		Game.ctx.fillRect(Game.width - 65, 0, 50, 40);
+	},
 	drawStat: function(s, x, y) {
 		Game.ctx.font = 'lighter 11px sans-serif';
-		Game.ctx.clearRect(x, y, 50, 20);
+		// Game.ctx.clearRect(x, y, 50, 20);
 		Game.ctx.beginPath();
-		Game.ctx.rect(x, y, 50, 20);
-		Game.ctx.fillStyle = 'rgba(0,0,0,0.25)';
-		Game.ctx.fill();
+		// Game.ctx.rect(x, y, 50, 20);
+		// Game.ctx.fill();
 		Game.ctx.fillStyle = 'rgba(100,255,200)';
 		Game.ctx.fillText(s, x + 5, y + 15);
 	},
