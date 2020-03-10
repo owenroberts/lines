@@ -8,14 +8,16 @@ function Settings(app, name, appSave) {
 		settings.panels = {};
 
 		for (const p in app.ui.panels) {
-			settings.panels[p] = {
-				open: app.ui.panels[p].open,
-				docked: app.ui.panels[p].isDocked,
-				order: app.ui.panels[p].order,
-				block: app.ui.panels[p].isBlock,
-				headless: app.ui.panels[p].isHeadless
-			};
-			if (p == 'settings') settings.panels[p].open = false;
+			if (p != 'el') {
+				settings.panels[p] = {
+					open: app.ui.panels[p].isOpen,
+					docked: app.ui.panels[p].isDocked,
+					order: app.ui.panels[p].order,
+					block: app.ui.panels[p].isBlock,
+					headless: app.ui.panels[p].isHeadless
+				};
+			}
+			// if (p == 'settings') settings.panels[p].open = false;
 		}
 		localStorage[self.name] = JSON.stringify(settings);
 	};
@@ -27,7 +29,7 @@ function Settings(app, name, appSave) {
 			for (const p in settings.panels) {
 				if (p != 'el') { /* fix later */
 					if (settings.panels[p].docked) app.ui.panels[p].dock();
-					if (!settings.panels[p].open) app.ui.panels[p].toggle();
+					if (!settings.panels[p].open) app.ui.panels[p].open.update();
 					if (settings.panels[p].block) app.ui.panels[p].block();
 					if (settings.panels[p].headless) app.ui.panels[p].headless();
 					app.ui.panels[p].order = settings.panels[p].order;

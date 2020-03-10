@@ -54,11 +54,10 @@ function Interface(app) {
 				}
 
 				this.addSelect(Object.keys(data));
-				self.settings.load();
+				// self.settings.load();
 				if (callback) callback();
 			});
 	};
-
 
 	this.addSelect = function(panelList) {
 		const selector = new UICollection({id: 'selector'});

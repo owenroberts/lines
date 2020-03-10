@@ -4,19 +4,22 @@ class UIPanel extends UICollection {
 		this.addClass("panel");
 		this.addClass("undocked");
 		
-		this.open = true;
 		this.rows = [];
 
 		this.header = new UIRow();
 		this.header.addClass('header');
 		this.append(this.header);
 
-		this.header.append(new UIToggle({
+		this.open = new UIToggle({
 			onText: "-",
 			offText: "+",
-			callback: this.toggle.bind(this),
-			type: "toggle"
-		}));
+			type: "toggle",
+			callback: () => {
+				if (this.open.isOn) this.addClass('closed');
+				else this.removeClass('closed');
+			}
+		});
+		this.header.append(this.open);
 
 		this.header.append(new UILabel({ text: label }));
 
@@ -80,10 +83,8 @@ class UIPanel extends UICollection {
 		return this.el.classList.contains('headless');
 	}
 
-	toggle() {
-		if (this.open) this.addClass('closed');
-		else this.removeClass('closed');
-		this.open = !this.open;
+	get isOpen() {
+		return this.open.value;
 	}
 
 	block() {
