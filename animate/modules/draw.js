@@ -133,13 +133,19 @@ function Draw(defaults) {
 			while (point.dist(origin) > b){
 				point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
 			}
-			self.drawing.push(point);
+			if (point.x > 0 && point.x < lns.canvas.width && 
+					point.y > 0 && point.y < lns.canvas.height) {
+				self.drawing.push(point);
+			}
 			const points = Cool.randomInt(1,3);
 			for (let i = 0; i < points; i ++) {
-				self.drawing.push(new Cool.Vector(
-					point.x + Cool.randomInt(-1, 1),
-					point.y + Cool.randomInt(_y)
-				));
+				if (point.x > 0 && point.x < lns.canvas.width && 
+					point.y > 0 && point.y < lns.canvas.height) {
+					self.drawing.push(new Cool.Vector(
+						point.x + Cool.randomInt(-1, 1),
+						point.y + Cool.randomInt(_y)
+					));
+				}
 			}
 			self.drawing.push('end');
 		}
@@ -156,7 +162,7 @@ function Draw(defaults) {
 			if (self.brush <= 0)
 				self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
 			else
-				self.addBrush(ev.offsetX, ev.offsetY);
+				self.addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
 		} else if (ev.altKey) {
 			self.startDots = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY));
 		}
