@@ -3,7 +3,7 @@ class UILayer extends UICollection {
 		super(params);
 		this.el.classList.add('layer');
 		this.layer = layer;
-		this.el.style.gridRow = params.index + 1;
+		// this.el.style.gridRow = params.index + 1;
 
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
@@ -69,7 +69,7 @@ class UILayer extends UICollection {
 			this.append(this.tweens[i]);
 		}
 
-		this.update();
+		// this.update();
 	}
 
 	get html() {

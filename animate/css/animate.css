@@ -109,4 +109,30 @@
   padding: 0.25em 0;
 }
 
+#timeline {
+  --num-frames: 1;
+  --num-layers: 1;
+  --frame-size: 40;
+  --height: 80;
+  --layer-size: calc(calc(var(--height) / var(--num-layers)) * 1px);
+  display: grid;
+  height: calc(var(--height) * 1px);
+  grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-size) * 1px));
+  grid-template-rows: 12px repeat(var(--num-layers), var(--layer-size) 1px);
+  overflow: scroll hidden;
+}
+#timeline .frame {
+  margin: 0;
+  background-color: #bee4ff;
+  grid-row: 1/span calc(var(--num-layers) * 2);
+  width: 100%;
+}
+#timeline .frame.current {
+  background-color: #FF79FF;
+}
+#timeline .layer {
+  margin: 0;
+  background-color: lightgray;
+}
+
 /*# sourceMappingURL=animate.css.map */

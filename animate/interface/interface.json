@@ -1105,5 +1105,27 @@
 				]
 			}
 		]
+	},
+	"timeline": {
+		"label": "Timeline",
+		"uis": [
+			{
+				"module": "ui",
+				"sub": "timeline",
+				"list": [
+					{
+						"type": "UIRow",
+						"k": "timeline",
+						"params": {
+							"id": "timeline"
+						}
+					},
+					{
+						"type": "UIList",
+						"k": "frames"
+					}
+				]
+			}
+		]
 	}
 }

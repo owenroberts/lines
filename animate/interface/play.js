@@ -4,6 +4,7 @@ function Play() {
 	this.update = function() {
 		self.updateFrames();
 		self.updateFrame();
+		lns.ui.timeline.update();
 	};
 
 	this.updateFrames = function() {

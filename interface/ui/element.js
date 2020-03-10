@@ -30,6 +30,14 @@ class UIElement {
 		return { x: this.el.getBoundingClientRect().x, y: this.el.getBoundingClientRect().y };
 	}
 
+	setProp(prop, value) {
+		this.el.style.setProperty(prop, value);
+	}
+
+	getProp(prop) {
+		return this.el.style.getPropertyValue(prop); 
+	}
+
 	handler() {
 		this.callback();
 	}
