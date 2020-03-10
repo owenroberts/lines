@@ -17,7 +17,7 @@ function Capture() {
 	}; /* k key */
 
 	this.multiple = function() {
-		self.frames = prompt("Capture how many frames?");
+		self.frames = +prompt("Capture how many frames?");
 		self.start();
 	}; /* shift k */
 
@@ -29,7 +29,6 @@ function Capture() {
 				self.isCapturing = true;
 			} else if (self.isCapturing) {
 				self.isCapturing = false;
-				self.bg = false;
 				lns.anim.isPlaying = false;
 				lns.anim.onDraw = undefined;
 			}
