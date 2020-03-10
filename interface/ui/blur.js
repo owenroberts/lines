@@ -2,9 +2,9 @@ class UIBlur extends UIText {
 	constructor(params) {
 		super(params);
 
-		this.el.onblur = ev => {
+		this.el.addEventListener('blur', ev => {
 			if (ev.target.value) this.handler(ev, this);
-		};
+		});
 		this.value = params.value;
 	}
 

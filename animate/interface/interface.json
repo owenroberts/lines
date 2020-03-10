@@ -8,9 +8,7 @@
 					{
 						"type": "UIText",
 						"face": "title",
-						"fromModule": {
-							"callback": "saveFile"
-						},
+						
 						"params": {
 							"placeholder": "title",
 							"id": "title"
