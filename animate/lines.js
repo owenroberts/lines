@@ -37,6 +37,8 @@ window.addEventListener("load", function() {
 		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.updateFIO);
 		lns.ui.update();
 		lns.render.start();
+
+		lns.ui.timeline.init();
 	});
 });
 

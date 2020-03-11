@@ -1114,15 +1114,21 @@
 				"sub": "timeline",
 				"list": [
 					{
+						"type": "UIButton",
+						"key": "alt-f",
+						"fromModule": {
+							"callback": "fit"
+						},
+						"params": {
+							"text": "Fit"
+						}
+					},
+					{
 						"type": "UIRow",
 						"k": "timeline",
 						"params": {
 							"id": "timeline"
 						}
-					},
-					{
-						"type": "UIList",
-						"k": "frames"
 					}
 				]
 			}

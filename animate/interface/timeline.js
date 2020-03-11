@@ -2,6 +2,46 @@ function Timeline() {
 	const self = this;
 	this.frameSize = 40;
 
+	this.init = function() {
+		self.panel.el.addEventListener('wheel', ev => {
+			ev.preventDefault();
+			self.frameSize += ev.deltaY > 0 ? 1 : -1;
+			self.panel.timeline.setProp('--frame-size', self.frameSize);
+		});
+
+		self.panel.el.addEventListener('mousedown', ev => {
+			ev.preventDefault();
+			// console.log('mousedown');
+		});
+
+		self.panel.el.addEventListener('mouseup', ev => {
+			ev.preventDefault();
+			// console.log('mouseup');
+			// console.log(ev);
+			// console.log(ev.target);
+			// console.log(ev.which);
+		});
+
+		self.panel.el.addEventListener('mousemove', ev => {
+			if (ev.which == 1 && ev.target.classList.contains('frame') && 
+				lns.anim.currentFrame != +ev.target.textContent) {
+				lns.draw.reset();
+				lns.ui.play.setFrame(+ev.target.textContent);
+				lns.ui.update();
+			}
+		});
+
+		self.panel.el.oncontextmenu = function() {
+  			return false;
+		};
+	};
+
+	this.fit = function() {
+		const f = lns.anim.endFrame + 1;
+		const w = lns.ui.timeline.panel.el.clientWidth - 11; /* 11 for padding */
+		self.frameSize = (w - 2 * f) / f; 
+		self.panel.timeline.setProp('--frame-size', self.frameSize);
+	};
 
 	this.update = function() {
 		// self.panel.timeline.setProp('--frame-size', 40); /* can't get computerd style */
@@ -17,7 +57,7 @@ function Timeline() {
 				text: `${i}`,
 				css: {
 					gridColumnStart:  1 + (i * 2),
-					gridColumnEnd:  2 + (i * 2)
+					gridColumnEnd:  3 + (i * 2)
 				},
 				class: i == lns.anim.currentFrame ? 'current' : '',
 				callback: function() {
@@ -34,7 +74,6 @@ function Timeline() {
 
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
-			console.log(layer);
 			const ui = new UILayer({
 				type: 'layer',
 				css: {
@@ -52,10 +91,4 @@ function Timeline() {
 			self.panel.timeline.append(ui, `lyr-${i}`);
 		}
 	};
-
-	document.addEventListener('wheel', ev => {
-		ev.preventDefault();
-		self.frameSize += ev.deltaY > 0 ? 1 : -1;
-		self.panel.timeline.setProp('--frame-size', self.frameSize);
-	});
 }
