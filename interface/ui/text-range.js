@@ -31,8 +31,16 @@ class UITextRange extends UICollection {
 	}
 
 	update(value) {
+		if (value == 60) {
+			console.trace();
+			console.log(value);
+		}
 		this.callback(value, this.arguments);
 		this.textInput.value = value;
 		this.range.value = value;
+	}
+
+	get value() {
+		return this.textInput.value;
 	}
 }

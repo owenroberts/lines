@@ -11,6 +11,7 @@ const Game = {
 		this.lps = params.lps;
 		this.lineInterval = 1000 / params.lps;
 		this.currentScene = 0;
+		this.lettering = {};
 
 		this.updateTime = performance.now();
 		this.updateInterval = 1000 / 60; // 60 fps
@@ -48,16 +49,29 @@ const Game = {
 			const file = files[f];
 			fetch(file)
 				.then(response => {
-					if (response.ok) return response.json();
+					if (response.ok) {
+						return response.url.includes('csv') ? response.text() : response.json();
+					}
 					throw new Error('Network response was not ok.');
 				})
-				.then(json => {
+				.then(data => {
 					Game[f] = {};
 					Game.assetsLoaded[f] = {};
-					for (const key in json) {
-						Game.assetsLoaded[f][key] = false;
+					if (typeof data == 'object') {
+						Game[f].data = data;
+						for (const key in data) {
+							Game.assetsLoaded[f][key] = false;
+							Game.loadJSON(f, key, data[key].src);
+						}
+					} else {
+						const csv = CSVToArray(data, ',').splice(1);
+						Game[f].data = csv;
+						for (let i = 0; i < csv.length; i++) {
+							const food = csv[i][0];
+							Game.assetsLoaded[f][food] = false;
+							Game.loadJSON(f, food, `/drawings/food/${food}.json`);
+						}
 					}
-					Game.loadSprites(f, json);
 				})
 				.catch(error => {
 					console.error(error);
@@ -78,15 +92,13 @@ const Game = {
 			}
 		}, 1000 / 60);
 	},
-	loadSprites: function(file, json) {
-		for (const key in json) {
-			fetch(json[key].src)
-				.then(response => { return response.json(); })
-				.then(json => {
-					Game[file][key] = json;
-					Game.assetsLoaded[file][key] = true;
-				});
-		}
+	loadJSON: function(file, key, src) {
+		fetch(src)
+			.then(response => { return response.json(); })
+			.then(json => {
+				Game[file][key] = json;
+				Game.assetsLoaded[file][key] = true;
+			});
 	},
 	start: function() {
 		if (typeof start === "function") start(); // should be game method?
@@ -99,7 +111,6 @@ const Game = {
 		if (typeof update === "function") requestAnimFrame(Game.update);
 		if (typeof draw === "function") requestAnimFrame(Game.draw);
 		if (typeof Events != "undefined") Events.init(Game.canvas);
-		
 	},
 	draw: function() {
 		const time = performance.now();
@@ -150,14 +161,12 @@ const Game = {
 		Game.ctx.fillStyle = 'rgba(100,255,200)';
 		Game.ctx.fillText(s, x + 5, y + 15);
 	},
-	lettering: function(src) {
-		/* data should be in json file or something */
-		const map = { "a": 0, "b": 1, "c": 2, "d": 3, "e": 4, "f":5, "g":6, "h":7, "i":8, "j":9, "k":10, "l":11, "m":12, "n":13, "o":14, "p":15, "q":16, "r":17, "s":18, "t":19, "u":20, "v":21, "w":22, "x":23, "y":24, "z":25, "0":26, "1":27, "2":28, "3":29, "4":30, "5":31, "6":32, "7":33, "8":34, "9":35, ".":36, ",":37, ":":38, "?":39, "E":40, "F":41, "A":42, "S":43, "D":44, "W":45, "{" :46, "}": 47, "-": 48, "+": 49, "M": 50, "J": 51, "K": 52, "L": 53, "Q": 54, "'": 55 };
-		
-		Game.letters = new Anim();
-		Game.letters.load(src);
-		for (const key in map) {
-			Game.letters.createNewState(key, map[key], map[key]);
+	lettering: function(src, label) {
+		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$";
+		Game.lettering[label] = new Anim();
+		Game.lettering[label].load(src);
+		for (let i = 0; i < letterIndexString.length; i++) {
+			Game.lettering[label]x.createNewState(letterIndexString[i], i, i);
 		}
 	},
 	setBounds: function(dir, value) {

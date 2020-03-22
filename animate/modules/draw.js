@@ -45,8 +45,12 @@ function Draw(defaults) {
 	this.reset = function(f) {
 		if (self.drawing.length > 0) {
 			lns.anim.drawings.push([]);
+			/* seems repetietive - settings class ... ? */
 			lns.anim.layers.push(new Layer({ 
-				...defaults,
+				n: +lns.ui.faces.n.value,
+				r: +lns.ui.faces.r.value,
+				w: +lns.ui.faces.w.value,
+				v: +lns.ui.faces.v.value,
 				c: lns.ui.faces.c.value,
 				d: lns.anim.drawings.length - 1,  
 				f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
