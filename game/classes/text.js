@@ -1,7 +1,7 @@
 class Text {
 	constructor(x, y, msg, wrap, letters) {
-		this.x = x;
-		this.y = y;
+		this.x = Math.round(x);
+		this.y = Math.round(y);
 		this.msg = msg;
 		this.wrap = wrap;
 		this.active = true;
@@ -51,7 +51,7 @@ class Text {
 			y -= this.breaks.length * 35;
 			for (let i = index; i < len; i++) {
 				var letter = this.msg[i];
-				if (letter == ' ') {
+				if (letter == ' ' || letter == '_') {
 					x += 30;
 				} else {
 					this.letters.state = letter;
@@ -78,6 +78,15 @@ class Text {
 				this.count = 0;
 				return true; // ended
 			}
+		}
+	}
+
+	isOver(x, y) {
+		if (x > this.x && x < this.x + (this.wrap < this.msg ? this.wrap : this.msg.length) * this.letters.width &&
+			y > this.y && y < this.y + (this.breaks.length + 1) * this.letters.height) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

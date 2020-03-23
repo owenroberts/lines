@@ -161,12 +161,12 @@ const Game = {
 		Game.ctx.fillStyle = 'rgba(100,255,200)';
 		Game.ctx.fillText(s, x + 5, y + 15);
 	},
-	lettering: function(src, label) {
+	addLettering: function(src, label) {
 		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$";
 		Game.lettering[label] = new Anim();
 		Game.lettering[label].load(src);
 		for (let i = 0; i < letterIndexString.length; i++) {
-			Game.lettering[label]x.createNewState(letterIndexString[i], i, i);
+			Game.lettering[label].createNewState(letterIndexString[i], i, i);
 		}
 	},
 	setBounds: function(dir, value) {

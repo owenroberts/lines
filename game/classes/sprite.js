@@ -164,16 +164,16 @@ class Sprite {
 
 	collide(other, callback) {
 		if (this.alive && other.alive) {
-			if (this.position.x + this.collider.position.x < other.position.x + other.collider.position.x + other.collider.width &&
-				this.position.x + this.collider.position.x + this.collider.width > other.position.x + other.collider.position.x && 
-				this.position.y + this.collider.position.y < other.position.y + other.collider.position.y + other.collider.height && 
-				this.position.y + this.collider.position.y + this.collider.size.y > other.position.y + other.collider.height) {
-				if (callback) 
-					callback(this);
+
+			if (this.xy.x + this.collider.position.x < other.xy.x + other.collider.position.x + other.collider.width &&
+			this.xy.x + this.collider.position.x + this.collider.width > other.xy.x + other.collider.position.x &&
+			this.xy.y + this.collider.position.y < other.xy.y + other.collider.position.y + other.collider.height &&
+			this.xy.y + this.collider.position.y + this.collider.height > other.xy.y + other.collider.position.y) {
+				if (callback) callback(this);
 				return true;
 			} else if (this.bounce) {
 				// check next frame
-				var nextpos = new Cool.Vector(this.position.x, this.position.y);
+				var nextpos = new Cool.Vector(this.xy.x, this.xy.y);
 				nextpos.add(this.velocity);
 				if (nextpos.x < other.position.x + other.width &&
 				nextpos.x + this.width > other.position.x  && 
