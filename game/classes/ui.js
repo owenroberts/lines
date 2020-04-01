@@ -1,6 +1,5 @@
 class UI extends Sprite {
 	constructor(params, debug) {
-		console.log(params);
 		/* xy orientation to game window */
 		let x = params.x;
 		let y = params.y;
@@ -14,18 +13,15 @@ class UI extends Sprite {
 		this.center = true;
 
 		if (params.hidden) this.alive = false; /* alive is more like isVisible */
-		this.addAnimation(params.src, () => {
-			if (params.state) this.animation.state = params.state;
-		});
+		if (params.json) this.addJSON(params.json);
 		
 		if (params.states) {
 			this.animation.states = params.states;
 			this.animation.state = 'idle';
 		}
 
-		this.scenes = params.scenes;
+		this.scenes = params.scenes; // deprecate ? 
 		
-		this.clickStart = false;
 		if (params.func) this.func = window[params.func]; 
 		/* shouldnt be attached to window - fine for now */
 	}

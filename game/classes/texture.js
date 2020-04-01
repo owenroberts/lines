@@ -6,7 +6,7 @@ class Texture {
 		
 		this.items = [];
 		this.frame = params.frame || 'index';
-
+		this.json = params.json;
 
 		if (params.src) {
 			fetch(params.src)

@@ -1,42 +1,26 @@
-class Toggle extends UI {
+class Toggle extends Button {
 	constructor(params, debug) {
 		super(params, debug);
 		this.toggled = false;
-		this.on = "idle",
-		this.off = "active";
 	}
 
-	setOnOff() {
-		if (this.toggled) this.animation.state = this.on;
-		else this.animation.state = this.off;
+	toggle(state) {
+		if (!state) this.toggled = !this.toggled;
+		else this.toggled = state == 'on' ? true : false;
+		this.animation.state = this.toggled ? 'selected' : 'idle';
+		if (this.func) this.func();
+		this.waitToGoOut = false;
+		this.mouseOver = false;
+		this.clickStarted = false;
 	}
 
-	over(x, y) {
-		if (this.tap(x,y)) {
-			this.animation.state = 'over';
-			return true;
-		} else {
-			this.setOnOff();
-			this.clickStart = false;
-			return false;
-		}
-	}
-
-	down(x, y) {
-		if (this.tap(x,y)) {
-			this.animation.state = 'selected';
-			document.body.style.cursor = 'pointer';
-			this.clickStart = true;
-		}
+	out(x, y) {
+		super.out(x, y);
+		this.animation.state = this.toggled ? 'selected' : 'idle';
 	}
 	
 	up(x, y) {
-		if (this.tap(x,y) && this.clickStart) {
-			this.toggled = !this.toggled;
-			this.setOnOff();
-			document.body.style.cursor = 'pointer';
-			if (this.func) this.func();
-		}
-		this.clickStart = false;
+		super.up();
+		if (this.tap(x,y) && this.clickStarted) this.toggle();
 	}
 }

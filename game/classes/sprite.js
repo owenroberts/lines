@@ -13,6 +13,11 @@ class Sprite {
 		this.alive = true;
 		// this.initPhysics();
 		// this.bkg = false; /* draw a filled in outline */
+
+		this.mouseOver = false;
+		this.waitToGoOut = false;
+		this.clickStarted = false;
+		// onOver, onOut, onUp, onDown, onClick
 	}
 	
 	/* make a physics class? */
@@ -164,7 +169,6 @@ class Sprite {
 
 	collide(other, callback) {
 		if (this.alive && other.alive) {
-
 			if (this.xy.x + this.collider.position.x < other.xy.x + other.collider.position.x + other.collider.width &&
 			this.xy.x + this.collider.position.x + this.collider.width > other.xy.x + other.collider.position.x &&
 			this.xy.y + this.collider.position.y < other.xy.y + other.collider.position.y + other.collider.height &&
@@ -228,5 +232,52 @@ class Sprite {
 	reset(widthMin, widthMax, heightMin, heightMax) {
 		this.position.x = Cool.randomInt(widthMin, widthMax - this.width);
 		this.position.y = Cool.randomInt(heightMin, heightMax);
+	}
+
+	over(x, y) {
+		if (this.alive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
+			if (this.animation) this.animation.state = 'over';
+			this.mouseOver = true;
+			if (this.onOver) this.onOver();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	out(x, y) {
+		if (this.alive && !this.tap(x,y) && (this.mouseOver || this.waitToGoOut)) {
+			if (this.animation) this.animation.state = 'idle';
+			this.clickStarted = false;
+			this.waitToGoOut = false;
+			this.mouseOver = false;
+			if (this.onOut) this.onOut();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	down(x, y) {
+		if (this.alive && this.tap(x,y)) {
+			if (this.animation) this.animation.state = 'active';
+			this.clickStarted = true;
+			this.waitToGoOut = true;
+			if (this.onDown) this.onDown();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	up(x, y) {
+		if (this.alive && this.tap(x,y) && this.clickStarted) {
+			if (this.animation) this.animation.state = 'idle';
+			this.mouseOver = false;
+			if (this.onUp) this.onUp();
+			if (this.onClick) this.onClick();
+			if (this.func) func();
+		}
+		this.clickStarted = false;
 	}
 }

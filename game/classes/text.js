@@ -2,6 +2,8 @@ class Text {
 	constructor(x, y, msg, wrap, letters) {
 		this.x = Math.round(x);
 		this.y = Math.round(y);
+		this.lead = 35; // leading is space between lines
+		this.track = 18; // tracking is space between letters
 		this.msg = msg;
 		this.wrap = wrap;
 		this.active = true;
@@ -10,6 +12,8 @@ class Text {
 		this.setBreaks();
 		this.count = 0;
 		this.end = 0;
+		this.hover = false;
+		this.clickStarted = false;
 	}
 
 	setPosition(x, y) {
@@ -28,7 +32,7 @@ class Text {
 		this.breaks = [];
 		for (let i = 0; i < this.msg.length; i++) {
 			if (i != 0) {
-				if (i % this.wrap  == offset && this.msg[i] == ' ' && !nextSpace) {
+				if (i % this.wrap == offset && this.msg[i] == ' ' && !nextSpace) {
 					this.breaks.push(i);
 				} else if (i % this.wrap == offset && this.msg[i] != ' ' && !nextSpace) {
 					nextSpace = true;
@@ -43,50 +47,46 @@ class Text {
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
 	display(countForward, countBackward, _x, _y) {
-		const len = countForward ? this.count : this.msg.length;
-		const index = countBackward ? this.end : 0;
 		if (this.active) {
+			const len = countForward ? this.count : this.msg.length;
+			const index = countBackward ? this.end : 0;
 			let x = _x || this.x;
 			let y = _y || this.y;
-			y -= this.breaks.length * 35;
+			// y -= this.breaks.length * this.lead;
 			for (let i = index; i < len; i++) {
 				var letter = this.msg[i];
+				// if (!letter.match(/[!a-zA-Z]/g)) console.log(letter);
 				if (letter == ' ' || letter == '_') {
-					x += 30;
+					x += this.track;
+				} else if (letter == '\n' || letter == '\r') {
+					y += this.lead;
+					x = _x || this.x;
 				} else {
 					this.letters.state = letter;
 					this.letters.draw(x, y);
-					x += 18;
+					x += this.track;
 				}
 				if (this.breaks.indexOf(i) != -1) {
-					y += 35;
+					y += this.lead;
 					x = _x || this.x;
 				}
 			}
-		}
-		if (this.count >= this.msg.length) this.end++;
-		else this.count++;
-		if (countBackward) {
-			if (this.end >= this.msg.length) {
-				this.end = 0; /* reset */
-				this.count = 0;
-				return true;
+			
+			if (this.count >= this.msg.length) this.end++;
+			else this.count++;
+			if (countBackward) {
+				if (this.end >= this.msg.length) {
+					this.end = 0; /* reset */
+					this.count = 0;
+					return true;
+				}
+			} else {
+				if (this.end >= 5) { // how long to wait after completed text // hardcoded?
+					this.end = 0;
+					this.count = 0;
+					return true; // ended
+				}
 			}
-		} else {
-			if (this.end >= 5) { // how long to wait after completed text // hardcoded?
-				this.end = 0;
-				this.count = 0;
-				return true; // ended
-			}
-		}
-	}
-
-	isOver(x, y) {
-		if (x > this.x && x < this.x + (this.wrap < this.msg ? this.wrap : this.msg.length) * this.letters.width &&
-			y > this.y && y < this.y + (this.breaks.length + 1) * this.letters.height) {
-			return true;
-		} else {
-			return false;
 		}
 	}
 }

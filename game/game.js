@@ -25,6 +25,12 @@ const Game = {
 
 		this.bounds = { top: 0, bottom: 0, left: 0, right: 0 };
 
+		this.data = {};
+		this.scenes = {};
+		for (let i = 0; i < params.scenes.length; i++) {
+			this.scenes[params.scenes[i]] = new Scene();
+		}
+
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
 			this.dpr = params.checkRetina ? window.devicePixelRatio || 1 : 1;
@@ -55,21 +61,21 @@ const Game = {
 					throw new Error('Network response was not ok.');
 				})
 				.then(data => {
-					Game[f] = {};
+					Game.data[f] = {};
 					Game.assetsLoaded[f] = {};
 					if (typeof data == 'object') {
-						Game[f].data = data;
+						Game.data[f].entries = data;
 						for (const key in data) {
 							Game.assetsLoaded[f][key] = false;
 							Game.loadJSON(f, key, data[key].src);
 						}
 					} else {
 						const csv = CSVToArray(data, ',').splice(1);
-						Game[f].data = csv;
+						Game.data[f].entries = csv;
 						for (let i = 0; i < csv.length; i++) {
-							const food = csv[i][0];
-							Game.assetsLoaded[f][food] = false;
-							Game.loadJSON(f, food, `/drawings/food/${food}.json`);
+							const itemName = csv[i][0];
+							Game.assetsLoaded[f][itemName] = false;
+							Game.loadJSON(f, itemName, `drawings/${f}/${itemName}.json`);
 						}
 					}
 				})
@@ -96,13 +102,13 @@ const Game = {
 		fetch(src)
 			.then(response => { return response.json(); })
 			.then(json => {
-				Game[file][key] = json;
+				Game.data[file][key] = json;
 				Game.assetsLoaded[file][key] = true;
 			});
 	},
 	start: function() {
 		if (typeof start === "function") start(); // should be game method?
-		if (typeof sizeCanvas === "function") sizeCanvas();
+		// if (typeof sizeCanvas === "function") sizeCanvas();
 
 		/* draw and update are separates functions 
 			because lines draw at relatively slow rate (10fps) 
@@ -116,6 +122,9 @@ const Game = {
 		const time = performance.now();
 		if (time >= Game.drawTime + Game.lineInterval) {
 			if (Game.clearBg) Game.ctx.clearRect(0, 0, Game.width * Game.dpr, Game.height * Game.dpr);
+
+			// add game scenes ?
+
 			draw(); // draw defined in each game js file
 			if (Game.stats) {
 				Game.drawFrameRates.push( 1000 / (time - Game.drawTime) );
@@ -161,10 +170,10 @@ const Game = {
 		Game.ctx.fillStyle = 'rgba(100,255,200)';
 		Game.ctx.fillText(s, x + 5, y + 15);
 	},
-	addLettering: function(src, label) {
-		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$";
+	addLettering: function(label, json) {
+		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"";
 		Game.lettering[label] = new Anim();
-		Game.lettering[label].load(src);
+		Game.lettering[label].loadJSON(json);
 		for (let i = 0; i < letterIndexString.length; i++) {
 			Game.lettering[label].createNewState(letterIndexString[i], i, i);
 		}

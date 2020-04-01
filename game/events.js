@@ -7,6 +7,7 @@ const Events = {
 
 		canvas.addEventListener('click', function(ev) {
 			ev.preventDefault();
+			
 			if (typeof mouseClicked === "function") 
 				mouseClicked(ev.offsetX, ev.offsetY);
 		}, false);
@@ -45,9 +46,8 @@ const Events = {
 				keyUp(Cool.keys[ev.which]);
 		});
 
-		document.addEventListener('resize', function(ev) {
-			if (typeof sizeCanvas === "function") 
-				sizeCanvas();
+		window.addEventListener('resize', function(ev) {
+			if (typeof sizeCanvas === "function") sizeCanvas();
 		}, false);
 	}
 }

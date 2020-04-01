@@ -1,55 +1,61 @@
 class Button extends UI {
 	constructor(params, debug) {
 		super(params, debug);
-		this.selected = params.selected || false;
-	}
 
-	toggle(selected) {
-		this.selected = selected;
-		this.animation.state = selected ? 'selected' : 'idle';
+		this.mouseOver = false;
+		this.waitToGoOut = false;
+		this.clickStarted = false;
+
+		if (params.onOver) this.onOver = params.onOver;
+		if (params.onOut) this.onOut = params.onOut;
+		if (params.onDown) this.onDown = params.onDown;
+		if (params.onClick) this.onClick = params.onClick;
 	}
 
 	over(x, y) {
-		if (!this.selected) {
-			if (this.tap(x,y)) {
-				this.animation.state = 'over';
-				return true;
-			} else {
-				this.animation.state = 'idle';
-				this.clickStart = false;
-				return false;
-			}
+		if (this.alive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
+			if (this.animation) this.animation.state = 'over';
+			this.mouseOver = true;
+			if (this.onOver) this.onOver();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	out(x, y) {
+		if (this.alive && !this.tap(x,y) && (this.mouseOver || this.waitToGoOut)) {
+			if (this.animation) this.animation.state = 'idle';
+			this.clickStarted = false;
+			this.waitToGoOut = false;
+			this.mouseOver = false;
+			if (this.onOut) this.onOut();
+			return true;
+		} else {
+			return false;
 		}
 	}
 
 	down(x, y) {
-		if (!this.selected) {
-			if (this.tap(x,y)) {
-				this.animation.state = 'active';
-				document.body.style.cursor = 'pointer'; /* weird - leave for now */
-				this.clickStart = true;
-			}
+		if (this.alive && this.tap(x,y)) {
+			if (this.animation) this.animation.state = 'active';
+			this.clickStarted = true;
+			this.waitToGoOut = true;
+			if (this.onDown) this.onDown();
+			return true;
+		} else {
+			return false;
 		}
 	}
 
 	up(x, y) {
-		if (!this.selected) {
-			if (this.tap(x,y) && this.clickStart) {
-				this.animation.state = 'over';
-				document.body.style.cursor = 'pointer';
-				if (this.callback) this.callback();
-				if (this.func) this.func();
-				this.clickStart = false;
-				return true;
-			}
+		if (this.alive && this.tap(x,y) && this.clickStarted) {
+			if (this.animation) this.animation.state = 'idle';
+			this.mouseOver = false;
+			if (this.onUp) this.onUp();
+			if (this.onClick) this.onClick();
+			if (this.func) func();
 		}
-		return false;
-	}
-
-	/* is this used ? */
-	event(x, y) {
-		if (this.tap(x, y)) {
-			if (this.callback) this.callback();
-		}
+		this.clickStarted = false;
 	}
 }
