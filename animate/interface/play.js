@@ -26,7 +26,6 @@ function Play() {
 			}
 		}
 
-
 		const numFrameBtns = self.panel.frames.children.length;
 		for (let i = numFrameBtns - 1; i >= numFrames; i--) {
 			self.panel.frames.remove(self.panel.frames[i], i);

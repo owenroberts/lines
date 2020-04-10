@@ -6,7 +6,7 @@ class Text {
 		this.track = 18; // tracking is space between letters
 		this.msg = msg;
 		this.wrap = wrap;
-		this.active = true;
+		this.isActive = true;
 		this.letters = letters;
 		this.breaks = [];
 		this.setBreaks();
@@ -47,7 +47,7 @@ class Text {
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
 	display(countForward, countBackward, _x, _y) {
-		if (this.active) {
+		if (this.isActive) {
 			const len = countForward ? this.count : this.msg.length;
 			const index = countBackward ? this.end : 0;
 			let x = _x || this.x;

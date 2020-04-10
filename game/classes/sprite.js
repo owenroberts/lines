@@ -3,14 +3,14 @@ class Sprite {
 		this.position = new Cool.Vector(x, y);
 		this.width = w;
 		this.height = h;
-		this.debug = false; /* argument? */
+		this.debug = false; /* argument? isDebug ? */
 		this.debugColor = "#00ffbb";
 		this.collider = {
 			position: new Cool.Vector(0, 0),
 			width: this.width,
 			height: this.height
 		};
-		this.alive = true;  // need a better name for this - disabled or something ... 
+		this.isActive = true;  // need a better name for this - disabled or something ... 
 
 		this.mouseOver = false;
 		this.waitToGoOut = false;
@@ -67,7 +67,7 @@ class Sprite {
 	}
 
 	update() {
-		if (this.alive) {
+		if (this.isActive) {
 			if (this.jumpAmount != 0) {
 				this.velocity.y += this.jumpAmount;
 				this.jumpAmount = 0;
@@ -124,7 +124,7 @@ class Sprite {
 	display(isMap) {
 		// if (this.debug) console.log(this.xy);
 		// isMap should be editor specific parameter ... 
-		if (this.alive && (this.isOnScreen() || isMap)) {
+		if (this.isActive && (this.isOnScreen() || isMap)) {
 			if (this.debug) this.drawDebug();
 			if (this.animation && this.animation.loaded) {
 				this.animation.draw(this.xy.x, this.xy.y);
@@ -159,7 +159,7 @@ class Sprite {
 	}
 
 	collide(other, callback) {
-		if (this.alive && other.alive) {
+		if (this.isActive && other.isActive) {
 			if (this.xy.x + this.collider.position.x < other.xy.x + other.collider.position.x + other.collider.width &&
 			this.xy.x + this.collider.position.x + this.collider.width > other.xy.x + other.collider.position.x &&
 			this.xy.y + this.collider.position.y < other.xy.y + other.collider.position.y + other.collider.height &&
@@ -210,23 +210,13 @@ class Sprite {
 		}
 	}
 
-	dies() {
-		this.alive = false;
-		this.animation.play = false;
-		var p = this;
-		setTimeout( function() {
-			//p.alive = true;
-			//p.pos = new Cool.Vector(10, 20);
-		}, 1000);
-	}
-
 	reset(widthMin, widthMax, heightMin, heightMax) {
 		this.position.x = Cool.randomInt(widthMin, widthMax - this.width);
 		this.position.y = Cool.randomInt(heightMin, heightMax);
 	}
 
 	over(x, y) {
-		if (this.alive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
+		if (this.isActive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
 			this.mouseOver = true;
 			if (this.onOver) this.onOver();
 			return true;
@@ -236,7 +226,7 @@ class Sprite {
 	}
 
 	out(x, y) {
-		if (this.alive && !this.tap(x,y) && (this.mouseOver || this.waitToGoOut)) {
+		if (this.isActive && !this.tap(x,y) && (this.mouseOver || this.waitToGoOut)) {
 			this.clickStarted = false;
 			this.waitToGoOut = false;
 			this.mouseOver = false;
@@ -248,7 +238,7 @@ class Sprite {
 	}
 
 	down(x, y) {
-		if (this.alive && this.tap(x,y)) {
+		if (this.isActive && this.tap(x,y)) {
 			this.clickStarted = true;
 			this.waitToGoOut = true;
 			if (this.onDown) this.onDown();
@@ -259,7 +249,7 @@ class Sprite {
 	}
 
 	up(x, y) {
-		if (this.alive && this.tap(x,y) && this.clickStarted) {
+		if (this.isActive && this.tap(x,y) && this.clickStarted) {
 			this.mouseOver = false;
 			if (this.onUp) this.onUp();
 			if (this.onClick) this.onClick();

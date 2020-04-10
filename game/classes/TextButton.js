@@ -1,7 +1,6 @@
 class TextButton extends UI {
 	constructor(x, y, msg, wrap, letters) {
 		super({x: x, y: y});
-		// this.debug = true;
 		this.center = false;
 		this.text = new Text(this.position.x, this.position.y, msg, wrap, letters);
 		this.setCollider();
@@ -20,7 +19,9 @@ class TextButton extends UI {
 
 	display() {
 		super.display();
-		if (this.alive) this.text.display();
+		if (this.isActive) this.text.display();
+		/* use setter for alive active? when is text button set to not alive? 
+			find TextButton */
 	}
 
 	setPosition(x, y) {

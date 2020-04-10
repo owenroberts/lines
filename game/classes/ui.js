@@ -12,7 +12,7 @@ class UI extends Sprite {
 		this.debug = debug;
 		this.center = true;
 
-		if (params.hidden) this.alive = false; /* alive is more like isVisible */
+		if (params.hidden) this.isActive = false; /* hidden prob in garden json ...  */
 		if (params.json) this.addJSON(params.json);
 		
 		if (params.states) {
