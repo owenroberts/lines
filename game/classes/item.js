@@ -15,13 +15,16 @@ class Item extends Sprite {
 		}
 
 		this.scenes = params.scenes;
-		// console.log(params.center)
 		this.center = params.center || true;
 	}
 
 	update(offset) {
 		this.position.x = this.origin.x + offset.x;
 		this.position.y = this.origin.y + offset.y;
-		// console.log(this.position.x, this.position.y);
+	}
+
+	setPosition(x, y) {
+		this.origin.x = x;
+		this.origin.y = y;
 	}
 }

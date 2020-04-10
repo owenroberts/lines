@@ -10,23 +10,12 @@ class Sprite {
 			width: this.width,
 			height: this.height
 		};
-		this.alive = true;
-		// this.initPhysics();
-		// this.bkg = false; /* draw a filled in outline */
+		this.alive = true;  // need a better name for this - disabled or something ... 
 
 		this.mouseOver = false;
 		this.waitToGoOut = false;
 		this.clickStarted = false;
 		// onOver, onOut, onUp, onDown, onClick
-	}
-	
-	/* make a physics class? */
-	initPhysics() {
-		this.jumpAmount = 0;
-		this.velocity = new Cool.Vector(0,0);
-		this.bounceAmount = new Cool.Vector(0,0);
-		this.bounce = false;
-		this.wiggleAmount = -1;
 	}
 	
 	/* i don't know why the other reset exists,
@@ -66,6 +55,7 @@ class Sprite {
 		this.collider.height = h;
 	}
 
+	/* scaling sucks, should add this as sub class */
 	scale(n) {
 		/* need to wait for animation to load, do this later */
 		this.width *= n;
@@ -133,6 +123,7 @@ class Sprite {
 
 	display(isMap) {
 		// if (this.debug) console.log(this.xy);
+		// isMap should be editor specific parameter ... 
 		if (this.alive && (this.isOnScreen() || isMap)) {
 			if (this.debug) this.drawDebug();
 			if (this.animation && this.animation.loaded) {
@@ -236,7 +227,6 @@ class Sprite {
 
 	over(x, y) {
 		if (this.alive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
-			if (this.animation) this.animation.state = 'over';
 			this.mouseOver = true;
 			if (this.onOver) this.onOver();
 			return true;
@@ -247,7 +237,6 @@ class Sprite {
 
 	out(x, y) {
 		if (this.alive && !this.tap(x,y) && (this.mouseOver || this.waitToGoOut)) {
-			if (this.animation) this.animation.state = 'idle';
 			this.clickStarted = false;
 			this.waitToGoOut = false;
 			this.mouseOver = false;
@@ -260,7 +249,6 @@ class Sprite {
 
 	down(x, y) {
 		if (this.alive && this.tap(x,y)) {
-			if (this.animation) this.animation.state = 'active';
 			this.clickStarted = true;
 			this.waitToGoOut = true;
 			if (this.onDown) this.onDown();
@@ -272,11 +260,13 @@ class Sprite {
 
 	up(x, y) {
 		if (this.alive && this.tap(x,y) && this.clickStarted) {
-			if (this.animation) this.animation.state = 'idle';
 			this.mouseOver = false;
 			if (this.onUp) this.onUp();
 			if (this.onClick) this.onClick();
 			if (this.func) func();
+			return true;
+		} else {
+			return false;
 		}
 		this.clickStarted = false;
 	}

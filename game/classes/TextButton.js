@@ -1,4 +1,4 @@
-class TextButton extends Button {
+class TextButton extends UI {
 	constructor(x, y, msg, wrap, letters) {
 		super({x: x, y: y});
 		// this.debug = true;

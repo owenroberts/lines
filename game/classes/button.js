@@ -13,49 +13,26 @@ class Button extends UI {
 	}
 
 	over(x, y) {
-		if (this.alive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
-			if (this.animation) this.animation.state = 'over';
-			this.mouseOver = true;
-			if (this.onOver) this.onOver();
-			return true;
-		} else {
-			return false;
-		}
+		const over = super.over(x, y);
+		if (over) this.animation.state = 'over';
+		return over;
 	}
 
 	out(x, y) {
-		if (this.alive && !this.tap(x,y) && (this.mouseOver || this.waitToGoOut)) {
-			if (this.animation) this.animation.state = 'idle';
-			this.clickStarted = false;
-			this.waitToGoOut = false;
-			this.mouseOver = false;
-			if (this.onOut) this.onOut();
-			return true;
-		} else {
-			return false;
-		}
+		const out = super.out(x, y);
+		if (out) this.animation.state = 'idle';
+		return out;
 	}
 
 	down(x, y) {
-		if (this.alive && this.tap(x,y)) {
-			if (this.animation) this.animation.state = 'active';
-			this.clickStarted = true;
-			this.waitToGoOut = true;
-			if (this.onDown) this.onDown();
-			return true;
-		} else {
-			return false;
-		}
+		const down = super.down(x, y);
+		if (down)  this.animation.state = 'active';
+		return down;
 	}
 
 	up(x, y) {
-		if (this.alive && this.tap(x,y) && this.clickStarted) {
-			if (this.animation) this.animation.state = 'idle';
-			this.mouseOver = false;
-			if (this.onUp) this.onUp();
-			if (this.onClick) this.onClick();
-			if (this.func) func();
-		}
-		this.clickStarted = false;
+		const up = super.up(x, y);
+		if (up) this.animation.state = 'idle';
+		return up;
 	}
 }

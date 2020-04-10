@@ -69,7 +69,7 @@ class Animation {
 	}
 
 	set state(state) {
-		if (this._state != state) {
+		if (this._state != state && this.states[state]) {
 			this._state = state;
 			if (this.currentState) this.frame = this.currentState.start;
 			if (!this.isPlaying) this.isPlaying = true; /* bad temp fix ... */
