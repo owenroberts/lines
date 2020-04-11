@@ -28,6 +28,7 @@ class Sprite {
 	/* rewrite later ... */	
 	addJSON(json, callback) {
 		this.animation = new Anim();
+
 		this.animation.loadJSON(json, data => {
 			this.width = this.collider.width = data.w;
 			this.height = this.collider.height = data.h;

@@ -110,6 +110,7 @@ class Animation {
 	}
 
 	draw(x, y) {
+		// if (this.debug) console.log(x, y);
 		if (!this.mixedColors) this.ctx.beginPath();
 		for (let i = 0, len = this.layers.length; i < len; i++) {
 			const layer = this.layers[i];
@@ -209,6 +210,8 @@ class Animation {
 
 	loadData(json, callback) {
 		this.loaded = true;
+		// console.time('load drawings');
+		// console.log(json.d.length);
 		for (let i = 0; i < json.d.length; i++) {
 			const drawing = json.d[i];
 			let d;
@@ -224,7 +227,8 @@ class Animation {
 			}
 			this.drawings[i] = d;
 		}
-		
+		// console.timeEnd('load drawings');
+
 		this.layers = json.l;
 
 		for (const key in json.s) {
