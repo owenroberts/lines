@@ -25,24 +25,10 @@ class Sprite {
 		this.height = undefined;
 	}
 
-	/* rewrite later ... */	
-	addJSON(json, callback) {
-		this.animation = new Anim();
-
-		this.animation.loadJSON(json, data => {
-			this.width = this.collider.width = data.w;
-			this.height = this.collider.height = data.h;
-			if (callback) callback();
-		});
-	}
-
-	addAnimation(src, callback) {
-		this.animation = new Anim();
-		this.animation.load(src, data => {
-			this.width = this.collider.width = data.w;
-			this.height = this.collider.height = data.h;
-			if (callback) callback();
-		});
+	addAnimation(animation, callback) {
+		this.animation = animation;
+		this.width = this.collider.width = this.animation.width;
+		this.height = this.collider.height = this.animation.height;
 	}
 
 	fit(width) {

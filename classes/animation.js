@@ -212,6 +212,7 @@ class Animation {
 		this.loaded = true;
 		// console.time('load drawings');
 		// console.log(json.d.length);
+		// console.log(json);
 		for (let i = 0; i < json.d.length; i++) {
 			const drawing = json.d[i];
 			let d;

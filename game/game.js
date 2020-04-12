@@ -26,6 +26,7 @@ const Game = {
 		this.bounds = { top: 0, bottom: 0, left: 0, right: 0 };
 
 		this.data = {};
+		this.anims = {};
 		this.scenes = {};
 		for (let i = 0; i < params.scenes.length; i++) {
 			this.scenes[params.scenes[i]] = new Scene();
@@ -55,13 +56,12 @@ const Game = {
 			const file = files[f];
 			fetch(file)
 				.then(response => {
-					if (response.ok) {
-						return response.url.includes('csv') ? response.text() : response.json();
-					}
+					if (response.ok) return response.url.includes('csv') ? response.text() : response.json();
 					throw new Error('Network response was not ok.');
 				})
 				.then(data => {
 					Game.data[f] = {};
+					Game.anims[f] = {};
 					Game.assetsLoaded[f] = {};
 					if (typeof data == 'object') {
 						Game.data[f].entries = data;
@@ -102,8 +102,11 @@ const Game = {
 		fetch(src)
 			.then(response => { return response.json(); })
 			.then(json => {
-				Game.data[file][key] = json;
-				Game.assetsLoaded[file][key] = true;
+				// Game.data[file][key] = json;
+				Game.anims[file][key] = new Anim();
+				Game.anims[file][key].loadData(json, function() {
+					Game.assetsLoaded[file][key] = true;
+				});
 			});
 	},
 	start: function() {
@@ -170,12 +173,10 @@ const Game = {
 		Game.ctx.fillStyle = 'rgba(100,255,200)';
 		Game.ctx.fillText(s, x + 5, y + 15);
 	},
-	addLettering: function(label, json) {
+	addLettering: function(label) {
 		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"";
-		Game.lettering[label] = new Anim();
-		Game.lettering[label].loadJSON(json);
 		for (let i = 0; i < letterIndexString.length; i++) {
-			Game.lettering[label].createNewState(letterIndexString[i], i, i);
+			Game.anims.lettering[label].createNewState(letterIndexString[i], i, i);
 		}
 	},
 	setBounds: function(dir, value) {

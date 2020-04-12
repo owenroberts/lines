@@ -7,14 +7,7 @@ class Texture {
 		this.center = params.center || false;
 		
 		this.offset = {x: 0, y: 0};
-
-		if (params.json) this.addJSON(params.json);
-
-		if (params.src) {
-			fetch(params.src)
-				.then(response => { return response.json(); })
-				.then(json => this.addJSON);
-		}
+		if (params.animation) this.animation = params.animation;
 	}
 
 	addLocation(index, x, y) {
@@ -22,12 +15,8 @@ class Texture {
 		this.locations.push({ x: x, y: y, i: index });
 	}
 
-	addJSON(json) {
-		// this.json = json;
-		this.animation = new Anim();
-		this.animation.loadJSON(json);
-		this.animation.debug = this.debug;
-		
+	addLocations(locations) {
+		this.locations.push(...locations);
 		for (let i = 0; i < this.locations.length; i++) {
 			if (this.frame == 'index') {
 				this.locations[i].i = i;
