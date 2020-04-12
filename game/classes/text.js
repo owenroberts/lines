@@ -27,20 +27,34 @@ class Text {
 	}
 
 	setBreaks() {
-		let nextSpace = false;
-		let offset = 0;
+		/* 
+			set line breaks in message, 
+			based on message length, new line & return keys
+			waits for a space i guess?
+		*/
+
+		let breakOnNextSpace = false; // wait for next space character
+		let offset = 0; // 0 matches first i % this.wrap, then moves to accomodate added characters for spaces
 		this.breaks = [];
-		for (let i = 0; i < this.msg.length; i++) {
-			if (i != 0) {
-				if (i % this.wrap == offset && this.msg[i] == ' ' && !nextSpace) {
-					this.breaks.push(i);
-				} else if (i % this.wrap == offset && this.msg[i] != ' ' && !nextSpace) {
-					nextSpace = true;
-				} else if (nextSpace && this.msg[i] == ' ') {
-					this.breaks.push(i);
-					offset = i % this.wrap;
-					nextSpace = false;
-				}
+
+		for (let i = 1; i < this.msg.length; i++) {
+
+			// break on \n\r, check to make sure it didn't just break
+			if (this.msg[i].match(/[\n\r]/g) && !this.breaks.includes(i - 1)) {
+				this.breaks.push(i);
+				offset = i % this.wrap;
+				breakOnNextSpace = false;
+			}
+
+			else if (i % this.wrap == offset && !breakOnNextSpace) {
+				if (this.msg[i] == ' ') this.breaks.push(i);
+				else breakOnNextSpace = true;
+			}
+
+			else if (this.msg[i] == ' ' && breakOnNextSpace) {
+				this.breaks.push(i);
+				offset = i % this.wrap;
+				breakOnNextSpace = false;
 			}
 		}
 	}
@@ -59,8 +73,8 @@ class Text {
 				if (letter == ' ' || letter == '_') {
 					x += this.track;
 				} else if (letter == '\n' || letter == '\r') {
-					y += this.lead;
-					x = _x || this.x;
+					// y += this.lead;
+					// x = _x || this.x;
 				} else {
 					this.letters.state = letter;
 					this.letters.draw(x, y);
