@@ -14,7 +14,7 @@ class UI extends Sprite {
 
 		if (params.hidden) this.isActive = false; /* hidden prob in garden json ...  */
 		if (params.json) this.addJSON(params.json);
-		
+		if (params.animation) this.addAnimation(params.animation);
 		if (params.states) {
 			this.animation.states = params.states;
 			this.animation.state = 'idle';

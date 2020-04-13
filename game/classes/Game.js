@@ -148,11 +148,10 @@ class Game {
 		requestAnimFrame(() => { this.update(); });  // this context
 	}
 
-	// this really feels like it can be handled in loading
-	addLettering(label) {
+	addLettering(animation) {
 		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"!";
 		for (let i = 0; i < letterIndexString.length; i++) {
-			this.anims.lettering[label].createNewState(letterIndexString[i], i, i);
+			animation.createNewState(letterIndexString[i], i, i);
 		}
 	}
 
