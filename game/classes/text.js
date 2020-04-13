@@ -35,19 +35,24 @@ class Text {
 
 		let breakOnNextSpace = false; // wait for next space character
 		let offset = 0; // 0 matches first i % this.wrap, then moves to accomodate added characters for spaces
+		let prevBreak = false; // for space break followed by \n\r
 		this.breaks = [];
 
 		for (let i = 1; i < this.msg.length; i++) {
+			prevBreak = false;
 
 			// break on \n\r, check to make sure it didn't just break
-			if (this.msg[i].match(/[\n\r]/g) && !this.breaks.includes(i - 1)) {
+			if (this.msg[i].match(/[\n\r]/g) && !prevBreak) {
 				this.breaks.push(i);
 				offset = i % this.wrap;
 				breakOnNextSpace = false;
 			}
 
 			else if (i % this.wrap == offset && !breakOnNextSpace) {
-				if (this.msg[i] == ' ') this.breaks.push(i);
+				if (this.msg[i] == ' ') {
+					this.breaks.push(i);
+					prevBreak = true;
+				}
 				else breakOnNextSpace = true;
 			}
 
@@ -55,6 +60,7 @@ class Text {
 				this.breaks.push(i);
 				offset = i % this.wrap;
 				breakOnNextSpace = false;
+				prevBreak = true;
 			}
 		}
 	}

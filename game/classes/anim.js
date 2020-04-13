@@ -1,6 +1,6 @@
 class Anim extends Animation {
 	constructor(src, callback, debug) {
-		super(Game.ctx, Game.lps, Game.mixedColors);
+		super(gme.ctx, gme.lps, gme.mixedColors);
 		this.src = src;
 		this.debug = debug;
 		this.loaded = false;

@@ -174,7 +174,7 @@ const Game = {
 		Game.ctx.fillText(s, x + 5, y + 15);
 	},
 	addLettering: function(label) {
-		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"";
+		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"!";
 		for (let i = 0; i < letterIndexString.length; i++) {
 			Game.anims.lettering[label].createNewState(letterIndexString[i], i, i);
 		}
