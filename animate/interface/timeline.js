@@ -91,4 +91,12 @@ function Timeline() {
 			self.panel.timeline.append(ui, `lyr-${i}`);
 		}
 	};
+
+	this.toggleLayerView = function() {
+		if (!self.panel.timeline.el.classList.contains('collapse')) {
+			self.panel.timeline.addClass('collapse');
+		} else {
+			self.panel.timeline.removeClass('collapse');
+		}
+	};
 }

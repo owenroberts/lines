@@ -132,6 +132,10 @@ $column-width: 40px;
 
 	overflow: scroll hidden;
 
+	&.collapse {
+		height: 20px;
+	}
+
 	.frame {
 		// overflow: hidden;
 		margin: 0;
@@ -183,6 +187,5 @@ $column-width: 40px;
 		background-color: darkgrey;
 		outline: 1px solid slategrey;
 	}
-
 }
 

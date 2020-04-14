@@ -1124,6 +1124,18 @@
 						}
 					},
 					{
+						"type": "UIToggle",
+						"key": "ctrl-l",
+						"face": "timelineView",
+						"fromModule": {
+							"callback": "toggleLayerView"
+						},
+						"params": {
+							"onText": "Frame View",
+							"offText": "Layer View"
+						}
+					},
+					{
 						"type": "UIRow",
 						"k": "timeline",
 						"params": {

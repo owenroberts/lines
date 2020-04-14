@@ -55,7 +55,8 @@ function appSave() {
 		onionSkinNum: lns.render.onionSkinNum,
 		mouseInterval: lns.draw.mouseInterval,
 		palettes: lns.ui.palette.palettes,
-		rl: lns.ui.faces.rl.value
+		rl: lns.ui.faces.rl.value,
+		timelineView: lns.ui.faces.timelineView.value
 	};
 }
 
@@ -70,13 +71,16 @@ function appLoad(settings) {
 	lns.ui.faces.width.update(settings.width);
 	lns.ui.faces.height.update(settings.height);
 	lns.ui.faces.bgColor.update(settings.canvasColor);	
+	lns.ui.faces.timelineView.update(settings.timelineView);
+
 	lns.ui.faces.lineWidth.update(settings.lineWidth); // has to be called last bc of reset ... 
 
 	/* lns.anim + ui */
 	lns.ui.faces.fps.update(settings.fps);
 	lns.ui.faces.c.update(settings.c);
 
-	// palettes - no need to separate module from ui bc its all ui - only one not a ui with update ... 
+	// palettes - no need to separate module from ui bc its all ui 
+	// - only one not a ui with update ... 
 	lns.ui.palette.setup(settings.palettes);
 
 	/* ui only */

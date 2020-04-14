@@ -120,6 +120,9 @@
   grid-template-rows: 20px repeat(var(--num-layers), calc(var(--layer-size) * 1px) 1px);
   overflow: scroll hidden;
 }
+#timeline.collapse {
+  height: 20px;
+}
 #timeline .frame {
   margin: 0;
   background-color: lightgray;
