@@ -4,7 +4,7 @@ class Scene {
 		this.updateItems = [];
 		this.uiItems = [];
 	}
-	
+
 	add(item) {
 		this.displayItems.push(item);
 		this.updateItems.push(item);
@@ -18,7 +18,6 @@ class Scene {
 			const index = this[`${type}Items`].indexOf(item);
 			if (index >= 0) this[`${type}Items`].splice(index, 1);
 		}
-		
 	}
 
 	addSprite(item) {
@@ -49,9 +48,9 @@ class Scene {
 		}
 	}
 
-	update(offset) {
+	update() {
 		for (let i = 0; i < this.updateItems.length; i++) {
-			this.updateItems[i].update(offset);
+			this.updateItems[i].update();
 		}
 	}
 

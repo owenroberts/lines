@@ -16,12 +16,8 @@ class Game {
 		this.clearBg = true;
 		this.bounds = { top: 0, bottom: 0, left: 0, right: 0 };
 
-		this.scenes = {};
-		for (let i = 0; i < params.scenes.length; i++) {
-			this.scenes[params.scenes[i]] = new Scene();
-		}
+		this.scenes = new SceneManager(params.scenes, Scene);
 
-		this.lettering = {};
 		this.data = {};
 		this.anims = {};
 
