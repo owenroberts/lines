@@ -39,7 +39,7 @@ class UILayer extends UICollection {
 		});
 
 		this.left = new UIDragButton({
-			text: '<',
+			text: '⬗',
 			type: 'left',
 			callback: (dir, num) => {
 				layer.startFrame += (dir ? dir : -1) * (num ? num : 1);
@@ -49,9 +49,10 @@ class UILayer extends UICollection {
 		});
 
 		this.right = new UIDragButton({
-			text: '>',
+			text: '⬖',
 			type: 'right',
 			callback: (dir, num) => {
+				console.log(dir, num);
 				layer.endFrame += (dir ? dir : 1) * (num ? num : 1);
 				this.update();
 				lns.ui.update();

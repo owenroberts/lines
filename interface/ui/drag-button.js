@@ -13,10 +13,12 @@ class UIDragButton extends UIButton {
 		});
 
 		document.addEventListener('mouseup', ev => {
+			// console.log(ev);
 			if (this.dragging) {
 				const delta = ev.pageX - this.down.x;
 				if (Math.abs(delta) > 10) {
-					this.callback(delta > 0 ? 1 : -1, Math.abs(Math.ceil(delta / 40)));
+					this.callback(delta > 0 ? 1 : -1, Math.abs(Math.ceil(delta / lns.ui.timeline.frameSize
+)));
 				}
 			}
 			this.dragging = false;

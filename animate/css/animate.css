@@ -137,6 +137,7 @@
   margin: 0;
   background-color: #bee4ff;
   overflow: hidden;
+  display: flex;
 }
 #timeline .layer .layer-toggle {
   min-width: 12px;
@@ -155,6 +156,9 @@
 #timeline .layer .left.off, #timeline .layer .right.off, #timeline .layer .layer-toggle.off, #timeline .layer .layer-edit.off {
   background-color: blue;
   color: white;
+}
+#timeline .layer .right {
+  margin-left: auto;
 }
 #timeline::-webkit-scrollbar {
   width: 0.5em;

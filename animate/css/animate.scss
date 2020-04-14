@@ -153,6 +153,7 @@ $column-width: 40px;
 		margin: 0;
 		background-color: $main-color;
 		overflow: hidden;
+		display: flex;
 
 		.layer-toggle {
 			min-width: 12px;
@@ -171,6 +172,10 @@ $column-width: 40px;
 				background-color: $accent-color; 
 				color: white;
 			}
+		}
+
+		.right {
+			margin-left: auto;
 		}
 	}
 
