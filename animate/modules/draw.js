@@ -34,6 +34,7 @@ function Draw(defaults) {
 	};
 
 	this.setProperty = function(value, args) {
+		/* good / only reason for layer module, or add to sub animation class ... */
 		lns.ui.layers.updateProperty(args.prop, value);
 		self.layer[args.prop] = value;
 	};

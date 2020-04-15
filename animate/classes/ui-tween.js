@@ -1,14 +1,15 @@
 class UITween extends UICollection {
-	constructor(tween) {
-		super({});
-		this.el.classList.add('tween');
+	constructor(params, tween, layer) {
+		super(params);
+		this.addClass('tween');
 		this.tween = tween;
 
-		this.label = new UIButton({
-			text: tween.prop,
+		this.edit = new UIButton({
+			text: '✎',
+			type: 'tween-edit',
 			callback: () => {
-				const modal = new UIModal('Edit Tween', lns, this.label.position, function() {
-					lns.ui.layers.update();
+				const modal = new UIModal('Edit Tween', lns, this.position, function() {
+					lns.ui.update();
 				});	
 
 				/* not DRY maybe make an animate class tween-modal */
@@ -47,35 +48,42 @@ class UITween extends UICollection {
 				}));
 			}
 		});
-		this.label.addClass('tween');
 
 		this.left = new UIDragButton({
-			text: '+',
+			text: '⬗',
 			type: 'left',
 			callback: (dir, num) => {
 				tween.sf += (dir ? dir : -1) * (num ? num : 1);
-				this.update();
+				lns.ui.update();
 			}		
 		});
 
 		this.right = new UIDragButton({
-			text: '+',
+			text: '⬖',
 			type: 'right',
 			callback: (dir, num) => {
 				this.tween.ef += (dir ? dir : 1) * (num ? num : 1);
-				this.update();
+				lns.ui.update();
 			}		
 		});
 
-		this.update();
+		this.remove = new UIButton({
+			type: 'remove',
+			text: '🗑',
+			callback: () => {
+				layer.t.splice(layer.t.indexOf(this), 1);
+				lns.ui.update();
+			}
+		});
+
+		this.append(this.edit);
+		this.append(this.remove);
+		this.append(this.left);
+		this.append(this.right);
 	}
 
 	get html() {
-		return [this.left.el, this.label.el, this.right.el];
+		return this.el;
 	}
 
-	update() {
-		this.left.el.style['grid-column'] = `${this.tween.sf + 1} / span 1`;
-		this.label.el.style['grid-column'] = `${this.tween.sf + 2} / span ${this.tween.ef - this.tween.sf + 1}`;
-	}
 }

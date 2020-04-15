@@ -22,7 +22,7 @@ class UIToggle extends UIButton {
 
 	toggle() {
 		if (this.isOn) this.off();
-		else  this.on();
+		else this.on();
 		this.isOn = !this.isOn;
 	}
 

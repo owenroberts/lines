@@ -1,7 +1,7 @@
 @import "../../interface/css/colors";
 @import "../../interface/css/lines.css";
 
-$anim-color: lightgreen;
+$anim-color: #9de0b1;
 $anim-select: green;
 $anim-off: darkgreen;
 
@@ -119,6 +119,7 @@ $column-width: 40px;
 #timeline {
 	--num-frames: 1;
 	--num-layers: 1;
+	--num-tweens: 0;
 	--frame-size: 40;
 	
 	--height: 80;
@@ -128,7 +129,7 @@ $column-width: 40px;
 	display: grid;
 	// height: calc(var(--height) * 1px);
 	grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-size) * 1px));
-	grid-template-rows: 20px repeat(var(--num-layers),  calc(var(--layer-size) * 1px) 1px);
+	grid-template-rows: 20px repeat(calc(var(--num-layers) + var(--num-tweens)),  calc(var(--layer-size) * 1px) 1px) 3px;
 
 	overflow: scroll hidden;
 
@@ -140,7 +141,7 @@ $column-width: 40px;
 		// overflow: hidden;
 		margin: 0;
 		background-color: $ui-color;
-		grid-row: 1 / span calc(var(--num-layers) * 2);
+		grid-row: 1 / span calc(var(--num-layers) * 2 + 2);
 		width: 100%;
 		overflow: hidden;
 
@@ -149,7 +150,7 @@ $column-width: 40px;
 		}
 	}
 
-	.layer {
+	.layer, .tween {
 		margin: 0;
 		background-color: $main-color;
 		overflow: hidden;
@@ -159,7 +160,7 @@ $column-width: 40px;
 			min-width: 12px;
 		}
 
-		.left, .right, .layer-toggle, .layer-edit {
+		.left, .right, .layer-toggle, .layer-edit, .layer-tween, .tween-edit, .remove {
 			margin: 0;
 			margin-right: 1px;
 			padding: 1px;
@@ -174,9 +175,15 @@ $column-width: 40px;
 			}
 		}
 
+		.remove { font-size: 1vh; }
+
 		.right {
 			margin-left: auto;
 		}
+	}
+
+	.tween {
+		background-color: $anim-color;
 	}
 
 	&::-webkit-scrollbar {

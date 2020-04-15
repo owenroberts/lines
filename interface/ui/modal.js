@@ -12,6 +12,11 @@ class UIModal extends UICollection {
 		
 		const self = this;
 
+		this.break = new UIElement({
+			class: 'break'
+		});
+		this.append(this.break);
+
 		this.submit = new UIButton({
 			text: "Submit",
 			callback: function() {
@@ -35,7 +40,7 @@ class UIModal extends UICollection {
 	}
 
 	add(component) {
-		this.el.insertBefore(component.el, this.submit.el);
+		this.el.insertBefore(component.el, this.break.el);
 	}
 
 	clear() {

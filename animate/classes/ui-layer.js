@@ -1,9 +1,8 @@
 class UILayer extends UICollection {
 	constructor(params, layer) {
 		super(params);
-		this.el.classList.add('layer');
+		this.addClass('layer');
 		this.layer = layer;
-		// this.el.style.gridRow = params.index + 1;
 
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
@@ -20,6 +19,50 @@ class UILayer extends UICollection {
 					lns.ui.update();
 				});
 
+				modal.add(new UIButton({ 
+					text: "Cut Segment",
+					callback: () => {
+						const drawing = lns.anim.drawings[layer.d];
+						drawing.pop(); /* remove "end" */
+						drawing.pop(); /* remove segment */
+						drawing.push('end'); /* new end */
+					}
+				}));
+
+				modal.add(new UIButton({
+					text: "Cut Line",
+					callback: () => {
+						const drawing = lns.anim.drawings[layer.d];
+						drawing.pop(); /* remove "end" */
+						for (let i = drawing.length - 1; i > 0; i--) {
+							if (drawing[i] != 'end') drawing.pop();
+							else break;
+						}
+					}
+				}));
+
+				modal.add(new UIButton({
+					text: "Clone",
+					callback: () => {
+						const newLayer = new Layer(_.cloneDeep(layer));
+						newLayer.startFrame = newLayer.endFrame = layer.endFrame + 1;
+						lns.anim.layers.splice(lns.anim.layers.length - 1, 0, newLayer);
+						lns.ui.play.setFrame(layer.endFrame + 1);
+					}
+				}));
+
+				modal.add(new UIButton({
+					text: "Split",
+					callback: () => {
+						const newLayer = new Layer(_.cloneDeep(layer));
+						newLayer.startFrame = lns.anim.currentFrame + 1;
+						layer.endFrame = lns.anim.currentFrame;
+						lns.anim.layers.splice(lns.anim.layers.length - 1, 0, newLayer);
+						lns.ui.play.setFrame(layer.endFrame + 1);
+					}
+				}));
+
+				modal.add(new UIElement({class: 'break'}));
 				modal.add(new UILabel({ text: "Start Frame:"}));
 				modal.add(new UIBlur({
 					value: layer.startFrame,
@@ -28,6 +71,7 @@ class UILayer extends UICollection {
 					}
 				}));
 
+				modal.add(new UIElement({class: 'break'}));
 				modal.add(new UILabel({ text: "End Frame:"}));
 				modal.add(new UIBlur({
 					value: layer.endFrame,
@@ -35,6 +79,78 @@ class UILayer extends UICollection {
 						layer.endFrame = +value;
 					}
 				}));
+			}
+		});
+
+		this.tween = new UIButton({
+			text: "⧉",
+			type: 'layer-tween',
+			callback: () => {
+				
+				const tween = {
+					prop: 'e',
+					sf: lns.anim.currentFrame,
+					ef: lns.anim.currentFrame + 10,
+					sv: 0,
+					ev: 'end'
+				};
+
+				const modal = new UIModal('Add Tween', lns, this.position, function() {
+					tween.ev = lns.anim.drawings[layer.d].length;
+					layer.addTween(tween);
+					lns.ui.update();
+				});
+
+				modal.add(new UILabel({ text: 'Property:' }));
+				modal.add(new UISelect({
+					options: ['e', 's', 'n', 'r', 'w', 'v', 'x', 'y'],
+					value: 'e',
+					selected: 'e',
+					callback: function(value) {
+						tween.prop = value;
+					}
+				}));
+
+				modal.add(new UILabel({ text: 'Start Frame:' }));
+				modal.add(new UIBlur({
+					value: tween.sf,
+					callback: function(value) {
+						tween.sf = +value;
+					}
+				}));
+
+				modal.add(new UILabel({ text: 'End Frame:' }));
+				modal.add(new UIBlur({
+					value: tween.ef,
+					callback: function(value) {
+						tween.ef = +value;
+					}
+				}));
+
+				modal.add(new UILabel({ text: 'Start Value:' }));
+				modal.add(new UIBlur({
+					value: tween.sv,
+					callback: function(value) {
+						tween.sv = +value;
+					}
+				}));
+
+				modal.add(new UILabel({ text: 'End Value:' }));
+				modal.add(new UIBlur({
+					value: tween.ev,
+					callback: function(value) {
+						tween.ev = +value;
+					}
+				}));
+			}
+		});
+
+		this.remove = new UIButton({
+			type: 'remove',
+			text: '🗑',
+			callback: () => {
+				lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
+				lns.ui.update();
 			}
 		});
 
@@ -61,46 +177,13 @@ class UILayer extends UICollection {
 
 		this.append(this.toggle);
 		this.append(this.edit);
+		this.append(this.tween);
+		this.append(this.remove);
 		this.append(this.left);
 		this.append(this.right);
-
-		this.tweens = [];
-		for (let i = 0; i < layer.t.length; i++) {
-			this.tweens[i] = new UITween(layer.t[i]);
-			this.append(this.tweens[i]);
-		}
-
-		// this.update();
 	}
 
 	get html() {
 		return this.el;
-	}
-
-	addTween(tween) {
-		const tweenUI = new UITween(tween);
-		this.tweens.push(tweenUI);
-		this.append(tweenUI);
-	}
-
-	update() {
-		/* position in grid */
-		this.el.style.gridColumnStart = 1; // this.layer.startFrame + 1;
-		this.el.style.gridColumnEnd = lns.anim.endFrame + 2; // this.layer.endFrame + 2;
-
-		/* grid for children */
-		this.el.style['grid-template-columns'] = `auto auto repeat(${lns.anim.endFrame}, 1fr) auto`;
-
-		this.left.el.style['grid-column'] = `${this.layer.startFrame + 1} / span 1`;
-		this.toggle.el.style['grid-column'] = `${this.layer.startFrame + 3} / span ${this.layer.endFrame - this.layer.startFrame}`;
-
-		for (let i = 0; i < this.layer.t.length; i++) {
-			if (this.tweens[i]) this.tweens[i].update();
-			else this.addTween(this.layer.t[i])
-		}
-	}
-
-	remove() {
-		this.el.remove();
 	}
 }

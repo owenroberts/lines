@@ -72,7 +72,7 @@ function Layers() {
 			ev: 'end'
 		};
 
-		const modal = new UIModal('Add Animation', lns, this.position, function() {
+		const modal = new UIModal('Add Tween', lns, this.position, function() {
 			self.loop((layer, index) => {
 				if (tween.ev == 'end') 
 					tween.ev = lns.anim.drawings[layer.d].length;
@@ -167,7 +167,7 @@ function Layers() {
 				}, layer);
 				self.panel.layers.append(ui, i);
 			} else {
-				self.panel.layers[i].update();
+				// self.panel.layers[i].update();
 			}
 		}
 	};

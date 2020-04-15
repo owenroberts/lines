@@ -230,7 +230,10 @@ select {
 	box-shadow: 1px 1px 4px $ui-highlight;
 	
 	max-width: 400px;
-	* { margin-right: 1em; }
+	// * { margin-right: 1em; }
+	.break {
+		flex-basis: 100%;
+	}
 
 	input { max-width: 40px; }
 
@@ -239,6 +242,10 @@ select {
 
 	label:first-child {
 		flex: 100%;
+	}
+
+	label, .btn, input {
+		margin: 3px;
 	}
 }
 

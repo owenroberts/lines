@@ -1136,6 +1136,33 @@
 						}
 					},
 					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "split"
+						},
+						"params": {
+							"text": "Split"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "select"
+						},
+						"params": {
+							"text": "Select"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "selectAll"
+						},
+						"params": {
+							"text": "Select All"
+						}
+					},
+					{
 						"type": "UIRow",
 						"k": "timeline",
 						"params": {

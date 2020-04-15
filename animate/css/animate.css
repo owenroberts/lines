@@ -40,7 +40,7 @@
 #layers-panel .layer .tween {
   margin: 0;
   line-height: 1;
-  background-color: lightgreen;
+  background-color: #9de0b1;
 }
 #layers-panel .layer .left, #layers-panel .layer .right, #layers-panel .layer .layer-toggle, #layers-panel .layer .layer-edit {
   margin: 0;
@@ -112,12 +112,13 @@
 #timeline {
   --num-frames: 1;
   --num-layers: 1;
+  --num-tweens: 0;
   --frame-size: 40;
   --height: 80;
   --layer-size: 16;
   display: grid;
   grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-size) * 1px));
-  grid-template-rows: 20px repeat(var(--num-layers), calc(var(--layer-size) * 1px) 1px);
+  grid-template-rows: 20px repeat(calc(var(--num-layers) + var(--num-tweens)), calc(var(--layer-size) * 1px) 1px) 3px;
   overflow: scroll hidden;
 }
 #timeline.collapse {
@@ -126,23 +127,23 @@
 #timeline .frame {
   margin: 0;
   background-color: lightgray;
-  grid-row: 1/span calc(var(--num-layers) * 2);
+  grid-row: 1/span calc(var(--num-layers) * 2 + 2);
   width: 100%;
   overflow: hidden;
 }
 #timeline .frame.current {
   background-color: #FF79FF;
 }
-#timeline .layer {
+#timeline .layer, #timeline .tween {
   margin: 0;
   background-color: #bee4ff;
   overflow: hidden;
   display: flex;
 }
-#timeline .layer .layer-toggle {
+#timeline .layer .layer-toggle, #timeline .tween .layer-toggle {
   min-width: 12px;
 }
-#timeline .layer .left, #timeline .layer .right, #timeline .layer .layer-toggle, #timeline .layer .layer-edit {
+#timeline .layer .left, #timeline .layer .right, #timeline .layer .layer-toggle, #timeline .layer .layer-edit, #timeline .layer .layer-tween, #timeline .layer .tween-edit, #timeline .layer .remove, #timeline .tween .left, #timeline .tween .right, #timeline .tween .layer-toggle, #timeline .tween .layer-edit, #timeline .tween .layer-tween, #timeline .tween .tween-edit, #timeline .tween .remove {
   margin: 0;
   margin-right: 1px;
   padding: 1px;
@@ -150,15 +151,21 @@
   display: inline-block;
   cursor: pointer;
 }
-#timeline .layer .left:hover, #timeline .layer .right:hover, #timeline .layer .layer-toggle:hover, #timeline .layer .layer-edit:hover {
+#timeline .layer .left:hover, #timeline .layer .right:hover, #timeline .layer .layer-toggle:hover, #timeline .layer .layer-edit:hover, #timeline .layer .layer-tween:hover, #timeline .layer .tween-edit:hover, #timeline .layer .remove:hover, #timeline .tween .left:hover, #timeline .tween .right:hover, #timeline .tween .layer-toggle:hover, #timeline .tween .layer-edit:hover, #timeline .tween .layer-tween:hover, #timeline .tween .tween-edit:hover, #timeline .tween .remove:hover {
   background-color: gray;
 }
-#timeline .layer .left.off, #timeline .layer .right.off, #timeline .layer .layer-toggle.off, #timeline .layer .layer-edit.off {
+#timeline .layer .left.off, #timeline .layer .right.off, #timeline .layer .layer-toggle.off, #timeline .layer .layer-edit.off, #timeline .layer .layer-tween.off, #timeline .layer .tween-edit.off, #timeline .layer .remove.off, #timeline .tween .left.off, #timeline .tween .right.off, #timeline .tween .layer-toggle.off, #timeline .tween .layer-edit.off, #timeline .tween .layer-tween.off, #timeline .tween .tween-edit.off, #timeline .tween .remove.off {
   background-color: blue;
   color: white;
 }
-#timeline .layer .right {
+#timeline .layer .remove, #timeline .tween .remove {
+  font-size: 1vh;
+}
+#timeline .layer .right, #timeline .tween .right {
   margin-left: auto;
+}
+#timeline .tween {
+  background-color: #9de0b1;
 }
 #timeline::-webkit-scrollbar {
   width: 0.5em;

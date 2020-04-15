@@ -232,14 +232,17 @@ select {
   display: flex;
   flex-wrap: wrap;
 }
-.modal * {
-  margin-right: 1em;
+.modal .break {
+  flex-basis: 100%;
 }
 .modal input {
   max-width: 40px;
 }
 .modal label:first-child {
   flex: 100%;
+}
+.modal label, .modal .btn, .modal input {
+  margin: 3px;
 }
 
 .mobile .menu-panel {
