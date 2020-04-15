@@ -6,7 +6,7 @@ window.addEventListener("load", function() {
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
 	lns.render = new Render(10); // (lps)
 
-	lns.anim = new Animation(lns.canvas.ctx);
+	lns.anim = new LnsAnim(lns.canvas.ctx);
 
 	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
 	lns.bgImage = new Background();

@@ -27,15 +27,14 @@ function Draw(defaults) {
 		for (const prop in props) {
 			if (self.layer[prop] !== undefined) {
 				// self.layer[prop] = props[prop];
-				if (lns.ui) lns.ui.faces[prop].update(props[prop]); 
+				if (lns.ui) lns.ui.faces[prop].update(props[prop]);
 				/* how to do this with ui, setter */
 			}
 		}
 	};
 
 	this.setProperty = function(value, args) {
-		/* good / only reason for layer module, or add to sub animation class ... */
-		lns.ui.layers.updateProperty(args.prop, value);
+		lns.anim.updateProperty(args.prop, value);
 		self.layer[args.prop] = value;
 	};
 

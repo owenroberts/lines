@@ -1,4 +1,4 @@
-class Animation {
+class LinesAnimation {
 	constructor(ctx, lps, mixedColors) {
 		this.ctx = ctx;
 		this.loaded = false;
