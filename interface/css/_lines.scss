@@ -182,8 +182,8 @@ select {
 			cursor: pointer;
 			font-size: 12px;
 			padding: 1px;
-			&:hover { background: $main-color; }
 			&.off { background-color: inherit; }
+			&:hover { background: $main-color; }
 		}
 
 		.block-btn {

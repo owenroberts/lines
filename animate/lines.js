@@ -23,7 +23,6 @@ window.addEventListener("load", function() {
 	lns.ui.capture = new Capture();
 	lns.ui.states = new States();
 	lns.ui.palette = new Palette();
-	lns.ui.layers = new Layers();
 	lns.ui.drawings = new Drawings();
 	lns.ui.play = new Play();
 	lns.ui.timeline = new Timeline();

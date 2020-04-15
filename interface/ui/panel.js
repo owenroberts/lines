@@ -11,8 +11,8 @@ class UIPanel extends UICollection {
 		this.append(this.header);
 
 		this.open = new UIToggle({
-			onText: "-",
-			offText: "+",
+			onText: "－",
+			offText: "＋",
 			type: "toggle",
 			callback: () => {
 				if (this.open.isOn) this.addClass('closed');

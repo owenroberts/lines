@@ -136,12 +136,6 @@ function Timeline() {
 		lns.ui.play.setFrame(lns.anim.currentFrame + 1);
 	};
 
-	/*
-		selection should be handled where? 
-		by layers
-
-	*/
-
 	// select in frame
 	this.select = function() {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {

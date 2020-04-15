@@ -2,8 +2,8 @@ function Play() {
 	const self = this;
 
 	this.update = function() {
-		self.updateFrames();
-		self.updateFrame();
+		// self.updateFrames();
+		// self.updateFrame();
 		lns.ui.timeline.update();
 	};
 

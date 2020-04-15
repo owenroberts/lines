@@ -637,24 +637,6 @@
 			}
 		]
 	},
-	"frames": {
-		"label": "Frames",
-		"uis": [
-			{	
-				"module": "ui",
-				"sub": "play",
-				"list": [
-					{
-						"type": "UIList",
-						"params": {
-							"id": "frames"
-						},
-						"k": "frames"
-					}
-				]
-			}
-		]
-	},
 	"capture": {
 		"label": "Capture",
 		"uis": [

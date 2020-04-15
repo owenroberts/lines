@@ -26,7 +26,6 @@ function setupAnimateInterface(ui) {
 
 	ui.update = function() {
 		ui.play.update();
-		ui.layers.update();
 		ui.drawings.update();
 		ui.states.update(); 
 	};
