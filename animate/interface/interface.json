@@ -1022,16 +1022,6 @@
 				"sub": "timeline",
 				"list": [
 					{
-						"type": "UIButton",
-						"key": "alt-f",
-						"fromModule": {
-							"callback": "fit"
-						},
-						"params": {
-							"text": "Fit"
-						}
-					},
-					{
 						"type": "UIToggle",
 						"key": "ctrl-l",
 						"face": "timelineView",
@@ -1041,6 +1031,16 @@
 						"params": {
 							"onText": "Frame View",
 							"offText": "Layer View"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-f",
+						"fromModule": {
+							"callback": "fit"
+						},
+						"params": {
+							"text": "Fit"
 						}
 					},
 					{

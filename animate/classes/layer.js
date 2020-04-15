@@ -89,20 +89,21 @@ class Layer {
 		}
 		
 		this.resetTweens();
-		return this;
+		return this; // when is this used ? 
 	}
 
 	shiftIndex(index, n) {
+		console.log(index, n);
 		if (!n) n = -1;	/* n is shift num, negative or positive */
 
-		/* what about insert ... */
-		if (this.startFrame == index && this.startFrame == index)
-			return this.removeIndex(index);
+		/* what about insert ... i dont get this ... shift should not delete right */
+		// if (this.startFrame == index)
+			// return this.removeIndex(index);
 
 		if (this.startFrame >= index) this.startFrame += n;
 		if (this.endFrame >= index) this.endFrame += n;
 
-		this.resetTweens();
+		this.resetTweens(); // can i check this somewhere else ? 
 		return this;
 	}
 

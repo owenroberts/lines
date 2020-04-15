@@ -202,11 +202,9 @@ function Data(anim) {
 		lns.draw.reset();
 		self.saveState();
 		for (let i = 0, len = anim.layers.length - 1; i < len; i++) {
+			// insert before args.dir  0, after 1
 			anim.layers[i].shiftIndex(anim.currentFrame + args.dir, 1);
-			const layer = anim.layers[i].removeIndex(anim.currentFrame + args.dir);
-			if (!layer) lns.ui.layers.remove(i);
-			else if (anim.layers.indexOf(layer) == -1)
-				lns.anim.layers.splice(lns.anim.layers.length - 1, 0, layer);
+			lns.anim.addLayer(anim.layers[i].removeIndex(anim.currentFrame + args.dir));
 			anim.frame = anim.currentFrame + args.dir;
 		}
 		lns.ui.update();

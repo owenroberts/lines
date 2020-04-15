@@ -7,4 +7,10 @@ class LnsAnim extends LinesAnimation {
 		}
 	}
 
+	addLayer(layer) {
+		// add before draw layer
+		if (this.layers.indexOf(layer) == -1)
+			this.layers.splice(lns.anim.layers.length - 1, 0, layer);
+	}
+
 }

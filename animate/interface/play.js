@@ -1,44 +1,6 @@
 function Play() {
 	const self = this;
 
-	this.update = function() {
-		// self.updateFrames();
-		// self.updateFrame();
-		lns.ui.timeline.update();
-	};
-
-	this.updateFrames = function() {
-		const numFrames = lns.anim.endFrame + 1;
-		for (let i = 0; i < numFrames; i++) {
-			if (!self.panel.frames[i]) {
-				const frameBtn = new UIButton({
-					type: "frame",
-					text: `${i}`,
-					key: i,
-					callback: function() {
-						lns.draw.reset();
-						self.setFrame(i);
-						lns.ui.update();
-					}	
-				});
-				lns.ui.keys[i] = frameBtn;
-				self.panel.frames.append(frameBtn, i);
-			}
-		}
-
-		const numFrameBtns = self.panel.frames.children.length;
-		for (let i = numFrameBtns - 1; i >= numFrames; i--) {
-			self.panel.frames.remove(self.panel.frames[i], i);
-		}
-	};
-
-	this.updateFrame = function() {
-		const currentFrame = document.getElementById("current")
-		if (currentFrame) currentFrame.removeAttribute("id");
-		self.panel.frames.setId('current', lns.anim.currentFrame);
-		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame;
-	};
-
 	this.setFrame = function(f) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// no before ?? 
