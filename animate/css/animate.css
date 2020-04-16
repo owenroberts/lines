@@ -30,16 +30,15 @@
   --num-frames: 1;
   --num-layers: 1;
   --num-tweens: 0;
-  --frame-size: 40;
-  --height: 80;
-  --layer-size: 16;
+  --frame-width: 40;
+  --layer-height: 1.5;
   display: grid;
-  grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-size) * 1px));
-  grid-template-rows: 20px repeat(calc(var(--num-layers) + var(--num-tweens)), calc(var(--layer-size) * 1px) 1px) 3px;
+  grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
+  grid-template-rows: 1.5em repeat(calc(var(--num-layers) + var(--num-tweens)), calc(var(--layer-height) * 1em) 1px) 3px;
   overflow: scroll hidden;
 }
 #timeline.collapse {
-  height: 20px;
+  height: 1.75em;
 }
 #timeline .frame {
   margin: 0;

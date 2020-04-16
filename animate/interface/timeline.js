@@ -1,12 +1,12 @@
 function Timeline() {
 	const self = this;
-	this.frameSize = 40;
+	this.frameWidth = 40;
 
 	this.init = function() {
 		self.panel.el.addEventListener('wheel', ev => {
 			ev.preventDefault();
-			self.frameSize += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 10 : 1);
-			self.panel.timeline.setProp('--frame-size', self.frameSize);
+			self.frameWidth += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 10 : 1);
+			self.panel.timeline.setProp('--frame-width', self.frameWidth);
 		});
 
 		self.panel.el.addEventListener('mousedown', ev => {
@@ -34,12 +34,11 @@ function Timeline() {
 	this.fit = function() {
 		const f = lns.anim.endFrame + 1;
 		const w = lns.ui.timeline.panel.el.clientWidth - 11; /* 11 for padding */
-		self.frameSize = (w - 2 * f) / f; 
-		self.panel.timeline.setProp('--frame-size', self.frameSize);
+		self.frameWidth = (w - 2 * f) / f; 
+		self.panel.timeline.setProp('--frame-width', self.frameWidth);
 	};
 
 	this.update = function() {
-		// self.panel.timeline.setProp('--frame-size', 40); /* can't get computerd style */
 		self.panel.timeline.setProp('--num-frames', lns.anim.endFrame + 1);
 		self.panel.timeline.setProp('--num-layers', lns.anim.layers.length - 1);
 		self.panel.timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.t.length, 0));

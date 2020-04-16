@@ -34,15 +34,16 @@ function Play() {
 		} else {
 			// put in reset? 
 			if (dir > 0) {
-				if (lns.anim.currentFrame < lns.anim.endFrame || 
-					lns.draw.hasDrawing()) {
+				console.log(lns.anim.currentFrame, lns.anim.currentState)
+				if (lns.anim.currentFrame < lns.anim.currentState.end  || 
+					(lns.anim.state == 'default' && lns.draw.hasDrawing())) {
 					lns.draw.layer.startFrame = next;
 					lns.draw.layer.endFrame = next;	
 					lns.anim.frame = next;
 				}
 			}
 
-			if (dir < 0 && lns.anim.currentFrame > 0) {
+			if (dir < 0 && lns.anim.currentFrame > lns.anim.currentState.start) {
 				lns.draw.layer.startFrame = next;
 				lns.draw.layer.endFrame = next;
 				lns.anim.frame = next;

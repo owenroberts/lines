@@ -55,6 +55,7 @@ function States() {
 
 	this.set = function(state) {
 		lns.anim.state = state;
+		lns.ui.update();
 	};
 
 	this.create = function() {

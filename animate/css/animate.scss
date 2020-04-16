@@ -30,21 +30,27 @@ $anim-off: darkgreen;
 	--num-frames: 1;
 	--num-layers: 1;
 	--num-tweens: 0;
-	--frame-size: 40;
+	--frame-width: 40;
 	
-	--height: 80;
-	// --layer-size: calc(calc(var(--height) / var(--num-layers)) * 1px);
-	--layer-size: 16;
+	--layer-height: 1.5;
 	
 	display: grid;
 	// height: calc(var(--height) * 1px);
-	grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-size) * 1px));
-	grid-template-rows: 20px repeat(calc(var(--num-layers) + var(--num-tweens)),  calc(var(--layer-size) * 1px) 1px) 3px;
+	grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
+	grid-template-rows: 
+		1.5em 
+		repeat(
+			calc(var(--num-layers) + var(--num-tweens)),  
+			calc(var(--layer-height) * 1em) 
+			1px
+			) 
+		3px
+	;
 
 	overflow: scroll hidden;
 
 	&.collapse {
-		height: 20px;
+		height: 1.75em;
 	}
 
 	.frame {
