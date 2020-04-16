@@ -14,7 +14,7 @@ class LinesAnimation {
 		this.intervalRatio = 1;
 
 		this.mixedColors = mixedColors || true;
-
+		
 		this.rndr = {
 			off: { x: 0, y: 0 },
 			speed: { x: 0, y: 0 }
@@ -149,7 +149,7 @@ class LinesAnimation {
 				}
 
 				if (this.rndr.w > 0) {
-					this.rndr.off.x = Cool.random(0, this.rndr.w);
+					this.rndr.off.x = Cool.random(0, this.rndr.w); // random start of wiggle offset
 					this.rndr.off.y = Cool.random(0, this.rndr.w);
 					this.rndr.speed.x = Cool.random(-this.rndr.v, this.rndr.v);
 					this.rndr.speed.y = Cool.random(-this.rndr.v, this.rndr.v);
@@ -177,20 +177,23 @@ class LinesAnimation {
 							this.rndr.x + p.x + v.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x,
 							this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
 						);
+
+						if (k == 0 || this.rndr.ws) {
+							if (this.rndr.w > 0) {
+								for (const xy in this.rndr.off) {
+									this.rndr.off[xy] += this.rndr.speed[xy];
+									if (this.rndr.off[xy] >= this.rndr.w || 
+										this.rndr.off[xy] <= -this.rndr.w) {
+										this.rndr.speed[xy] *= -1;
+									}
+								}
+							}
+						}
 					}
 
 					if (this.ctx.strokeStyle != this.rndr.c && this.mixedColors)
 						this.ctx.strokeStyle = this.rndr.c;
 
-					if (this.rndr.w > 0) {
-						this.rndr.off.x += this.rndr.speed.x;
-						if (this.rndr.off.x >= this.rndr.w || this.rndr.off.x <= -this.rndr.w)
-							this.rndr.speed.x *= -1;
-	
-						this.rndr.off.y += this.rndr.speed.y;
-						if (this.rndr.off.y >= this.rndr.w || this.rndr.off.y <= -this.rndr.w)
-							this.rndr.speed.y *= -1;
-					}
 				}
 				
 				if (this.mixedColors) this.ctx.stroke();

@@ -10,6 +10,7 @@ class Layer {
 		this.w =  params.w;
 		this.v =  params.v;
 		this.c =  params.c;
+		this.ws = params.ws || false; // wiggle segments 
 
 		this.toggled = false;
 		this.resetTweens();

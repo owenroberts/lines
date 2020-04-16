@@ -88,6 +88,17 @@
 							"min": 10,
 							"max": 40
 						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "alt-m",
+						"fromModule": {
+							"callback": "cursorToggle"
+						},
+						"params": {
+							"onText": "Hide Cursor",
+							"offText": "Show Cursor"
+						}
 					}
 				]
 			}
@@ -854,6 +865,18 @@
 							"step": 0.005,
 							"arguments": {
 								"prop": "v"
+							}
+						}
+					},
+					{
+						"type": "UIToggle",
+						"fromModule": {
+							"callback": "setProperty"
+						},
+						"params": {
+							"text":  "Wiggle Segments",
+							"arguments": {
+								"prop": "ws"
 							}
 						}
 					},

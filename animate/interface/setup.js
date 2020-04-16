@@ -5,6 +5,13 @@ function setupAnimateInterface(ui) {
 		else lns.canvas.canvas.parentElement.classList.remove('right');
 	};
 
+	ui.cursorToggle = function() {
+		if (lns.canvas.canvas.classList.contains('no-cursor')) 
+			lns.canvas.canvas.classList.remove('no-cursor');
+		else 
+			lns.canvas.canvas.classList.add('no-cursor');
+	};
+
 	ui.baseFontSize = 11; 
 	ui.updateScale = function(n) {
 		ui.baseFontSize = +n;

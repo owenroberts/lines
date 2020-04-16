@@ -79,8 +79,9 @@ function Canvas(id, _width, _height, color, checkRetina) {
 			}
 		}
 
-		self.setWidth((max.x - min.x) + tolerance * 2);
-		self.setHeight((max.y - min.y) + tolerance * 2);
+		// example of this syntax being counter intuitive/annoying
+		lns.ui.faces.width.update((max.x - min.x) + tolerance * 2);
+		lns.ui.faces.height.update((max.y - min.y) + tolerance * 2);
 
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			lns.anim.layers[i].x -= min.x - tolerance > 0 ? min.x - tolerance : 0;

@@ -7,9 +7,10 @@
 @import "../../interface/css/lines.css";
 #draw #lines {
   border: 1px solid lightgray;
-}
-#draw #lines:active, #draw #lines:hover {
   cursor: crosshair;
+}
+#draw #lines.no-cursor {
+  cursor: none;
 }
 
 #fio-panel #title {
