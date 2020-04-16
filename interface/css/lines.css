@@ -10,9 +10,10 @@
 }
 
 body {
+  --base-font-size: 11;
   font-family: Verdana, sans-serif;
   margin: 0;
-  font-size: 11px;
+  font-size: calc(var(--base-font-size) * 1px);
   -webkit-user-select: none;
   user-select: none;
   touch-action: manipulation;
@@ -21,6 +22,7 @@ body {
 
 select, input {
   color: #110263;
+  font-size: inherit;
 }
 
 button:focus,
@@ -52,7 +54,7 @@ select {
 }
 
 #container {
-  margin: 1em;
+  margin: 1rem;
   display: flex;
   flex-wrap: wrap;
 }
@@ -104,12 +106,12 @@ select {
 .panel {
   flex-basis: 120px;
   flex-grow: 1;
-  max-width: 160px;
+  max-width: 14.5em;
   order: 0;
   background-color: #eae1ff;
   border-radius: 3px;
   margin: 2px 4px 2px 0;
-  padding: 0.5em;
+  padding: 0.5rem;
   overflow: hidden;
   position: relative;
   height: auto;
@@ -213,7 +215,7 @@ select {
   flex-wrap: nowrap;
 }
 .panel .header label {
-  font-size: 12px;
+  font-size: 1.0625em;
 }
 .panel .header span, .panel .header label {
   margin-top: 0;
@@ -228,7 +230,7 @@ select {
 .panel .header .toggle, .panel .header .order-btn, .panel .header .undock-btn, .panel .header .block-btn, .panel .header .headless-btn {
   display: inline-block;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 1.0625em;
   padding: 1px;
 }
 .panel .header .toggle.off, .panel .header .order-btn.off, .panel .header .undock-btn.off, .panel .header .block-btn.off, .panel .header .headless-btn.off {
@@ -243,7 +245,7 @@ select {
 }
 .panel .header .block-btn {
   align-self: flex-start;
-  font-size: 11px;
+  font-size: 1em;
 }
 .panel .header .headless-btn {
   margin-right: 0;

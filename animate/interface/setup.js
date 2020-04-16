@@ -5,6 +5,12 @@ function setupAnimateInterface(ui) {
 		else lns.canvas.canvas.parentElement.classList.remove('right');
 	};
 
+	ui.baseFontSize = 11; 
+	ui.updateScale = function(n) {
+		ui.baseFontSize = +n;
+		document.body.style.setProperty('--base-font-size', ui.baseFontSize);
+	};
+
 	ui.updateFIO = function(data, params) {
 
 		ui.faces.title.value = lns.files.fileName.split('/').pop().replace('.json', '');

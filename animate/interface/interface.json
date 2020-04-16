@@ -75,6 +75,19 @@
 							"onText": "R/L",
 							"offText": "L/R"
 						}
+					},
+					{
+						"type": "UITextRange",
+						"face": "interfaceScale",
+						"fromModule": {
+							"callback": "updateScale"
+						},
+						"params": {
+							"label": "Interface Scale",
+							"value": 11,
+							"min": 10,
+							"max": 40
+						}
 					}
 				]
 			}
@@ -225,7 +238,7 @@
 					{
 						"row": true,
 						"type": "UITextRange",
-						"face": "scale",
+						"face": "canvasScale",
 						"fromModule": {
 							"callback": "setScale"
 						},
