@@ -26,13 +26,6 @@
   border-bottom: 1px solid black;
 }
 
-#draw-layers {
-  margin-top: 1em;
-  border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
-  padding: 0.25em 0;
-}
-
 #timeline {
   --num-frames: 1;
   --num-layers: 1;

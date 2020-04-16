@@ -5,10 +5,11 @@ function Canvas(id, _width, _height, color, checkRetina) {
 		canvas width and height are dependent on dpr */
 	this.canvas = document.getElementById(id); // lns.canvas.canvas is html elem
 	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
+	this.scale = 1;
 
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
-	this.lw = 1; // to keep value from getting reset
+	this.lineWidth = 1; // to keep value from getting reset
 
 	this.setBGColor = function(color) {
 		self.bgColor = color;
@@ -18,34 +19,37 @@ function Canvas(id, _width, _height, color, checkRetina) {
 	this.setBGColor(color);
 
 	this.setLineWidth = function(n) {
-		self.ctx.lineWidth = self.lw = +n;
+		self.ctx.lineWidth = self.lineWidth = +n;
+		self.ctx.miterLimit = 1;
 	};
 
-	/* set line color */
-	this.setStrokeColor = function(color) {
-		this.ctx.strokeStyle = color;
+	this.setScale = function(n) {
+		self.scale = +n;
+		self.setWidth(self.width);
+		self.setHeight(self.height);
 	};
 
 	/* update canvas width */
 	this.setWidth = function(width) {
 		self.width = +width;
-		self.canvas.width = +width * self.dpr;
+		self.canvas.width = +width * self.dpr * self.scale;
 		self.reset();
 	};
 
 	/* update canvas height */
 	this.setHeight = function(height) {
 		self.height = +height;
-		self.canvas.height = +height * self.dpr;
+		self.canvas.height = +height * self.dpr * self.scale;
 		self.reset();
 	};
 
 	this.reset = function() {
 		// https://www.html5rocks.com/en/tutorials/canvas/hidpi/
-		self.ctx.scale(this.dpr, this.dpr);
-		self.canvas.style.zoom = 1 / this.dpr;
+		self.ctx.scale(1, 1); // prevent multiple scales
+		self.ctx.scale(this.dpr * self.scale, self.dpr * self.scale);
+		self.canvas.style.zoom = 1 / self.dpr;
+		self.ctx.lineWidth = self.lineWidth;
 		self.ctx.miterLimit = 1;
-		self.ctx.lineWidth = self.lw;
 	};
 	
 	/* set initial width and height */
@@ -78,7 +82,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 		self.setWidth((max.x - min.x) + tolerance * 2);
 		self.setHeight((max.y - min.y) + tolerance * 2);
 
-		for (let i = 0; i < lns.anim.layers.length; i++) {
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			lns.anim.layers[i].x -= min.x - tolerance > 0 ? min.x - tolerance : 0;
 			lns.anim.layers[i].y -= min.y - tolerance > 0 ? min.y - tolerance : 0;
 		}

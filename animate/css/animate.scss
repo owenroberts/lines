@@ -5,15 +5,12 @@ $anim-color: #9de0b1;
 $anim-select: green;
 $anim-off: darkgreen;
 
-$column-width: 40px;
-
 #draw #lines {
 	border: 1px solid $ui-color;
 	&:active, &:hover { cursor: crosshair; }
 }
 
 #fio-panel {
-
 	#title {
 		border: none;
 		max-width: 120px;
@@ -27,13 +24,6 @@ $column-width: 40px;
 			border-bottom: 1px solid black;
 		}
 	}
-}
-
-#draw-layers {
-	margin-top: 1em;
-	border-top: 1px solid $ui-color;
-	border-bottom: 1px solid $ui-color;
-	padding: 0.25em 0;
 }
 
 #timeline {

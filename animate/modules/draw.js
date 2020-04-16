@@ -137,8 +137,9 @@ function Draw(defaults) {
 			while (point.dist(origin) > b){
 				point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
 			}
+			point.divide(lns.canvas.scale);
 			if (point.x > 0 && point.x < lns.canvas.width && 
-					point.y > 0 && point.y < lns.canvas.height) {
+				point.y > 0 && point.y < lns.canvas.height) {
 				self.drawing.push(point);
 			}
 			const points = Cool.randomInt(1,3);
@@ -156,7 +157,7 @@ function Draw(defaults) {
 	}
 
 	this.addLine = function(x, y) {
-		self.drawing.push(new Cool.Vector(x, y));
+		self.drawing.push(new Cool.Vector(x, y).divide(lns.canvas.scale));
 	};
 
 	this.start = function(ev) {

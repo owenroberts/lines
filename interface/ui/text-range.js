@@ -6,17 +6,20 @@ class UITextRange extends UICollection {
 		this.arguments = params.arguments;
 
 		this.textInput = new UIBlur({
-			value: params.value,
+			...params,
 			callback: this.handler.bind(this)
 		});
 
 		this.range = new UIRange({
-			value: params.value,
-			min: params.min,
-			max: params.max,
-			step: params.step,
+			...params,
 			callback: this.handler.bind(this)
 		});
+
+		if (params.event == 'change') {
+			this.range.el.addEventListener('input', ev => {
+				this.textInput.el.placeholder = ev.currentTarget.value;
+			});
+		}
 	}
 
 	get html() {

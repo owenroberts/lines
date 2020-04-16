@@ -6,7 +6,7 @@ class UIRange extends UIInput {
 		this.value = params.value || params.min;
 		if (params.step) this.setStep(params.step);
 
-		this.el.addEventListener('input', ev => {
+		this.el.addEventListener(params.event || 'input', ev => {
 			this.handler(ev, this);
 		});
 	}
