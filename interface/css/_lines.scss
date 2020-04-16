@@ -124,7 +124,10 @@ select {
 		
 		label { line-height: 1.5; }
 		
-		span, label, input, select {
+		span, 
+		label, 
+		input, 
+		select {
 			white-space: nowrap;
 			margin-right: 0.25em;
 			margin-top: 0.25em;
@@ -141,8 +144,48 @@ select {
 			text-align: right;
 		}
 		
-		input[type=range], input[type=color] {
+		input[type=range], 
+		input[type=color] {
 			flex: 1 1 auto;
+		}
+
+		input[type=range] {
+			-webkit-appearance: none;
+			width: 100%;
+			background-color: white;
+			border: 1px solid $ui-color;
+			margin-left: 0;
+			border-radius: 3px;
+
+			&:active {
+				border: 1px solid $main-color;
+			}
+
+			&:focus {
+				outline: none;
+				border: 1px solid $main-color;
+				&::-webkit-slider-thumb {
+					background-color: $main-color;
+				}
+			}
+
+			&::-webkit-slider-thumb {
+				-webkit-appearance: none; 
+				outline: none;
+				background-color: $ui-color;
+				height: 1.25em;
+				width: 0.75em;
+				cursor: grab;
+				&:active { 
+					cursor: grabbing; 
+					background-color: $main-color;
+				}
+			}
+
+			&::-ms-track {
+				width: 100%;
+				cursor: pointer;
+			}
 		}
 		
 		input[type=text] {
@@ -183,7 +226,14 @@ select {
 			font-size: 12px;
 			padding: 1px;
 			&.off { background-color: inherit; }
-			&:hover { background: $main-color; }
+			&:hover { background: $ui-select; }
+		}
+
+		.order-btn, .undock-btn, .block-btn, .headless-btn {
+			&:hover {
+				background-color: $ui-color;
+				border-top: 2px solid $ui-select;
+			}
 		}
 
 		.block-btn {
