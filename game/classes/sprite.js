@@ -11,6 +11,7 @@ class Sprite {
 			height: this.height
 		};
 		this.isActive = true;  // need a better name for this - disabled or something ... 
+		this.center = false;
 
 		this.mouseOver = false;
 		this.waitToGoOut = false;

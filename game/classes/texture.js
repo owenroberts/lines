@@ -1,18 +1,19 @@
 class Texture {
 	constructor(params, debug) {
-		this.scenes = params.scenes;
 		this.locations = params.locations || [];
 		this.frame = params.frame || 'index';
 		this.debug = debug;
 		this.center = params.center || false;
 		
-		this.offset = {x: 0, y: 0};
+		this.offset = new Cool.Vector(0, 0);
 		if (params.animation) this.animation = params.animation;
 	}
 
 	addLocation(index, x, y) {
 		this.animation.createNewState(`f-${index}`, index, index);
-		this.locations.push({ x: x, y: y, i: index });
+		const loc = new Cool.Vector(x, y);
+		loc.i = index;
+		this.locations.push(loc);
 	}
 
 	addLocations(locations) {
@@ -47,12 +48,11 @@ class Texture {
 				if (this.locations[i].i) this.animation.state = `f-${this.locations[i].i}`;
 				this.animation.draw(x, y);
 			}
-
-			
 		}
 	}
 
 	update(offset) {
-		this.offset = offset;
+		// this.offset = offset;
+		this.offset = offset.copy();
 	}
 }
