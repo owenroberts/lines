@@ -1,4 +1,4 @@
-class Item extends Sprite {
+class Entity extends Sprite {
 	constructor(params, src, debug) {
 		super(params.x, params.y);
 		this.debug = debug;

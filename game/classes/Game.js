@@ -61,6 +61,7 @@ class Game {
 							this.loadJSON(f, key, data[key].src);
 						}
 					} else {
+						// csv item names have to match drawing names
 						const csv = CSVToArray(data, ',').splice(1);
 						this.data[f].entries = csv;
 						for (let i = 0; i < csv.length; i++) {
@@ -96,7 +97,7 @@ class Game {
 		fetch(src)
 			.then(response => { return response.json(); })
 			.then(json => {
-				this.anims[file][key] = new Anim();
+				this.anims[file][key] = new GameAnim();
 				this.anims[file][key].loadData(json, () => {
 					this.assetsLoaded[file][key] = true;
 				});

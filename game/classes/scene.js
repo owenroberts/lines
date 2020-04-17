@@ -1,75 +1,66 @@
 class Scene {
 	constructor() {
-		this.displayItems = [];
-		this.updateItems = [];
-		this.uiItems = [];
+		this.displaySprites = new SpriteCollection();
+		this.updateSprites = new SpriteCollection();
+		this.uiSprites = new SpriteCollection();
 	}
 
-	add(item) {
-		this.displayItems.push(item);
-		this.updateItems.push(item);
-		this.uiItems.push(item);
+	add(sprite) {
+		this.displaySprites.add(sprite);
+		this.updateSprites.add(sprite);
+		this.uiSprites.add(sprite);
 	}
 
-	remove(item, type) {
+	remove(sprite, type) {
 		const types = type ? [type] : ['display', 'update', 'ui'];
 		for (let i = 0; i < types.length; i++) {
-			const type = types[i];
-			const index = this[`${type}Items`].indexOf(item);
-			if (index >= 0) this[`${type}Items`].splice(index, 1);
+			const index = this[`${types[i]}Sprites`].indexOf(sprite);
+			if (index >= 0) this[`${types[i]}Sprites`].splice(index, 1);
 		}
 	}
 
-	addSprite(item) {
-		this.displayItems.push(item);
-		this.updateItems.push(item);
+	addSprite(sprite) {
+		this.displaySprites.add(sprite);
+		this.updateSprites.add(sprite);
 	}
 
-	addUI(item) {
-		this.displayItems.push(item);
-		this.uiItems.push(item);
+	addUI(sprite) {
+		this.displaySprites.add(sprite);
+		this.uiSprites.add(sprite);
 	}
 
-	addToDisplay(item) {
-		this.displayItems.push(item);
+	addToDisplay(sprite) {
+		this.displaySprites.add(sprite);
 	}
 
-	addToUpdate(item) {
-		this.updateItems.push(item);
+	addToUpdate(sprite) {
+		this.updateSprites.add(sprite);
 	}
 
-	addToUI(item) {
-		this.uiItems.push(item);
+	addToUI(sprite) {
+		this.uiSprites.add(sprite);
 	}
 
 	display() {
-		for (let i = 0; i < this.displayItems.length; i++) {
-			this.displayItems[i].display();
-		}
+		this.displaySprites.all(sprite => { sprite.display() });
 	}
 
 	update() {
-		for (let i = 0; i < this.updateItems.length; i++) {
-			this.updateItems[i].update();
-		}
+		this.updateSprites.all(sprite => { sprite.update() });
 	}
 
 	mouseMoved(x, y) {
-		for (let i = 0; i < this.uiItems.length; i++) {
-			this.uiItems[i].over(x, y);
-			this.uiItems[i].out(x, y);
-		}
+		this.uiSprites.all(sprite => { 
+			sprite.over(x, y);
+			sprite.out(x, y);
+		});
 	}
 
 	mouseDown(x, y) {
-		for (let i = 0; i < this.uiItems.length; i++) {
-			this.uiItems[i].down(x, y);
-		}
+		this.uiSprites.all(sprite => { sprite.down(x, y); });
 	}
 
 	mouseUp(x, y) {
-		for (let i = 0; i < this.uiItems.length; i++) {
-			this.uiItems[i].up(x, y);
-		}
+		this.uiSprites.all(sprite => { sprite.up(x, y); });
 	}
 }
