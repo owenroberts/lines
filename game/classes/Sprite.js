@@ -26,7 +26,7 @@ class Sprite {
 	}
 
 	get xy() {
-		return this.center ? this.position : this.position.subtract(this.size.divide(2));
+		return this.center ? this.position.copy().subtract(this.size.copy().divide(2)) : this.position;
 	}
 
 	get x() {
@@ -127,6 +127,8 @@ class Sprite {
 	}
 
 	over(x, y) {
+		// console.log(x, y);
+		// console.log(this.tap(x, y));
 		if (this.isActive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
 			this.mouseOver = true;
 			if (this.onOver) this.onOver();

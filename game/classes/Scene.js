@@ -50,7 +50,7 @@ class Scene {
 	}
 
 	mouseMoved(x, y) {
-		this.uiSprites.all(sprite => { 
+		this.uiSprites.all(sprite => {
 			sprite.over(x, y);
 			sprite.out(x, y);
 		});
