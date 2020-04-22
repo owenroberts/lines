@@ -1,14 +1,12 @@
 class Sprite {
 	constructor(x, y, w, h) {
 		this.position = new Cool.Vector(x, y);
-		this.width = w;
-		this.height = h;
-		this.debug = false; /* argument? isDebug ? */
+		this.size = new Cool.Vector(w, h);
+		this.debug = false;
 		this.debugColor = "#00ffbb";
 		this.collider = {
 			position: new Cool.Vector(0, 0),
-			width: this.width,
-			height: this.height
+			size: new Cool.Vector(w, h)
 		};
 		this.isActive = true;  // need a better name for this - disabled or something ... 
 		this.center = false;
@@ -18,67 +16,48 @@ class Sprite {
 		this.clickStarted = false;
 		// onOver, onOut, onUp, onDown, onClick
 	}
-	
-	/* i don't know why the other reset exists,
-		need this to add new animtion in toilet2 */
-	resetSize() {
-		this.width = undefined;
-		this.height = undefined;
+
+	get width() {
+		return this.size.x;
+	}
+
+	get height() {
+		return this.size.y;
+	}
+
+	get xy() {
+		return this.center ? this.position : this.position.subtract(this.size.divide(2));
+	}
+
+	get x() {
+		return this.xy.x;
+	}
+
+	get y() {
+		return this.xy.y;
 	}
 
 	addAnimation(animation, callback) {
 		this.animation = animation;
-		this.width = this.collider.width = this.animation.width;
-		this.height = this.collider.height = this.animation.height;
-	}
-
-	fit(width) {
-		if (this.width > width) this.scale(width / this.width);
+		this.size.x = this.collider.size.x = this.animation.width;
+		this.size.y = this.collider.size.y = this.animation.height;
 	}
 
 	setCollider(x, y, w, h) {
 		this.collider.position.x = x;
 		this.collider.position.y = y;
-		this.collider.width = w;
-		this.collider.height = h;
-	}
-
-	/* scaling sucks, should add this as sub class */
-	scale(n) {
-		/* need to wait for animation to load, do this later */
-		this.width *= n;
-		this.height *= n;
-		this.collider.width *= n;
-		this.collider.height *= n;
-		this.animation.widthRatio *= n
-		this.animation.heightRatio *= n;
-	}
-
-	update() {
-		if (this.isActive) {
-			if (this.jumpAmount != 0) {
-				this.velocity.y += this.jumpAmount;
-				this.jumpAmount = 0;
-			}
-			if (this.wiggleAmount > 0) {
-				this.velocity.x += getRandom(-this.wiggleAmount, this.wiggleAmount);
-			}
-			this.position.add( this.velocity );
-			if (!this.bounceAmount.zero()) {
-				this.velocity.add( this.bouncAmount );
-				this.bounceAmount = new Cool.Vector(0,0);
-			}
-		}
+		this.collider.size.x = w;
+		this.collider.size.y = h;
 	}
 
 	drawDebug() {
 		gme.ctx.lineWidth = 1;
 		gme.ctx.beginPath();
 		gme.ctx.rect(
-			this.xy.x + this.collider.position.x,
-			this.xy.y + this.collider.position.y,
-			this.collider.width, 
-			this.collider.height
+			this.x + this.collider.position.x,
+			this.y + this.collider.position.y,
+			this.collider.size.x, 
+			this.collider.size.y
 		);
 		const temp = gme.ctx.strokeStyle;
 		gme.ctx.strokeStyle = this.debugColor;
@@ -86,36 +65,11 @@ class Sprite {
 		gme.ctx.strokeStyle = temp;
 	}
 
-	/* better name for this ... */
-	get xy() {
-		if (this.center) {
-			return {
-				x: this.position.x - (this.center ? this.width / 2 : 0),
-				y: this.position.y - (this.center ? this.height / 2 : 0)
-			}
-		} else {
-			return this.position;
-		}
-	}
-
-	getCenter() {
-		if (this.center) {
-			return {
-				x: this.position.x - (this.center ? this.width/2 : 0),
-				y: this.position.y - (this.center ? this.height/2 : 0)
-			}
-		} else {
-			return this.position;
-		}
-	}
-
-	display(isMap) {
-		// if (this.debug) console.log(this.xy);
-		// isMap should be editor specific parameter ... 
-		if (this.isActive && (this.isOnScreen() || isMap)) {
+	display() {
+		if (this.isActive && this.isOnScreen()) {
 			if (this.debug) this.drawDebug();
-			if (this.animation && this.animation.loaded) {
-				this.animation.draw(this.xy.x, this.xy.y);
+			if (this.animation) {
+				this.animation.draw(this.x, this.y);
 				this.animation.update();
 			}
 		}
@@ -123,59 +77,33 @@ class Sprite {
 	}
 
 	isOnScreen() {
-		if (this.xy.x + this.width > 0 && 
-			this.xy.y + this.height > 0 &&
-			this.xy.x < gme.width &&
-			this.xy.y < gme.height)
+		if (this.x + this.width > 0 && 
+			this.y + this.height > 0 &&
+			this.x < gme.width &&
+			this.y < gme.height)
 			return true;
 		else
 			return false;
 	} 
 
 	tap(x, y) {
-		if (x > this.xy.x + this.collider.position.x &&
-			x < this.xy.x + this.collider.position.x + this.collider.width && 
-			y > this.xy.y + this.collider.position.y && 
-			y < this.xy.y + this.collider.position.y + this.collider.height) {
+		if (x > this.x + this.collider.position.x &&
+			x < this.x + this.collider.position.x + this.collider.size.x && 
+			y > this.y + this.collider.position.y && 
+			y < this.y + this.collider.position.y + this.collider.size.y) {
 			return true;
 		} else 
 			return false;
 	}
 
-	jump(amount) {
-		this.jumpAmount += Math.min(-amount / 25, 10);
-	}
-
 	collide(other, callback) {
 		if (this.isActive && other.isActive) {
-			if (this.xy.x + this.collider.position.x < other.xy.x + other.collider.position.x + other.collider.width &&
-			this.xy.x + this.collider.position.x + this.collider.width > other.xy.x + other.collider.position.x &&
-			this.xy.y + this.collider.position.y < other.xy.y + other.collider.position.y + other.collider.height &&
-			this.xy.y + this.collider.position.y + this.collider.height > other.xy.y + other.collider.position.y) {
+			if (this.x + this.collider.position.x < other.x + other.collider.position.x + other.collider.size.x &&
+				this.x + this.collider.position.x + this.collider.size.x > other.x + other.collider.position.x &&
+				this.y + this.collider.position.y < other.y + other.collider.position.y + other.collider.size.y &&
+				this.y + this.collider.position.y + this.collider.size.y > other.y + other.collider.position.y) {
 				if (callback) callback(this);
 				return true;
-			} else if (this.bounce) {
-				// check next frame
-				var nextpos = new Cool.Vector(this.xy.x, this.xy.y);
-				nextpos.add(this.velocity);
-				if (nextpos.x < other.position.x + other.width &&
-				nextpos.x + this.width > other.position.x  && 
-				nextpos.y < other.position.y + other.size.y && 
-				nextpos.y + this.height > other.position.y) {
-					var xoff = (this.position.x + this.width) - other.position.y;
-					var yoff = (this.position.y + this.height) - other.position.y;
-					if ( Math.abs(xoff) < Math.abs(yoff) ) {
-						this.position.x = other.position.x - this.width;
-					} else {
-						this.position.y = other.position.y - this.height;
-						this.bounceAmount.add( new Cool.Vector(0, yoff/2) );
-					}
-					if (callback) callback(this);				
-					return true;
-				}
-				return false;
-			} else {
-				return false;
 			}
 		} else {
 			return false;
@@ -189,18 +117,13 @@ class Sprite {
 		next.add(this.velocity);
 		var nextSize = this.collider.size.copy();
 		if (next.x < other.position.x + other.collider.position.x ||
-			next.x + nextSize.x > other.position.x + other.collider.position.x + other.collider.width ||
+			next.x + nextSize.x > other.position.x + other.collider.position.x + other.collider.size.x ||
 			next.y < other.position.y + other.collider.position.y ||
-			next.y + nextSize.y > other.position.y + other.collider.position.y + other.collider.height) {
+			next.y + nextSize.y > other.position.y + other.collider.position.y + other.collider.size.y) {
 			return true;
 		} else {
 			return false;
 		}
-	}
-
-	reset(widthMin, widthMax, heightMin, heightMax) {
-		this.position.x = Cool.randomInt(widthMin, widthMax - this.width);
-		this.position.y = Cool.randomInt(heightMin, heightMax);
 	}
 
 	over(x, y) {

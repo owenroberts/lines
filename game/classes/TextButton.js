@@ -13,8 +13,8 @@ class TextButton extends UI {
 	}
 
 	setCollider() {
-		this.width = this.collider.width = (this.text.wrap < this.text.msg.length ? this.text.wrap : this.text.msg.length) * this.text.track;
-		this.height = this.collider.height = (this.text.breaks.length + 1) * this.text.letters.height;
+		this.size.x = this.collider.size.x = (this.text.wrap < this.text.msg.length ? this.text.wrap : this.text.msg.length) * this.text.track;
+		this.size.y = this.collider.size.y = (this.text.breaks.length + 1) * this.text.letters.height;
 	}
 
 	display() {

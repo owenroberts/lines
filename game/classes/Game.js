@@ -36,7 +36,6 @@ class Game {
 			if (params.stats) this.stats = new Stats(this.ctx, ['FPS', 'draw']);
 
 			this.ctx.miterLimit = 1; // do this last
-
 		}
 	}
 

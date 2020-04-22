@@ -252,7 +252,7 @@ class LinesAnimation {
 
 		// this.isPlaying = true; /* off for animate ? */
 
-		/* need width and height for infinite hell */
+		/* need width and height for infinite hell ?? */
 		this.width = json.w;
 		this.height = json.h;
 
