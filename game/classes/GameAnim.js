@@ -1,6 +1,6 @@
 class GameAnim extends LinesAnimation {
-	constructor(src, callback, debug) {
-		super(gme.ctx, gme.lps, gme.mixedColors);
+	constructor(debug) {
+		super(GAME.ctx, GAME.lps, GAME.mixedColors);
 		this.debug = debug;
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */

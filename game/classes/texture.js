@@ -48,7 +48,8 @@ class Texture {
 			}
 
 			//  figure out centering later, only draw textures on screen
-			if (x + this.animation.width > 0 && x < gme.width && y + this.animation.height > 0 && y < gme.height) {
+			if (x + this.animation.width > 0 && x < GAME.width && 
+				y + this.animation.height > 0 && y < GAME.height) {
 				if (this.locations[i].i) this.animation.state = `f-${this.locations[i].i}`;
 				this.animation.draw(x, y);
 			}

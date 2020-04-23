@@ -20,4 +20,8 @@ class Manager {
 		return this[this._current];
 	}
 
+	get currentName() {
+		return this._current;
+	}
+
 }

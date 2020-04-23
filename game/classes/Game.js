@@ -1,5 +1,31 @@
+/*
+	this is really more like the game loader, renderer, doesn't handle game logic
+	loads files
+	renders and updates
+	manage canvas
+	manages scenes
+	start function called when load ends ... calls start, update, draw
+	params.events - mouse, keyboard, mouse+keyboard
+
+	user defined functions:
+	start - create anything using loaded animations
+	draw - draw sprites, anything not in scenes
+	update - update user input only
+
+	sizeCanvas - handle canvas resize
+
+	keyDown(key)
+	keyUp(key)
+
+	mouseMoved(x, y, which)
+	mouseDown(x, y, which)
+	mouseUp(x, y, which)
+*/
+
 class Game {
 	constructor(params) {
+		window.GAME = this; // for references in sub classes
+
 		this.canvas = document.getElementById(params.canvas || "lines");
 
 		this.width = params.width;
@@ -21,6 +47,10 @@ class Game {
 
 		this.data = {};
 		this.anims = {};
+
+		this.useMouseEvents = params.events ? params.events.includes('mouse') : true;
+		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
+
 
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
@@ -45,6 +75,7 @@ class Game {
 	}
 
 	load(files, callback) {
+		if (this.debug) console.time('load data');
 		this.assetsLoaded = {};
 		const numFiles = Object.keys(files).length;
 		for (const f in files) {
@@ -89,6 +120,7 @@ class Game {
 				}
 			}
 			if (loaded) {
+				if (this.debug) console.timeEnd('load data');
 				clearInterval(loader);
 				// when will this ever not be game start?
 				// if (callback) callback();
@@ -109,17 +141,11 @@ class Game {
 	}
 
 	start() {
-		/* 
-			draw and update are separates functions 
-			because lines draw at relatively slow rate (10fps) 
-		*/
 		if (typeof start === "function") start(); // should be this method?
-		
 		if (typeof update === "function") requestAnimFrame(() => { this.update() });
-		// if (typeof draw === "function") requestAnimFrame(() => { this.draw() });
-
-		// better way to do events? 
-		if (typeof Events != "undefined") Events.init(this.canvas);
+		if (this.useMouseEvents) this.startMouseEvents();
+		if (this.useKeyboardEvents) this.startKeyboardEvents();
+		if (typeof sizeCanvas === "function") window.addEventListener('resize', sizeCanvas, false);
 	}
 
 	draw(time) {
@@ -150,5 +176,52 @@ class Game {
 
 	setBounds(dir, value) {
 		this.bounds[dir] = value;
+	}
+
+	startMouseEvents() {
+		let dragStarted = false;
+		let dragOffset;
+
+		this.canvas.addEventListener('click', function(ev) {
+			ev.preventDefault();
+			if (typeof mouseClicked === "function") 
+				mouseClicked(ev.offsetX, ev.offsetY);
+		}, false);
+
+		this.canvas.addEventListener('mousedown', function(ev) {
+			ev.preventDefault();
+			if (typeof mouseDown === "function") 
+				mouseDown(ev.offsetX, ev.offsetY, ev.which, ev.shiftKey);
+			if (typeof startDrag === "function") {
+				dragOffset = startDrag(ev.offsetX, ev.offsetY);
+				if (dragOffset) dragStarted = true;
+			}
+		}, false);
+
+		this.canvas.addEventListener('mouseup', function(ev) {
+			ev.preventDefault();
+			if (typeof mouseUp === "function") 
+				mouseUp(ev.offsetX, ev.offsetY, ev.which);
+			if (dragStarted) dragStarted = false;
+		}, false);
+
+		this.canvas.addEventListener('mousemove', function(ev) {
+			if (typeof mouseMoved === "function") 
+				mouseMoved(ev.offsetX, ev.offsetY, ev.which);
+			if (dragStarted) 
+				drag(ev.offsetX, ev.offsetY, dragOffset);
+		}, false);
+	}
+
+	startKeyboardEvents() {
+		document.addEventListener('keydown', function(ev) {
+			if (typeof keyDown === "function" && ev.target.tagName != "INPUT") 
+				keyDown(Cool.keys[ev.which]);
+		});
+
+		document.addEventListener('keyup', function(ev) {
+			if (typeof keyUp === "function" && ev.target.tagName != "INPUT") 
+				keyUp(Cool.keys[ev.which]);
+		});
 	}
 }

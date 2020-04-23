@@ -59,18 +59,18 @@ class Sprite {
 	}
 
 	drawDebug() {
-		gme.ctx.lineWidth = 1;
-		gme.ctx.beginPath();
-		gme.ctx.rect(
+		GAME.ctx.lineWidth = 1;
+		GAME.ctx.beginPath();
+		GAME.ctx.rect(
 			this.x + this.collider.position.x,
 			this.y + this.collider.position.y,
 			this.collider.size.x, 
 			this.collider.size.y
 		);
-		const temp = gme.ctx.strokeStyle;
-		gme.ctx.strokeStyle = this.debugColor;
-		gme.ctx.stroke();
-		gme.ctx.strokeStyle = temp;
+		const temp = GAME.ctx.strokeStyle;
+		GAME.ctx.strokeStyle = this.debugColor;
+		GAME.ctx.stroke();
+		GAME.ctx.strokeStyle = temp;
 	}
 
 	display() {
@@ -87,8 +87,8 @@ class Sprite {
 	isOnScreen() {
 		if (this.x + this.width > 0 && 
 			this.y + this.height > 0 &&
-			this.x < gme.width &&
-			this.y < gme.height)
+			this.x < GAME.width &&
+			this.y < GAME.height)
 			return true;
 		else
 			return false;
