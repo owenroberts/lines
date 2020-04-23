@@ -1,5 +1,14 @@
+/*
+	Sprite -> Entity
+	Entity is basically anything that appears on the map
+	needs to be updated by offset generated in game map
+
+	sprite position is draw position - origin + offset
+	origin is really map position
+*/
+
 class Entity extends Sprite {
-	constructor(params, src, debug) {
+	constructor(params, debug) {
 		super(params.x, params.y);
 		this.debug = debug;
 		this.origin = new Cool.Vector(params.x, params.y);
@@ -9,14 +18,13 @@ class Entity extends Sprite {
 	}
 
 	update(offset) {
-		// this.position.x = this.origin.x + offset.x;
-		// this.position.y = this.origin.y + offset.y;
-		this.position = this.origin.copy().add(offset.copy());
+		/* simpler than vectors */
+		this.position.x = this.origin.x + offset.x;
+		this.position.y = this.origin.y + offset.y;
 	}
 
 	setPosition(x, y) {
-		this.origin = new Cool.Vector(x, y);
-		// this.origin.x = x;
-		// this.origin.y = y;
+		this.origin.x = x;
+		this.origin.y = y;
 	}
 }

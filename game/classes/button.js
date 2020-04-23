@@ -1,3 +1,7 @@
+/*
+	Sprite -> UI -> Button
+*/
+
 class Button extends UI {
 	constructor(params, debug) {
 		super(params, debug);

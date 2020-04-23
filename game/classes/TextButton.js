@@ -1,3 +1,8 @@
+/*
+	Sprite -> UI -> TextButton
+	a ui sprite that has text to render instead of animation
+*/
+
 class TextButton extends UI {
 	constructor(x, y, msg, wrap, letters) {
 		super({x: x, y: y});
@@ -20,8 +25,6 @@ class TextButton extends UI {
 	display() {
 		super.display();
 		if (this.isActive) this.text.display();
-		/* use setter for alive active? when is text button set to not alive? 
-			find TextButton */
 	}
 
 	setPosition(x, y) {

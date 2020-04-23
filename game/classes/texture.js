@@ -1,3 +1,7 @@
+/*
+	draws frames from one animation in multuple places (locations)	
+*/
+
 class Texture {
 	constructor(params, debug) {
 		this.locations = params.locations || [];
@@ -52,7 +56,7 @@ class Texture {
 	}
 
 	update(offset) {
-		// this.offset = offset;
-		this.offset = offset.copy();
+		this.offset.x = offset.x;
+		this.offset.y = offset.y;
 	}
 }

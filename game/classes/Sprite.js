@@ -1,5 +1,11 @@
+/*
+	base class for all game objects
+	usually has an animation
+	physics and scaling removed in recent version
+*/
+
 class Sprite {
-	constructor(x, y, w, h) {
+	constructor(x, y, w, h, animation, callback) {
 		this.position = new Cool.Vector(x, y);
 		this.size = new Cool.Vector(w, h);
 		this.debug = false;
@@ -10,6 +16,8 @@ class Sprite {
 		};
 		this.isActive = true;  // need a better name for this - disabled or something ... 
 		this.center = false;
+
+		if (animation) this.addAnimation(animation, callback);
 
 		this.mouseOver = false;
 		this.waitToGoOut = false;

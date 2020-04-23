@@ -7,11 +7,12 @@ class Game {
 		this.lps = params.lps;
 		this.mixedColors = params.mixedColors || false; /* param? */
 		this.debug = params.debug || false;
-		this.lineInterval = 1000 / params.lps;
 
-		this.updateTime = performance.now();
-		this.updateInterval = 1000 / 60; // 60 fps
 		this.drawTime = performance.now();
+		this.drawInterval = 1000 / params.lps;
+
+		this.updateTime = this.drawTime;
+		this.updateInterval = 1000 / 60; // 60 fps
 
 		this.clearBg = true;
 		this.bounds = { top: 0, bottom: 0, left: 0, right: 0 };
@@ -33,7 +34,11 @@ class Game {
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
 
-			if (params.stats) this.stats = new Stats(this.ctx, ['FPS', 'draw']);
+			if (params.stats) {
+				this.stats = new Stats(this.ctx, params.width);
+				this.stats.create('FPS', this.updateTime);
+				this.stats.create('draw', this.drawTime);
+			}
 
 			this.ctx.miterLimit = 1; // do this last
 		}
@@ -102,7 +107,7 @@ class Game {
 				});
 			});
 	}
-	
+
 	start() {
 		/* 
 			draw and update are separates functions 
@@ -111,44 +116,36 @@ class Game {
 		if (typeof start === "function") start(); // should be this method?
 		
 		if (typeof update === "function") requestAnimFrame(() => { this.update() });
-		if (typeof draw === "function") requestAnimFrame(() => { this.draw() });
+		// if (typeof draw === "function") requestAnimFrame(() => { this.draw() });
 
 		// better way to do events? 
 		if (typeof Events != "undefined") Events.init(this.canvas);
 	}
 
-	draw() {
-		const time = performance.now();
-		if (time >= this.drawTime + this.lineInterval) {
-			if (this.clearBg) this.ctx.clearRect(0, 0, this.width * this.dpr, this.height * this.dpr);
+	draw(time) {
+		if (this.clearBg) this.ctx.clearRect(0, 0, this.width * this.dpr, this.height * this.dpr);
 
-			// add this scenes ?
+		// add draw scenes ? 
 
-			draw(); // draw defined in each this js file, or not ... 
-			if (this.stats) {
-				this.stats.draw();
-				this.stats.update('draw', time, this.drawTime)
-			}
-			this.drawTime = time;
+		draw(); // draw defined in each this js file, or not ... 
+		if (this.stats) {
+			this.stats.update('draw', time);
+			this.stats.draw();
 		}
-		requestAnimFrame(() => { this.draw(); });
+		this.drawTime = time - ((time - this.drawTime) % this.drawInterval);
 	}
 
 	update() {
+		requestAnimFrame(() => { this.update(); });  // this context
+
 		const time = performance.now();
 		if (time > this.updateTime + this.updateInterval) {
 			update(); // update defined in each game js file
-			if (this.stats) this.stats.update('FPS', time, this.updateTime);
-			this.updateTime = time;
+			this.updateTime = time - ((time - this.updateTime) % this.updateInterval); // adjust for fps interval being off
+			if (this.stats) this.stats.update('FPS', time);
+			
 		}
-		requestAnimFrame(() => { this.update(); });  // this context
-	}
-
-	addLettering(animation) {
-		const letterIndexString = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"!";
-		for (let i = 0; i < letterIndexString.length; i++) {
-			animation.createNewState(letterIndexString[i], i, i);
-		}
+		if (time > this.drawTime + this.drawInterval) this.draw(time);
 	}
 
 	setBounds(dir, value) {

@@ -1,5 +1,4 @@
 class SceneManager extends Manager {
-
 	add(item, scenes, which) {
 		if (typeof scenes == 'string') scenes = [scenes];
 		for (let i = 0; i < scenes.length; i++) {
@@ -8,5 +7,4 @@ class SceneManager extends Manager {
 			else this[scenes[i]].add(item);
 		}
 	}
-
 }

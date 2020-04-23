@@ -1,3 +1,7 @@
+/*
+	positions sprites relative to game canvas dimensions
+*/
+
 class UI extends Sprite {
 	constructor(params, debug) {
 		/* xy orientation to game window */
@@ -13,7 +17,6 @@ class UI extends Sprite {
 		this.center = true;
 
 		if (params.hidden) this.isActive = false; /* hidden prob in garden json ...  */
-		if (params.json) this.addJSON(params.json);
 		if (params.animation) this.addAnimation(params.animation);
 		if (params.states) {
 			this.animation.states = params.states;

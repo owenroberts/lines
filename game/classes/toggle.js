@@ -1,3 +1,8 @@
+/*
+	Sprite -> UI -> Button -> Toggle
+	button with added toggled state
+*/
+
 class Toggle extends Button {
 	constructor(params, debug) {
 		super(params, debug);

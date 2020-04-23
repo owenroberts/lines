@@ -1,3 +1,9 @@
+/*
+	used for scenes: gme.scenes, gme.scenes.current etc
+	could also be implemented for animation states, other things with states
+	basically allows you to set with a string and get an object
+*/
+
 class Manager {
 	constructor(list, _class) {
 		for (let i = 0; i < list.length; i++) {

@@ -1,3 +1,8 @@
+/*
+	used mostly by SceneManager to handle sprites for each scene
+	also used by game asset managers like pack or map
+*/
+
 class SpriteCollection {
 	constructor(sprites) {
 		this.sprites = sprites ? [...sprites] : [];

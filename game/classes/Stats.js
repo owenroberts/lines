@@ -1,38 +1,48 @@
+/*
+	still figuring this out
+	rn just fps and draw/sec
+	want to add millis
+*/
+
 class Stats {
-	constructor(ctx, labels) {
+	constructor(ctx, width) {
 		this.ctx = ctx;
-		this.ctx.font = 'lighter 11px sans-serif';
+		this.width = width;
 		this.stats = {};
-		labels.forEach(label => {
-			this.stats[label] = [];
-		});
 	}
 
-	create(label) {
-		this.stats[label] = [];
+	create(label, time) {
+		this.stats[label] = {
+			count: 0,
+			startTime: time,
+			value: 0
+		}
 	}
 
-	update(label, time, prevTime) {
-		this.stats[label].push( 1000 / (time - prevTime) );
-		if (this.stats[label].length > 20) this.stats[label].shift();
+	update(label, time) {
+		// this.stats[label].push(time);
+		// if (this.stats[label].length > 20) this.stats[label].shift();
+	
+		const stat = this.stats[label];
+		// if (label == 'draw') console.log(time, stat.startTime, stat.count);
+		stat.count++;
+		stat.value = Math.round(1000 / ((time - stat.startTime) / stat.count) * 100) / 100;
 	}
 
 	draw() {
 		// bg
 		this.ctx.fillStyle = 'rgba(0,0,0,0.75)';
-		this.ctx.fillRect(window.innerWidth - 65, 0, 50, 40);
+		this.ctx.fillRect(this.width - 65, 0, 60, 40);
 
 		this.ctx.font = 'lighter 11px sans-serif';
 		this.ctx.fillStyle = 'rgba(100,255,200)';
 
-		let x = window.innerWidth - 60;
+		let x = this.width - 60;
 		let y = 15;
 
 		for (const label in this.stats) {
 			const stat = this.stats[label];
-			const text = `${label} ${Math.round(stat.reduce((n,s) => n + s, 0) / stat.length )}`;
-
-			this.ctx.fillText(text, x, y);
+			this.ctx.fillText(`${label} ${stat.value}`, x, y);
 			y += 20;
 		}
 	}

@@ -1,5 +1,11 @@
+/*
+	draws text with lettering based on game text string
+	handled by game so that each new text object doesn't have to add all the letters...
+	maybe just check first?
+*/
+
 class Text {
-	constructor(x, y, msg, wrap, letters) {
+	constructor(x, y, msg, wrap, letters, letterIndexString) {
 		this.x = Math.round(x);
 		this.y = Math.round(y);
 		this.lead = 35; // leading is space between lines
@@ -14,6 +20,13 @@ class Text {
 		this.end = 0;
 		this.hover = false;
 		this.clickStarted = false;
+
+		if (!letters.states[0]) {
+			const indexString = letterIndexString || "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"!";
+			for (let i = 0; i < indexString.length; i++) {
+				letters.createNewState(indexString[i], i, i);
+			}
+		}
 	}
 
 	setPosition(x, y) {
