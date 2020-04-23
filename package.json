@@ -1,0 +1,30 @@
+{
+	"name": "lines",
+	"version": "2.4.2",
+	"description": "Animation and drawing tool.",
+	"main": "gulpfile.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/owenroberts/lines.git"
+	},
+	"author": "@owenroberts",
+	"devDependencies": {
+		"cssnano": "^4.1.10",
+		"gulp": "^4.0.2",
+		"gulp-autoprefixer": "^7.0.1",
+		"gulp-babel": "^8.0.0",
+		"gulp-better-rollup": "^4.0.1",
+		"gulp-concat": "^2.5.2",
+		"gulp-plumber": "^1.2.1",
+		"gulp-postcss": "^8.0.0",
+		"gulp-replace": "^1.0.0",
+		"gulp-sass": "^4.0.2",
+		"gulp-sourcemaps": "^2.6.5",
+		"gulp-terser": "^1.2.0",
+		"gulp-uglify": "^3.0.2",
+		"gulp-uglify-es": "^2.0.0",
+		"gulp-uglifycss": "^1.0.9",
+		"gulp-webserver": "^0.9.1",
+		"merge-stream": "^2.0.0"
+	}
+}
