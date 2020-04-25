@@ -265,7 +265,7 @@ function Data(anim) {
 			const layer = anim.layers[i];
 			if (layer.isInFrame(anim.currentFrame)) {
 				layer.endFrame = layer.startFrame + n;
-				if (anim.currentState.end < layer.endFrame) anim.currentState.end = layer.endFrame;
+				if (anim.state.end < layer.endFrame) anim.state.end = layer.endFrame;
 				switch(type) {
 					case "Explode":
 						layer.addTween({

@@ -20,7 +20,7 @@ class LinesAnimation {
 			speed: { x: 0, y: 0 }
 		};
 
-		this._state = 'default';
+		this._state = 'default'; // set state label
 		this.states = { 'default': {start: 0, end: 0 } };
 
 		this.over = {};
@@ -64,24 +64,18 @@ class LinesAnimation {
 			: 0;
 	}
 
-	get currentState() {
-		return this.states[this.state];
-	}
-
 	set state(state) {
 		if (this._state != state && this.states[state]) {
 			this._state = state;
-			if (this.currentState) this.frame = this.currentState.start;
-			
-			/* bad temp fix ... for what? 
-			if (!this.isPlaying && state != 'default') 
-				this.isPlaying = true; 
-			take it out until i remember
-			*/
+			if (this.state) this.frame = this.state.start;
 		}
 	}
 
 	get state() {
+		return this.states[this._state];
+	}
+
+	get stateName() {
 		return this._state;
 	}
 
@@ -97,16 +91,15 @@ class LinesAnimation {
 
 	update() {
 		if (this.isPlaying) {
-			if (this.currentFrame <= this.currentState.end) {
+			if (this.currentFrame <= this.state.end) {
 				this.currentFrameCounter += this.intervalRatio;
 				this.currentFrame = Math.floor(this.currentFrameCounter);
 				if (this.onUpdate) this.onUpdate();
 			}
-			// console.log(this.frame4, this.currentState.end, this.currentState.end + 1 - this.intervalRatio, this.frame4 > this.currentState.end + 1 - this.intervalRatio);
-			// console.log(this.frame4, this.currentState.end + 1);
+
 			/* fuck me */
-			if (this.frame4 >= this.currentState.end + 1) {
-				this.frame = this.currentState.start;
+			if (this.frame4 >= this.state.end + 1) {
+				this.frame = this.state.start;
 				/* loop ? */
 				if (this.onPlayedState) this.onPlayedState();
 			}
