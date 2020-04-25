@@ -7,15 +7,25 @@
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="../interface/css/lines.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<style type="text/css">
+		#wrap {
+			font-size: 18px;
+			width: 600px;
+			margin: 2em auto;
+		}
+	</style>
 </head>
 <body>
-	<h1>Play example</h1>
-	<p><a href="../">Back</a></p>
-	<canvas id="lines" data-src="_ex.json"></canvas>
+	<div id="wrap">
+		<h1>Play example</h1>
+		<p><a href="../">Back</a></p>
+		<canvas id="lines" data-src="_ex.json"></canvas>
+	</div>
+	
 	<!-- data src thing is for multiple instances
 		but this is not really working -->
 	<script src="../lib/cool/cool.js"></script>
-	<script src="../classes/animation.js"></script>
+	<script src="../classes/LinesAnimation.js"></script>
 	<script src="play.js"></script>
 	<script>
 		window.onload = function() {

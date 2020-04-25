@@ -15,7 +15,7 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 	this.isTexture = isTexture;
 	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
 
-	this.animation = new Animation(this.ctx, this.lps);
+	this.animation = new LinesAnimation(this.ctx, this.lps);
 	if (src) this.animation.load(src, data => {
 		this.width = data.w;
 		this.canvas.width = data.w * this.dpr;
