@@ -6,7 +6,7 @@ function Files(params) {
 	this.fileName = undefined;
 
 	/* s key - shift-s for single */
-	this.saveFile = function(args, callback) {
+	this.saveFile = function(single, callback) {
 
 		lns.draw.reset();
 		lns.ui.play.checkEnd();
@@ -31,7 +31,7 @@ function Files(params) {
 
 		/* save current frame */
 		let layers = [];
-		if (args.single) {
+		if (single) {
 			for (let i = 0; i < lns.anim.layers.length; i++) {
 				if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
 					const layer = _.cloneDeep(lns.anim.layers[i]);
@@ -81,7 +81,6 @@ function Files(params) {
 		if (self.fileName) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
 			saveAs(blob, `${self.fileName}.json`);
-			if (callback) callback(self.fileName); /* to set values ... */
 			// lns.ui.updateFIO();
 			lns.ui.faces.title.value = self.fileName;
 		}

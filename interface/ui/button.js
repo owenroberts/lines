@@ -11,6 +11,11 @@ class UIButton extends UIElement {
 	}
 	
 	handler() {
-		this.callback(this.arguments);
+		// interface arguments have to be in the right order
+		let args = [];
+		for (const arg in this.arguments) {
+			args.push(this.arguments[arg]);
+		}
+		this.callback(...args);
 	}
 }

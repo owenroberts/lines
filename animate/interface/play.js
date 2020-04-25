@@ -34,7 +34,6 @@ function Play() {
 		} else {
 			// put in reset? 
 			if (dir > 0) {
-				console.log(lns.anim.currentFrame, lns.anim.currentState)
 				if (lns.anim.currentFrame < lns.anim.currentState.end  || 
 					(lns.anim.state == 'default' && lns.draw.hasDrawing())) {
 					lns.draw.layer.startFrame = next;

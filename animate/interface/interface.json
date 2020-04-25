@@ -541,6 +541,38 @@
 		"label": "Play Back",
 		"uis": [
 			{
+				"module": "ui",
+				"sub": "play",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "0",
+						"fromModule": {
+							"callback": "setFrame"
+						},
+						"params": {
+							"text": "0",
+							"arguments": {
+								"f": 0
+							}
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "w",
+						"fromModule": {
+							"callback": "next"
+						},
+						"params": {
+							"text": "<",
+							"arguments": {
+								"dir": -1
+							}
+						}
+					}
+				]
+			},
+			{
 				"module": "render",
 				"list": [
 					{
@@ -551,8 +583,8 @@
 							"callback": "toggle"
 						},
 						"params": {
-							"onText": "Play",
-							"offText": "Pause"
+							"onText": "▶",
+							"offText": "❚❚"
 						}
 					}
 				]
@@ -563,25 +595,12 @@
 				"list": [
 					{
 						"type": "UIButton",
-						"key": "w",
-						"fromModule": {
-							"callback": "next"
-						},
-						"params": {
-							"text": "Prev",
-							"arguments": {
-								"dir": -1
-							}
-						}
-					},
-					{
-						"type": "UIButton",
 						"key": "e",
 						"fromModule": {
 							"callback": "next"
 						},
 						"params": {
-							"text": "Next",
+							"text": ">",
 							"arguments": {
 								"dir": 1
 							}

@@ -104,7 +104,7 @@ select {
 }
 
 .panel {
-  flex-basis: 120px;
+  flex-basis: 12em;
   flex-grow: 1;
   max-width: 14.5em;
   order: 0;
@@ -220,6 +220,7 @@ select {
 }
 .panel .header span, .panel .header label {
   margin-top: 0;
+  margin-right: 0.06125em;
 }
 .panel .header .undock-btn {
   align-self: flex-start;
