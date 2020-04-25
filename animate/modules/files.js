@@ -81,7 +81,6 @@ function Files(params) {
 		if (self.fileName) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
 			saveAs(blob, `${self.fileName}.json`);
-			// lns.ui.updateFIO();
 			lns.ui.faces.title.value = self.fileName;
 		}
 	};

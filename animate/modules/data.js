@@ -52,7 +52,6 @@ function Data(anim) {
 
 		/* these functions just call one function, should just call directly .. but this is still being worked on*/
 		lns.ui.drawings.clear();
-		lns.ui.layers.clear();
 		lns.ui.update();
 	};
 
