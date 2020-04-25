@@ -208,6 +208,10 @@ select {
   padding: 0 0.25em;
   margin-right: 3px;
   margin-top: 0.5em;
+  transition: background-color 100ms ease-in-out;
+}
+.panel .btn.triggered {
+  background-color: gray;
 }
 .panel select {
   margin-top: 0.25em;

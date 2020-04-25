@@ -3,7 +3,7 @@ class UITextRange extends UICollection {
 		super(params);
 
 		this.callback = params.callback;
-		this.arguments = params.arguments;
+		this.arguments = params.arguments || [];
 
 		this.textInput = new UIBlur({
 			...params,
@@ -34,7 +34,7 @@ class UITextRange extends UICollection {
 	}
 
 	update(value) {
-		this.callback(value, this.arguments);
+		this.callback(...[...this.arguments, value]);
 		this.textInput.value = value;
 		this.range.value = value;
 	}

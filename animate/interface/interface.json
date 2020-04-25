@@ -22,9 +22,7 @@
 						},
 						"params": {
 							"text": "Save",
-							"arguments": {
-								"single": false
-							}
+							"arguments": [false]
 						}
 					},
 					{
@@ -35,9 +33,7 @@
 						},
 						"params": {
 							"text": "Save Frame",
-							"arguments": {
-								"single": true
-							}
+							"arguments": [true]
 						}
 					},
 					{
@@ -279,9 +275,7 @@
 							"callback": "setProperty"
 						},
 						"params": {
-							"arguments": {
-								"prop": "c"
-							}
+							"arguments": ["c"]
 						}
 					}
 				]
@@ -515,9 +509,7 @@
 						},
 						"params": {
 							"text": "Insert Before",
-							"arguments": {
-								"dir": 0
-							}
+							"arguments": [0]
 						}
 					},
 					{
@@ -528,9 +520,7 @@
 						},
 						"params": {
 							"text": "Insert After",
-							"arguments": {
-								"dir": 1
-							}
+							"arguments": [1]
 						}
 					}
 				]
@@ -552,9 +542,7 @@
 						},
 						"params": {
 							"text": "0",
-							"arguments": {
-								"f": 0
-							}
+							"arguments": [0]
 						}
 					},
 					{
@@ -565,9 +553,7 @@
 						},
 						"params": {
 							"text": "<",
-							"arguments": {
-								"dir": -1
-							}
+							"arguments": [-1]
 						}
 					}
 				]
@@ -601,9 +587,7 @@
 						},
 						"params": {
 							"text": ">",
-							"arguments": {
-								"dir": 1
-							}
+							"arguments": [1]
 						}
 					},
 					{
@@ -618,42 +602,20 @@
 					}
 				]
 			},
-			{
-				"module": "render",
+			{	
+				"module": "ui",
+				"sub": "play",
 				"list": [
 					{
 						"type": "UIText",
-						"key": "l",
-						"face": "onionSkinNum",
+						"key": "f",
+						"face": "frameDisplay",
 						"fromModule": {
-							"callback": "setOnionSkin"
+							"callback": "setFrame"
 						},
 						"params": {
 							"value": 0,
-							"label": "Onion",
-							"prompt": "Onion skin"
-						}
-					},
-					{
-						"type": "UIToggle",
-						"key": "shift-l",
-						"toggle": "onionSkinIsVisible",
-						"params": {
-							"onText": "Hide",
-							"offText": "Show"
-						}
-					},
-					{
-						"row": true,
-						"type": "UIBlur",
-						"key": "'",
-						"face": "lps",
-						"fromModule": {
-							"callback": "setLps"
-						},
-						"params": {
-							"prompt": "Set Lines/Second",
-							"label": "LPS"
+							"prompt": "Go To Frame"
 						}
 					}
 				]
@@ -674,22 +636,41 @@
 					}
 				]
 			},
-			{	
-				"module": "ui",
-				"sub": "play",
+			{
+				"module": "render",
 				"list": [
-					
 					{
-						"type": "UIText",
-						"key": "f",
-						"face": "frameDisplay",
+						"type": "UIBlur",
+						"key": "'",
+						"face": "lps",
 						"fromModule": {
-							"callback": "setFrame"
+							"callback": "setLps"
 						},
 						"params": {
-							"label": "Frame",
+							"prompt": "Set Lines/Second",
+							"label": "LPS"
+						}
+					},
+					{
+						"type": "UIText",
+						"key": "l",
+						"face": "onionSkinNum",
+						"fromModule": {
+							"callback": "setOnionSkin"
+						},
+						"params": {
 							"value": 0,
-							"prompt": "Go To Frame"
+							"label": "Onion",
+							"prompt": "Onion skin"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "shift-l",
+						"toggle": "onionSkinIsVisible",
+						"params": {
+							"onText": "Hide",
+							"offText": "Show"
 						}
 					}
 				]
@@ -836,9 +817,7 @@
 							"label": "Segments",
 							"min": 1,
 							"max": 10,
-							"arguments": {
-								"prop": "n"
-							}
+							"arguments": ["n"]
 						}
 					},
 					{
@@ -851,9 +830,7 @@
 							"label": "Jiggle",
 							"min": 0,
 							"max": 10,
-							"arguments": {
-								"prop": "r"
-							}
+							"arguments": ["r"]
 						}
 					},
 					{
@@ -866,9 +843,7 @@
 							"label": "Wiggle",
 							"min": 0,
 							"max": 15,
-							"arguments": {
-								"prop": "w"
-							}
+							"arguments": ["w"]
 						}
 					},
 					{
@@ -882,9 +857,7 @@
 							"min": 0,
 							"max": 5,
 							"step": 0.005,
-							"arguments": {
-								"prop": "v"
-							}
+							"arguments": ["v"]
 						}
 					},
 					{
@@ -894,9 +867,7 @@
 						},
 						"params": {
 							"text":  "Wiggle Segments",
-							"arguments": {
-								"prop": "ws"
-							}
+							"arguments": ["ws"]
 						}
 					},
 					{
@@ -1019,9 +990,7 @@
 						},
 						"params": {
 							"text": "Explode",
-							"arguments": {
-								"type": "Explode"
-							}
+							"arguments": ["Explode"]
 						}
 					},
 					{
@@ -1032,9 +1001,7 @@
 						},
 						"params": {
 							"text": "Reverse",
-							"arguments": {
-								"type": "Reverse"
-							}
+							"arguments": ["Reverse"]
 						}
 					},
 					{
@@ -1045,9 +1012,7 @@
 						},
 						"params": {
 							"text": "ExRev",
-							"arguments": {
-								"type": "ExRev"
-							}
+							"arguments": ["ExRev"]
 						}
 					}
 				]

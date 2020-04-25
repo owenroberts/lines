@@ -3,11 +3,10 @@ class UIColor extends UIInput {
 		super(params);
 		this.el.type = "color";
 		this.colors = [];
-		this.arguments = params.arguments;
+		this.arguments = params.arguments || [];
 
 		this.el.addEventListener('input', ev => {
-			this.current = ev.target.value;
-			this.callback(ev.target.value, this.arguments);
+			this.setColor(ev.target.value);
 		});
 
 		this.el.addEventListener('focus', ev => {
@@ -33,8 +32,15 @@ class UIColor extends UIInput {
 		}
 	}
 
+	/* to set color without constantly updating "current" */
+	setColor(value) {
+		this.current = value;
+		this.callback(...[...this.arguments, value]);
+	}
+
+	/* update for loading */
 	update(value) {
-		this.callback(value, this.arguments);
+		this.setColor(value);
 		this.value = value;
 	}
 

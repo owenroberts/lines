@@ -198,14 +198,14 @@ function Data(anim) {
 		lns.draw.popOff();
 	}; /* shift z */
 
-	this.insert = function(args) {
+	this.insert = function(dir) {
 		lns.draw.reset();
 		self.saveState();
 		for (let i = 0, len = anim.layers.length - 1; i < len; i++) {
-			// insert before args.dir  0, after 1
-			anim.layers[i].shiftIndex(anim.currentFrame + args.dir, 1);
-			lns.anim.addLayer(anim.layers[i].removeIndex(anim.currentFrame + args.dir));
-			anim.frame = anim.currentFrame + args.dir;
+			// insert before dir  0, after 1
+			anim.layers[i].shiftIndex(anim.currentFrame + dir, 1);
+			lns.anim.addLayer(anim.layers[i].removeIndex(anim.currentFrame + dir));
+			anim.frame = anim.currentFrame + dir;
 		}
 		lns.ui.update();
 	}; /* i, shift-i key */
@@ -258,7 +258,7 @@ function Data(anim) {
 		}
 	}; /* q key  */
 
-	this.explode = function(params) {
+	this.explode = function(type) {
 		lns.draw.reset();
 		const n = +prompt('Number of frames?');
 		for (let i = 0; i < anim.layers.length - 1; i++) {
@@ -266,7 +266,7 @@ function Data(anim) {
 			if (layer.isInFrame(anim.currentFrame)) {
 				layer.endFrame = layer.startFrame + n;
 				if (anim.currentState.end < layer.endFrame) anim.currentState.end = layer.endFrame;
-				switch(params.type) {
+				switch(type) {
 					case "Explode":
 						layer.addTween({
 							prop: 'e',

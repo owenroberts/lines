@@ -43,7 +43,7 @@ function Render(lps, color) {
 			self.timer = performance.now();
 
 			// what actually need to be update here ?
-			if (lns.anim.isPlaying) lns.ui.timeline.update(); 
+			if (lns.anim.isPlaying) lns.ui.timeline.update();
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 

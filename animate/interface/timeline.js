@@ -39,6 +39,9 @@ function Timeline() {
 	};
 
 	this.update = function() {
+
+		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame; // eek
+
 		self.panel.timeline.setProp('--num-frames', lns.anim.endFrame + 1);
 		self.panel.timeline.setProp('--num-layers', lns.anim.layers.length - 1);
 		self.panel.timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.t.length, 0));
@@ -107,8 +110,6 @@ function Timeline() {
 				gridRowStart += 2;
 				gridRowEnd += 2;
 			}
-
-			
 		}
 	};
 

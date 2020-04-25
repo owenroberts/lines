@@ -18,7 +18,7 @@ class UIRange extends UIInput {
 	update(value) {
 		this.el.value = value;
 		this.el.blur();
-		this.callback(value, this.arguments);
+		this.callback(...this.arguments, value);
 	}
 
 	setRange(min, max) {

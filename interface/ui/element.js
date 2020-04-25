@@ -59,10 +59,12 @@ class UIElement {
 	onPress(triggerRelease) {
 		toolTip.text = `${this.el.title}`;
 		toolTip.addClass('visible');
+		this.addClass('triggered');
 		if (triggerRelease === true) setTimeout(this.onRelease.bind(this), 400);
 	}
 
 	onRelease() {
 		toolTip.removeClass('visible');
+		this.removeClass('triggered');
 	}
 }

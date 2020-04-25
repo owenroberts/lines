@@ -19,9 +19,8 @@ function Play() {
 	};
 
 	/* call before changing a frame */
-	this.next = function(args) {
+	this.next = function(dir) {
 
-		const dir = args.dir ? args.dir : args;
 		const next = lns.anim.currentFrame + dir;
 		
 		if (lns.anim.isPlaying) lns.ui.faces.play.update();

@@ -206,6 +206,10 @@ select {
 		padding: 0 0.25em;
 		margin-right: 3px;
 		margin-top: 0.5em;
+		transition: background-color 100ms ease-in-out;
+		&.triggered {
+			background-color: $ui-select;
+		}
 	}
 
 	select { margin-top: 0.25em; }
