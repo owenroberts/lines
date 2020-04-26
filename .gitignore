@@ -13,4 +13,4 @@ test.json
 tion/
 tions/
 node_modules/
-build/src_maps/
+**/src_maps/

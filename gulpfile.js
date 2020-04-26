@@ -7,6 +7,11 @@ const uglify = require('gulp-uglify-es').default;
 const merge = require('merge-stream');
 const server = require('gulp-webserver');
 
+const sass = require('gulp-sass');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+
 const files = {
 	base: [ './classes/*.js' ],
 	interface: [
@@ -29,6 +34,16 @@ const files = {
 	]
 };
 
+const sassFiles = {
+	animate: [
+		'./css/animate.scss'
+	],
+	interface: [
+		'./css/colors.scss',
+		'./css/interface.scss'
+	]
+};
+
 function jsTasks() {
 	function jsTask(files, name, dir){
 		return src(files)
@@ -46,6 +61,26 @@ function jsTasks() {
 	}
 	return merge(...tasks);
 }
+
+// Sass task: compiles the style.scss file into style.css
+function sassTask(files, name, dir){    
+    return src(files)
+        .pipe(sourcemaps.init()) // initialize sourcemaps first
+        .pipe(sass()) // compile SCSS to CSS
+        .pipe(postcss([ autoprefixer(), cssnano() ])) // PostCSS plugins
+        .pipe(sourcemaps.write('./src_maps')) // write sourcemaps file in current directory
+        .pipe(dest(dir)
+    ); // put final CSS in dist folder
+}
+
+function sassTasks() {
+	const tasks = [];
+	for (const f in sassFiles) {
+		tasks.push( sassTask(sassFiles[f], `${f}.min.js`, './css') );
+	}
+	return merge(...tasks);
+}
+
 
 function serverTask() {
 	return src('./')
@@ -67,10 +102,17 @@ function cacheBustTask(){
 // Watch task: watch SCSS and JS files for changes
 // If any change, run scss and js tasks simultaneously
 function watchTask(){
-	watch([...files.base, ...files.interface, ...files.animate],
+	watch([...files.base, 
+			...files.interface, 
+			...files.animate, 
+			...files.game,
+			...sassFiles.interface,
+			...sassFiles.animate
+		],
 		{interval: 1000, usePolling: true}, //Makes docker work
 		series(
 			parallel(jsTasks),
+			parallel(sassTasks),
 			cacheBustTask
 		)
 	);    
@@ -81,6 +123,7 @@ function watchTask(){
 // then runs cacheBust, then watch task
 exports.default = series(
 	parallel(jsTasks),
+	parallel(sassTasks),
 	cacheBustTask,
 	serverTask,
 	watchTask
