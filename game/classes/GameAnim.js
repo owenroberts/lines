@@ -51,7 +51,7 @@ class GameAnim extends LinesAnimation {
 	}
 
 	get state() {
-		return this.state[this._state];
+		return this.states[this._state];
 	}
 
 	playOnce(callback) {

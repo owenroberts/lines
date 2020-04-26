@@ -19,13 +19,17 @@ const files = {
 	animate: [
 		'./animate/modules/*.js',
 		'./animate/classes/*.js',
-		'./interface/*.js',
+		'./animate/interface/*.js',
 		'./animate/lines.js'
+	],
+	game: [
+		'./game/classes/Sprite.js',
+		'./game/classes/UI.js',
+		'./game/classes/*.js',
 	]
 }
 
 function jsTask(files, name, dir){
-	console.log(files, name);
 	return src(files)
 		.pipe(sourcemaps.init())
 		.pipe(concat(name))

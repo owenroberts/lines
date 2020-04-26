@@ -20,9 +20,6 @@ let waves;
 
 function start() {
 
-	// need to fix lettering string here 
-	gme.addLettering(gme.anims.data.letters);
-	
 	char = new Character(300, 300);
 	gme.scenes.walk.add(char);
 
