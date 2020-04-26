@@ -15,10 +15,10 @@ const cssnano = require('cssnano');
 const files = {
 	base: [ './classes/*.js' ],
 	interface: [
-		'./interface/ui/element.js',
-		'./interface/ui/collection.js',
-		'./interface/ui/input.js',
-		'./interface/ui/text.js',
+		'./interface/ui/Element.js',
+		'./interface/ui/Collection.js',
+		'./interface/ui/Input.js',
+		'./interface/ui/Text.js',
 		'./interface/**/*.js',
 	],
 	animate: [
