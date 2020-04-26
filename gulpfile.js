@@ -27,19 +27,19 @@ const files = {
 		'./game/classes/UI.js',
 		'./game/classes/*.js',
 	]
-}
-
-function jsTask(files, name, dir){
-	return src(files)
-		.pipe(sourcemaps.init())
-		.pipe(concat(name))
-		.pipe(uglify())
-		.pipe(sourcemaps.write('./src_maps'))
-		.pipe(dest(dir)
-	);
-}
+};
 
 function jsTasks() {
+	function jsTask(files, name, dir){
+		return src(files)
+			.pipe(sourcemaps.init())
+			.pipe(concat(name))
+			.pipe(uglify())
+			.pipe(sourcemaps.write('./src_maps'))
+			.pipe(dest(dir)
+		);
+	}
+
 	const tasks = [];
 	for (const f in files) {
 		tasks.push( jsTask(files[f], `${f}.min.js`, './build') );
@@ -85,3 +85,5 @@ exports.default = series(
 	serverTask,
 	watchTask
 );
+
+exports.lnsFiles = files;
