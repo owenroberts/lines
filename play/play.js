@@ -16,25 +16,6 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
 
 	this.animation = new LinesAnimation(this.ctx, this.lps);
-	if (src) this.animation.load(src, data => {
-		this.width = data.w;
-		this.canvas.width = data.w * this.dpr;
-		this.height = data.h;
-		this.canvas.height = data.h * this.dpr;
-		this.ctx.scale(this.dpr, this.dpr);
-		this.canvas.style.zoom = 1 / this.dpr;
-
-		this.ctx.miterLimit = 1;
-		if (data.bg) this.canvas.style.backgroundColor = data.bg;
-		if (callback) callback();
-		if (!this.isTexture) requestAnimFrame(this.draw.bind(this)); /* three.js stuff */
-		if (this.sizeCanvas) {
-			this.sizeCanvas();
-			window.addEventListener('resize', this.sizeCanvas.bind(this), false);
-		}
-		if (this.color) this.ctx.strokeStyle = this.color;
-		this.animation.isPlaying = true;
-	});
 
 	this.ctx.miterLimit = 1;
 	this.width;
@@ -72,6 +53,31 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 			this.animation.draw();
 		}
 	};
+
+	this.load = function(src, callback) {
+		const self = this;
+		this.animation.load(src, data => {
+			self.width = data.w;
+			self.canvas.width = data.w * self.dpr;
+			self.height = data.h;
+			self.canvas.height = data.h * self.dpr;
+			self.ctx.scale(self.dpr, self.dpr);
+			self.canvas.style.zoom = 1 / self.dpr;
+
+			self.ctx.miterLimit = 1;
+			if (data.bg) self.canvas.style.backgroundColor = data.bg;
+			if (callback) callback();
+			if (!self.isTexture) requestAnimFrame(self.draw.bind(self)); /* three.js stuff */
+			if (self.sizeCanvas) {
+				self.sizeCanvas();
+				window.addEventListener('resize', self.sizeCanvas.bind(self), false);
+			}
+			if (self.color) self.ctx.strokeStyle = self.color;
+			self.animation.isPlaying = true;
+		});
+	};
+
+	if (src) this.load(src);
 }
 
 function loadAnimation(src, canvas, lps, callback) {
