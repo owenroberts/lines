@@ -1,5 +1,9 @@
 @import "interface.scss";
 
+body {
+	overflow: hidden;
+}
+
 $anim-color: #9de0b1;
 $anim-select: green;
 $anim-off: darkgreen;

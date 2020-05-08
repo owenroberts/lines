@@ -118,17 +118,6 @@ function Draw(defaults) {
 		}
 	};
 
-	this.update = function(ev) {
-		if (performance.now() > self.mouseInterval + self.mouseTimer) {
-			self.mouseTimer = performance.now();
-			if (self.isDrawing)
-				if (self.brush <= 0)
-					self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
-				else
-					self.addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
-		}
-	};
-
 	this.addBrush = function(x, y) {
 		const b = self.brush * self.brush * self.brushSpread;
 		let _y = 1;
@@ -156,10 +145,21 @@ function Draw(defaults) {
 			}
 			self.drawing.push('end');
 		}
-	}
+	};
 
 	this.addLine = function(x, y) {
 		self.drawing.push(new Cool.Vector(x, y).divide(lns.canvas.scale));
+	};
+
+	this.update = function(ev) {
+		if (performance.now() > self.mouseInterval + self.mouseTimer) {
+			self.mouseTimer = performance.now();
+			if (self.isDrawing)
+				if (self.brush <= 0)
+					self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
+				else
+					self.addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
+		}
 	};
 
 	this.start = function(ev) {
