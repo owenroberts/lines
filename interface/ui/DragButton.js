@@ -17,12 +17,11 @@ class UIDragButton extends UIButton {
 			if (this.dragging) {
 				const delta = ev.pageX - this.down.x;
 				if (Math.abs(delta) > 10) {
-					this.callback(delta > 0 ? 1 : -1, Math.abs(Math.ceil(delta / lns.ui.timeline.frameSize
-)));
+					this.callback(delta > 0 ? 1 : -1, Math.abs(Math.ceil(delta / lns.ui.timeline.frameSize)));
 				}
 			}
 			this.dragging = false;
 			this.down.x = 0;
 		});
-	}f
+	}
 }

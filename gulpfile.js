@@ -81,12 +81,11 @@ function sassTasks() {
 	return merge(...tasks);
 }
 
-
 function serverTask() {
 	return src('./')
 		.pipe(server({
 			livereload: false,
-			open: true,
+			// open: true,
 			port: 8080	// set a port to avoid conflicts with other local apps
 		}));
 }
