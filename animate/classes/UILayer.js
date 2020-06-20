@@ -149,7 +149,7 @@ class UILayer extends UICollection {
 			type: 'remove',
 			text: '🗑',
 			callback: () => {
-				lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
+				lns.anim.layers.splice(lns.anim.layers.indexOf(layer), 1);
 				lns.ui.update();
 			}
 		});

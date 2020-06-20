@@ -125,31 +125,37 @@ function Data(anim) {
 		lns.draw.drawing = [];
 	}; /* x key */
 
+
+	/* called by clear frame */
 	this.clearLayers = function() {
 		self.saveState(); /* will save lines ... */
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
 			if (anim.layers[i].isInFrame(anim.currentFrame)) {
 				const layer = anim.layers[i].removeIndex(anim.currentFrame);
-				if (!layer) lns.ui.layers.remove(i);
+				if (layer == "remove") anim.layers.splice(i, 1);
+				lns.ui.update();
 			}
 		}
 	};
 
+	/* are these functions useful anymore with timeline ? */
 	this.cutTopLayer = function() {
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
 			if (anim.layers[i].isInFrame(anim.currentFrame)) {
 				const layer = anim.layers[i].removeIndex(anim.currentFrame);
-				if (!layer) lns.ui.layers.remove(i);
+				if (layer == "remove") anim.layers.splice(i, 1);
+				lns.ui.update();
 			}
 			break;
 		}
 	}; /* ctrl - x */
 
 	this.cutBottomLayer = function() {
-		for (let i = 0; i < anim.layers.length; i++) {
+		for (let i = 0; i < anim.layers.length - 1; i++) {
 			if (anim.layers[i].isInFrame(anim.currentFrame)) {
 				const layer = anim.layers[i].removeIndex(anim.currentFrame);
-				if (!layer) lns.ui.layers.remove(i);
+				if (layer == "remove") anim.layers.splice(i, 1);
+				lns.ui.update();
 			}
 			break;
 		}

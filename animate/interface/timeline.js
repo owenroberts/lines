@@ -5,7 +5,7 @@ function Timeline() {
 	this.init = function() {
 		self.panel.el.addEventListener('wheel', ev => {
 			ev.preventDefault();
-			self.frameWidth += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 10 : 1);
+			self.frameWidth += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 20 : 1);
 			self.panel.timeline.setProp('--frame-width', self.frameWidth);
 		});
 
@@ -38,6 +38,7 @@ function Timeline() {
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
 	};
 
+	/* creates all the layer ui new each time */
 	this.update = function() {
 
 		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame; // eek

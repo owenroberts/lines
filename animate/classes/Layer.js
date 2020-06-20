@@ -74,7 +74,12 @@ class Layer {
 	}
 
 	removeIndex(index) {
-		if (this.startFrame == index && this.endFrame == index) return undefined;
+		/*
+			returns a layer to add to layers to calling function
+			if no match return "remove" to remove the layer	
+		*/
+
+		if (this.startFrame == index && this.endFrame == index) return "remove";
 		else if (this.startFrame == index) this.startFrame += 1;
 		else if (this.endFrame == index) this.endFrame -= 1;
 		else if (index > this.startFrame && index < this.endFrame) {
@@ -90,7 +95,7 @@ class Layer {
 		}
 		
 		this.resetTweens();
-		return this; // when is this used ? 
+		// return this; // when is this used ? 
 	}
 
 	shiftIndex(index, n) {
