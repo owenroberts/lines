@@ -19,7 +19,13 @@ class UIRange extends UIInput {
 	update(value) {
 		this.el.value = value;
 		this.el.blur();
-		this.callback(...this.arguments, value);
+
+		/* 
+			arguments system breaks here 
+			handler is expecting ev/value
+			now requires two args, before "me"
+		*/
+		this.callback(value);
 	}
 
 	setRange(min, max) {

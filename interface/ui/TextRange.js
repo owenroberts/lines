@@ -27,6 +27,7 @@ class UITextRange extends UICollection {
 	}
 
 	handler(ev, me) {
+		console.log(typeof ev, ev, me)
 		if (typeof ev === "number") this.update(ev);
 		else if (typeof ev === "string")  this.update(+ev);
 		else me.update(ev.target.value || prompt(me.prompt));
