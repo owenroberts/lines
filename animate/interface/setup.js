@@ -13,8 +13,8 @@ function setupAnimateInterface(ui) {
 	};
 
 	ui.baseFontSize = 11; 
-	ui.updateScale = function(n) {
-		ui.baseFontSize = +n;
+	ui.updateScale = function(value) {
+		ui.baseFontSize = +value;
 		document.body.style.setProperty('--base-font-size', ui.baseFontSize);
 	};
 
@@ -42,4 +42,5 @@ function setupAnimateInterface(ui) {
 		ui.drawings.update();
 		ui.states.update(); 
 	};
+
 }

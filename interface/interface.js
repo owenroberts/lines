@@ -49,11 +49,74 @@ function Interface(app) {
 		fetch(file)
 			.then(response => { return response.json(); })
 			.then(data => {
+
+				const quickRef = new UIPanel('quick', 'Quick Ref');
+				quickRef.fontSize = 11;
+				quickRef.list = [];
+				self.panels.append(quickRef, 'quick');
+
+				// not handled by individual uis
+				quickRef.add(new UILabel({ text: "Quick Ref Scale" }));
+				
+				const quickRefScale = new UITextRange({
+					value: 11,
+					min: 10,
+					max: 40,
+					callback: function(value) {
+						quickRef.fontSize = +value;
+						document.body.style.setProperty('--quick-ref-font-size', quickRef.fontSize);
+					}
+				});
+				quickRef.add(quickRefScale);
+				self.faces.quickRefScale = quickRefScale;
+
+				quickRef.add(new UIButton({
+					text: "+",
+					callback: function() {
+						const m1 = new UIModal("panels", app, quickRef.position, function() {
+							const options = {};
+							data[p1.value].uis.forEach(ui => {
+								ui.list.forEach(el => {
+									if (el.fromModule) {
+										if (el.fromModule.callback) {
+											el.mod = ui.module;
+											el.sub = ui.sub;
+
+											// multiple uis w same callback
+											options[el.fromModule.callback] = el;
+										}
+									}
+								});
+							});
+
+							const m2 = new UIModal("ui", app, quickRef.position, function() {
+								const data = options[p2.value];
+								const mod = data.sub ? app[data.mod][data.sub] : app[data.mod];
+								const ui = self.createUI(data, mod, quickRef);
+								quickRef.list.push({
+									panel: p1.value,
+									ui: p2.value
+								});
+							});
+
+							const p2 = new UISelect({
+								options: Object.keys(options)
+							});
+							m2.add(p2);
+						});
+						const p1 = new UISelect({
+							options: Object.keys(data)
+						});
+						m1.add(p1);
+					}
+				}));
+
+
 				for (const key in data) {
 					self.createPanel(key, data[key]);
 				}
 
-				this.addSelect(Object.keys(data));
+				self.addSelect([...Object.keys(data), 'quick']);
 				// self.settings.load();
 				if (callback) callback();
 			});
@@ -110,6 +173,12 @@ function Interface(app) {
 		}
 
 		if (data.row) panel.addRow();
+
+		/* 
+			this is counter intuitive because 
+			labels get created before ui, 
+			doesn't work for uis created in js
+		*/
 		if (params.label) panel.add(new UILabel({ text: params.label}));
 		
 		let ui = new uiTypes[data.type](params);

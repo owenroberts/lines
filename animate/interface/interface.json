@@ -8,7 +8,6 @@
 					{
 						"type": "UIText",
 						"face": "title",
-						
 						"params": {
 							"placeholder": "title",
 							"id": "title"

@@ -57,7 +57,9 @@ function appSave() {
 		rl: lns.ui.faces.rl.value,
 		timelineView: lns.ui.faces.timelineView.value,
 		canvasScale: lns.ui.faces.canvasScale.value,
-		interfaceScale: lns.ui.faces.interfaceScale.value
+		interfaceScale: lns.ui.faces.interfaceScale.value,
+		quickRefScale: lns.ui.faces.quickRefScale.value,
+		quickRefList: lns.ui.panels.quick.list
 	};
 }
 
@@ -76,6 +78,8 @@ function appLoad(settings) {
 
 	lns.ui.faces.canvasScale.update(settings.canvasScale);
 	lns.ui.faces.interfaceScale.update(settings.interfaceScale);
+	lns.ui.faces.quickRefScale.update(settings.quickRefScale);
+
 
 	lns.ui.faces.lineWidth.update(settings.lineWidth); // has to be called last bc of reset ... 
 

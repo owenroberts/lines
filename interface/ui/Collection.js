@@ -3,6 +3,7 @@ class UICollection extends UIElement {
 		super(params);
 	}
 
+	// k is the key value in the interface object
 	append(ui, k) {
 		if (k !== undefined) this[k] = ui;
 		if (Array.isArray(ui.html)) {
@@ -22,6 +23,5 @@ class UICollection extends UIElement {
 	removeK(k) {
 		this.el.removeChild(this[k].el);
 		delete this[k];
-		console.log(this);
 	}
 }
