@@ -34,8 +34,8 @@ function Draw(defaults) {
 	};
 
 	this.setProperty = function(prop, value) {
-		// console.log(arguments);
-		// console.log(prop, value);
+		// console.trace();
+		console.log(prop, value);
 		lns.anim.updateProperty(prop, value);
 		self.layer[prop] = value;
 	};
