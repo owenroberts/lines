@@ -8,23 +8,17 @@ class UIRange extends UIInput {
 		if (params.step) this.setStep(params.step);
 
 		this.el.addEventListener(params.event || 'input', ev => {
-			this.handler(ev, this);
+			this.handler(ev.target.value);
 		});
 	}
 
-	handler(ev, me) {
-		me.update(ev.type == 'keydown' ? prompt(me.prompt) : +ev.target.value);
+	handler(value, isKeyEvent) {
+		this.update(isKeyEvent ? prompt(this.prompt) : +value);
 	}
 
 	update(value) {
 		this.el.value = value;
 		this.el.blur();
-
-		/* 
-			arguments system breaks here 
-			handler is expecting ev/value
-			now requires two args, before "me"
-		*/
 		this.callback(value);
 	}
 

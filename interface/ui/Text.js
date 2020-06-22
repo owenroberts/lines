@@ -24,14 +24,14 @@ class UIText extends UIInput {
 		});
 	}
 
-	handler(ev, me) {
-		me.update(ev.target.value || prompt(me.prompt));
+	handler(value) {
+		this.update(value !== undefined ? +value : prompt(this.prompt));
 	}
 
 	update(value) {
 		if (this.callback) this.callback(value);
 		this.value = value;
-		this.el.blur(); // keep going back and forth on this??
+		// this.el.blur(); // keep going back and forth on this??
 		// 11.27.2019 to prevent settings not saving when something focused
 	}
 

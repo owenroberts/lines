@@ -30,14 +30,14 @@ function Interface(app) {
 		k = ev.ctrlKey ? "ctrl-" + k : k;
 		k = ev.altKey ? "alt-" + k : k;
 
-		const key = self.keys[k];
+		const ui = self.keys[k];
 
-		if (k && key && 
+		if (k && ui && 
 			document.activeElement.type != "text" && 
 			!ev.metaKey) {
 			ev.preventDefault();
-			key.handler(ev, key);
-			key.onPress(true);
+			ui.handler(ev.target.value, true);
+			ui.onPress(true);
 		}
 	};
 	document.addEventListener("keydown", self.keyDown, false);
