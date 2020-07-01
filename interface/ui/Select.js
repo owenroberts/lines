@@ -5,7 +5,7 @@ class UISelect extends UIElement {
 		this.setOptions(params.options || [], params.selected);
 		
 		this.el.addEventListener('change', function(ev) {
-			params.callback(ev.target.value);
+			if (params.callback) params.callback(ev.target.value);
 			ev.target.blur();
 		});
 	}

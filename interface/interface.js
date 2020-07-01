@@ -26,7 +26,7 @@ function Interface(app) {
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
 		if (k == "space") ev.preventDefault();
-		k = ev.shiftKey ? "shift-" + k : k
+		k = ev.shiftKey ? "shift-" + k : k;
 		k = ev.ctrlKey ? "ctrl-" + k : k;
 		k = ev.altKey ? "alt-" + k : k;
 
@@ -73,36 +73,48 @@ function Interface(app) {
 				quickRef.add(new UIButton({
 					text: "+",
 					callback: function() {
+
+						// m1 choose a panel
 						const m1 = new UIModal("panels", app, quickRef.position, function() {
 							const options = {};
 							data[p1.value].uis.forEach(ui => {
 								ui.list.forEach(el => {
-									if (el.fromModule) {
-										if (el.fromModule.callback) {
-											el.mod = ui.module;
-											el.sub = ui.sub;
 
-											// multiple uis w same callback
-											options[el.fromModule.callback] = el;
-										}
+									let createQuickUI = (el.number || el.toggle) ? true : false;
+									if (el.fromModule) createQuickUI = el.fromModule.callback ? true : false;
+
+									if (createQuickUI) {
+										const title = el.params ? 
+											el.params.text || el.params.onText || el.params.label || el.face:
+											el.fromModule.callback;
+										
+										el.mod = ui.module;
+										el.sub = ui.sub;
+
+										options[title] = el;
 									}
 								});
 							});
 
-							const m2 = new UIModal("ui", app, quickRef.position, function() {
-								const data = options[p2.value];
-								const mod = data.sub ? app[data.mod][data.sub] : app[data.mod];
-								const ui = self.createUI(data, mod, quickRef);
-								quickRef.list.push({
-									panel: p1.value,
-									ui: p2.value
+							if (Object.keys(options).length > 0) {
+								// m2 choose a callback
+								const m2 = new UIModal("ui", app, quickRef.position, function() {
+									const data = options[p2.value];
+									const mod = data.sub ? app[data.mod][data.sub] : app[data.mod];
+									const ui = self.createUI(data, mod, quickRef);
+									quickRef.list.push({
+										panel: p1.value,
+										ui: p2.value
+									});
 								});
-							});
 
-							const p2 = new UISelect({
-								options: Object.keys(options)
-							});
-							m2.add(p2);
+								const p2 = new UISelect({
+									options: Object.keys(options)
+								});
+								m2.add(p2);
+							} else {
+								m1.clear();
+							}
 						});
 						const p1 = new UISelect({
 							options: Object.keys(data)

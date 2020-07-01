@@ -36,7 +36,6 @@ window.addEventListener("load", function() {
 		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.updateFIO);
 		lns.ui.update();
 		lns.render.start();
-
 		lns.ui.timeline.init();
 	});
 });
@@ -80,6 +79,8 @@ function appLoad(settings) {
 	lns.ui.faces.interfaceScale.update(settings.interfaceScale);
 	lns.ui.faces.quickRefScale.update(settings.quickRefScale);
 
+	const quickRefList = settings.quickRefList;
+	console.log( quickRefList );
 
 	lns.ui.faces.lineWidth.update(settings.lineWidth); // has to be called last bc of reset ... 
 
