@@ -16,6 +16,8 @@ function Interface(app) {
 		UIList,
 		UIRow
 	};
+
+	// turn off ipad request desktop
 	document.body.classList.add(Cool.mobilecheck() ? 'mobile' : 'desktop');
 
 	this.keys = {};
