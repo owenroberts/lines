@@ -263,7 +263,7 @@ function Data(anim) {
 		}
 	}; /* q key  */
 
-	this.explode = function(type) {
+	this.quickAnimate = function(type) {
 		lns.draw.reset();
 		const n = +prompt('Number of frames?');
 		for (let i = 0; i < anim.layers.length - 1; i++) {
@@ -272,7 +272,7 @@ function Data(anim) {
 				layer.endFrame = layer.startFrame + n;
 				if (anim.state.end < layer.endFrame) anim.state.end = layer.endFrame;
 				switch(type) {
-					case "Explode":
+					case "Draw":
 						layer.addTween({
 							prop: 'e',
 							sf: layer.f.s,
@@ -290,7 +290,7 @@ function Data(anim) {
 							ev: anim.drawings[layer.d].length
 						});
 					break;
-					case "ExRev":
+					case "DrawReverse":
 						const mid = Math.floor(n / 2);
 						layer.addTween({
 							prop: 'e',

@@ -58,7 +58,7 @@ function appSave() {
 		canvasScale: lns.ui.faces.canvasScale.value,
 		interfaceScale: lns.ui.faces.interfaceScale.value,
 		quickRefScale: lns.ui.faces.quickRefScale.value,
-		quickRefList: lns.ui.panels.quick.list
+		quickRefList: lns.ui.panels.quickRef.list
 	};
 }
 
@@ -80,7 +80,10 @@ function appLoad(settings) {
 	lns.ui.faces.quickRefScale.update(settings.quickRefScale);
 
 	const quickRefList = settings.quickRefList;
-	console.log( quickRefList );
+	quickRefList.forEach(ref => {
+		console.log(ref);
+		lns.ui.createUI(ref, ref.mod, ref.sub, lns.ui.panels.quickRef);
+	});
 
 	lns.ui.faces.lineWidth.update(settings.lineWidth); // has to be called last bc of reset ... 
 

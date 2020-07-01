@@ -50,10 +50,10 @@ function Interface(app) {
 			.then(response => { return response.json(); })
 			.then(data => {
 
-				const quickRef = new UIPanel('quick', 'Quick Ref');
+				const quickRef = new UIPanel('quickRef', 'Quick Ref');
 				quickRef.fontSize = 11;
 				quickRef.list = [];
-				self.panels.append(quickRef, 'quick');
+				self.panels.append(quickRef, 'quickRef');
 
 				// not handled by individual uis
 				quickRef.add(new UILabel({ text: "Quick Ref Scale" }));
@@ -99,13 +99,9 @@ function Interface(app) {
 							if (Object.keys(options).length > 0) {
 								// m2 choose a callback
 								const m2 = new UIModal("ui", app, quickRef.position, function() {
-									const data = options[p2.value];
-									const mod = data.sub ? app[data.mod][data.sub] : app[data.mod];
-									const ui = self.createUI(data, mod, quickRef);
-									quickRef.list.push({
-										panel: p1.value,
-										ui: p2.value
-									});
+									const d = options[p2.value];
+									const ui = self.createUI(d, d.mod, d.sub, quickRef);
+									quickRef.list.push(d);
 								});
 
 								const p2 = new UISelect({
@@ -128,7 +124,7 @@ function Interface(app) {
 					self.createPanel(key, data[key]);
 				}
 
-				self.addSelect([...Object.keys(data), 'quick']);
+				self.addSelect([...Object.keys(data), 'quickRef']);
 				// self.settings.load();
 				if (callback) callback();
 			});
@@ -152,35 +148,37 @@ function Interface(app) {
 		
 		for (let i = 0; i < data.uis.length; i++) {
 			const uis = data.uis[i];
-			const mod = uis.sub ? app[uis.module][uis.sub] : app[uis.module];
 			for (let j = 0; j < uis.list.length; j++) {
-				self.createUI(uis.list[j], mod, panel);
+				self.createUI(uis.list[j], uis.module, uis.sub, panel);
 			}
 			if (uis.module == 'ui' && uis.sub) 
 				app.ui[uis.sub].panel = panel;
 		}
 	};
 
-	this.createUI = function(data, module, panel) {
+	this.createUI = function(data, mod, sub, panel) {
+
+		const m = sub ? app[mod][sub] : app[mod]; // module with sub module
+		// this is because a bunch of modules are "sub modules" of the ui object, for no reason?
 
 		const params = { ...data.params };
 		if (data.key) params.key = data.key;
 
 		// most callbacks
 		for (const k in data.fromModule) {
-			params[k] = module[data.fromModule[k]];
+			params[k] = m[data.fromModule[k]];
 		}
 
 		/* direct set properties, toggle, number */
 		if (data.number) {
 			params.callback = function(value) {
-				module[data.number] = +value;
+				m[data.number] = +value;
 			};
 		}
 
 		if (data.toggle) {
 			params.callback = function() {
-				module[data.toggle] = !module[data.toggle];
+				m[data.toggle] = !m[data.toggle];
 			};
 		}
 

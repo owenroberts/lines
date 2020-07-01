@@ -975,8 +975,8 @@
 			}
 		]
 	},
-	"explode": {
-		"label": "Explode",
+	"quickAnim": {
+		"label": "Quick Animate",
 		"uis": [
 			{
 				"module": "data",
@@ -985,18 +985,18 @@
 						"type": "UIButton",
 						"key": "a",
 						"fromModule": {
-							"callback": "explode"
+							"callback": "quickAnimate"
 						},
 						"params": {
-							"text": "Explode",
-							"arguments": ["Explode"]
+							"text": "Draw",
+							"arguments": ["Draw"]
 						}
 					},
 					{
 						"type": "UIButton",
 						"key": "shift-a",
 						"fromModule": {
-							"callback": "explode"
+							"callback": "quickAnimate"
 						},
 						"params": {
 							"text": "Reverse",
@@ -1007,11 +1007,11 @@
 						"type": "UIButton",
 						"key": "ctrl-a",
 						"fromModule": {
-							"callback": "explode"
+							"callback": "quickAnimate"
 						},
 						"params": {
-							"text": "ExRev",
-							"arguments": ["ExRev"]
+							"text": "Draw + Reverse",
+							"arguments": ["DrawReverse"]
 						}
 					}
 				]
