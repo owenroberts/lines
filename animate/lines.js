@@ -81,7 +81,6 @@ function appLoad(settings) {
 
 	const quickRefList = settings.quickRefList;
 	quickRefList.forEach(ref => {
-		console.log(ref);
 		lns.ui.createUI(ref, ref.mod, ref.sub, lns.ui.panels.quickRef);
 	});
 
