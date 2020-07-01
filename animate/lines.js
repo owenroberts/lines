@@ -79,10 +79,10 @@ function appLoad(settings) {
 	lns.ui.faces.interfaceScale.update(settings.interfaceScale);
 	lns.ui.faces.quickRefScale.update(settings.quickRefScale);
 
-	const quickRefList = settings.quickRefList;
-	quickRefList.forEach(ref => {
+	settings.quickRefList.forEach(ref => {
 		lns.ui.createUI(ref, ref.mod, ref.sub, lns.ui.panels.quickRef);
 	});
+	lns.ui.panels.quickRef.list = settings.quickRefList;
 
 	lns.ui.faces.lineWidth.update(settings.lineWidth); // has to be called last bc of reset ... 
 
