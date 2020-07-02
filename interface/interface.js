@@ -78,7 +78,6 @@ function Interface(app) {
 
 						// m1 choose a panel
 						const m1 = new UIModal("panels", app, quickRef.position, function() {
-							console.log('hello?');
 							const options = {};
 							data[p1.value].uis.forEach(ui => {
 								ui.list.forEach(el => {
@@ -104,15 +103,42 @@ function Interface(app) {
 								const m2 = new UIModal("ui", app, quickRef.position, function() {
 									const d = options[p2.value];
 									const ui = self.createUI(d, d.mod, d.sub, quickRef);
-									console.log(d);
 									quickRef.list.push(d);
-									console.log(quickRef.list);
 								});
 
 								const p2 = new UISelect({
 									options: Object.keys(options)
 								});
 								m2.add(p2);
+
+								const callFunc = new UIButton({
+									text: "Execute",
+									callback: function() {
+										m2.clear();
+										const d = options[p2.value];
+										console.log(d);
+
+										const m = d.sub ? app[d.mod][d.sub] : app[d.mod];
+										// most callbacks
+										if (d.fromModule) {
+											if (d.fromModule.callback) {
+												m[d.fromModule.callback]();
+											}
+										}
+
+										/* direct set properties, toggle, number */
+										if (d.number) {
+											// doesn't update ui
+											m[d.number] = +prompt(d.prompt || d.label);
+										}
+
+										if (d.toggle) {
+											m[d.toggle] = !m[d.toggle];
+										}
+
+									}
+								});
+								m2.add(callFunc);
 							} else {
 								m1.clear();
 							}
