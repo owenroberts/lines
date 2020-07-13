@@ -44,7 +44,7 @@ function Draw(defaults) {
 
 	this.reset = function(f) {
 		if (self.drawing.length > 0) {
-			lns.anim.drawings.push([]);
+			lns.anim.drawings.push([]); // new Drawing?
 			/* seems repetietive - settings class ... ? */
 			lns.anim.layers.push(new Layer({ 
 				n: +lns.ui.faces.n.value,

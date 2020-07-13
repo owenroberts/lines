@@ -47,6 +47,7 @@ function Interface(app) {
 	window.toolTip = new UILabel({id: 'tool-tip'});
 	document.getElementById('interface').appendChild(window.toolTip.el);
 
+	// use module ? 
 	this.load = function(file, callback) {
 		fetch(file)
 			.then(response => { return response.json(); })
@@ -126,9 +127,11 @@ function Interface(app) {
 											}
 										}
 
-										/* direct set properties, toggle, number */
+										/* 
+											direct set properties, toggle, number 
+											doesn't update ui
+										*/
 										if (d.number) {
-											// doesn't update ui
 											m[d.number] = +prompt(d.prompt || d.label);
 										}
 
@@ -143,6 +146,7 @@ function Interface(app) {
 								m1.clear();
 							}
 						});
+
 						const p1 = new UISelect({
 							options: Object.keys(data)
 						});

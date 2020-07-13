@@ -230,29 +230,19 @@ function Data(anim) {
 	}; /* shift -c  */
 
 	this.offsetDrawing = function(offset) {
-		lns.draw.reset();
-		const _layers = [];
-		const togs = lns.anim.layers.some(layer => { return layer.toggled });
-		for (let i = 0; i < anim.layers.length - 1; i++) {
-			const layer = anim.layers[i];
-			if (layer.isInFrame(anim.currentFrame) && !togs || togs && layer.toggled) 
-					_layers.push(anim.layers[i]);
+		// get toggled layers or offset all layers in frame
+		let layers = anim.layers.filter(layer => layer.toggled);
+		if (layers.length == 0) {
+			layers = lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame));
 		}
-		if (_layers) {
+
+		// then reset drawing to preserve any lines
+		lns.draw.reset();
+
+		if (layers) {
 			self.saveState();
 			if (!offset) offset = new Cool.Vector(+prompt("x"), +prompt("y"));
 			if (offset) {
-				// check to see if layers are selected
-				let layers = [];
-				if (lns.ui.layers.length > 0) {
-					for (let i = 0; i < lns.ui.layers.length; i++) {
-						if (lns.ui.layers[i].toggled)
-							layers.push(lns.ui.layers[i])
-					}
-				} else {
-					layers = _layers;
-				}
-
 				for (let i = 0; i < layers.length; i++) {
 					layers[i].x += offset.x;
 					layers[i].y += offset.y;

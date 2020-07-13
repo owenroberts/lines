@@ -9,14 +9,19 @@ class Toggle extends Button {
 		this.toggled = false;
 	}
 
-	toggle(state) {
+	toggle(state, callFuncs=true) {
 		if (!state) this.toggled = !this.toggled;
 		else this.toggled = state == 'on' ? true : false;
 		this.animation.state = this.toggled ? 'selected' : 'idle';
-		if (this.func) this.func();
+		
 		this.waitToGoOut = false;
 		this.mouseOver = false;
 		this.clickStarted = false;
+
+		if (callFuncs) {
+			if (this.func) this.func(this.toggled);
+			if (this.onClick) this.onClick(this.toggled);
+		}
 	}
 
 	out(x, y) {

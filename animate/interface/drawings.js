@@ -39,7 +39,7 @@ function Drawings() {
 							c: layer.c,
 							x: layer.x,
 							y: layer.y
-						} /* prob a better way to do this ... 
+						}; /* prob a better way to do this ... 
 							this stops existing when updating interface */
 					}
 
@@ -49,6 +49,7 @@ function Drawings() {
 						isOn: inFrame,
 						callback: function() {
 							let layer = self.getLayer(i);
+							console.log(layer);
 
 							/* add */
 							if (!this.isOn) {
@@ -80,7 +81,7 @@ function Drawings() {
 								} 
 							}
 							
-							lns.ui.layers.update();
+							lns.ui.update();
 						}
 					}), i);
 				} else {

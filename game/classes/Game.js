@@ -86,10 +86,14 @@ class Game {
 					throw new Error('Network response was not ok.');
 				})
 				.then(data => {
+					
+					// are we loading anything that's not an animation? just attach data to anims?
 					this.data[f] = {};
 					this.anims[f] = {};
 					this.assetsLoaded[f] = {};
+
 					if (typeof data == 'object') {
+						// why can't these just be arrays?
 						this.data[f].entries = data;
 						for (const key in data) {
 							this.assetsLoaded[f][key] = false;
@@ -97,12 +101,20 @@ class Game {
 						}
 					} else {
 						// csv item names have to match drawing names
-						const csv = CSVToArray(data, ',').splice(1);
-						this.data[f].entries = csv;
-						for (let i = 0; i < csv.length; i++) {
-							const itemName = csv[i][0];
-							this.assetsLoaded[f][itemName] = false;
-							this.loadJSON(f, itemName, `drawings/${f}/${itemName}.json`);
+						const csv = CSVToArray(data, ',').splice(0);
+
+						// convert to json? 
+						this.data[f].entries = [];
+						const keys = csv[0];
+						for (let i = 1; i < csv.length; i++) {
+							const itemData = {};
+							for (let j = 0; j < keys.length; j++) {
+								itemData[keys[j]] = csv[i][j];
+							}
+							this.data[f].entries.push(itemData);
+							// const itemName = csv[i][0];
+							this.assetsLoaded[f][itemData.label] = false;
+							this.loadJSON(f, itemData.label, `drawings/${f}/${itemData.label}.json`);
 						}
 					}
 				})
