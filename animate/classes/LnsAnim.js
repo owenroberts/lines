@@ -13,4 +13,9 @@ class LnsAnim extends LinesAnimation {
 			this.layers.splice(lns.anim.layers.length - 1, 0, layer);
 	}
 
+	removeLayer(layer) {
+		const index = this.layers.indexOf(layer);
+		if (index >= 0) this.layers.splice(index, 1);
+	}
+
 }

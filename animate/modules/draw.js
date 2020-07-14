@@ -46,6 +46,7 @@ function Draw(defaults) {
 		if (self.drawing.length > 0) {
 			lns.anim.drawings.push([]); // new Drawing?
 			/* seems repetietive - settings class ... ? */
+			// lns.anim.addLayer ??
 			lns.anim.layers.push(new Layer({ 
 				n: +lns.ui.faces.n.value,
 				r: +lns.ui.faces.r.value,

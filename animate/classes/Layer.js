@@ -77,6 +77,7 @@ class Layer {
 		/*
 			returns a layer to add to layers to calling function
 			if no match return "remove" to remove the layer	
+			is that sort of stupid?
 		*/
 
 		if (this.startFrame == index && this.endFrame == index) return "remove";
@@ -124,8 +125,12 @@ class Layer {
 			n: this.n,
 			r: this.r,
 			w: this.w,
-			v: this.v
-		}
+			v: this.v,
+			ws: this.ws,
+			x: this.x,
+			y: this.y,
+			c: this.c
+		};
 	}
 
 	resetTweens() {
