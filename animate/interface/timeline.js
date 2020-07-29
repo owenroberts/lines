@@ -74,7 +74,7 @@ function Timeline() {
 		let gridRowEnd = 3;
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
-			if (layer.toggled) layer.toggle();  // for rebuilding interface cnstantly
+			if (layer.toggled) layer.toggle();  // for rebuilding interface constantly
 			const ui = new UILayer({
 				type: 'layer',
 				css: {

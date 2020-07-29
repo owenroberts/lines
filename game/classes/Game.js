@@ -75,6 +75,7 @@ class Game {
 	}
 
 	load(files, callback) {
+		/* loads one instance of all animations to be used/shared by sprites */
 		if (this.debug) console.time('load data');
 		this.assetsLoaded = {};
 		const numFiles = Object.keys(files).length;

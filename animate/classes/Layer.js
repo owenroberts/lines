@@ -93,14 +93,15 @@ class Layer {
 			this.resetTweens();
 
 			return layer;
+		} else {
+			// outside range? fixes insert?
+			return this;
 		}
 		
 		this.resetTweens();
-		// return this; // when is this used ? 
 	}
 
 	shiftIndex(index, n) {
-		console.log(index, n);
 		if (!n) n = -1;	/* n is shift num, negative or positive */
 
 		/* what about insert ... i dont get this ... shift should not delete right */
@@ -129,7 +130,7 @@ class Layer {
 			ws: this.ws,
 			x: this.x,
 			y: this.y,
-			c: this.c
+			c: this.toggled ? this.pc : this.c
 		};
 	}
 

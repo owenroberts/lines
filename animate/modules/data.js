@@ -75,7 +75,9 @@ function Data(anim) {
 		/* copy one frame onto multiple */
 		for (let i = 0; i < self.pasteFrames.length; i++) {
 			for (let j = 0; j < self.copyFrame.length; j++) {
-				self.copyFrame[j].addIndex(self.pasteFrames[i]);
+				console.log(i, self.pasteFrames[i], j, self.copyFrame[j])
+				const layer = self.copyFrame[j].addIndex(self.pasteFrames[i]);
+				if (layer) anim.addLayer(layer);
 			}
 		}
 
@@ -173,7 +175,6 @@ function Data(anim) {
 		// -2 to skip draw layer
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
 			layer = anim.layers[i].shiftIndex(index, -1);
-			if (!layer) lns.ui.layers.remove(i);
 		}
 		lns.ui.update();
 	}; /* d key */
@@ -194,12 +195,10 @@ function Data(anim) {
 	}; /* shift-d */
 
 	this.cutLastSegment = function() {
-		lns.ui.layers.cutLayerSegment();
 		lns.draw.pop(); 
 	}; /* z key */
 
 	this.cutLastLine = function() {
-		lns.ui.layers.cutLayerLine(); 
 		lns.draw.popOff();
 	}; /* shift z */
 
@@ -209,7 +208,7 @@ function Data(anim) {
 		for (let i = 0, len = anim.layers.length - 1; i < len; i++) {
 			// insert before dir  0, after 1
 			anim.layers[i].shiftIndex(anim.currentFrame + dir, 1);
-			lns.anim.addLayer(anim.layers[i].removeIndex(anim.currentFrame + dir));
+			anim.addLayer(anim.layers[i].removeIndex(anim.currentFrame + dir));
 			anim.frame = anim.currentFrame + dir;
 		}
 		lns.ui.update();

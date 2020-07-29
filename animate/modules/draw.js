@@ -26,9 +26,8 @@ function Draw(defaults) {
 	this.setProperties = function(props) {
 		for (const prop in props) {
 			if (self.layer[prop] !== undefined) {
-				// self.layer[prop] = props[prop];
-				if (lns.ui) lns.ui.faces[prop].update(props[prop]);
-				/* how to do this with ui, setter */
+				self.layer[prop] = props[prop];
+				if (lns.ui.faces[prop]) lns.ui.faces[prop].update(props[prop]);
 			}
 		}
 	};

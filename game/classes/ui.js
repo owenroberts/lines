@@ -1,5 +1,6 @@
 /*
 	positions sprites relative to game canvas dimensions
+	better name like user interface element? UISprite?
 */
 
 class UI extends Sprite {
