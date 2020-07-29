@@ -75,7 +75,6 @@ function Data(anim) {
 		/* copy one frame onto multiple */
 		for (let i = 0; i < self.pasteFrames.length; i++) {
 			for (let j = 0; j < self.copyFrame.length; j++) {
-				console.log(i, self.pasteFrames[i], j, self.copyFrame[j])
 				const layer = self.copyFrame[j].addIndex(self.pasteFrames[i]);
 				if (layer) anim.addLayer(layer);
 			}
@@ -170,11 +169,18 @@ function Data(anim) {
 
 	this.deleteFrame = function(_index) {
 		const index = _index !== undefined ? _index : lns.anim.currentFrame;
+		// lns.draw.reset(); ??
 		self.saveState();
 
 		// -2 to skip draw layer
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
-			layer = anim.layers[i].shiftIndex(index, -1);
+			// console.log(i);
+			if (anim.layers[i].removeIndex(index) == "remove")
+				anim.layers.splice(i, 1);
+		}
+		
+		for (let i = anim.layers.length - 2; i >= 0; i--) {
+			anim.layers[i].shiftIndex(index, -1);
 		}
 		lns.ui.update();
 	}; /* d key */

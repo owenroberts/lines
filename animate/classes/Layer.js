@@ -102,6 +102,7 @@ class Layer {
 	}
 
 	shiftIndex(index, n) {
+		// console.log(index, n, this.startFrame, this.endFrame);
 		if (!n) n = -1;	/* n is shift num, negative or positive */
 
 		/* what about insert ... i dont get this ... shift should not delete right */
