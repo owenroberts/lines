@@ -85,8 +85,9 @@ function Timeline() {
 					gridColumnEnd: layer.endFrame * 2 + 3
 				},
 				callback: function() {
-					layer.toggle();
 					lns.draw.setProperties(layer.props);
+					layer.toggle();
+					
 				}
 			}, layer);
 			
