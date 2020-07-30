@@ -61,7 +61,7 @@ function Palette() {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const name = `Layer ${i}`;
 			const layer = lns.anim.layers[i];
-			self.palettes[name] = {
+			const newPalette = {
 				c: layer.c,
 				n: layer.n,
 				r: layer.r,
@@ -74,7 +74,21 @@ function Palette() {
 				dots: lns.draw.dots,
 				grass: lns.draw.grass
 			};
-			self.addUI(name);
+			
+			let isACopy = false;
+			for (const key in self.palettes) {
+				const palette = self.palettes[key];
+				let samePalette = true;
+				for (const prop in palette) {
+					if (palette[prop] != newPalette[prop]) samePalette = false;
+				}
+				if (samePalette) isACopy = true;
+			}
+
+			if (!isACopy) {
+				self.palettes[name] = newPalette;
+				self.addUI(name);
+			}
 		}
 	};
 }
