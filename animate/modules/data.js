@@ -132,8 +132,9 @@ function Data(anim) {
 		self.saveState(); /* will save lines ... */
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
 			if (anim.layers[i].isInFrame(anim.currentFrame)) {
-				const layer = anim.layers[i].removeIndex(anim.currentFrame);
-				if (layer == "remove") anim.layers.splice(i, 1);
+				anim.layers[i].removeIndex(anim.currentFrame, function() {
+					anim.layers.splice(i, 1);
+				});
 				lns.ui.update();
 			}
 		}
@@ -143,19 +144,22 @@ function Data(anim) {
 	this.cutTopLayer = function() {
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
 			if (anim.layers[i].isInFrame(anim.currentFrame)) {
-				const layer = anim.layers[i].removeIndex(anim.currentFrame);
-				if (layer == "remove") anim.layers.splice(i, 1);
+				anim.layers[i].removeIndex(anim.currentFrame, function() {
+					anim.layers.splice(i, 1);
+				});
 				lns.ui.update();
 			}
 			break;
 		}
 	}; /* ctrl - x */
 
+	/* consolidate with above ? */
 	this.cutBottomLayer = function() {
 		for (let i = 0; i < anim.layers.length - 1; i++) {
 			if (anim.layers[i].isInFrame(anim.currentFrame)) {
-				const layer = anim.layers[i].removeIndex(anim.currentFrame);
-				if (layer == "remove") anim.layers.splice(i, 1);
+				anim.layers[i].removeIndex(anim.currentFrame, function() {
+					anim.layers.splice(i, 1);
+				});
 				lns.ui.update();
 			}
 			break;
@@ -174,9 +178,9 @@ function Data(anim) {
 
 		// -2 to skip draw layer
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
-			// console.log(i);
-			if (anim.layers[i].removeIndex(index) == "remove")
+			anim.layers[i].removeIndex(anim.currentFrame, function() {
 				anim.layers.splice(i, 1);
+			});
 		}
 		
 		for (let i = anim.layers.length - 2; i >= 0; i--) {

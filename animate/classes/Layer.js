@@ -73,14 +73,14 @@ class Layer {
 		return this;
 	}
 
-	removeIndex(index) {
+	removeIndex(index, removeFunc) {
 		/*
 			returns a layer to add to layers to calling function
 			if no match return "remove" to remove the layer	
 			is that sort of stupid?
 		*/
 
-		if (this.startFrame == index && this.endFrame == index) return "remove";
+		if (this.startFrame == index && this.endFrame == index) removeFunc();
 		else if (this.startFrame == index) this.startFrame += 1;
 		else if (this.endFrame == index) this.endFrame -= 1;
 		else if (index > this.startFrame && index < this.endFrame) {
