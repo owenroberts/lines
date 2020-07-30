@@ -63,6 +63,7 @@ function Render(lps, color) {
 						const color = `rgba(105,150,255,${ 1.5 - (o / self.onionSkinNum) })`;
 						lns.anim.currentFrame = index;
 						lns.anim.overrideProperty('c', color);
+						/* this triggers capture, turn off onion skin for clean capture */
 						lns.anim.draw();
 					}
 				}

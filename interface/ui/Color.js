@@ -24,8 +24,7 @@ class UIColor extends UIInput {
 				css: { "background": color },
 				value: color,
 				callback: function() {
-					self.callback(color, self.arguments);
-					self.value = color;
+					self.update(color, self.arguments);
 				}
 			});
 			self.palette.append(btn);
