@@ -55,6 +55,7 @@ function appSave() {
 		palettes: lns.ui.palette.palettes,
 		rl: lns.ui.faces.rl.value,
 		timelineView: lns.ui.faces.timelineView.value,
+		timelineAutoFit: lns.ui.faces.timelineAutoFit.value,
 		canvasScale: lns.ui.faces.canvasScale.value,
 		interfaceScale: lns.ui.faces.interfaceScale.value,
 		quickRefScale: lns.ui.faces.quickRefScale.value,
@@ -74,6 +75,7 @@ function appLoad(settings) {
 	lns.ui.faces.height.update(settings.height);
 	lns.ui.faces.bgColor.update(settings.canvasColor);	
 	lns.ui.faces.timelineView.update(settings.timelineView);
+	lns.ui.faces.timelineAutoFit.update(settings.timelineAutoFit);
 
 	lns.ui.faces.canvasScale.update(settings.canvasScale);
 	lns.ui.faces.interfaceScale.update(settings.interfaceScale);

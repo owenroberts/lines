@@ -84,6 +84,24 @@ select {
 	vertical-align: middle;
 	white-space: nowrap;
 	&.press { background-color: $accent-two; }
+
+	&.left-end {
+		margin-right: 0 !important;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+		border-right: 1px solid $ui-select;
+	}
+
+	&.middle {
+		margin-right: 0;
+		border-radius: 0;
+		border-right: 1px solid $ui-select;
+	}
+
+	&.right-end {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
 }
 
 #panels {

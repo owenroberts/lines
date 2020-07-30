@@ -1075,7 +1075,18 @@
 							"callback": "fit"
 						},
 						"params": {
+							"class": "left-end",
 							"text": "Fit"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"face": "timelineAutoFit",
+						"toggle": "autoFit",
+						"params": {
+							"onText": "Auto",
+							"offText": "Auto",
+							"class": "right-end"
 						}
 					},
 					{
@@ -1093,7 +1104,8 @@
 							"callback": "select"
 						},
 						"params": {
-							"text": "Select"
+							"text": "Select",
+							"class": "left-end"
 						}
 					},
 					{
@@ -1102,7 +1114,8 @@
 							"callback": "selectAll"
 						},
 						"params": {
-							"text": "Select All"
+							"text": "All",
+							"class": "right-end"
 						}
 					},
 					{

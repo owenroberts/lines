@@ -1,6 +1,7 @@
 function Timeline() {
 	const self = this;
 	this.frameWidth = 40;
+	this.autoFit = false;
 
 	this.init = function() {
 		self.panel.el.addEventListener('wheel', ev => {
@@ -112,6 +113,8 @@ function Timeline() {
 				gridRowEnd += 2;
 			}
 		}
+
+		if (self.autoFit) self.fit();
 	};
 
 	this.toggleLayerView = function() {
