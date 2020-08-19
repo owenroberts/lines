@@ -37,6 +37,18 @@ function Timeline() {
 		const w = lns.ui.timeline.panel.el.clientWidth - 11; /* 11 for padding */
 		self.frameWidth = (w - 2 * f) / f; 
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
+
+		// def better way to do this
+		if (self.frameWidth < 5) {
+			self.panel.timeline.addClass('five');
+			self.panel.timeline.removeClass('ten');
+		} else if (self.frameWidth < 10) {
+			self.panel.timeline.addClass('ten');
+			self.panel.timeline.removeClass('five');
+		} else {
+			self.panel.timeline.removeClass('ten');
+			self.panel.timeline.removeClass('five');
+		}
 	};
 
 	/* creates all the layer ui new each time */

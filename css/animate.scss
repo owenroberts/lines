@@ -69,7 +69,31 @@ $anim-off: darkgreen;
 		overflow: hidden;
 
 		&.current {
-			background-color: $ui-highlight;
+			background-color: $ui-highlight !important;
+		}
+	}
+
+	&.ten {
+		.frame {
+			text-indent: -4em;
+		}
+		.frame:nth-child(5n+1) {
+			text-indent: 0;
+			overflow: visible;
+			z-index: 2;
+			background-color: darkgray;
+		}
+	}
+
+	&.five {
+		.frame {
+			text-indent: -4em;
+		}
+		.frame:nth-child(10n+1) {
+			text-indent: 0;
+			overflow: visible;
+			z-index: 2;
+			background-color: darkgray;
 		}
 	}
 
@@ -78,6 +102,7 @@ $anim-off: darkgreen;
 		background-color: $main-color;
 		overflow: hidden;
 		display: flex;
+		z-index: 3;
 
 		.layer-toggle {
 			min-width: 12px;
