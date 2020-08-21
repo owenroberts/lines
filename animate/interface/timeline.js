@@ -24,6 +24,8 @@ function Timeline() {
 				lns.draw.reset();
 				lns.ui.play.setFrame(+ev.target.textContent);
 				lns.ui.update();
+			} else if (ev.which == 3) {
+				// scroll right/left
 			}
 		});
 
