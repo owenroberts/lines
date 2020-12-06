@@ -9,8 +9,8 @@ class LinesAnimation {
 		this.currentFrameCounter = 0; // floats
 		
 
-		this.lps = lps || 12; // draw graphics 
-		this.lpd = 2; // lines update per draw, wait 2 draws to update lines
+		this.lps = 30; // draw graphics 
+		this.lpd = 4; // lines update per draw, wait 2 draws to update lines
 		this.lineCount = 0; // lines were drawn?
 		// this.lps = this.dps / 2; // update lines
 		
@@ -164,65 +164,68 @@ class LinesAnimation {
 					}
 				}
 
-				// update wiggle properties
-				if (this.rndr.w > 0) {
-					this.rndr.off.x = Cool.random(0, this.rndr.w); // random start of wiggle offset
-					this.rndr.off.y = Cool.random(0, this.rndr.w);
-					this.rndr.speed.x = Cool.random(-this.rndr.v, this.rndr.v);
-					this.rndr.speed.y = Cool.random(-this.rndr.v, this.rndr.v);
-				} else {
-					this.rndr.off.x = 0;
-					this.rndr.off.y = 0;
-					this.rndr.speed.x = 0;
-					this.rndr.speed.y = 0;
-				}
 
 				if (this.lineCount == this.lpd) {
 					this.lines(drawing, this.rndr.n, this.rndr.r);
 					this.lineCount = 0;
+					console.log('line update');
+
+					// update wiggle properties
+					if (this.rndr.w > 0) {
+						this.rndr.off.x = Cool.random(0, this.rndr.w); // random start of wiggle offset
+						this.rndr.off.y = Cool.random(0, this.rndr.w);
+						this.rndr.speed.x = Cool.random(-this.rndr.v, this.rndr.v);
+						this.rndr.speed.y = Cool.random(-this.rndr.v, this.rndr.v);
+					} else {
+						this.rndr.off.x = 0;
+						this.rndr.off.y = 0;
+						this.rndr.speed.x = 0;
+						this.rndr.speed.y = 0;
+					}
 				} else {
 					this.lineCount++;
 				}
 
 				if (this.mixedColors) this.ctx.beginPath();
-				for (let j = this.rndr.s; j < this.rndr.e; j++) {
-					const s = drawing[j];
-					const e = drawing[j + 1];
-					const v = new Cool.Vector(e.x, e.y);
-					if (e == 'end') {
-						console.log(e, v);
-					}
-					const jig = s.j;
-					// jig.push(e.j[0]);
-					v.subtract(s);
-					v.divide(this.rndr.n);
-					this.ctx.moveTo(
-						this.rndr.x + s.x + jig[0].x + this.rndr.off.x, 
-						this.rndr.y + s.y + jig[0].y + this.rndr.off.y
-					);
-					for (let k = 0; k < this.rndr.n; k++) {
-						const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
-						this.ctx.lineTo( 
-							this.rndr.x + p.x + v.x + jig[k].x + this.rndr.off.x,
-							this.rndr.y + p.y + v.y + jig[k].y + this.rndr.off.y
+				for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
+					if (drawing[j] !== 'end' && drawing[j + 1] !== 'end') {
+						const s = drawing[j];
+						const e = drawing[j + 1];
+						if (typeof e === 'undefined') {
+							console.log(e);
+						}
+						const v = new Cool.Vector(e.x, e.y);
+						const jig = s.j;
+						jig.push(e.j[0]);
+						v.subtract(s);
+						v.divide(this.rndr.n);
+						this.ctx.moveTo(
+							this.rndr.x + s.x + jig[0].x + this.rndr.off.x, 
+							this.rndr.y + s.y + jig[0].y + this.rndr.off.y
 						);
+						for (let k = 0; k < this.rndr.n; k++) {
+							const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
+							this.ctx.lineTo( 
+								this.rndr.x + p.x + v.x + jig[k].x + this.rndr.off.x,
+								this.rndr.y + p.y + v.y + jig[k].y + this.rndr.off.y
+							);
 
-						if (k == 0 || this.rndr.ws) {
-							if (this.rndr.w > 0) {
-								for (const xy in this.rndr.off) {
-									this.rndr.off[xy] += this.rndr.speed[xy];
-									if (this.rndr.off[xy] >= this.rndr.w || 
-										this.rndr.off[xy] <= -this.rndr.w) {
-										this.rndr.speed[xy] *= -1;
+							if (k == 0 || this.rndr.ws) {
+								if (this.rndr.w > 0) {
+									for (const xy in this.rndr.off) {
+										this.rndr.off[xy] += this.rndr.speed[xy];
+										if (this.rndr.off[xy] >= this.rndr.w || 
+											this.rndr.off[xy] <= -this.rndr.w) {
+											this.rndr.speed[xy] *= -1;
+										}
 									}
 								}
 							}
 						}
-					}
 
-					if (this.ctx.strokeStyle != this.rndr.c && this.mixedColors)
-						this.ctx.strokeStyle = this.rndr.c;
-
+						if (this.ctx.strokeStyle != this.rndr.c && this.mixedColors)
+							this.ctx.strokeStyle = this.rndr.c;
+					} // else lineTo
 				}
 				
 				if (this.mixedColors) this.ctx.stroke();

@@ -5,7 +5,7 @@
 const gme = new Game({
 	width: window.innerWidth, 
 	height: window.innerHeight, 
-	lps: 10,
+	lps: 30,
 	stats: true,
 	debug: false,
 	mixedColors: true,
