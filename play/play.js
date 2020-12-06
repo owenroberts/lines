@@ -8,7 +8,7 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 	}
 
 	this.ctx = this.canvas.getContext('2d');
-	this.lps = lps || 30; // 12  default ?
+	this.lps = lps || 36; // default ?
 	this.lineInterval = 1000 / this.lps; /* needed in both places ?? */
 	this.mixedColors = false; // is this always false?
 	this.drawBg = true; /* where? */

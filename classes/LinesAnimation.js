@@ -113,21 +113,6 @@ class LinesAnimation {
 		}
 	}
 
-	lines(drawing, n, r) {
-		// add random offsets for xy for each segment of the lines
-		for (let i = 0; i < drawing.length; i++) {
-			if (drawing[i] != 'end') {
-				drawing[i].j = [];
-				for (let j = 0; j < n; j++) {
-					drawing[i].j.push({
-						x: Cool.random(-r, r),
-						y: Cool.random(-r, r)
-					})
-				}
-			}
-		}
-	}
-
 	draw(x, y) {
 		// if (this.debug) console.log(x, y);
 		if (!this.mixedColors) this.ctx.beginPath();
@@ -136,7 +121,7 @@ class LinesAnimation {
 			const drawing = this.drawings[layer.d];
 			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
 				this.rndr.s = 0;
-				this.rndr.e = drawing.length - 1;
+				this.rndr.e = drawing.length;
 
 				for (const key in layer) {
 					this.rndr[key] = layer[key];
@@ -151,7 +136,7 @@ class LinesAnimation {
 						const tween = layer.t[j];
 						if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
 							this.rndr[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
-							if (tween.prop == 's' || tween.prop == 'e')
+							if (tween.prop == 's' || tween.prop == 'e') 
 								this.rndr[tween.prop] = Math.round(this.rndr[tween.prop]);
 						}
 					}
@@ -164,63 +149,32 @@ class LinesAnimation {
 					}
 				}
 
-
 				if (this.lineCount == this.lpd) {
-					this.lines(drawing, this.rndr.n, this.rndr.r);
+					drawing.update(this.rndr.n, this.rndr.r, this.rndr.w, this.rndr.v, this.rndr.ws);
 					this.lineCount = 0;
-					console.log('line update');
-
-					// update wiggle properties
-					if (this.rndr.w > 0) {
-						this.rndr.off.x = Cool.random(0, this.rndr.w); // random start of wiggle offset
-						this.rndr.off.y = Cool.random(0, this.rndr.w);
-						this.rndr.speed.x = Cool.random(-this.rndr.v, this.rndr.v);
-						this.rndr.speed.y = Cool.random(-this.rndr.v, this.rndr.v);
-					} else {
-						this.rndr.off.x = 0;
-						this.rndr.off.y = 0;
-						this.rndr.speed.x = 0;
-						this.rndr.speed.y = 0;
-					}
 				} else {
 					this.lineCount++;
 				}
 
 				if (this.mixedColors) this.ctx.beginPath();
 				for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
-					if (drawing[j] !== 'end' && drawing[j + 1] !== 'end') {
-						const s = drawing[j];
-						const e = drawing[j + 1];
-						if (typeof e === 'undefined') {
-							console.log(e);
-						}
+					const s = drawing.get(j);
+					const e = drawing.get(j + 1);
+					if (s !== 'end' && e !== 'end') {
+						const off = [...s.off, e.off[0]];
 						const v = new Cool.Vector(e.x, e.y);
-						const jig = s.j;
-						jig.push(e.j[0]);
 						v.subtract(s);
 						v.divide(this.rndr.n);
 						this.ctx.moveTo(
-							this.rndr.x + s.x + jig[0].x + this.rndr.off.x, 
-							this.rndr.y + s.y + jig[0].y + this.rndr.off.y
+							this.rndr.x + s.x + off[0].x,
+							this.rndr.y + s.y + off[0].y
 						);
 						for (let k = 0; k < this.rndr.n; k++) {
 							const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
 							this.ctx.lineTo( 
-								this.rndr.x + p.x + v.x + jig[k].x + this.rndr.off.x,
-								this.rndr.y + p.y + v.y + jig[k].y + this.rndr.off.y
+								this.rndr.x + p.x + v.x + off[k+1].x,
+								this.rndr.y + p.y + v.y + off[k+1].y
 							);
-
-							if (k == 0 || this.rndr.ws) {
-								if (this.rndr.w > 0) {
-									for (const xy in this.rndr.off) {
-										this.rndr.off[xy] += this.rndr.speed[xy];
-										if (this.rndr.off[xy] >= this.rndr.w || 
-											this.rndr.off[xy] <= -this.rndr.w) {
-											this.rndr.speed[xy] *= -1;
-										}
-									}
-								}
-							}
 						}
 
 						if (this.ctx.strokeStyle != this.rndr.c && this.mixedColors)
@@ -250,33 +204,19 @@ class LinesAnimation {
 
 	loadData(json, callback) {
 		this.loaded = true;
-		// console.time('load drawings');
-		// console.log(json.d.length);
-		// console.log(json);
 		for (let i = 0; i < json.d.length; i++) {
-			const drawing = json.d[i];
-			let d;
-			if (drawing) {
-				d = [];
-				for (let j = 0; j < drawing.length; j++) {
-					const point = drawing[j];
-					if (point) d.push({ x: point[0], y: point[1] });
-					else d.push('end');
-				}
-			} else {
-				d = null;
-			}
-			this.drawings[i] = d;
+			this.drawings[i] = json.d[i] ? 
+				new Drawing(json.d[i]) : 
+				null;
 		}
-		// console.timeEnd('load drawings');
 
 		this.layers = json.l;
+
 
 		// set first random values
 		for (let i = 0; i < this.layers.length; i++) {
 			const layer = this.layers[i];
-			// updates drawing by reference
-			this.lines(this.drawings[layer.d], layer.n, layer.r); 
+			this.drawings[layer.d].update(layer.n, layer.r, layer.w, layer.v, layer.ws); 
 		}
 
 		for (const key in json.s) {
