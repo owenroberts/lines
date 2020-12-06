@@ -312,6 +312,7 @@ select {
 	border-radius: 1em;
 	border: 2px solid $main-color;
 	box-shadow: 1px 1px 4px $ui-highlight;
+	z-index: 9;
 	
 	max-width: 400px;
 	// * { margin-right: 1em; }

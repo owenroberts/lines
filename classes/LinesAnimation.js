@@ -8,7 +8,12 @@ class LinesAnimation {
 		this.currentFrame = 0;
 		this.currentFrameCounter = 0; // floats
 		
-		this.lps = lps || 12;
+
+		this.lps = lps || 12; // draw graphics 
+		this.lpd = 2; // lines update per draw, wait 2 draws to update lines
+		this.lineCount = 0; // lines were drawn?
+		// this.lps = this.dps / 2; // update lines
+		
 		this.fps = lps || 12;
 		this.lineInterval = 1000 / this.lps;
 		this.intervalRatio = 1;
@@ -17,7 +22,7 @@ class LinesAnimation {
 		
 		this.rndr = {
 			off: { x: 0, y: 0 },
-			speed: { x: 0, y: 0 }
+			speed: { x: 0, y: 0 },
 		};
 
 		this._state = 'default'; // set state label
@@ -90,6 +95,7 @@ class LinesAnimation {
 	}
 
 	update() {
+		// frame update
 		if (this.isPlaying) {
 			if (this.currentFrame <= this.state.end) {
 				this.currentFrameCounter += this.intervalRatio;
@@ -107,6 +113,21 @@ class LinesAnimation {
 		}
 	}
 
+	lines(drawing, n, r) {
+		// add random offsets for xy for each segment of the lines
+		for (let i = 0; i < drawing.length; i++) {
+			if (drawing[i] != 'end') {
+				drawing[i].j = [];
+				for (let j = 0; j < n; j++) {
+					drawing[i].j.push({
+						x: Cool.random(-r, r),
+						y: Cool.random(-r, r)
+					})
+				}
+			}
+		}
+	}
+
 	draw(x, y) {
 		// if (this.debug) console.log(x, y);
 		if (!this.mixedColors) this.ctx.beginPath();
@@ -115,7 +136,7 @@ class LinesAnimation {
 			const drawing = this.drawings[layer.d];
 			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
 				this.rndr.s = 0;
-				this.rndr.e = drawing.length;
+				this.rndr.e = drawing.length - 1;
 
 				for (const key in layer) {
 					this.rndr[key] = layer[key];
@@ -124,6 +145,7 @@ class LinesAnimation {
 				if (x) this.rndr.x += x;
 				if (y) this.rndr.y += y;
 
+				// "tweens"
 				if (layer.t) {
 					for (let j = 0; j < layer.t.length; j++) {
 						const tween = layer.t[j];
@@ -135,12 +157,14 @@ class LinesAnimation {
 					}
 				}
 
+				// over ride animation data from renderer (usually effects)
 				if (this.override) {
 					for (const key in this.over) {
 						this.rndr[key] = this.over[key];
 					}
 				}
 
+				// update wiggle properties
 				if (this.rndr.w > 0) {
 					this.rndr.off.x = Cool.random(0, this.rndr.w); // random start of wiggle offset
 					this.rndr.off.y = Cool.random(0, this.rndr.w);
@@ -153,22 +177,34 @@ class LinesAnimation {
 					this.rndr.speed.y = 0;
 				}
 
+				if (this.lineCount == this.lpd) {
+					this.lines(drawing, this.rndr.n, this.rndr.r);
+					this.lineCount = 0;
+				} else {
+					this.lineCount++;
+				}
+
 				if (this.mixedColors) this.ctx.beginPath();
-				for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
+				for (let j = this.rndr.s; j < this.rndr.e; j++) {
 					const s = drawing[j];
 					const e = drawing[j + 1];
 					const v = new Cool.Vector(e.x, e.y);
+					if (e == 'end') {
+						console.log(e, v);
+					}
+					const jig = s.j;
+					// jig.push(e.j[0]);
 					v.subtract(s);
 					v.divide(this.rndr.n);
 					this.ctx.moveTo(
-						this.rndr.x + s.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x, 
-						this.rndr.y + s.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
+						this.rndr.x + s.x + jig[0].x + this.rndr.off.x, 
+						this.rndr.y + s.y + jig[0].y + this.rndr.off.y
 					);
 					for (let k = 0; k < this.rndr.n; k++) {
 						const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
 						this.ctx.lineTo( 
-							this.rndr.x + p.x + v.x + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.x,
-							this.rndr.y + p.y + v.y + Cool.random(-this.rndr.r, this.rndr.r) + this.rndr.off.y
+							this.rndr.x + p.x + v.x + jig[k].x + this.rndr.off.x,
+							this.rndr.y + p.y + v.y + jig[k].y + this.rndr.off.y
 						);
 
 						if (k == 0 || this.rndr.ws) {
@@ -233,6 +269,13 @@ class LinesAnimation {
 
 		this.layers = json.l;
 
+		// set first random values
+		for (let i = 0; i < this.layers.length; i++) {
+			const layer = this.layers[i];
+			// updates drawing by reference
+			this.lines(this.drawings[layer.d], layer.n, layer.r); 
+		}
+
 		for (const key in json.s) {
 			this.states[key] = json.s[key];
 		}
@@ -250,7 +293,7 @@ class LinesAnimation {
 		this.height = json.h;
 
 		if (callback) callback(json);
-		if (this.onLoad) this.onLoad();
+		// if (this.onLoad) this.onLoad();
 	}
 
 	setOnLoad(callback) {
