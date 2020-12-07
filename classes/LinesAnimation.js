@@ -112,7 +112,8 @@ class LinesAnimation {
 		}
 	}
 
-	draw(x, y) {
+	draw(x, y, suspendLinesUpdate) {
+		// suspendLinesUpdate for text but could be useful ... for like textures!
 		// if (this.debug) console.log(x, y);
 		if (!this.mixedColors) this.ctx.beginPath();
 		for (let i = 0, len = this.layers.length; i < len; i++) {
@@ -148,10 +149,10 @@ class LinesAnimation {
 					}
 				}
 
-				if (layer.lc >= layer.l) {
+				if (layer.lc >= layer.l && !suspendLinesUpdate) {
 					drawing.update(this.rndr.n, this.rndr.r, this.rndr.w, this.rndr.v, this.rndr.ws);
 					layer.lc = 0;
-				} else {
+				} else if (!suspendLinesUpdate) {
 					layer.lc++;
 				}
 

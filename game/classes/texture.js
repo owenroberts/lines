@@ -51,7 +51,7 @@ class Texture {
 			if (x + this.animation.width > 0 && x < GAME.width && 
 				y + this.animation.height > 0 && y < GAME.height) {
 				if (this.locations[i].i) this.animation.state = `f-${this.locations[i].i}`;
-				this.animation.draw(x, y);
+				this.animation.draw(x, y, i == 0);
 			}
 		}
 	}

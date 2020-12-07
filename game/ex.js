@@ -23,9 +23,21 @@ function start() {
 	char = new Character(300, 300);
 	gme.scenes.walk.add(char);
 
-	waves = new Sprite(400, 400);
-	waves.addAnimation(gme.anims.data.waves);
-	waves.animation.randomFrames = true;
+	waves = new Texture({
+		frame: 'random',
+		center: true,
+		animation: gme.anims.data.waves
+	});
+	waves.addLocations([
+		new Cool.Vector(100, 400), 
+		new Cool.Vector(300, 400),
+		new Cool.Vector(500, 400)
+
+	]);
+
+	// waves = new Sprite(400, 400);
+	// waves.addAnimation(gme.anims.data.waves);
+	// waves.animation.randomFrames = true;
 	gme.scenes.walk.addToDisplay(waves);
 
 
