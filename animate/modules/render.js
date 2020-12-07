@@ -1,9 +1,11 @@
 function Render(lps, color) {
 	const self = this;
 
+	console.log(lps);
 	this.lps = lps || 12; // lines per second all the time
 	this.interval = 1000 / this.lps;  // fps per one second, the line interval
 	this.timer = performance.now();
+	console.log(this.lps);
 
 	this.onionSkinNum = 0;
 	this.onionSkinIsVisible = false;

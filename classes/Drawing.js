@@ -16,13 +16,20 @@ class Drawing {
 			this.points.push('end');
 		} else if (Array.isArray(point)) {
 			// from json file
-			this.points.push({ x: point[0], y: point[1] });
+			this.points.push({ x: point[0], y: point[1], off: [] });
 		} else {
-			this.points.push(point);
+			this.points.push({ ...point, off: [] });
 		}
 	}
 
+	pop() {
+		this.points.pop();
+	}
+
 	get(index) {
+		if (index < 0) {
+			return this.points[this.point.length - index];
+		}
 		return this.points[index];
 	}
 

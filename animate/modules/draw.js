@@ -16,7 +16,7 @@ function Draw(defaults) {
 		}
 	});
 
-	lns.anim.drawings.push([]);
+	lns.anim.drawings.push(new Drawing());
 	lns.anim.layers.push(new Layer({ 
 		...defaults, 
 		d: Math.max(lns.anim.drawings.length - 1, 0),  
@@ -43,7 +43,7 @@ function Draw(defaults) {
 
 	this.reset = function(f) {
 		if (self.drawing.length > 0) {
-			lns.anim.drawings.push([]); // new Drawing?
+			lns.anim.drawings.push(new Drawing()); // new Drawing?
 			/* seems repetietive - settings class ... ? */
 			// lns.anim.addLayer ??
 			lns.anim.layers.push(new Layer({ 
@@ -101,7 +101,7 @@ function Draw(defaults) {
 		if (self.drawing.length > 0) {
 			if (self.drawing.pop() == 'end')
 				self.drawing.pop();
-			self.drawing.push('end');
+			self.drawing.add('end');
 		}
 	};
 
@@ -110,7 +110,7 @@ function Draw(defaults) {
 		if (self.drawing.length > 0) {
 			self.drawing.pop(); // remove end
 			for (let i = self.drawing.length - 1; i > 0; i--) {
-				if (self.drawing[i] != 'end') self.drawing.pop();
+				if (self.drawing.get(i) != 'end') self.drawing.pop();
 				else break;
 			}
 		}
@@ -129,24 +129,24 @@ function Draw(defaults) {
 			point.divide(lns.canvas.scale);
 			if (point.x > 0 && point.x < lns.canvas.width && 
 				point.y > 0 && point.y < lns.canvas.height) {
-				self.drawing.push(point);
+				self.drawing.add(point);
 			}
 			const points = Cool.randomInt(1,3);
 			for (let i = 0; i < points; i ++) {
 				if (point.x > 0 && point.x < lns.canvas.width && 
 					point.y > 0 && point.y < lns.canvas.height) {
-					self.drawing.push(new Cool.Vector(
+					self.drawing.add(new Cool.Vector(
 						point.x + Cool.randomInt(-1, 1),
 						point.y + Cool.randomInt(_y)
 					));
 				}
 			}
-			self.drawing.push('end');
+			self.drawing.add('end');
 		}
 	};
 
 	this.addLine = function(x, y) {
-		self.drawing.push(new Cool.Vector(x, y).divide(lns.canvas.scale));
+		self.drawing.add(new Cool.Vector(x, y).divide(lns.canvas.scale));
 	};
 
 	this.update = function(ev) {
@@ -188,21 +188,21 @@ function Draw(defaults) {
 					const _y = Math.round(y) + Cool.randomInt(-r/2, r/2);
 					const points = Cool.randomInt(1,3);
 					for (let i = 0; i < points; i ++) {
-						self.drawing.push(new Cool.Vector(
+						self.drawing.add(new Cool.Vector(
 							_x + Cool.randomInt(-1, 1),
 							_y + Cool.randomInt(-1, 1)
 						));
 					}
-					self.drawing.push('end');
+					self.drawing.add('end');
 				}
 			}
 			self.startDots = false;
 		} else if (ev.which == 1) {
 			self.isDrawing = false;
 			/* prevent saving single point drawing segments */
-			if (self.drawing[self.drawing.length-2] != 'end' &&
+			if (self.drawing.get(self.drawing.length-2) != 'end' &&
 				self.drawing.length > 1) {
-				self.drawing.push("end");
+				self.drawing.add("end");
 			} else {
 				self.drawing.pop();
 			}

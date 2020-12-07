@@ -161,7 +161,15 @@ class LinesAnimation {
 					const s = drawing.get(j);
 					const e = drawing.get(j + 1);
 					if (s !== 'end' && e !== 'end') {
-						const off = [...s.off, e.off[0]];
+						const off = [...s.off, ...e.off];
+						
+						// catch for drawing - add flag?
+						if (off.length < this.rndr.n + 1) {
+							for (let k = off.length - 1; k < this.rndr.n + 1; k++) {
+								off.push(new Cool.Vector());
+							}
+						}
+						
 						const v = new Cool.Vector(e.x, e.y);
 						v.subtract(s);
 						v.divide(this.rndr.n);
