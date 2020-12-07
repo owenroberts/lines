@@ -13,10 +13,12 @@ class Texture {
 		if (params.animation) this.animation = params.animation;
 	}
 
-	addLocation(index, x, y) {
-		this.animation.createNewState(`f-${index}`, index, index);
+	addLocation(x, y, index) {
 		const loc = new Cool.Vector(x, y);
-		loc.i = index;
+		if (index) {
+			this.animation.createNewState(`f-${index}`, index, index);
+			loc.i = index;
+		}
 		this.locations.push(loc);
 	}
 

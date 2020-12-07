@@ -28,12 +28,9 @@ function start() {
 		center: true,
 		animation: gme.anims.data.waves
 	});
-	waves.addLocations([
-		new Cool.Vector(100, 400), 
-		new Cool.Vector(300, 400),
-		new Cool.Vector(500, 400)
-
-	]);
+	waves.addLocation(100, 400);
+	waves.addLocation(300, 400);
+	waves.addLocation(500, 400);
 
 	// waves = new Sprite(400, 400);
 	// waves.addAnimation(gme.anims.data.waves);
