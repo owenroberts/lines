@@ -180,8 +180,9 @@ class LinesAnimation {
 						for (let k = 0; k < this.rndr.n; k++) {
 							const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
 							this.ctx.lineTo( 
-								this.rndr.x + p.x + v.x + off[k+1].x,
-								this.rndr.y + p.y + v.y + off[k+1].y
+								// breaks ? k + 1 : k
+								this.rndr.x + p.x + v.x + off[k].x,
+								this.rndr.y + p.y + v.y + off[k].y
 							);
 						}
 

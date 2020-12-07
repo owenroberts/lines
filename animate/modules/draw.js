@@ -200,8 +200,7 @@ function Draw(defaults) {
 		} else if (ev.which == 1) {
 			self.isDrawing = false;
 			/* prevent saving single point drawing segments */
-			if (self.drawing.get(self.drawing.length-2) != 'end' &&
-				self.drawing.length > 1) {
+			if (self.drawing.get(-2) !== 'end' && self.drawing.length > 1) {
 				self.drawing.add("end");
 			} else {
 				self.drawing.pop();

@@ -28,7 +28,7 @@ class Drawing {
 
 	get(index) {
 		if (index < 0) {
-			return this.points[this.point.length - index];
+			return this.points[this.points.length - index];
 		}
 		return this.points[index];
 	}
