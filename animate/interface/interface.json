@@ -808,6 +808,19 @@
 				"list": [
 					{
 						"type": "UITextRange",
+						"face": "l",
+						"fromModule": {
+							"callback": "setProperty"
+						},
+						"params": {
+							"label": "Lines Update",
+							"min": 1,
+							"max": 10,
+							"arguments": ["l"]
+						}
+					},
+					{
+						"type": "UITextRange",
 						"face": "n",
 						"fromModule": {
 							"callback": "setProperty"

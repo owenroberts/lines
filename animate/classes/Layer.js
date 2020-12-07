@@ -12,6 +12,9 @@ class Layer {
 		this.c =  params.c;
 		this.ws = params.ws || false; // wiggle segments 
 
+		this.l = params.l || 4; // draw count per line update
+		this.lc = 0; // line update counter
+
 		this.toggled = false;
 		this.resetTweens();
 	}
@@ -131,6 +134,8 @@ class Layer {
 			ws: this.ws,
 			x: this.x,
 			y: this.y,
+			l: this.l,
+			lc: this.lc,
 			c: this.toggled ? this.pc : this.c
 		};
 	}

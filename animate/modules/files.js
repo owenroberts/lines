@@ -63,7 +63,7 @@ function Files(params) {
 			const drawing = lns.anim.drawings[index];
 			const d = [];
 			for (let j = 0; j < drawing.length; j++) {
-				const point = drawing[j];
+				const point = drawing.get(j);
 				if (point == 'end') d.push(0);
 				else d.push([point.x, point.y]);
 			}

@@ -8,7 +8,7 @@ window.addEventListener("load", function() {
 
 	lns.anim = new LnsAnim(lns.canvas.ctx);
 
-	lns.draw = new Draw({ n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
+	lns.draw = new Draw({ l: 4, n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
 	lns.bgImage = new Background();
 	lns.data = new Data(lns.anim);
 	lns.files = new Files({

@@ -7,11 +7,10 @@ class LinesAnimation {
 		this.layers = [];
 		this.currentFrame = 0;
 		this.currentFrameCounter = 0; // floats
-		
 
 		this.lps = 30; // draw graphics 
-		this.lpd = 4; // lines update per draw, wait 2 draws to update lines
-		this.lineCount = 0; // lines were drawn?
+		// this.lpd = 4; // lines update per draw, wait 2 draws to update lines
+		// this.lineCount = 0; // lines were drawn?
 		// this.lps = this.dps / 2; // update lines
 		
 		this.fps = lps || 12;
@@ -149,11 +148,11 @@ class LinesAnimation {
 					}
 				}
 
-				if (this.lineCount == this.lpd) {
+				if (layer.lc >= layer.l) {
 					drawing.update(this.rndr.n, this.rndr.r, this.rndr.w, this.rndr.v, this.rndr.ws);
-					this.lineCount = 0;
+					layer.lc = 0;
 				} else {
-					this.lineCount++;
+					layer.lc++;
 				}
 
 				if (this.mixedColors) this.ctx.beginPath();
@@ -225,6 +224,8 @@ class LinesAnimation {
 		// set first random values
 		for (let i = 0; i < this.layers.length; i++) {
 			const layer = this.layers[i];
+			if (!layer.l) layer.l = 4; // new layer counter
+			if (!layer.lc) layer.lc = 0;
 			this.drawings[layer.d].update(layer.n, layer.r, layer.w, layer.v, layer.ws); 
 		}
 
