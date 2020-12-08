@@ -8,6 +8,7 @@ class Drawing {
 		}
 
 		this.offset = new Cool.Vector();
+		this.lastDrawCount = 0;
 	}
 
 	// add a point
@@ -36,6 +37,17 @@ class Drawing {
 	get length() {
 		return this.points.length;
 	}
+
+	get needsUpdate() {
+		if (this.lastDrawCount < drawCount) {
+			this.lastDrawCount = drawCount;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
 
 	// update the animtor  properties - happens when the lineCount is 0
 	// n number of segments, r randomness of segments
@@ -72,4 +84,6 @@ class Drawing {
 			}
 		}
 	}
+
+
 }

@@ -36,6 +36,7 @@ class Game {
 
 		this.drawTime = performance.now();
 		this.drawInterval = 1000 / params.lps;
+		window.drawCount = 0; // global referenced in drawings
 
 		this.updateTime = this.drawTime;
 		this.updateInterval = 1000 / 60; // 60 fps
@@ -167,6 +168,7 @@ class Game {
 		// add draw scenes ? 
 
 		draw(); // draw defined in each this js file, or not ... 
+		drawCount++;
 		if (this.stats) {
 			this.stats.update('draw', time);
 			this.stats.draw();

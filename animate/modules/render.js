@@ -4,6 +4,7 @@ function Render(lps, color) {
 	this.lps = lps || 12; // lines per second all the time
 	this.interval = 1000 / this.lps;  // fps per one second, the line interval
 	this.timer = performance.now();
+	window.drawCount = 0;
 
 	this.onionSkinNum = 0;
 	this.onionSkinIsVisible = false;
@@ -41,6 +42,7 @@ function Render(lps, color) {
 	this.update = function(time) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
+			drawCount++;
 
 			// what actually need to be update here ?
 			if (lns.anim.isPlaying) lns.ui.timeline.update();

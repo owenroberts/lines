@@ -97,7 +97,7 @@ class Text {
 				} else {
 					this.letters.state = letter;
 					// only do a line update when its the first instance of letter in message
-					this.letters.draw(x, y, i !== this.msg.indexOf(letter));
+					this.letters.draw(x, y);
 					x += this.track;
 				}
 				if (this.breaks.indexOf(i) != -1) {

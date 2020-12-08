@@ -149,10 +149,10 @@ class LinesAnimation {
 					}
 				}
 
-				if (layer.lc >= layer.l && !suspendLinesUpdate) {
+				if (layer.lc >= layer.l && drawing.needsUpdate) {
 					drawing.update(this.rndr.n, this.rndr.r, this.rndr.w, this.rndr.v, this.rndr.ws);
 					layer.lc = 0;
-				} else if (!suspendLinesUpdate) {
+				} else if (drawing.needsUpdate) {
 					layer.lc++;
 				}
 
