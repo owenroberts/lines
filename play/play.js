@@ -10,6 +10,7 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 	this.ctx = this.canvas.getContext('2d');
 	this.lps = lps || 36; // default ?
 	this.lineInterval = 1000 / this.lps; /* needed in both places ?? */
+	window.drawCount = 0;
 	this.mixedColors = false; // is this always false?
 	this.drawBg = true; /* where? */
 	this.isTexture = isTexture;
@@ -47,10 +48,12 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 			requestAnimFrame(this.draw.bind(this));
 		
 		if (performance.now() > this.lineInterval + this.timer) {
+
 			this.timer = performance.now();
 			this.animation.update();
 			if (this.drawBg) this.ctx.clearRect(0, 0, this.width, this.height);
 			this.animation.draw();
+			drawCount++;
 		}
 	};
 
