@@ -112,10 +112,9 @@ class Sprite {
 				this.y + this.collider.position.y + this.collider.size.y > other.y + other.collider.position.y) {
 				if (callback) callback(this);
 				return true;
-			}
-		} else {
-			return false;
+			} 
 		}
+		return false;
 	}
 
 	outside(other) {
