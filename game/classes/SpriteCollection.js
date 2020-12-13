@@ -20,6 +20,10 @@ class SpriteCollection {
 		this.sprites.splice(this.sprites.indexOf(sprite), 1);
 	}
 
+	clear() {
+		this.sprites = [];
+	}
+
 	add(sprite) {
 		this.sprites.push(sprite);
 	}
