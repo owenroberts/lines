@@ -30,15 +30,16 @@ class Game {
 
 		this.width = params.width;
 		this.height = params.height;
-		this.lps = params.lps;
+		
 		this.mixedColors = params.mixedColors || false; /* param? */
 		this.debug = params.debug || false;
 
+		this.dps = params.lps; // draw per second
 		this.drawTime = performance.now();
-		this.drawInterval = 1000 / params.lps;
+		this.drawInterval = 1000 / params.dps;
 		window.drawCount = 0; // global referenced in drawings
 
-		this.updateTime = this.drawTime;
+		this.updateTime = performance.now();
 		this.updateInterval = 1000 / 60; // 60 fps
 
 		this.clearBg = true;

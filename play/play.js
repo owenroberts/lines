@@ -1,5 +1,5 @@
 /* play module - need to use params too many args */
-function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
+function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
@@ -8,8 +8,8 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 	}
 
 	this.ctx = this.canvas.getContext('2d');
-	this.lps = lps || 36; // default ?
-	this.lineInterval = 1000 / this.lps; /* needed in both places ?? */
+	this.dps = dps || 36; // default ?
+	this.drawInterval = 1000 / this.dps; /* needed in both places ?? */
 	window.drawCount = 0;
 	this.mixedColors = false; // is this always false?
 	this.drawBg = true; /* where? */
@@ -47,7 +47,7 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 		if (!this.isTexture && this.animation.isPlaying)
 			requestAnimFrame(this.draw.bind(this));
 		
-		if (performance.now() > this.lineInterval + this.timer) {
+		if (performance.now() > this.drawInterval + this.timer) {
 
 			this.timer = performance.now();
 			this.animation.update();
@@ -83,6 +83,6 @@ function LinesPlayer(canvas, src, checkRetina, lps, callback, isTexture) {
 	if (src) this.load(src);
 }
 
-function loadAnimation(src, canvas, lps, callback) {
-	const player = new LinesPlayer(canvas, src, lps, true, callback);
+function loadAnimation(src, canvas, dps, callback) {
+	const player = new LinesPlayer(canvas, src, dps, true, callback);
 }

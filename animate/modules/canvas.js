@@ -68,7 +68,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 			const layer = lns.anim.layers[i];
 			const drawing = lns.anim.drawings[layer.d];
 			for (let j = 0; j < drawing.length; j++) {
-				const point = drawing[j];
+				const point = drawing.get(j);
 				if (point != 'end') {
 					tolerance = Math.max(tolerance, layer.r * 4); /* account for random jiggle */
 					min.x = Math.min(min.x, point.x + layer.x);
