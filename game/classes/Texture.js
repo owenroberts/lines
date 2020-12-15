@@ -15,10 +15,10 @@ class Texture {
 
 	addLocation(x, y, index) {
 		const loc = new Cool.Vector(x, y);
-		if (index) {
+		if (index !== undefined) {
 			this.animation.createNewState(`f-${index}`, index, index);
 			loc.i = index;
-		} else if (this.frame == 'randomIndex') {
+		}  else if (this.frame == 'randomIndex') {
 			let r = Cool.randomInt(0, this.animation.endFrame);
 			this.animation.createNewState(`f-${r}`, r, r);
 			loc.i = r;
@@ -56,7 +56,7 @@ class Texture {
 			//  figure out centering later, only draw textures on screen
 			if (x + this.animation.width > 0 && x < GAME.width && 
 				y + this.animation.height > 0 && y < GAME.height) {
-				if (this.locations[i].i) this.animation.state = `f-${this.locations[i].i}`;
+				if (this.locations[i].i !== undefined) this.animation.state = `f-${this.locations[i].i}`;
 				this.animation.draw(x, y);
 			}
 		}
