@@ -5,7 +5,7 @@
 class Texture {
 	constructor(params, debug) {
 		this.locations = params.locations || [];
-		this.frame = params.frame || 'index';
+		this.frame = params.frame || 'index'; // bad name
 		this.debug = debug;
 		this.center = params.center || false;
 		
@@ -18,6 +18,10 @@ class Texture {
 		if (index) {
 			this.animation.createNewState(`f-${index}`, index, index);
 			loc.i = index;
+		} else if (this.frame == 'randomIndex') {
+			let r = Cool.randomInt(0, this.animation.endFrame);
+			this.animation.createNewState(`f-${r}`, r, r);
+			loc.i = r;
 		}
 		this.locations.push(loc);
 	}

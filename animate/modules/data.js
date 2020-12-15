@@ -33,8 +33,7 @@ function Data(anim) {
 		self.saveStates.current.drawings = _.cloneDeep(anim.drawings);
 		self.saveStates.current.layers = _.cloneDeep(anim.layers);
 	};
-
-	/* ctrl z - undo one save state */
+	
 	this.undo = function() {
 
 		if (self.saveStates.prev.drawings) {
@@ -53,7 +52,7 @@ function Data(anim) {
 		/* these functions just call one function, should just call directly .. but this is still being worked on*/
 		lns.ui.drawings.clear();
 		lns.ui.update();
-	};
+	}; /* ctrl z - undo one save state */
 
 	this.copy = function() {
 		lns.draw.reset();
@@ -123,11 +122,9 @@ function Data(anim) {
 	}; /* ctrl v */
 
 	this.clearLines = function() {
-		lns.draw.drawing = [];
+		lns.draw.drawing = new Drawing();
 	}; /* x key */
 
-
-	/* called by clear frame */
 	this.clearLayers = function() {
 		self.saveState(); /* will save lines ... */
 		for (let i = anim.layers.length - 2; i >= 0; i--) {
@@ -138,7 +135,7 @@ function Data(anim) {
 				lns.ui.update();
 			}
 		}
-	};
+	}; /* called by clear frame */
 
 	/* are these functions useful anymore with timeline ? */
 	this.cutTopLayer = function() {

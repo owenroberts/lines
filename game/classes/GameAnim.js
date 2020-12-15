@@ -1,6 +1,6 @@
 class GameAnim extends LinesAnimation {
 	constructor(debug) {
-		super(GAME.ctx, GAME.lps, GAME.mixedColors);
+		super(GAME.ctx, GAME.dps, GAME.mixedColors);
 		this.debug = debug;
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */
@@ -8,27 +8,26 @@ class GameAnim extends LinesAnimation {
 
 	update() { /* too many things to stick in onPlayedState etc */
 		if (this.isPlaying) {
-			if (this.currentFrame <= this.state.end) {
-				this.currentFrameCounter += this.intervalRatio;
-				if (this.randomFrames && this.currentFrame != Math.floor(this.currentFrameCounter)) {
-					const prevFrame = this.currentFrame;
-					while (prevFrame == this.currentFrame) {
-						this.frame = Cool.randomInt(this.state.start, this.state.end);
-					}
-				}
-				this.currentFrame = Math.floor(this.currentFrameCounter);
-				if (this.onUpdate) this.onUpdate();
-			}
-		}
 
-		if (this.frame4 >= this.state.end + 1) { /* not DRY fuck me */
-			if (this.loop) this.frame = this.state.start;
-			else this.frame = this.state.end;
-			if (this.onPlayedOnce) {
-				this.onPlayedOnce();
-				this.onPlayedOnce = undefined;
+			if (this.drawCount == this.drawsPerFrame) {
+				if (this.randomFrames) {
+					while (prevFrame == this.currentFrame) {
+						this.currentFrame = Cool.randomInt(this.state.start, this.state.end);
+					}
+				} else if (this.currentFrame >= this.state.end) {
+					this.currentFrame = this.loop ? this.state.start : this.state.end;
+					if (this.onPlayedOnce) {
+						this.onPlayeOnce();
+						this.onPlayedOnce = undefined;
+					}
+					if (this.onPlayedState) this.onPlayedState();
+				} else {
+					this.currentFrame++;
+				}
+				this.drawCount = 0;
 			}
-			if (this.onPlayedState) this.onPlayedState();
+			this.drawCount++;
+			if (this.onUpdate) this.onUpdate();
 		}
 	}
 
@@ -40,6 +39,10 @@ class GameAnim extends LinesAnimation {
 			}
 		}
 		this.state = label; /* ? */
+	}
+
+	playStateCheck() {
+		if (this.state.start != this.state.end) this.isPlaying = true;
 	}
 
 	set state(state) {

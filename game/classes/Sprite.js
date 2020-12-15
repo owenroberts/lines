@@ -77,8 +77,8 @@ class Sprite {
 		if (this.isActive && this.isOnScreen()) {
 			if (this.debug) this.drawDebug();
 			if (this.animation) {
-				this.animation.draw(this.x, this.y);
 				this.animation.update();
+				this.animation.draw(this.x, this.y);
 			}
 		}
 		if (this.displayFunc) this.displayFunc();

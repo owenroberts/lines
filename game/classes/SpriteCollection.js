@@ -35,6 +35,10 @@ class SpriteCollection {
 		}
 	}
 
+	update() {
+		this.all(sprite => { sprite.update(); });
+	}
+
 	display() {
 		this.all(sprite => { sprite.display(); });
 	}

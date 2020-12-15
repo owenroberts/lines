@@ -99,9 +99,9 @@ function Timeline() {
 					gridColumnEnd: layer.endFrame * 2 + 3
 				},
 				callback: function() {
-					lns.draw.setProperties(layer.props);
+					// only update the values when toggling on, ignore when toggling off
+					if (!layer.toggled) lns.draw.setProperties(layer.props);
 					layer.toggle();
-					
 				}
 			}, layer);
 			

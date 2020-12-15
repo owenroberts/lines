@@ -14,6 +14,11 @@ class LinesAnimation {
 		this.drawInterval = 1000 / this.dps;
 		this.intervalRatio = this.drawInterval / (1000 / this.fps); // ratio between draws and frame updates
 
+		// could also probably figure out the drawInterval to get correct number of frames ...
+		// drawInterval effected by renderer
+		// the drawInterval actually doesnt fucking matter ....
+		// need to know renderer dps, thats it ... 
+		// also cant change renderer dps 
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
 
@@ -101,10 +106,7 @@ class LinesAnimation {
 		
 		// frame update
 		if (this.isPlaying) {
-			// console.log(this.drawCount, this.drawsPerFrame);
-			// console.log('updt', this.currentFrame)
 			if (this.drawCount == this.drawsPerFrame) {
-				
 				if (this.currentFrame >= this.state.end) {
 					this.currentFrame = this.state.start;
 					if (this.onPlayedState) this.onPlayedState();
