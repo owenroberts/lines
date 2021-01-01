@@ -1,5 +1,5 @@
 class LinesAnimation {
-	constructor(ctx, lps, mixedColors) {
+	constructor(ctx, dps, mixedColors) {
 		this.ctx = ctx;
 		this.loaded = false;
 		this.isPlaying = false;
@@ -8,14 +8,19 @@ class LinesAnimation {
 		this.currentFrame = 0;
 		this.currentFrameCounter = 0; // floats
 
-		this.lps = 30; // draw graphics 
-		// this.lpd = 4; // lines update per draw, wait 2 draws to update lines
-		// this.lineCount = 0; // lines were drawn?
-		// this.lps = this.dps / 2; // update lines
-		
-		this.fps = lps || 12;
-		this.lineInterval = 1000 / this.lps;
-		this.intervalRatio = 1;
+		this.dps = dps || 30; // draw graphics 
+		this.fps = dps || 12; // update frames
+
+		this.drawInterval = 1000 / this.dps;
+		this.intervalRatio = this.drawInterval / (1000 / this.fps); // ratio between draws and frame updates
+
+		// could also probably figure out the drawInterval to get correct number of frames ...
+		// drawInterval effected by renderer
+		// the drawInterval actually doesnt fucking matter ....
+		// need to know renderer dps, thats it ... 
+		// also cant change renderer dps 
+		this.drawsPerFrame = Math.round(this.dps / this.fps);
+		this.drawCount = 0;
 
 		this.mixedColors = mixedColors || true;
 		
@@ -33,21 +38,25 @@ class LinesAnimation {
 
 	set fps(fps) {
 		this._fps = +fps;
-		this.intervalRatio = this.lineInterval / (1000 / +fps);
+		this.intervalRatio = this.drawInterval / (1000 / +fps);
+		this.drawsPerFrame = Math.round(this.dps / this.fps);
+		this.drawCount = 0;
 	}
 
 	get fps() {
 		return this._fps;
 	}
 
-	set lps(lps) {
-		this._lps = +lps;
-		this.lineInterval = 1000 / +lps;
-		this.intervalRatio = this.lineInterval / (1000 / this.fps);
+	set dps(dps) {
+		this._dps = +dps;
+		this.drawInterval = 1000 / +dps;
+		this.intervalRatio = this.drawInterval / (1000 / this.fps);
+		this.drawsPerFrame = Math.round(this.dps / this.fps);
+		this.drawCount = 0;
 	}
 
-	get lps() {
-		return this._lps;
+	get dps() {
+		return this._dps;
 	}
 
 	set frame(n) {
@@ -94,20 +103,41 @@ class LinesAnimation {
 	}
 
 	update() {
+		
 		// frame update
 		if (this.isPlaying) {
-			if (this.currentFrame <= this.state.end) {
-				this.currentFrameCounter += this.intervalRatio;
-				this.currentFrame = Math.floor(this.currentFrameCounter);
-				if (this.onUpdate) this.onUpdate();
+			if (this.drawCount == this.drawsPerFrame) {
+				if (this.currentFrame >= this.state.end) {
+					this.currentFrame = this.state.start;
+					if (this.onPlayedState) this.onPlayedState();
+				} else {
+					this.currentFrame++;
+				}
+				this.drawCount = 0;
 			}
+			this.drawCount++;
 
-			/* fuck me */
-			if (this.frame4 >= this.state.end + 1) {
-				this.frame = this.state.start;
-				/* loop ? */
-				if (this.onPlayedState) this.onPlayedState();
-			}
+
+
+			// console.log('updt', this.currentFrame, this.currentFrameCounter, this.state.end);
+			// if (this.currentFrame <= this.state.end) {
+			// 	this.currentFrameCounter += this.intervalRatio;
+			// 	if (this.currentFrameCounter >= this.state.end + 1) {
+			// 		this.currentFrame = this.state.start;
+			// 		this.currentFrameCounter = this.state.start + (this.currentFrameCounter % 1)/2;
+			// 	} else {
+			// 		this.currentFrame = Math.floor(this.currentFrameCounter);
+			// 	}
+				
+			// 	if (this.onUpdate) this.onUpdate();
+			// }
+
+			// /* fuck me */
+			// // if (this.frame4 >= this.state.end + 1) {
+			// // 	this.frame = this.state.start;
+			// // 	/* loop ? */
+			// // 	if (this.onPlayedState) this.onPlayedState();
+			// // }
 			if (this.onUpdate) this.onUpdate();
 		}
 	}
@@ -115,6 +145,7 @@ class LinesAnimation {
 	draw(x, y, suspendLinesUpdate) {
 		// suspendLinesUpdate for text but could be useful ... for like textures!
 		// if (this.debug) console.log(x, y);
+		// console.log('draw', this.currentFrame);
 		if (!this.mixedColors) this.ctx.beginPath();
 		for (let i = 0, len = this.layers.length; i < len; i++) {
 			const layer = this.layers[i];
@@ -221,7 +252,6 @@ class LinesAnimation {
 
 		this.layers = json.l;
 
-
 		// set first random values
 		for (let i = 0; i < this.layers.length; i++) {
 			const layer = this.layers[i];
@@ -237,6 +267,7 @@ class LinesAnimation {
 			this.states.default.end = this.endFrame;
 
 		this.intervalRatio = this.lineInterval / (1000 / json.fps);
+		this.fps = json.fps;
 
 		if (json.mc) this.mixedColors = json.mc; /* hmm .. over ride? */
 

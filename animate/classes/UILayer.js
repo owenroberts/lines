@@ -147,7 +147,7 @@ class UILayer extends UICollection {
 
 		this.remove = new UIButton({
 			type: 'remove',
-			text: '🗑',
+			text: 'X',
 			callback: () => {
 				lns.anim.layers.splice(lns.anim.layers.indexOf(layer), 1);
 				lns.ui.update();

@@ -1,8 +1,8 @@
-function Render(lps, color) {
+function Render(dps, color) {
 	const self = this;
 
-	this.lps = lps || 12; // lines per second all the time
-	this.interval = 1000 / this.lps;  // fps per one second, the line interval
+	this.dps = dps || 30; // draws pers second
+	this.interval = 1000 / this.dps;  // time interval between draws
 	this.timer = performance.now();
 	window.drawCount = 0;
 
@@ -33,10 +33,10 @@ function Render(lps, color) {
 	};
 
 	/* ' - lps is property of render engine, not individual animations */
-	this.setLps = function(lps) {
-		self.lps = +lps;
-		self.interval = 1000 / self.lps;
-		lns.anim.lps = self.lps;
+	this.setDps = function(dps) {
+		self.dps = +lps;
+		self.interval = 1000 / self.dps;
+		lns.anim.dps = self.dps;
 	};
 
 	this.update = function(time) {
