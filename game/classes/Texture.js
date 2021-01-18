@@ -4,13 +4,17 @@
 
 class Texture {
 	constructor(params, debug) {
-		this.locations = params.locations || [];
+		this.locations = [];
 		this.frame = params.frame || 'index'; // bad name
 		this.debug = debug;
 		this.center = params.center || false;
 		
 		this.offset = new Cool.Vector(0, 0);
 		if (params.animation) this.animation = params.animation;
+
+		if (params.locations.length > 0) {
+			this.addLocations(params.locations)
+		}
 	}
 
 	addLocation(x, y, index) {

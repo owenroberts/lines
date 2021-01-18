@@ -45,8 +45,8 @@ class Scene {
 		this.displaySprites.all(sprite => { sprite.display() });
 	}
 
-	update() {
-		this.updateSprites.all(sprite => { sprite.update() });
+	update(offset) {
+		this.updateSprites.all(sprite => { sprite.update(offset) });
 	}
 
 	mouseMoved(x, y) {

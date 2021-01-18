@@ -7,7 +7,7 @@
 class Sprite {
 	constructor(x, y, w, h, animation, callback) {
 		this.position = new Cool.Vector(x, y);
-		this.size = new Cool.Vector(w, h);
+		this.size = new Cool.Vector(w, h); // remove w,h ? i dont really resize sprites
 		this.debug = false;
 		this.debugColor = "#00ffbb";
 		this.collider = {

@@ -78,6 +78,7 @@ class Game {
 
 	load(files, callback) {
 		/* loads one instance of all animations to be used/shared by sprites */
+		if (this.debug) console.log('loading data');
 		if (this.debug) console.time('load data');
 		this.assetsLoaded = {};
 		const numFiles = Object.keys(files).length;
@@ -117,6 +118,7 @@ class Game {
 							this.data[f].entries.push(itemData);
 							// const itemName = csv[i][0];
 							this.assetsLoaded[f][itemData.label] = false;
+							// drawings included in path for json files ...
 							this.loadJSON(f, itemData.label, `drawings/${f}/${itemData.label}.json`);
 						}
 					}
@@ -192,6 +194,17 @@ class Game {
 
 	setBounds(dir, value) {
 		this.bounds[dir] = value;
+	}
+
+	updateBounds(position) {
+		if (position.y < this.bounds.top) 
+			this.bounds.top = position.y;
+		if (position.y > this.bounds.bottom) 
+			this.bounds.bottom = position.y + this.height;
+		if (position.x > this.bounds.right) 
+			this.bounds.right = position.x + this.width/2;
+		if (position.x < this.bounds.left) 
+			this.bounds.left = position.x - this.width/2;
 	}
 
 	startMouseEvents() {
