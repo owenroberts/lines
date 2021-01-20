@@ -67,4 +67,8 @@ class UIElement {
 		toolTip.removeClass('visible');
 		this.removeClass('triggered');
 	}
+
+	remove() {
+		this.el.remove();
+	}
 }

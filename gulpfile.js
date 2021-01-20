@@ -31,6 +31,12 @@ const files = {
 		'./game/classes/Sprite.js',
 		'./game/classes/UI.js',
 		'./game/classes/*.js',
+	],
+	editor: [
+		'./game/editor/classes/*.js',
+		'./game/editor/modules/*.js',
+		'./game/editor/interface/*.js',
+		'./game/editor/editor.js',
 	]
 };
 
@@ -41,6 +47,9 @@ const sassFiles = {
 	interface: [
 		'./css/colors.scss',
 		'./css/interface.scss'
+	],
+	editor: [
+		'./css/editor.scss'
 	]
 };
 
@@ -105,8 +114,10 @@ function watchTask(){
 			...files.interface, 
 			...files.animate, 
 			...files.game,
+			...files.editor,
 			...sassFiles.interface,
-			...sassFiles.animate
+			...sassFiles.animate,
+			...sassFiles.editor
 		],
 		{interval: 1000, usePolling: true}, //Makes docker work
 		series(

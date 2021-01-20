@@ -1,4 +1,4 @@
-class ItemUI extends Item {
+class ItemUI extends Entity {
 	constructor(params, src, debug) {
 		super(params, src, debug);
 		this.x = params.x;
@@ -7,8 +7,8 @@ class ItemUI extends Item {
 
 	set x(x) {
 		this._x = x;
-		if (x % 1 != 0) this.position.x = Game.width * x; /* decimal / percentage of window */
-		else if (x < 0) this.position.x = Game.width + x; /* negative x offset from right side */
+		if (x % 1 != 0) this.position.x = GAME.width * x; /* decimal / percentage of window */
+		else if (x < 0) this.position.x = GAME.width + x; /* negative x offset from right side */
 		else this.position.x = x;
 	}
 
@@ -18,8 +18,8 @@ class ItemUI extends Item {
 
 	set y(y) {
 		this._y = y;
-		if (y % 1 != 0) this.position.y = Game.height * y; /* decimal / percentage of window */
-		else if (y < 0) this.position.y = Game.height + y; /* negative y offset from bottom */
+		if (y % 1 != 0) this.position.y = GAME.height * y; /* decimal / percentage of window */
+		else if (y < 0) this.position.y = GAME.height + y; /* negative y offset from bottom */
 		else this.position.y = y;
 	}
 
@@ -28,7 +28,7 @@ class ItemUI extends Item {
 	}
 
 	display() {
-		Game.ctx.strokeStyle = '#000000'; // game colors ???
+		GAME.ctx.strokeStyle = '#000000'; // game colors ???
 		super.display(true);
 		if (this.displayLabel) this.drawLabel();
 		if (this.outline) this.drawOutline();

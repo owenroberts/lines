@@ -13,9 +13,7 @@
 						},
 						"params": {
 							"text": "Zoom",
-							"arguments": {
-								"toolName": "zoom"
-							}
+							"arguments": ["zoom"]
 						}
 					},
 					{
@@ -26,9 +24,7 @@
 						},
 						"params": {
 							"text": "Transform",
-							"arguments": {
-								"toolName": "transform"
-							}
+							"arguments": ["transform"]
 						}
 					},
 					{
@@ -39,9 +35,7 @@
 						},
 						"params": {
 							"text": "Ruler",
-							"arguments": {
-								"toolName": "ruler"
-							}
+							"arguments": ["ruler"]
 						}
 					}
 				]

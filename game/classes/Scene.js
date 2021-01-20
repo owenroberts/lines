@@ -41,8 +41,8 @@ class Scene {
 		this.uiSprites.add(sprite);
 	}
 
-	display() {
-		this.displaySprites.all(sprite => { sprite.display() });
+	display(view) {
+		this.displaySprites.all(sprite => { sprite.display(view) });
 	}
 
 	update(offset) {

@@ -25,8 +25,7 @@ function Zoom() {
 	};
 
 	this.set = function(ctx, offset) {
-		console.log(Game.dpr);
-		ctx.scale((this.canvas.width / this.view.width) * Game.dpr, (this.canvas.height / this.view.height) * Game.dpr);
+		ctx.scale((this.canvas.width / this.view.width) * GAME.dpr, (this.canvas.height / this.view.height) * GAME.dpr);
 		ctx.translate(offset.x - this.view.x, offset.y - this.view.y);
 	};
 
@@ -80,15 +79,15 @@ function Zoom() {
 	};
 
 	this.center = function() {
-		self.canvas = { width: Game.width, height: Game.height };
-		self.view = { x: 0, y: 0, width: Game.width, height: Game.height };
+		self.canvas = { width: GAME.width, height: GAME.height };
+		self.view = { x: 0, y: 0, width: GAME.width, height: GAME.height };
 		self.previous = { x: undefined, y: undefined }; 
 	};
 
 	this.translate = function(x, y) {
 		const scale = self.canvas.width / self.view.width;
-		x = x / scale + self.view.x - Game.width/2;
-		y = y / scale + self.view.y - Game.height/2;
+		x = x / scale + self.view.x - GAME.width/2;
+		y = y / scale + self.view.y - GAME.height/2;
 		return {x: Math.round(x), y: Math.round(y)};
 	};
 

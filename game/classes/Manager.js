@@ -5,11 +5,12 @@
 */
 
 class Manager {
-	constructor(list, _class) {
+	constructor(list, clAss) {
 		for (let i = 0; i < list.length; i++) {
-			this[list[i]] = new _class();
+			this[list[i]] = new clAss();
 		}
 		this._current = list[0];
+		this.names = list;
 	}
 
 	set current(label) {
@@ -22,6 +23,10 @@ class Manager {
 
 	get currentName() {
 		return this._current;
+	}
+
+	get list() {
+		return this.names;
 	}
 
 }

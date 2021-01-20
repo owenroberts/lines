@@ -25,7 +25,7 @@ class SpriteCollection {
 	}
 
 	add(sprite) {
-		this.sprites.push(sprite);
+		if (!this.sprites.includes(sprite)) this.sprites.push(sprite);
 	}
 
 	// loop 

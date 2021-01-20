@@ -11,14 +11,15 @@ function Data(app, params) {
 		const ui = {};
 		const settings = {};
 
+		// should all the sprites be saved somewhere ??
 		for (const type in app.sprites) {
 			if (!sprites[type]) sprites[type] = {};
 			if (!settings[type]) settings[type] = {};
 			for (const key in app.sprites[type]) {
 				if (!app.sprites[type][key].remove) 
 					sprites[type][key] = app.sprites[type][key].data;
-				if (app.sprites[type][key].locked)
-					settings[type][key] = { locked: true };
+				if (app.sprites[type][key].isLocked)
+					settings[type][key] = { lock: true };
 			}
 		}
 

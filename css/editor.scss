@@ -1,5 +1,5 @@
-@import "../../../interface/css/colors";
-@import "../../../interface/css/lines.css";
+@import "colors.scss";
+@import "interface.scss";
 
 #nav {
 	margin-bottom: 0.25em;
@@ -35,10 +35,12 @@ canvas#map.location-tool {
 }
 
 /* item layout */
-.item {
-	border-bottom: 1px solid $main-color;
+.item-collection {
+	// border-bottom: 1px solid $main-color;
 	padding: 3px;
 	justify-content: space-between;
+	display: flex;
+	flex-direction: column;
 
 	input.label {
 		order: 1;
@@ -47,25 +49,10 @@ canvas#map.location-tool {
 		padding: 3px;
 	}
 
-	.x-label, .x-input, .y-label, .y-input,
-	.add {
-		order: 2;
-		flex: 25%;
-	}
+	.label { order: 0; }
+	.edit { order: 1; }
+	.scene { order: 2; }
+	.location { order: 3; }
 
-	.focus, .remove, .lock, .all {
-		order: 3;
-	}
 
-	.scene-selector, .frame-type {
-		order: 4;
-	}
-
-	.add-scene {
-		order: 5;
-	}
-
-	.edit {
-		order: 6;
-	}
 }

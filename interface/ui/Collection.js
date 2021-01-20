@@ -24,4 +24,11 @@ class UICollection extends UIElement {
 		this.el.removeChild(this[k].el);
 		delete this[k];
 	}
+
+	clear() {
+		for (let i = this.el.children.length - 1; i >= 0; --i) {
+  			this.el.children[i].remove();
+		}
+	}
+
 }

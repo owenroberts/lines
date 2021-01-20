@@ -1,3 +1,19 @@
+const gme = new Game({
+	canvas: "map",
+	width: 960,
+	height: 720,
+	dps: 24,
+	mixedColors: true,
+	checkRetina: true,
+	scenes: ['game'],
+	debug: true
+}); // maybe there's a way to use the garden js file here? modules & exports :O
+
+gme.load({
+	scenery: '/data/scenery.json',
+	textures: '/data/textures.json'
+});
+
 const edi = {}; /* editor app */
 edi.ui = new Interface(edi);
 edi.ui.load('interface/interface.json');
@@ -13,14 +29,15 @@ edi.tool = {
 		const toolName = _toolName.toolName || _toolName;
 		edi.tool.current = toolName;
 		edi.ui.selectTool.value = toolName;
-		Game.canvas.className = '';
-		Game.canvas.classList.add(`${toolName}-tool`);
+		gme.canvas.className = '';
+		gme.canvas.classList.add(`${toolName}-tool`);
 	},
-	items: [],
+	items: new SpriteCollection(),
 	clear: function() {
-		for (let i = edi.tool.items.length - 1; i >= 0; i--) {
-			edi.tool.items[i].selected = false;
-		}
+		edi.tool.items.all(item => {
+			item.select(false);
+		});
+		edi.tool.items.clear();
 	}
 }; /* tools: zoom/pan, transform, ruler - modulize if it gets complicated */
 /* move this somewhere else eventually ... */
@@ -31,108 +48,114 @@ edi.ui.selectTool = new UISelect({
 	selected: edi.tool.current,
 	callback: edi.tool.set
 });
+
 edi.ui.reset = function() {
-	for (const key in Game.sprites) {
-		Game.sprites[key].removeUI();
+	for (const key in GAME.sprites) {
+		GAME.sprites[key].removeUI();
 	}
-	for (const key in Game.ui) {
-		Game.ui[key].removeUI();
+	for (const key in GAME.ui) {
+		GAME.ui[key].removeUI();
 	}
 };
 
-Game.sprites = {};
-Game.ui = {};
-Game.scenes = [];
-Game.init({
-	canvas: "map",
-	width: 720,
-	height: 400,
-	lps: 12,
-	mixedColors: true,
-	checkRetina: true
-});
-
-edi.data = new Data(Game, { save: false, path: '/drawings' }); 
-Game.load({ ui: "/data/ui.json", sprites: "/data/sprites.json" }, { ui: ItemUI, scenery: ItemEdit, textures: TextureEdit }, Game.start);
+edi.data = new Data(gme, { save: false, path: '/drawings' }); 
 
 function start() {
 
+	gme.sprites = {
+		scenery: {},
+		textures: {}
+	}; // easier for editor 
+
+	// maybe a way to make these regular ...
+	for (const key in gme.data.scenery.entries) {
+		const data = gme.data.scenery.entries[key];
+		const s = new ItemEdit({ ...data, label: key });
+		s.addAnimation(gme.anims.scenery[key]);
+		gme.scenes.add(s, data.scenes);
+		gme.updateBounds(s.position);
+		gme.sprites.scenery[key] = s;
+	}
+
+	for (const key in gme.data.textures.entries) {
+		const data = gme.data.textures.entries[key];
+		const t = new TextureEdit({
+			animation: gme.anims.textures[key],
+			locations: data.locations,
+			frame: 'index',
+			label: key
+		});
+		gme.scenes.add(t, data.scenes);
+		for (let i = 0; i < data.locations.length; i++) {
+			gme.updateBounds(data.locations[i]);
+		}
+		gme.sprites.textures[key] = t;
+	}
+
 	edi.ui.textures.display();
 
-	edi.zoom.canvas.width = edi.zoom.view.width = Game.width;
-	edi.zoom.canvas.height = edi.zoom.view.height = Game.height;
+	edi.zoom.canvas.width = edi.zoom.view.width = GAME.width;
+	edi.zoom.canvas.height = edi.zoom.view.height = GAME.height;
 	edi.zoom.load();
 	edi.tool.set('zoom');
 	edi.ui.markers.center = new Marker(0, 0);
-	Game.canvas.addEventListener("mousewheel", function(ev) {
+	gme.canvas.addEventListener("mousewheel", function(ev) {
 		edi.zoom.wheel(ev, function() {
-			Game.ctx.miterLimit = 1;
+			gme.ctx.miterLimit = 1;
 		});
 	}, false);
 
-	Game.scene = 'game';
 
 	edi.ui.selectScene = new UISelect({
 		id: "select-scene",
 		label: "scene:",
-		options: Game.scenes.length ? Game.scenes : [ 'game' ],
-		selected: Game.scene,
+		options: gme.scenes.length ? gme.scenes : [ 'game' ],
+		selected: gme.scene,
 		callback: function(value) {
-			Game.scene = value;
+			gme.scene = value;
 			edi.ui.reset();
 		}
 	});
-
-	// edi.ui.load('interface.json');
 
 	fetch('/data/settings.json')
 		.then(response => { return response.json(); })
 		.then(json => {
 			for (const type in json) {
-				for (const key in json[type]) {
-					if (json[type][key].locked) {
-						Game.sprites[type][key].lock(true);
+				for (const sprite in json[type]) {
+					if (json[type][sprite]["lock"]) {
+						gme.sprites[type][sprite].isLocked = true;
 					}
 				}
 			}
 		});
+	edi.ui.settings.load();
 	/* settings loaded before map done loading */
 
-	//  document.oncontextmenu = function() { return false; } 
-	/* maybe dont need with tool selector */
+	gme.scene = 'game';
 }
 
 function draw() {
 
-	edi.zoom.clear(Game.ctx);
-	edi.zoom.set(Game.ctx, { x: Game.width/2, y: Game.height/2 });
+	edi.zoom.clear(gme.ctx);
+	edi.zoom.set(gme.ctx, { x: gme.width/2, y: gme.height/2 });
 
 	// const view = edi.zoom.view;
-	// Game.ctx.fillRect(view.x - Game.width/2, view.y - Game.height/2,view.width + Game.width, view.height + Game.height);
+	// GAME.ctx.fillRect(view.x - GAME.width/2, view.y - GAME.height/2,view.width + GAME.width, view.height + GAME.height);
 
 	/* not sure where to put this .... */
-	Game.ctx.font = '16px monaco';
-	Game.ctx.fillStyle = '#bb11ff';
+	gme.ctx.font = '16px monaco';
+	gme.ctx.fillStyle = '#bb11ff';
 
 	for (const key in edi.ui.markers) {
 		edi.ui.markers[key].display();
 	}
 
 	/* draw sprites -- data, scenes? */
-	for (const type in Game.sprites) {
-		for (const key in Game.sprites[type])
-			if (Game.sprites[type][key].scenes.includes(Game.scene)) 
-				Game.sprites[type][key].display(edi.zoom.view);
-	}
+	gme.scenes.current.display(edi.zoom.view);
 
 	if (edi.tool.current == 'ruler') edi.ruler.display();
 
-	edi.zoom.clear(Game.ctx);
-	
-	for (const key in Game.ui) {
-		if (Game.ui[key].scenes.includes(Game.scene)) 
-			Game.ui[key].display(edi.zoom.view);
-	}
+	edi.zoom.clear(gme.ctx);
 }
 
 /* what module would this be in? */
@@ -142,7 +165,7 @@ function mouseMoved(x, y, button) {
 		if (edi.zoom.mouseDown) {
 			const delta = edi.zoom.getDelta(x, y);
 			if (edi.tool.current == 'transform' && edi.tool.items.length > 0) {
-				edi.tool.items.forEach(item => {
+				edi.tool.items.all(item => {
 					item.update({ x: Math.round(delta.x), y: Math.round(delta.y) });
 				});
 			} else {
@@ -164,17 +187,20 @@ function mouseDown(x, y, button, shift) {
 			const item = intersectItems(x, y);
 			
 			if (edi.tool.items.length > 0) {
-				if (item && shift) {
-					item.selected = true;
+				if (item && shift) { // select multiple items
+					item.select(true);
 				} else if (item && !shift) {
 					edi.tool.clear();
-					item.selected = true;
+					item.select(true);
 				} else if (!item) {
 					edi.tool.clear();
 				}
 			} else if (item) {
-				item.selected = true;
+				item.select(true);
 			}
+
+			if (item.isSelected) edi.tool.items.add(item);
+			else edi.tool.items.remove(item);
 			
 			edi.zoom.mouseDown = true;
 	
@@ -191,21 +217,19 @@ function mouseUp(x, y, button) {
 
 /* what module should this be in??? */
 function intersectItems(x, y, move) {
-	for (const type in Game.sprites) {
-		for (const key in Game.sprites[type]) {
-			if (Game.sprites[type][key].scenes.includes(Game.scene)) {
-				const intersect = Game.sprites[type][key].mouseOver(x, y, edi.zoom);
-				if (intersect) return intersect;
-			}
-		}
-	}
 
-	for (const key in Game.ui) {
-		if (Game.ui[key].scenes.includes(Game.scene)) {
-			const intersect = Game.ui[key].mouseOver(x, y);
-			if (intersect) return intersect;
-		}
+	// callback return doesn't work ... 
+	for (let i = 0; i < gme.scenes.current.displaySprites.length; i++) {
+		const s = gme.scenes.current.displaySprites.sprite(i);
+		if (s.isMouseOver(x, y, edi.zoom)) return s;
 	}
+	
+	// for (const key in gme.ui) {
+	// 	if (gme.ui[key].scenes.includes(gme.scene)) {
+	// 		const intersect = gme.ui[key].mouseOver(x, y);
+	// 		if (intersect) return intersect;
+	// 	}
+	// }
 
 	return false;
 }

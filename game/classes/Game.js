@@ -53,7 +53,6 @@ class Game {
 		this.useMouseEvents = params.events ? params.events.includes('mouse') : true;
 		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
 
-
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
 			this.dpr = params.checkRetina ? window.devicePixelRatio || 1 : 1;
@@ -102,6 +101,7 @@ class Game {
 						for (const key in data) {
 							this.assetsLoaded[f][key] = false;
 							this.loadJSON(f, key, data[key].src);
+							this.data[f].entries[key].src = data[key].src;
 						}
 					} else {
 						// csv item names have to match drawing names
@@ -159,7 +159,9 @@ class Game {
 
 	start() {
 		if (typeof start === "function") start(); // should be this method?
-		if (typeof update === "function") requestAnimFrame(() => { this.update() });
+		if (typeof update !== "function") this.noUpdate = true;
+		requestAnimFrame(() => { this.update() });
+
 		if (this.useMouseEvents) this.startMouseEvents();
 		if (this.useKeyboardEvents) this.startKeyboardEvents();
 		if (typeof sizeCanvas === "function") window.addEventListener('resize', sizeCanvas, false);
@@ -184,7 +186,7 @@ class Game {
 
 		const time = performance.now();
 		if (time > this.updateTime + this.updateInterval) {
-			update(); // update defined in each game js file
+			if (!this.noUpdate) update(); // update defined in each game js file
 			this.updateTime = time - ((time - this.updateTime) % this.updateInterval); // adjust for fps interval being off
 			if (this.stats) this.stats.update('FPS', time);
 			

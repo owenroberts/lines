@@ -73,8 +73,8 @@ class Sprite {
 		GAME.ctx.strokeStyle = temp;
 	}
 
-	display() {
-		if (this.isActive && this.isOnScreen()) {
+	display(editorOnScreen) {
+		if (this.isActive && (this.isOnScreen() || editorOnScreen)) {
 			if (this.debug) this.drawDebug();
 			if (this.animation) {
 				this.animation.update();

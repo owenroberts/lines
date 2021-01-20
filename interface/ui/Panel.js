@@ -103,8 +103,8 @@ class UIPanel extends UICollection {
 		this.addClass('undocked');
 	}
 
-	addRow(k) {
-		const row = new UIRow();
+	addRow(k, className) {
+		const row = new UIRow({ class: className });
 		this.append(row, k);
 		this.rows.push(row);
 		return row;
