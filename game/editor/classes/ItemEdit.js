@@ -79,7 +79,6 @@ class ItemEdit extends Entity {
 	}
 
 	update(offset) {
-		console.log(offset);
 		if (!this.isLocked) {
 			this.position.add(offset);
 			this.ui.update({ x: this.position.x, y: this.position.y });

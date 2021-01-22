@@ -1,13 +1,14 @@
 class TextureEdit extends Texture {
 	constructor(params, debug) {
 		super(params, debug);
-		if (params.src) this.origin = params.src;
+		if (params.src) this.src = params.src;
+		this.scenes = params.scenes || ['game'];
 		this.label = params.label;
 
 		if (params.x !== undefined && !params.locations) {
 			this.locations = [{x: params.x, y: params.y}];
 		}
-		this.locked = false;
+		this.isLocked = false;
 		this.ui = new TextureEditUI(this, edi.ui.panels.textures);
 	}
 
@@ -30,7 +31,7 @@ class TextureEdit extends Texture {
 
 					if (this.locations[i].i !== undefined) 
 						this.animation.state = `f-${this.locations[i].i}`;
-					this.animation.draw(x, y);
+					this.animation.draw(x, y, GAME.debug);
 				}
 			}
 		}
@@ -59,17 +60,22 @@ class TextureEdit extends Texture {
 
 	get data() {
 		return {
-			src: this.params.src,
-			locations: this.items.map(item => item.position),
+			src: this.src,
+			locations: this.locations.map(l => { return { x: l.x, y: l.y } }),
 			scenes: this.scenes,
-			tags: this.tags
+			tags: this.tags // ?
 		};
 	}
 
+	get settings() {
+		if (this.isLocked) return { lock: this.isLocked };
+		else return false;
+	}
+
 	lock() {
-		this.locked = !this.locked;
+		this.isLocked = !this.isLocked;
 		for (let i = 0; i < this.items.length; i++) {
-			this.items[i].lock(this.locked);
+			this.items[i].lock(this.isLocked);
 		}
 	}
 }

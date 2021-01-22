@@ -7,44 +7,30 @@ function Data(app, params) {
 
 	/* one file or multiple files ??? */
 	this.save = function() {
-		const sprites = {};
-		const ui = {};
-		const settings = {};
-
-		// should all the sprites be saved somewhere ??
-		for (const type in app.sprites) {
-			if (!sprites[type]) sprites[type] = {};
-			if (!settings[type]) settings[type] = {};
-			for (const key in app.sprites[type]) {
-				if (!app.sprites[type][key].remove) 
-					sprites[type][key] = app.sprites[type][key].data;
-				if (app.sprites[type][key].isLocked)
-					settings[type][key] = { lock: true };
-			}
-		}
-
-		for (const key in app.ui) {
-			const s = app.ui[key];
-			ui[key] = {
-				src: `${params.path}/ui/${s.label}.json`,
-				x: s.x,
-				y: s.y,
-				states: s.animation.states,
-				state: s.animation.state,
-				scenes: s.scenes
-			};
-		}
-
-		const f = self.download(sprites, 'sprites.json');
-		f.onwriteend = function() { 
-			const _f = self.download(ui, 'ui.json');
-			_f.onwriteend = function() {
-				self.download(settings, 'settings.json');
-			}; /* yes this looks ridiculous */
-		};
+		saveFile(0, {});
 	};
 
-	this.download = function(data, fileName) {
+	function saveFile(count, settings) {
+		const file = params.files[count];
+		const data = {};
+		settings[file] = {};
+		for (const key in app.sprites[file]) {
+			const s = app.sprites[file][key];
+			if (!s.remove) data[key] = s.data;
+			if (s.settings) settings[file][key] = s.settings;
+		}
+		const f = download(data, `${file}.json`);
+		f.onwriteend = () => {
+			if (count < params.files.length - 1) {
+				count++;
+				saveFile(count, settings);
+			} else {
+				download(settings, 'settings.json');
+			}
+		};
+	}
+
+	function download(data, fileName) {
 		const json = JSON.stringify(data);
 		const blob = new Blob([json], { type: "application/x-download;charset=utf-8" });
 		return saveAs(blob, fileName);

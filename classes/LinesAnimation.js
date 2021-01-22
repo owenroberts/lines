@@ -6,19 +6,13 @@ class LinesAnimation {
 		this.drawings = [];
 		this.layers = [];
 		this.currentFrame = 0;
-		this.currentFrameCounter = 0; // floats
 
-		this.dps = dps || 30; // draw graphics 
-		this.fps = dps || 12; // update frames
+		this.dps = dps || 30; // draw per frame from renderer
+		this.fps = 5; // update frames
 
-		this.drawInterval = 1000 / this.dps;
-		this.intervalRatio = this.drawInterval / (1000 / this.fps); // ratio between draws and frame updates
-
-		// could also probably figure out the drawInterval to get correct number of frames ...
-		// drawInterval effected by renderer
-		// the drawInterval actually doesnt fucking matter ....
-		// need to know renderer dps, thats it ... 
-		// also cant change renderer dps 
+		// how often to change frame for animations ... 
+		// relative to renderer
+		// layer count determines how often to redo randomness
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
 
@@ -38,7 +32,6 @@ class LinesAnimation {
 
 	set fps(fps) {
 		this._fps = +fps;
-		this.intervalRatio = this.drawInterval / (1000 / +fps);
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
 	}
@@ -49,8 +42,6 @@ class LinesAnimation {
 
 	set dps(dps) {
 		this._dps = +dps;
-		this.drawInterval = 1000 / +dps;
-		this.intervalRatio = this.drawInterval / (1000 / this.fps);
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
 	}
@@ -103,8 +94,6 @@ class LinesAnimation {
 	}
 
 	update() {
-		
-		// frame update
 		if (this.isPlaying) {
 			if (this.drawCount == this.drawsPerFrame) {
 				if (this.currentFrame >= this.state.end) {
@@ -117,35 +106,13 @@ class LinesAnimation {
 			}
 			this.drawCount++;
 
-
-
-			// console.log('updt', this.currentFrame, this.currentFrameCounter, this.state.end);
-			// if (this.currentFrame <= this.state.end) {
-			// 	this.currentFrameCounter += this.intervalRatio;
-			// 	if (this.currentFrameCounter >= this.state.end + 1) {
-			// 		this.currentFrame = this.state.start;
-			// 		this.currentFrameCounter = this.state.start + (this.currentFrameCounter % 1)/2;
-			// 	} else {
-			// 		this.currentFrame = Math.floor(this.currentFrameCounter);
-			// 	}
-				
-			// 	if (this.onUpdate) this.onUpdate();
-			// }
-
-			// /* fuck me */
-			// // if (this.frame4 >= this.state.end + 1) {
-			// // 	this.frame = this.state.start;
-			// // 	/* loop ? */
-			// // 	if (this.onPlayedState) this.onPlayedState();
-			// // }
 			if (this.onUpdate) this.onUpdate();
 		}
 	}
 
 	draw(x, y, suspendLinesUpdate) {
 		// suspendLinesUpdate for text but could be useful ... for like textures!
-		// if (this.debug) console.log(x, y);
-		// console.log('draw', this.currentFrame);
+		// console.log(x, y);
 		if (!this.mixedColors) this.ctx.beginPath();
 		for (let i = 0, len = this.layers.length; i < len; i++) {
 			const layer = this.layers[i];
@@ -158,8 +125,10 @@ class LinesAnimation {
 					this.rndr[key] = layer[key];
 				}
 
+				if (this.debug) console.log(this.rndr.x);
 				if (x) this.rndr.x += x;
 				if (y) this.rndr.y += y;
+				if (this.debug) console.log(this.rndr.x);
 
 				// "tweens"
 				if (layer.t) {
@@ -180,10 +149,12 @@ class LinesAnimation {
 					}
 				}
 
-				if (layer.lc >= layer.l && drawing.needsUpdate) {
+				// how often to reset randomness
+				if (layer.lc >= layer.l && drawing.needsUpdate && 
+					!suspendLinesUpdate) {
 					drawing.update(this.rndr.n, this.rndr.r, this.rndr.w, this.rndr.v, this.rndr.ws);
 					layer.lc = 0;
-				} else if (drawing.needsUpdate) {
+				} else if (drawing.needsUpdate && !suspendLinesUpdate) {
 					layer.lc++;
 				}
 
@@ -255,7 +226,7 @@ class LinesAnimation {
 		// set first random values
 		for (let i = 0; i < this.layers.length; i++) {
 			const layer = this.layers[i];
-			if (!layer.l) layer.l = 4; // new layer counter
+			if (!layer.l) layer.l = 5; // new layer counter
 			if (!layer.lc) layer.lc = 0;
 			this.drawings[layer.d].update(layer.n, layer.r, layer.w, layer.v, layer.ws); 
 		}
@@ -266,8 +237,8 @@ class LinesAnimation {
 		if (this.states.default)
 			this.states.default.end = this.endFrame;
 
-		this.intervalRatio = this.lineInterval / (1000 / json.fps);
 		this.fps = json.fps;
+		// do drawings get there own update rate?
 
 		if (json.mc) this.mixedColors = json.mc; /* hmm .. over ride? */
 

@@ -31,6 +31,11 @@ class GameAnim extends LinesAnimation {
 		}
 	}
 
+	// dont really need animating lines to edit right?
+	// draw() {
+	// 	super.draw(); 
+	// }
+
 	createNewState(label, start, end) {
 		if (!this.states[label]) {
 			this.states[label] = {

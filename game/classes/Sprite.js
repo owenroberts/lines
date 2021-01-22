@@ -78,7 +78,7 @@ class Sprite {
 			if (this.debug) this.drawDebug();
 			if (this.animation) {
 				this.animation.update();
-				this.animation.draw(this.x, this.y);
+				this.animation.draw(this.x, this.y, GAME.debug);
 			}
 		}
 		if (this.displayFunc) this.displayFunc();

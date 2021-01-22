@@ -27,7 +27,7 @@ class EditUI {
 		this.uis.append(ediRow);
 
 		ediRow.append(new UIToggle({
-			text: "⬉",
+			text: "🐭",
 			class: "selectable",
 			isOn: this.item.isSelectable,
 			callback: () => {

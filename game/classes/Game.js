@@ -34,7 +34,7 @@ class Game {
 		this.mixedColors = params.mixedColors || false; /* param? */
 		this.debug = params.debug || false;
 
-		this.dps = params.lps; // draw per second
+		this.dps = params.dps; // draw per second
 		this.drawTime = performance.now();
 		this.drawInterval = 1000 / params.dps;
 		window.drawCount = 0; // global referenced in drawings

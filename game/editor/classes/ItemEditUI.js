@@ -9,28 +9,21 @@ class ItemEditUI extends EditUI {
 		let locRow = this.panel.addRow('location', 'location');
 		this.uis.append(locRow);
 
-		let xLabel = new UILabel({ text: "x", class: 'x-label' });
-		locRow.append(xLabel);
-		
-		let x = new UIText({
+		locRow.append(new UILabel({ text: "x", class: 'x-label' }));
+		this.uis.x = new UIText({
 			value: this.item.position.x,
 			class: 'x-input',
-			callback: function(value) {
-				this.item.position.x = +value;
-			}
+			callback: n => { this.item.position.x = +n; }
 		});
-		locRow.append(x);
+		locRow.append(this.uis.x);
 
-		let yLabel = new UILabel({ text: "y", class: 'y-label' });
-		let y = new UIText({
+		locRow.append(new UILabel({ text: "y", class: 'y-label' }));
+		this.uis.y = new UIText({
 			value: this.item.position.y,
 			class: 'y-input',
-			callback: function(value) {
-				this.item.position.y = +value;
-			}
+			callback: n => { this.item.position.y = +n; }
 		});
-		locRow.append(yLabel);
-		locRow.append(y);
+		locRow.append(this.uis.y);
 
 		let focus = new UIButton({
 			text: "📍",
@@ -45,28 +38,24 @@ class ItemEditUI extends EditUI {
 		let sceneRow = this.panel.addRow('scene', 'scene');
 		this.uis.append(sceneRow);
 		
-		// why multiple ??
-		let sceneSelector = new UISelect({
+		sceneRow.append(new UISelect({
 			options: this.item.scenes,
 			selected: this.item.scenes[0],
 			class: 'scene-selector',
 			callback: function(value) {
 				this.item.scenes[i] = value;
 			}
-		});
-		sceneRow.append(sceneSelector);
+		}));
 
-		let addScene = new UIButton({
+		sceneRow.append(new UIButton({
 			text: "+ scene",
 			class: 'add-scene',
 			callback: function() {
 				// const s = addSceneSelector(GAME.scenes[0], this.item.scenes.length);
 				// this.panel.add(s, this.row);
-				console.log(self);
+				console.warn('you didnt finish this', self);
 			}
-		});
-		sceneRow.append(addScene);
-
+		}));
 
 		super.add();
 	}

@@ -2,11 +2,12 @@ const gme = new Game({
 	canvas: "map",
 	width: 960,
 	height: 720,
-	dps: 24,
+	dps: 30,
 	mixedColors: true,
 	checkRetina: true,
 	scenes: ['game'],
-	debug: true
+	debug: true,
+	stats: false
 }); // maybe there's a way to use the garden js file here? modules & exports :O
 
 gme.load({
@@ -58,7 +59,7 @@ edi.ui.reset = function() {
 	}
 };
 
-edi.data = new Data(gme, { save: false, path: '/drawings' }); 
+edi.data = new Data(gme, { save: false, path: '/drawings', files: ['scenery', 'textures'] }); 
 
 function start() {
 
@@ -80,10 +81,10 @@ function start() {
 	for (const key in gme.data.textures.entries) {
 		const data = gme.data.textures.entries[key];
 		const t = new TextureEdit({
+			...data,
 			animation: gme.anims.textures[key],
-			locations: data.locations,
 			frame: 'index',
-			label: key
+			label: key,
 		});
 		gme.scenes.add(t, data.scenes);
 		for (let i = 0; i < data.locations.length; i++) {
@@ -164,9 +165,13 @@ function mouseMoved(x, y, button) {
 		/* does button exist if no mouse down? */
 		if (edi.zoom.mouseDown) {
 			const delta = edi.zoom.getDelta(x, y);
-			if (edi.tool.current == 'transform' && edi.tool.items.length > 0) {
+			if (edi.tool.current == 'transform' && 
+				edi.tool.items.length > 0) {
 				edi.tool.items.all(item => {
-					item.update({ x: Math.round(delta.x), y: Math.round(delta.y) });
+					item.update({ 
+						x: Math.round(delta.x),
+						y: Math.round(delta.y) 
+					});
 				});
 			} else {
 				edi.zoom.updateView(delta.x, delta.y);
