@@ -60,10 +60,10 @@ class TextureEdit extends Texture {
 	}
 
 	isInMapBounds(view, x, y, width, height) {
-		if (x + width > view.x - view.width/2 &&
-			x < view.x + view.width/2 &&
+		if (x + width > view.x - GAME.width/2 &&
+			x < view.x - GAME.width/2 + view.width &&
 			y + height > view.y - GAME.height/2 &&
-			y < view.y + view.height/2 ) {
+			y < view.y - GAME.height/2 + view.height ) {
 			return true;
 		} else {
 			return false;

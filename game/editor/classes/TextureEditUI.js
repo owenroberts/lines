@@ -3,6 +3,18 @@ class TextureEditUI extends EditUI {
 		super(item, panel);
 		this.allSelected = false;
 		this.prevSelected = undefined;
+
+		const toggle = new UIToggle({
+			text: item.label,
+			callback: function() {
+				item.locations.forEach(loc => {
+					loc.isSelected = true;
+				});
+			}
+		});
+
+		panel.add(toggle);
+
 	}
 
 	create() {
