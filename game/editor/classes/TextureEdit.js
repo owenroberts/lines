@@ -35,8 +35,10 @@ class TextureEdit extends Texture {
 					if (this.locations[i].i !== undefined) 
 						this.animation.state = `f-${this.locations[i].i}`;
 					this.animation.draw(x, y, GAME.debug);
-					this.drawLabel(x, y, i);
-					this.drawOutline(x, y);
+					if (this.locations[i].isSelected || this.locations[i].isMoused) {
+						this.drawLabel(x, y, i);
+						this.drawOutline(x, y);
+					}
 
 					// if (this.locations[i].isSelected) {}
 				}
@@ -58,10 +60,10 @@ class TextureEdit extends Texture {
 	}
 
 	isInMapBounds(view, x, y, width, height) {
-		if (x + width > view.x - GAME.width/2 &&
-			x < view.x + view.width + GAME.width/2 &&
+		if (x + width > view.x - view.width/2 &&
+			x < view.x + view.width/2 &&
 			y + height > view.y - GAME.height/2 &&
-			y < view.y + view.height + GAME.height/2 ) {
+			y < view.y + view.height/2 ) {
 			return true;
 		} else {
 			return false;
@@ -70,21 +72,49 @@ class TextureEdit extends Texture {
 
 	isMouseOver(x, y, zoom) {
 		for (let i = 0; i < this.locations.length; i++) {
-			let loc = this.locations[i];
-			if (this.isInMapBounds(zoom.view, loc.x, loc.y, this.animation.width, this.animation.height)) {
-				// console.log('in bounds', this.label, loc.i);
-				const xy = zoom.translate(loc.x, loc.y);
-				if (xy.x > loc.x &&
-					xy.x < loc.x + this.animation.width &&
-					xy.y > loc.y &&
-					xy.y < loc.y + this.animation.height) {
-
-					loc.isSelected = true;
+			if (this.isInMapBounds(zoom.view, this.locations[i].x, this.locations[i].y, this.animation.width, this.animation.height)) {
+				const xy = zoom.translate(x, y);
+				if (xy.x > this.locations[i].x &&
+					xy.x < this.locations[i].x + this.animation.width &&
+					xy.y > this.locations[i].y &&
+					xy.y < this.locations[i].y + this.animation.height) {
+				 	this.locations[i].isMoused = true;
 					return this;
+				} else {
+					if (!this.locations[i].isSelected) {
+						this.locations[i].isMoused = false;
+					}
 				}
 			}
 		}
 		return false;
+	}
+
+	select(isSelected) {
+		if (isSelected) {
+			this.locations.filter(loc => loc.isMoused).forEach(loc => {
+				loc.isSelected = true;
+				loc.isMoused = false;
+			});
+		} else {
+			this.locations.forEach(loc => {
+				loc.isSelected = false;
+				loc.isMoused = false;
+			});
+		}
+	}
+
+	get isSelected() {
+		return this.locations.filter(loc => loc.isSelected).length > 0;
+	}
+
+	update(offset) {
+		if (!this.isLocked) {
+			this.locations.filter(loc => loc.isSelected).forEach(loc => {
+				loc.x += offset.x;
+				loc.y += offset.y;
+			});
+		}
 	}
 
 	get data() {

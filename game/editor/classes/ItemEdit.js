@@ -74,8 +74,6 @@ class ItemEdit extends Entity {
 		this.displayOutline = isSelected;
 		if (isSelected) this.ui.add();
 		else if (this.ui.isAdded) this.ui.remove();
-		if (this.texture && isSelected) this.texture.ui.add();
-		else if (this.texture) this.texture.ui.remove();
 	}
 
 	update(offset) {
