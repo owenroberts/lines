@@ -12,11 +12,11 @@ class ItemEdit extends Entity {
 		this.isLocked = false; // move xy
 		this.isSelectable = true; // click on it
 		this.isSelected = false; 
-		this.remove = false; // idk
+		this.isRemoved = false; // idk
 	}
 
 	display(view) {
-		if (!this.remove) {
+		if (!this.isRemoved) {
 			super.display(this.isInMapBounds(view));
 			if (this.displayLabel) this.drawLabel();
 			if (this.displayOutline) this.drawOutline();
@@ -24,10 +24,10 @@ class ItemEdit extends Entity {
 	}
 
 	isInMapBounds(view) {
-		if (this.position.x + this.width > view.x - GAME.width/2 &&
-			this.position.x < view.x + view.width + GAME.width/2 &&
-			this.position.y + this.height > view.y - GAME.height/2 &&
-			this.position.y < view.y + view.height + GAME.height/2 ) {
+		if (this.xy.x + this.width > view.x - view.width/2 &&
+			this.xy.x < view.x + view.width/2 &&
+			this.xy.y + this.height > view.y - view.height/2 &&
+			this.xy.y < view.y + view.height/2) {
 			return true;
 		} else {
 			return false;
@@ -49,7 +49,7 @@ class ItemEdit extends Entity {
 
 	isMouseOver(x, y, zoom) {
 		if (this.isInMapBounds(zoom.view) && this.isSelectable) {
-			const xy = zoom.translate(x, y);
+			const xy = zoom.translate(x, y); // translate mouse coordinates
 			if (xy.x > this.xy.x &&
 				xy.x < this.xy.x + this.width &&
 				xy.y > this.xy.y &&
@@ -58,7 +58,7 @@ class ItemEdit extends Entity {
 				this.displayOutline = true;
 				return this;
 			} else {
-				if (!this.selected) {
+				if (!this.isSelected) {
 					this.displayLabel = false;
 					this.displayOutline = false;
 					return false;

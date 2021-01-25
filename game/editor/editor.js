@@ -68,30 +68,39 @@ function start() {
 		textures: {}
 	}; // easier for editor 
 
-	// maybe a way to make these regular ...
-	for (const key in gme.data.scenery.entries) {
-		const data = gme.data.scenery.entries[key];
-		const s = new ItemEdit({ ...data, label: key });
-		s.addAnimation(gme.anims.scenery[key]);
-		gme.scenes.add(s, data.scenes);
-		gme.updateBounds(s.position);
-		gme.sprites.scenery[key] = s;
-	}
+	let key = 'tomb_x';
+	// let key = 'cat_tree_2';
+	const data = gme.data.scenery.entries[key];
+	const s = new ItemEdit({ ...data, label: key });
+	s.addAnimation(gme.anims.scenery[key]);
+	gme.scenes.add(s, data.scenes);
+	gme.updateBounds(s.position);
+	gme.sprites.scenery[key] = s;
 
-	for (const key in gme.data.textures.entries) {
-		const data = gme.data.textures.entries[key];
-		const t = new TextureEdit({
-			...data,
-			animation: gme.anims.textures[key],
-			frame: 'index',
-			label: key,
-		});
-		gme.scenes.add(t, data.scenes);
-		for (let i = 0; i < data.locations.length; i++) {
-			gme.updateBounds(data.locations[i]);
-		}
-		gme.sprites.textures[key] = t;
-	}
+	// maybe a way to make these regular ...
+	// for (const key in gme.data.scenery.entries) {
+	// 	const data = gme.data.scenery.entries[key];
+	// 	const s = new ItemEdit({ ...data, label: key });
+	// 	s.addAnimation(gme.anims.scenery[key]);
+	// 	gme.scenes.add(s, data.scenes);
+	// 	gme.updateBounds(s.position);
+	// 	gme.sprites.scenery[key] = s;
+	// }
+
+	// for (const key in gme.data.textures.entries) {
+	// 	const data = gme.data.textures.entries[key];
+	// 	const t = new TextureEdit({
+	// 		...data,
+	// 		animation: gme.anims.textures[key],
+	// 		frame: 'index',
+	// 		label: key,
+	// 	});
+	// 	gme.scenes.add(t, data.scenes);
+	// 	for (let i = 0; i < data.locations.length; i++) {
+	// 		gme.updateBounds(data.locations[i]);
+	// 	}
+	// 	gme.sprites.textures[key] = t;
+	// }
 
 	edi.ui.textures.display();
 
@@ -124,7 +133,7 @@ function start() {
 			for (const type in json) {
 				for (const sprite in json[type]) {
 					if (json[type][sprite]["lock"]) {
-						gme.sprites[type][sprite].isLocked = true;
+						// gme.sprites[type][sprite].isLocked = true;
 					}
 				}
 			}
@@ -141,7 +150,7 @@ function draw() {
 	edi.zoom.set(gme.ctx, { x: gme.width/2, y: gme.height/2 });
 
 	// const view = edi.zoom.view;
-	// GAME.ctx.fillRect(view.x - GAME.width/2, view.y - GAME.height/2,view.width + GAME.width, view.height + GAME.height);
+	// GAME.ctx.fillRect(view.x - GAME.width/2, view.y - GAME.height/2, view.width, view.height);
 
 	/* not sure where to put this .... */
 	gme.ctx.font = '16px monaco';
@@ -190,6 +199,7 @@ function mouseDown(x, y, button, shift) {
 			edi.tool.callback(xy.x, xy.y);
 		} else {
 			const item = intersectItems(x, y);
+			if (item) console.log(item);
 			
 			if (edi.tool.items.length > 0) {
 				if (item && shift) { // select multiple items
@@ -228,13 +238,6 @@ function intersectItems(x, y, move) {
 		const s = gme.scenes.current.displaySprites.sprite(i);
 		if (s.isMouseOver(x, y, edi.zoom)) return s;
 	}
-	
-	// for (const key in gme.ui) {
-	// 	if (gme.ui[key].scenes.includes(gme.scene)) {
-	// 		const intersect = gme.ui[key].mouseOver(x, y);
-	// 		if (intersect) return intersect;
-	// 	}
-	// }
 
 	return false;
 }

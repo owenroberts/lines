@@ -16,7 +16,7 @@ function Data(app, params) {
 		settings[file] = {};
 		for (const key in app.sprites[file]) {
 			const s = app.sprites[file][key];
-			if (!s.remove) data[key] = s.data;
+			if (!s.isRemoved) data[key] = s.data;
 			if (s.settings) settings[file][key] = s.settings;
 		}
 		const f = download(data, `${file}.json`);

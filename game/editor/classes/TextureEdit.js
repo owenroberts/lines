@@ -9,6 +9,9 @@ class TextureEdit extends Texture {
 			this.locations = [{x: params.x, y: params.y}];
 		}
 		this.isLocked = false;
+		this.isSelectable = true;
+		this.isRemoved = false;
+
 		this.ui = new TextureEditUI(this, edi.ui.panels.textures);
 	}
 
@@ -19,10 +22,10 @@ class TextureEdit extends Texture {
 	}
 
 	display(view) {
-		if (!this.remove) {
+		if (!this.isRemoved) {
 			for (let i = 0; i < this.locations.length; i++) {
-				let x = this.locations[i].x + this.offset.x;
-				let y = this.locations[i].y + this.offset.y;
+				let x = this.locations[i].x;
+				let y = this.locations[i].y;
 				if (this.isInMapBounds(view, x, y, this.animation.width, this.animation.height)) {
 					if (this.center) {
 						x -= this.animation.width / 2;
@@ -32,9 +35,26 @@ class TextureEdit extends Texture {
 					if (this.locations[i].i !== undefined) 
 						this.animation.state = `f-${this.locations[i].i}`;
 					this.animation.draw(x, y, GAME.debug);
+					this.drawLabel(x, y, i);
+					this.drawOutline(x, y);
+
+					// if (this.locations[i].isSelected) {}
 				}
 			}
 		}
+	}
+
+	drawLabel(x, y, i) {
+		GAME.ctx.fillText(`${this.label} ${i}`, x, y);
+	}
+
+	drawOutline(x, y) {
+		GAME.ctx.strokeStyle = '#000000';
+		GAME.ctx.strokeRect(x, y, this.animation.width, this.animation.height);
+		GAME.ctx.strokeStyle = this.ui.color; /* ? */
+		GAME.ctx.beginPath();
+		GAME.ctx.arc(x, y, 5, 0, 2 * Math.PI, false);
+		GAME.ctx.stroke();
 	}
 
 	isInMapBounds(view, x, y, width, height) {
@@ -49,13 +69,22 @@ class TextureEdit extends Texture {
 	}
 
 	isMouseOver(x, y, zoom) {
-		// let item = false;
-		// for (let i = 0; i < this.locations.length; i++) {
+		for (let i = 0; i < this.locations.length; i++) {
+			let loc = this.locations[i];
+			if (this.isInMapBounds(zoom.view, loc.x, loc.y, this.animation.width, this.animation.height)) {
+				// console.log('in bounds', this.label, loc.i);
+				const xy = zoom.translate(loc.x, loc.y);
+				if (xy.x > loc.x &&
+					xy.x < loc.x + this.animation.width &&
+					xy.y > loc.y &&
+					xy.y < loc.y + this.animation.height) {
 
-		// 	item = this.items[i].mouseOver(x, y, zoom);
-		// 	if (item) return item;
-		// }
-		// return item;
+					loc.isSelected = true;
+					return this;
+				}
+			}
+		}
+		return false;
 	}
 
 	get data() {

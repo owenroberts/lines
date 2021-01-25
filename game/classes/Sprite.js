@@ -74,7 +74,11 @@ class Sprite {
 	}
 
 	display(editorOnScreen) {
-		if (this.isActive && (this.isOnScreen() || editorOnScreen)) {
+		let isDraw = false;
+		if (editorOnScreen !== undefined) isDraw = editorOnScreen
+		else isDraw = this.isActive && this.isOnScreen();
+	
+		if (isDraw) {
 			if (this.debug) this.drawDebug();
 			if (this.animation) {
 				this.animation.update();

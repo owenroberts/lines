@@ -59,7 +59,7 @@ class EditUI {
 			text: "Remove",
 			class: 'remove',
 			callback: function() {
-				self.item.remove = true;
+				self.item.isRemoved = true;
 				self.remove();
 			}
 		});
