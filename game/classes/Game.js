@@ -33,6 +33,7 @@ class Game {
 		
 		this.mixedColors = params.mixedColors || false; /* param? */
 		this.debug = params.debug || false;
+		this.suspend = params.suspend || false; // whether to update lines
 
 		this.dps = params.dps; // draw per second
 		this.drawTime = performance.now();

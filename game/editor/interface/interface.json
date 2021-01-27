@@ -207,6 +207,27 @@
 		"label": "Items",
 		"uis": [
 			{
+				"module": "search",
+				"list": [
+					{
+						"type": "UIText",
+						"fromModule": {
+							"callback": "sprites"
+						},
+						"params": {
+							"placeholder": "Search sprites",
+							"class": "search",
+							"updateByKey": true
+						}
+
+					},
+					{
+						"type": "UIRow",
+						"k": "itemSearchResults"
+					}
+				]
+			},
+			{
 				"module": "ui",
 				"sub": "items",
 				"list": []

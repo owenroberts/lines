@@ -16,8 +16,10 @@ function Data(app, params) {
 		settings[file] = {};
 		for (const key in app.sprites[file]) {
 			const s = app.sprites[file][key];
-			if (!s.isRemoved) data[key] = s.data;
-			if (s.settings) settings[file][key] = s.settings;
+			if (!s.isRemoved) {
+				data[key] = s.data;
+				settings[file][key] = s.settings;
+			}
 		}
 		const f = download(data, `${file}.json`);
 		f.onwriteend = () => {
@@ -41,16 +43,27 @@ function Data(app, params) {
 
 		let mod = 'sprites', type = 'scenery';
 		let location; 
-
-		const modal = new Modal("Add Sprite", function() {
+		const modal = new UIModal("Add Sprite", edi, { x: x, y: y }, function() {
 			if (mod == 'ui') location = app[mod];
 			else location = app[mod][type];
-			
-			location[fileName] = new app.classes[type]({ 
-				label: fileName,
-				src: `${params.path}/sprites/${fileName}.json`,
-				scenes: [app.scene],
-				...edi.zoom.translate(x, y) 
+		
+			console.log(location, mod, type);
+			let C = ItemEdit;
+			if (type == 'texture') C = TextureEdit;
+			if (type == 'ui') C = UIEdit;
+
+			// prob way to extend Game.js to do this
+			let animation = new LinesAnimation(app.ctx, app.dps);
+			animation.load(`${params.path}/sprites/${fileName}.json`, function() {
+				const s = new C({
+					animation: animation,
+					label: fileName,
+					src: `${params.path}/sprites/${fileName}.json`,
+					scenes: [app.scene],
+					...edi.zoom.translate(x, y) 
+				});
+				location[fileName] = s;
+				gme.scenes.add(s, app.scene)
 			});
 		});
 
@@ -63,7 +76,7 @@ function Data(app, params) {
 		}));
 
 		modal.add(new UISelect({
-			options: ['scenery', 'textures'],
+			options: Object.keys(gme.sprites),
 			selected: type,
 			callback: function(value) {
 				type = value;

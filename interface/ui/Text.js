@@ -9,6 +9,12 @@ class UIText extends UIInput {
 			this.el.select();
 		});
 
+		if (params.updateByKey) {
+			this.el.addEventListener('keyup', ev => {
+				this.callback(ev.target.value);
+			});
+		}
+
 		/* have to hit enter to confirm value */
 		this.el.addEventListener('keyup', ev => {
 			if (ev.which == 13) this.update(ev.target.value);

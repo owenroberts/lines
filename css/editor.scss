@@ -34,6 +34,13 @@ canvas#map.location-tool {
 	cursor: cell;
 }
 
+.panel {
+	input.search {
+		flex: 100%;
+		text-align: left;
+	}
+}
+
 /* item layout */
 .item-collection {
 	// border-bottom: 1px solid $main-color;
@@ -49,10 +56,12 @@ canvas#map.location-tool {
 		padding: 3px;
 	}
 
+	
+
 	.label { order: 0; }
 	.edit { order: 1; }
 	.scene { order: 2; }
 	.location { order: 3; }
-
+	.texture { order: 3; }
 
 }

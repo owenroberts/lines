@@ -6,21 +6,23 @@ class TextureEditUI extends EditUI {
 
 		const toggle = new UIToggle({
 			text: item.label,
-			callback: function() {
+			callback: () => {
 				item.locations.forEach(loc => {
-					loc.isSelected = true;
+					loc.isSelected = toggle.isOn;
 				});
+				item.select(toggle.isOn);
 			}
 		});
-
 		panel.add(toggle);
-
 	}
 
-	create() {
+	add() {
 		const self = this;
 
-		this.uis.add = new UIButton({
+		let textureRow = this.panel.addRow('texture', 'texture');
+		this.uis.append(textureRow);
+
+		textureRow.append(new UIButton({
 			text: "Add",
 			class: "add",
 			callback: function() {
@@ -31,14 +33,15 @@ class TextureEditUI extends EditUI {
 					edi.tool.set('zoom');
 				}
 			}
-		});
+		}));
 
-		this.uis.selectAll = new UIToggle({
+		textureRow.append(new UIToggle({
 			text: "All",
 			class: "all",
 			callback: function() {
 				edi.tool.clear();
 				self.allSelected = !self.allSelected;
+				console.log(self);
 				for (let i = 0; i < self.item.items.length; i++) {
 					if (self.item.items[i].selected) self.prevSelected = i;
 					self.item.items[i].selected = self.allSelected;
@@ -46,9 +49,9 @@ class TextureEditUI extends EditUI {
 				if (!self.allSelected && self.prevSelected)
 					self.items[self.prevSelected].selected = true;
 			}
-		});
+		}));
 
-		this.uis.frame = new UISelect({
+		textureRow.append(new UISelect({
 			options: [ 'index', 'random' ],
 			selected: this.item.frame,
 			class: "frame-type",
@@ -67,8 +70,8 @@ class TextureEditUI extends EditUI {
 					}
 				}
 			}
-		});
+		}));
 
-		super.create();
+		super.add();
 	}
 }

@@ -125,10 +125,8 @@ class LinesAnimation {
 					this.rndr[key] = layer[key];
 				}
 
-				if (this.debug) console.log(this.rndr.x);
 				if (x) this.rndr.x += x;
 				if (y) this.rndr.y += y;
-				if (this.debug) console.log(this.rndr.x);
 
 				// "tweens"
 				if (layer.t) {

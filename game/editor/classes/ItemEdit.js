@@ -94,6 +94,13 @@ class ItemEdit extends Entity {
 		};
 	}
 
+	get settings() {
+		return { 
+			isLocked: this.isLocked,
+			isSelectable: this.isSelectable
+		};
+	}
+
 	lock(lockState) {
 		if (lockState !== undefined) this.isLocked = lockState;
 		else this.isLocked = !this.isLocked;

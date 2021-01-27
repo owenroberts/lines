@@ -7,7 +7,8 @@ const gme = new Game({
 	checkRetina: true,
 	scenes: ['game'],
 	debug: true,
-	stats: false
+	stats: false,
+	suspend: true
 }); // maybe there's a way to use the garden js file here? modules & exports :O
 
 gme.load({
@@ -19,6 +20,7 @@ const edi = {}; /* editor app */
 edi.ui = new Interface(edi);
 edi.ui.load('interface/interface.json');
 edi.ui.settings = new Settings(edi, 'edi');
+edi.ui.game = new GameSettings(edi); // scene, wiggle
 edi.ui.textures = new Textures();
 edi.ui.items = new Items();
 edi.ui.markers = {};
@@ -29,7 +31,7 @@ edi.tool = {
 	set: function(_toolName) {
 		const toolName = _toolName.toolName || _toolName;
 		edi.tool.current = toolName;
-		edi.ui.selectTool.value = toolName;
+		// edi.ui.selectTool.value = toolName;
 		gme.canvas.className = '';
 		gme.canvas.classList.add(`${toolName}-tool`);
 	},
@@ -43,12 +45,22 @@ edi.tool = {
 }; /* tools: zoom/pan, transform, ruler - modulize if it gets complicated */
 /* move this somewhere else eventually ... */
 
-edi.ui.selectTool = new UISelect({
-	id: "select-tool",
-	options: [ "zoom", "transform", "ruler", "location" ],
-	selected: edi.tool.current,
-	callback: edi.tool.set
-});
+edi.search = {
+	sprites: function(query) {
+		edi.ui.panels.items.itemSearchResults.clear();
+		gme.scenes.current.displaySprites.sprites.filter(s => {
+			return query.length && s.label.includes(query);
+		}).forEach(item => {
+			let toggle = new UIToggle({
+				text: item.label,
+				callback: () => {
+					item.select(toggle.isOn);
+				}
+			});
+			edi.ui.panels.items.itemSearchResults.append(toggle);
+		});
+	}
+};
 
 edi.ui.reset = function() {
 	for (const key in GAME.sprites) {
@@ -105,24 +117,18 @@ function start() {
 	}, false);
 
 
-	edi.ui.selectScene = new UISelect({
-		id: "select-scene",
-		label: "scene:",
-		options: gme.scenes.length ? gme.scenes : [ 'game' ],
-		selected: gme.scene,
-		callback: function(value) {
-			gme.scene = value;
-			edi.ui.reset();
-		}
-	});
+
+	edi.ui.faces.scenes.setOptions(gme.scenes);
 
 	fetch('/data/settings.json')
 		.then(response => { return response.json(); })
 		.then(json => {
 			for (const type in json) {
 				for (const sprite in json[type]) {
-					if (json[type][sprite]["lock"]) {
-						// gme.sprites[type][sprite].isLocked = true;
+					for (const prop in json[type][sprite]) {
+						gme.sprites[type][sprite][prop] = json[type][sprite][prop];
+						gme.sprites[type][sprite].select(false);
+						// unselect stop gap
 					}
 				}
 			}
@@ -138,7 +144,7 @@ function draw() {
 	edi.zoom.clear(gme.ctx);
 	// edi.zoom.set(gme.ctx, { x: gme.width/2, y: gme.height/2 });
 	edi.zoom.set(gme.ctx, { x: gme.width/2, y: gme.height/2 });
-	
+
 	// const view = edi.zoom.view;
 	// GAME.ctx.fillRect(view.x - GAME.width/2, view.y - GAME.height/2,view.width + GAME.width, view.height + GAME.height);
 

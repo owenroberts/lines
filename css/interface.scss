@@ -108,6 +108,7 @@ select {
 	margin-top: 0.25em;
 	display: flex;
 	flex-wrap: wrap;
+	gap: 0.5em;
 }
 
 #quickRef-panel {
@@ -125,8 +126,6 @@ select {
 
 	background-color: $bg-color;
 	border-radius: 3px;
-	margin: 2px 4px 2px 0;
-	// margin-left: 0;
 
 	padding: 0.25rem;
 	overflow: hidden;

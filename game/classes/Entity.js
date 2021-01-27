@@ -13,6 +13,7 @@ class Entity extends Sprite {
 		this.debug = debug;
 		this.origin = new Cool.Vector(params.x, params.y);
 		// this.origin = { x: params.x, y: params.y };
+		if (params.animation) this.addAnimation(params.animation);
 
 		this.center = params.center || true;
 	}

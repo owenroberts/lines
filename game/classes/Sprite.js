@@ -82,7 +82,7 @@ class Sprite {
 			if (this.debug) this.drawDebug();
 			if (this.animation) {
 				this.animation.update();
-				this.animation.draw(this.x, this.y, GAME.debug);
+				this.animation.draw(this.x, this.y, GAME.suspend);
 			}
 		}
 		if (this.displayFunc) this.displayFunc();

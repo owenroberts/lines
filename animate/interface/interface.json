@@ -636,7 +636,7 @@
 				"list": [
 					{
 						"type": "UIBlur",
-						"label": "LPS"
+						"label": "LPS",
 						"key": "'",
 						"face": "lps",
 						"fromModule": {

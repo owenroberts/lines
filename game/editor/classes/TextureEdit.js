@@ -17,8 +17,6 @@ class TextureEdit extends Texture {
 
 	addLocation(x, y) {
 		super.addLocation(x, y, this.locations.length);
-		this.ui.remove();
-		this.ui.create();
 	}
 
 	display(view) {
@@ -34,7 +32,7 @@ class TextureEdit extends Texture {
 
 					if (this.locations[i].i !== undefined) 
 						this.animation.state = `f-${this.locations[i].i}`;
-					this.animation.draw(x, y, GAME.debug);
+					this.animation.draw(x, y, GAME.suspend);
 					if (this.locations[i].isSelected || this.locations[i].isMoused) {
 						this.drawLabel(x, y, i);
 						this.drawOutline(x, y);
@@ -71,23 +69,25 @@ class TextureEdit extends Texture {
 	}
 
 	isMouseOver(x, y, zoom) {
-		for (let i = 0; i < this.locations.length; i++) {
-			if (this.isInMapBounds(zoom.view, this.locations[i].x, this.locations[i].y, this.animation.width, this.animation.height)) {
-				const xy = zoom.translate(x, y);
-				if (xy.x > this.locations[i].x &&
-					xy.x < this.locations[i].x + this.animation.width &&
-					xy.y > this.locations[i].y &&
-					xy.y < this.locations[i].y + this.animation.height) {
-				 	this.locations[i].isMoused = true;
-					return this;
-				} else {
-					if (!this.locations[i].isSelected) {
-						this.locations[i].isMoused = false;
+		if (this.isSelectable) {
+			for (let i = 0; i < this.locations.length; i++) {
+				if (this.isInMapBounds(zoom.view, this.locations[i].x, this.locations[i].y, this.animation.width, this.animation.height)) {
+					const xy = zoom.translate(x, y);
+					if (xy.x > this.locations[i].x &&
+						xy.x < this.locations[i].x + this.animation.width &&
+						xy.y > this.locations[i].y &&
+						xy.y < this.locations[i].y + this.animation.height) {
+					 	this.locations[i].isMoused = true;
+						return this;
+					} else {
+						if (!this.locations[i].isSelected) {
+							this.locations[i].isMoused = false;
+						}
 					}
 				}
 			}
+			return false;
 		}
-		return false;
 	}
 
 	select(isSelected) {
@@ -96,11 +96,14 @@ class TextureEdit extends Texture {
 				loc.isSelected = true;
 				loc.isMoused = false;
 			});
+			this.ui.remove();
+			this.ui.add();
 		} else {
 			this.locations.forEach(loc => {
 				loc.isSelected = false;
 				loc.isMoused = false;
 			});
+			this.ui.remove();
 		}
 	}
 
@@ -127,14 +130,13 @@ class TextureEdit extends Texture {
 	}
 
 	get settings() {
-		if (this.isLocked) return { lock: this.isLocked };
-		else return false;
+		return { 
+			isLocked: this.isLocked,
+			isSelectable: this.isSelectable
+		};
 	}
 
 	lock() {
 		this.isLocked = !this.isLocked;
-		for (let i = 0; i < this.items.length; i++) {
-			this.items[i].lock(this.isLocked);
-		}
 	}
 }

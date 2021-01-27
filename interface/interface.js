@@ -14,7 +14,8 @@ function Interface(app) {
 		UISelectButton,
 		UICollection,
 		UIList,
-		UIRow
+		UIRow,
+		UIInput
 	};
 
 	// turn off ipad request desktop
