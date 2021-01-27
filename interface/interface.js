@@ -198,6 +198,8 @@ function Interface(app) {
 		const params = { ...data.params };
 		if (data.key) params.key = data.key;
 
+		// console.log(data);
+
 		// most callbacks
 		for (const k in data.fromModule) {
 			params[k] = m[data.fromModule[k]];
@@ -223,7 +225,7 @@ function Interface(app) {
 			labels get created before ui, 
 			doesn't work for uis created in js
 		*/
-		if (params.label) panel.add(new UILabel({ text: params.label}));
+		if (data.label) panel.add(new UILabel({ text: data.label}));
 		
 		let ui = new uiTypes[data.type](params);
 		if (data.k) panel.append(ui, data.k);

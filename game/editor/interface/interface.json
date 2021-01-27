@@ -82,6 +82,58 @@
 			}
 		]
 	},
+	"game": {
+		"label": "Game",
+		"uis": [
+			{
+				"module": "tool",
+				"list": [
+					{
+						"type": "UISelect",
+						"label": "tool:",
+						"fromModule": {
+							"callback": "set"
+						},
+						"params": {
+							"selected": "zoom",
+							"id": "select-tool",
+							"options": ["zoom", "transform", "ruler", "location"]
+						}
+					}
+				]
+			},
+			{
+				"module": "ui",
+				"sub": "game",
+				"list": [
+
+					{
+						"type": "UISelect",
+						"face": "scenes",
+						"label": "scene:",
+						"fromModule": {
+							"callback": "set"
+						},
+						"params": {
+							"selected": "game",
+							"id": "select-scene",
+							"options": ["game"]
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "shift-l",
+						"fromModule": {
+							"callback": "toggleSuspend"
+						},
+						"params": {
+							"text": "Toggle Lines"
+						}
+					}
+				]
+			}
+		]
+	},
 	"settings": {
 		"label": "Settings",
 		"uis": [
