@@ -74,11 +74,11 @@
 					{
 						"type": "UITextRange",
 						"face": "interfaceScale",
+						"label": "Interface Scale",
 						"fromModule": {
 							"callback": "updateScale"
 						},
 						"params": {
-							"label": "Interface Scale",
 							"value": 11,
 							"min": 10,
 							"max": 40
@@ -107,6 +107,7 @@
 				"list": [
 					{
 						"type": "UITextRange",
+						"label": "Mouse time",
 						"face": "mouseInterval",
 						"key": "m",
 						"number": "mouseInterval",
@@ -114,7 +115,6 @@
 							"min": 0,
 							"max": 100,
 							"value": 30,
-							"label": "Mouse time",
 							"prompt": "Set mouse interval"
 						}
 					}
@@ -130,12 +130,12 @@
 				"list": [
 					{
 						"type": "UIText",
+						"label": "Add URL, Enter",
 						"fromModule": {
 							"callback": "loadImage"
 						},
 						"params": {
-							"placeholder": "URL",
-							"label": "Add URL, Enter"
+							"placeholder": "URL"
 						}
 					},
 					{
@@ -151,8 +151,8 @@
 						"row": true,
 						"type": "UIRange",
 						"number":  "x",
+						"label": "X",
 						"params": {
-							"label": "X",
 							"min": -1024,
 							"max": 1024,
 							"value": 0,
@@ -162,8 +162,8 @@
 					{
 						"type": "UIRange",
 						"number": "y",
+						"label": "Y",
 						"params": {
-							"label": "Y",
 							"min": -1024,
 							"max": 1024,
 							"value": 0,
@@ -173,8 +173,8 @@
 					{
 						"type": "UIRange",
 						"number": "size",
+						"label": "Size",
 						"params": {
-							"label": "Size",
 							"input": "size-range",
 							"min": 0.1,
 							"max": 2,
@@ -206,35 +206,31 @@
 						"row": true,
 						"type": "UIBlur",
 						"face": "width",
+						"label": "Width",
 						"fromModule": {
 							"placeholder": "width",
 							"callback": "setWidth"
-						},
-						"params": {
-							"label": "Width"
 						}
 					},
 					{
 						"row": true,
 						"type": "UIBlur",
 						"face": "height",
+						"label": "Height",
 						"fromModule": {
 							"placeholder": "height",
 							"callback": "setHeight"
-						},
-						"params": {
-							"label": "Height"
 						}
 					},
 					{
 						"row": true,
 						"type": "UITextRange",
 						"face": "lineWidth",
+						"label": "Line Width",
 						"fromModule": {
 							"callback": "setLineWidth"
 						},
 						"params": {
-							"label": "Line Width",
 							"value": 1,
 							"min": 0.25,
 							"max": 4,
@@ -245,12 +241,12 @@
 						"row": true,
 						"type": "UITextRange",
 						"face": "canvasScale",
+						"label": "Scale",
 						"fromModule": {
 							"callback": "setScale"
 						},
 						"params": {
 							"event": "change",
-							"label": "Scale",
 							"value": 1,
 							"min": 0.1,
 							"max": 4,
@@ -624,12 +620,12 @@
 				"list": [
 					{
 						"type": "UIBlur",
+						"label": "FPS",
 						"key": ";",
 						"face": "fps",
 						"number": "fps",
 						"params": {
 							"prompt": "Set FPS",
-							"label": "FPS",
 							"value": 10
 						}
 					}
@@ -640,18 +636,19 @@
 				"list": [
 					{
 						"type": "UIBlur",
+						"label": "LPS"
 						"key": "'",
 						"face": "lps",
 						"fromModule": {
 							"callback": "setLps"
 						},
 						"params": {
-							"prompt": "Set Lines/Second",
-							"label": "LPS"
+							"prompt": "Set Lines/Second"
 						}
 					},
 					{
 						"type": "UIText",
+						"label": "Onion",
 						"key": "l",
 						"face": "onionSkinNum",
 						"fromModule": {
@@ -659,7 +656,6 @@
 						},
 						"params": {
 							"value": 0,
-							"label": "Onion",
 							"prompt": "Onion skin"
 						}
 					},
@@ -754,10 +750,10 @@
 				"list": [
 					{
 						"type": "UITextRange",
+						"label": "Brush",
 						"face": "brush",
 						"number": "brush",
 						"params": {
-							"label": "Brush",
 							"min": 0, 
 							"max": 10,
 							"value": 0
@@ -765,10 +761,10 @@
 					},
 					{
 						"type": "UITextRange",
+						"label": "Brush Spread",
 						"face": "brushSpread",
 						"number":  "brushSpread",
 						"params": {
-							"label": "Brush Spread",
 							"min": 0, 
 							"max": 5,
 							"value": 0
@@ -776,10 +772,10 @@
 					},
 					{
 						"type": "UITextRange",
+						"label": "Grass",
 						"face": "grass",
 						"number":  "grass",
 						"params": {
-							"label": "Grass",
 							"min": 0, 
 							"max": 20,
 							"value": 0
@@ -787,10 +783,10 @@
 					},
 					{
 						"type": "UITextRange",
+						"label": "Dots",
 						"face": "dots",
 						"number": "dots",
 						"params": {
-							"label": "Dots",
 							"min": 10, 
 							"max": 50,
 							"value": 10
@@ -808,12 +804,12 @@
 				"list": [
 					{
 						"type": "UITextRange",
+						"label": "Lines Update",
 						"face": "l",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
-							"label": "Lines Update",
 							"min": 1,
 							"max": 10,
 							"arguments": ["l"]
@@ -821,12 +817,12 @@
 					},
 					{
 						"type": "UITextRange",
+						"label": "Segments",
 						"face": "n",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
-							"label": "Segments",
 							"min": 1,
 							"max": 10,
 							"arguments": ["n"]
@@ -834,12 +830,12 @@
 					},
 					{
 						"type": "UITextRange",
+						"label": "Jiggle",
 						"face": "r",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
-							"label": "Jiggle",
 							"min": 0,
 							"max": 10,
 							"arguments": ["r"]
@@ -847,12 +843,12 @@
 					},
 					{
 						"type": "UITextRange",
+						"label": "Wiggle",
 						"face": "w",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
-							"label": "Wiggle",
 							"min": 0,
 							"max": 15,
 							"arguments": ["w"]
@@ -860,12 +856,12 @@
 					},
 					{
 						"type": "UITextRange",
+						"label": "Wiggle Speed",
 						"face": "v",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
-							"label": "Wiggle Speed",
 							"min": 0,
 							"max": 5,
 							"step": 0.005,
