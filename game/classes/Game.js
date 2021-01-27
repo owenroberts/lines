@@ -186,6 +186,12 @@ class Game {
 		requestAnimFrame(() => { this.update(); });  // this context
 
 		const time = performance.now();
+		
+		// interesting approach to fixing performance but looks mad choppy
+		// would be better to suspend a bit, like only every other or something
+		if (!this.suspend && time - this.updateTime > this.updateInterval) this.suspend = true;
+		else if (this.suspend) this.suspend = false;
+		
 		if (time > this.updateTime + this.updateInterval) {
 			if (!this.noUpdate) update(); // update defined in each game js file
 			this.updateTime = time - ((time - this.updateTime) % this.updateInterval); // adjust for fps interval being off

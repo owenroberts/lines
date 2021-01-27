@@ -39,10 +39,10 @@ canvas#map.location-tool {
 		flex: 100%;
 		text-align: left;
 	}
-}
+//}
 
 /* item layout */
-.item-collection {
+//.item-collection {
 	// border-bottom: 1px solid $main-color;
 	padding: 3px;
 	justify-content: space-between;
@@ -55,8 +55,6 @@ canvas#map.location-tool {
 		text-align: left;
 		padding: 3px;
 	}
-
-	
 
 	.label { order: 0; }
 	.edit { order: 1; }

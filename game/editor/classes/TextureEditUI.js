@@ -3,32 +3,20 @@ class TextureEditUI extends EditUI {
 		super(item, panel);
 		this.allSelected = false;
 		this.prevSelected = undefined;
-
-		const toggle = new UIToggle({
-			text: item.label,
-			callback: () => {
-				item.locations.forEach(loc => {
-					loc.isSelected = toggle.isOn;
-				});
-				item.select(toggle.isOn);
-			}
-		});
-		panel.add(toggle);
 	}
 
 	add() {
-		const self = this;
 
 		let textureRow = this.panel.addRow('texture', 'texture');
-		this.uis.append(textureRow);
+		this.rows.push(textureRow);
 
 		textureRow.append(new UIButton({
 			text: "Add",
 			class: "add",
-			callback: function() {
+			callback: () => {
 				edi.tool.set('location');
 				edi.tool.callback = function(x, y) {
-					self.item.addLocation(x, y);
+					this.item.addLocation(x, y);
 					delete edi.tool.callback;
 					edi.tool.set('zoom');
 				}
@@ -38,16 +26,15 @@ class TextureEditUI extends EditUI {
 		textureRow.append(new UIToggle({
 			text: "All",
 			class: "all",
-			callback: function() {
+			callback: () => {
 				edi.tool.clear();
-				self.allSelected = !self.allSelected;
-				console.log(self);
-				for (let i = 0; i < self.item.items.length; i++) {
-					if (self.item.items[i].selected) self.prevSelected = i;
-					self.item.items[i].selected = self.allSelected;
+				this.allSelected = !this.allSelected;
+				for (let i = 0; i < this.item.locations.length; i++) {
+					if (this.item.locations[i].isSelected) this.prevSelected = i;
+					this.item.locations[i].isSelected = this.allSelected;
 				}
-				if (!self.allSelected && self.prevSelected)
-					self.items[self.prevSelected].selected = true;
+				if (!this.allSelected && this.prevSelected)
+					this.items[this.prevSelected].isSelected = true;
 			}
 		}));
 
@@ -55,10 +42,10 @@ class TextureEditUI extends EditUI {
 			options: [ 'index', 'random' ],
 			selected: this.item.frame,
 			class: "frame-type",
-			callback: function(value) {
-				self.item.frame = value;
-				for (let i = 0; i < self.item.items.length; i++) {
-					const item = self.item.items[i];
+			callback: value => {
+				this.item.frame = value;
+				for (let i = 0; i < this.item.items.length; i++) {
+					const item = this.item.items[i];
 					if (item.animation.randomFrames != value) {
 						if (value == 'random') {
 							item.animation.randomFrames = true;

@@ -74,7 +74,7 @@ class ItemEdit extends Entity {
 		this.isSelected = isSelected;
 		this.displayLabel = isSelected;
 		this.displayOutline = isSelected;
-		if (isSelected) this.ui.add();
+		if (isSelected && !this.ui.added) this.ui.add();
 		else if (this.ui.isAdded) this.ui.remove();
 	}
 

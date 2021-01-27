@@ -12,7 +12,7 @@ class TextureEdit extends Texture {
 		this.isSelectable = true;
 		this.isRemoved = false;
 
-		this.ui = new TextureEditUI(this, edi.ui.panels.textures);
+		this.ui = new TextureEditUI(this, edi.ui.panels.items);
 	}
 
 	addLocation(x, y) {
@@ -96,15 +96,15 @@ class TextureEdit extends Texture {
 				loc.isSelected = true;
 				loc.isMoused = false;
 			});
-			this.ui.remove();
-			this.ui.add();
 		} else {
 			this.locations.forEach(loc => {
 				loc.isSelected = false;
 				loc.isMoused = false;
 			});
-			this.ui.remove();
 		}
+
+		if (isSelected) this.ui.add();
+		else if (this.ui.isAdded) this.ui.remove();
 	}
 
 	get isSelected() {

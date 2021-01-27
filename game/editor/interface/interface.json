@@ -226,11 +226,6 @@
 						"k": "itemSearchResults"
 					}
 				]
-			},
-			{
-				"module": "ui",
-				"sub": "items",
-				"list": []
 			}
 		]
 	},
