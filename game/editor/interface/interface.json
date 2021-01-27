@@ -228,15 +228,5 @@
 				]
 			}
 		]
-	},
-	"textures": {
-		"label": "Textures",
-		"uis": [
-			{
-				"module": "ui",
-				"sub": "textures",
-				"list": []
-			}
-		]
 	}
 }
