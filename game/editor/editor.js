@@ -38,9 +38,9 @@ edi.tool = {
 	items: new SpriteCollection(),
 	clear: function() {
 		edi.tool.items.all(item => {
-			item.select(false);
+			item.select(false); // deselect sprites
 		});
-		edi.tool.items.clear();
+		edi.tool.items.clear(); //  clear sprite collection
 	}
 }; /* tools: zoom/pan, transform, ruler - modulize if it gets complicated */
 /* move this somewhere else eventually ... */
@@ -172,7 +172,6 @@ function mouseMoved(x, y, button) {
 			const delta = edi.zoom.getDelta(x, y);
 			if (edi.tool.current == 'transform' && 
 				edi.tool.items.length > 0) {
-				console.log('mouse move is moving?');
 				edi.tool.items.all(item => {
 					item.update({ 
 						x: Math.round(delta.x),
@@ -195,14 +194,12 @@ function mouseDown(x, y, button, shift) {
 			const xy = edi.zoom.translate(x, y);
 			edi.tool.callback(xy.x, xy.y);
 		} else {
-			console.log('mousedown')
 			const item = intersectItems(x, y);
-			console.log('item', item.label);
 
 			if (edi.tool.items.length > 0) {
 				if (item && shift) { // select multiple items
 					item.select(true);
-				} else if (item && !shift && item !== item) {
+				} else if (item && !shift && !edi.tool.items.includes(item)) {
 					edi.tool.clear();
 					item.select(true);
 				} else if (!item) {
@@ -214,8 +211,6 @@ function mouseDown(x, y, button, shift) {
 
 			if (item.isSelected) edi.tool.items.add(item);
 			else edi.tool.items.remove(item);
-			
-			console.log('items', edi.tool.items.length);
 			
 			edi.zoom.mouseDown = true;
 	

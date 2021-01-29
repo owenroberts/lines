@@ -47,20 +47,20 @@ function Data(app, params) {
 			if (mod == 'ui') location = app[mod];
 			else location = app[mod][type];
 		
-			console.log(location, mod, type);
 			let C = ItemEdit;
-			if (type == 'texture') C = TextureEdit;
+			if (type == 'textures') C = TextureEdit;
 			if (type == 'ui') C = UIEdit;
 
 			// prob way to extend Game.js to do this
-			let animation = new LinesAnimation(app.ctx, app.dps);
+			let animation = new GameAnim();
 			animation.load(`${params.path}/sprites/${fileName}.json`, function() {
 				const s = new C({
 					animation: animation,
 					label: fileName,
 					src: `${params.path}/sprites/${fileName}.json`,
 					scenes: [app.scene],
-					...edi.zoom.translate(x, y) 
+					locations: [edi.zoom.translate(x, y)],
+					...edi.zoom.translate(x, y)
 				});
 				location[fileName] = s;
 				gme.scenes.add(s, app.scene)

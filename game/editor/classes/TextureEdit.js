@@ -5,9 +5,6 @@ class TextureEdit extends Texture {
 		this.scenes = params.scenes || ['game'];
 		this.label = params.label;
 
-		if (params.x !== undefined && !params.locations) {
-			this.locations = [{x: params.x, y: params.y}];
-		}
 		this.isLocked = false;
 		this.isSelectable = true;
 		this.isRemoved = false;

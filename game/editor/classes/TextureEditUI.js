@@ -10,18 +10,21 @@ class TextureEditUI extends EditUI {
 		let textureRow = this.panel.addRow('texture', 'texture');
 		this.rows.push(textureRow);
 
-		textureRow.append(new UIButton({
+		let addTexture = new UIButton({
 			text: "Add",
 			class: "add",
+			key: "a",
 			callback: () => {
 				edi.tool.set('location');
-				edi.tool.callback = function(x, y) {
+				edi.tool.callback = (x, y) => {
 					this.item.addLocation(x, y);
 					delete edi.tool.callback;
 					edi.tool.set('zoom');
 				}
 			}
-		}));
+		});
+		textureRow.append(addTexture);
+		edi.ui.keys['a'] = addTexture;
 
 		textureRow.append(new UIToggle({
 			text: "All",

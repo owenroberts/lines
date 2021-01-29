@@ -44,16 +44,16 @@ class EditUI {
 		}));
 
 		ediRow.append(new UIButton({
-			text: "Edit",
+			text: "✎",
 			class: 'edit',
 			callback: function() {
 				console.log(self);
-				window.open(`${location.origin}/${location.pathname.includes('lines') ? 'lines/' : ''}animate/?src=${self.item.origin}`, 'anim');
+				window.open(`${location.origin}/${location.pathname.includes('lines') ? 'lines/' : ''}animate/?src=${self.item.src}`, 'anim');
 			}
 		}));
 
 		ediRow.append(new UIButton({
-			text: "Remove",
+			text: "🗑️",
 			class: 'remove',
 			callback: function() {
 				if (prompt('remove?')) {

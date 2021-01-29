@@ -12,6 +12,10 @@ class SpriteCollection {
 		return this.sprites.length;
 	}
 
+	includes(sprite) {
+		return this.sprites.includes(sprite);
+	}
+
 	sprite(index) {
 		return this.sprites[index];
 	}
