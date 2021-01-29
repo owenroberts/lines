@@ -108,7 +108,7 @@ select {
 	margin-top: 0.25em;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.5em;
+	gap: 0.5rem;
 }
 
 #quickRef-panel {
@@ -131,6 +131,8 @@ select {
 	overflow: hidden;
 	position: relative;
 	height: auto;
+
+	// margin: 0 0.5em 0.5em 0;
 
 	&.undocked { display: none; }
 	&.closed { height: 25px; }
@@ -298,9 +300,7 @@ select {
 				margin-left: auto;
 				font-size: 10px;
 			}
-		}
-
-		
+		}	
 	}
 }
 
