@@ -1,12 +1,9 @@
 function Render(dps, showStats) {
 	const self = this;
-	let stats;
+	this.showStats = showStats;
 	if (showStats) {
-		stats = new Stats();
-		document.body.appendChild(stats.dom);
-		// stats.dom.style.position = 'relative';
-		stats.dom.style.bottom = '0';
-		stats.dom.style.top = 'auto';
+		this.stats = new Stats();
+		this.stats.dom.style.position = 'relative';
 	}
 
 	this.dps = dps || 30; // draws pers second
@@ -48,7 +45,7 @@ function Render(dps, showStats) {
 	};
 
 	this.update = function(time) {
-		if (showStats) stats.begin();
+		if (showStats) self.stats.begin();
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
@@ -89,7 +86,7 @@ function Render(dps, showStats) {
 		}
 		if (!lns.ui.capture.isCapturing) 
 			window.requestAnimFrame(self.update);
-		if (showStats) stats.end();
+		if (showStats) self.stats.end();
 	};
 
 	this.start = function() {

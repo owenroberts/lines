@@ -128,7 +128,7 @@ class LinesAnimation {
 				if (x) this.rndr.x += x;
 				if (y) this.rndr.y += y;
 
-				// "tweens"
+				// "tweens" -- empty array
 				if (layer.t) {
 					for (let j = 0; j < layer.t.length; j++) {
 						const tween = layer.t[j];

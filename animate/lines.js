@@ -37,6 +37,11 @@ window.addEventListener("load", function() {
 		lns.ui.update();
 		lns.render.start();
 		lns.ui.timeline.init();
+
+		if (lns.render.showStats) {
+			lns.ui.panels.play.el.appendChild(lns.render.stats.dom);
+		}
+
 	});
 });
 
