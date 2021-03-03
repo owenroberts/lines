@@ -22,5 +22,7 @@
 		"gulp-webserver": "^0.9.1",
 		"merge-stream": "^2.0.0"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"stats.js": "^0.17.0"
+	}
 }

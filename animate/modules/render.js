@@ -1,5 +1,13 @@
-function Render(dps, color) {
+function Render(dps, showStats) {
 	const self = this;
+	let stats;
+	if (showStats) {
+		stats = new Stats();
+		document.body.appendChild(stats.dom);
+		// stats.dom.style.position = 'relative';
+		stats.dom.style.bottom = '0';
+		stats.dom.style.top = 'auto';
+	}
 
 	this.dps = dps || 30; // draws pers second
 	this.interval = 1000 / this.dps;  // time interval between draws
@@ -40,6 +48,7 @@ function Render(dps, color) {
 	};
 
 	this.update = function(time) {
+		if (showStats) stats.begin();
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
@@ -80,6 +89,7 @@ function Render(dps, color) {
 		}
 		if (!lns.ui.capture.isCapturing) 
 			window.requestAnimFrame(self.update);
+		if (showStats) stats.end();
 	};
 
 	this.start = function() {
