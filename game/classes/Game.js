@@ -67,9 +67,11 @@ class Game {
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
 
 			if (params.stats) {
-				this.stats = new Stats(this.ctx, params.width);
-				this.stats.create('FPS', this.updateTime);
-				this.stats.create('draw', this.drawTime);
+				this.stats = new Stats();
+				document.body.appendChild(this.stats.dom);
+				this.stats.dom.style.left = 'auto';
+				this.stats.dom.style.right = '0px';
+
 			}
 
 			this.ctx.miterLimit = 1; // do this last
@@ -175,14 +177,15 @@ class Game {
 
 		draw(); // draw defined in each this js file, or not ... 
 		drawCount++;
-		if (this.stats) {
-			this.stats.update('draw', time);
-			this.stats.draw();
-		}
+		// if (this.stats) {
+		// 	this.stats.update('draw', time);
+		// 	this.stats.draw();
+		// }
 		this.drawTime = time - ((time - this.drawTime) % this.drawInterval);
 	}
 
 	update() {
+		if (this.stats) this.stats.begin();
 		requestAnimFrame(() => { this.update(); });  // this context
 
 		const time = performance.now();
@@ -195,10 +198,11 @@ class Game {
 		if (time > this.updateTime + this.updateInterval) {
 			if (!this.noUpdate) update(); // update defined in each game js file
 			this.updateTime = time - ((time - this.updateTime) % this.updateInterval); // adjust for fps interval being off
-			if (this.stats) this.stats.update('FPS', time);
+			// if (this.stats) this.stats.update('FPS', time);
 			
 		}
 		if (time > this.drawTime + this.drawInterval) this.draw(time);
+		if (this.stats) this.stats.end();
 	}
 
 	setBounds(dir, value) {
