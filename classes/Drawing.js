@@ -8,7 +8,6 @@ class Drawing {
 		}
 
 		this.offset = new Cool.Vector();
-		this.lastDrawCount = 0;
 	}
 
 	// add a point
@@ -38,20 +37,12 @@ class Drawing {
 		return this.points.length;
 	}
 
-	get needsUpdate() {
-		if (this.lastDrawCount < drawCount) {
-			this.lastDrawCount = drawCount;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	// update the animtor  properties - happens when the lineCount is 0
 	// n number of segments, r randomness of segments
 	// w wiggle amount, v, wiggle speed
 	// ws is wiggle segments
-	update(n, r, w, v, ws) {
+	update(props) {
+		const { n, r, w, v, ws } = props;
 
 		this.offset = new Cool.Vector().random(0, w);
 		let speed = new Cool.Vector().random(v);

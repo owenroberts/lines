@@ -157,11 +157,10 @@ class LinesAnimation {
 				}
 
 				// how often to reset randomness
-				if (layer.lc >= layer.l && drawing.needsUpdate && 
-					!suspendLinesUpdate) {
-					drawing.update(this.rndr.n, this.rndr.r, this.rndr.w, this.rndr.v, this.rndr.ws);
+				if (layer.lc >= layer.l && !suspendLinesUpdate) {
+					drawing.update(this.rndr);
 					layer.lc = 0;
-				} else if (drawing.needsUpdate && !suspendLinesUpdate) {
+				} else if (!suspendLinesUpdate) {
 					layer.lc++;
 				}
 
@@ -236,7 +235,7 @@ class LinesAnimation {
 			const layer = this.layers[i];
 			if (!layer.l) layer.l = 5; // new layer counter
 			if (!layer.lc) layer.lc = 0;
-			this.drawings[layer.d].update(layer.n, layer.r, layer.w, layer.v, layer.ws); 
+			this.drawings[layer.d].update(layer); 
 		}
 
 		for (const key in json.s) {
