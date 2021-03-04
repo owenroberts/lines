@@ -115,7 +115,13 @@ class LinesAnimation {
 		// console.log(x, y);
 		if (!this.mixedColors) this.ctx.beginPath();
 		for (let i = 0, len = this.layers.length; i < len; i++) {
-			const layer = this.layers[i];
+
+		const layers = this.layers.filter(layer => 
+			this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e
+		);
+		
+		for (let i = 0; i < layers.length; i++) {
+			const layer = layers[i];
 			const drawing = this.drawings[layer.d];
 			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
 				this.rndr.s = 0;
@@ -128,8 +134,8 @@ class LinesAnimation {
 				if (x) this.rndr.x += x;
 				if (y) this.rndr.y += y;
 
-				// "tweens" -- empty array
-				if (layer.t) {
+				
+				if (layer.t) { // "tweens" -- empty array
 					for (let j = 0; j < layer.t.length; j++) {
 						const tween = layer.t[j];
 						if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
@@ -164,6 +170,7 @@ class LinesAnimation {
 						const off = [...s.off, ...e.off];
 						
 						// catch for drawing - add flag?
+						// what is this?
 						if (off.length < this.rndr.n + 1) {
 							for (let k = off.length - 1; k < this.rndr.n + 1; k++) {
 								off.push(new Cool.Vector());
@@ -180,7 +187,7 @@ class LinesAnimation {
 						for (let k = 0; k < this.rndr.n; k++) {
 							const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
 							this.ctx.lineTo( 
-								// breaks ? k + 1 : k
+								// breaks ? k + 1 : k (old breaky style)
 								this.rndr.x + p.x + v.x + off[k + 1].x,
 								this.rndr.y + p.y + v.y + off[k + 1].y
 							);
@@ -188,7 +195,7 @@ class LinesAnimation {
 
 						if (this.ctx.strokeStyle != this.rndr.c && this.mixedColors)
 							this.ctx.strokeStyle = this.rndr.c;
-					} // else lineTo
+					}
 				}
 				
 				if (this.mixedColors) this.ctx.stroke();
