@@ -29,30 +29,24 @@ function Files(params) {
 		colors = [...new Set(colors)];
 		json.mc = colors.length > 1 ? true : false;
 
-		/* save current frame */
-		let layers = [];
 		if (single) {
-			for (let i = 0; i < lns.anim.layers.length; i++) {
-				if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
-					const layer = _.cloneDeep(lns.anim.layers[i]);
+			json.l = lns.anim.layers
+				.filter(layer => layer.isInFrame(lns.anim.currentFrame))
+				.map(layer => {
 					layer.startFrame = 0;
 					layer.endFrame = 0;
-					layers.push(layer);;
-				}
-			}
+					return layer.saveProps;
+				});
 		} else {
-			layers = lns.anim.layers;
+			json.l = lns.anim.layers.map(layer => { return layer.saveProps });
 		}
-
-		for (let i = 0; i < layers.length; i++) {
-			layers[i].clean();
-		}
-		json.l = layers;
 
 		/* search frames for layers and drawings used */
+		// functional approach here ??
+
 		const drawingIndexes = [];
-		for (let i = 0; i < layers.length; i++) {
-			const drawingIndex = layers[i].d;
+		for (let i = 0; i < json.l.length; i++) {
+			const drawingIndex = json.l[i].d;
 			if (!drawingIndexes.includes(drawingIndex))
 				drawingIndexes.push(drawingIndex);
 		}

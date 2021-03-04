@@ -15,7 +15,7 @@ class UILayer extends UICollection {
 			text: "✎",
 			callback: () => {
 				const modal = new UIModal('Edit Layer', lns, this.position, () => {
-					this.update();
+					// this.update();
 					lns.ui.update();
 				});
 
@@ -62,8 +62,8 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.add(new UIElement({class: 'break'}));
-				modal.add(new UILabel({ text: "Start Frame:"}));
+				modal.addBreak();
+				modal.addLabel("Start Frame:");
 				modal.add(new UIBlur({
 					value: layer.startFrame,
 					callback: function(value) {
@@ -71,12 +71,21 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.add(new UIElement({class: 'break'}));
-				modal.add(new UILabel({ text: "End Frame:"}));
+				modal.addBreak();
+				modal.addLabel("End Frame:");
 				modal.add(new UIBlur({
 					value: layer.endFrame,
 					callback: function(value) {
 						layer.endFrame = +value;
+					}
+				}));
+
+				modal.addBreak();
+				modal.addLabel("Order");
+				modal.add(new UIBlur({
+					value: layer.order || 'None',
+					callback: function(value) {
+						layer.order = +value;
 					}
 				}));
 			}

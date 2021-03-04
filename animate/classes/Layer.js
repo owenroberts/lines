@@ -10,7 +10,8 @@ class Layer {
 		this.w =  params.w;
 		this.v =  params.v;
 		this.c =  params.c;
-		this.ws = params.ws || false; // wiggle segments 
+		this.ws = params.ws || false; // wiggle segments
+		if (params.o) this.order = params.o;
 
 		this.l = params.l || 4; // draw count per line update
 		this.lc = 0; // line update counter
@@ -125,8 +126,26 @@ class Layer {
 		else return false;
 	}
 
+	get saveProps() {
+		const props = {
+			n: this.n,
+			r: this.r,
+			w: this.w,
+			v: this.v,
+			ws: this.ws,
+			x: this.x,
+			y: this.y,
+			c: this.toggled ? this.pc : this.c,
+			f: this.f,
+			d: this.d,
+		};
+		if (this.t) props.t = this.t;
+		if (this.order) props.o = this.order;
+		return props;
+	}
+
 	get props() {
-		return {
+		const props = {
 			n: this.n,
 			r: this.r,
 			w: this.w,
@@ -138,6 +157,8 @@ class Layer {
 			lc: this.lc,
 			c: this.toggled ? this.pc : this.c
 		};
+		if (this.order) props.o = this.order;
+		return props;
 	}
 
 	resetTweens() {

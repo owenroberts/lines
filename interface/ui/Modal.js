@@ -43,6 +43,14 @@ class UIModal extends UICollection {
 		this.el.insertBefore(component.el, this.break.el);
 	}
 
+	addBreak() {
+		this.add(new UIElement({ class: "break" }));
+	}
+
+	addLabel(labelText) {
+		this.add(new UILabel({ text: labelText}));
+	}
+
 	clear() {
 		this.el.remove();
 	}

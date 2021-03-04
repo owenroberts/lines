@@ -114,14 +114,18 @@ class LinesAnimation {
 		// suspendLinesUpdate for text but could be useful ... for like textures!
 		// console.log(x, y);
 		if (!this.mixedColors) this.ctx.beginPath();
-		for (let i = 0, len = this.layers.length; i < len; i++) {
 
-		const layers = this.layers.filter(layer => 
+		const layersInFrame = this.layers.filter(layer => 
 			this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e
 		);
-		
-		for (let i = 0; i < layers.length; i++) {
-			const layer = layers[i];
+
+		const orderedLayers = layersInFrame.sort((a, b) => {
+			if (a.order) return a.order > b.order ? 1 : -1;
+			else return 1;
+		});
+
+		for (let i = 0; i < orderedLayers.length; i++) {
+			const layer = orderedLayers[i];
 			const drawing = this.drawings[layer.d];
 			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
 				this.rndr.s = 0;
@@ -133,7 +137,6 @@ class LinesAnimation {
 
 				if (x) this.rndr.x += x;
 				if (y) this.rndr.y += y;
-
 				
 				if (layer.t) { // "tweens" -- empty array
 					for (let j = 0; j < layer.t.length; j++) {
