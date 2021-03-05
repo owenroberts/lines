@@ -1,3 +1,11 @@
+/*
+	basic unit of lines animation
+	animation contains drawings and layers
+	draw per second determined by renderer framerate and target fps
+	fps effects frame updates and line rendering
+	wiggle is calculated based on the layer offset, default 5 frames
+*/
+
 class LinesAnimation {
 	constructor(ctx, dps, mixedColors) {
 		this.ctx = ctx;
@@ -156,12 +164,14 @@ class LinesAnimation {
 					}
 				}
 
-				// how often to reset randomness
-				if (layer.lc >= layer.l && !suspendLinesUpdate) {
-					drawing.update(this.rndr);
-					layer.lc = 0;
-				} else if (!suspendLinesUpdate) {
-					layer.lc++;
+				// how often to reset wiggle
+				if (!suspendLinesUpdate) {
+					if (layer.lc >= layer.l) {
+						drawing.update(this.rndr);
+						layer.lc = 0;
+					} else {
+						layer.lc++;
+					}
 				}
 
 				if (this.mixedColors) this.ctx.beginPath();
