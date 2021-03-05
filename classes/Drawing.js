@@ -14,9 +14,8 @@ class Drawing {
 	add(point) {
 		if (point == 'end' || point == 0) {
 			this.points.push('end');
-		} else if (Array.isArray(point)) {
-			// from json file
-			this.points.push({ x: point[0], y: point[1], off: [] });
+		} else if (Array.isArray(point)) { 	// from json file
+			this.points.push(new Cool.Vector(point));
 		} else {
 			this.points.push({ ...point, off: [] });
 		}
@@ -63,7 +62,7 @@ class Drawing {
 						}
 					}
 
-					// add jiggle to wiggle
+					// add jiggle to wiggle -- needs to figure the fuck out!
 					this.points[i].off.push({
 						x: Cool.random(-r, r) + this.offset.x,
 						y: Cool.random(-r, r) + this.offset.y
