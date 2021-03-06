@@ -67,6 +67,7 @@ $anim-off: darkgreen;
 		grid-row: 1 / span calc(var(--num-layers) * 2 + 2);
 		width: 100%;
 		overflow: hidden;
+		border-left: 1px dashed $bg-color;
 
 		&.current {
 			background-color: $ui-highlight !important;

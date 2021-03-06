@@ -169,7 +169,6 @@ class LinesAnimation {
 						// maybe happens when segment num changes ... ?
 						// still working on this lol
 						if (off.length < this.props.n + 1) {
-							console.log('off length')
 							for (let k = off.length - 1; k < this.props.n + 1; k++) {
 								off.push(new Cool.Vector());
 							}
