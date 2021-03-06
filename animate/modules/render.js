@@ -37,9 +37,9 @@ function Render(dps, showStats) {
 		lns.anim.isPlaying = !lns.anim.isPlaying;
 	};
 
-	/* ' - lps is property of render engine, not individual animations */
+	/* ' - dps is property of render engine, not individual animations */
 	this.setDps = function(dps) {
-		self.dps = +lps;
+		self.dps = +dps;
 		self.interval = 1000 / self.dps;
 		lns.anim.dps = self.dps;
 	};

@@ -53,7 +53,7 @@ function appSave() {
 		width: lns.canvas.width,
 		height: lns.canvas.height,
 		fps: lns.anim.fps,
-		lps: lns.render.lps,
+		dps: lns.render.dps,
 		onionSkinIsVisible: lns.render.onionSkinIsVisible,
 		onionSkinNum: lns.render.onionSkinNum,
 		mouseInterval: lns.draw.mouseInterval,
@@ -71,7 +71,7 @@ function appSave() {
 function appLoad(settings) {
 
 	/* environment + ui + lns.anim */
-	lns.ui.faces.lps.update(settings.lps);
+	lns.ui.faces.dps.update(settings.dps);
 
 	/* environment + ui */
 	lns.ui.faces.onionSkinNum.update(settings.onionSkinNum);

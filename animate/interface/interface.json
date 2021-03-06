@@ -636,14 +636,14 @@
 				"list": [
 					{
 						"type": "UIBlur",
-						"label": "LPS",
+						"label": "DPS",
 						"key": "'",
-						"face": "lps",
+						"face": "dps",
 						"fromModule": {
-							"callback": "setLps"
+							"callback": "setDps"
 						},
 						"params": {
-							"prompt": "Set Lines/Second"
+							"prompt": "Set Draws/Second"
 						}
 					},
 					{

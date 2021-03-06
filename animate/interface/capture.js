@@ -41,7 +41,7 @@ function Capture() {
 		lns.anim.frame = lns.anim.endFrame;
 		lns.anim.isPlaying = true;
 		// capture as many frames as necessary for lines ratio or 1 of every frame
-		self.frames = lns.anim.endFrame * Math.max(1, lns.render.lps / lns.anim.fps) + 1;
+		self.frames = lns.anim.endFrame * Math.max(1, lns.render.dps / lns.anim.fps) + 1;
 		self.start();
 	}; /* ctrl-k - start at beginning and capture one of every frame */
 
