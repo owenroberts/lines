@@ -17,7 +17,8 @@ class Drawing {
 		} else if (Array.isArray(point)) { 	// from json file
 			this.points.push(new Cool.Vector(point));
 		} else {
-			this.points.push({ ...point, off: [] });
+			point.off = []; // maybe ditch cool.js and make LinesVector ? -- 
+			this.points.push(point);
 		}
 	}
 
@@ -39,12 +40,11 @@ class Drawing {
 	// update the animtor  properties - happens when the lineCount is 0
 	// n number of segments, r randomness of segments
 	// w wiggle amount, v, wiggle speed
-	// ws is wiggle segments
+	// ws is wiggle segments (true/false)
 	update(props) {
 		const { n, r, w, v, ws } = props;
-
+		const speed = new Cool.Vector().random(v);
 		this.offset = new Cool.Vector().random(0, w);
-		let speed = new Cool.Vector().random(v);
 
 		// add random offsets for xy for each segment of the lines
 		for (let i = 0; i < this.points.length; i++) {

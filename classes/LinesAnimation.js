@@ -7,35 +7,32 @@
 */
 
 class LinesAnimation {
-	constructor(ctx, dps, mixedColors) {
+	constructor(ctx, dps, multiColor) {
 		this.ctx = ctx;
-		this.loaded = false;
+		this.isLoaded = false;
 		this.isPlaying = false;
+		this.multiColor = multiColor || true;
+
 		this.drawings = [];
 		this.layers = [];
-		this.currentFrame = 0;
-
+		
 		this.dps = dps || 30; // draw per frame from renderer
 		this.fps = 5; // update frames
-
-		// how often to change frame for animations ... 
-		// relative to renderer
-		// layer count determines how often to redo randomness
+		this.currentFrame = 0;
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
-
-		this.mixedColors = mixedColors || true;
 		
-		this.rndr = {
+		// props are layer specific right?? -- part of layer class?
+		this.props = {
 			off: { x: 0, y: 0 },
 			speed: { x: 0, y: 0 },
+			over: {},
 		};
 
+		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
 		this.states = { 'default': {start: 0, end: 0 } };
 
-		this.over = {};
-		this.override = true;
 	}
 
 	set fps(fps) {
@@ -48,26 +45,12 @@ class LinesAnimation {
 		return this._fps;
 	}
 
-	set dps(dps) {
-		this._dps = +dps;
-		this.drawsPerFrame = Math.round(this.dps / this.fps);
-		this.drawCount = 0;
-	}
-
-	get dps() {
-		return this._dps;
-	}
-
 	set frame(n) {
-		this.currentFrame = this.currentFrameCounter = +n;
+		this.currentFrame = +n;
 		if (this.states.default) {
 			if (this.states.default.end != this.endFrame)
 				this.states.default.end = this.endFrame;
 		}
-	}
-
-	get frame4() {
-		return +this.currentFrameCounter.toFixed(4);
 	}
 
 	get endFrame() {
@@ -92,13 +75,11 @@ class LinesAnimation {
 	}
 
 	overrideProperty(prop, value) {
-		this.over[prop] = value;
-		this.override = true;
+		this.props.override[prop] = value;
 	}
 
 	cancelOverride() {
-		this.over = {}
-		this.override = false;
+		this.props.override = {};
 	}
 
 	update() {
@@ -119,110 +100,114 @@ class LinesAnimation {
 	}
 
 	draw(x, y, suspendLinesUpdate) {
-		// suspendLinesUpdate for text but could be useful ... for like textures!
-		// console.log(x, y);
-		if (!this.mixedColors) this.ctx.beginPath();
+		if (!this.multiColor) this.ctx.beginPath();
 
-		const layersInFrame = this.layers.filter(layer => 
+		const layers = this.layers.filter(layer => 
 			this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e
-		);
-
-		const orderedLayers = layersInFrame.sort((a, b) => {
-			if (a.order) return a.order > b.order ? 1 : -1;
+		).sort((a, b) => {
+			if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
 			else return 1;
 		});
 
-		for (let i = 0; i < orderedLayers.length; i++) {
-			const layer = orderedLayers[i];
+		for (let i = 0; i < layers.length; i++) {
+			const layer = layers[i];
 			const drawing = this.drawings[layer.d];
 			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
-				this.rndr.s = 0;
-				this.rndr.e = drawing.length;
 
+				// set once in layer class ... 
+				this.props.s = 0;
+				this.props.e = drawing.length;
+
+				// set with layer renderProps ... 
 				for (const key in layer) {
-					this.rndr[key] = layer[key];
+					this.props[key] = layer[key];
 				}
 
-				if (x) this.rndr.x += x;
-				if (y) this.rndr.y += y;
+				// xy come from games -- should be GameAnim only?
+				// only works if game can edits props before super
+				// should see if x,y is usually a vector
+				if (x) this.props.x += x;
+				if (y) this.props.y += y;
 				
 				if (layer.t) { // "tweens" -- empty array
 					for (let j = 0; j < layer.t.length; j++) {
 						const tween = layer.t[j];
+						// range class lol -- wait Range exists???
 						if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
-							this.rndr[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
+							this.props[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
 							if (tween.prop == 's' || tween.prop == 'e') 
-								this.rndr[tween.prop] = Math.round(this.rndr[tween.prop]);
+								this.props[tween.prop] = Math.round(this.props[tween.prop]);
 						}
 					}
 				}
 
 				// over ride animation data from renderer (usually effects)
-				if (this.override) {
-					for (const key in this.over) {
-						this.rndr[key] = this.over[key];
-					}
+				for (const key in this.over) {
+					this.props[key] = this.over[key];
 				}
 
 				// how often to reset wiggle
 				if (!suspendLinesUpdate) {
 					if (layer.lc >= layer.l) {
-						drawing.update(this.rndr);
+						drawing.update(this.props);
 						layer.lc = 0;
 					} else {
 						layer.lc++;
 					}
 				}
 
-				if (this.mixedColors) this.ctx.beginPath();
-				for (let j = this.rndr.s; j < this.rndr.e - 1; j++) {
+				if (this.multiColor) this.ctx.beginPath();
+				for (let j = this.props.s; j < this.props.e - 1; j++) {
 					const s = drawing.get(j);
 					const e = drawing.get(j + 1);
 					if (s !== 'end' && e !== 'end') {
-						const off = [...s.off, ...e.off];
+						const off = [...s.off, ...e.off]; // offset stored in drawing points
 						
 						// catch for drawing - add flag?
 						// what is this?
-						if (off.length < this.rndr.n + 1) {
-							for (let k = off.length - 1; k < this.rndr.n + 1; k++) {
+						// only happens on certain drawings but happens A LOT
+						// maybe happens when segment num changes ... ?
+						// still working on this lol
+						if (off.length < this.props.n + 1) {
+							console.log('off length')
+							for (let k = off.length - 1; k < this.props.n + 1; k++) {
 								off.push(new Cool.Vector());
 							}
 						}
 						
 						const v = new Cool.Vector(e.x, e.y);
 						v.subtract(s);
-						v.divide(this.rndr.n);
+						v.divide(this.props.n);
 						this.ctx.moveTo(
-							this.rndr.x + s.x + off[0].x,
-							this.rndr.y + s.y + off[0].y
+							this.props.x + s.x + off[0].x,
+							this.props.y + s.y + off[0].y
 						);
-						for (let k = 0; k < this.rndr.n; k++) {
-							const p = new Cool.Vector(s.x + v.x * k, s.y + v.y * k);
+						for (let k = 0; k < this.props.n; k++) {
+							const p = s.clone().add(v.clone().multiply(k));
+							if (!off[k + 1]) console.log('k + 1', k + 1, this.props, off, drawing);
 							this.ctx.lineTo( 
 								// breaks ? k + 1 : k (old breaky style)
-								this.rndr.x + p.x + v.x + off[k + 1].x,
-								this.rndr.y + p.y + v.y + off[k + 1].y
+								this.props.x + p.x + v.x + off[k + 1].x,
+								this.props.y + p.y + v.y + off[k + 1].y
 							);
 						}
 
-						if (this.ctx.strokeStyle != this.rndr.c && this.mixedColors)
-							this.ctx.strokeStyle = this.rndr.c;
+						if (this.ctx.strokeStyle != this.props.c && this.multiColor)
+							this.ctx.strokeStyle = this.props.c;
 					}
 				}
 				
-				if (this.mixedColors) this.ctx.stroke();
+				if (this.multiColor) this.ctx.stroke();
 			}
 		}
-		if (!this.mixedColors) this.ctx.stroke();
+		if (!this.multiColor) this.ctx.stroke();
 		if (this.onDraw) this.onDraw();
 	}
 
 	load(src, callback) {
 		fetch(src)
 			.then(response => { return response.json() })
-			.then(data => {
-				this.loadData(data, callback);
-			})
+			.then(data => { this.loadData(data, callback); })
 			.catch(error => { console.error(error) });
 	}
 
@@ -251,78 +236,23 @@ class LinesAnimation {
 		for (const key in json.s) {
 			this.states[key] = json.s[key];
 		}
+
 		if (this.states.default)
 			this.states.default.end = this.endFrame;
 
 		this.fps = json.fps;
-		// do drawings get there own update rate?
 
-		if (json.mc) this.mixedColors = json.mc; /* hmm .. over ride? */
+		if (json.mc) this.multiColor = json.mc;
 
-		// this.isPlaying = true; /* off for animate ? */
-
-		/* need width and height for infinite hell ?? */
 		this.width = json.w;
 		this.height = json.h;
 
 		if (callback) callback(json);
-		// if (this.onLoad) this.onLoad();
+		if (this.onLoad) this.onLoad();
 	}
 
 	setOnLoad(callback) {
-		if (this.loaded) callback();
+		if (this.isLoaded) callback();
 		else this.onLoad = callback;
 	}
 }
-
-/* questions 
-	- use A/Anim to make Animation availabe in contexts?
-		- only really in game
-		- maybe Animation and GameAnimation
-		- or Sprite Animation
-		- Anim is not good ... 
-	rndr	
-		- wierd to rndr as only abbreivation?
-		- yes used so often its okay to abbreviate
-		- animate just rests every time ...
-			- do i need rndr at all, just layer values and over ride?
-			- yeah as is rndr is stupid because it never doesn't reset the values
-				- what were issues with that?
-				- 0 undefined at first but there was others ... 
-				- using layers instead of frames makes this better
-				- maybe keep track of layers chaning?
-				- that happens with currentFrame between endFrame startFrame
-				- think more on this
-			- otherwise just use const
-				const e = over.e !== undefined ? over.e : layer.e;
-			- do some performance tests with garden
-
-
-	anim/game
-		- how to handle width, height ratios for resizing ...
-		- loop is assumed for other anims ...
-		- random frames prob only in game
-
-	load -- issues 
-		- game saves loaded sprites, not necessary for others
-		- game setting sprite size
-		- whole separate loader class?
-	pre/post draw, needed but should be handled by sub classes?
-	- onupdate - on draw
-
-	update
-		- comes at the end for game, beginning for anim and animate/play
-		- does update call draw or the other way around ...
-
-	layer class ?
-		- more for interface stuff ...
-		- only useful method isInFrame
-		- mm ... start frame, end frame ... 
-		- anim one is useful but probab not necessary for game
-
-	range class
-		- start and end
-		- end can't be smaller than start
-		- what about saving data???  method ... 
-		- is this actually usedful? 
-*/
