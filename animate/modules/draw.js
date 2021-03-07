@@ -51,7 +51,7 @@ function Draw(defaults) {
 				segmentNum: +lns.ui.faces.segmentNum.value,
 				jiggleRange: +lns.ui.faces.jiggleRange.value,
 				wiggleRange: +lns.ui.faces.wiggleRange.value,
-				v: +lns.ui.faces.v.value,
+				wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
 				color: lns.ui.faces.color.value,
 				d: lns.anim.drawings.length - 1,  
 				f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }

@@ -12,7 +12,7 @@ window.addEventListener("load", function() {
 		segmentNum: 2,
 		jiggleRange: 1,
 		wiggleRange: 1, 
-		v: 0.1, 
+		wiggleSpeed: 0.1, 
 		c: '#000000' 
 	}); // defaults
 	lns.bgImage = new Background();

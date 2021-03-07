@@ -17,8 +17,11 @@ class Layer {
 		this.segmentNum =  params.segmentNum || params.n; // need to fix these ... 
 		this.jiggleRange = params.jiggleRange || params.r;
 		this.wiggleRange = params.wiggleRange || params.w;
-		this.v = params.v;
-		this.ws = params.ws || false; // wiggle segments
+		this.wiggleSpeed = params.wiggleSpeed || params.v;
+		this.wiggleSegments = params.wiggleSegments || params.ws || false; // true/false
+		console.log(params.b);
+		this.breaks = params.breaks || params.b || false;
+		console.log(this.breaks);
 		if (params.o) this.order = params.o;
 
 		this.linesInterval = params.l || 5; // draw count per line update
@@ -28,7 +31,7 @@ class Layer {
 		this.resetTweens();
 
 		// console.trace();
-		console.log(this);
+		// console.log(this);
 	}
 
 	update() {
@@ -147,9 +150,9 @@ class Layer {
 		const props = {
 			n: this.segmentNum,
 			r: this.jiggleRange,
-			w: this.w,
-			v: this.v,
-			ws: this.ws,
+			w: this.wiggleRange,
+			v: this.wiggleSpeed,
+			ws: this.wiggleSegments,
 			x: this.x,
 			y: this.y,
 			c: this.isToggled ? this.tempColor : this.color,
@@ -165,9 +168,9 @@ class Layer {
 		const props = {
 			segmentNum: this.segmentNum,
 			jiggleRange: this.jiggleRange,
-			w: this.w,
-			v: this.v,
-			ws: this.ws,
+			wiggleRange: this.wiggleRange,
+			wiggleSpeed: this.wiggleSpeed,
+			wiggleSegments: this.wiggleSegments,
 			x: this.x,
 			y: this.y,
 			l: this.l,

@@ -857,7 +857,7 @@
 					{
 						"type": "UITextRange",
 						"label": "Wiggle Speed",
-						"face": "v",
+						"face": "wiggleSpeed",
 						"fromModule": {
 							"callback": "setProperty"
 						},
@@ -865,7 +865,7 @@
 							"min": 0,
 							"max": 5,
 							"step": 0.005,
-							"arguments": ["v"]
+							"arguments": ["wiggleSpeed"]
 						}
 					},
 					{
@@ -875,7 +875,17 @@
 						},
 						"params": {
 							"text":  "Wiggle Segments",
-							"arguments": ["ws"]
+							"arguments": ["wiggleSegments"]
+						}
+					},
+					{
+						"type": "UIToggle",
+						"fromModule": {
+							"callback": "setProperty"
+						},
+						"params": {
+							"text":  "Breaks",
+							"arguments": ["breaks"]
 						}
 					},
 					{

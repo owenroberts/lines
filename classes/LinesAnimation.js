@@ -166,18 +166,12 @@ class LinesAnimation {
 					// maybe happens when segment num changes ... ?
 					// still working on this lol
 					// als when in the middle of drawing
-
 					if (off.length < this.props.segmentNum + 1) {
 						for (let k = off.length - 1; k < this.props.segmentNum + 1; k++) {
 							off.push(new Cool.Vector());
 						}
 					}
 
-					if (off.length == 0) {
-						console.log(this.props)
-						console.log(off.length, this.props.segmentNum)
-					}
-					
 					const v = new Cool.Vector(e.x, e.y);
 					v.subtract(s);
 					v.divide(this.props.segmentNum);
@@ -188,10 +182,10 @@ class LinesAnimation {
 					for (let k = 0; k < this.props.segmentNum; k++) {
 						const p = s.clone().add(v.clone().multiply(k));
 						if (!off[k + 1]) console.log('k + 1', k + 1, this.props, off, drawing);
+						const index = this.props.breaks ? k : k + 1;
 						this.ctx.lineTo( 
-							// breaks ? k + 1 : k (old breaky style)
-							this.props.x + p.x + v.x + off[k + 1].x,
-							this.props.y + p.y + v.y + off[k + 1].y
+							this.props.x + p.x + v.x + off[index].x,
+							this.props.y + p.y + v.y + off[index].y
 						);
 					}
 
