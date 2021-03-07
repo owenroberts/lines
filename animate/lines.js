@@ -13,7 +13,7 @@ window.addEventListener("load", function() {
 		jiggleRange: 1,
 		wiggleRange: 1, 
 		wiggleSpeed: 0.1, 
-		c: '#000000' 
+		color: '#000000' 
 	}); // defaults
 	lns.bgImage = new Background();
 	lns.data = new Data(lns.anim);
@@ -101,7 +101,7 @@ function appLoad(settings) {
 
 	/* lns.anim + ui */
 	lns.ui.faces.fps.update(settings.fps);
-	// lns.ui.faces.color.update(settings.color);
+	lns.ui.faces.color.update(settings.color);
 
 	// palettes - no need to separate module from ui bc its all ui 
 	// - only one not a ui with update ... 

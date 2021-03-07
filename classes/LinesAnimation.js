@@ -23,11 +23,10 @@ class LinesAnimation {
 		this.drawCount = 0;
 		
 		// props are layer specific right?? -- part of layer class?
-		this.props = {
-			off: { x: 0, y: 0 },
-			speed: { x: 0, y: 0 },
-			override: {},
-		};
+		// this.props = {
+		// 	override: {},
+		// };
+		this.override = {};
 
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
@@ -53,9 +52,10 @@ class LinesAnimation {
 	}
 
 	get endFrame() {
-		return this.layers.length > 0 ?
-			Math.max.apply(Math, this.layers.map(layer => { return layer.f.e; }))
-			: 0;
+		const endFrame = this.layers.map(layer => { return layer.endFrame; });
+		// when is layers.length 0 ??
+		// return this.layers.length > 0 ? Math.max.apply(Math, endFrame) : 0;
+		return Math.max.apply(Math, endFrame);
 	}
 
 	set state(state) {
@@ -110,29 +110,22 @@ class LinesAnimation {
 		for (let i = 0; i < layers.length; i++) {
 			const layer = layers[i];
 			const drawing = this.drawings[layer.drawingIndex];
-			// set once in layer class ... 
-			this.props.s = layer.drawingStartIndex;
+
+			const props = layer.drawProps;
+
 			// better to get this interactively if Animate app
 			// this.props.e = layer.drawingEndIndex > 0 ? layer.drawingEndIndex : drawing.length;
-			// console.log(layer.drawingEndIndex);
-			this.props.e = drawing.length;
-
-			// console.log(layer.drawingIndex, layer.drawingEndIndex, this.props.e);
-
-			// set with layer renderProps ... 
-			for (const key in layer) {
-				this.props[key] = layer[key];
-			}
+			props.endIndex = drawing.length;
 
 			// xy come from games -- should be GameAnim only?
 			// only works if game can edits props before super
 			// should see if x,y is usually a vector
-			if (x) this.props.x += x;
-			if (y) this.props.y += y;
+			if (x) props.x += x;
+			if (y) props.y += y;
 			
-			if (layer.tweens) { // default empty array
-				for (let j = 0; j < layer.tweens.length; j++) {
-					const tween = layer.tweens[j];
+			if (props.tweens) { // default empty array
+				for (let j = 0; j < props.tweens.length; j++) {
+					const tween = props.tweens[j];
 					// range class lol -- wait Range exists???
 					if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
 						this.props[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
@@ -143,18 +136,18 @@ class LinesAnimation {
 			}
 
 			// over ride animation data from renderer (usually effects)
-			for (const key in this.props.override) {
-				this.props[key] = this.props.override[key];
+			for (const key in this.override) {
+				props[key] = this.override[key];
 			}
 
 			// how often to reset wiggle
 			if (!suspendLinesUpdate) {
 				const updateDrawing = layer.update();
-				if (updateDrawing) drawing.update(this.props);
+				if (updateDrawing) drawing.update(props);
 			}
 
 			if (this.multiColor) this.ctx.beginPath();
-			for (let j = this.props.s; j < this.props.e - 1; j++) {
+			for (let j = props.startIndex; j < props.endIndex - 1; j++) {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);
 				if (s !== 'end' && e !== 'end') {
@@ -166,31 +159,31 @@ class LinesAnimation {
 					// maybe happens when segment num changes ... ?
 					// still working on this lol
 					// als when in the middle of drawing
-					if (off.length < this.props.segmentNum + 1) {
-						for (let k = off.length - 1; k < this.props.segmentNum + 1; k++) {
+					if (off.length < props.segmentNum + 1) {
+						for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
 							off.push(new Cool.Vector());
 						}
 					}
 
 					const v = new Cool.Vector(e.x, e.y);
 					v.subtract(s);
-					v.divide(this.props.segmentNum);
+					v.divide(props.segmentNum);
 					this.ctx.moveTo(
-						this.props.x + s.x + off[0].x,
-						this.props.y + s.y + off[0].y
+						props.x + s.x + off[0].x,
+						props.y + s.y + off[0].y
 					);
-					for (let k = 0; k < this.props.segmentNum; k++) {
+					for (let k = 0; k < props.segmentNum; k++) {
 						const p = s.clone().add(v.clone().multiply(k));
-						if (!off[k + 1]) console.log('k + 1', k + 1, this.props, off, drawing);
-						const index = this.props.breaks ? k : k + 1;
+						if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
+						const index = props.breaks ? k : k + 1;
 						this.ctx.lineTo( 
-							this.props.x + p.x + v.x + off[index].x,
-							this.props.y + p.y + v.y + off[index].y
+							props.x + p.x + v.x + off[index].x,
+							props.y + p.y + v.y + off[index].y
 						);
 					}
 
-					if (this.ctx.strokeStyle != this.props.color && this.multiColor)
-						this.ctx.strokeStyle = this.props.color;
+					if (this.ctx.strokeStyle != props.color && this.multiColor)
+						this.ctx.strokeStyle = props.color;
 				}
 			}
 			

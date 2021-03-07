@@ -43,7 +43,6 @@ function Draw(defaults) {
 
 	this.reset = function(f) {
 		if (self.drawing.length > 0) {
-			console.log(lns.ui.faces.segmentNum);
 			lns.anim.drawings.push(new Drawing()); // new Drawing?
 			/* seems repetietive - settings class ... ? */
 			// lns.anim.addLayer ??
@@ -53,7 +52,7 @@ function Draw(defaults) {
 				wiggleRange: +lns.ui.faces.wiggleRange.value,
 				wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
 				color: lns.ui.faces.color.value,
-				d: lns.anim.drawings.length - 1,  
+				d: lns.anim.drawings.length - 1,
 				f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
 			}));
 			lns.data.saveState();

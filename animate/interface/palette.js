@@ -69,6 +69,7 @@ function Palette() {
 				wiggleRange: layer.wiggleRange,
 				wiggleSpeed: layer.wiggleSpeed,
 				wiggleSegments: layer.wiggleSegments,
+				breaks: layer.breaks,
 				lineWidth: lns.canvas.ctx.lineWidth,
 				mouseInterval: lns.draw.mouseInterval,
 				brush: 0,

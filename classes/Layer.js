@@ -1,7 +1,7 @@
 class Layer {
 	constructor(params, drawingEndIndex) {
 		// console.log(params);
-		this.drawingIndex = params.d;
+		this.drawingIndex = params.d; // fix some time
 		this.x = params.x || 0;
 		this.y = params.y || 0;
 		this.tweens = params.t || [];
@@ -19,9 +19,7 @@ class Layer {
 		this.wiggleRange = params.wiggleRange || params.w;
 		this.wiggleSpeed = params.wiggleSpeed || params.v;
 		this.wiggleSegments = params.wiggleSegments || params.ws || false; // true/false
-		console.log(params.b);
 		this.breaks = params.breaks || params.b || false;
-		console.log(this.breaks);
 		if (params.o) this.order = params.o;
 
 		this.linesInterval = params.l || 5; // draw count per line update
@@ -141,8 +139,8 @@ class Layer {
 	}
 
 	isInFrame(index) {
-		if (lns.anim.layers.indexOf(this) == -1) return false
-		else if (index >= this.f.s && index <= this.f.e) return true;
+		// if (lns.anim.layers.indexOf(this) == -1) return false; // idk
+		if (index >= this.startFrame && index <= this.endFrame) return true;
 		else return false;
 	}
 
@@ -176,6 +174,25 @@ class Layer {
 			l: this.l,
 			linesInterval: this.linesInterval,
 			c: this.isToggled ? this.tempColor : this.color,
+		};
+		if (this.order) props.o = this.order;
+		return props;
+	}
+
+	get drawProps() {
+		const props = {
+			segmentNum: this.segmentNum,
+			jiggleRange: this.jiggleRange,
+			wiggleRange: this.wiggleRange,
+			wiggleSpeed: this.wiggleSpeed,
+			wiggleSegments: this.wiggleSegments,
+			x: this.x,
+			y: this.y,
+			linesCount: this.linesCount,
+			linesInterval: this.linesInterval,
+			color: this.color,
+			startIndex: this.drawingStartIndex,
+			tweens: this.tweens,
 		};
 		if (this.order) props.o = this.order;
 		return props;
