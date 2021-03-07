@@ -26,13 +26,12 @@ class LinesAnimation {
 		this.props = {
 			off: { x: 0, y: 0 },
 			speed: { x: 0, y: 0 },
-			over: {},
+			override: {},
 		};
 
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
 		this.states = { 'default': {start: 0, end: 0 } };
-
 	}
 
 	set fps(fps) {
@@ -102,102 +101,106 @@ class LinesAnimation {
 	draw(x, y, suspendLinesUpdate) {
 		if (!this.multiColor) this.ctx.beginPath();
 
-		const layers = this.layers.filter(layer => 
-			this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e
-		).sort((a, b) => {
+		const layers = this.layers.filter(layer => layer.isInFrame(this.currentFrame))
+		.sort((a, b) => {
 			if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
 			else return 1;
 		});
 
 		for (let i = 0; i < layers.length; i++) {
 			const layer = layers[i];
-			const drawing = this.drawings[layer.d];
-			if (this.currentFrame >= layer.f.s && this.currentFrame <= layer.f.e) {
+			const drawing = this.drawings[layer.drawingIndex];
+			// set once in layer class ... 
+			this.props.s = layer.drawingStartIndex;
+			// better to get this interactively if Animate app
+			// this.props.e = layer.drawingEndIndex > 0 ? layer.drawingEndIndex : drawing.length;
+			// console.log(layer.drawingEndIndex);
+			this.props.e = drawing.length;
 
-				// set once in layer class ... 
-				this.props.s = 0;
-				this.props.e = drawing.length;
+			// console.log(layer.drawingIndex, layer.drawingEndIndex, this.props.e);
 
-				// set with layer renderProps ... 
-				for (const key in layer) {
-					this.props[key] = layer[key];
-				}
-
-				// xy come from games -- should be GameAnim only?
-				// only works if game can edits props before super
-				// should see if x,y is usually a vector
-				if (x) this.props.x += x;
-				if (y) this.props.y += y;
-				
-				if (layer.t) { // "tweens" -- empty array
-					for (let j = 0; j < layer.t.length; j++) {
-						const tween = layer.t[j];
-						// range class lol -- wait Range exists???
-						if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
-							this.props[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
-							if (tween.prop == 's' || tween.prop == 'e') 
-								this.props[tween.prop] = Math.round(this.props[tween.prop]);
-						}
-					}
-				}
-
-				// over ride animation data from renderer (usually effects)
-				for (const key in this.over) {
-					this.props[key] = this.over[key];
-				}
-
-				// how often to reset wiggle
-				if (!suspendLinesUpdate) {
-					if (layer.lc >= layer.l) {
-						drawing.update(this.props);
-						layer.lc = 0;
-					} else {
-						layer.lc++;
-					}
-				}
-
-				if (this.multiColor) this.ctx.beginPath();
-				for (let j = this.props.s; j < this.props.e - 1; j++) {
-					const s = drawing.get(j);
-					const e = drawing.get(j + 1);
-					if (s !== 'end' && e !== 'end') {
-						const off = [...s.off, ...e.off]; // offset stored in drawing points
-						
-						// catch for drawing - add flag?
-						// what is this?
-						// only happens on certain drawings but happens A LOT
-						// maybe happens when segment num changes ... ?
-						// still working on this lol
-						if (off.length < this.props.n + 1) {
-							for (let k = off.length - 1; k < this.props.n + 1; k++) {
-								off.push(new Cool.Vector());
-							}
-						}
-						
-						const v = new Cool.Vector(e.x, e.y);
-						v.subtract(s);
-						v.divide(this.props.n);
-						this.ctx.moveTo(
-							this.props.x + s.x + off[0].x,
-							this.props.y + s.y + off[0].y
-						);
-						for (let k = 0; k < this.props.n; k++) {
-							const p = s.clone().add(v.clone().multiply(k));
-							if (!off[k + 1]) console.log('k + 1', k + 1, this.props, off, drawing);
-							this.ctx.lineTo( 
-								// breaks ? k + 1 : k (old breaky style)
-								this.props.x + p.x + v.x + off[k + 1].x,
-								this.props.y + p.y + v.y + off[k + 1].y
-							);
-						}
-
-						if (this.ctx.strokeStyle != this.props.c && this.multiColor)
-							this.ctx.strokeStyle = this.props.c;
-					}
-				}
-				
-				if (this.multiColor) this.ctx.stroke();
+			// set with layer renderProps ... 
+			for (const key in layer) {
+				this.props[key] = layer[key];
 			}
+
+			// xy come from games -- should be GameAnim only?
+			// only works if game can edits props before super
+			// should see if x,y is usually a vector
+			if (x) this.props.x += x;
+			if (y) this.props.y += y;
+			
+			if (layer.tweens) { // default empty array
+				for (let j = 0; j < layer.tweens.length; j++) {
+					const tween = layer.tweens[j];
+					// range class lol -- wait Range exists???
+					if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
+						this.props[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
+						if (tween.prop == 's' || tween.prop == 'e') 
+							this.props[tween.prop] = Math.round(this.props[tween.prop]);
+					}
+				}
+			}
+
+			// over ride animation data from renderer (usually effects)
+			for (const key in this.props.override) {
+				this.props[key] = this.props.override[key];
+			}
+
+			// how often to reset wiggle
+			if (!suspendLinesUpdate) {
+				const updateDrawing = layer.update();
+				if (updateDrawing) drawing.update(this.props);
+			}
+
+			if (this.multiColor) this.ctx.beginPath();
+			for (let j = this.props.s; j < this.props.e - 1; j++) {
+				const s = drawing.get(j);
+				const e = drawing.get(j + 1);
+				if (s !== 'end' && e !== 'end') {
+					const off = [...s.off, ...e.off]; // offset stored in drawing points
+					
+					// catch for drawing - add flag?
+					// what is this?
+					// only happens on certain drawings but happens A LOT
+					// maybe happens when segment num changes ... ?
+					// still working on this lol
+					// als when in the middle of drawing
+
+					if (off.length < this.props.segmentNum + 1) {
+						for (let k = off.length - 1; k < this.props.segmentNum + 1; k++) {
+							off.push(new Cool.Vector());
+						}
+					}
+
+					if (off.length == 0) {
+						console.log(this.props)
+						console.log(off.length, this.props.segmentNum)
+					}
+					
+					const v = new Cool.Vector(e.x, e.y);
+					v.subtract(s);
+					v.divide(this.props.segmentNum);
+					this.ctx.moveTo(
+						this.props.x + s.x + off[0].x,
+						this.props.y + s.y + off[0].y
+					);
+					for (let k = 0; k < this.props.segmentNum; k++) {
+						const p = s.clone().add(v.clone().multiply(k));
+						if (!off[k + 1]) console.log('k + 1', k + 1, this.props, off, drawing);
+						this.ctx.lineTo( 
+							// breaks ? k + 1 : k (old breaky style)
+							this.props.x + p.x + v.x + off[k + 1].x,
+							this.props.y + p.y + v.y + off[k + 1].y
+						);
+					}
+
+					if (this.ctx.strokeStyle != this.props.color && this.multiColor)
+						this.ctx.strokeStyle = this.props.color;
+				}
+			}
+			
+			if (this.multiColor) this.ctx.stroke();
 		}
 		if (!this.multiColor) this.ctx.stroke();
 		if (this.onDraw) this.onDraw();
@@ -222,14 +225,19 @@ class LinesAnimation {
 				null;
 		}
 
-		this.layers = json.l;
+		// this.layers = json.l;
+		for (let i = 0; i < json.l.length; i++) {
+			// console.log(this.drawings[json.l[i].d].length)
+			this.layers[i] = new Layer(json.l[i], this.drawings[json.l[i].d].length);
+		}
 
 		// set first random values
 		for (let i = 0; i < this.layers.length; i++) {
 			const layer = this.layers[i];
-			if (!layer.l) layer.l = 5; // new layer counter
-			if (!layer.lc) layer.lc = 0;
-			this.drawings[layer.d].update(layer); 
+			this.drawings[layer.drawingIndex].update(layer);
+			// console.log(this.drawings[layer.drawingIndex].length)
+			// layer.drawingEndIndex = this.drawings[layer.drawingIndex].length;
+			// console.log(layer.drawingEndIndex);
 		}
 
 		for (const key in json.s) {

@@ -6,7 +6,7 @@ class UILayer extends UICollection {
 
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
-			text: `${layer.d}`,
+			text: `${layer.drawingIndex}`,
 			callback: params.callback
 		});
 
@@ -22,7 +22,7 @@ class UILayer extends UICollection {
 				modal.add(new UIButton({ 
 					text: "Cut Segment",
 					callback: () => {
-						const drawing = lns.anim.drawings[layer.d];
+						const drawing = lns.anim.drawings[layer.drawingIndex];
 						drawing.pop(); /* remove "end" */
 						drawing.pop(); /* remove segment */
 						drawing.push('end'); /* new end */
@@ -32,7 +32,7 @@ class UILayer extends UICollection {
 				modal.add(new UIButton({
 					text: "Cut Line",
 					callback: () => {
-						const drawing = lns.anim.drawings[layer.d];
+						const drawing = lns.anim.drawings[layer.drawingIndex];
 						drawing.pop(); /* remove "end" */
 						for (let i = drawing.length - 1; i > 0; i--) {
 							if (drawing[i] != 'end') drawing.pop();
@@ -112,6 +112,8 @@ class UILayer extends UICollection {
 
 				modal.add(new UILabel({ text: 'Property:' }));
 				modal.add(new UISelect({
+					// redo props, add linesInterval 
+					// interpolation?
 					options: ['e', 's', 'n', 'r', 'w', 'v', 'x', 'y'],
 					value: 'e',
 					selected: 'e',

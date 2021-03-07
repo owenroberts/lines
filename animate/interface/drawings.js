@@ -6,7 +6,7 @@ function Drawings() {
 		// - 1 for draw layer
 		// get layers containing drawing
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			if (lns.anim.layers[i].d == index) layers.push(lns.anim.layers[i]);
+			if (lns.anim.layers[i].drawingIndex == index) layers.push(lns.anim.layers[i]);
 		}
 
 		if (layers.length == 0) return false;

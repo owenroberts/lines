@@ -46,7 +46,7 @@ function Files(params) {
 
 		const drawingIndexes = [];
 		for (let i = 0; i < json.l.length; i++) {
-			const drawingIndex = json.l[i].d;
+			const drawingIndex = json.l[i].drawingIndex;
 			if (!drawingIndexes.includes(drawingIndex))
 				drawingIndexes.push(drawingIndex);
 		}
@@ -89,7 +89,7 @@ function Files(params) {
 				.then(response => { return response.json() })
 				.then(data => { self.loadJSON(data, callback); })
 				.catch(error => {
-					alert('File not found: ' + error.message);
+					// alert('File not found: ' + error.message);
 					console.error(error);
 				});
 		}
@@ -97,20 +97,16 @@ function Files(params) {
 
 	this.loadJSON = function(data, callback) {
 
-		lns.anim.drawings = [];
-		lns.anim.layers = [];
+		lns.anim = new LnsAnim(lns.canvas.ctx, lns.render.dps);
 		lns.anim.loadData(data, function() {
-			// set layers to classes 
-			for (let i = 0; i < data.l.length; i++) {
-				// console.log(data.l[i])
-				lns.anim.layers[i] = new Layer(data.l[i]);
-			}
 			lns.canvas.setWidth(data.w);
 			lns.canvas.setHeight(data.h);
 			lns.ui.faces.fps.update(data.fps);
 			if (data.bg) lns.canvas.setBGColor(data.bg);
 			lns.draw.reset(); 
-			if (callback) callback(data, params); 
+			// if (callback) callback(data, params); // why?
+			if (callback) callback(data);
+
 		});
 	};
 

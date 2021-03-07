@@ -7,8 +7,14 @@ window.addEventListener("load", function() {
 	lns.render = new Render(30, true); // (dps, stats?)
 
 	lns.anim = new LnsAnim(lns.canvas.ctx);
-
-	lns.draw = new Draw({ l: 4, n: 2, r: 1, w: 1, v: 0.1, c: '#000000' }); // defaults
+	lns.draw = new Draw({ 
+		linesInterval: 5, 
+		segmentNum: 2,
+		jiggleRange: 1,
+		wiggleRange: 1, 
+		v: 0.1, 
+		c: '#000000' 
+	}); // defaults
 	lns.bgImage = new Background();
 	lns.data = new Data(lns.anim);
 	lns.files = new Files({
@@ -32,7 +38,7 @@ window.addEventListener("load", function() {
 	lns.ui.load('./interface/interface.json', function() {
 		lns.draw.setDefaults();
 		lns.ui.settings.load(appLoad);
-		const url = location.search.split('=')[1]
+		const url = location.search.split('=')[1];
 		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.updateFIO);
 		lns.ui.update();
 		lns.render.start();
@@ -95,7 +101,7 @@ function appLoad(settings) {
 
 	/* lns.anim + ui */
 	lns.ui.faces.fps.update(settings.fps);
-	lns.ui.faces.c.update(settings.c);
+	// lns.ui.faces.color.update(settings.color);
 
 	// palettes - no need to separate module from ui bc its all ui 
 	// - only one not a ui with update ... 

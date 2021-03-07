@@ -43,15 +43,16 @@ function Draw(defaults) {
 
 	this.reset = function(f) {
 		if (self.drawing.length > 0) {
+			console.log(lns.ui.faces.segmentNum);
 			lns.anim.drawings.push(new Drawing()); // new Drawing?
 			/* seems repetietive - settings class ... ? */
 			// lns.anim.addLayer ??
 			lns.anim.layers.push(new Layer({ 
-				n: +lns.ui.faces.n.value,
-				r: +lns.ui.faces.r.value,
-				w: +lns.ui.faces.w.value,
+				segmentNum: +lns.ui.faces.segmentNum.value,
+				jiggleRange: +lns.ui.faces.jiggleRange.value,
+				wiggleRange: +lns.ui.faces.wiggleRange.value,
 				v: +lns.ui.faces.v.value,
-				c: lns.ui.faces.c.value,
+				color: lns.ui.faces.color.value,
 				d: lns.anim.drawings.length - 1,  
 				f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
 			}));
@@ -72,10 +73,11 @@ function Draw(defaults) {
 		/* layer loop function?? its called forEach dumbass */
 	};
 
+	// what uses this?
 	this.hasDrawing = function() {
 		return lns.anim.layers.some(layer => {
 			return layer.isInFrame(lns.anim.currentFrame) && 
-				lns.anim.drawings[layer.d].length > 0; 
+				lns.anim.drawings[layer.drawingIndex].length > 0; 
 			});
 	};
 

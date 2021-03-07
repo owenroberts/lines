@@ -10,6 +10,12 @@ class UIBlur extends UIText {
 	}
 
 	set value(_value) {
+		if (this.arguments) {
+			if (this.arguments['segmentNum']) {
+				console.trace();
+				console.log(_value);
+			}
+		}
 		if (_value !== undefined) this.el.placeholder = _value;
 		this.el.value = '';
 		

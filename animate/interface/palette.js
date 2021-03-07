@@ -7,8 +7,8 @@ function Palette() {
 		const name = self.current = prompt('Name this palette.');
 		if (name) {
 			self.palettes[name] = {
-				c: lns.draw.layer.c,
-				n: lns.draw.layer.n,
+				color: lns.draw.layer.color,
+				segmentNum: lns.draw.layer.segmentNum,
 				r: lns.draw.layer.r,
 				w: lns.draw.layer.w,
 				v: lns.draw.layer.v,
@@ -61,11 +61,12 @@ function Palette() {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const name = `Layer ${i}`;
 			const layer = lns.anim.layers[i];
+			// replace with paletteProps
 			const newPalette = {
-				c: layer.c,
-				n: layer.n,
-				r: layer.r,
-				w: layer.w,
+				color: layer.color,
+				segmentNum: layer.segmentNum,
+				jiggleRange: layer.jiggleRange,
+				wiggleRange: layer.wiggleRange,
 				v: layer.v,
 				lineWidth: lns.canvas.ctx.lineWidth,
 				mouseInterval: lns.draw.mouseInterval,

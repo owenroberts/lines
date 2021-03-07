@@ -28,8 +28,8 @@ function setupAnimateInterface(ui) {
 
 		lns.anim.layers.forEach(layer => {
 			if (layer) {
-				ui.faces.c.addColor(layer.c);
-				ui.faces.c.value = layer.c;
+				ui.faces.color.addColor(layer.color);
+				ui.faces.color.value = layer.color;
 			}
 		});
 

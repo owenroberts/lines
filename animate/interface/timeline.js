@@ -60,7 +60,7 @@ function Timeline() {
 
 		self.panel.timeline.setProp('--num-frames', lns.anim.endFrame + 1);
 		self.panel.timeline.setProp('--num-layers', lns.anim.layers.length - 1);
-		self.panel.timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.t.length, 0));
+		self.panel.timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.tweens.length, 0));
 
 		self.panel.timeline.clear();
 
@@ -109,9 +109,9 @@ function Timeline() {
 			gridRowEnd += 2;
 			self.panel.timeline.append(ui, `layer-${i}`);
 
-			/* add tweens */
-			for (let j = 0; j < layer.t.length; j++) {
-				const tween = layer.t[j]
+			/* add tweens -- add methods like getTweens */
+			for (let j = 0; j < layer.tweens.length; j++) {
+				const tween = layer.tweens[j];
 				const tweenUI = new UITween({
 					type: 'tween',
 					css: {

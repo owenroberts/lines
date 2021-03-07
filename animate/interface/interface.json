@@ -265,12 +265,12 @@
 				"list": [
 					{
 						"type": "UIColor",
-						"face": "c",
+						"face": "color",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
-							"arguments": ["c"]
+							"arguments": ["color"]
 						}
 					}
 				]
@@ -804,54 +804,54 @@
 				"list": [
 					{
 						"type": "UITextRange",
-						"label": "Lines Update",
-						"face": "l",
+						"label": "Lines Interval",
+						"face": "linesInterval",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
 							"min": 1,
 							"max": 10,
-							"arguments": ["l"]
+							"arguments": ["linesInterval"]
 						}
 					},
 					{
 						"type": "UITextRange",
 						"label": "Segments",
-						"face": "n",
+						"face": "segmentNum",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
 							"min": 1,
 							"max": 10,
-							"arguments": ["n"]
+							"arguments": ["segmentNum"]
 						}
 					},
 					{
 						"type": "UITextRange",
 						"label": "Jiggle",
-						"face": "r",
+						"face": "jiggleRange",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
 							"min": 0,
 							"max": 10,
-							"arguments": ["r"]
+							"arguments": ["jiggleRange"]
 						}
 					},
 					{
 						"type": "UITextRange",
 						"label": "Wiggle",
-						"face": "w",
+						"face": "wiggleRange",
 						"fromModule": {
 							"callback": "setProperty"
 						},
 						"params": {
 							"min": 0,
 							"max": 15,
-							"arguments": ["w"]
+							"arguments": ["wiggleRange"]
 						}
 					},
 					{

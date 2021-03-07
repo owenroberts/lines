@@ -26,7 +26,6 @@ class UITween extends UICollection {
 				modal.add(new UIBlur({
 					value: tween.ef,
 					callback: function(value) {
-						console.log(tween);
 						tween.ef = +value;
 					}
 				}));
@@ -71,7 +70,7 @@ class UITween extends UICollection {
 			type: 'remove',
 			text: '🗑',
 			callback: () => {
-				layer.t.splice(layer.t.indexOf(this), 1);
+				layer.tweens.splice(layer.tweens.indexOf(this), 1);
 				lns.ui.update();
 			}
 		});
