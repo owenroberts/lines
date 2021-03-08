@@ -8,12 +8,11 @@ class UIText extends UIInput {
 		this.el.addEventListener('focus', ev => {
 			this.el.select();
 		});
-
-		if (params.updateByKey) {
-			this.el.addEventListener('keyup', ev => {
-				this.callback(ev.target.value);
-			});
-		}
+		
+		this.el.addEventListener('keyup', ev => {
+			if (params.updateByKey) this.callback(ev.target.value);
+			// this.el.style.width = ((ev.target.value.length + 1) * 8) + 'px';
+		});
 
 		/* have to hit enter to confirm value */
 		this.el.addEventListener('keyup', ev => {

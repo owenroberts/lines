@@ -110,16 +110,12 @@ class LinesAnimation {
 		for (let i = 0; i < layers.length; i++) {
 			const layer = layers[i];
 			const drawing = this.drawings[layer.drawingIndex];
-
 			const props = layer.drawProps;
 
 			// better to get this interactively if Animate app
 			// this.props.e = layer.drawingEndIndex > 0 ? layer.drawingEndIndex : drawing.length;
 			props.endIndex = drawing.length;
 
-			// xy come from games -- should be GameAnim only?
-			// only works if game can edits props before super
-			// should see if x,y is usually a vector
 			if (x) props.x += x;
 			if (y) props.y += y;
 			

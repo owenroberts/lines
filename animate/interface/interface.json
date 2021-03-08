@@ -619,6 +619,9 @@
 				"module": "anim",
 				"list": [
 					{
+						"type": "UIRow"
+					},
+					{
 						"type": "UIBlur",
 						"label": "FPS",
 						"key": ";",
@@ -645,6 +648,9 @@
 						"params": {
 							"prompt": "Set Draws/Second"
 						}
+					},
+					{
+						"type": "UIRow"
 					},
 					{
 						"type": "UIText",

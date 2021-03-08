@@ -140,6 +140,8 @@ select {
 	&.block {
 		min-width: 100%;
 		width: max-content;
+		display: flex;
+		flex-wrap: wrap;
 	}
 
 	.row label { margin-bottom: 0; }
@@ -166,7 +168,7 @@ select {
 		}
 
 		input {
-			flex: 0 1 40px;
+			flex: 0 1 28px;
 			width: 100%;
 			text-align: right;
 		}
@@ -240,6 +242,7 @@ select {
 
 	.header {
 		flex-wrap: nowrap;
+		flex-basis: 100%;
 		label {  font-size: 1.0625em; }
 		span, label { 
 			margin-top: 0; 
