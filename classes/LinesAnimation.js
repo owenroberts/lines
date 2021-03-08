@@ -21,11 +21,7 @@ class LinesAnimation {
 		this.currentFrame = 0;
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
-		
-		// props are layer specific right?? -- part of layer class?
-		// this.props = {
-		// 	override: {},
-		// };
+
 		this.override = {};
 
 		// most animations use default state, game anims/textures have states for changing frame
@@ -74,11 +70,11 @@ class LinesAnimation {
 	}
 
 	overrideProperty(prop, value) {
-		this.props.override[prop] = value;
+		this.override[prop] = value;
 	}
 
 	cancelOverride() {
-		this.props.override = {};
+		this.override = {};
 	}
 
 	update() {
@@ -112,10 +108,6 @@ class LinesAnimation {
 			const drawing = this.drawings[layer.drawingIndex];
 			const props = layer.drawProps;
 
-			// better to get this interactively if Animate app
-			// this.props.e = layer.drawingEndIndex > 0 ? layer.drawingEndIndex : drawing.length;
-			props.endIndex = drawing.length;
-
 			if (x) props.x += x;
 			if (y) props.y += y;
 			
@@ -143,7 +135,7 @@ class LinesAnimation {
 			}
 
 			if (this.multiColor) this.ctx.beginPath();
-			for (let j = props.startIndex; j < props.endIndex - 1; j++) {
+			for (let j = props.startIndex, endIndex = drawing.length; j < endIndex - 1; j++) {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);
 				if (s !== 'end' && e !== 'end') {
