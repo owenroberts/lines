@@ -192,6 +192,7 @@ class Layer {
 			linesInterval: this.linesInterval,
 			color: this.color,
 			startIndex: this.drawingStartIndex,
+			endIndex: this.drawingEndIndex,
 			tweens: this.tweens,
 		};
 		if (this.order) props.o = this.order;

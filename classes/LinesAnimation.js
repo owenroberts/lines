@@ -135,7 +135,8 @@ class LinesAnimation {
 			}
 
 			if (this.multiColor) this.ctx.beginPath();
-			for (let j = props.startIndex, endIndex = drawing.length; j < endIndex - 1; j++) {
+			const endIndex = props.endIndex > 0 ? props.endIndex : drawing.length;
+			for (let j = props.startIndex; j < endIndex - 1; j++) {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);
 				if (s !== 'end' && e !== 'end') {
