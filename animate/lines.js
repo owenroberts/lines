@@ -12,7 +12,7 @@ window.addEventListener("load", function() {
 		segmentNum: 2,
 		jiggleRange: 1,
 		wiggleRange: 1, 
-		wiggleSpeed: 0.1, 
+		wiggleSpeed: 0.1,
 		color: '#000000' 
 	}); // defaults
 	lns.bgImage = new Background();
@@ -55,7 +55,7 @@ function appSave() {
 	return {
 		canvasColor: lns.canvas.bgColor,
 		lineWidth: lns.canvas.ctx.lineWidth,
-		c: lns.draw.layer.c,
+		color: lns.draw.layer.color,
 		width: lns.canvas.width,
 		height: lns.canvas.height,
 		fps: lns.anim.fps,
@@ -75,6 +75,7 @@ function appSave() {
 }
 
 function appLoad(settings) {
+	console.log(settings);
 
 	/* environment + ui + lns.anim */
 	lns.ui.faces.dps.update(settings.dps);

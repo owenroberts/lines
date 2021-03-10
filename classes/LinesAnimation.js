@@ -115,10 +115,11 @@ class LinesAnimation {
 				for (let j = 0; j < props.tweens.length; j++) {
 					const tween = props.tweens[j];
 					// range class lol -- wait Range exists???
-					if (tween.sf <= this.currentFrame && tween.ef >= this.currentFrame) {
-						this.props[tween.prop] = Cool.map(this.currentFrame, tween.sf, tween.ef, tween.sv, tween.ev);
-						if (tween.prop == 's' || tween.prop == 'e') 
-							this.props[tween.prop] = Math.round(this.props[tween.prop]);
+					if (tween.startFrame <= this.currentFrame && 
+						tween.endFrame >= this.currentFrame) {
+						props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
+						if (tween.prop == 'startIndex' || tween.prop == 'endIndex') 
+							props[tween.prop] = Math.round(props[tween.prop]);
 					}
 				}
 			}
@@ -201,19 +202,20 @@ class LinesAnimation {
 				null;
 		}
 
-		// this.layers = json.l;
 		for (let i = 0; i < json.l.length; i++) {
-			// console.log(this.drawings[json.l[i].d].length)
-			this.layers[i] = new Layer(json.l[i], this.drawings[json.l[i].d].length);
-		}
+			const params = this.loadParams(json.l[i]);
+			const index = json.l[i].d;
+			console.log(this.drawings[index])
+			params.drawingEndIndex = this.drawings[index].length;
+			
+			const layer = new Layer(params);
+			this.layers[i] = layer;
+		// }
 
-		// set first random values
-		for (let i = 0; i < this.layers.length; i++) {
-			const layer = this.layers[i];
+		// // set first random values
+		// for (let i = 0; i < this.layers.length; i++) {
+		// 	const layer = this.layers[i];
 			this.drawings[layer.drawingIndex].update(layer);
-			// console.log(this.drawings[layer.drawingIndex].length)
-			// layer.drawingEndIndex = this.drawings[layer.drawingIndex].length;
-			// console.log(layer.drawingEndIndex);
 		}
 
 		for (const key in json.s) {
@@ -232,6 +234,30 @@ class LinesAnimation {
 
 		if (callback) callback(json);
 		if (this.onLoad) this.onLoad();
+	}
+
+	loadParams(json) {
+		console.log(json);
+		const params = {
+			drawingIndex: json.d,
+			tweens: json.t.map(t => { 
+				return { prop: t[0], startFrame: t[1], endFrame: t[2], startValue: t[3], endValue: t[4]}
+			}),
+			startFrame: json.f[0],
+			endFrame: json.f[1],
+			x: json.x || 0,
+			y: json.y || 0,
+			color: json.c,
+			segmentNum: json.n,
+			jiggleRange: json.r,
+			wiggleRange: json.w,
+			wiggleSpeed: json.v,
+			wiggleSegments: json.ws,
+			breaks: json.b || false,
+			linesInterval: json.l || 5,
+		};
+		if (json.o) params.order = json.o; // test && ?
+		return params;
 	}
 
 	setOnLoad(callback) {

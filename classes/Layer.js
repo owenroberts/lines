@@ -1,35 +1,38 @@
 class Layer {
 	constructor(params, drawingEndIndex) {
 		// console.log(params);
-		this.drawingIndex = params.d; // fix some time
+		this.drawingIndex = params.drawingIndex; // fix some time
+		this.tweens = params.tweens || [];
+
 		this.x = params.x || 0;
 		this.y = params.y || 0;
-		this.tweens = params.t || [];
 		
-		this.f = params.f;
-		this._startFrame = params.f.s;
-		this._endFrame = params.f.e;
+		this._startFrame = params.startFrame;
+		this._endFrame = params.endFrame || params.startFrame;
 
 		this.drawingStartIndex = 0;
-		this.drawingEndIndex = drawingEndIndex || -1;
+		this.drawingEndIndex = params.drawingEndIndex || -1;
 		
-		this.color = params.c || params.color || '#000000';
-		this.segmentNum =  params.segmentNum || params.n; // need to fix these ... 
-		this.jiggleRange = params.jiggleRange || params.r;
-		this.wiggleRange = params.wiggleRange || params.w;
-		this.wiggleSpeed = params.wiggleSpeed || params.v;
-		this.wiggleSegments = params.wiggleSegments || params.ws || false; // true/false
-		this.breaks = params.breaks || params.b || false;
+		console.log(params.color);
+		this.color = params.color || '#000000';
+
+		this.segmentNum =  params.segmentNum; // need to fix these ... 
+		this.jiggleRange = params.jiggleRange;
+		this.wiggleRange = params.wiggleRange;
+		this.wiggleSpeed = params.wiggleSpeed;
+		this.wiggleSegments = params.wiggleSegments || false; // true/false
+		this.breaks = params.breaks || false;
+		
 		if (params.o) this.order = params.o;
 
-		this.linesInterval = params.l || 5; // draw count per line update
+		this.linesInterval = params.linesInterval // draw count per line update
 		this.linesCount = 0; // line update counter
 
-		this.isToggled = false;
+		this.isToggled = false; // lns anim layer
 		this.resetTweens();
 
-		// console.trace();
-		// console.log(this);
+		console.log(this);
+		console.log(this.color);
 	}
 
 	update() {
@@ -52,15 +55,14 @@ class Layer {
 		this.isToggled = !this.isToggled;
 	}
 
-	// remove this??
-	remove() {
-		lns.anim.layers.splice(lns.anim.layers.indexOf(this), 1);
-	}
-
+	// would never call this outside of animate right?
 	addTween(tween) {
 		this.tweens.push(tween);
-		if (tween.sf < this.startFrame) this.startFrame = tween.sf;
-		if (tween.ef > this.endFrame) this.endFrame = tween.ef;
+		if (tween.startFrame < this.startFrame) this.startFrame = tween.startFrame;
+		if (tween.endFrame > this.endFrame) this.endFrame = tween.endFrame;
+		if (lns.anim.stateName == 'default' && lns.anim.state.end < this.endFrame) {
+			lns.anim.state.end = this.endFrame;
+		}
 	}
 
 	get startFrame() {
@@ -79,6 +81,14 @@ class Layer {
 	set endFrame(f) {
 		this._endFrame = Math.max(0, +f);
 		this.resetTweens();
+	}
+
+	resetTweens() {
+		for (let i = 0; i < this.tweens.length; i++) {
+			const tween = this.tweens[i];
+			if (tween.startFrame < this.startFrame) tween.startFrame = this.startFrame;
+			if (tween.endFrame > this.endFrame) tween.endFrame = this.endFrame;
+		}
 	}
 
 	addIndex(index) {
@@ -151,30 +161,13 @@ class Layer {
 			w: this.wiggleRange,
 			v: this.wiggleSpeed,
 			ws: this.wiggleSegments,
-			x: this.x,
-			y: this.y,
 			c: this.isToggled ? this.tempColor : this.color,
-			f: { s: this.startFrame, e: this.endFrame },
+			f: [this.startFrame, this.endFrame],
 			d: this.drawingIndex,
 		};
-		if (this.tweens) props.t = this.tweens;
-		if (this.order) props.o = this.order;
-		return props;
-	}
-
-	get props() {
-		const props = {
-			segmentNum: this.segmentNum,
-			jiggleRange: this.jiggleRange,
-			wiggleRange: this.wiggleRange,
-			wiggleSpeed: this.wiggleSpeed,
-			wiggleSegments: this.wiggleSegments,
-			x: this.x,
-			y: this.y,
-			l: this.l,
-			linesInterval: this.linesInterval,
-			c: this.isToggled ? this.tempColor : this.color,
-		};
+		if (this.x) props.x = x; // ignore if 0 or undefined
+		if (this.y) props.y = y;
+		if (this.tweens) props.t = this.tweens.map(tween => { return [tween.prop, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue]});
 		if (this.order) props.o = this.order;
 		return props;
 	}
@@ -199,11 +192,29 @@ class Layer {
 		return props;
 	}
 
-	resetTweens() {
-		for (let i = 0; i < this.tweens.length; i++) {
-			const tween = this.tweens[i];
-			if (tween.sf < this.startFrame) tween.sf = this.startFrame;
-			if (tween.ef > this.endFrame) tween.ef = this.endFrame;
-		}
+	get editProps() {
+		return {
+			segmentNum: this.segmentNum,
+			jiggleRange: this.jiggleRange,
+			wiggleRange: this.wiggleRange,
+			wiggleSpeed: this.wiggleSpeed,
+			wiggleSegments: this.wiggleSegments,
+			linesInterval: this.linesInterval,
+			breaks: this.breaks,
+			color: this.color,
+		};
+	}
+
+	get tweenProps() {
+		return {
+			segmentNum: this.segmentNum,
+			jiggleRange: this.jiggleRange,
+			wiggleRange: this.wiggleRange,
+			wiggleSpeed: this.wiggleSpeed,
+			wiggleSegments: this.wiggleSegments,
+			linesInterval: this.linesInterval,
+			startIndex: this.drawingStartIndex,
+			endIndex: this.drawingEndIndex,
+		};
 	}
 }

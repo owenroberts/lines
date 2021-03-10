@@ -237,7 +237,7 @@ function Data(anim) {
 
 	this.offsetDrawing = function(offset) {
 		// get toggled layers or offset all layers in frame
-		let layers = anim.layers.filter(layer => layer.toggled);
+		let layers = anim.layers.filter(layer => layer.isToggled);
 		if (layers.length == 0) {
 			layers = lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame));
 		}

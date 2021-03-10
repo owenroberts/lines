@@ -16,33 +16,33 @@ class UITween extends UICollection {
 
 				modal.add(new UILabel({ text: 'Start Frame:' }));
 				modal.add(new UIBlur({
-					value: tween.sf,
+					value: tween.startFrame,
 					callback: function(value) {
-						tween.sf = +value;
+						tween.startFrame = +value;
 					}
 				}));
 
 				modal.add(new UILabel({ text: 'End Frame:' }));
 				modal.add(new UIBlur({
-					value: tween.ef,
+					value: tween.endFrame,
 					callback: function(value) {
-						tween.ef = +value;
+						tween.endFrame = +value;
 					}
 				}));
 
 				modal.add(new UILabel({ text: 'Start Value:' }));
 				modal.add(new UIBlur({
-					value: tween.sv,
+					value: tween.startValue,
 					callback: function(value) {
-						tween.sv = +value;
+						tween.startValue = +value;
 					}
 				}));
 
 				modal.add(new UILabel({ text: 'End Value:' }));
 				modal.add(new UIBlur({
-					value: tween.ev,
+					value: tween.endValue,
 					callback: function(value) {
-						tween.ev = +value;
+						tween.endValue = +value;
 					}
 				}));
 			}

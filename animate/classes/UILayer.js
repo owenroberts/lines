@@ -97,60 +97,65 @@ class UILayer extends UICollection {
 			callback: () => {
 				
 				const tween = {
-					prop: 'e',
-					sf: lns.anim.currentFrame,
-					ef: lns.anim.currentFrame + 10,
-					sv: 0,
-					ev: 'end'
+					prop: 'endIndex',
+					startFrame: lns.anim.currentFrame,
+					endFrame: lns.anim.currentFrame + 10,
+					startValue: 0,
+					endValue: 'end'
 				};
 
 				const modal = new UIModal('Add Tween', lns, this.position, function() {
-					tween.ev = lns.anim.drawings[layer.d].length;
+					tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
 					layer.addTween(tween);
 					lns.ui.update();
 				});
 
-				modal.add(new UILabel({ text: 'Property:' }));
+				modal.addBreak();
+				modal.addLabel('Property:');
 				modal.add(new UISelect({
 					// redo props, add linesInterval 
 					// interpolation?
-					options: ['e', 's', 'n', 'r', 'w', 'v', 'x', 'y'],
-					value: 'e',
-					selected: 'e',
+					options: Object.keys(layer.tweenProps),
+					value: 'endIndex',
+					selected: 'endIndex',
 					callback: function(value) {
 						tween.prop = value;
 					}
 				}));
 
-				modal.add(new UILabel({ text: 'Start Frame:' }));
+				modal.addBreak();
+				modal.addLabel('Start Frame:');
 				modal.add(new UIBlur({
-					value: tween.sf,
+					value: tween.startFrame,
 					callback: function(value) {
-						tween.sf = +value;
+						tween.startFrame = +value;
 					}
 				}));
 
-				modal.add(new UILabel({ text: 'End Frame:' }));
+				modal.addBreak();
+				modal.addLabel('End Frame:');
 				modal.add(new UIBlur({
-					value: tween.ef,
+					value: tween.endFrame,
 					callback: function(value) {
-						tween.ef = +value;
+						tween.endFrame = +value;
 					}
 				}));
 
-				modal.add(new UILabel({ text: 'Start Value:' }));
+				modal.addBreak();
+				modal.addLabel('Start Value:');
 				modal.add(new UIBlur({
-					value: tween.sv,
+					value: tween.startValue,
 					callback: function(value) {
-						tween.sv = +value;
+						tween.startValue = +value;
 					}
 				}));
 
-				modal.add(new UILabel({ text: 'End Value:' }));
+				modal.addBreak();
+				modal.addLabel('End Value:');
 				modal.add(new UIBlur({
-					value: tween.ev,
+					value: tween.endValue,
 					callback: function(value) {
-						tween.ev = +value;
+						tween.endValue = +value;
 					}
 				}));
 			}

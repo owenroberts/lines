@@ -20,7 +20,7 @@ function Files(params) {
 			lns.canvas.fitCanvasToDrawing();
 
 		const json = {};
-		json.v = "2.4";
+		json.v = "2.5";
 		json.w = +lns.canvas.width;
 		json.h = +lns.canvas.height;
 		json.fps = +lns.anim.fps;
@@ -44,30 +44,24 @@ function Files(params) {
 		/* search frames for layers and drawings used */
 		// functional approach here ??
 
-		const drawingIndexes = [];
-		for (let i = 0; i < json.l.length; i++) {
-			const drawingIndex = json.l[i].drawingIndex;
-			if (!drawingIndexes.includes(drawingIndex))
-				drawingIndexes.push(drawingIndex);
-		}
+
+		const drawingIndexes = new Set(json.l.map(layer => layer.d));
 
 		json.d = [];
-		for (let i = 0; i < drawingIndexes.length; i++) {
-			const index = drawingIndexes[i];
-			const drawing = lns.anim.drawings[index];
-			const d = [];
-			for (let j = 0; j < drawing.length; j++) {
-				const point = drawing.get(j);
-				if (point == 'end') d.push(0);
-				else d.push([point.x, point.y]);
-			}
-			json.d[index] = d;
+		console.log(lns.anim.drawings);
+		for (let i = 0; i < lns.anim.drawings.length; i++) {
+			json.d[i] = drawingIndexes.has(i) ?
+				lns.anim.drawings[i].points.map(point => point == 'end' ? 0 : [point.x, point.y])
+				: null;
 		}
 
-		/* don't save default state */
 		if (Object.keys(lns.anim.states).length > 1) {
-			json.s = _.cloneDeep(lns.anim.states);
-			delete json.s.default;
+			json.s = [];
+			for (const state in lns.anim.states) {
+				if (state != 'default') {
+					json.s.push([states[state].start, states[state].end]);
+				}
+			}
 		}
 
 		const jsonfile = JSON.stringify(json);

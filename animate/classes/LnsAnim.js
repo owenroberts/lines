@@ -18,4 +18,5 @@ class LnsAnim extends LinesAnimation {
 		if (index >= 0) this.layers.splice(index, 1);
 	}
 
+
 }

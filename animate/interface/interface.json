@@ -1145,10 +1145,7 @@
 					},
 					{
 						"type": "UIRow",
-						"k": "timeline",
-						"params": {
-							"id": "timeline"
-						}
+						"k": "timeline"
 					}
 				]
 			}

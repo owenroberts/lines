@@ -19,8 +19,8 @@ function Draw(defaults) {
 	lns.anim.drawings.push(new Drawing());
 	lns.anim.layers.push(new Layer({ 
 		...defaults, 
-		d: Math.max(lns.anim.drawings.length - 1, 0),  
-		f: { s: lns.anim.currentFrame, e: lns.anim.currentFrame }
+		drawingIndex: Math.max(lns.anim.drawings.length - 1, 0),  
+		startFrame: lns.anim.currentFrame,
 	}));
 
 	this.setProperties = function(props) {
@@ -33,6 +33,9 @@ function Draw(defaults) {
 	};
 
 	this.setProperty = function(prop, value) {
+		if (prop == 'color') {
+			console.log(prop, value);
+		}
 		lns.anim.updateProperty(prop, value);
 		self.layer[prop] = value;
 	};
@@ -46,14 +49,15 @@ function Draw(defaults) {
 			lns.anim.drawings.push(new Drawing()); // new Drawing?
 			/* seems repetietive - settings class ... ? */
 			// lns.anim.addLayer ??
-			lns.anim.layers.push(new Layer({ 
+			lns.anim.layers.push(new Layer({
+				linesInterval: +lns.ui.faces.linesInterval.value,
 				segmentNum: +lns.ui.faces.segmentNum.value,
 				jiggleRange: +lns.ui.faces.jiggleRange.value,
 				wiggleRange: +lns.ui.faces.wiggleRange.value,
 				wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
 				color: lns.ui.faces.color.value,
-				d: lns.anim.drawings.length - 1,
-				f: { s: +f || lns.anim.currentFrame, e: +f || lns.anim.currentFrame }
+				drawingIndex: lns.anim.drawings.length - 1,
+				startFrame: lns.anim.currentFrame,
 			}));
 			lns.data.saveState();
 		}

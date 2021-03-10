@@ -89,7 +89,7 @@ function Timeline() {
 		let gridRowEnd = 3;
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
-			if (layer.toggled) layer.toggle();  // for rebuilding interface constantly
+			if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 			const ui = new UILayer({
 				type: 'layer',
 				css: {
@@ -100,7 +100,8 @@ function Timeline() {
 				},
 				callback: function() {
 					// only update the values when toggling on, ignore when toggling off
-					if (!layer.toggled) lns.draw.setProperties(layer.props);
+					console.log(layer);
+					if (!layer.isToggled) lns.draw.setProperties(layer.editProps);
 					layer.toggle();
 				}
 			}, layer);
@@ -117,8 +118,8 @@ function Timeline() {
 					css: {
 						gridRowStart: gridRowStart, 
 						gridRowEnd: gridRowEnd, 	
-						gridColumnStart: tween.sf * 2 + 1,
-						gridColumnEnd: tween.ef * 2 + 3
+						gridColumnStart: tween.startFrame * 2 + 1,
+						gridColumnEnd: tween.endFrame * 2 + 3
 					},
 				}, tween, layer);
 				
@@ -160,7 +161,7 @@ function Timeline() {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
 			if (layer.isInFrame(lns.anim.currentFrame)) {
-				if (!layer.toggled) {
+				if (!layer.isToggled) {
 					self.panel.timeline[`layer-${i}`].toggle.handler(); // this is weird
 				}
 			}
@@ -169,14 +170,14 @@ function Timeline() {
 
 	// select all
 	this.selectAll = function() {
-		const allToggled = lns.anim.layers.filter(layer => layer.toggled).length == lns.anim.layers.length - 1;
+		const allToggled = lns.anim.layers.filter(layer => layer.isToggled).length == lns.anim.layers.length - 1;
 		
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
-			if (allToggled && layer.toggled) {
+			if (allToggled && layer.isToggled) {
 				self.panel.timeline[`layer-${i}`].toggle.on();
 				lns.anim.layers[i].toggle();
-			} else if (!layer.toggled) {
+			} else if (!layer.isToggled) {
 				lns.anim.layers[i].toggle();
 				self.panel.timeline[`layer-${i}`].toggle.off(); // this is weird
 			}
