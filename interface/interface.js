@@ -230,7 +230,6 @@ function Interface(app) {
 		if (data.label) panel.add(new UILabel({ text: data.label}));
 		
 		let ui = new uiTypes[data.type](params);
-		if (params.prompt) ui.prompt = params.prompt; /* only key commands -- why here? */
 		
 		if (data.type == 'UIRow') panel.addRow(data.k, params.class);
 		else if (data.k) panel.append(ui, data.k);
@@ -238,7 +237,7 @@ function Interface(app) {
 
 		/* add is to row, append is adding it straight there */
 
-		
+		if (params.prompt) ui.prompt = params.prompt; /* only key commands -- why here? */
 		if (params.key) self.keys[data.key] = ui;
 		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
 	};
