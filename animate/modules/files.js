@@ -50,10 +50,10 @@ function Files(params) {
 		}
 
 		if (Object.keys(lns.anim.states).length > 1) {
-			json.s = [];
+			json.s = {};
 			for (const state in lns.anim.states) {
 				if (state != 'default') {
-					json.s.push([states[state].start, states[state].end]);
+					json.s[state] = [states[state].start, states[state].end];
 				}
 			}
 		}

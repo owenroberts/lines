@@ -216,7 +216,10 @@ class Lines {
 		}
 
 		for (const key in json.s) {
-			this.states[key] = json.s[key];
+			this.states[key] = {
+				start: json.s[key][0],
+				end: json.s[key][1],
+			};
 		}
 
 		if (this.states.default)
