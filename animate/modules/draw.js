@@ -33,9 +33,6 @@ function Draw(defaults) {
 	};
 
 	this.setProperty = function(prop, value) {
-		if (prop == 'color') {
-			console.log(prop, value);
-		}
 		lns.anim.updateProperty(prop, value);
 		self.layer[prop] = value;
 	};

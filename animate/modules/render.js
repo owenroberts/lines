@@ -33,6 +33,8 @@ function Render(dps, showStats) {
 		if (!lns.anim.isPlaying) {
 			lns.ui.play.checkEnd();
 			lns.ui.timeline.update();
+		} else {
+			lns.draw.layer.startFrame = lns.draw.layer.endFrame = lns.anim.currentFrame;
 		}
 		lns.anim.isPlaying = !lns.anim.isPlaying;
 	};

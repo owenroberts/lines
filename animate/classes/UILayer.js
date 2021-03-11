@@ -15,7 +15,6 @@ class UILayer extends UICollection {
 			text: "✎",
 			callback: () => {
 				const modal = new UIModal('Edit Layer', lns, this.position, () => {
-					// this.update();
 					lns.ui.update();
 				});
 
@@ -142,7 +141,7 @@ class UILayer extends UICollection {
 				}));
 
 				modal.addBreak();
-				modal.addLabel('Start Value:');
+				modal.addLabel('End Frame:');
 				modal.add(new UIBlur({
 					value: tween.startValue,
 					callback: function(value) {

@@ -43,8 +43,9 @@ class UIModal extends UICollection {
 		this.el.insertBefore(component.el, this.break.el);
 	}
 
-	addBreak() {
+	addBreak(label) {
 		this.add(new UIElement({ class: "break" }));
+		if (label) this.addLabel(label);
 	}
 
 	addLabel(labelText) {

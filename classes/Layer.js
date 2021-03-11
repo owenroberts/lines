@@ -1,6 +1,5 @@
 class Layer {
 	constructor(params, drawingEndIndex) {
-		// console.log(params);
 		this.drawingIndex = params.drawingIndex; // fix some time
 		this.tweens = params.tweens || [];
 
@@ -13,7 +12,6 @@ class Layer {
 		this.drawingStartIndex = 0;
 		this.drawingEndIndex = params.drawingEndIndex || -1;
 		
-		console.log(params.color);
 		this.color = params.color || '#000000';
 
 		this.segmentNum =  params.segmentNum; // need to fix these ... 
@@ -23,16 +21,13 @@ class Layer {
 		this.wiggleSegments = params.wiggleSegments || false; // true/false
 		this.breaks = params.breaks || false;
 		
-		if (params.o) this.order = params.o;
+		if (params.order) this.order = params.order;
 
 		this.linesInterval = params.linesInterval // draw count per line update
 		this.linesCount = 0; // line update counter
 
 		this.isToggled = false; // lns anim layer
 		this.resetTweens();
-
-		console.log(this);
-		console.log(this.color);
 	}
 
 	update() {
@@ -149,7 +144,7 @@ class Layer {
 	}
 
 	isInFrame(index) {
-		// if (lns.anim.layers.indexOf(this) == -1) return false; // idk
+		// if (lns.anim.layers.indexOf(this) == -1) return false; // idk -- maybe to ignore the draw layer
 		if (index >= this.startFrame && index <= this.endFrame) return true;
 		else return false;
 	}

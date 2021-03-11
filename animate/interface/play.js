@@ -5,8 +5,10 @@ function Play() {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// no before ?? 
 			lns.anim.frame = +f;
+			
 			lns.draw.layer.startFrame = lns.anim.currentFrame;
 			lns.draw.layer.endFrame = lns.anim.currentFrame;
+
 			lns.ui.update();
 		}
 	}; /* f key */
@@ -31,6 +33,7 @@ function Play() {
 			lns.draw.reset(next);
 			lns.anim.frame = next;
 		} else {
+			console.log(lns.draw.layer.startFrame);
 			// put in reset? 
 			if (dir > 0) {
 				if (lns.anim.currentFrame < lns.anim.state.end  || 
@@ -46,6 +49,7 @@ function Play() {
 				lns.draw.layer.endFrame = next;
 				lns.anim.frame = next;
 			}
+			console.log(lns.draw.layer.startFrame);
 		}
 
 		lns.data.saveState();

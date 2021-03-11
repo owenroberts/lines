@@ -75,7 +75,6 @@ function appSave() {
 }
 
 function appLoad(settings) {
-	console.log(settings);
 
 	/* environment + ui + lns.anim */
 	lns.ui.faces.dps.update(settings.dps);

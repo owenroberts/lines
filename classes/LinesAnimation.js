@@ -204,17 +204,11 @@ class LinesAnimation {
 
 		for (let i = 0; i < json.l.length; i++) {
 			const params = this.loadParams(json.l[i]);
-			const index = json.l[i].d;
-			console.log(this.drawings[index])
-			params.drawingEndIndex = this.drawings[index].length;
+			params.drawingEndIndex = this.drawings[params.drawingIndex].length;
 			
 			const layer = new Layer(params);
 			this.layers[i] = layer;
-		// }
 
-		// // set first random values
-		// for (let i = 0; i < this.layers.length; i++) {
-		// 	const layer = this.layers[i];
 			this.drawings[layer.drawingIndex].update(layer);
 		}
 
@@ -237,7 +231,6 @@ class LinesAnimation {
 	}
 
 	loadParams(json) {
-		console.log(json);
 		const params = {
 			drawingIndex: json.d,
 			tweens: json.t.map(t => { 
@@ -256,7 +249,7 @@ class LinesAnimation {
 			breaks: json.b || false,
 			linesInterval: json.l || 5,
 		};
-		if (json.o) params.order = json.o; // test && ?
+		if (json.o) params.order = json.o;
 		return params;
 	}
 

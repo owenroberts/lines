@@ -100,7 +100,6 @@ function Timeline() {
 				},
 				callback: function() {
 					// only update the values when toggling on, ignore when toggling off
-					console.log(layer);
 					if (!layer.isToggled) lns.draw.setProperties(layer.editProps);
 					layer.toggle();
 				}
