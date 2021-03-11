@@ -44,14 +44,12 @@ const LayerMixin = {
 		else if (this.startFrame == index) this.startFrame += 1;
 		else if (this.endFrame == index) this.endFrame -= 1;
 		else if (index > this.startFrame && index < this.endFrame) {
-			const layer = _.cloneDeep(this);
+			const layer = new Layer(this.getCloneProps());
 			layer.startFrame = index + 1;
 			layer.endFrame = this.endFrame;
 			layer.resetTweens();
-
 			this.endFrame = index - 1;
 			this.resetTweens();
-
 			return layer;
 		} else {
 			// outside range? fixes insert?
@@ -76,7 +74,7 @@ const LayerMixin = {
 		return this;
 	},
 
-	get saveProps() {
+	getSaveProps() {
 		const props = {
 			n: this.segmentNum,
 			r: this.jiggleRange,
@@ -94,7 +92,7 @@ const LayerMixin = {
 		return props;
 	},
 
-	get editProps() {
+	getEditProps() {
 		return {
 			segmentNum: this.segmentNum,
 			jiggleRange: this.jiggleRange,
@@ -107,7 +105,7 @@ const LayerMixin = {
 		};
 	},
 
-	get tweenProps() {
+	getTweenProps() {
 		return {
 			segmentNum: this.segmentNum,
 			jiggleRange: this.jiggleRange,
@@ -118,6 +116,27 @@ const LayerMixin = {
 			startIndex: this.drawingStartIndex,
 			endIndex: this.drawingEndIndex,
 		};
+	},
+
+	getCloneProps() {
+		return props = {
+			drawingIndex: this.drawingIndex,
+			segmentNum: this.segmentNum,
+			jiggleRange: this.jiggleRange,
+			wiggleRange: this.wiggleRange,
+			wiggleSpeed: this.wiggleSpeed,
+			wiggleSegments: this.wiggleSegments,
+			breaks: this.breaks,
+			linesInterval: this.linesInterval,
+			x: this.x,
+			y: this.y,
+			color: this.color,
+			drawingStartIndex: this.drawingStartIndex,
+			drawingEndIndex: this.drawingEndIndex,
+			startFrame: this.startFrame,
+			endFrame: this.endFrame,
+		};
+		// ignore tweens for now
 	}
 
 };

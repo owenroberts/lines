@@ -239,7 +239,6 @@ class Lines {
 	loadParams(json) {
 		const params = {
 			drawingIndex: json.d,
-			
 			startFrame: json.f[0],
 			endFrame: json.f[1],
 			x: json.x || 0,

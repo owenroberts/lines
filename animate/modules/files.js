@@ -34,10 +34,10 @@ function Files(params) {
 				.map(layer => {
 					layer.startFrame = 0;
 					layer.endFrame = 0;
-					return layer.saveProps;
+					return layer.getSaveProps();
 				});
 		} else {
-			json.l = lns.anim.layers.map(layer => { return layer.saveProps });
+			json.l = lns.anim.layers.map(layer => { return layer.getSaveProps() });
 		}
 
 		const drawingIndexes = new Set(json.l.map(layer => layer.d));

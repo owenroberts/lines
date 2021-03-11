@@ -100,7 +100,7 @@ function Timeline() {
 				},
 				callback: function() {
 					// only update the values when toggling on, ignore when toggling off
-					if (!layer.isToggled) lns.draw.setProperties(layer.editProps);
+					if (!layer.isToggled) lns.draw.setProperties(layer.getEditProps());
 					layer.toggle();
 				}
 			}, layer);
@@ -145,11 +145,10 @@ function Timeline() {
 			const layer = lns.anim.layers[i];
 			if (layer.isInFrame(lns.anim.currentFrame)) {
 				/* this is repeated in ui layer */
-				const newLayer = new Layer(_.cloneDeep(layer));
-				newLayer.startFrame = lns.anim.currentFrame + 1;
+				const props = layer.getCloneProps();
+				props.startFrame = lns.anim.currentFrame + 1;
+				lns.anim.addLayer(new Layer(props));
 				layer.endFrame = lns.anim.currentFrame;
-				// this must be to put new layer in front of draw layer
-				lns.anim.layers.splice(lns.anim.layers.length - 1, 0, newLayer); /* func ? */
 			}
 		}
 		lns.ui.play.setFrame(lns.anim.currentFrame + 1);

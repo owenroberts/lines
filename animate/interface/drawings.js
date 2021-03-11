@@ -30,6 +30,7 @@ function Drawings() {
 			if (lns.anim.drawings[i]) {
 				const drawing = lns.anim.drawings[i];
 				let layer = self.getLayer(i); /* check for existing layer */
+				console.log(layer);
 				let inFrame = layer ? layer.isInFrame(lns.anim.currentFrame) : false;
 
 				self.panel.drawings.append(new UIToggle({

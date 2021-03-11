@@ -9,7 +9,7 @@ class Layer {
 		this._startFrame = params.startFrame;
 		this._endFrame = params.endFrame || params.startFrame;
 
-		this.drawingStartIndex = 0;
+		this.drawingStartIndex = params.drawingStartIndex || 0;
 		this.drawingEndIndex = params.drawingEndIndex || -1;
 		
 		this.color = params.color || '#000000';

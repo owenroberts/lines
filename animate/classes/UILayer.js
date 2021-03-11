@@ -43,9 +43,9 @@ class UILayer extends UICollection {
 				modal.add(new UIButton({
 					text: "Clone",
 					callback: () => {
-						const newLayer = new Layer(_.cloneDeep(layer));
-						newLayer.startFrame = newLayer.endFrame = layer.endFrame + 1;
-						lns.anim.layers.splice(lns.anim.layers.length - 1, 0, newLayer);
+						const props = layer.getCloneProps();
+						props.startFrame = props.endFrame = layer.endFrame + 1;
+						lns.anim.addLayer(new Layer(props));
 						lns.ui.play.setFrame(layer.endFrame + 1);
 					}
 				}));
@@ -53,16 +53,15 @@ class UILayer extends UICollection {
 				modal.add(new UIButton({
 					text: "Split",
 					callback: () => {
-						const newLayer = new Layer(_.cloneDeep(layer));
-						newLayer.startFrame = lns.anim.currentFrame + 1;
+						const props = layer.getCloneProps();
+						props.startFrame = lns.anim.currentFrame + 1;
 						layer.endFrame = lns.anim.currentFrame;
-						lns.anim.layers.splice(lns.anim.layers.length - 1, 0, newLayer);
+						lns.anim.addLayer(new Layer(props));
 						lns.ui.play.setFrame(layer.endFrame + 1);
 					}
 				}));
 
-				modal.addBreak();
-				modal.addLabel("Start Frame:");
+				modal.addBreak("Start Frame:");
 				modal.add(new UIBlur({
 					value: layer.startFrame,
 					callback: function(value) {
@@ -70,8 +69,7 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.addBreak();
-				modal.addLabel("End Frame:");
+				modal.addBreak("End Frame:");
 				modal.add(new UIBlur({
 					value: layer.endFrame,
 					callback: function(value) {
@@ -79,8 +77,7 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.addBreak();
-				modal.addLabel("Order");
+				modal.addBreak("Order");
 				modal.add(new UIBlur({
 					value: layer.order || 'None',
 					callback: function(value) {
@@ -113,7 +110,7 @@ class UILayer extends UICollection {
 				modal.add(new UISelect({
 					// redo props, add linesInterval 
 					// interpolation?
-					options: Object.keys(layer.tweenProps),
+					options: Object.keys(layer.getTweenProps()),
 					value: 'endIndex',
 					selected: 'endIndex',
 					callback: function(value) {
