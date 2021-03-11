@@ -30,7 +30,7 @@ class UITween extends UICollection {
 					}
 				}));
 
-				modal.addBreak('End Frame:');
+				modal.addBreak('Start Value:');
 				modal.add(new UIBlur({
 					value: tween.startValue,
 					callback: function(value) {
@@ -52,7 +52,7 @@ class UITween extends UICollection {
 			text: '⬗',
 			type: 'left',
 			callback: (dir, num) => {
-				tween.sf += (dir ? dir : -1) * (num ? num : 1);
+				tween.startFrame += (dir ? dir : -1) * (num ? num : 1);
 				lns.ui.update();
 			}		
 		});
@@ -61,7 +61,7 @@ class UITween extends UICollection {
 			text: '⬖',
 			type: 'right',
 			callback: (dir, num) => {
-				this.tween.ef += (dir ? dir : 1) * (num ? num : 1);
+				this.tween.endFrame += (dir ? dir : 1) * (num ? num : 1);
 				lns.ui.update();
 			}		
 		});

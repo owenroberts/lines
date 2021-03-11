@@ -33,7 +33,6 @@ function Play() {
 			lns.draw.reset(next);
 			lns.anim.frame = next;
 		} else {
-			console.log(lns.draw.layer.startFrame);
 			// put in reset? 
 			if (dir > 0) {
 				if (lns.anim.currentFrame < lns.anim.state.end  || 
@@ -49,7 +48,6 @@ function Play() {
 				lns.draw.layer.endFrame = next;
 				lns.anim.frame = next;
 			}
-			console.log(lns.draw.layer.startFrame);
 		}
 
 		lns.data.saveState();

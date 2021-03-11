@@ -6,7 +6,7 @@
 	wiggle is calculated based on the layer offset, default 5 frames
 */
 
-class LinesAnimation {
+class Lines {
 	constructor(ctx, dps, multiColor) {
 		this.ctx = ctx;
 		this.isLoaded = false;
@@ -114,12 +114,14 @@ class LinesAnimation {
 			if (props.tweens) { // default empty array
 				for (let j = 0; j < props.tweens.length; j++) {
 					const tween = props.tweens[j];
+					// console.log(tween);
 					// range class lol -- wait Range exists???
 					if (tween.startFrame <= this.currentFrame && 
 						tween.endFrame >= this.currentFrame) {
 						props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
-						if (tween.prop == 'startIndex' || tween.prop == 'endIndex') 
+						if (tween.prop == 'startIndex' || tween.prop == 'endIndex') {
 							props[tween.prop] = Math.round(props[tween.prop]);
+						}
 					}
 				}
 			}
@@ -136,7 +138,7 @@ class LinesAnimation {
 			}
 
 			if (this.multiColor) this.ctx.beginPath();
-			const endIndex = props.endIndex > 0 ? props.endIndex : drawing.length;
+			const endIndex = props.endIndex >= 0 ? props.endIndex : drawing.length;
 			for (let j = props.startIndex; j < endIndex - 1; j++) {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);
@@ -192,6 +194,7 @@ class LinesAnimation {
 
 	loadJSON(json, callback) {
 		this.loadData(json, callback);
+		this.loadData(json, callback);
 	}
 
 	loadData(json, callback) {
@@ -233,9 +236,7 @@ class LinesAnimation {
 	loadParams(json) {
 		const params = {
 			drawingIndex: json.d,
-			tweens: json.t.map(t => { 
-				return { prop: t[0], startFrame: t[1], endFrame: t[2], startValue: t[3], endValue: t[4]}
-			}),
+			
 			startFrame: json.f[0],
 			endFrame: json.f[1],
 			x: json.x || 0,
@@ -249,6 +250,11 @@ class LinesAnimation {
 			breaks: json.b || false,
 			linesInterval: json.l || 5,
 		};
+		if (json.t) {
+			params.tweens = json.t.map(t => { 
+				return { prop: t[0], startFrame: t[1], endFrame: t[2], startValue: t[3], endValue: t[4]}
+			});
+		}
 		if (json.o) params.order = json.o;
 		return params;
 	}

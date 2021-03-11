@@ -1,4 +1,4 @@
-class GameAnim extends LinesAnimation {
+class GameAnim extends Lines {
 	constructor(debug) {
 		super(GAME.ctx, GAME.dps, GAME.mixedColors);
 		this.debug = debug;

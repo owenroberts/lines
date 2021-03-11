@@ -1,4 +1,4 @@
-function Data(anim) {
+function Data() {
 	const self = this;
 
 	this.copyFrame = []; // copy layers in frame
@@ -26,19 +26,19 @@ function Data(anim) {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
 			self.saveStates.prev.layers = _.cloneDeep(self.saveStates.current.layers);
 		} else {
-			self.saveStates.prev.drawings = _.cloneDeep(anim.drawings);
-			self.saveStates.prev.layers = _.cloneDeep(anim.layers);
+			self.saveStates.prev.drawings = _.cloneDeep(lns.anim.drawings);
+			self.saveStates.prev.layers = _.cloneDeep(lns.anim.layers);
 		}
 
-		self.saveStates.current.drawings = _.cloneDeep(anim.drawings);
-		self.saveStates.current.layers = _.cloneDeep(anim.layers);
+		self.saveStates.current.drawings = _.cloneDeep(lns.anim.drawings);
+		self.saveStates.current.layers = _.cloneDeep(lns.anim.layers);
 	};
 	
 	this.undo = function() {
 
 		if (self.saveStates.prev.drawings) {
-			anim.drawings = _.cloneDeep(self.saveStates.prev.drawings);
-			anim.layers = _.cloneDeep(self.saveStates.prev.layers);
+			lns.anim.drawings = _.cloneDeep(self.saveStates.prev.drawings);
+			lns.anim.layers = _.cloneDeep(self.saveStates.prev.layers);
 			
 			self.saveStates.current.drawings = _.cloneDeep(self.saveStates.prev.drawings);
 			self.saveStates.current.layers = _.cloneDeep(self.saveStates.prev.layers);
@@ -59,9 +59,9 @@ function Data(anim) {
 		self.copyFrame = [];
 
 		// -1 dont copy draw frame 
-		for (let i = 0; i < anim.layers.length - 1; i++) {
-			if (anim.layers[i].isInFrame(anim.currentFrame))
-				self.copyFrame.push(anim.layers[i]);
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
+			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame))
+				self.copyFrame.push(lns.anim.layers[i]);
 		}
 	}; /* c key */
 
@@ -69,13 +69,13 @@ function Data(anim) {
 		self.saveState();
 
 		if (self.pasteFrames.length == 0)
-			self.pasteFrames.push(anim.currentFrame); 
+			self.pasteFrames.push(lns.anim.currentFrame); 
 
 		/* copy one frame onto multiple */
 		for (let i = 0; i < self.pasteFrames.length; i++) {
 			for (let j = 0; j < self.copyFrame.length; j++) {
 				const layer = self.copyFrame[j].addIndex(self.pasteFrames[i]);
-				if (layer) anim.addLayer(layer);
+				if (layer) lns.anim.addLayer(layer);
 			}
 		}
 
@@ -127,10 +127,10 @@ function Data(anim) {
 
 	this.clearLayers = function() {
 		self.saveState(); /* will save lines ... */
-		for (let i = anim.layers.length - 2; i >= 0; i--) {
-			if (anim.layers[i].isInFrame(anim.currentFrame)) {
-				anim.layers[i].removeIndex(anim.currentFrame, function() {
-					anim.layers.splice(i, 1);
+		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
+			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
+				lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
+					lns.anim.layers.splice(i, 1);
 				});
 				lns.ui.update();
 			}
@@ -139,10 +139,10 @@ function Data(anim) {
 
 	/* are these functions useful anymore with timeline ? */
 	this.cutTopLayer = function() {
-		for (let i = anim.layers.length - 2; i >= 0; i--) {
-			if (anim.layers[i].isInFrame(anim.currentFrame)) {
-				anim.layers[i].removeIndex(anim.currentFrame, function() {
-					anim.layers.splice(i, 1);
+		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
+			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
+				lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
+					lns.anim.layers.splice(i, 1);
 				});
 				lns.ui.update();
 			}
@@ -152,10 +152,10 @@ function Data(anim) {
 
 	/* consolidate with above ? */
 	this.cutBottomLayer = function() {
-		for (let i = 0; i < anim.layers.length - 1; i++) {
-			if (anim.layers[i].isInFrame(anim.currentFrame)) {
-				anim.layers[i].removeIndex(anim.currentFrame, function() {
-					anim.layers.splice(i, 1);
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
+			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
+				lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
+					lns.anim.layers.splice(i, 1);
 				});
 				lns.ui.update();
 			}
@@ -174,14 +174,14 @@ function Data(anim) {
 		self.saveState();
 
 		// -2 to skip draw layer
-		for (let i = anim.layers.length - 2; i >= 0; i--) {
-			anim.layers[i].removeIndex(anim.currentFrame, function() {
-				anim.layers.splice(i, 1);
+		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
+			lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
+				lns.anim.layers.splice(i, 1);
 			});
 		}
 		
-		for (let i = anim.layers.length - 2; i >= 0; i--) {
-			anim.layers[i].shiftIndex(index, -1);
+		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
+			lns.anim.layers[i].shiftIndex(index, -1);
 		}
 		lns.ui.update();
 	}; /* d key */
@@ -212,11 +212,11 @@ function Data(anim) {
 	this.insert = function(dir) {
 		lns.draw.reset();
 		self.saveState();
-		for (let i = 0, len = anim.layers.length - 1; i < len; i++) {
+		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			// insert before dir  0, after 1
-			anim.layers[i].shiftIndex(anim.currentFrame + dir, 1);
-			anim.addLayer(anim.layers[i].removeIndex(anim.currentFrame + dir));
-			anim.frame = anim.currentFrame + dir;
+			lns.anim.layers[i].shiftIndex(lns.anim.currentFrame + dir, 1);
+			lns.anim.addLayer(lns.anim.layers[i].removeIndex(lns.anim.currentFrame + dir));
+			lns.anim.frame = lns.anim.currentFrame + dir;
 		}
 		lns.ui.update();
 	}; /* i, shift-i key */
@@ -237,9 +237,9 @@ function Data(anim) {
 
 	this.offsetDrawing = function(offset) {
 		// get toggled layers or offset all layers in frame
-		let layers = anim.layers.filter(layer => layer.isToggled);
+		let layers = lns.anim.layers.filter(layer => layer.isToggled);
 		if (layers.length == 0) {
-			layers = lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame));
+			layers = lns.lns.anim.layers.filter(layer => layer.isInFrame(lns.lns.anim.currentFrame));
 		}
 
 		// then reset drawing to preserve any lines
@@ -262,45 +262,45 @@ function Data(anim) {
 	this.quickAnimate = function(type) {
 		lns.draw.reset();
 		const n = +prompt('Number of frames?');
-		for (let i = 0; i < anim.layers.length - 1; i++) {
-			const layer = anim.layers[i];
-			if (layer.isInFrame(anim.currentFrame)) {
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.isInFrame(lns.anim.currentFrame)) {
 				layer.endFrame = layer.startFrame + n;
-				if (anim.state.end < layer.endFrame) anim.state.end = layer.endFrame;
+				if (lns.anim.state.end < layer.endFrame) lns.anim.state.end = layer.endFrame;
 				switch(type) {
 					case "Draw":
 						layer.addTween({
-							prop: 'e',
-							sf: layer.f.s,
-							ef: layer.f.e,
-							sv: 0,
-							ev: anim.drawings[layer.d].length
+							prop: 'endIndex',
+							startFrame: layer.startFrame,
+							endFrame: layer.endFrame,
+							startValue: 0,
+							endValue: lns.anim.drawings[layer.drawindIndex].length
 						});
 					break;
 					case "Reverse":
 						layer.addTween({
-							prop: 's',
-							sf: layer.f.s,
-							ef: layer.f.e,
-							sv: 0,
-							ev: anim.drawings[layer.d].length
+							prop: 'startIndex',
+							startFrame: layer.startFrame,
+							endFrame: layer.endFrame,
+							startValue: 0,
+							endValue: lns.anim.drawings[layer.drawingIndex].length
 						});
 					break;
 					case "DrawReverse":
 						const mid = Math.floor(n / 2);
 						layer.addTween({
-							prop: 'e',
-							sf: layer.f.s,
-							ef: layer.f.s + mid,
-							sv: 0,
-							ev: anim.drawings[layer.d].length
+							prop: 'endIndex',
+							startFrame: layer.startFrame,
+							endFrame: layer.startFrame + mid,
+							startValue: 0,
+							endValue: lns.anim.drawings[layer.drawingIndex].length
 						});
 						layer.addTween({
-							prop: 's',
-							sf: layer.f.s + mid,
-							ef: layer.f.e,
-							sv: 0,
-							ev: anim.drawings[layer.d].length
+							prop: 'startIndex',
+							startFrame: layer.startFrame + mid,
+							endFrame: layer.endFrame,
+							startValue: 0,
+							endValue: lns.anim.drawings[layer.drawingIndex].length
 						});
 					break;
 				}

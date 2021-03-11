@@ -109,8 +109,7 @@ class UILayer extends UICollection {
 					lns.ui.update();
 				});
 
-				modal.addBreak();
-				modal.addLabel('Property:');
+				modal.addBreak('Property:');
 				modal.add(new UISelect({
 					// redo props, add linesInterval 
 					// interpolation?
@@ -122,8 +121,7 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.addBreak();
-				modal.addLabel('Start Frame:');
+				modal.addBreak('Start Frame:');
 				modal.add(new UIBlur({
 					value: tween.startFrame,
 					callback: function(value) {
@@ -131,8 +129,7 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.addBreak();
-				modal.addLabel('End Frame:');
+				modal.addBreak('End Frame:');
 				modal.add(new UIBlur({
 					value: tween.endFrame,
 					callback: function(value) {
@@ -140,8 +137,7 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.addBreak();
-				modal.addLabel('End Frame:');
+				modal.addBreak('Start Value:');
 				modal.add(new UIBlur({
 					value: tween.startValue,
 					callback: function(value) {
@@ -149,8 +145,7 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.addBreak();
-				modal.addLabel('End Value:');
+				modal.addBreak('End Value:');
 				modal.add(new UIBlur({
 					value: tween.endValue,
 					callback: function(value) {

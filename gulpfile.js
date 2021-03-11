@@ -13,7 +13,10 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 
 const files = {
-	base: [ './classes/*.js' ],
+	base: [ 
+		'./lib/cool/cool.js',
+		'./classes/*.js',
+	],
 	interface: [
 		'./interface/ui/Element.js',
 		'./interface/ui/Collection.js',
@@ -25,7 +28,7 @@ const files = {
 		'./animate/modules/*.js',
 		'./animate/classes/*.js',
 		'./animate/interface/*.js',
-		'./animate/lines.js'
+		'./animate/animate.js'
 	],
 	game: [
 		'./game/classes/Sprite.js',

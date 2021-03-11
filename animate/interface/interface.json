@@ -616,7 +616,7 @@
 				]
 			},
 			{
-				"module": "anim",
+				"module": "render",
 				"list": [
 					{
 						"type": "UIRow"
@@ -626,17 +626,14 @@
 						"label": "FPS",
 						"key": ";",
 						"face": "fps",
-						"number": "fps",
+						"fromModule": {
+							"callback": "setFps"
+						},
 						"params": {
 							"prompt": "Set FPS",
 							"value": 10
 						}
-					}
-				]
-			},
-			{
-				"module": "render",
-				"list": [
+					},
 					{
 						"type": "UIBlur",
 						"label": "DPS",

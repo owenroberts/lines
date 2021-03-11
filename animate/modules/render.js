@@ -46,6 +46,11 @@ function Render(dps, showStats) {
 		lns.anim.dps = self.dps;
 	};
 
+	/* ; - fps update frame value in anim*/
+	this.setFps = function(fps) {
+		lns.anim.fps = +fps;
+	};
+
 	this.update = function(time) {
 		if (showStats) self.stats.begin();
 		if (performance.now() > self.interval + self.timer || time == 'cap') {

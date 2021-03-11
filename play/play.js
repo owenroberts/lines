@@ -1,5 +1,6 @@
 /* play module - need to use params too many args */
 function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
+	console.log(this);
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
@@ -16,7 +17,7 @@ function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
 	this.isTexture = isTexture;
 	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
 
-	this.animation = new LinesAnimation(this.ctx, this.dps);
+	this.animation = new Lines(this.ctx, this.dps);
 
 	this.ctx.miterLimit = 1;
 	this.width;

@@ -19,15 +19,14 @@ function Files(params) {
 		if (params.fit && confirm("Fit canvas?"))
 			lns.canvas.fitCanvasToDrawing();
 
-		const json = {};
-		json.v = "2.5";
-		json.w = +lns.canvas.width;
-		json.h = +lns.canvas.height;
-		json.fps = +lns.anim.fps;
+		const json = {
+			v: "2.5",
+			w: +lns.canvas.width,
+			h: +lns.canvas.height,
+			fps: +lns.anim.fps,
+			mc: [...new Set(lns.anim.layers.map(layer => layer.c))].length > 1,
+		};
 		if (params.bg) json.bg = lns.canvas.bgColor;
-		let colors = lns.anim.layers.map(layer => layer.c);
-		colors = [...new Set(colors)];
-		json.mc = colors.length > 1 ? true : false;
 
 		if (single) {
 			json.l = lns.anim.layers
@@ -41,14 +40,9 @@ function Files(params) {
 			json.l = lns.anim.layers.map(layer => { return layer.saveProps });
 		}
 
-		/* search frames for layers and drawings used */
-		// functional approach here ??
-
-
 		const drawingIndexes = new Set(json.l.map(layer => layer.d));
 
 		json.d = [];
-		console.log(lns.anim.drawings);
 		for (let i = 0; i < lns.anim.drawings.length; i++) {
 			json.d[i] = drawingIndexes.has(i) ?
 				lns.anim.drawings[i].points.map(point => point == 'end' ? 0 : [point.x, point.y])
@@ -65,7 +59,6 @@ function Files(params) {
 		}
 
 		const jsonfile = JSON.stringify(json);
-
 		if (self.fileName) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
 			saveAs(blob, `${self.fileName}.json`);
@@ -91,7 +84,7 @@ function Files(params) {
 
 	this.loadJSON = function(data, callback) {
 
-		lns.anim = new LnsAnim(lns.canvas.ctx, lns.render.dps);
+		lns.anim = new Lines(lns.canvas.ctx, lns.render.dps);
 		lns.anim.loadData(data, function() {
 			lns.canvas.setWidth(data.w);
 			lns.canvas.setHeight(data.h);

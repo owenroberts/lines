@@ -66,7 +66,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];
-			const drawing = lns.anim.drawings[layer.d];
+			const drawing = lns.anim.drawings[layer.drawingIndex];
 			for (let j = 0; j < drawing.length; j++) {
 				const point = drawing.get(j);
 				if (point != 'end') {

@@ -2,11 +2,14 @@ window.addEventListener("load", function() {
 
 	window.lns = {};
 
+	Object.assign(Layer.prototype, LayerMixin);
+	Object.assign(Lines.prototype, LinesMixin);
+
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
 	lns.render = new Render(30, true); // (dps, stats?)
 
-	lns.anim = new LnsAnim(lns.canvas.ctx);
+	lns.anim = new Lines(lns.canvas.ctx);
 	lns.draw = new Draw({ 
 		linesInterval: 5, 
 		segmentNum: 2,
@@ -16,13 +19,13 @@ window.addEventListener("load", function() {
 		color: '#000000' 
 	}); // defaults
 	lns.bgImage = new Background();
-	lns.data = new Data(lns.anim);
+	lns.data = new Data();
 	lns.files = new Files({
 		fit: false, /* fit to canvas when saving */
 		save: false, /* save settings on unload  */
 		load: true, /* load setttings after file load */
 		reload: false, /* confirm reload */
-		bg: true /* bg color */
+		bg: false /* bg color */
 	});
 	
 	lns.ui = new Interface(lns);
