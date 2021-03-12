@@ -54,7 +54,7 @@ function Draw(defaults) {
 				wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
 				color: lns.ui.faces.color.value,
 				drawingIndex: lns.anim.drawings.length - 1,
-				startFrame: lns.anim.currentFrame,
+				startFrame: +f || lns.anim.currentFrame,
 			}));
 			lns.data.saveState();
 		}

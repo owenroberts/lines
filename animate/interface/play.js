@@ -36,7 +36,7 @@ function Play() {
 		} else {
 			// put in reset? 
 			if (dir > 0) {
-				if (lns.anim.currentFrame < lns.anim.state.end  || 
+				if (lns.anim.currentFrame < lns.anim.state.end || 
 					(lns.anim.stateName == 'default' && lns.draw.hasDrawing())) {
 					lns.draw.layer.startFrame = next;
 					lns.draw.layer.endFrame = next;	
