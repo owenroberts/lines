@@ -12,6 +12,12 @@ const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 
+const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
+const gutil = require('gulp-util');
+
+
+
 const files = {
 	base: [ 
 		'./lib/cool/cool.js',
@@ -59,6 +65,13 @@ const sassFiles = {
 function jsTasks() {
 	function jsTask(files, name, dir){
 		return src(files)
+			.pipe(plumber({ errorHandler: function(err) {
+				notify.onError({
+					title: "Gulp error in " + err.plugin,
+					message:  err.toString()
+				})(err);
+				gutil.beep();
+			}}))
 			.pipe(sourcemaps.init())
 			.pipe(concat(name))
 			.pipe(uglify())
@@ -77,6 +90,13 @@ function jsTasks() {
 // Sass task: compiles the style.scss file into style.css
 function sassTask(files, name, dir){    
     return src(files)
+    	.pipe(plumber({ errorHandler: function(err) {
+			notify.onError({
+				title: "Gulp error in " + err.plugin,
+				message:  err.toString()
+			})(err);
+			gutil.beep();
+		}}))
         .pipe(sourcemaps.init()) // initialize sourcemaps first
         .pipe(sass()) // compile SCSS to CSS
         .pipe(postcss([ autoprefixer(), cssnano() ])) // PostCSS plugins

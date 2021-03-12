@@ -68,7 +68,8 @@ function appSave() {
 		mouseInterval: lns.draw.mouseInterval,
 		palettes: lns.ui.palette.palettes,
 		rl: lns.ui.faces.rl.value,
-		timelineView: lns.ui.faces.timelineView.value,
+		viewLayers: lns.ui.faces.viewLayers.value,
+		viewActiveLayers: lns.ui.faces.viewActiveLayers.value,
 		timelineAutoFit: lns.ui.faces.timelineAutoFit.value,
 		canvasScale: lns.ui.faces.canvasScale.value,
 		interfaceScale: lns.ui.faces.interfaceScale.value,
@@ -88,7 +89,9 @@ function appLoad(settings) {
 	lns.ui.faces.width.update(settings.width);
 	lns.ui.faces.height.update(settings.height);
 	lns.ui.faces.bgColor.update(settings.canvasColor);	
-	lns.ui.faces.timelineView.update(settings.timelineView);
+	lns.ui.faces.viewLayers.update(settings.viewLayers);
+	lns.ui.faces.viewActiveLayers.update(settings.viewActiveLayers);
+	
 	lns.ui.faces.timelineAutoFit.update(settings.timelineAutoFit);
 
 	lns.ui.faces.canvasScale.update(settings.canvasScale);

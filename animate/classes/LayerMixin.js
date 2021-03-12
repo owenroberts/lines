@@ -25,8 +25,9 @@ const LayerMixin = {
 			else if (this.endFrame + 1 == index) this.endFrame += 1;
 			else {
 				return new Layer({
-					...this,
-					f: [index, index]
+					...this.getCloneProps(),
+					startFrame: index,
+					endFrame: index,
 				});
 			}
 		}
@@ -85,8 +86,8 @@ const LayerMixin = {
 			f: [this.startFrame, this.endFrame],
 			d: this.drawingIndex,
 		};
-		if (this.x) props.x = x; // ignore if 0 or undefined
-		if (this.y) props.y = y;
+		if (this.x) props.x = this.x; // ignore if 0 or undefined
+		if (this.y) props.y = this.y;
 		if (this.tweens) props.t = this.tweens.map(tween => { return [tween.prop, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue]});
 		if (this.order) props.o = this.order;
 		return props;

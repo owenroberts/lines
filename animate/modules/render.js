@@ -74,9 +74,8 @@ function Render(dps, showStats) {
 				for (let o = 1; o <= self.onionSkinNum; o++){
 					const index = temp - o;
 					if (index >= 0) {
-						const color = `rgba(105,150,255,${ 1.5 - (o / self.onionSkinNum) })`;
 						lns.anim.currentFrame = index;
-						lns.anim.overrideProperty('c', color);
+						lns.anim.overrideProperty('color', `rgba(105,150,255,${ 1.5 - (o / self.onionSkinNum) })`);
 						/* this triggers capture, turn off onion skin for clean capture */
 						lns.anim.draw();
 					}

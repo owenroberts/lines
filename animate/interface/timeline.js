@@ -2,6 +2,8 @@ function Timeline() {
 	const self = this;
 	this.frameWidth = 40;
 	this.autoFit = false;
+	this.viewLayers = true;
+	this.viewActiveLayers = false;
 
 	this.init = function() {
 		self.panel.el.addEventListener('wheel', ev => {
@@ -59,7 +61,6 @@ function Timeline() {
 		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame; // eek
 
 		self.panel.timeline.setProp('--num-frames', lns.anim.endFrame + 1);
-		self.panel.timeline.setProp('--num-layers', lns.anim.layers.length - 1);
 		self.panel.timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.tweens.length, 0));
 
 		self.panel.timeline.clear();
@@ -84,60 +85,72 @@ function Timeline() {
 			self.panel.timeline.append(frameBtn, `frm-${i}`);
 		}
 
+		if (self.viewLayers) {
+			const layers = self.viewActiveLayers ?
+				lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame)) :
+				lns.anim.layers;
 
-		let gridRowStart = 2;
-		let gridRowEnd = 3;
-		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
-			const ui = new UILayer({
-				type: 'layer',
-				css: {
-					gridRowStart: gridRowStart, // 2 + (i * 2),
-					gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
-					gridColumnStart: layer.startFrame * 2 + 1,
-					gridColumnEnd: layer.endFrame * 2 + 3
-				},
-				callback: function() {
-					// only update the values when toggling on, ignore when toggling off
-					if (!layer.isToggled) lns.draw.setProperties(layer.getEditProps());
-					layer.toggle();
-				}
-			}, layer);
-			
-			gridRowStart += 2;
-			gridRowEnd += 2;
-			self.panel.timeline.append(ui, `layer-${i}`);
+			self.panel.timeline.setProp('--num-layers', layers.length - 1);
 
-			/* add tweens -- add methods like getTweens */
-			for (let j = 0; j < layer.tweens.length; j++) {
-				const tween = layer.tweens[j];
-				const tweenUI = new UITween({
-					type: 'tween',
+			let gridRowStart = 2;
+			let gridRowEnd = 3;
+			for (let i = 0; i < layers.length - 1; i++) {
+				const layer = layers[i];
+				if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
+				const ui = new UILayer({
+					type: 'layer',
 					css: {
-						gridRowStart: gridRowStart, 
-						gridRowEnd: gridRowEnd, 	
-						gridColumnStart: tween.startFrame * 2 + 1,
-						gridColumnEnd: tween.endFrame * 2 + 3
+						gridRowStart: gridRowStart, // 2 + (i * 2),
+						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
+						gridColumnStart: layer.startFrame * 2 + 1,
+						gridColumnEnd: layer.endFrame * 2 + 3
 					},
-				}, tween, layer);
+					callback: function() {
+						// only update the values when toggling on, ignore when toggling off
+						if (!layer.isToggled) lns.draw.setProperties(layer.getEditProps());
+						layer.toggle();
+					}
+				}, layer);
 				
-				self.panel.timeline.append(tweenUI, `tween-${j}-layer-${i}`);
 				
 				gridRowStart += 2;
 				gridRowEnd += 2;
+				self.panel.timeline.append(ui, `layer-${i}`);
+
+				/* add tweens -- add methods like getTweens */
+				for (let j = 0; j < layer.tweens.length; j++) {
+					const tween = layer.tweens[j];
+					const tweenUI = new UITween({
+						type: 'tween',
+						css: {
+							gridRowStart: gridRowStart, 
+							gridRowEnd: gridRowEnd, 	
+							gridColumnStart: tween.startFrame * 2 + 1,
+							gridColumnEnd: tween.endFrame * 2 + 3
+						},
+					}, tween, layer);
+					
+					self.panel.timeline.append(tweenUI, `tween-${j}-layer-${i}`);
+					
+					gridRowStart += 2;
+					gridRowEnd += 2;
+				}
 			}
+		} else {
+			self.panel.timeline.setProp('--num-layers', 0);
 		}
 
 		if (self.autoFit) self.fit();
 	};
 
-	this.toggleLayerView = function() {
-		if (!self.panel.timeline.el.classList.contains('collapse')) {
-			self.panel.timeline.addClass('collapse');
-		} else {
-			self.panel.timeline.removeClass('collapse');
-		}
+	this.toggleViewLayers = function() {
+		self.viewLayers = !self.viewLayers;
+		self.update();
+	};
+
+	this.toggleViewActiveLayers = function() {
+		self.viewActiveLayers = !self.viewActiveLayers;
+		self.update();
 	};
 
 	this.split = function() {

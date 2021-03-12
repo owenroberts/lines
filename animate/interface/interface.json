@@ -1081,13 +1081,24 @@
 					{
 						"type": "UIToggle",
 						"key": "ctrl-l",
-						"face": "timelineView",
+						"face": "viewLayers",
 						"fromModule": {
-							"callback": "toggleLayerView"
+							"callback": "toggleViewLayers"
 						},
 						"params": {
-							"onText": "^",
-							"offText": "⌄"
+							"onText": "ᐱ",
+							"offText": "^"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"face": "viewActiveLayers",
+						"fromModule": {
+							"callback": "toggleViewActiveLayers"
+						},
+						"params": {
+							"onText": "V",
+							"offText": "v"
 						}
 					},
 					{

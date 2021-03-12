@@ -53,7 +53,7 @@ function Files(params) {
 			json.s = {};
 			for (const state in lns.anim.states) {
 				if (state != 'default') {
-					json.s[state] = [states[state].start, states[state].end];
+					json.s[state] = [lns.anim.states[state].start, lns.anim.states[state].end];
 				}
 			}
 		}

@@ -4,8 +4,9 @@ function Play() {
 	this.setFrame = function(f) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// no before ?? 
+			if (lns.anim.frame != +f) lns.draw.reset();
 			lns.anim.frame = +f;
-			
+
 			lns.draw.layer.startFrame = lns.anim.currentFrame;
 			lns.draw.layer.endFrame = lns.anim.currentFrame;
 

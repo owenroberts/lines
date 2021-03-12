@@ -1,8 +1,8 @@
 function Data() {
 	const self = this;
 
-	this.copyFrame = []; // copy layers in frame
-	this.pasteFrames = []; // frame indexes to paste
+	let copyFrame = []; // copy layers in frame
+	let pasteFrames = []; // frame indexes to paste
 
 	this.saveStates = {
 		current: {
@@ -56,25 +56,25 @@ function Data() {
 
 	this.copy = function() {
 		lns.draw.reset();
-		self.copyFrame = [];
+		copyFrame = [];
 
 		// -1 dont copy draw frame 
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame))
-				self.copyFrame.push(lns.anim.layers[i]);
+				copyFrame.push(lns.anim.layers[i]);
 		}
 	}; /* c key */
 
 	this.paste = function() {
 		self.saveState();
 
-		if (self.pasteFrames.length == 0)
-			self.pasteFrames.push(lns.anim.currentFrame); 
+		if (pasteFrames.length == 0)
+			pasteFrames.push(lns.anim.currentFrame); 
 
 		/* copy one frame onto multiple */
-		for (let i = 0; i < self.pasteFrames.length; i++) {
-			for (let j = 0; j < self.copyFrame.length; j++) {
-				const layer = self.copyFrame[j].addIndex(self.pasteFrames[i]);
+		for (let i = 0; i < pasteFrames.length; i++) {
+			for (let j = 0; j < copyFrame.length; j++) {
+				const layer = copyFrame[j].addIndex(pasteFrames[i]);
 				if (layer) lns.anim.addLayer(layer);
 			}
 		}
@@ -87,9 +87,9 @@ function Data() {
 	this.selectFrame = function(elem) {
 		if (!elem.classList.contains("selected")) {
 			elem.classList.add("selected");
-			self.pasteFrames.push(+elem.textContent);
+			pasteFrames.push(+elem.textContent);
 		} else {
-			self.pasteFrames.splice(self.pasteFrames.indexOf(+elem.textContent), 1);
+			pasteFrames.splice(pasteFrames.indexOf(+elem.textContent), 1);
 			elem.classList.remove("selected");
 		}
 	};
@@ -112,7 +112,7 @@ function Data() {
 	}; /* alt v */
 
 	this.clearSelected = function() {
-		self.pasteFrames = [];
+		pasteFrames = [];
 
 		/* this is a ui thing ... */
 		const copyFrameElems = document.getElementsByClassName("selected");
@@ -222,7 +222,7 @@ function Data() {
 	}; /* i, shift-i key */
 
 	this.addMultipleCopies = function() {
-		self.copyFrame = [];
+		copyFrame = [];
 		self.clearSelected();
 		let n = +prompt("Number of copies: ");
 		self.copy();
