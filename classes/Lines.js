@@ -167,7 +167,8 @@ class Lines {
 					for (let k = 0; k < props.segmentNum; k++) {
 						const p = s.clone().add(v.clone().multiply(k));
 						if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
-						const index = props.breaks ? k : k + 1;
+						// const index = props.breaks ? k : k + 1;
+						const index = k;
 						this.ctx.lineTo( 
 							props.x + p.x + v.x + off[index].x,
 							props.y + p.y + v.y + off[index].y
@@ -212,7 +213,7 @@ class Lines {
 			const layer = new Layer(params);
 			this.layers[i] = layer;
 
-			this.drawings[layer.drawingIndex].update(layer);
+			// this.drawings[layer.drawingIndex].update(layer);
 		}
 
 		for (const key in json.s) {

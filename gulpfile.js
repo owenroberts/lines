@@ -19,6 +19,9 @@ const gutil = require('gulp-util');
 
 
 const files = {
+	worker: [
+		'./LinesWorker.js',
+	],
 	base: [ 
 		'./lib/cool/cool.js',
 		'./classes/*.js',
@@ -133,7 +136,8 @@ function cacheBustTask(){
 // Watch task: watch SCSS and JS files for changes
 // If any change, run scss and js tasks simultaneously
 function watchTask(){
-	watch([...files.base, 
+	watch([...files.base,
+			...files.worker,
 			...files.interface, 
 			...files.animate, 
 			...files.game,
