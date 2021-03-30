@@ -197,7 +197,7 @@ function Data() {
 			}
 
 			lns.draw.cutEnd();
-			lns.ui.setFrame(0);
+			lns.ui.play.setFrame(0);
 		}
 	}; /* shift-d */
 
