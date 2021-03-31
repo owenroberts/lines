@@ -97,6 +97,7 @@ class Lines {
 	draw(x, y, suspendLinesUpdate) {
 		if (!this.multiColor) this.ctx.beginPath();
 
+		// do some performance tests here
 		const layers = this.layers.filter(layer => layer.isInFrame(this.currentFrame))
 		.sort((a, b) => {
 			if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
@@ -213,7 +214,7 @@ class Lines {
 			const layer = new Layer(params);
 			this.layers[i] = layer;
 
-			// this.drawings[layer.drawingIndex].update(layer);
+			this.drawings[layer.drawingIndex].update(layer);
 		}
 
 		for (const key in json.s) {

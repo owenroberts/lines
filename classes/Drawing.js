@@ -1,6 +1,7 @@
 class Drawing {
 	constructor(points) {
 		this.points = [];
+		this.pointsArray = [];
 		if (points) {
 			for (let i = 0; i < points.length; i++) {
 				this.add(points[i]);
@@ -8,20 +9,22 @@ class Drawing {
 		}
 
 		// this.offset = new Cool.Vector();
-
 	}
 
 	// add a point
 	add(point) {
 		if (point == 'end' || point == 0) {
 			this.points.push('end');
+			this.pointsArray.push('end');
 		} else if (Array.isArray(point)) { 	// from json file
 			const v = new Cool.Vector(point);
 			v.off = [];
 			this.points.push(v);
+			this.pointsArray.push([v.x, v.y]);
 		} else {
 			point.off = []; // maybe ditch cool.js and make LinesVector ? -- 
 			this.points.push(point);
+			this.pointsArray.push([point.x, point.y]);
 		}
 	}
 
@@ -40,11 +43,10 @@ class Drawing {
 		return this.points.length;
 	}
 
-	// update the animtor  properties - happens when the lineCount is 0
 	update(props) {
+		// update the animtor  properties - happens when the lineCount is 0
 
 		if (!this.worker) {
-			console.log(location);
 			this.worker = new Worker('lines/build/worker.min.js');
 			this.worker.onmessage = (event) => {
 				this.workerUpdate(event.data);
@@ -53,9 +55,9 @@ class Drawing {
 
 		this.worker.postMessage({
 			props: props,
-			points: this.points.map(v => v == 'end' ? 'end' : [v.x, v.y]),
+			// points: this.points.map(v => v == 'end' ? 'end' : [v.x, v.y]),
+			points: this.pointsArray,
 		});
-		
 	}
 
 	workerUpdate(offsets) {
