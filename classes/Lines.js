@@ -97,11 +97,16 @@ class Lines {
 	draw(x, y, suspendLinesUpdate) {
 		if (!this.multiColor) this.ctx.beginPath();
 
-		const layers = this.layers.filter(layer => layer.isInFrame(this.currentFrame))
-		.sort((a, b) => {
-			if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
-			else return 1;
-		});
+		const layers = [];
+		for (let i = 0; i < this.layers.length; i++) {
+			if (this.layers[i].isInFrame(this.currentFrame)) {
+				layers.push(this.layers[i]);
+			}
+		}
+		// layers.sort((a, b) => {
+		// 	if (a.order) return a.order > b.order ? 1 : -1;
+		// 	else return 1;
+		// });
 
 		for (let i = 0; i < layers.length; i++) {
 			const layer = layers[i];
