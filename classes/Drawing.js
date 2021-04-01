@@ -2,9 +2,11 @@ class Drawing {
 	constructor(points) {
 		this.points = [];
 		this.pointsArray = [];
+		this.offsets = [];
 		if (points) {
 			for (let i = 0; i < points.length; i++) {
 				this.add(points[i]);
+				this.offsets.push([0, 0]);
 			}
 		}
 
@@ -42,7 +44,7 @@ class Drawing {
 	get length() {
 		return this.points.length;
 	}
-
+/*
 	update(props) {
 		// update the animtor  properties - happens when the lineCount is 0
 
@@ -69,4 +71,5 @@ class Drawing {
 			}
 		}
 	}
+*/
 }

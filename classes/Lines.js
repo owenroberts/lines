@@ -27,6 +27,11 @@ class Lines {
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
 		this.states = { 'default': {start: 0, end: 0 } };
+
+		this.worker = new Worker('lines/build/worker.min.js');
+		this.worker.onmessage = (event) => {
+			this.drawings[event.data.index].offsets = event.data.offsets;
+		}
 	}
 
 	set fps(fps) {
@@ -135,7 +140,13 @@ class Lines {
 			// how often to reset wiggle
 			if (!suspendLinesUpdate) {
 				const updateDrawing = layer.update();
-				if (updateDrawing) drawing.update(props);
+				if (updateDrawing) {
+					this.worker.postMessage({
+						props: props,
+						index: layer.drawingIndex,
+						points: drawing.pointsArray,
+					});
+				}
 			}
 
 			if (this.multiColor) this.ctx.beginPath();
@@ -144,26 +155,37 @@ class Lines {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);
 				if (s !== 'end' && e !== 'end') {
-					const off = [...s.off, ...e.off]; // offset stored in drawing points
-					
+					// const off = [...s.off, ...e.off]; // offset stored in drawing points
+					let off = []
+					try {
+						off = [
+							...drawing.offsets[j],
+							...drawing.offsets[j + 1],
+						];
+					} catch(error) {
+						console.log(error);
+						console.log(drawing.offsets);
+					}
+					// console.log(off);
+
 					// catch for drawing - add flag?
 					// what is this?
 					// only happens on certain drawings but happens A LOT
 					// maybe happens when segment num changes ... ?
 					// still working on this lol
 					// als when in the middle of drawing
-					if (off.length < props.segmentNum + 1) {
-						for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
-							off.push(new Cool.Vector());
+					if (off.length < +props.segmentNum + 1) {
+						for (let k = off.length - 1; k < +props.segmentNum + 1; k++) {
+							off.push([0, 0]);
 						}
 					}
 
 					const v = new Cool.Vector(e.x, e.y);
 					v.subtract(s);
-					v.divide(props.segmentNum);
+					v.divide(+props.segmentNum);
 					this.ctx.moveTo(
-						props.x + s.x + off[0].x,
-						props.y + s.y + off[0].y
+						props.x + s.x + off[0][0],
+						props.y + s.y + off[0][1],
 					);
 					for (let k = 0; k < props.segmentNum; k++) {
 						const p = s.clone().add(v.clone().multiply(k));
@@ -171,8 +193,8 @@ class Lines {
 						// const index = props.breaks ? k : k + 1;
 						const index = k;
 						this.ctx.lineTo( 
-							props.x + p.x + v.x + off[index].x,
-							props.y + p.y + v.y + off[index].y
+							props.x + p.x + v.x + off[index][0],
+							props.y + p.y + v.y + off[index][1],
 						);
 					}
 
@@ -214,7 +236,13 @@ class Lines {
 			const layer = new Layer(params);
 			this.layers[i] = layer;
 
-			this.drawings[layer.drawingIndex].update(layer);
+			this.worker.postMessage({
+				props: layer,
+				index: layer.drawingIndex,
+				points: this.drawings[layer.drawingIndex].pointsArray,
+			});
+
+			// this.drawings[layer.drawingIndex].update(layer);
 		}
 
 		for (const key in json.s) {

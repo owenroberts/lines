@@ -49,5 +49,8 @@ onmessage = function(event) {
 		}
 	}
 
-	postMessage(offsets);
+	postMessage({
+		offsets: offsets,
+		index: event.data.index,
+	});
 };
