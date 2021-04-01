@@ -8,6 +8,12 @@ class Drawing {
 		}
 
 		this.offset = new Cool.Vector();
+
+		this.seed = {
+			x: Math.random(),
+			y: Math.random(),
+			z: Math.random(),
+		};
 	}
 
 	// add a point
@@ -37,10 +43,6 @@ class Drawing {
 		return this.points.length;
 	}
 
-	// update the animtor  properties - happens when the lineCount is 0
-	// n number of segments, r randomness of segments
-	// w wiggle amount, v, wiggle speed
-	// ws is wiggle segments (true/false)
 	update(props) {
 		const { segmentNum, jiggleRange, wiggleRange, wiggleSpeed, wiggleSegments } = props;
 		const speed = new Cool.Vector().random(wiggleSpeed);
@@ -52,7 +54,7 @@ class Drawing {
 				this.points[i].off = []; // point offset 
 
 				for (let j = 0; j < segmentNum; j++) {
-					// calculate wiggle 
+					// calculate wiggle -- wiggle by "line" or by segment produced by segmentNum
 					if (wiggleRange > 0 && (j == 0 || wiggleSegments)) {
 						this.offset.add(speed);
 						for (const xy in speed) {
