@@ -28,7 +28,14 @@ class Lines {
 		this._state = 'default'; // set state label
 		this.states = { 'default': {start: 0, end: 0 } };
 
-		this.worker = new Worker('lines/build/worker.min.js');
+		let relUrl = 'lines';
+		let isInLines = window.location.href.split('/');
+		isInLines.pop();
+		if (['play', 'animate', 'game', 'editor'].some(str => isInLines.includes(str))){
+			relUrl = '..';
+		}
+
+		this.worker = new Worker(`${relUrl}/build/worker.min.js`);
 		this.worker.onmessage = (event) => {
 			this.drawings[event.data.index].offsets = event.data.offsets;
 		}
@@ -103,11 +110,18 @@ class Lines {
 		if (!this.multiColor) this.ctx.beginPath();
 
 		// do some performance tests here
-		const layers = this.layers.filter(layer => layer.isInFrame(this.currentFrame))
-		.sort((a, b) => {
-			if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
-			else return 1;
-		});
+		// const layers = this.layers.filter(layer => layer.isInFrame(this.currentFrame))
+		// .sort((a, b) => {
+		// 	if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
+		// 	else return 1;
+		// });
+
+		const layers = [];
+		for (let i = 0; i < this.layers.length; i++) {
+			if (this.layers[i].isInFrame(this.currentFrame)) {
+				layers.push(this.layers[i]);
+			}
+		}
 
 		for (let i = 0; i < layers.length; i++) {
 			const layer = layers[i];
@@ -163,8 +177,8 @@ class Lines {
 							...drawing.offsets[j + 1],
 						];
 					} catch(error) {
-						console.log(error);
-						console.log(drawing.offsets);
+						// console.log(error);
+						// console.log(drawing.offsets);
 					}
 					// console.log(off);
 
@@ -189,7 +203,7 @@ class Lines {
 					);
 					for (let k = 0; k < props.segmentNum; k++) {
 						const p = s.clone().add(v.clone().multiply(k));
-						if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
+						// if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
 						// const index = props.breaks ? k : k + 1;
 						const index = k;
 						this.ctx.lineTo( 
