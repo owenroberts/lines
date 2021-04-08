@@ -38,6 +38,7 @@ class Game {
 		this.dps = params.dps; // draw per second
 		this.drawTime = performance.now();
 		this.drawInterval = 1000 / params.dps;
+		console.log(this.drawInterval, params.dps);
 
 		this.updateTime = performance.now();
 		this.updateInterval = 1000 / 60; // 60 fps
@@ -194,7 +195,7 @@ class Game {
 		else if (this.suspend) this.suspend = false;
 		
 		if (time > this.updateTime + this.updateInterval) {
-			if (!this.noUpdate) update(); // update defined in each game js file
+			if (!this.noUpdate) update(time - this.updateTime); // update defined in each game js file
 			this.updateTime = time - ((time - this.updateTime) % this.updateInterval); // adjust for fps interval being off
 			// if (this.stats) this.stats.update('FPS', time);
 			
