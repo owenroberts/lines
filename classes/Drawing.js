@@ -37,10 +37,6 @@ class Drawing {
 		return this.points.length;
 	}
 
-	// update the animtor  properties - happens when the lineCount is 0
-	// n number of segments, r randomness of segments
-	// w wiggle amount, v, wiggle speed
-	// ws is wiggle segments (true/false)
 	update(props) {
 		const { segmentNum, jiggleRange, wiggleRange, wiggleSpeed, wiggleSegments } = props;
 		const speed = new Cool.Vector().random(wiggleSpeed);

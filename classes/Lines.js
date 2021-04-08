@@ -103,10 +103,6 @@ class Lines {
 				layers.push(this.layers[i]);
 			}
 		}
-		// layers.sort((a, b) => {
-		// 	if (a.order) return a.order > b.order ? 1 : -1;
-		// 	else return 1;
-		// });
 
 		for (let i = 0; i < layers.length; i++) {
 			const layer = layers[i];
@@ -137,10 +133,8 @@ class Lines {
 			}
 
 			// how often to reset wiggle
-			if (!suspendLinesUpdate) {
-				const updateDrawing = layer.update();
-				if (updateDrawing) drawing.update(props);
-			}
+			// console.log('update', suspendLinesUpdate);
+			if (layer.update(suspendLinesUpdate)) drawing.update(props);
 
 			if (this.multiColor) this.ctx.beginPath();
 			const endIndex = props.endIndex >= 0 ? props.endIndex : drawing.length;
@@ -210,9 +204,11 @@ class Lines {
 				null;
 		}
 
+		const randomCount = Math.round(Math.random() * 5);
 		for (let i = 0; i < json.l.length; i++) {
 			const params = this.loadParams(json.l[i]);
 			params.drawingEndIndex = this.drawings[params.drawingIndex].length;
+			params.linesCount = randomCount;
 			
 			const layer = new Layer(params);
 			this.layers[i] = layer;
