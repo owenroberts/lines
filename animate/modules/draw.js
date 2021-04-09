@@ -48,6 +48,7 @@ function Draw(defaults) {
 		if (newDrawing) {
 			lns.anim.drawings.push(new Drawing()); // new Drawing?
 			/* seems repetietive - settings class ... ? */
+			lns.ui.faces.color.addColor(self.layer.color); // add color to color pallette
 			lns.anim.layers.push(new Layer({
 				linesInterval: +lns.ui.faces.linesInterval.value,
 				segmentNum: +lns.ui.faces.segmentNum.value,

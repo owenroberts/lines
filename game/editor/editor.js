@@ -116,8 +116,6 @@ function start() {
 		});
 	}, false);
 
-
-
 	edi.ui.faces.scenes.setOptions(gme.scenes);
 
 	fetch('/data/settings.json')
@@ -229,10 +227,11 @@ function mouseUp(x, y, button) {
 function intersectItems(x, y, move) {
 
 	// callback return doesn't work ... 
+	let returnSprite = false;
 	for (let i = 0; i < gme.scenes.current.displaySprites.length; i++) {
 		const s = gme.scenes.current.displaySprites.sprite(i);
-		if (s.isMouseOver(x, y, edi.zoom)) return s;
+		if (s.isMouseOver(x, y, edi.zoom) && !returnSprite) returnSprite = s;
 	}
 
-	return false;
+	return returnSprite;
 }

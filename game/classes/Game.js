@@ -35,6 +35,7 @@ class Game {
 		this.debug = params.debug || false;
 		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
 		this.suspend = false;
+		this.editorSuspend = false;
 
 		this.dps = params.dps; // draw per second
 		this.drawTime = performance.now();
@@ -198,7 +199,7 @@ class Game {
 
 			// interesting approach to fixing performance but looks mad choppy
 			// would be better to suspend a bit, like only every other or something
-			if (this.suspendOnTimeOver) {
+			if (this.suspendOnTimeOver && !this.editorSuspend) {
 				if (!this.suspend && time - this.updateTime > this.drawInterval * 1.5) {
 					this.suspend = true;
 				} else if (this.suspend) {

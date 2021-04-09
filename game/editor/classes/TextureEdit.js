@@ -67,6 +67,7 @@ class TextureEdit extends Texture {
 
 	isMouseOver(x, y, zoom) {
 		if (this.isSelectable) {
+			let returnSprite = false;
 			for (let i = 0; i < this.locations.length; i++) {
 				if (this.isInMapBounds(zoom.view, this.locations[i].x, this.locations[i].y, this.animation.width, this.animation.height)) {
 					const xy = zoom.translate(x, y);
@@ -75,7 +76,8 @@ class TextureEdit extends Texture {
 						xy.y > this.locations[i].y &&
 						xy.y < this.locations[i].y + this.animation.height) {
 					 	this.locations[i].isMoused = true;
-						return this;
+						// return this;
+						returnSprite = this;
 					} else {
 						if (!this.locations[i].isSelected) {
 							this.locations[i].isMoused = false;
@@ -83,7 +85,7 @@ class TextureEdit extends Texture {
 					}
 				}
 			}
-			return false;
+			return returnSprite;
 		}
 	}
 
@@ -99,9 +101,9 @@ class TextureEdit extends Texture {
 				loc.isMoused = false;
 			});
 		}
-
-		if (isSelected) this.ui.add();
-		else if (this.ui.isAdded) this.ui.remove();
+		// console.log(isSelected, this.ui.isAdded);
+		if (isSelected && !this.ui.isAdded) this.ui.add();
+		if (!isSelected && this.ui.isAdded) this.ui.remove();
 	}
 
 	get isSelected() {
