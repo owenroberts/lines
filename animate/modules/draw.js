@@ -42,10 +42,13 @@ function Draw(defaults) {
 	};
 
 	this.reset = function(f) {
-		if (self.drawing.length > 0) {
+		let newDrawing = false;
+		if (!self.drawing) newDrawing = true;
+		else if (self.drawing.length > 0) newDrawing = true;
+		if (newDrawing) {
 			lns.anim.drawings.push(new Drawing()); // new Drawing?
 			/* seems repetietive - settings class ... ? */
-			// lns.anim.addLayer ??
+			lns.ui.faces.color.addColor(self.layer.color); // add color to color pallette
 			lns.anim.layers.push(new Layer({
 				linesInterval: +lns.ui.faces.linesInterval.value,
 				segmentNum: +lns.ui.faces.segmentNum.value,
@@ -54,10 +57,13 @@ function Draw(defaults) {
 				wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
 				color: lns.ui.faces.color.value,
 				drawingIndex: lns.anim.drawings.length - 1,
-				startFrame: lns.anim.currentFrame,
+				startFrame: +f || lns.anim.currentFrame,
 			}));
 			lns.data.saveState();
-		}
+		}  
+
+		// or just change layer frame ?
+
 		lns.ui.update();
 	}; /* r key */
 

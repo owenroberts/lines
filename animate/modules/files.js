@@ -24,7 +24,7 @@ function Files(params) {
 			w: +lns.canvas.width,
 			h: +lns.canvas.height,
 			fps: +lns.anim.fps,
-			mc: [...new Set(lns.anim.layers.map(layer => layer.c))].length > 1,
+			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1,
 		};
 		if (params.bg) json.bg = lns.canvas.bgColor;
 

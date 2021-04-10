@@ -22,6 +22,7 @@ function setupAnimateInterface(ui) {
 
 		ui.faces.title.value = lns.files.fileName.split('/').pop().replace('.json', '');
 		ui.faces.fps.value = data.fps;
+		document.title = `${ui.faces.title.value} ~ animate`;
 
 		ui.faces.width.value = data.w;
 		ui.faces.height.value = data.h;

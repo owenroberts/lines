@@ -105,13 +105,6 @@ class Lines {
 			}
 		}
 
-		// const layers = this.layers.filter(layer => layer.isInFrame(this.currentFrame));
-
-		// .sort((a, b) => {
-		// 	if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
-		// 	else return 1;
-		// });
-
 		for (let i = 0; i < layers.length; i++) {
 			const layer = layers[i];
 			const drawing = this.drawings[layer.drawingIndex];
@@ -217,9 +210,11 @@ class Lines {
 				null;
 		}
 
+		const randomCount = Math.round(Math.random() * 5);
 		for (let i = 0; i < json.l.length; i++) {
 			const params = this.loadParams(json.l[i]);
 			params.drawingEndIndex = this.drawings[params.drawingIndex].length;
+			params.linesCount = randomCount;
 			
 			const layer = new Layer(params);
 			this.layers[i] = layer;

@@ -12,10 +12,12 @@ class UIColor extends UIInput {
 		this.el.addEventListener('focus', ev => {
 			this.addColor(this.current);
 		});
+
 		this.palette = new UICollection();
 	}
 
 	addColor(color) {
+		// console.trace();
 		const self = this;
 		if (!this.colors.includes(color) && color) {
 			this.colors.push(color);

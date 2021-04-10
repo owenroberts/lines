@@ -67,30 +67,34 @@ class TextureEdit extends Texture {
 
 	isMouseOver(x, y, zoom) {
 		if (this.isSelectable) {
+			let returnSprite = false;
 			for (let i = 0; i < this.locations.length; i++) {
-				if (this.isInMapBounds(zoom.view, this.locations[i].x, this.locations[i].y, this.animation.width, this.animation.height)) {
+				const location = this.locations[i];
+				if (this.isInMapBounds(zoom.view, location.x, location.y, this.animation.width, this.animation.height)) {
 					const xy = zoom.translate(x, y);
-					if (xy.x > this.locations[i].x &&
-						xy.x < this.locations[i].x + this.animation.width &&
-						xy.y > this.locations[i].y &&
-						xy.y < this.locations[i].y + this.animation.height) {
-					 	this.locations[i].isMoused = true;
-						return this;
+					if (xy.x > location.x &&
+						xy.x < location.x + this.animation.width &&
+						xy.y > location.y &&
+						xy.y < location.y + this.animation.height) {
+					 	location.isMoused = true;
+						// return this;
+						if (!returnSprite) returnSprite = this;
 					} else {
-						if (!this.locations[i].isSelected) {
-							this.locations[i].isMoused = false;
+						if (!location.isSelected) {
+							location.isMoused = false;
 						}
 					}
 				}
 			}
-			return false;
+			return returnSprite;
 		}
 	}
 
-	select(isSelected) {
+	select(isSelected, shift) {
 		if (isSelected) {
 			this.locations.filter(loc => loc.isMoused).forEach(loc => {
-				loc.isSelected = true;
+				if (!shift && loc.isSelected && !loc.isMoused) loc.isSelected = false;
+				else loc.isSelected = true;
 				loc.isMoused = false;
 			});
 		} else {
@@ -99,9 +103,9 @@ class TextureEdit extends Texture {
 				loc.isMoused = false;
 			});
 		}
-
-		if (isSelected) this.ui.add();
-		else if (this.ui.isAdded) this.ui.remove();
+		
+		if (isSelected && !this.ui.isAdded) this.ui.add();
+		if (!isSelected && this.ui.isAdded) this.ui.remove();
 	}
 
 	get isSelected() {
