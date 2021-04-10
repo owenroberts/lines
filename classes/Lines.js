@@ -98,94 +98,89 @@ class Lines {
 	draw(x, y, suspendLinesUpdate) {
 		if (!this.multiColor) this.ctx.beginPath();
 
-		const layers = [];
-		for (let i = 0; i < this.layers.length; i++) {
+		for (let i = 0, len = this.layers.length; i < len; i++) {
 			if (this.layers[i].isInFrame(this.currentFrame)) {
-				layers.push(this.layers[i]);
-			}
-		}
+				const layer = this.layers[i];
+				const drawing = this.drawings[layer.drawingIndex];
+				const props = layer.drawProps;
 
-		for (let i = 0; i < layers.length; i++) {
-			const layer = layers[i];
-			const drawing = this.drawings[layer.drawingIndex];
-			const props = layer.drawProps;
-
-			if (x) props.x += x;
-			if (y) props.y += y;
-			
-			if (props.tweens) { // default empty array
-				for (let j = 0; j < props.tweens.length; j++) {
-					const tween = props.tweens[j];
-					// console.log(tween);
-					// range class lol -- wait Range exists???
-					if (tween.startFrame <= this.currentFrame && 
-						tween.endFrame >= this.currentFrame) {
-						props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
-						if (tween.prop == 'startIndex' || tween.prop == 'endIndex') {
-							props[tween.prop] = Math.round(props[tween.prop]);
+				if (x) props.x += x;
+				if (y) props.y += y;
+				
+				if (props.tweens) { // default empty array
+					for (let j = 0; j < props.tweens.length; j++) {
+						const tween = props.tweens[j];
+						// console.log(tween);
+						// range class lol -- wait Range exists???
+						if (tween.startFrame <= this.currentFrame && 
+							tween.endFrame >= this.currentFrame) {
+							props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
+							if (tween.prop == 'startIndex' || tween.prop == 'endIndex') {
+								props[tween.prop] = Math.round(props[tween.prop]);
+							}
 						}
 					}
 				}
-			}
 
-			// over ride animation data from renderer (usually effects)
-			for (const key in this.override) {
-				props[key] = this.override[key];
-			}
-
-			// how often to reset wiggle
-			if (!suspendLinesUpdate) {
-				if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
-					drawing.update(props);
-					layer.linesCount = 0;
-				} else if (drawing.needsUpdate) {
-					layer.linesCount++;
+				// over ride animation data from renderer (usually effects)
+				for (const key in this.override) {
+					props[key] = this.override[key];
 				}
-			}
 
-			if (this.multiColor) this.ctx.beginPath();
-			const endIndex = props.endIndex >= 0 ? props.endIndex : drawing.length;
-			for (let j = props.startIndex; j < endIndex - 1; j++) {
-				const s = drawing.get(j);
-				const e = drawing.get(j + 1);
-				if (s !== 'end' && e !== 'end') {
-					const off = [...s.off, ...e.off]; // offset stored in drawing points
-					
-					// catch for drawing - add flag?
-					// what is this?
-					// only happens on certain drawings but happens A LOT
-					// maybe happens when segment num changes ... ?
-					// still working on this lol
-					// als when in the middle of drawing
-					if (off.length < props.segmentNum + 1) {
-						for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
-							off.push(new Cool.Vector());
-						}
+				// how often to reset wiggle
+				if (!suspendLinesUpdate) {
+					if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
+						drawing.update(props);
+						layer.linesCount = 0;
+					} else if (drawing.needsUpdate) {
+						layer.linesCount++;
 					}
+				}
 
-					const v = new Cool.Vector(e.x, e.y);
-					v.subtract(s);
-					v.divide(props.segmentNum);
-					this.ctx.moveTo(
-						props.x + s.x + off[0].x,
-						props.y + s.y + off[0].y
-					);
-					for (let k = 0; k < props.segmentNum; k++) {
-						const p = s.clone().add(v.clone().multiply(k));
-						if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
-						const index = props.breaks ? k : k + 1;
-						this.ctx.lineTo( 
-							props.x + p.x + v.x + off[index].x,
-							props.y + p.y + v.y + off[index].y
+				if (this.multiColor) this.ctx.beginPath();
+				const endIndex = props.endIndex >= 0 ? props.endIndex : drawing.length;
+				for (let j = props.startIndex; j < endIndex - 1; j++) {
+					const s = drawing.get(j);
+					const e = drawing.get(j + 1);
+					if (s !== 'end' && e !== 'end') {
+						const off = [...s.off, ...e.off]; // offset stored in drawing points
+						
+						// catch for drawing - add flag?
+						// what is this?
+						// only happens on certain drawings but happens A LOT
+						// maybe happens when segment num changes ... ?
+						// still working on this lol
+						// als when in the middle of drawing
+						if (off.length < props.segmentNum + 1) {
+							for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
+								off.push(new Cool.Vector());
+							}
+						}
+
+						const v = new Cool.Vector(e.x, e.y);
+						v.subtract(s);
+						v.divide(props.segmentNum);
+						this.ctx.moveTo(
+							props.x + s.x + off[0].x,
+							props.y + s.y + off[0].y
 						);
-					}
+						for (let k = 0; k < props.segmentNum; k++) {
+							const p = s.clone().add(v.clone().multiply(k));
+							if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
+							const index = props.breaks ? k : k + 1;
+							this.ctx.lineTo( 
+								props.x + p.x + v.x + off[index].x,
+								props.y + p.y + v.y + off[index].y
+							);
+						}
 
-					if (this.ctx.strokeStyle != props.color && this.multiColor)
-						this.ctx.strokeStyle = props.color;
+						if (this.ctx.strokeStyle != props.color && this.multiColor)
+							this.ctx.strokeStyle = props.color;
+					}
 				}
+				
+				if (this.multiColor) this.ctx.stroke();
 			}
-			
-			if (this.multiColor) this.ctx.stroke();
 		}
 		if (!this.multiColor) this.ctx.stroke();
 		if (this.onDraw) this.onDraw();
