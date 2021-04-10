@@ -12,7 +12,7 @@ class Texture {
 		this.offset = new Cool.Vector(0, 0);
 		if (params.animation) this.animation = params.animation;
 
-		if (params.locations.length > 0) {
+		if (params.locations) {
 			this.addLocations(params.locations)
 		}
 	}

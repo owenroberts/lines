@@ -23,7 +23,7 @@ class Layer {
 		
 		if (params.order) this.order = params.order;
 
-		this.linesInterval = params.linesInterval // draw count per line update
+		this.linesInterval = params.linesInterval || 5; // draw count per line update
 		this.linesCount = 0; // line update counter
 
 		this.isToggled = false; // lns anim layer

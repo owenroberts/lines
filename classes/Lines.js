@@ -18,6 +18,7 @@ class Lines {
 		
 		this.dps = dps || 30; // draw per frame from renderer
 		this.fps = 5; // update frames
+
 		this.currentFrame = 0;
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
@@ -97,11 +98,19 @@ class Lines {
 	draw(x, y, suspendLinesUpdate) {
 		if (!this.multiColor) this.ctx.beginPath();
 
-		const layers = this.layers.filter(layer => layer.isInFrame(this.currentFrame))
-		.sort((a, b) => {
-			if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
-			else return 1;
-		});
+		const layers = [];
+		for (let i = 0; i < this.layers.length; i++) {
+			if (this.layers[i].isInFrame(this.currentFrame)) {
+				layers.push(this.layers[i]);
+			}
+		}
+
+		// const layers = this.layers.filter(layer => layer.isInFrame(this.currentFrame));
+
+		// .sort((a, b) => {
+		// 	if (a.order) return a.order > b.order ? 1 : -1; // order not always there, ignore 0
+		// 	else return 1;
+		// });
 
 		for (let i = 0; i < layers.length; i++) {
 			const layer = layers[i];
@@ -133,8 +142,12 @@ class Lines {
 
 			// how often to reset wiggle
 			if (!suspendLinesUpdate) {
-				const updateDrawing = layer.update();
-				if (updateDrawing) drawing.update(props);
+				if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
+					drawing.update(props);
+					layer.linesCount = 0;
+				} else if (drawing.needsUpdate) {
+					layer.linesCount++;
+				}
 			}
 
 			if (this.multiColor) this.ctx.beginPath();
@@ -193,7 +206,6 @@ class Lines {
 	}
 
 	loadJSON(json, callback) {
-		this.loadData(json, callback);
 		this.loadData(json, callback);
 	}
 
