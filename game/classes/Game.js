@@ -85,7 +85,7 @@ class Game {
 		}
 	}
 
-	load(files, callback) {
+	load(files, loadEntriesOnly, callback) {
 		/* loads one instance of all animations to be used/shared by sprites */
 		if (this.debug) console.log('loading data');
 		if (this.debug) console.time('load data');
@@ -109,8 +109,8 @@ class Game {
 						// why can't these just be arrays?
 						this.data[f].entries = data;
 						for (const key in data) {
-							this.assetsLoaded[f][key] = false;
-							this.loadJSON(f, key, data[key].src);
+							this.assetsLoaded[f][key] = loadEntriesOnly ? true : false; // for editor loading
+							if (!loadEntriesOnly) this.loadJSON(f, key, data[key].src);
 							this.data[f].entries[key].src = data[key].src;
 						}
 					} else {

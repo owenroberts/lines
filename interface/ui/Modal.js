@@ -20,7 +20,7 @@ class UIModal extends UICollection {
 		this.submit = new UIButton({
 			text: "Submit",
 			callback: function() {
-				callback();
+				if (callback) callback();
 				self.clear();
 			}
 		});

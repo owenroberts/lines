@@ -139,6 +139,16 @@
 						"params": {
 							"text": "Toggle Lines"
 						}
+					},
+					{
+						"type": "UIButton",
+						"key": "ctrl-l",
+						"fromModule": {
+							"callback": "loadAnimations"
+						},
+						"params": {
+							"text": "Load Animations"
+						}
 					}
 				]
 			}
