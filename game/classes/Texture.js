@@ -13,7 +13,7 @@ class Texture {
 		if (params.animation) this.animation = params.animation;
 
 		if (params.locations && params.animation) {
-			this.addLocations(params.locations)
+			this.addLocations()
 		}
 	}
 

@@ -196,7 +196,7 @@ class Lines {
 	}
 
 	loadData(json, callback) {
-		this.loaded = true;
+		this.isLoaded = true;
 		for (let i = 0; i < json.d.length; i++) {
 			this.drawings[i] = json.d[i] ? 
 				new Drawing(json.d[i]) : 
