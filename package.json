@@ -22,8 +22,14 @@
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-uglify-es": "^2.0.0",
 		"gulp-util": "^2.2.20",
-		"gulp-webserver": "^0.9.1",
-		"merge-stream": "^2.0.0"
+		"gulp-webserver": "^0.1.0",
+		"is-svg": ">=4.2.2",
+		"lodash.template": ">=4.5.0",
+		"merge-stream": "^2.0.0",
+		"node-notifier": ">=8.0.1",
+		"open": ">=6.0.0",
+		"y18n": ">=3.2.2",
+		"yargs-parser": ">=5.0.0-security.0"
 	},
 	"dependencies": {
 		"stats.js": "^0.17.0"
