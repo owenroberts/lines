@@ -33,12 +33,14 @@ class Game {
 		
 		this.mixedColors = params.mixedColors || false; /* param? */
 		this.debug = params.debug || false;
-		this.suspend = params.suspend || false; // whether to update lines
+		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
+		this.suspend = false;
+		this.editorSuspend = false;
 
 		this.dps = params.dps; // draw per second
 		this.drawTime = performance.now();
 		this.drawInterval = 1000 / params.dps;
-
+		
 		this.updateTime = performance.now();
 		this.updateInterval = 1000 / 60; // 60 fps
 
@@ -70,6 +72,12 @@ class Game {
 				document.body.appendChild(this.stats.dom);
 				this.stats.dom.style.left = 'auto';
 				this.stats.dom.style.right = '0px';
+
+				this.drawStats = new Stats();
+				document.body.appendChild(this.drawStats.dom);
+				this.drawStats.dom.style.left = 'auto';
+				this.drawStats.dom.style.right = '0px';
+				this.drawStats.dom.style.top = '48px';
 
 			}
 
@@ -160,6 +168,9 @@ class Game {
 	}
 
 	start() {
+		this.drawTime = performance.now();
+		this.updateTime = performance.now();
+		
 		if (typeof start === "function") start(); // should be this method?
 		if (typeof update !== "function") this.noUpdate = true;
 		requestAnimFrame(() => { this.update() });
@@ -170,16 +181,12 @@ class Game {
 	}
 
 	draw(time) {
+		if (this.stats) this.drawStats.begin();
 		if (this.clearBg) this.ctx.clearRect(0, 0, this.width * this.dpr, this.height * this.dpr);
-
 		// add draw scenes ? 
-
 		draw(); // draw defined in each this js file, or not ... 
-		// if (this.stats) {
-		// 	this.stats.update('draw', time);
-		// 	this.stats.draw();
-		// }
 		this.drawTime = time - ((time - this.drawTime) % this.drawInterval);
+		if (this.stats) this.drawStats.end();
 	}
 
 	update() {
@@ -188,16 +195,23 @@ class Game {
 
 		const time = performance.now();
 		
-		// interesting approach to fixing performance but looks mad choppy
-		// would be better to suspend a bit, like only every other or something
-		if (!this.suspend && time - this.updateTime > this.updateInterval) this.suspend = true;
-		else if (this.suspend) this.suspend = false;
-		
 		if (time > this.updateTime + this.updateInterval) {
-			if (!this.noUpdate) update(); // update defined in each game js file
+
+			// interesting approach to fixing performance but looks mad choppy
+			// would be better to suspend a bit, like only every other or something
+			if (this.suspendOnTimeOver && !this.editorSuspend) {
+				if (!this.suspend && time - this.updateTime > this.drawInterval * 1.5) {
+					this.suspend = true;
+				} else if (this.suspend) {
+					this.suspend = false;
+				}
+			}
+
+
+			if (!this.noUpdate) update(time - this.updateTime); // update defined in each game js file
 			this.updateTime = time - ((time - this.updateTime) % this.updateInterval); // adjust for fps interval being off
+			// this.updateTime = time;
 			// if (this.stats) this.stats.update('FPS', time);
-			
 		}
 		if (time > this.drawTime + this.drawInterval) this.draw(time);
 		if (this.stats) this.stats.end();

@@ -116,8 +116,6 @@ function start() {
 		});
 	}, false);
 
-
-
 	edi.ui.faces.scenes.setOptions(gme.scenes);
 
 	fetch('/data/settings.json')
@@ -195,13 +193,18 @@ function mouseDown(x, y, button, shift) {
 			edi.tool.callback(xy.x, xy.y);
 		} else {
 			const item = intersectItems(x, y);
+			// console.log(item.label);
 
 			if (edi.tool.items.length > 0) {
 				if (item && shift) { // select multiple items
-					item.select(true);
-				} else if (item && !shift && !edi.tool.items.includes(item)) {
-					edi.tool.clear();
-					item.select(true);
+					item.select(true, shift);
+				} else if (item && !shift) {
+					if (!edi.tool.items.includes(item)) {
+						edi.tool.clear();
+						item.select(true, shift);
+					} else if (item.constructor.name == 'TextureEdit') {
+						item.select(true, shift);
+					}
 				} else if (!item) {
 					edi.tool.clear();
 				}
@@ -229,10 +232,11 @@ function mouseUp(x, y, button) {
 function intersectItems(x, y, move) {
 
 	// callback return doesn't work ... 
+	let returnSprite = false;
 	for (let i = 0; i < gme.scenes.current.displaySprites.length; i++) {
 		const s = gme.scenes.current.displaySprites.sprite(i);
-		if (s.isMouseOver(x, y, edi.zoom)) return s;
+		if (s.isMouseOver(x, y, edi.zoom) && !returnSprite) returnSprite = s;
 	}
 
-	return false;
+	return returnSprite;
 }
