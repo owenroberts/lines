@@ -1,7 +1,7 @@
 class ItemEdit extends Entity {
 	constructor(params, src, debug) {
 		super(params, src, debug);
-		this.origin = params.src || src;
+		this.src = params.src || src;
 		this.displayLabel = false;
 		this.displayOutline = false; // displayOutline
 		this.label = params.label;
@@ -9,6 +9,7 @@ class ItemEdit extends Entity {
 		
 		this.ui = new ItemEditUI(this, edi.ui.panels.items);
 
+		this.isLoaded = false;
 		this.isLocked = false; // move xy
 		this.isSelectable = true; // click on it
 		this.isSelected = false; 
@@ -87,7 +88,7 @@ class ItemEdit extends Entity {
 
 	get data() {
 		return {
-			src: this.origin,
+			src: this.src,
 			x: this.position.x,
 			y: this.position.y,
 			scenes: this.scenes
@@ -95,7 +96,8 @@ class ItemEdit extends Entity {
 	}
 
 	get settings() {
-		return { 
+		return {
+			isLoaded: this.isLoaded,
 			isLocked: this.isLocked,
 			isSelectable: this.isSelectable
 		};

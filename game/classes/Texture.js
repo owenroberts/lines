@@ -4,7 +4,7 @@
 
 class Texture {
 	constructor(params, debug) {
-		this.locations = [];
+		this.locations = params.locations || [];
 		this.frame = params.frame || 'index'; // bad name
 		this.debug = debug;
 		this.center = params.center || false;
@@ -12,7 +12,7 @@ class Texture {
 		this.offset = new Cool.Vector(0, 0);
 		if (params.animation) this.animation = params.animation;
 
-		if (params.locations.length > 0) {
+		if (params.locations && params.animation) {
 			this.addLocations(params.locations)
 		}
 	}
@@ -31,7 +31,7 @@ class Texture {
 	}
 
 	addLocations(locations) {
-		this.locations.push(...locations);
+		if (locations) this.locations.push(...locations);
 		for (let i = 0; i < this.locations.length; i++) {
 			if (this.frame == 'index') {
 				this.locations[i].i = i;

@@ -11,14 +11,15 @@ const gme = new Game({
 	suspend: true
 }); // maybe there's a way to use the garden js file here? modules & exports :O
 
-gme.load({
-	scenery: '/data/scenery.json',
-	textures: '/data/textures.json'
-});
 
 const edi = {}; /* editor app */
 edi.ui = new Interface(edi);
-edi.ui.load('interface/interface.json');
+edi.ui.load('interface/interface.json', () => {
+	gme.load({
+		scenery: '/data/scenery.json',
+		textures: '/data/textures.json'
+	}, true);
+});
 edi.ui.settings = new Settings(edi, 'edi');
 edi.ui.game = new GameSettings(edi); // scene, wiggle
 edi.ui.textures = new Textures();
@@ -71,7 +72,22 @@ edi.ui.reset = function() {
 	}
 };
 
-edi.data = new Data(gme, { save: false, path: '/drawings', files: ['scenery', 'textures'] }); 
+edi.data = new Data(gme, { save: false, path: '/drawings', files: ['scenery', 'textures'] });
+
+edi.loadAnimation = function(type, label, src) {
+	if (gme.debug) console.log(`loading ${src}`);
+	if (gme.debug) console.time(`done ${src}`);
+	fetch(src)
+		.then(response => { return response.json(); })
+		.then(json => {
+			console.timeEnd(`done ${src}`);
+			gme.anims[type][label] = new GameAnim();
+			gme.anims[type][label].loadData(json, () => {
+				gme.sprites[type][label].addAnimation(gme.anims[type][label]);
+				gme.sprites[type][label].isLoaded = true;
+			});
+		});
+};
 
 function start() {
 
@@ -84,7 +100,9 @@ function start() {
 	for (const key in gme.data.scenery.entries) {
 		const data = gme.data.scenery.entries[key];
 		const s = new ItemEdit({ ...data, label: key });
-		s.addAnimation(gme.anims.scenery[key]);
+		if (gme.anims.scenery[key]) {
+			s.addAnimation(gme.anims.scenery[key]);
+		}
 		gme.scenes.add(s, data.scenes);
 		gme.updateBounds(s.position);
 		gme.sprites.scenery[key] = s;
@@ -94,10 +112,12 @@ function start() {
 		const data = gme.data.textures.entries[key];
 		const t = new TextureEdit({
 			...data,
-			animation: gme.anims.textures[key],
 			frame: 'index',
 			label: key,
 		});
+		if (gme.anims.textures[key]) {
+			t.addAnimation(gme.anims.textures[key]);
+		}
 		gme.scenes.add(t, data.scenes);
 		for (let i = 0; i < data.locations.length; i++) {
 			gme.updateBounds(data.locations[i]);
@@ -122,12 +142,16 @@ function start() {
 		.then(response => { return response.json(); })
 		.then(json => {
 			for (const type in json) {
-				for (const sprite in json[type]) {
-					for (const prop in json[type][sprite]) {
-						gme.sprites[type][sprite][prop] = json[type][sprite][prop];
-						gme.sprites[type][sprite].select(false);
-						// unselect stop gap
+				for (const label in json[type]) {
+					const sprite = gme.sprites[type][label];
+					const data = json[type][label];
+					sprite.select(false); // unselect stop gap
+					if (data.isLoaded && !gme.anims[type][label]) {
+						edi.loadAnimation(type, label, sprite.src);
 					}
+					sprite.isSelectable = data.isSelectable;
+					sprite.isLocked = data.isLocked;
+
 				}
 			}
 		});

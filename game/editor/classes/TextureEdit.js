@@ -5,6 +5,7 @@ class TextureEdit extends Texture {
 		this.scenes = params.scenes || ['game'];
 		this.label = params.label;
 
+		this.isLoaded = false;
 		this.isLocked = false;
 		this.isSelectable = true;
 		this.isRemoved = false;
@@ -12,12 +13,17 @@ class TextureEdit extends Texture {
 		this.ui = new TextureEditUI(this, edi.ui.panels.items);
 	}
 
+	addAnimation(animation) {
+		this.animation = animation;
+		this.addLocations();
+	}
+
 	addLocation(x, y) {
 		super.addLocation(x, y, this.locations.length);
 	}
 
 	display(view) {
-		if (!this.isRemoved) {
+		if (!this.isRemoved && this.isLoaded) {
 			for (let i = 0; i < this.locations.length; i++) {
 				let x = this.locations[i].x;
 				let y = this.locations[i].y;
@@ -66,7 +72,7 @@ class TextureEdit extends Texture {
 	}
 
 	isMouseOver(x, y, zoom) {
-		if (this.isSelectable) {
+		if (this.isSelectable && this.isLoaded) {
 			let returnSprite = false;
 			for (let i = 0; i < this.locations.length; i++) {
 				const location = this.locations[i];
@@ -131,7 +137,8 @@ class TextureEdit extends Texture {
 	}
 
 	get settings() {
-		return { 
+		return {
+			isLoaded: this.isLoaded,
 			isLocked: this.isLocked,
 			isSelectable: this.isSelectable
 		};
