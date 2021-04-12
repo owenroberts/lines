@@ -16,8 +16,6 @@ const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 const gutil = require('gulp-util');
 
-
-
 const files = {
 	base: [ 
 		'./lib/cool/cool.js',

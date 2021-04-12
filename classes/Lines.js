@@ -193,7 +193,6 @@ class Lines {
 
 	loadJSON(json, callback) {
 		this.loadData(json, callback);
-		this.loadData(json, callback);
 	}
 
 	loadData(json, callback) {
