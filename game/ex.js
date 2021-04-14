@@ -8,7 +8,7 @@ const gme = new Game({
 	dps: 30,
 	stats: true,
 	debug: false,
-	mixedColors: true,
+	multiColor: true,
 	checkRetina: true,
 	scenes: ['walk', 'drag']
 });

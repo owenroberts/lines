@@ -11,7 +11,7 @@ function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
 	this.ctx = this.canvas.getContext('2d');
 	this.dps = dps || 36; // default ?
 	this.drawInterval = 1000 / this.dps; /* needed in both places ?? */
-	this.mixedColors = false; // is this always false?
+	this.multiColor = false; // is this always false?
 	this.drawBg = true; /* where? */
 	this.isTexture = isTexture;
 	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;

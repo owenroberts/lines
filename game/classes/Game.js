@@ -31,7 +31,7 @@ class Game {
 		this.width = params.width;
 		this.height = params.height;
 		
-		this.mixedColors = params.mixedColors || false; /* param? */
+		this.multiColor = params.multiColor || false; /* param? */
 		this.debug = params.debug || false;
 		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
 		this.suspend = false;

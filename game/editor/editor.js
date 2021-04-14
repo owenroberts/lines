@@ -3,7 +3,7 @@ const gme = new Game({
 	width: 960,
 	height: 720,
 	dps: 30,
-	mixedColors: true,
+	multiColor: true,
 	checkRetina: true,
 	scenes: ['game'],
 	debug: true,
