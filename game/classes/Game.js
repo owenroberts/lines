@@ -40,6 +40,7 @@ class Game {
 		this.dps = params.dps; // draw per second
 		this.drawTime = performance.now();
 		this.drawInterval = 1000 / params.dps;
+		window.drawCount = 0; // global referenced in drawings -- prevents double updates for textures and 
 		
 		this.updateTime = performance.now();
 		this.updateInterval = 1000 / 60; // 60 fps
@@ -185,6 +186,8 @@ class Game {
 		if (this.clearBg) this.ctx.clearRect(0, 0, this.width * this.dpr, this.height * this.dpr);
 		// add draw scenes ? 
 		draw(); // draw defined in each this js file, or not ... 
+		drawCount++;
+
 		this.drawTime = time - ((time - this.drawTime) % this.drawInterval);
 		if (this.stats) this.drawStats.end();
 	}
