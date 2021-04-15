@@ -23,9 +23,8 @@ class Layer {
 		
 		if (params.order) this.order = params.order;
 
-		this.linesInterval = params.linesInterval // draw count per line update
+		this.linesInterval = params.linesInterval; // draw count per line update
 		this.linesCount = params.linesCount || 0; // line update counter
-		//Math.round(Math.random() * params.linesInterval); 
 
 		this.isToggled = false; // lns anim layer
 		this.resetTweens();

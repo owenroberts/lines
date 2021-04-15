@@ -7,7 +7,7 @@ class Drawing {
 			}
 		}
 
-		this.offset = new Cool.Vector();
+		this.lastDrawCount = 0;
 	}
 
 	// add a point
@@ -37,22 +37,32 @@ class Drawing {
 		return this.points.length;
 	}
 
+	get needsUpdate() {
+		if (this.lastDrawCount < drawCount) {
+			this.lastDrawCount = drawCount;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	update(props) {
+
 		const { segmentNum, jiggleRange, wiggleRange, wiggleSpeed, wiggleSegments } = props;
 		const speed = new Cool.Vector().random(wiggleSpeed);
-		this.offset = new Cool.Vector().random(0, wiggleRange);
+		const offset = new Cool.Vector().random(0, wiggleRange);
 
 		// add random offsets for xy for each segment of the lines
-		for (let i = 0; i < this.points.length; i++) {
+		for (let i = 0, len = this.points.length; i < len; i++) {
 			if (this.points[i] != 'end') {
 				this.points[i].off = []; // point offset 
 
 				for (let j = 0; j < segmentNum; j++) {
 					// calculate wiggle 
 					if (wiggleRange > 0 && (j == 0 || wiggleSegments)) {
-						this.offset.add(speed);
+						offset.add(speed);
 						for (const xy in speed) {
-							if (this.offset[xy] >= wiggleRange || this.offset[xy] <= -wiggleRange) {
+							if (offset[xy] >= wiggleRange || offset[xy] <= -wiggleRange) {
 								speed[xy] *= -1;
 							}
 						}
@@ -60,8 +70,8 @@ class Drawing {
 
 					// add jiggle to wiggle -- needs to figure the fuck out!
 					this.points[i].off.push({
-						x: Cool.random(-jiggleRange, jiggleRange) + this.offset.x,
-						y: Cool.random(-jiggleRange, jiggleRange) + this.offset.y
+						x: Cool.random(-jiggleRange, jiggleRange) + offset.x,
+						y: Cool.random(-jiggleRange, jiggleRange) + offset.y
 					});
 				}
 
