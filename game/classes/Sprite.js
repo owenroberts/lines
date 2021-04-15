@@ -71,6 +71,7 @@ class Sprite {
 		GAME.ctx.strokeStyle = this.debugColor;
 		GAME.ctx.stroke();
 		GAME.ctx.strokeStyle = temp;
+		if (GAME.lineWidth != 1) GAME.ctx.lineWidth = GAME.lineWidth;
 	}
 
 	display(editorOnScreen) {

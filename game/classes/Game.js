@@ -36,6 +36,7 @@ class Game {
 		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
 		this.suspend = false;
 		this.editorSuspend = false;
+		this.lineWidth = params.lineWidth || 1;
 
 		this.dps = params.dps; // draw per second
 		this.drawTime = performance.now();
@@ -81,6 +82,7 @@ class Game {
 
 			}
 
+			this.ctx.lineWidth = this.lineWidth;
 			this.ctx.miterLimit = 1; // do this last
 		}
 	}
