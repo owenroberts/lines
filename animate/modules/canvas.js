@@ -70,7 +70,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 			for (let j = 0; j < drawing.length; j++) {
 				const point = drawing.get(j);
 				if (point != 'end') {
-					tolerance = Math.max(tolerance, layer.r * 4); /* account for random jiggle */
+					tolerance = Math.max(tolerance, layer.jiggleRange * 4); /* account for random jiggle */
 					min.x = Math.min(min.x, point.x + layer.x);
 					min.y = Math.min(min.y, point.y + layer.y);
 					max.x = Math.max(max.x, point.x + layer.x);
@@ -80,8 +80,8 @@ function Canvas(id, _width, _height, color, checkRetina) {
 		}
 
 		// example of this syntax being counter intuitive/annoying
-		lns.ui.faces.width.update((max.x - min.x) + tolerance * 2);
-		lns.ui.faces.height.update((max.y - min.y) + tolerance * 2);
+		lns.ui.faces.width.update(Math.round((max.x - min.x) + tolerance * 2));
+		lns.ui.faces.height.update(Math.round((max.y - min.y) + tolerance * 2));
 
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			lns.anim.layers[i].x -= min.x - tolerance > 0 ? min.x - tolerance : 0;

@@ -11,7 +11,7 @@ class Lines {
 		this.ctx = ctx;
 		this.isLoaded = false;
 		this.isPlaying = false;
-		this.multiColor = multiColor || true;
+		this.multiColor = multiColor || false;
 
 		this.drawings = [];
 		this.layers = [];
@@ -28,6 +28,10 @@ class Lines {
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
 		this.states = { 'default': {start: 0, end: 0 } };
+	}
+
+	randomCount() {
+		this.drawCount = Cool.randomInt(this.drawsPerFrame);
 	}
 
 	set fps(fps) {
@@ -68,6 +72,12 @@ class Lines {
 
 	get stateName() {
 		return this._state;
+	}
+
+	setLinesUpdate(n) {
+		this.layers.forEach(layer => {
+			layer.linesInterval = n;
+		});
 	}
 
 	overrideProperty(prop, value) {
@@ -138,8 +148,16 @@ class Lines {
 				}
 
 				if (this.multiColor) this.ctx.beginPath();
-				const endIndex = props.endIndex >= 0 ? props.endIndex : drawing.length;
-				for (let j = props.startIndex; j < endIndex - 1; j++) {
+				let { endIndex, startIndex } = props;
+				// text animation
+				if (this.endIndexMultiplier !== undefined) {
+					endIndex *= this.endIndexMultiplier; 
+				}
+				if (this.startIndexMultiplier !== undefined) {
+					startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
+				}
+
+				for (let j = startIndex; j < endIndex - 1; j++) {
 					const s = drawing.get(j);
 					const e = drawing.get(j + 1);
 					if (s !== 'end' && e !== 'end') {

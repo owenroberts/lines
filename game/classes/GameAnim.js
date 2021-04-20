@@ -4,16 +4,17 @@ class GameAnim extends Lines {
 		this.debug = debug;
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */
+		this.prevFrame = 0;
 	}
 
 	update() { /* too many things to stick in onPlayedState etc */
 		if (this.isPlaying) {
-
 			if (this.drawCount == this.drawsPerFrame) {
 				if (this.randomFrames) {
-					while (prevFrame == this.currentFrame) {
+					while (this.prevFrame == this.currentFrame) {
 						this.currentFrame = Cool.randomInt(this.state.start, this.state.end);
 					}
+					this.prevFrame = this.currentFrame;
 				} else if (this.currentFrame >= this.state.end) {
 					this.currentFrame = this.loop ? this.state.start : this.state.end;
 					if (this.onPlayedOnce) {
@@ -67,7 +68,7 @@ class GameAnim extends Lines {
 		this.isPlaying = false;
 	}
 
-	start() {
+	play() {
 		this.isPlaying = true;
 	}
 }

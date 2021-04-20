@@ -5,7 +5,7 @@
 */
 
 class Text {
-	constructor(x, y, msg, wrap, letters, letterIndexString) {
+	constructor(x, y, msg, wrap, letters, letterIndexString) { // params?
 		this.x = Math.round(x);
 		this.y = Math.round(y);
 		this.lead = 35; // leading is space between lines
@@ -18,11 +18,14 @@ class Text {
 		this.setBreaks();
 		this.count = 0;
 		this.end = 0;
+		this.endCount = 1;
+		this.endDelay = GAME.dps || 10;
 		this.hover = false;
 		this.clickStarted = false;
 
 		if (!letters.states[0]) {
-			const indexString = letterIndexString || "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"!";
+			const indexString = letterIndexString || 
+				"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"!";
 			for (let i = 0; i < indexString.length; i++) {
 				letters.createNewState(indexString[i], i, i);
 			}
@@ -81,7 +84,7 @@ class Text {
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
 	display(countForward, countBackward, _x, _y) {
 		if (this.isActive) {
-			const len = countForward ? this.count : this.msg.length;
+			const len = countForward ? Math.floor(this.count) : this.msg.length;
 			const index = countBackward ? this.end : 0;
 			let x = _x || this.x;
 			let y = _y || this.y;
@@ -106,8 +109,9 @@ class Text {
 				}
 			}
 			
+			// console.log(this.count, this.msg.length, this.end);
 			if (this.count >= this.msg.length) this.end++;
-			else this.count++;
+			else this.count += this.endCount;
 			if (countBackward) {
 				if (this.end >= this.msg.length) {
 					this.end = 0; /* reset */
@@ -115,7 +119,7 @@ class Text {
 					return true;
 				}
 			} else {
-				if (this.end >= 5) { // how long to wait after completed text // hardcoded?
+				if (this.end >= this.endDelay) { // how long to wait after completed text // hardcoded?
 					this.end = 0;
 					this.count = 0;
 					return true; // ended
