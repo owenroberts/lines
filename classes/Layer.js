@@ -30,17 +30,6 @@ class Layer {
 		this.resetTweens();
 	}
 
-	update(suspend) {
-		if (suspend) return false;
-		if (this.linesCount >= this.linesInterval) {
-			this.linesCount = 0;
-			return true;
-		} else {
-			this.linesCount++;
-			return false;
-		}
-	}
-
 	get startFrame() {
 		return this._startFrame;
 	}

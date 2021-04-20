@@ -517,6 +517,24 @@
 							"text": "Insert After",
 							"arguments": [1]
 						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "applyOffset"
+						},
+						"params": {
+							"text": "Apply Offset"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "pruneDrawings"
+						},
+						"params": {
+							"text": "Prune Drawings"
+						}
 					}
 				]
 			}

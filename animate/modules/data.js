@@ -308,4 +308,39 @@ function Data() {
 		}
 		lns.ui.update();
 	}; /* a key */
+
+	this.applyOffset = function() {
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			const drawing = lns.anim.drawings[layer.drawingIndex];
+			['x', 'y'].forEach(coord => {
+				if (coord !== 0) {
+					for (let i = 0; i < drawing.length; i++) {
+						drawing.points[i][coord] += layer[coord];
+					}
+					layer[coord] = 0;
+				}
+			});
+		}
+	};
+
+	this.pruneDrawings = function() {
+
+		const nonNulls = []
+
+		for (let i = 0; i < lns.anim.drawings.length; i++) {
+			const drawing = lns.anim.drawings[i];
+			if (drawing) nonNulls.push(i);
+		}
+
+		for (let i = 0; i < lns.anim.layers.length; i++) {
+			const layer = lns.anim.layers[i];
+			const index = nonNulls.indexOf(layer.drawingIndex);
+			layer.drawingIndex = index;
+		}
+
+		for (let i = lns.anim.drawings.length; i >= 0; i--) {
+			if (lns.anim.drawings[i] == null) lns.anim.drawings.splice(i, 1);
+		}
+	};
 }

@@ -37,8 +37,9 @@ class Game {
 		this.suspend = false;
 		this.editorSuspend = false;
 		this.lineWidth = params.lineWidth || 1;
+		this.checkRetina = params.checkRetina !== undefined ? params.checkRetina : true;
 
-		this.dps = params.dps; // draw per second
+		this.dps = params.dps || 30; // draw per second
 		this.drawTime = performance.now();
 		this.drawInterval = 1000 / params.dps;
 		window.drawCount = 0; // global referenced in drawings -- prevents double updates for textures and 
@@ -59,7 +60,7 @@ class Game {
 
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
-			this.dpr = params.checkRetina ? window.devicePixelRatio || 1 : 1;
+			this.dpr = this.checkRetina ? window.devicePixelRatio || 1 : 1;
 
 			this.canvas.width = this.width * this.dpr;
 			this.canvas.height = this.height * this.dpr;
@@ -187,7 +188,7 @@ class Game {
 		if (this.stats) this.drawStats.begin();
 		if (this.clearBg) this.ctx.clearRect(0, 0, this.width * this.dpr, this.height * this.dpr);
 		// add draw scenes ? 
-		draw(); // draw defined in each this js file, or not ... 
+		draw(time - this.drawTime); // draw defined in each this js file, or not ... 
 		drawCount++;
 
 		this.drawTime = time - ((time - this.drawTime) % this.drawInterval);

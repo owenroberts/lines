@@ -9,7 +9,7 @@ window.addEventListener("load", function() {
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
 	lns.render = new Render(30, true); // (dps, stats?)
 
-	lns.anim = new Lines(lns.canvas.ctx);
+	lns.anim = new Lines(lns.canvas.ctx, 30, true);
 	lns.draw = new Draw({ 
 		linesInterval: 5, 
 		segmentNum: 2,

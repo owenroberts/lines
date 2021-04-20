@@ -45,7 +45,7 @@ function Files(params) {
 		json.d = [];
 		for (let i = 0; i < lns.anim.drawings.length; i++) {
 			json.d[i] = drawingIndexes.has(i) ?
-				lns.anim.drawings[i].points.map(point => point == 'end' ? 0 : [point.x, point.y])
+				lns.anim.drawings[i].points.map(point => point == 'end' ? 0 : [Math.round(point.x), Math.round(point.y)])
 				: null;
 		}
 
@@ -84,7 +84,7 @@ function Files(params) {
 
 	this.loadJSON = function(data, callback) {
 
-		lns.anim = new Lines(lns.canvas.ctx, lns.render.dps);
+		lns.anim = new Lines(lns.canvas.ctx, lns.render.dps, true);
 		lns.anim.loadData(data, function() {
 			lns.canvas.setWidth(data.w);
 			lns.canvas.setHeight(data.h);
