@@ -188,7 +188,7 @@ class Game {
 		if (this.stats) this.drawStats.begin();
 		if (this.clearBg) this.ctx.clearRect(0, 0, this.width * this.dpr, this.height * this.dpr);
 		// add draw scenes ? 
-		draw(); // draw defined in each this js file, or not ... 
+		draw(time - this.drawTime); // draw defined in each this js file, or not ... 
 		drawCount++;
 
 		this.drawTime = time - ((time - this.drawTime) % this.drawInterval);

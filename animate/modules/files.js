@@ -84,7 +84,7 @@ function Files(params) {
 
 	this.loadJSON = function(data, callback) {
 
-		lns.anim = new Lines(lns.canvas.ctx, lns.render.dps);
+		lns.anim = new Lines(lns.canvas.ctx, lns.render.dps, true);
 		lns.anim.loadData(data, function() {
 			lns.canvas.setWidth(data.w);
 			lns.canvas.setHeight(data.h);
