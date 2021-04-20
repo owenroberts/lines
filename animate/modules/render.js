@@ -9,6 +9,7 @@ function Render(dps, showStats) {
 	this.dps = dps || 30; // draws pers second
 	this.interval = 1000 / this.dps;  // time interval between draws
 	this.timer = performance.now();
+	window.drawCount = 0;
 
 	this.onionSkinNum = 0;
 	this.onionSkinIsVisible = false;
@@ -87,6 +88,7 @@ function Render(dps, showStats) {
 			/* draw before update is cool for now ... */
 			lns.anim.draw();
 			lns.anim.update();
+			window.drawCount++;
 		}
 		if (!lns.ui.capture.isCapturing) 
 			window.requestAnimFrame(self.update);
