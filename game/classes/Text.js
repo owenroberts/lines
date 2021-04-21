@@ -18,7 +18,7 @@ class Text {
 		this.setBreaks();
 		this.count = 0;
 		this.end = 0;
-		this.endCount = 1;
+		this.endCount = 0.5;
 		this.endDelay = GAME.dps || 10;
 		this.hover = false;
 		this.clickStarted = false;
@@ -89,10 +89,10 @@ class Text {
 			let x = _x || this.x;
 			let y = _y || this.y;
 			// y -= this.breaks.length * this.lead;
-			for (let i = index; i < len; i++) {
+			for (let i = 0; i < len; i++) {
 				var letter = this.msg[i];
 				// if (!letter.match(/[!a-zA-Z]/g)) console.log(letter);
-				if (letter == ' ' || letter == '_') {
+				if (letter == ' ' || letter == '_' || i < index) {
 					x += this.track;
 				} else if (letter == '\n' || letter == '\r') {
 					// y += this.lead;

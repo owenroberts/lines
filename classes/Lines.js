@@ -149,6 +149,7 @@ class Lines {
 
 				if (this.multiColor) this.ctx.beginPath();
 				let { endIndex, startIndex } = props;
+				if (endIndex < 0) endIndex = drawing.length;
 				// text animation
 				if (this.endIndexMultiplier !== undefined) {
 					endIndex *= this.endIndexMultiplier; 
