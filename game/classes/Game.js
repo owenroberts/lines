@@ -59,8 +59,6 @@ class Game {
 		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
 
 		this.view = {
-			x: 0,
-			y: 0,
 			width: this.width * this.dpr,
 			height: this.height * this.dpr,
 		};
@@ -77,15 +75,10 @@ class Game {
 			this.canvas.style.zoom = 1 / this.dpr;
 
 			if (params.zoom) {
-				this.view.x = Math.round((this.width - this.width / zoom) / 2);
-				this.view.y = Math.round((this.height - this.height / zoom) / 2);
 				this.view.width = Math.round(this.width / zoom);
 				this.view.height = Math.round(this.height / zoom);
 				this.ctx.scale(params.zoom * this.dpr, params.zoom * this.dpr);
-				// this.ctx.translate(this.view.x, this.view.y);
 			}
-
-			console.log('view', this.view);
 
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
