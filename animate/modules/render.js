@@ -61,6 +61,8 @@ function Render(dps, showStats) {
 			if (lns.anim.isPlaying) lns.ui.timeline.update();
 
 			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
+			lns.canvas.ctx.fillStyle = '#ffffff';
+			lns.canvas.ctx.fillRect(0, 0, lns.canvas.width, lns.canvas.height);
 
 			/* in capture set animation onDraw */
 			if (lns.ui.capture.bg && (lns.ui.capture.frames > 0 || lns.ui.capture.isVideo)) {

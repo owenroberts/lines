@@ -58,14 +58,34 @@ class Game {
 		this.useMouseEvents = params.events ? params.events.includes('mouse') : true;
 		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
 
+		this.view = {
+			x: 0,
+			y: 0,
+			width: this.width * this.dpr,
+			height: this.height * this.dpr,
+		};
+
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
 			this.dpr = this.checkRetina ? window.devicePixelRatio || 1 : 1;
+
+			const zoom = params.zoom || 1;
 
 			this.canvas.width = this.width * this.dpr;
 			this.canvas.height = this.height * this.dpr;
 			this.ctx.scale(this.dpr, this.dpr);
 			this.canvas.style.zoom = 1 / this.dpr;
+
+			if (params.zoom) {
+				this.view.x = Math.round((this.width - this.width / zoom) / 2);
+				this.view.y = Math.round((this.height - this.height / zoom) / 2);
+				this.view.width = Math.round(this.width / zoom);
+				this.view.height = Math.round(this.height / zoom);
+				this.ctx.scale(params.zoom * this.dpr, params.zoom * this.dpr);
+				// this.ctx.translate(this.view.x, this.view.y);
+			}
+
+			console.log('view', this.view);
 
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
@@ -165,6 +185,7 @@ class Game {
 			.then(response => { return response.json(); })
 			.then(json => {
 				this.anims[file][key] = new GameAnim();
+				this.anims[file][key].src = src; // debug 
 				this.anims[file][key].loadData(json, () => {
 					this.assetsLoaded[file][key] = true;
 				});
@@ -186,7 +207,7 @@ class Game {
 
 	draw(time) {
 		if (this.stats) this.drawStats.begin();
-		if (this.clearBg) this.ctx.clearRect(0, 0, this.width * this.dpr, this.height * this.dpr);
+		if (this.clearBg) this.ctx.clearRect(0, 0, this.view.width, this.view.height);
 		// add draw scenes ? 
 		draw(time - this.drawTime); // draw defined in each this js file, or not ... 
 		drawCount++;

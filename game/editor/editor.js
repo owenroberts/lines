@@ -165,7 +165,7 @@ function draw() {
 
 	edi.zoom.clear(gme.ctx);
 	// edi.zoom.set(gme.ctx, { x: gme.width/2, y: gme.height/2 });
-	edi.zoom.set(gme.ctx, { x: gme.width/2, y: gme.height/2 });
+	edi.zoom.set(gme.ctx, { x: gme.width / 2, y: gme.height / 2 });
 
 	// const view = edi.zoom.view;
 	// GAME.ctx.fillRect(view.x - GAME.width/2, view.y - GAME.height/2,view.width + GAME.width, view.height + GAME.height);

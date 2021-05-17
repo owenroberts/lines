@@ -1,4 +1,4 @@
-const { src, dest, watch, series, parallel } = require('gulp');
+const { src, dest, watch, series, parallel, task } = require('gulp');
 
 const replace = require('gulp-replace');
 const sourcemaps = require('gulp-sourcemaps');
@@ -149,9 +149,16 @@ function watchTask(){
 	);    
 }
 
+task('js', jsTasks);
+task('sass', sassTasks);
+task('default', parallel(jsTasks, sassTasks));
+task('watch', watchTask);
+task('browser', parallel(jsTasks, sassTasks), series(cacheBustTask, serverTask, watchTask));
+
 // Export the default Gulp task so it can be run
 // Runs the scss and js tasks simultaneously
 // then runs cacheBust, then watch task
+/*
 exports.default = series(
 	parallel(jsTasks),
 	parallel(sassTasks),
@@ -159,5 +166,6 @@ exports.default = series(
 	serverTask,
 	watchTask
 );
+*/
 
 exports.lnsFiles = files;

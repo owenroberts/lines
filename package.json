@@ -9,14 +9,14 @@
 	},
 	"author": "@owenroberts",
 	"devDependencies": {
-		"cssnano": "^4.1.10",
+		"cssnano": "^5.0.2",
 		"gulp": "^4.0.2",
-		"gulp-autoprefixer": "^7.0.1",
+		"gulp-autoprefixer": "^5.0.0",
 		"gulp-better-rollup": "^4.0.1",
 		"gulp-concat": "^2.5.2",
 		"gulp-notify": "^3.2.0",
 		"gulp-plumber": "^1.2.1",
-		"gulp-postcss": "^8.0.0",
+		"gulp-postcss": "^9.0.0",
 		"gulp-replace": "^1.0.0",
 		"gulp-sass": "^4.0.2",
 		"gulp-sourcemaps": "^2.6.5",
@@ -32,6 +32,7 @@
 		"yargs-parser": ">=5.0.1"
 	},
 	"dependencies": {
+		"node-sass": "^4.14.1",
 		"stats.js": "^0.17.0"
 	}
 }

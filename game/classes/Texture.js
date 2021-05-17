@@ -58,12 +58,27 @@ class Texture {
 			}
 
 			//  figure out centering later, only draw textures on screen
-			if (x + this.animation.width > 0 && x < GAME.width && 
-				y + this.animation.height > 0 && y < GAME.height) {
+			if (x + this.animation.width > 0 && x < GAME.view.width && 
+				y + this.animation.height > 0 && y < GAME.view.height) {
 				if (this.locations[i].i !== undefined) this.animation.state = `f-${this.locations[i].i}`;
 				this.animation.draw(x, y, GAME.suspend);
 			}
 		}
+	}
+
+	isOnScreen() {  // debugging
+		let onScreen = [];
+		for (let i = 0; i < this.locations.length; i++) {
+			let x = this.locations[i].x + this.offset.x;
+			let y = this.locations[i].y + this.offset.y;
+			if (this.center) {
+				x -= this.animation.width / 2;
+				y -= this.animation.height / 2;
+			}
+			onScreen.push(x + this.animation.width > 0 && x < GAME.view.width && 
+				y + this.animation.height > 0 && y < GAME.view.height);
+		}
+		return onScreen;
 	}
 
 	update(offset) {

@@ -4,6 +4,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 	/* width and height are pixel dimensions
 		canvas width and height are dependent on dpr */
 	this.canvas = document.getElementById(id); // lns.canvas.canvas is html elem
+	// this.canvas.style.imageRendering = 'pixelated'; // doesn't really look different
 	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
 	this.scale = 1;
 

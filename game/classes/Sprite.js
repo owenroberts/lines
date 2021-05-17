@@ -92,8 +92,8 @@ class Sprite {
 	isOnScreen() {
 		if (this.x + this.width > 0 && 
 			this.y + this.height > 0 &&
-			this.x < GAME.width &&
-			this.y < GAME.height)
+			this.x < GAME.view.width &&
+			this.y < GAME.view.height)
 			return true;
 		else
 			return false;
