@@ -35,28 +35,6 @@ class ItemEditUI extends EditUI {
 			}
 		}));
 
-		let sceneRow = this.panel.addRow('scene', 'scene');
-		this.rows.push(sceneRow);
-		
-		sceneRow.append(new UISelect({
-			options: this.item.scenes,
-			selected: this.item.scenes[0],
-			class: 'scene-selector',
-			callback: value => {
-				this.item.scenes[i] = value;
-			}
-		}));
-
-		sceneRow.append(new UIButton({
-			text: "+ scene",
-			class: 'add-scene',
-			callback: () => {
-				// const s = addSceneSelector(GAME.scenes[0], this.item.scenes.length);
-				// this.panel.add(s, this.row);
-				console.warn('you didnt finish this', this);
-			}
-		}));
-
 		super.add();
 	}
 }

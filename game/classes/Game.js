@@ -59,8 +59,8 @@ class Game {
 		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
 
 		this.view = {
-			width: this.width * this.dpr,
-			height: this.height * this.dpr,
+			width: this.width,
+			height: this.height,
 		};
 
 		if (this.canvas.getContext) {

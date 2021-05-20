@@ -144,7 +144,6 @@ function watchTask(){
 		series(
 			parallel(jsTasks),
 			parallel(sassTasks),
-			cacheBustTask
 		)
 	);    
 }

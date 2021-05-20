@@ -97,6 +97,7 @@ function Draw(defaults) {
 	this.mouseTimer = performance.now();  //  independent of draw timer
 	this.mouseInterval = 30;
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
+	lns.mousePosition = new Cool.Vector();
 
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != lns.canvas.canvas) {
@@ -160,6 +161,8 @@ function Draw(defaults) {
 	this.update = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
+			lns.mousePosition.x = ev.pageX;
+			lns.mousePosition.y = ev.pageY;
 			if (self.isDrawing)
 				if (self.brush <= 0)
 					self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));

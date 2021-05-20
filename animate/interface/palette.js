@@ -9,9 +9,10 @@ function Palette() {
 			self.palettes[name] = {
 				color: lns.draw.layer.color,
 				segmentNum: lns.draw.layer.segmentNum,
-				r: lns.draw.layer.r,
-				w: lns.draw.layer.w,
-				v: lns.draw.layer.v,
+				jiggleRange: lns.draw.layer.jiggleRange,
+				wiggleRange: lns.draw.layer.wiggleRange,
+				wiggleSpeed: lns.draw.layer.wiggleSpeed,
+				wiggleSegments: lns.draw.layer.wiggleSegments,
 				lineWidth: lns.canvas.ctx.lineWidth,
 				mouseInterval: lns.draw.mouseInterval,
 				brush: lns.draw.brush,
@@ -24,12 +25,35 @@ function Palette() {
 	};
 
 	this.addUI = function(name) {
+		self.panel.addRow(name);
 		self.panel.add(new UIButton({
 			text: name,
 			callback: function() {
 				self.load(name);
 			}
 		}));
+
+		self.panel.add(new UIButton({
+			text: '✎',
+			callback: function() {
+				const rename = prompt('Rename: ');
+				self.palettes[rename] = _.cloneDeep(self.palettes[name]);
+				self.addUI(rename);
+				self.remove(name);
+			}
+		}));
+
+		self.panel.add(new UIButton({
+			text: 'X',
+			callback: function() {
+				self.remove(name);
+			}
+		}));
+	};
+
+	this.remove = function(name) {
+		delete self.palettes[name];
+		self.panel[name].clear();
 	};
 
 	this.setup = function(palettes) {
@@ -52,7 +76,7 @@ function Palette() {
 			if (lns.ui.faces[prop] !== undefined) {
 				lns.ui.faces[prop].update(palette[prop]);
 			} else {
-				console.log(' no face', prop)
+				console.log('no face', prop)
 			}
 		};
 	};
@@ -93,5 +117,49 @@ function Palette() {
 				self.addUI(name);
 			}
 		}
+	};
+
+	this.quickSelect = function(ev) {
+		const modal = new UIModal("Select Pallette", lns, lns.mousePosition);
+
+		for (const key in self.palettes) {
+			if (key != 'current') {
+				modal.add(new UIButton({
+					text: key,
+					callback: function() {
+						self.load(key);
+						modal.clear();
+					}
+				}))
+			}
+		}
+	};
+
+	this.saveFile = function() {
+		const jsonfile = JSON.stringify(self.palettes);
+		const fileName = prompt('Name:');
+		const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
+		saveAs(blob, `${fileName}.json`);
+	};
+
+	this.loadFile = function() {
+		const openFile = document.createElement('input');
+		openFile.type = "file";
+		openFile.click();
+		console.log(openFile);
+		openFile.onchange = function() {
+			for (let i = 0, f; f = openFile.files[i]; i++) {
+				console.log(i, f);
+				if (!f.type.match('application/json')) continue;
+				const reader = new FileReader();
+				reader.onload = (function(theFile) {
+					return function(e) {
+						console.log(e.target.result);
+						self.setup(JSON.parse(e.target.result));
+					}
+				})(f);
+				reader.readAsText(f);
+			}
+		};
 	};
 }

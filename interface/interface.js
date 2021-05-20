@@ -54,6 +54,7 @@ function Interface(app) {
 			.then(response => { return response.json(); })
 			.then(data => {
 
+				// this should be in its own function
 				const quickRef = new UIPanel('quickRef', 'Quick Ref');
 				quickRef.fontSize = 11;
 				quickRef.list = [];

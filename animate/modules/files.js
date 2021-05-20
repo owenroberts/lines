@@ -122,9 +122,9 @@ function Files(params) {
 			const reader = new FileReader();
 			reader.onload = (function(theFile) {
 				return function(e) {
-				self.fileName = f.name.split('.')[0];
-				self.loadJSON(JSON.parse(e.target.result), callback);
-			};
+					self.fileName = f.name.split('.')[0];
+					self.loadJSON(JSON.parse(e.target.result), callback);
+				};
 			})(f);
 			reader.readAsText(f);
 		}

@@ -47,7 +47,6 @@ class EditUI {
 			text: "✎",
 			class: 'edit',
 			callback: function() {
-				console.log(self);
 				window.open(`${location.origin}/${location.pathname.includes('lines') ? 'lines/' : ''}animate/?src=${self.item.src}`, 'anim');
 			}
 		}));
@@ -60,6 +59,29 @@ class EditUI {
 					self.item.isRemoved = true;
 					self.remove();
 				}
+			}
+		}));
+
+		let sceneRow = this.panel.addRow('scene', 'scene');
+		this.rows.push(sceneRow);
+		
+		// replace with list of scenes and x to remove (similar to states ui)
+		sceneRow.append(new UISelect({
+			options: this.item.scenes,
+			selected: this.item.scenes[0],
+			class: 'scene-selector',
+			callback: value => {
+				this.item.scenes[i] = value;
+			}
+		}));
+
+		sceneRow.append(new UIButton({
+			text: "+ scene",
+			class: 'add-scene',
+			callback: () => {
+				// const s = addSceneSelector(GAME.scenes[0], this.item.scenes.length);
+				// this.panel.add(s, this.row);
+				console.warn('you didnt finish this', this);
 			}
 		}));
 

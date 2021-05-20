@@ -239,7 +239,7 @@ function Data() {
 		// get toggled layers or offset all layers in frame
 		let layers = lns.anim.layers.filter(layer => layer.isToggled);
 		if (layers.length == 0) {
-			layers = lns.lns.anim.layers.filter(layer => layer.isInFrame(lns.lns.anim.currentFrame));
+			layers = lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame));
 		}
 
 		// then reset drawing to preserve any lines

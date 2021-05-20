@@ -1,5 +1,6 @@
 function Data(app, params) {
 	const self = this;
+	console.log(app);
 
 	/* from animate/js/files ... combine? */
 	this.saveFiledEnabled = false;
@@ -51,6 +52,8 @@ function Data(app, params) {
 			if (type == 'textures') C = TextureEdit;
 			if (type == 'ui') C = UIEdit;
 
+			// replace with edi.loadAnimation??
+
 			// prob way to extend Game.js to do this
 			let animation = new GameAnim();
 			animation.load(`${params.path}/sprites/${fileName}.json`, function() {
@@ -63,7 +66,8 @@ function Data(app, params) {
 					...edi.zoom.translate(x, y)
 				});
 				location[fileName] = s;
-				gme.scenes.add(s, app.scene)
+				gme.scenes.add(s, app.scene);
+				s.isLoaded = true;
 			});
 		});
 

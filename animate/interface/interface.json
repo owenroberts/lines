@@ -488,7 +488,7 @@
 					},
 					{
 						"type": "UIButton",
-						"key": "q",
+						"key": "shift-o",
 						"fromModule": {
 							"callback": "offsetDrawing"
 						},
@@ -1067,6 +1067,24 @@
 				"list": [
 					{
 						"type": "UIButton",
+						"fromModule": {
+							"callback": "saveFile"
+						},
+						"params": {
+							"text": "Save Palette File"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "loadFile"
+						},
+						"params": {
+							"text": "Load Palette File"
+						}
+					},
+					{
+						"type": "UIButton",
 						"key": "shift-p",
 						"fromModule": {
 							"callback": "buildFromAnimation"
@@ -1083,6 +1101,16 @@
 						},
 						"params": {
 							"text": "+"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "q",
+						"fromModule": {
+							"callback": "quickSelect"
+						},
+						"params": {
+							"text": "Quick Select"
 						}
 					}
 				]
