@@ -184,7 +184,7 @@ class Lines {
 						}
 
 						if (props.segmentNum == 1) { // i rarely use n=1 tho
-							this.pixelLine(
+							this.simplePixelLine(
 								props.x + s.x + off[0].x,
 								props.y + s.y + off[0].y,
 								props.x + e.x + off[1].x,
@@ -200,7 +200,7 @@ class Lines {
 								const p1 = s.clone().add(v.clone().multiply(k + 1));
 
 								const index = props.breaks ? k : k + 1;
-								this.pixelLine(
+								this.simplePixelLine(
 									props.x + p0.x + off[k].x,
 									props.y + p0.y + off[k].y,
 									props.x + p1.x + off[k + 1].x,
@@ -221,21 +221,47 @@ class Lines {
 		if (this.onDraw) this.onDraw();
 	}
 
+	simplePixelLine(x0, y0, x1, y1) {
+		const size = this.ctx.lineWidth;
+		x0 = Math.round(x0);
+		y0 = Math.round(y0);
+		x1 = Math.round(x1);
+		y1 = Math.round(y1);
+		let dx = Math.abs(x1 - x0);
+		let dy = Math.abs(y1 - y0);
+		let sx = x0 < x1 ? 1 : -1;
+		let sy = y0 < y1 ? 1 : -1;
+		let err = dx - dy;
+
+		while(true) {
+			this.ctx.rect(x0, y0, size, size);
+			if (x0 === x1 && y0 === y1) break;
+			let e2 = 2 * err;
+			if (e2 > -dy) {
+				err -= dy;
+				x0 += sx;
+			}
+			if (e2 < dx) {
+				err += dx;
+				y0 += sy;
+			}
+		}
+	}
+
 	pixelLine(x1, y1, x2, y2) {
 		const size = this.ctx.lineWidth;
- 		x1 = Math.round(x1);
- 		x2 = Math.round(x2);
-  		y1 = Math.round(y1);
-  		y2 = Math.round(y2);
+		x1 = Math.round(x1);
+		x2 = Math.round(x2);
+		y1 = Math.round(y1);
+		y2 = Math.round(y2);
 
-  		const dx = Math.abs(x2 - x1);
-  		const sx = x1 < x2 ? 1 : -1;
-  		const dy = Math.abs(y2 - y1);
-  		const sy = y1 < y2 ? 1 : -1;
+		const dx = Math.abs(x2 - x1);
+		const sx = x1 < x2 ? 1 : -1;
+		const dy = Math.abs(y2 - y1);
+		const sy = y1 < y2 ? 1 : -1;
 
-  		let error, len, rev, count = dx;
+		let error, len, rev, count = dx;
 
-  		// this.ctx.beginPath();
 		if (dx > dy) {
 			error = dx / 2;
 			rev = x1 > x2 ? 1 : 0;
@@ -273,7 +299,6 @@ class Lines {
 				y1 += sy;
 			} while (count--);
 		}
-		// this.ctx.fill();
 	}
 
 	load(src, callback) {
