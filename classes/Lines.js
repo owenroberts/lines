@@ -170,27 +170,39 @@ class Lines {
 						// maybe happens when segment num changes ... ?
 						// still working on this lol
 						// als when in the middle of drawing
+						// this would be useful to fix!!!
 						if (off.length < props.segmentNum + 1) {
 							for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
 								off.push(new Cool.Vector());
 							}
 						}
 
-						const v = new Cool.Vector(e.x, e.y);
-						v.subtract(s);
-						v.divide(props.segmentNum);
 						this.ctx.moveTo(
 							props.x + s.x + off[0].x,
 							props.y + s.y + off[0].y
 						);
-						for (let k = 0; k < props.segmentNum; k++) {
-							const p = s.clone().add(v.clone().multiply(k));
-							if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
-							const index = props.breaks ? k : k + 1;
+
+						if (props.segmentNum == 1) { // i rarely use n=1 tho
 							this.ctx.lineTo( 
-								props.x + p.x + v.x + off[index].x,
-								props.y + p.y + v.y + off[index].y
+								props.x + e.x + off[1].x,
+								props.y + e.y + off[1].y
 							);
+						} else {
+							const v = new Cool.Vector(e.x, e.y);
+							v.subtract(s);
+							v.divide(props.segmentNum);
+							
+							// need to spend a little time here ...
+							
+							for (let k = 1; k < props.segmentNum; k++) {
+								const p = s.clone().add(v.clone().multiply(k));
+								if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
+								const index = props.breaks ? k : k + 1;
+								this.ctx.lineTo( 
+									props.x + p.x + v.x + off[index].x,
+									props.y + p.y + v.y + off[index].y
+								);
+							}
 						}
 
 						if (this.ctx.strokeStyle != props.color && this.multiColor)
