@@ -51,6 +51,9 @@ function Render(dps, showStats) {
 		lns.anim.fps = +fps;
 	};
 
+	this.clearCount = 0;
+	this.clearInterval = 0;
+
 	this.update = function(time) {
 		if (showStats) self.stats.begin();
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
@@ -60,9 +63,12 @@ function Render(dps, showStats) {
 			// what actually need to be update here ?
 			if (lns.anim.isPlaying) lns.ui.timeline.update();
 
-			lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
-			lns.canvas.ctx.fillStyle = '#ffffff';
-			lns.canvas.ctx.fillRect(0, 0, lns.canvas.width, lns.canvas.height);
+			if (self.clearCount == self.clearInterval) {
+				lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
+				self.clearCount = 0;
+			} else {
+				self.clearCount++;
+			}
 
 			/* in capture set animation onDraw */
 			if (lns.ui.capture.bg && (lns.ui.capture.frames > 0 || lns.ui.capture.isVideo)) {
