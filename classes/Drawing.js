@@ -13,7 +13,7 @@ class Drawing {
 
 	// add a point
 	add(point) {
-		if (point == 'end' || point == 0) {
+		if (point == 'end' || point === 0) {
 			this.points.push('end');
 		} else if (Array.isArray(point)) { 	// from json file
 			this.points.push(new Cool.Vector(point));
@@ -60,7 +60,7 @@ class Drawing {
 
 				for (let j = 0; j < segmentNum; j++) {
 					// calculate wiggle 
-					if (wiggleRange > 0 && (j == 0 || wiggleSegments)) {
+					if (wiggleRange > 0 && (j === 0 || wiggleSegments)) {
 						offset.add(speed);
 						for (const xy in speed) {
 							if (offset[xy] >= wiggleRange || offset[xy] <= -wiggleRange) {

@@ -183,7 +183,7 @@ class Lines {
 							}
 						}
 
-						if (props.segmentNum == 1) { // i rarely use n=1 tho
+						if (props.segmentNum === 1) { // i rarely use n=1 tho
 							this.simplePixelLine(
 								props.x + s.x + off[0].x,
 								props.y + s.y + off[0].y,
@@ -209,7 +209,7 @@ class Lines {
 							}
 						}
 
-						if (this.ctx.fillStyle != props.color && this.multiColor)
+						if (this.ctx.fillStyle !== props.color && this.multiColor)
 							this.ctx.fillStyle = props.color;
 					}
 				}
