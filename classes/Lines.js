@@ -151,12 +151,12 @@ class Lines {
 				let { endIndex, startIndex } = props;
 				if (endIndex < 0) endIndex = drawing.length;
 				// text animation
-				if (this.endIndexMultiplier !== undefined) {
-					endIndex *= this.endIndexMultiplier; 
-				}
-				if (this.startIndexMultiplier !== undefined) {
-					startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
-				}
+				// if (this.endIndexMultiplier !== undefined) {
+				// 	endIndex *= this.endIndexMultiplier; 
+				// }
+				// if (this.startIndexMultiplier !== undefined) {
+				// 	startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
+				// }
 
 				for (let j = startIndex; j < endIndex - 1; j++) {
 					const s = drawing.get(j);
@@ -177,7 +177,7 @@ class Lines {
 							}
 						}
 
-						if (props.segmentNum == 1) { // i rarely use n=1 tho
+						if (props.segmentNum === 1) { // i rarely use n=1 tho
 							this.simplePixelLine(
 								props.x + s.x + off[0].x,
 								props.y + s.y + off[0].y,
@@ -203,7 +203,7 @@ class Lines {
 							}
 						}
 
-						if (this.ctx.fillStyle != props.color && this.multiColor)
+						if (this.ctx.fillStyle !== props.color && this.multiColor)
 							this.ctx.fillStyle = props.color;
 					}
 				}
