@@ -94,6 +94,9 @@ class Lines {
 				if (this.currentFrame >= this.state.end) {
 					this.currentFrame = this.state.start;
 					if (this.onPlayedState) this.onPlayedState();
+					if (this.onPlayedOnce) {
+						this.onPlayedOnce();
+					}
 				} else {
 					this.currentFrame++;
 				}
@@ -151,12 +154,12 @@ class Lines {
 				let { endIndex, startIndex } = props;
 				if (endIndex < 0) endIndex = drawing.length;
 				// text animation
-				if (this.endIndexMultiplier !== undefined) {
-					endIndex *= this.endIndexMultiplier; 
-				}
-				if (this.startIndexMultiplier !== undefined) {
-					startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
-				}
+				// if (this.endIndexMultiplier !== undefined) {
+				// 	endIndex *= this.endIndexMultiplier; 
+				// }
+				// if (this.startIndexMultiplier !== undefined) {
+				// 	startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
+				// }
 
 				for (let j = startIndex; j < endIndex - 1; j++) {
 					const s = drawing.get(j);

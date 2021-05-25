@@ -4,6 +4,7 @@ function Timeline() {
 	this.autoFit = false;
 	this.viewLayers = true;
 	this.viewActiveLayers = false;
+	this.updateDuringPlay = false;
 
 	this.init = function() {
 		self.panel.el.addEventListener('wheel', ev => {
@@ -84,6 +85,11 @@ function Timeline() {
 			// lns.ui.keys[i] = frameBtn;
 			self.panel.timeline.append(frameBtn, `frm-${i}`);
 		}
+		
+		if (self.updateDuringPlay || !lns.anim.isPlaying) this.drawLayers();
+	};
+
+	this.drawLayers = function() {
 
 		if (self.viewLayers) {
 			const layers = self.viewActiveLayers ?

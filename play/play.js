@@ -1,6 +1,8 @@
 /* play module - need to use params too many args */
+
 function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
-	console.log(this);
+	let debug = true;
+	if (debug) console.log(this);
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
 	if (!this.canvas) {
@@ -15,6 +17,8 @@ function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
 	this.drawBg = true; /* where? */
 	this.isTexture = isTexture;
 	this.dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
+	
+	window.drawCount = 0;
 
 	this.animation = new Lines(this.ctx, this.dps);
 
@@ -53,12 +57,14 @@ function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
 			this.animation.update();
 			if (this.drawBg) this.ctx.clearRect(0, 0, this.width, this.height);
 			this.animation.draw();
+			window.drawCount++;
 		}
 	};
 
 	this.load = function(src, callback) {
 		const self = this;
 		this.animation.load(src, data => {
+			if (debug) console.log('animation data', data);
 			self.width = data.w;
 			self.canvas.width = data.w * self.dpr;
 			self.height = data.h;
