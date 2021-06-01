@@ -1,6 +1,7 @@
 /* play module - need to use params too many args */
 
-function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
+function LinesPlayer(params) {
+	const { canvas, src, checkRetina, dps, callback, isTexture } = params;
 	let debug = true;
 	if (debug) console.log(this);
 	this.canvas = canvas;
@@ -12,7 +13,7 @@ function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
 
 	this.ctx = this.canvas.getContext('2d');
 	this.dps = dps || 36; // default ?
-	this.drawInterval = 1000 / this.dps; /* needed in both places ?? */
+	this.interval = 1000 / this.dps; /* needed in both places ?? */
 	this.multiColor = false; // is this always false?
 	this.drawBg = true; /* where? */
 	this.isTexture = isTexture;
@@ -51,14 +52,22 @@ function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
 		if (!this.isTexture && this.animation.isPlaying)
 			requestAnimFrame(this.draw.bind(this));
 		
-		if (performance.now() > this.drawInterval + this.timer) {
-
+		if (performance.now() > this.interval + this.timer) {
 			this.timer = performance.now();
 			this.animation.update();
 			if (this.drawBg) this.ctx.clearRect(0, 0, this.width, this.height);
 			this.animation.draw();
 			window.drawCount++;
 		}
+	};
+
+	this.loadNew = function(src, callback) {
+		// loading a new animation -- skip resizing and call new draw
+		console.log(this);
+		this.animation = new Lines(this.ctx, this.dps);
+		this.animation.load(src, callback);
+		this.animation.isPlaying = true;
+		this.draw();
 	};
 
 	this.load = function(src, callback) {
@@ -82,10 +91,11 @@ function LinesPlayer(canvas, src, checkRetina, dps, callback, isTexture) {
 			}
 			if (self.color) self.ctx.strokeStyle = self.color;
 			self.animation.isPlaying = true;
+			console.log(self);
 		});
 	};
 
-	if (src) this.load(src);
+	if (src) this.load(src, callback);
 }
 
 function loadAnimation(src, canvas, dps, callback) {
