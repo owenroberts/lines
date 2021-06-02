@@ -7,7 +7,7 @@
 */
 
 class Lines {
-	constructor(ctx, dps, multiColor) {
+	constructor(ctx, dps, multiColor, pixelSize) {
 		this.ctx = ctx;
 		this.isLoaded = false;
 		this.isPlaying = false;
@@ -28,6 +28,12 @@ class Lines {
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
 		this.states = { 'default': {start: 0, end: 0 } };
+
+		// pixel branch, pixels are default
+		this.pixelSize = pixelSize || 1;
+		this.pixelM = this.pixelSize; 
+		// set w scale func
+
 	}
 
 	randomCount() {
@@ -221,12 +227,17 @@ class Lines {
 		if (this.onDraw) this.onDraw();
 	}
 
+	setPixelM(scale) {
+		this.pixelM = Math.ceil(this.pixelSize * scale);
+		console.log(this.pixelSize, scale, this.pixelM);
+	}
+
 	simplePixelLine(x0, y0, x1, y1) {
-		const size = this.ctx.lineWidth;
-		x0 = Math.round(x0);
-		y0 = Math.round(y0);
-		x1 = Math.round(x1);
-		y1 = Math.round(y1);
+
+		x0 = Math.round(x0 / this.pixelSize);
+		y0 = Math.round(y0 / this.pixelSize);
+		x1 = Math.round(x1 / this.pixelSize);
+		y1 = Math.round(y1 / this.pixelSize);
 		let dx = Math.abs(x1 - x0);
 		let dy = Math.abs(y1 - y0);
 		let sx = x0 < x1 ? 1 : -1;
@@ -234,7 +245,7 @@ class Lines {
 		let err = dx - dy;
 
 		while(true) {
-			this.ctx.rect(x0, y0, size, size);
+			this.ctx.rect(x0 * this.pixelM, y0 * this.pixelM, this.pixelM, this.pixelM);
 			if (x0 === x1 && y0 === y1) break;
 			let e2 = 2 * err;
 			if (e2 > -dy) {
