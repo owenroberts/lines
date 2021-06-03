@@ -2,7 +2,8 @@ function Data() {
 	const self = this;
 
 	let copyFrame = []; // copy layers in frame
-	let pasteFrames = []; // frame indexes to paste
+	let copyFrames = []; // copy multiple frames
+	let pasteFrames = []; // frame indexes to paste copy frame to
 
 	this.saveStates = {
 		current: {
@@ -68,8 +69,7 @@ function Data() {
 	this.paste = function() {
 		self.saveState();
 
-		if (pasteFrames.length == 0)
-			pasteFrames.push(lns.anim.currentFrame); 
+		if (pasteFrames.length == 0) pasteFrames.push(lns.anim.currentFrame);
 
 		/* copy one frame onto multiple */
 		for (let i = 0; i < pasteFrames.length; i++) {
@@ -79,47 +79,53 @@ function Data() {
 			}
 		}
 
-		self.clearSelected();
 		lns.draw.reset();
 		lns.ui.update();
 	}; /* v key */
 
-	this.selectFrame = function(elem) {
-		if (!elem.classList.contains("selected")) {
-			elem.classList.add("selected");
-			pasteFrames.push(+elem.textContent);
-		} else {
-			pasteFrames.splice(pasteFrames.indexOf(+elem.textContent), 1);
-			elem.classList.remove("selected");
+	this.addMultipleCopies = function() {
+		copyFrame = [];
+		let n = +prompt("Number of copies: ");
+		self.copy();
+		if (n) {
+			for (let i = 0; i < n; i++) {
+				lns.ui.play.next(1);
+				self.paste();
+			}
 		}
-	};
+		lns.ui.update();
+	}; /* shift - c */
 
-	this.selectAll = function() {
-		/* if less than all are selected deselect those first */
-		const someSelected = Array.from(lns.ui.frames.children).filter(elem => elem.classList.contains('selected')).length < lns.ui.frames.children.length - 1;
-		lns.ui.frames.looper(elem => {
-			if (someSelected) elem.classList.remove('selected');
-			self.selectFrame(elem);
-		});
-	}; /* shift v */
-
-	this.selectRange = function() {
-		const start = prompt("Start frame:");
-		const end = prompt("end frame:");
-		lns.ui.frames.looper(elem => {
-			self.selectFrame(elem);
-		}, start, end);
-	}; /* alt v */
-
-	this.clearSelected = function() {
-		pasteFrames = [];
-
-		/* this is a ui thing ... */
-		const copyFrameElems = document.getElementsByClassName("selected");
-		for (let i = copyFrameElems.length - 1; i >= 0; i--) {
-			copyFrameElems[i].classList.remove("selected");
+	this.copyRange = function() {
+		const start = +prompt("Start frame:");
+		const end = +prompt("end frame:");
+		copyFrames = [];
+		for (let i = start; i <= end; i++) {
+			copyFrames[i] = [];
+			for (let j = 0; j < lns.anim.layers.length - 1; j++) {
+				if (lns.anim.layers[j].isInFrame(i))
+					copyFrames[i].push(lns.anim.layers[j]);
+			}
 		}
-	}; /* ctrl v */
+	}; /* alt - c */
+
+	this.pasteRange = function() {
+		for (let i = 0; i < copyFrames.length; i++) {
+			const layers = copyFrames[i];
+			if (layers) {
+				for (let j = 0; j < layers.length; j++) {
+					const layer = layers[j].addIndex(lns.anim.currentFrame);
+					if (layer) lns.anim.addLayer(layer);
+				}
+			}
+			lns.ui.play.next(1);
+		}
+		lns.draw.reset();
+		lns.ui.update();
+	}; /* alt - v */
+
+	// select all -- copy all ?
+	// clear selected -- clear paste frames?
 
 	this.clearLines = function() {
 		lns.draw.drawing = new Drawing();
@@ -199,7 +205,7 @@ function Data() {
 			lns.draw.cutEnd();
 			lns.ui.play.setFrame(0);
 		}
-	}; /* shift-d */
+	}; /* shift - d */
 
 	this.cutLastSegment = function() {
 		lns.draw.pop(); 
@@ -220,20 +226,6 @@ function Data() {
 		}
 		lns.ui.update();
 	}; /* i, shift-i key */
-
-	this.addMultipleCopies = function() {
-		copyFrame = [];
-		self.clearSelected();
-		let n = +prompt("Number of copies: ");
-		self.copy();
-		if (n) {
-			for (let i = 0; i < n; i++) {
-				lns.ui.play.next(1);
-				self.paste();
-			}
-		}
-		lns.ui.update();
-	}; /* shift -c  */
 
 	this.offsetDrawing = function(offset) {
 		// get toggled layers or offset all layers in frame

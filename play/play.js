@@ -2,7 +2,7 @@
 
 function LinesPlayer(params) {
 	const { canvas, src, checkRetina, dps, callback, isTexture, pixelSize } = params;
-	let debug = true;
+	let debug = false;
 	if (debug) console.log(this);
 	this.canvas = canvas;
 	if (!this.canvas) this.canvas = document.getElementById('lines');
@@ -99,7 +99,6 @@ function LinesPlayer(params) {
 			}
 			if (self.color) self.ctx.strokeStyle = self.color;
 			self.animation.isPlaying = true;
-			console.log(self);
 		});
 	};
 

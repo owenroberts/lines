@@ -342,32 +342,22 @@
 					},
 					{
 						"type": "UIButton",
-						"key": "shift-v",
+						"key": "alt-c",
 						"fromModule": {
-							"callback": "selectAll"
+							"callback": "copyRange"
 						},
 						"params": {
-							"text": "Select All"
+							"text": "Copy Range"
 						}
 					},
 					{
 						"type": "UIButton",
 						"key": "alt-v",
 						"fromModule": {
-							"callback": "selectRange"
+							"callback": "pasteRange"
 						},
 						"params": {
-							"text": "Select Range"
-						}
-					},
-					{
-						"type": "UIButton",
-						"key": "ctrl-v",
-						"fromModule": {
-							"callback": "clearSelected"
-						},
-						"params": {
-							"text": "Clear Selected"
+							"text": "Paste Range"
 						}
 					}
 				]

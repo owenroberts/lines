@@ -138,7 +138,7 @@ function watchTask(){
 			...files.editor,
 			...sassFiles.interface,
 			...sassFiles.animate,
-			...sassFiles.editor
+			...sassFiles.editor,
 		],
 		{interval: 1000, usePolling: true}, //Makes docker work
 		series(
