@@ -8,6 +8,7 @@ class Drawing {
 		}
 
 		this.lastDrawCount = 0;
+		this.firstUpdate = true;
 	}
 
 	// add a point
