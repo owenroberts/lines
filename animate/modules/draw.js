@@ -87,6 +87,16 @@ function Draw(defaults) {
 			});
 	};
 
+	// open color selector
+	this.quickColorSelect = function() {
+		const modal = new UIModal("Select Color", lns, lns.mousePosition);
+		modal.add(new UIColor({
+			callback: function(value) {
+				lns.ui.faces.color.setColor(value);
+			}
+		}));
+	}; /* g key */
+
 	this.brush = 0;
 	this.brushSpread = 1;
 	this.startDots = false;

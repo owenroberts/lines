@@ -1,6 +1,5 @@
 function Data(app, params) {
 	const self = this;
-	console.log(app);
 
 	/* from animate/js/files ... combine? */
 	this.saveFiledEnabled = false;

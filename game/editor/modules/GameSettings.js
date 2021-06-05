@@ -24,14 +24,10 @@ function GameSettings(editor) {
 			for (const label in GAME.sprites[type]) {
 
 				const sprite = GAME.sprites[type][label];
-
-				modal.add(new UILabel({
-					text: label,
-				}));
-
+				
 				modal.add(new UIToggle({
-					onText: 'Load',
-					offText: 'Unload',
+					onText: label,
+					offText: label,
 					isOn: !sprite.isLoaded,
 					callback: () => {
 						if (sprite.isLoaded) {

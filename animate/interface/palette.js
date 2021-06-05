@@ -75,9 +75,10 @@ function Palette() {
 		for (prop in palette) {
 			if (lns.ui.faces[prop] !== undefined) {
 				lns.ui.faces[prop].update(palette[prop]);
-			} else {
-				console.log('no face', prop)
-			}
+			} 
+			// else {
+			// 	console.log('no face', prop)
+			// }
 		};
 	};
 

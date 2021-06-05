@@ -264,6 +264,16 @@
 				"module": "draw",
 				"list": [
 					{
+						"type": "UIButton",
+						"key": "g",
+						"fromModule": {
+							"callback": "quickColorSelect"
+						},
+						"params": {
+							"text": "Quick Select"
+						}
+					},
+					{
 						"type": "UIColor",
 						"face": "color",
 						"fromModule": {
