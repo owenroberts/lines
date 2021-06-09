@@ -23,6 +23,7 @@ select, input {
 	font-size: inherit;
 }
 
+
 button:focus, 
 select:focus { 
 	outline: none; 
@@ -55,6 +56,8 @@ select {
 	margin: 1rem;
 	display: flex;
 	flex-wrap: wrap;
+	justify-content: start;
+	
 	#draw {
 		order: 0;
 		padding-right: 1em;
@@ -64,7 +67,9 @@ select {
 			padding-right: 0;
 		}
 	}
+	
 	#interface { flex: 1; }
+
 }
 
 .btn {
@@ -169,7 +174,7 @@ select {
 
 		input {
 			flex: 0 1 28px;
-			width: 100%;
+			width: calc(calc(var(--base-font-size) * 3) * 1px);
 			text-align: right;
 		}
 		
@@ -345,8 +350,20 @@ select {
 			flex-basis: 50px;
 		}
 	}
-	
-	.btn, select, input {
-		font-size: 1.75em;
+}
+
+#interface {
+	position: relative;
+
+	#resize {
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: $text-color;
+		z-index: 9;
+		cursor: grab;
+		&:active {
+			cursor: grabbing;
+		}
 	}
 }

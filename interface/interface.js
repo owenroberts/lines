@@ -242,4 +242,36 @@ function Interface(app) {
 		if (params.key) self.keys[data.key] = ui;
 		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
 	};
+
+
+	// resize interface div
+
+	const iDiv = document.getElementById('interface');
+	const resize = document.createElement('div');
+	resize.id = 'resize';
+	let dragging = false;
+	let iWidth = iDiv.clientWidth;
+	let resizeX = 0;
+
+	resize.textContent = '|||';
+	iDiv.appendChild(resize);
+
+	resize.addEventListener('mousedown', ev => {
+		dragging = true;
+		resizeX = ev.pageX;
+	});
+
+	document.addEventListener('mouseup', ev => {
+		if (dragging) {
+			dragging = false;
+			iWidth = +iDiv.style.maxWidth.replace('px', '');
+		}
+	});
+
+	document.addEventListener('mousemove', ev => {
+		if (dragging) {
+			const delta = ev.pageX - resizeX;
+			iDiv.style.maxWidth = `${iWidth + delta}px`;
+		}
+	});
 }

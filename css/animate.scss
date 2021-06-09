@@ -8,6 +8,11 @@ $anim-color: #9de0b1;
 $anim-select: green;
 $anim-off: darkgreen;
 
+#draw {
+	display: flex;
+	justify-content: center;
+}
+
 #draw #lines {
 	border: 1px solid $ui-color;
 	
