@@ -130,7 +130,6 @@
 				"list": [
 					{
 						"type": "UIText",
-						"label": "Add URL, Enter",
 						"fromModule": {
 							"callback": "loadImage"
 						},

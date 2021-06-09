@@ -1,6 +1,7 @@
 function Palette() {
 	const self = this;
 	this.palettes = {};
+	let keyIndex = 1;
 
 	this.add = function() {
 		lns.draw.reset();
@@ -22,16 +23,24 @@ function Palette() {
 			};
 			self.addUI(name);
 		}
+
+
 	};
 
 	this.addUI = function(name) {
 		self.panel.addRow(name);
-		self.panel.add(new UIButton({
+		
+		const b = new UIButton({
 			text: name,
 			callback: function() {
 				self.load(name);
 			}
-		}));
+		})
+		self.panel.add(b);
+		if (keyIndex < 9) {
+			lns.ui.keys[keyIndex] = b;	
+			keyIndex++;
+		}
 
 		self.panel.add(new UIButton({
 			text: '✎',

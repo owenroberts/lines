@@ -92,7 +92,8 @@ function Draw(defaults) {
 		const modal = new UIModal("Select Color", lns, lns.mousePosition);
 		modal.add(new UIColor({
 			callback: function(value) {
-				lns.ui.faces.color.setColor(value);
+				self.setProperty('color', value);
+				lns.ui.faces.color.el.value = value;
 			}
 		}));
 	}; /* g key */

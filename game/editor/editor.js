@@ -145,12 +145,16 @@ function start() {
 				for (const label in json[type]) {
 					const sprite = gme.sprites[type][label];
 					const data = json[type][label];
-					sprite.select(false); // unselect stop gap
-					if (data.isLoaded && !gme.anims[type][label]) {
-						edi.loadAnimation(type, label, sprite.src);
+					try {
+						sprite.select(false); // unselect stop gap
+						if (data.isLoaded && !gme.anims[type][label]) {
+							edi.loadAnimation(type, label, sprite.src);
+						}
+						sprite.isSelectable = data.isSelectable;
+						sprite.isLocked = data.isLocked;
+					} catch(error) {
+						console.warn(error.message);
 					}
-					sprite.isSelectable = data.isSelectable;
-					sprite.isLocked = data.isLocked;
 
 				}
 			}

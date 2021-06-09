@@ -141,11 +141,11 @@ class Lines {
 				}
 
 				// how often to reset wiggle
-				if (!suspendLinesUpdate) {
-					if (drawing.firstUpdate) { // lazy load -- way to get rid of this check?
-						drawing.firstUpdate = false;
-						drawing.update(props);
-					} else if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
+				if (drawing.firstUpdate) { // lazy load -- way to get rid of this check?
+					drawing.firstUpdate = false;
+					drawing.update(props);
+				} else if (!suspendLinesUpdate) {
+					if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
 						drawing.update(props);
 						layer.linesCount = 0;
 					} else if (drawing.needsUpdate) {
