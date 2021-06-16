@@ -23,8 +23,6 @@ function Palette() {
 			};
 			self.addUI(name);
 		}
-
-
 	};
 
 	this.addUI = function(name) {
@@ -37,10 +35,25 @@ function Palette() {
 			}
 		})
 		self.panel.add(b);
-		if (keyIndex < 9) {
-			lns.ui.keys[keyIndex] = b;	
+
+		let thisKey = '+';
+		if (keyIndex < 10) {
+			lns.ui.keys[keyIndex] = b;
+			thisKey = keyIndex + '';
 			keyIndex++;
 		}
+
+		const key = new UIText({
+			text: thisKey,
+			callback: function(value) {
+				console.log(lns.ui.keys[+value])
+				lns.ui.keys[+value].key.value = '';
+				lns.ui.keys[+value].key.el.placeholder = '+';
+				lns.ui.keys[+value] = b;
+			}
+		});
+		b.key = key;
+		self.panel.add(key);
 
 		self.panel.add(new UIButton({
 			text: '✎',

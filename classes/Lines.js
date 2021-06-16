@@ -251,6 +251,7 @@ class Lines {
 			const layer = new Layer(params);
 			this.layers[i] = layer;
 
+			// maybe load when not debuggin -- add loading progress
 			// this.drawings[layer.drawingIndex].update(layer); // -- this takes forever for load ...
 		}
 
