@@ -62,6 +62,22 @@ class TextureEditUI extends EditUI {
 			}
 		}));
 
+		// locations
+		let removeRow = this.panel.addRow('remover', 'remover');
+		this.rows.push(removeRow);
+		this.item.locations.filter(loc => loc.isSelected)
+			.forEach(loc => {
+				removeRow.append(new UIButton({
+					text: `${loc.i} X`,
+					callback: () => {
+						this.item.locations.splice(loc.i, 1);
+
+					}
+				}));
+			});
+
 		super.add();
+
+
 	}
 }

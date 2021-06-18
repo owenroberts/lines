@@ -81,11 +81,6 @@ class Game {
 				this.ctx.scale(params.zoom * this.dpr, params.zoom * this.dpr);
 			}
 
-			console.log(this.width, this.height);
-			console.log(zoom);
-			console.log(this.dpr);
-			console.log(this.view);
-
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
 

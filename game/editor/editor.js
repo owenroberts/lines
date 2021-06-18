@@ -75,12 +75,12 @@ edi.ui.reset = function() {
 edi.data = new Data(gme, { save: false, path: '/drawings', files: ['scenery', 'textures'] });
 
 edi.loadAnimation = function(type, label, src) {
-	if (gme.debug) console.log(`loading ${src}`);
-	if (gme.debug) console.time(`done ${src}`);
+	// if (gme.debug) console.log(`loading ${src}`);
+	// if (gme.debug) console.time(`done ${src}`);
 	fetch(src)
 		.then(response => { return response.json(); })
 		.then(json => {
-			console.timeEnd(`done ${src}`);
+			// if (gme.debug) console.timeEnd(`done ${src}`);
 			gme.anims[type][label] = new GameAnim();
 			gme.anims[type][label].loadData(json, () => {
 				gme.sprites[type][label].addAnimation(gme.anims[type][label]);
