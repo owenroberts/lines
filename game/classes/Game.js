@@ -74,11 +74,17 @@ class Game {
 			this.ctx.scale(this.dpr, this.dpr);
 			this.canvas.style.zoom = 1 / this.dpr;
 
+			this.view.width = Math.round(this.width / zoom) * this.dpr;
+			this.view.height = Math.round(this.height / zoom) * this.dpr;
+
 			if (params.zoom) {
-				this.view.width = Math.round(this.width / zoom);
-				this.view.height = Math.round(this.height / zoom);
 				this.ctx.scale(params.zoom * this.dpr, params.zoom * this.dpr);
 			}
+
+			console.log(this.width, this.height);
+			console.log(zoom);
+			console.log(this.dpr);
+			console.log(this.view);
 
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
 			if (params.scale) this.ctx.scale(params.scale, params.scale);
