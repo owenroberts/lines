@@ -71,7 +71,6 @@ function LinesPlayer(params) {
 
 	this.loadNew = function(src, callback) {
 		// loading a new animation -- skip resizing and call new draw
-		console.log(this);
 		this.animation = new Lines(this.ctx, this.dps);
 		this.animation.load(src, callback);
 		this.animation.isPlaying = true;
