@@ -79,6 +79,7 @@ function Data() {
 			}
 		}
 
+		pasteFrames = []; // clear pasteframes after paste ??
 		lns.draw.reset();
 		lns.ui.update();
 	}; /* v key */

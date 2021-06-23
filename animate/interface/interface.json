@@ -1131,6 +1131,7 @@
 							"callback": "toggleViewLayers"
 						},
 						"params": {
+							"class": "left-end",
 							"onText": "ᐱ",
 							"offText": "^"
 						}
@@ -1143,7 +1144,8 @@
 						},
 						"params": {
 							"onText": "V",
-							"offText": "v"
+							"offText": "v",
+							"class": "right-end"
 						}
 					},
 					{
