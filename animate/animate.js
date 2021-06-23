@@ -4,12 +4,15 @@ window.addEventListener("load", function() {
 
 	Object.assign(Layer.prototype, LayerMixin);
 	Object.assign(Lines.prototype, LinesMixin);
+	Object.assign(PixelLines.prototype, LinesMixin);
+
+	const LinesClass = Lines; // PixelLines
 
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
 	lns.render = new Render(30, true); // (dps, stats?)
 
-	lns.anim = new Lines(lns.canvas.ctx, 30, true);
+	lns.anim = new LinesClass(lns.canvas.ctx, 30, true);
 	lns.draw = new Draw({ 
 		linesInterval: 5, 
 		segmentNum: 2,
@@ -26,7 +29,7 @@ window.addEventListener("load", function() {
 		load: true, /* load setttings after file load */
 		reload: false, /* confirm reload */
 		bg: false /* bg color */
-	});
+	}, LinesClass);
 	
 	lns.ui = new Interface(lns);
 	lns.ui.capture = new Capture();
