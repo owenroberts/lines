@@ -51,7 +51,6 @@ function Capture() {
 				const title = lns.ui.faces.title.value; // this is a UI
 				const frm = Cool.padNumber(lns.anim.currentFrame, 3);
 
-				
 				if (frm == self.prev.f) self.prev.n += 1;
 				else self.prev.n = 0;
 
@@ -66,7 +65,6 @@ function Capture() {
 						});
 					}, 100); // delay fixes bug where is stops after 10-12 frames
 				};
-					
 			});
 		} else {
 			const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
@@ -100,8 +98,10 @@ function Capture() {
 		if (self.ready) {
 			self.ready = false;
 			self.isVideo = true
-			self.stream = lns.canvas.canvas.captureStream();
-			self.rec = new MediaRecorder(self.stream);
+			const stream = lns.canvas.canvas.captureStream(lns.render.dps);
+			self.rec = new MediaRecorder(stream, {
+     			videoBitsPerSecond : 3 * 1024 * 1024,
+			});
 			self.rec.start();
 			self.rec.addEventListener('dataavailable', e => {
 				const blob = new Blob([ e.data ], { 'type': 'video/webm' });
