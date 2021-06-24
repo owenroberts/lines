@@ -5,14 +5,14 @@
 */
 
 class Sprite {
-	constructor(x, y, w, h, animation, callback) {
+	constructor(x, y, animation, callback) {
 		this.position = new Cool.Vector(x, y);
-		this.size = new Cool.Vector(w, h); // remove w,h ? i dont really resize sprites
+		// this.size = new Cool.Vector(w, h); // remove w,h ? i dont really resize sprites
 		this.debug = false;
 		this.debugColor = "#00ffbb";
 		this.collider = {
-			position: new Cool.Vector(0, 0),
-			size: new Cool.Vector(w, h)
+			position: new Cool.Vector(),
+			size: new Cool.Vector()
 		};
 		this.isActive = true;  // need a better name for this - disabled or something ... 
 		this.center = false;
@@ -26,11 +26,11 @@ class Sprite {
 	}
 
 	get width() {
-		return this.size.x;
+		return this.animation.width;
 	}
 
 	get height() {
-		return this.size.y;
+		return this.animation.height;
 	}
 
 	get xy() {
@@ -47,8 +47,8 @@ class Sprite {
 
 	addAnimation(animation, callback) {
 		this.animation = animation;
-		this.size.x = this.collider.size.x = this.animation.width;
-		this.size.y = this.collider.size.y = this.animation.height;
+		this.collider.size.x = this.animation.width;
+		this.collider.size.y = this.animation.height;
 	}
 
 	setCollider(x, y, w, h) {

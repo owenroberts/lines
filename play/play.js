@@ -1,7 +1,7 @@
 /* play module - need to use params too many args */
 
 function LinesPlayer(params) {
-	const { canvas, src, checkRetina, dps, callback, isTexture, pixelSize } = params;
+	const { canvas, src, checkRetina, dps, callback, isTexture, pixelSize, LinesClass } = params;
 	let debug = false;
 	if (debug) console.log(this);
 	this.canvas = canvas;
@@ -23,7 +23,7 @@ function LinesPlayer(params) {
 	
 	window.drawCount = 0;
 
-	this.animation = new Lines(this.ctx, this.dps, this.multiColor, this.pixelSize);
+	this.animation = new LinesClass(this.ctx, this.dps, this.multiColor, this.pixelSize);
 
 	this.ctx.miterLimit = 1;
 	this.width;
@@ -71,7 +71,7 @@ function LinesPlayer(params) {
 
 	this.loadNew = function(src, callback) {
 		// loading a new animation -- skip resizing and call new draw
-		this.animation = new Lines(this.ctx, this.dps);
+		this.animation = new LinesClass(this.ctx, this.dps);
 		this.animation.load(src, callback);
 		this.animation.isPlaying = true;
 		this.draw();

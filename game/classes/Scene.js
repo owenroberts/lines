@@ -14,8 +14,8 @@ class Scene {
 	remove(sprite, type) {
 		const types = type ? [type] : ['display', 'update', 'ui'];
 		for (let i = 0; i < types.length; i++) {
-			const index = this[`${types[i]}Sprites`].indexOf(sprite);
-			if (index >= 0) this[`${types[i]}Sprites`].splice(index, 1);
+			this[`${types[i]}Sprites`].remove(sprite);
+			// if (index >= 0) this[`${types[i]}Sprites`].splice(index, 1);
 		}
 	}
 

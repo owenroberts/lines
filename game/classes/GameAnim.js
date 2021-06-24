@@ -1,4 +1,5 @@
-class GameAnim extends Lines {
+window.LinesClass = PixelLines; // fuck
+class GameAnim extends LinesClass {
 	constructor(debug) {
 		super(GAME.ctx, GAME.dps, GAME.multiColor);
 		this.debug = debug;
@@ -18,7 +19,7 @@ class GameAnim extends Lines {
 				} else if (this.currentFrame >= this.state.end) {
 					this.currentFrame = this.loop ? this.state.start : this.state.end;
 					if (this.onPlayedOnce) {
-						this.onPlayeOnce();
+						this.onPlayedOnce();
 						this.onPlayedOnce = undefined;
 					}
 					if (this.onPlayedState) this.onPlayedState();

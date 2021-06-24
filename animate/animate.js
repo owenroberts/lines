@@ -6,7 +6,7 @@ window.addEventListener("load", function() {
 	Object.assign(Lines.prototype, LinesMixin);
 	Object.assign(PixelLines.prototype, LinesMixin);
 
-	const LinesClass = Lines; // PixelLines
+	const LinesClass = PixelLines; // PixelLines
 
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);

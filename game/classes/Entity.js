@@ -14,11 +14,14 @@ class Entity extends Sprite {
 		this.origin = new Cool.Vector(params.x, params.y);
 		// this.origin = { x: params.x, y: params.y };
 		if (params.animation) this.addAnimation(params.animation);
+		if (params.loop !== undefined) this.animation.loop = params.loop;
+		if (params.play) this.animation.play();
 
-		this.center = params.center || true;
+		this.center = params.center !== undefined ? params.center : true;
 	}
 
 	update(offset) {
+		console.log(this);
 		/* simpler than vectors */
 		this.position.x = this.origin.x + offset.x;
 		this.position.y = this.origin.y + offset.y;

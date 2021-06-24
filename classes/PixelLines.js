@@ -10,8 +10,6 @@ class PixelLines extends Lines {
 		this.pixelSize = pixelSize || 1;
 		this.pixelM = this.pixelSize; 
 		// set w scale func
-
-		console.log(this);
 	}
 
 	finish() {
