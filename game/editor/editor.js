@@ -1,7 +1,7 @@
 const gme = new Game({
 	canvas: "map",
-	width: 960,
-	height: 720,
+	width: 1200,
+	height: 900,
 	dps: 30,
 	multiColor: true,
 	checkRetina: true,
@@ -21,7 +21,7 @@ edi.ui.load('interface/interface.json', () => {
 	}, true);
 });
 edi.ui.settings = new Settings(edi, 'edi');
-edi.ui.game = new GameSettings(edi); // scene, wiggle
+edi.ui.game = new GameSettings(edi, true); // scene, wiggle
 edi.ui.textures = new Textures();
 edi.ui.items = new Items();
 edi.ui.markers = {};
@@ -168,11 +168,7 @@ function start() {
 function draw() {
 
 	edi.zoom.clear(gme.ctx);
-	// edi.zoom.set(gme.ctx, { x: gme.width/2, y: gme.height/2 });
 	edi.zoom.set(gme.ctx, { x: gme.width / 2, y: gme.height / 2 });
-
-	// const view = edi.zoom.view;
-	// GAME.ctx.fillRect(view.x - GAME.width/2, view.y - GAME.height/2,view.width + GAME.width, view.height + GAME.height);
 
 	/* not sure where to put this .... */
 	gme.ctx.font = '16px monaco';

@@ -1,13 +1,11 @@
 const LayerMixin = {
 	
 	toggle() {
-		if (!this.isToggled) {
-			this.tempColor = this.color;
-			this.color = "#00CC96";
-		} else if (this.color == "#00CC96") {
-			this.color = this.tempColor;
-		}
 		this.isToggled = !this.isToggled;
+	},
+
+	isInFrame(index) {
+		return (index >= this.startFrame && index <= this.endFrame && !this.dontDraw);
 	},
 
 	addTween(tween) {
@@ -16,6 +14,14 @@ const LayerMixin = {
 		if (tween.endFrame > this.endFrame) this.endFrame = tween.endFrame;
 		if (lns.anim.stateName == 'default' && lns.anim.state.end < this.endFrame) {
 			lns.anim.state.end = this.endFrame;
+		}
+	},
+
+	resetTweens() {
+		for (let i = 0; i < this.tweens.length; i++) {
+			const tween = this.tweens[i];
+			if (tween.startFrame < this.startFrame) tween.startFrame = this.startFrame;
+			if (tween.endFrame > this.endFrame) tween.endFrame = this.endFrame;
 		}
 	},
 

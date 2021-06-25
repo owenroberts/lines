@@ -1180,6 +1180,7 @@
 					},
 					{
 						"type": "UIButton",
+						"key": "shift-v",
 						"fromModule": {
 							"callback": "select"
 						},
@@ -1190,6 +1191,7 @@
 					},
 					{
 						"type": "UIButton",
+
 						"fromModule": {
 							"callback": "selectAll"
 						},

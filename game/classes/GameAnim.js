@@ -1,4 +1,4 @@
-window.LinesClass = PixelLines; // fuck
+window.LinesClass = Lines; // fuck
 class GameAnim extends LinesClass {
 	constructor(debug) {
 		super(GAME.ctx, GAME.dps, GAME.multiColor);

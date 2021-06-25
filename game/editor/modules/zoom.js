@@ -65,7 +65,6 @@ function Zoom() {
 		localStorage.zoom = JSON.stringify({ 
 			view: self.view, 
 			previous: self.previous, 
-			canvas: self.canvas 
 		});
 	};
 

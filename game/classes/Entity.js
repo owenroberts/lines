@@ -21,7 +21,6 @@ class Entity extends Sprite {
 	}
 
 	update(offset) {
-		console.log(this);
 		/* simpler than vectors */
 		this.position.x = this.origin.x + offset.x;
 		this.position.y = this.origin.y + offset.y;

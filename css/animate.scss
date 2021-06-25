@@ -98,7 +98,7 @@ $anim-off: darkgreen;
 	.layer, .tween {
 		margin: 0;
 		background-color: $main-color;
-		overflow: hidden;
+		// overflow: hidden;
 		display: flex;
 		z-index: 3;
 
@@ -106,7 +106,14 @@ $anim-off: darkgreen;
 			min-width: 12px;
 		}
 
-		.left, .right, .layer-toggle, .layer-edit, .layer-tween, .tween-edit, .remove {
+		.left, 
+		.right, 
+		.layer-toggle, 
+		.layer-highlight, 
+		.layer-edit, 
+		.layer-tween, 
+		.tween-edit, 
+		.remove {
 			margin: 0;
 			margin-right: 1px;
 			padding: 1px;

@@ -1,9 +1,11 @@
-function GameSettings(editor) {
+function GameSettings(editor, suspend) {
 	
 	this.toggleSuspend = function() {
 		GAME.editorSuspend = true;
 		GAME.suspend = !GAME.suspend;
 	};
+
+	if (suspend) this.toggleSuspend();
 
 	this.setScene = function(sceneName) {
 		GAME.scene = sceneName;

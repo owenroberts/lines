@@ -10,6 +10,14 @@ class UILayer extends UICollection {
 			callback: params.callback
 		});
 
+		this.highlight = new UIToggle({
+			type: 'layer-highlight',
+			text: '⬚',
+			callback: function() {
+				layer.isHighlighted = !layer.isHighlighted;
+			}
+		})
+
 		this.edit = new UIButton({
 			type: 'layer-edit',
 			text: "✎",
@@ -183,6 +191,7 @@ class UILayer extends UICollection {
 		this.append(this.edit);
 		this.append(this.tween);
 		this.append(this.remove);
+		this.append(this.highlight);
 		this.append(this.left);
 		this.append(this.right);
 	}

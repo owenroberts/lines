@@ -7,7 +7,7 @@
 class Sprite {
 	constructor(x, y, animation, callback) {
 		this.position = new Cool.Vector(x, y);
-		// this.size = new Cool.Vector(w, h); // remove w,h ? i dont really resize sprites
+		this.size = new Cool.Vector(); // set by animation
 		this.debug = false;
 		this.debugColor = "#00ffbb";
 		this.collider = {
@@ -26,15 +26,17 @@ class Sprite {
 	}
 
 	get width() {
-		return this.animation.width;
+		return this.size.x;
 	}
 
 	get height() {
-		return this.animation.height;
+		return this.size.y;
 	}
 
 	get xy() {
-		return this.center ? this.position.copy().subtract(this.size.copy().divide(2)) : this.position;
+		return this.center ? 
+			this.position.copy().subtract(this.size.copy().divide(2)) : 
+			this.position;
 	}
 
 	get x() {
@@ -47,8 +49,8 @@ class Sprite {
 
 	addAnimation(animation, callback) {
 		this.animation = animation;
-		this.collider.size.x = this.animation.width;
-		this.collider.size.y = this.animation.height;
+		this.size.x = this.collider.size.x = this.animation.width;
+		this.size.y = this.collider.size.y = this.animation.height;
 	}
 
 	setCollider(x, y, w, h) {
@@ -76,7 +78,7 @@ class Sprite {
 
 	display(editorOnScreen) {
 		let isDraw = false;
-		if (editorOnScreen !== undefined) isDraw = editorOnScreen
+		if (editorOnScreen !== undefined) isDraw = editorOnScreen;
 		else isDraw = this.isActive && this.isOnScreen();
 	
 		if (isDraw) {

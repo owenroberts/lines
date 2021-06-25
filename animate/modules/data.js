@@ -267,7 +267,7 @@ function Data() {
 							startFrame: layer.startFrame,
 							endFrame: layer.endFrame,
 							startValue: 0,
-							endValue: lns.anim.drawings[layer.drawindIndex].length
+							endValue: lns.anim.drawings[layer.drawingIndex].length
 						});
 					break;
 					case "Reverse":

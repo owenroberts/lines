@@ -25,10 +25,10 @@ class ItemEdit extends Entity {
 	}
 
 	isInMapBounds(view) {
-		if (this.xy.x + this.width > view.x - GAME.width/2 &&
-			this.xy.x < view.x - GAME.width/2 + view.width &&
-			this.xy.y + this.height > view.y - GAME.height/2 &&
-			this.xy.y < view.y - GAME.height/2 + view.height) {
+		if (this.x + this.width > view.x - GAME.width/2 &&
+			this.x < view.x - GAME.width/2 + view.width &&
+			this.y + this.height > view.y - GAME.height/2 &&
+			this.y < view.y - GAME.height/2 + view.height) {
 			// console.log('draw');
 			// console.log((this.xy.x + this.width), (view.x - GAME.width/2));
 			return true;

@@ -77,7 +77,5 @@ class TextureEditUI extends EditUI {
 			});
 
 		super.add();
-
-
 	}
 }

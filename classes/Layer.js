@@ -26,8 +26,6 @@ class Layer {
 		this.linesInterval = params.linesInterval; // draw count per line update
 		this.linesCount = params.linesCount || 0; // line update counter
 
-		this.isToggled = false; // lns anim layer
-		this.resetTweens();
 	}
 
 	get startFrame() {
@@ -46,14 +44,6 @@ class Layer {
 	set endFrame(f) {
 		this._endFrame = Math.max(0, +f);
 		this.resetTweens();
-	}
-
-	resetTweens() {
-		for (let i = 0; i < this.tweens.length; i++) {
-			const tween = this.tweens[i];
-			if (tween.startFrame < this.startFrame) tween.startFrame = this.startFrame;
-			if (tween.endFrame > this.endFrame) tween.endFrame = this.endFrame;
-		}
 	}
 
 	isInFrame(index) {

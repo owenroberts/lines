@@ -97,6 +97,29 @@ function Render(dps, showStats) {
 			lns.anim.draw();
 			lns.anim.update();
 			window.drawCount++;
+
+			// this nuts??
+			if (lns.anim.layers.some(l => l.isHighlighted)) {
+				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
+					const layer = lns.anim.layers[i];
+					if (layer.isInFrame(lns.anim.currentFrame)) {
+						if (layer.isHighlighted) {
+							lns.anim.overrideProperty('color', 'rgba(127,127,255,0.5)');
+							lns.anim.overrideProperty('jiggleRange', 0);
+							lns.anim.overrideProperty('wiggleRange', 0);
+							lns.anim.overrideProperty('segmentNum', 1);
+							lns.anim.overrideProperty('wiggleSpeed', 0);
+						} else {
+							layer.dontDraw = true;
+						}
+					}
+				}
+				lns.anim.draw(5, 5, true);
+				lns.anim.cancelOverride();
+				lns.anim.layers.filter(l => l.dontDraw).forEach(l => {
+					l.dontDraw = false;
+				});
+			}
 		}
 		if (!lns.ui.capture.isCapturing) 
 			window.requestAnimFrame(self.update);

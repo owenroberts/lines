@@ -4,9 +4,8 @@ window.addEventListener("load", function() {
 
 	Object.assign(Layer.prototype, LayerMixin);
 	Object.assign(Lines.prototype, LinesMixin);
-	Object.assign(PixelLines.prototype, LinesMixin);
 
-	const LinesClass = PixelLines; // PixelLines
+	const LinesClass = Lines; // PixelLines
 
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
