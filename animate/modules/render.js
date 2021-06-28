@@ -32,6 +32,7 @@ function Render(dps, showStats) {
 	this.toggle = function() {
 		if (!lns.anim.isPlaying) {
 			lns.ui.play.checkEnd();
+			lns.draw.reset();
 		} else {
 			lns.draw.layer.startFrame = lns.draw.layer.endFrame = lns.anim.currentFrame;
 		}
