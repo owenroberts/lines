@@ -21,8 +21,6 @@ class Layer {
 		this.wiggleSegments = params.wiggleSegments || false; // true/false
 		this.breaks = params.breaks || false;
 		
-		if (params.order) this.order = params.order;
-
 		this.linesInterval = params.linesInterval; // draw count per line update
 		this.linesCount = params.linesCount || 0; // line update counter
 

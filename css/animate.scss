@@ -42,6 +42,7 @@ $anim-off: darkgreen;
 	
 	--layer-height: 1.5;
 	
+	flex-basis: 100%;
 	display: grid;
 	// height: calc(var(--height) * 1px);
 	grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
@@ -107,7 +108,9 @@ $anim-off: darkgreen;
 		}
 
 		.left, 
-		.right, 
+		.right,
+		.left-right,
+		.right-left,
 		.layer-toggle, 
 		.layer-highlight, 
 		.layer-edit, 
@@ -128,11 +131,10 @@ $anim-off: darkgreen;
 			}
 		}
 
-		// .remove { font-size: 1vh; }
-
-		.right {
+		.right-margin {
 			margin-left: auto;
 		}
+
 	}
 
 	.tween {

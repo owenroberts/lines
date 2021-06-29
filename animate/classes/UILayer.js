@@ -3,6 +3,7 @@ class UILayer extends UICollection {
 		super(params);
 		this.addClass('layer');
 		this.layer = layer;
+		console.log(params.width);
 
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
@@ -12,7 +13,7 @@ class UILayer extends UICollection {
 
 		this.highlight = new UIToggle({
 			type: 'layer-highlight',
-			text: '⬚',
+			text: '❏',
 			callback: function() {
 				layer.isHighlighted = !layer.isHighlighted;
 			}
@@ -82,14 +83,6 @@ class UILayer extends UICollection {
 					value: layer.endFrame,
 					callback: function(value) {
 						layer.endFrame = +value;
-					}
-				}));
-
-				modal.addBreak("Order");
-				modal.add(new UIBlur({
-					value: layer.order || 'None',
-					callback: function(value) {
-						layer.order = +value;
 					}
 				}));
 			}
@@ -178,6 +171,16 @@ class UILayer extends UICollection {
 			}		
 		});
 
+		this.leftRight = new UIButton({
+			text: '⬖',
+			type: 'left-right',
+			callback: () => {
+				if (layer.endFrame == layer.startFrame) layer.endFrame += 1;
+				layer.startFrame += 1;
+				lns.ui.update();
+			}		
+		});
+
 		this.right = new UIDragButton({
 			text: '⬖',
 			type: 'right',
@@ -187,12 +190,30 @@ class UILayer extends UICollection {
 			}		
 		});
 
+		this.rightLeft = new UIButton({
+			text: '⬖',
+			type: 'right-left',
+			callback: () => {
+				if (layer.endFrame == layer.startFrame) layer.endFrame += -1;
+				layer.startFrame += -1;
+				lns.ui.update();
+			}		
+		});
+
+		if (layer.startFrame > 0) this.append(this.left);
+		if (params.width > 70) this.append(this.leftRight);
 		this.append(this.toggle);
-		this.append(this.edit);
-		this.append(this.tween);
-		this.append(this.remove);
-		this.append(this.highlight);
-		this.append(this.left);
+		if (params.width > 30) this.append(this.highlight);
+		if (params.width > 40) this.append(this.edit);
+		if (params.width > 60) this.append(this.tween);
+		if (params.width > 50) this.append(this.remove);
+		
+		if (params.width > 70) {
+			this.append(this.rightLeft);
+			this.rightLeft.addClass('right-margin');
+		} else {
+			this.right.addClass('right-margin');
+		}
 		this.append(this.right);
 	}
 

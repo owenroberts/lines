@@ -105,6 +105,7 @@ function Timeline() {
 				if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				const ui = new UILayer({
 					type: 'layer',
+					width: self.frameWidth,
 					css: {
 						gridRowStart: gridRowStart, // 2 + (i * 2),
 						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
