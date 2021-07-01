@@ -3,7 +3,7 @@ class UILayer extends UICollection {
 		super(params);
 		this.addClass('layer');
 		this.layer = layer;
-		console.log(params.width);
+		const width = params.width * (layer.endFrame - layer.startFrame + 1);
 
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
@@ -194,21 +194,22 @@ class UILayer extends UICollection {
 			text: '⬖',
 			type: 'right-left',
 			callback: () => {
-				if (layer.endFrame == layer.startFrame) layer.endFrame += -1;
-				layer.startFrame += -1;
+				console.log(layer.endFrame)
+				if (layer.endFrame === layer.startFrame) layer.endFrame += -1;
+				layer.endFrame += -1;
 				lns.ui.update();
 			}		
 		});
 
 		if (layer.startFrame > 0) this.append(this.left);
-		if (params.width > 70) this.append(this.leftRight);
+		if (width > 70) this.append(this.leftRight);
 		this.append(this.toggle);
-		if (params.width > 30) this.append(this.highlight);
-		if (params.width > 40) this.append(this.edit);
-		if (params.width > 60) this.append(this.tween);
-		if (params.width > 50) this.append(this.remove);
+		if (width > 30) this.append(this.highlight);
+		if (width > 40) this.append(this.edit);
+		if (width > 60) this.append(this.tween);
+		if (width > 50) this.append(this.remove);
 		
-		if (params.width > 70) {
+		if (width > 80) {
 			this.append(this.rightLeft);
 			this.rightLeft.addClass('right-margin');
 		} else {

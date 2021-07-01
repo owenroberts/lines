@@ -8,6 +8,7 @@ function Background() {
 	this.width = 0;
 	this.height = 0;
 	this.size = 1;
+	this.rotation = 0;
 
 	this.loadImage = function(url) {
 		self.img.src = url;
@@ -23,7 +24,13 @@ function Background() {
 	};
 
 	this.display = function() {
-		if (this.img.src && this.show)
+		if (this.img.src && this.show) {
+			if (this.rotation > 0) {
+				lns.canvas.ctx.save();
+				lns.canvas.ctx.rotate(this.rotation * Math.PI / 180);
+			}
 			lns.canvas.ctx.drawImage(this.img, this.x, this.y, this.size * this.width, this.height * this.size);
+			if (this.rotation > 0) lns.canvas.ctx.restore();
+		}
 	};
 }

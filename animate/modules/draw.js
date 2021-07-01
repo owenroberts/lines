@@ -98,6 +98,12 @@ function Draw(defaults) {
 		}));
 	}; /* g key */
 
+	this.randomColor = function() {
+		const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+		self.setProperty('color', color);
+		lns.ui.faces.color.el.value = color;
+	}; /* shift-g */
+
 	this.brush = 0;
 	this.brushSpread = 1;
 	this.startDots = false;
