@@ -6,7 +6,7 @@
 
 class Sprite {
 	constructor(x, y, animation, callback) {
-		this.position = new Cool.Vector(x, y);
+		this.position = new Cool.Vector(Math.round(x), Math.round(y));
 		this.size = new Cool.Vector(); // set by animation
 		this.debug = false;
 		this.debugColor = "#00ffbb";

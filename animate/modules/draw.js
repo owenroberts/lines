@@ -104,6 +104,15 @@ function Draw(defaults) {
 		lns.ui.faces.color.el.value = color;
 	}; /* shift-g */
 
+	this.colorVariation = function() {
+		let n = parseInt(self.layer.color.substr(1), 16);
+		n += Cool.randomInt(-500, 500);
+		n = Math.max(0, n);
+		const color = '#' + n.toString(16);
+		self.setProperty('color', color);
+		lns.ui.faces.color.el.value = color;
+	}; /* alt-g */
+
 	this.brush = 0;
 	this.brushSpread = 1;
 	this.startDots = false;
@@ -234,25 +243,18 @@ function Draw(defaults) {
 				self.drawing.pop();
 			}
 		}
-	}
+	};
 
-	if (window.PointerEvent) {
-		lns.canvas.canvas.addEventListener('pointermove', self.update);
-		lns.canvas.canvas.addEventListener('pointerdown', self.start);
-		lns.canvas.canvas.addEventListener('pointerup', self.end);
-	} else {
-		lns.canvas.canvas.addEventListener('mousemove', self.update);
-		lns.canvas.canvas.addEventListener('mousedown', self.start);
-		lns.canvas.canvas.addEventListener('mouseup', self.end);
-
+	if (window.navigator.platform.includes('iPad')) {
 		const lastTouch = { which: 1 };
+		const dpr = window.devicePixelRatio;
 
 		function toucher(ev, callback) {
 			ev.preventDefault();
 			if (ev.touches[0]) {
 				const rect = ev.target.getBoundingClientRect();
-				lastTouch.offsetX = ev.targetTouches[0].pageX - rect.left - window.scrollX;
-				lastTouch.offsetY = ev.targetTouches[0].pageY - rect.top - window.scrollY;
+				lastTouch.offsetX = ev.targetTouches[0].pageX - rect.left / dpr;
+				lastTouch.offsetY = ev.targetTouches[0].pageY - rect.top / dpr;
 				lastTouch.which = 1;
 				callback(lastTouch);
 			}
@@ -268,6 +270,15 @@ function Draw(defaults) {
 		lns.canvas.canvas.addEventListener('touchend', ev => {
 			self.end(lastTouch);
 		});
+	} else if (window.PointerEvent) {
+		lns.canvas.canvas.addEventListener('pointermove', self.update);
+		lns.canvas.canvas.addEventListener('pointerdown', self.start);
+		lns.canvas.canvas.addEventListener('pointerup', self.end);
+	} else {
+		lns.canvas.canvas.addEventListener('mousemove', self.update);
+		lns.canvas.canvas.addEventListener('mousedown', self.start);
+		lns.canvas.canvas.addEventListener('mouseup', self.end);
 	}
+
 	document.addEventListener('mousemove', self.outSideCanvas);
 }

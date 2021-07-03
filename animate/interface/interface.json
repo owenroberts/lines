@@ -295,6 +295,16 @@
 						}
 					},
 					{
+						"type": "UIButton",
+						"key": "alt-g",
+						"fromModule": {
+							"callback": "colorVariation"
+						},
+						"params": {
+							"text": "Color Variation"
+						}
+					},
+					{
 						"type": "UIColor",
 						"face": "color",
 						"fromModule": {
