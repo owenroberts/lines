@@ -8,7 +8,7 @@ class PixelLines extends Lines {
 
 		// pixel branch, pixels are default
 		this.pixelSize = pixelSize || 1;
-		this.pixelM = this.pixelSize; 
+		this.pixelM = this.pixelSize;  // multiplier
 		// set w scale func
 	}
 

@@ -5,8 +5,13 @@ window.addEventListener("load", function() {
 	Object.assign(Layer.prototype, LayerMixin);
 	Object.assign(Lines.prototype, LinesMixin);
 
-	const LinesClass = Lines; // PixelLines
+	const params = {};
+	location.search.substr(1).split('&').map(a => {
+		let [key, value] = a.split('=');
+		params[key] = value;
+	});
 
+	const LinesClass = params.render === 'pixel' ? PixelLines : Lines; 
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
 	lns.render = new Render(30, true); // (dps, stats?)
@@ -43,12 +48,10 @@ window.addEventListener("load", function() {
 	lns.ui.load('./interface/interface.json', function() {
 		lns.draw.setDefaults();
 		lns.ui.settings.load(appLoad);
-		const url = location.search.split('=')[1];
-		if (url) lns.files.loadFile(url.split('.')[0], lns.ui.updateFIO);
+		if (params.src) lns.files.loadFile(params.src.split('.')[0], lns.ui.updateFIO);
 		lns.ui.update();
 		lns.render.start();
 		lns.ui.timeline.init();
-
 		if (lns.render.showStats) {
 			lns.ui.panels.play.el.appendChild(lns.render.stats.dom);
 		}
