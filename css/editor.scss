@@ -60,3 +60,13 @@ canvas#map.location-tool {
 	.remover { order: 4; }
 
 }
+
+/* debug remove  */
+#log {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	font-family:  monaco, monospace;
+	font-size:  32px;
+	color: hotpink;
+}

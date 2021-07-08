@@ -96,6 +96,18 @@ function Draw(defaults) {
 				lns.ui.faces.color.el.value = value;
 			}
 		}));
+		lns.ui.faces.color.colors.forEach(color => {
+			modal.add(new UIButton({
+				text: color,
+				css: { "background": color },
+				value: color,
+				callback: function() {
+					self.setProperty('color', color);
+					lns.ui.faces.color.el.value = color;
+					modal.clear();
+				}
+			}))
+		});
 	}; /* g key */
 
 	this.randomColor = function() {
@@ -144,7 +156,7 @@ function Draw(defaults) {
 	this.popOff = function() {
 		if (self.drawing.length > 0) {
 			self.drawing.pop(); // remove end
-			for (let i = self.drawing.length - 1; i > 0; i--) {
+			for (let i = self.drawing.length - 1; i >= 0; i--) {
 				if (self.drawing.get(i) != 'end') self.drawing.pop();
 				else break;
 			}

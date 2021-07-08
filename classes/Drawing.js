@@ -13,7 +13,7 @@ class Drawing {
 
 	// add a point
 	add(point) {
-		if (point == 'end' || point === 0) {
+		if (point === 'end' || point === 0) {
 			this.points.push('end');
 		} else if (Array.isArray(point)) { 	// from json file
 			this.points.push(new Cool.Vector(point));

@@ -1,5 +1,5 @@
 class UILayer extends UICollection {
-	constructor(params, layer) {
+	constructor(params, layer, hasMultipleLayers) {
 		super(params);
 		this.addClass('layer');
 		this.layer = layer;
@@ -33,7 +33,7 @@ class UILayer extends UICollection {
 						const drawing = lns.anim.drawings[layer.drawingIndex];
 						drawing.pop(); /* remove "end" */
 						drawing.pop(); /* remove segment */
-						drawing.push('end'); /* new end */
+						drawing.add('end'); /* new end */
 					}
 				}));
 
@@ -194,11 +194,16 @@ class UILayer extends UICollection {
 			text: '⬖',
 			type: 'right-left',
 			callback: () => {
-				console.log(layer.endFrame)
 				if (layer.endFrame === layer.startFrame) layer.endFrame += -1;
 				layer.endFrame += -1;
 				lns.ui.update();
 			}		
+		});
+
+		this.moveUp = new UIButton({
+			text: '^',
+			type:'move-up',
+			callback: params.moveUp
 		});
 
 		if (layer.startFrame > 0) this.append(this.left);
@@ -208,6 +213,7 @@ class UILayer extends UICollection {
 		if (width > 40) this.append(this.edit);
 		if (width > 60) this.append(this.tween);
 		if (width > 50) this.append(this.remove);
+		if (width > 90 && hasMultipleLayers) this.append(this.moveUp);
 		
 		if (width > 80) {
 			this.append(this.rightLeft);

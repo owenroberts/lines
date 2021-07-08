@@ -1202,6 +1202,16 @@
 						}
 					},
 					{
+						"type": "UIToggle",
+						"key": "ctrl-f",
+						"fromModule": {
+							"callback": "fitFrame"
+						},
+						"params": {
+							"text": "Fit Frame"
+						}
+					},
+					{
 						"type": "UIButton",
 						"fromModule": {
 							"callback": "split"

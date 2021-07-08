@@ -56,6 +56,19 @@ function Timeline() {
 		}
 	};
 
+	this.fitFrame = function() {
+		lns.ui.faces.timelineAutoFit.off(); // better toggle setup ??
+		self.autoFit = false;
+		self.frameWidth = 120;
+		self.panel.timeline.setProp('--frame-width', self.frameWidth);
+		self.update();
+		self.scrollToFrame();
+	};
+
+	this.scrollToFrame = function() {
+		self.panel.timeline.el.scrollTo(lns.ui.panels.timeline.timeline[`frm-${lns.anim.currentFrame}`].el.offsetLeft - 10, 0);
+	};
+
 	/* creates all the layer ui new each time */
 	this.update = function() {
 
@@ -87,6 +100,7 @@ function Timeline() {
 		}
 		
 		if (self.updateDuringPlay || !lns.anim.isPlaying) this.drawLayers();
+		self.scrollToFrame();
 	};
 
 	this.drawLayers = function() {
@@ -116,8 +130,16 @@ function Timeline() {
 						// only update the values when toggling on, ignore when toggling off
 						if (!layer.isToggled) lns.draw.setProperties(layer.getEditProps());
 						layer.toggle();
+					},
+					moveUp: function() {
+						const swapIndex = lns.anim.layers.indexOf(layers[i - 1]);
+						const layerIndex = lns.anim.layers.indexOf(layer);
+						if (swapIndex) {
+							[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]]
+						}
+						self.update();
 					}
-				}, layer);
+				}, layer, i > 0 && layers.length > 2);
 				
 				
 				gridRowStart += 2;
