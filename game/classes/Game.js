@@ -67,22 +67,22 @@ class Game {
 			this.ctx = this.canvas.getContext('2d');
 			this.dpr = this.checkRetina ? window.devicePixelRatio || 1 : 1;
 
-			const zoom = params.zoom || 1;
-
 			this.canvas.width = this.width * this.dpr;
 			this.canvas.height = this.height * this.dpr;
 			this.ctx.scale(this.dpr, this.dpr);
 			this.canvas.style.zoom = 1 / this.dpr;
 
-			this.view.width = Math.round(this.width / zoom) * this.dpr;
-			this.view.height = Math.round(this.height / zoom) * this.dpr;
+			const zoom = params.zoom || 1;
+			const ediZoom = params.isEditor ? this.dpr : 1;
+
+			this.view.width = Math.round(this.width / zoom * ediZoom);
+			this.view.height = Math.round(this.height / zoom * ediZoom);
 
 			if (params.zoom) {
-				this.ctx.scale(params.zoom * this.dpr, params.zoom * this.dpr);
+				this.ctx.scale(params.zoom * ediZoom, params.zoom * ediZoom);
 			}
 
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
-			if (params.scale) this.ctx.scale(params.scale, params.scale);
 
 			if (params.stats) {
 				this.stats = new Stats();

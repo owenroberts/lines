@@ -87,6 +87,16 @@
 						"params": {
 							"text": "Center"
 						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-z",
+						"fromModule": {
+							"callback": "delete"
+						},
+						"params": {
+							"text": "Delete"
+						}
 					}
 				]
 			}

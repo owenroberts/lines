@@ -32,6 +32,7 @@ function GameSettings(editor, suspend) {
 					offText: label,
 					isOn: !sprite.isLoaded,
 					callback: () => {
+						console.log(sprite);
 						if (sprite.isLoaded) {
 							sprite.isLoaded = false;
 							return;

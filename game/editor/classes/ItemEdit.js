@@ -17,7 +17,7 @@ class ItemEdit extends Entity {
 	}
 
 	display(view) {
-		if (!this.isRemoved) {
+		if (!this.isRemoved && this.isLoaded) {
 			super.display(this.isInMapBounds(view));
 			if (this.displayLabel) this.drawLabel();
 			if (this.displayOutline) this.drawOutline();
@@ -51,7 +51,7 @@ class ItemEdit extends Entity {
 	}
 
 	isMouseOver(x, y, zoom) {
-		if (this.isInMapBounds(zoom.view) && this.isSelectable) {
+		if (this.isInMapBounds(zoom.view) && this.isSelectable && this.isLoaded) {
 			const xy = zoom.translate(x, y); // translate mouse coordinates
 			if (xy.x > this.xy.x &&
 				xy.x < this.xy.x + this.width &&

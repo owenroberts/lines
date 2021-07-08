@@ -77,6 +77,10 @@ function Zoom() {
 		}
 	};
 
+	this.delete = function() {
+		if (localStorage.zoom) delete localStorage.zoom;
+	};
+
 	this.center = function() {
 		self.canvas = { width: GAME.width, height: GAME.height };
 		self.view = { x: 0, y: 0, width: GAME.width, height: GAME.height };

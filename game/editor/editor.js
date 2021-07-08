@@ -1,14 +1,15 @@
 const gme = new Game({
 	canvas: "map",
 	width: 1200,
-	height: 900,
+	height: 700,
 	dps: 30,
 	multiColor: true,
 	checkRetina: true,
 	scenes: ['game'],
 	debug: true,
 	stats: false,
-	suspend: true
+	suspend: true,
+	isEditor: true,
 }); // maybe there's a way to use the garden js file here? modules & exports :O
 
 
