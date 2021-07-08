@@ -128,7 +128,10 @@ function Timeline() {
 					},
 					callback: function() {
 						// only update the values when toggling on, ignore when toggling off
-						if (!layer.isToggled) lns.draw.setProperties(layer.getEditProps());
+						if (!layer.isToggled) {
+							// set ui only
+							lns.draw.setProperties(layer.getEditProps(), true);
+						}
 						layer.toggle();
 					},
 					moveUp: function() {
@@ -203,11 +206,10 @@ function Timeline() {
 		layers.filter(l => !l.isToggled)
 			.forEach((l, index) => {
 				self.panel.timeline[`layer-${index}`].toggle.handler(); // why handler?
-
 			});
 	};
 
-	// select all -- error?
+	// select all -- error? -- this is a bad idea right .... 
 	this.selectAll = function() {
 		const allToggled = lns.anim.layers.filter(layer => layer.isToggled).length == lns.anim.layers.length - 1;
 		

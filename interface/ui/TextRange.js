@@ -26,12 +26,17 @@ class UITextRange extends UICollection {
 		return [this.textInput.el, this.range.el];
 	}
 
-	handler(value) {
-		this.update(value !== undefined ? +value : prompt(this.prompt));
+	handler(value, uiOnly) {
+		if (!uiOnly)this.update(value !== undefined ? +value : prompt(this.prompt));
+		this.value = value;
 	}
 
-	update(value) {
-		this.callback(...[...this.arguments, value]);
+	update(value, uiOnly) {
+		if (!uiOnly) this.callback(...[...this.arguments, value]);
+		this.value = value;
+	}
+
+	set value(value) {
 		this.textInput.value = value;
 		this.range.value = value;
 	}

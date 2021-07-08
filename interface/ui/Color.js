@@ -40,8 +40,8 @@ class UIColor extends UIInput {
 	}
 
 	/* update for loading */
-	update(value) {
-		this.setColor(value);
+	update(value, uiOnly) {
+		if (!uiOnly) this.setColor(value);
 		this.value = value;
 	}
 

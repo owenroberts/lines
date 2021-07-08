@@ -23,7 +23,6 @@ class Layer {
 		
 		this.linesInterval = params.linesInterval; // draw count per line update
 		this.linesCount = params.linesCount || 0; // line update counter
-
 	}
 
 	get startFrame() {

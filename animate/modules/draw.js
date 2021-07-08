@@ -23,11 +23,11 @@ function Draw(defaults) {
 		startFrame: lns.anim.currentFrame,
 	}));
 
-	this.setProperties = function(props) {
+	this.setProperties = function(props, uiOnly) {
 		for (const prop in props) {
 			if (self.layer[prop] !== undefined) {
 				self.layer[prop] = props[prop];
-				if (lns.ui.faces[prop]) lns.ui.faces[prop].update(props[prop]);
+				if (lns.ui.faces[prop]) lns.ui.faces[prop].update(props[prop], uiOnly);
 			}
 		}
 	};
