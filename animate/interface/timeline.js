@@ -137,7 +137,7 @@ function Timeline() {
 					moveUp: function() {
 						const swapIndex = lns.anim.layers.indexOf(layers[i - 1]);
 						const layerIndex = lns.anim.layers.indexOf(layer);
-						if (swapIndex) {
+						if (swapIndex >= 0) {
 							[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]]
 						}
 						self.update();
