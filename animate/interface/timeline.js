@@ -42,7 +42,10 @@ function Timeline() {
 		const w = lns.ui.timeline.panel.el.clientWidth - 11; /* 11 for padding */
 		self.frameWidth = (w - 2 * f) / f; 
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
+		self.frameClass();
+	};
 
+	this.frameClass = function() {
 		// def better way to do this
 		if (self.frameWidth < 5) {
 			self.panel.timeline.addClass('five');
@@ -61,6 +64,7 @@ function Timeline() {
 		self.autoFit = false;
 		self.frameWidth = 120;
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
+		self.frameClass();
 		self.update();
 		self.scrollToFrame();
 	};

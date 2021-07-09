@@ -116,88 +116,90 @@ class Lines {
 		if (this.ctx.strokeStyle !== color) this.ctx.strokeStyle = color;
 	}
 
-	draw(x, y, suspendLinesUpdate) {
-		if (!this.multiColor) this.ctx.beginPath();
-
+	getLayers() {
+		let layers = [];
 		for (let i = 0, len = this.layers.length; i < len; i++) {
 			if (this.layers[i].isInFrame(this.currentFrame)) {
-				const layer = this.layers[i];
-				const drawing = this.drawings[layer.drawingIndex];
-				const props = layer.drawProps;
-
-				if (x) props.x += x;
-				if (y) props.y += y;
-				
-				if (props.tweens) { // default empty array
-					for (let j = 0; j < props.tweens.length; j++) {
-						const tween = props.tweens[j];
-						// console.log(tween);
-						// range class lol -- wait Range exists???
-						if (tween.startFrame <= this.currentFrame && 
-							tween.endFrame >= this.currentFrame) {
-							props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
-							if (tween.prop == 'startIndex' || tween.prop == 'endIndex') {
-								props[tween.prop] = Math.round(props[tween.prop]);
-							}
-						}
-					}
-				}
-
-				// over ride animation data from renderer (usually effects)
-				for (const key in this.override) {
-					props[key] = this.override[key];
-				}
-
-				// how often to reset wiggle
-				if (drawing.firstUpdate) { // lazy load -- way to get rid of this check?
-					drawing.firstUpdate = false;
-					drawing.update(props);
-				} else if (!suspendLinesUpdate) {
-					if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
-						drawing.update(props);
-						layer.linesCount = 0;
-					} else if (drawing.needsUpdate) {
-						layer.linesCount++;
-					}
-				}
-
-				if (this.multiColor) this.ctx.beginPath();
-				let { endIndex, startIndex } = props;
-				if (endIndex < 0) endIndex = drawing.length;
-				// text animation
-				// if (this.endIndexMultiplier !== undefined) {
-				// 	endIndex *= this.endIndexMultiplier; 
-				// }
-				// if (this.startIndexMultiplier !== undefined) {
-				// 	startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
-				// }
-
-				for (let j = startIndex; j < endIndex - 1; j++) {
-					const s = drawing.get(j);
-					const e = drawing.get(j + 1);
-					if (s !== 'end' && e !== 'end') {
-						const off = [...s.off, ...e.off]; // offset stored in drawing points
-						
-						// catch for drawing - add flag?
-						// what is this?
-						// only happens on certain drawings but happens A LOT
-						// maybe happens when segment num changes ... ?
-						// still working on this lol
-						// als when in the middle of drawing
-						// this would be useful to fix!!!
-						if (off.length < props.segmentNum + 1) {
-							for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
-								off.push(new Cool.Vector());
-							}
-						}
-
-						this.drawLines(s, e, props, off);
-						if (this.multiColor) this.setColor(props.color);
-					}
-				}
-				
-				if (this.multiColor) this.finish();
+				layers.push(this.layers[i]);
 			}
+		}
+		return layers;
+	}
+
+	draw(x, y, suspendLinesUpdate) {
+		if (!this.multiColor) this.ctx.beginPath();
+		const layers = this.getLayers();
+		for (let i = 0, len = layers.length; i < len; i++) {
+			const layer = layers[i];
+			const drawing = this.drawings[layer.drawingIndex];
+			const props = layer.drawProps;
+
+			if (x) props.x += x;
+			if (y) props.y += y;
+			
+			if (props.tweens) { // default empty array
+				for (let j = 0; j < props.tweens.length; j++) {
+					const tween = props.tweens[j];
+					// console.log(tween);
+					// range class lol -- wait Range exists???
+					if (tween.startFrame <= this.currentFrame && 
+						tween.endFrame >= this.currentFrame) {
+						props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
+						if (tween.prop == 'startIndex' || tween.prop == 'endIndex') {
+							props[tween.prop] = Math.round(props[tween.prop]);
+						}
+					}
+				}
+			}
+
+			// over ride animation data from renderer (usually effects)
+			for (const key in this.override) {
+				props[key] = this.override[key];
+			}
+
+			// how often to reset wiggle
+			if (drawing.firstUpdate) { // lazy load -- way to get rid of this check?
+				drawing.firstUpdate = false;
+				drawing.update(props);
+			} else if (!suspendLinesUpdate) {
+				if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
+					drawing.update(props);
+					layer.linesCount = 0;
+				} else if (drawing.needsUpdate) {
+					layer.linesCount++;
+				}
+			}
+
+			if (this.multiColor) this.ctx.beginPath();
+			let { endIndex, startIndex } = props;
+			if (endIndex < 0) endIndex = drawing.length;
+			// text animation
+			// if (this.endIndexMultiplier !== undefined) {
+			// 	endIndex *= this.endIndexMultiplier; 
+			// }
+			// if (this.startIndexMultiplier !== undefined) {
+			// 	startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
+			// }
+
+			for (let j = startIndex; j < endIndex - 1; j++) {
+				const s = drawing.get(j);
+				const e = drawing.get(j + 1);
+				if (s !== 'end' && e !== 'end') {
+					const off = [...s.off, ...e.off]; // offset stored in drawing points
+					
+					// fuckin fuck fix... happens  when drawing ??
+					if (off.length < props.segmentNum + 1) {
+						for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
+							off.push(new Cool.Vector());
+						}
+					}
+
+					this.drawLines(s, e, props, off);
+					if (this.multiColor) this.setColor(props.color);
+				}
+			}
+			
+			if (this.multiColor) this.finish();
 		}
 		if (!this.multiColor) this.finish();
 		if (this.onDraw) this.onDraw();
