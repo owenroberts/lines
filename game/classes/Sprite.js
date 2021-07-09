@@ -55,6 +55,7 @@ class Sprite {
 	}
 
 	display(editorOnScreen) {
+		// better way to do this ... 
 		let isDraw = false;
 		if (editorOnScreen !== undefined) isDraw = editorOnScreen;
 		else isDraw = this.isActive && this.isOnScreen();

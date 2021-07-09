@@ -253,6 +253,21 @@ class Game {
 			this.bounds.left = position.x - this.width/2;
 	}
 
+	setupGrid(dimensions) {
+		this.grid = new SpatialGrid(this.bounds, [gme.view.width, gme.view.height]);
+		this.scenes.names.forEach(scene => {
+			const sprites = this.scenes[scene].displaySprites.sprites;
+			for (let i = 0; i < sprites.length; i++) {
+				const s = sprites[i];
+				if (s.constructor.name === 'Entity') {
+					const cells = this.grid.getCells(s.x, s.y, s.width, s.height);
+					s.cells = cells;
+				}
+			}
+		});
+		console.log(this.grid);
+	}
+
 	startMouseEvents() {
 		let dragStarted = false;
 		let dragOffset;
