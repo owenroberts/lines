@@ -1,7 +1,7 @@
 /* play module - need to use params too many args */
 
 function LinesPlayer(params) {
-	const { canvas, src, checkRetina, dps, callback, isTexture, pixelSize, LinesClass } = params;
+	let { canvas, src, checkRetina, dps, callback, isTexture, pixelSize, LinesClass } = params;
 	let debug = false;
 	if (debug) console.log(this);
 	this.canvas = canvas;
@@ -12,7 +12,7 @@ function LinesPlayer(params) {
 	}
 
 	this.ctx = this.canvas.getContext('2d');
-	this.dps = dps || 36; // default ?
+	this.dps = dps || 30; // default ?
 	this.interval = 1000 / this.dps; /* needed in both places ?? */
 	this.multiColor = false; // is this always false?
 	this.drawBg = true; /* where? */
@@ -23,13 +23,19 @@ function LinesPlayer(params) {
 	
 	window.drawCount = 0;
 
+	if (!LinesClass) LinesClass = Lines;
 	this.animation = new LinesClass(this.ctx, this.dps, this.multiColor, this.pixelSize);
 
-	this.ctx.miterLimit = 1;
+	
 	this.width;
 	this.height;
 	
 	this.timer = performance.now();
+
+	this.setupCanvas = function() {
+		this.ctx.lineWidth = params.lineWidth || 1;
+		this.ctx.miterLimit = 1;
+	};
 
 	this.override = function(prop, value) {
 		this.over[prop] = value;
@@ -88,7 +94,7 @@ function LinesPlayer(params) {
 			self.ctx.scale(self.dpr, self.dpr);
 			self.canvas.style.zoom = 1 / self.dpr;
 
-			self.ctx.miterLimit = 1;
+			this.setupCanvas();
 			if (data.bg) self.canvas.style.backgroundColor = data.bg;
 			if (callback) callback();
 			if (!self.isTexture) requestAnimFrame(self.draw.bind(self)); /* three.js stuff */
