@@ -211,6 +211,7 @@ class Game {
 	}
 
 	update() {
+		if (this.pauseGame) return;
 		if (this.stats) this.stats.begin();
 		requestAnimFrame(() => { this.update(); });  // this context
 
@@ -239,33 +240,18 @@ class Game {
 	}
 
 	setBounds(dir, value) {
-		this.bounds[dir] = value;
+		this.bounds[dir] = Math.round(value);
 	}
 
 	updateBounds(position) {
 		if (position.y < this.bounds.top) 
-			this.bounds.top = position.y;
+			this.bounds.top = Math.round(position.y);
 		if (position.y > this.bounds.bottom) 
-			this.bounds.bottom = position.y + this.height;
+			this.bounds.bottom = Math.round(position.y + this.height);
 		if (position.x > this.bounds.right) 
-			this.bounds.right = position.x + this.width/2;
+			this.bounds.right = Math.round(position.x + this.width / 2);
 		if (position.x < this.bounds.left) 
-			this.bounds.left = position.x - this.width/2;
-	}
-
-	setupGrid(dimensions) {
-		this.grid = new SpatialGrid(this.bounds, [gme.view.width, gme.view.height]);
-		this.scenes.names.forEach(scene => {
-			const sprites = this.scenes[scene].displaySprites.sprites;
-			for (let i = 0; i < sprites.length; i++) {
-				const s = sprites[i];
-				if (s.constructor.name === 'Entity') {
-					const cells = this.grid.getCells(s.x, s.y, s.width, s.height);
-					s.cells = cells;
-				}
-			}
-		});
-		console.log(this.grid);
+			this.bounds.left = Math.round(position.x - this.width / 2);
 	}
 
 	startMouseEvents() {
