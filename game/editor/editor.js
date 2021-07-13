@@ -1,6 +1,6 @@
 const gme = new Game({
 	canvas: "map",
-	width: 1200,
+	width: 800,
 	height: 700,
 	dps: 30,
 	multiColor: true,
@@ -37,12 +37,17 @@ edi.tool = {
 		gme.canvas.className = '';
 		gme.canvas.classList.add(`${toolName}-tool`);
 	},
+	// need a selection class?
 	items: new SpriteCollection(),
 	clear: function() {
+		console.log('clear')
 		edi.tool.items.all(item => {
 			item.select(false); // deselect sprites
 		});
 		edi.tool.items.clear(); //  clear sprite collection
+	},
+	add: function(item) {
+		edi.tool.items.add(item);
 	}
 }; /* tools: zoom/pan, transform, ruler - modulize if it gets complicated */
 /* move this somewhere else eventually ... */

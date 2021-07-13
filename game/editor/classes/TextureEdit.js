@@ -112,7 +112,10 @@ class TextureEdit extends Texture {
 		}
 		
 		if (isSelected && !this.ui.isAdded) this.ui.add();
-		if (!isSelected && this.ui.isAdded) this.ui.remove();
+		if (!isSelected && this.ui.isAdded) {
+			this.ui.allSelected = false;
+			this.ui.remove();
+		}
 	}
 
 	get isSelected() {
