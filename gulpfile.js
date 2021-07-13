@@ -16,6 +16,8 @@ const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 const gutil = require('gulp-util');
 
+const beeper = !process.argv.includes('-q');
+
 const files = {
 	base: [ 
 		'./lib/cool/cool.js',
@@ -64,11 +66,15 @@ function jsTasks() {
 	function jsTask(files, name, dir){
 		return src(files)
 			.pipe(plumber({ errorHandler: function(err) {
-				notify.onError({
-					title: "Gulp error in " + err.plugin,
-					message:  err.toString()
-				})(err);
-				gutil.beep();
+				if (beeper) {
+					notify.onError({
+						title: "Gulp error in " + err.plugin,
+						message:  err.toString()
+					})(err);
+					gutil.beep();
+				} else {
+					console.log("Gulp error in " + err.plugin, err.toString());
+				}
 			}}))
 			.pipe(sourcemaps.init())
 			.pipe(concat(name))

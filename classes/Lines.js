@@ -184,8 +184,8 @@ class Lines {
 			for (let j = startIndex; j < endIndex - 1; j++) {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);
-				if (s !== 'end' && e !== 'end') {
-					const off = [...s.off, ...e.off]; // offset stored in drawing points
+				if (s[0] !== 'end' && e[0] !== 'end') {
+					const off = [...s[1], ...e[1]]; // offset stored in drawing points
 					
 					// fuckin fuck fix... happens  when drawing ??
 					if (off.length < props.segmentNum + 1) {
@@ -194,7 +194,7 @@ class Lines {
 						}
 					}
 
-					this.drawLines(s, e, props, off);
+					this.drawLines(s[0], e[0], props, off);
 					if (this.multiColor) this.setColor(props.color);
 				}
 			}
@@ -207,29 +207,33 @@ class Lines {
 
 	drawLines(s, e, props, off) {
 		this.ctx.moveTo(
-			props.x + s.x + off[0][0],
-			props.y + s.y + off[0][1]
+			props.x + s[0] + off[0][0],
+			props.y + s[1] + off[0][1]
 		);
 
 		if (props.segmentNum == 1) { // i rarely use n=1 tho
 			this.ctx.lineTo( 
-				props.x + e.x + off[1][0],
-				props.y + e.y + off[1][1]
+				props.x + e[0] + off[1][0],
+				props.y + e[1] + off[1][1]
 			);
 		} else {
-			const v = new Cool.Vector(e.x, e.y);
-			v.subtract(s);
-			v.divide(props.segmentNum);
+			const v = [
+				(e[0] - s[0]) / props.segmentNum,
+				(e[1] - s[1]) / props.segmentNum,
+			];
 			
 			// need to spend a little time here ...
 			
 			for (let k = 1; k < props.segmentNum; k++) {
-				const p = s.clone().add(v.clone().multiply(k));
+				const p = [
+					s[0] + v[0] * k,
+					s[1] + v[1] * k
+				];
 				if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
 				const index = props.breaks ? k : k + 1;
 				this.ctx.lineTo( 
-					props.x + p.x + v.x + off[index][0],
-					props.y + p.y + v.y + off[index][1]
+					props.x + p[0] + v[0] + off[index][0],
+					props.y + p[1] + v[1] + off[index][1]
 				);
 			}
 		}

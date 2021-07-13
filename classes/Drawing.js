@@ -1,6 +1,7 @@
 class Drawing {
 	constructor(points) {
 		this.points = [];
+		this.offsets = [];
 		if (points) {
 			for (let i = 0; i < points.length; i++) {
 				this.add(points[i]);
@@ -16,10 +17,10 @@ class Drawing {
 		if (point === 'end' || point === 0) {
 			this.points.push('end');
 		} else if (Array.isArray(point)) { 	// from json file
-			this.points.push(new Cool.Vector(point));
-		} else {
-			point.off = []; // maybe ditch cool.js and make LinesVector ? -- 
 			this.points.push(point);
+		} else {
+			// point.off = []; // maybe ditch cool.js and make LinesVector ? -- 
+			// this.points.push(point);
 		}
 	}
 
@@ -31,7 +32,7 @@ class Drawing {
 		if (index < 0) {
 			return this.points[this.points.length - index];
 		}
-		return this.points[index];
+		return [this.points[index], this.offsets[index]];
 	}
 
 	get length() {
@@ -56,7 +57,8 @@ class Drawing {
 		// add random offsets for xy for each segment of the lines
 		for (let i = 0, len = this.points.length; i < len; i++) {
 			if (this.points[i] !== 'end') {
-				this.points[i].off = []; // point offset 
+				// this.points[i].off = []; // point offset 
+				this.offsets[i] = [];
 
 				for (let j = 0; j < segmentNum; j++) {
 					// calculate wiggle 
@@ -75,7 +77,7 @@ class Drawing {
 					}
 
 					// add jiggle to wiggle -- needs to figure the fuck out!
-					this.points[i].off.push([
+					this.offsets[i].push([
 						Cool.random(-jiggleRange, jiggleRange) + offset[0],
 						Cool.random(-jiggleRange, jiggleRange) + offset[1]
 					]);
