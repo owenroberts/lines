@@ -32,8 +32,10 @@ class Texture {
 
 	addLocations(locations) {
 		if (locations) this.locations.push(...locations);
+
+		// why doesn't this just call add location?
 		for (let i = 0; i < this.locations.length; i++) {
-			if (this.frame == 'index') {
+			if (this.frame == 'index' && i <= this.animation.endFrame) {
 				this.locations[i].i = i;
 				this.animation.createNewState(`f-${i}`, i, i);
 			}

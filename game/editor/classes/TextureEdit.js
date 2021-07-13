@@ -19,7 +19,8 @@ class TextureEdit extends Texture {
 	}
 
 	addLocation(x, y) {
-		super.addLocation(x, y, this.locations.length);
+		if (this.locations.length > this.animation.endFrame) alert('End of indexes');
+		else super.addLocation(x, y, this.locations.length);
 	}
 
 	display(view) {
