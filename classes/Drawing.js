@@ -20,7 +20,8 @@ class Drawing {
 			this.points.push(point);
 		} else {
 			// point.off = []; // maybe ditch cool.js and make LinesVector ? -- 
-			// this.points.push(point);
+			this.points.push([point.x, point.y]);
+			this.offsets.push([[0,0], [0,0]])
 		}
 	}
 

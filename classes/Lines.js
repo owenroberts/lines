@@ -185,7 +185,11 @@ class Lines {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);
 				if (s[0] !== 'end' && e[0] !== 'end') {
-					const off = [...s[1], ...e[1]]; // offset stored in drawing points
+					const off = [];
+					for (let i = 0; i < s[1].length; i++) {
+						off.push(s[1][i]);
+					}
+					if (e[1]) off.push(e[1][0])
 					
 					// fuckin fuck fix... happens  when drawing ??
 					if (off.length < props.segmentNum + 1) {
