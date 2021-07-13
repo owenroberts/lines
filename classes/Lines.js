@@ -137,7 +137,7 @@ class Lines {
 			if (x) props.x += x;
 			if (y) props.y += y;
 			
-			if (props.tweens) { // default empty array
+			if (props.tweens.length) { // default empty array -- .length didn't hurt
 				for (let j = 0; j < props.tweens.length; j++) {
 					const tween = props.tweens[j];
 					// console.log(tween);
@@ -190,7 +190,7 @@ class Lines {
 					// fuckin fuck fix... happens  when drawing ??
 					if (off.length < props.segmentNum + 1) {
 						for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
-							off.push(new Cool.Vector());
+							off.push([0,0]);
 						}
 					}
 
@@ -207,14 +207,14 @@ class Lines {
 
 	drawLines(s, e, props, off) {
 		this.ctx.moveTo(
-			props.x + s.x + off[0].x,
-			props.y + s.y + off[0].y
+			props.x + s.x + off[0][0],
+			props.y + s.y + off[0][1]
 		);
 
 		if (props.segmentNum == 1) { // i rarely use n=1 tho
 			this.ctx.lineTo( 
-				props.x + e.x + off[1].x,
-				props.y + e.y + off[1].y
+				props.x + e.x + off[1][0],
+				props.y + e.y + off[1][1]
 			);
 		} else {
 			const v = new Cool.Vector(e.x, e.y);
@@ -228,8 +228,8 @@ class Lines {
 				if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
 				const index = props.breaks ? k : k + 1;
 				this.ctx.lineTo( 
-					props.x + p.x + v.x + off[index].x,
-					props.y + p.y + v.y + off[index].y
+					props.x + p.x + v.x + off[index][0],
+					props.y + p.y + v.y + off[index][1]
 				);
 			}
 		}
