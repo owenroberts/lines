@@ -1,11 +1,20 @@
-class SpatialHashGrid {
+class SpatialHashGrid_Doodoo {
 	constructor(bounds, columns, rows) {
 		this.bounds = [
 			[bounds.left, bounds.top],
 			[bounds.right, bounds.bottom],
 		];
 		this.dimensions = [Math.round(columns), Math.round(rows)];
-		this.cells = new Map();
+		// this.cells = new Map();
+		this.cells = [new Array(this.dimensions[0]), new Array(this.dimensions[1])];
+		for (let x = 0; x < this.dimensions[0]; x++) {
+			this.cells[x] = [];
+			for (let y = 0; y < this.dimensions[1]; y++) {
+				this.cells[x][y] = [];
+			}
+		}
+		console.log(this.cells);
+
 		this.queryIds = 0;
 	}
   
@@ -26,27 +35,6 @@ class SpatialHashGrid {
 		return `${i}.${j}`;
 	}
   
-	addClient(x, y, w, h) {
-
-		const i = this.getCellIndex([x - w / 2, y - h / 2]);
-		const j = this.getCellIndex([x + w / 2, y + h / 2]);
-
-		for (let xs = i[0], xn = j[0]; xs <= xn; ++xs) {
-			for (let ys = i[1], yn = j[1]; ys <= yn; ++ys) {
-				const k = this.getKey(xs, ys);
-				if (!this.cells.has(k)) {
-					this.cells.set(k, new Set());
-				}
-
-				this.cells.get(k).add({
-					position: [x, y],
-					dimensions: [w, h],
-					// indices: [i, j],
-					sprite: sprite,
-	  			});
-			}
-		}
-	}
 
 	addSprite(sprite) {
 		const { x, y } = sprite.position;
@@ -58,12 +46,9 @@ class SpatialHashGrid {
 
 		for (let xs = i[0], xn = j[0]; xs <= xn; ++xs) {
 			for (let ys = i[1], yn = j[1]; ys <= yn; ++ys) {
-				const k = this.getKey(xs, ys);
-				if (!this.cells.has(k)) {
-					this.cells.set(k, []);
-				}
-
-				this.cells.get(k).add({
+				// if (!this.cells[xs][ys]) this.cells[xs][ys] = [];
+				
+				this.cells[xs][ys].push({
 					position: [x, y],
 					dimensions: [w, h],
 					// indices: [i, j],
@@ -83,18 +68,15 @@ class SpatialHashGrid {
 
 		for (let x = i[0], xn = j[0]; x <= xn; ++x) {
 			for (let y = i[1], yn = j[1]; y <= yn; ++y) {
-		  		const k = this.getKey(x, y);
-		  		if (this.cells.has(k)) {
-		  			const set = this.cells.get(k);
-					for (let client of set.values()) {
-						if (client.queryId !== queryId) {
-							clients.push(client);
-							client.queryId = queryId;
-						}
-
-						
-			  		}
-			  	}
+		  		// const k = this.getKey(x, y);
+	  			const set = this.cells[x][y];
+	  			for (let i = 0; i < set.length; i++) {
+	  				const client = set[i];
+					if (client.queryId !== queryId) {
+						clients.push(client);
+						client.queryId = queryId;
+					}
+				}
 			}
 		}
 		return clients;
