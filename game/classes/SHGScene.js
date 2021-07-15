@@ -3,12 +3,12 @@
 */
 
 class SHGScene extends Scene {
-	constructor(bounds, view) {
+	constructor(bounds, width, height) {
 		super();
-		const width = bounds.right - bounds.left;
-		const height = bounds.bottom - bounds.top;
-		this.grid = new SpatialHashGrid(bounds, width / view.width, height / view.height);
-		this.view = [view.width, view.height]; // seems nuts but cant get offset right ... 
+		const w = bounds.right - bounds.left;
+		const h = bounds.bottom - bounds.top;
+		this.grid = new SpatialHashGrid(bounds, w / width, h / height);
+		this.view = [width, height]; // seems nuts but cant get offset right ... 
 	}
 
 	addSprite(sprite) {
