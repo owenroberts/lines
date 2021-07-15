@@ -62,6 +62,7 @@ class Layer {
 			startIndex: this.drawingStartIndex,
 			endIndex: this.drawingEndIndex,
 			breaks: this.breaks,
+			linesInterval: this.linesInterval,
 		};
 		if (this.tweens) props.tweens = this.tweens;
 		return props;
