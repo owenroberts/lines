@@ -28,6 +28,8 @@ class Lines {
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
 		this.states = { 'default': {start: 0, end: 0 } };
+
+		this.layerColor;
 	}
 
 	randomCount() {
@@ -116,6 +118,10 @@ class Lines {
 		if (this.ctx.strokeStyle !== color) this.ctx.strokeStyle = color;
 	}
 
+	getColor() {
+		return this.ctx.strokeStyle;
+	}
+
 	getLayers() {
 		let layers = [];
 		for (let i = 0, len = this.layers.length; i < len; i++) {
@@ -127,7 +133,10 @@ class Lines {
 	}
 
 	draw(x, y, suspendLinesUpdate) {
-		if (!this.multiColor) this.ctx.beginPath();
+		// if (!this.multiColor) this.ctx.beginPath();
+		let layerColor = this.getColor();
+		this.ctx.beginPath();
+
 		const layers = this.getLayers();
 		for (let i = 0, len = layers.length; i < len; i++) {
 			const layer = layers[i];
@@ -170,7 +179,14 @@ class Lines {
 				}
 			}
 
-			if (this.multiColor) this.ctx.beginPath();
+			// if (this.multiColor) this.ctx.beginPath();
+			if (this.multiColor && props.color !== layerColor) {
+				this.finish();
+				this.setColor(props.color);
+				layerColor = props.color;
+				this.ctx.beginPath();
+			}
+
 			let { endIndex, startIndex } = props;
 			if (endIndex < 0) endIndex = drawing.length;
 			// text animation
@@ -199,13 +215,14 @@ class Lines {
 					}
 
 					this.drawLines(s[0], e[0], props, off);
-					if (this.multiColor) this.setColor(props.color);
+					// if (this.multiColor) this.setColor(props.color);
 				}
 			}
 			
-			if (this.multiColor) this.finish();
+			// if (this.multiColor) this.finish();
 		}
-		if (!this.multiColor) this.finish();
+		// if (!this.multiColor) 
+		this.finish();
 		if (this.onDraw) this.onDraw();
 	}
 

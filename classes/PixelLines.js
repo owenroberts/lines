@@ -20,6 +20,10 @@ class PixelLines extends Lines {
 		if (this.ctx.fillStyle !== color) this.ctx.fillStyle = color;
 	}
 
+	getColor() {
+		return this.ctx.fillStyle;
+	}
+
 	drawLines(s, e, props, off) {
 		if (props.segmentNum === 1) { // i rarely use n=1 tho
 			this.simplePixelLine(
