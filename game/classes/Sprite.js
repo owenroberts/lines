@@ -41,6 +41,8 @@ class Sprite {
 		this.animation = animation;
 		this.size.x = this.animation.width;
 		this.size.y = this.animation.height;
+		const label = this.animation.src.split('/').pop();
+		this.label = label.replace('.json', '');
 	}
 
 	drawDebug() {
@@ -51,6 +53,15 @@ class Sprite {
 		GAME.ctx.strokeStyle = this.debugColor;
 		GAME.ctx.stroke();
 		GAME.ctx.strokeStyle = temp;
+		GAME.ctx.fillText(this.label, this.position.x, this.position.y);
+
+		if (this.indexes) {
+			for (let i = 0; i < this.indexes.length; i++) {
+				GAME.ctx.fillText(`${this.indexes[i][0]}, ${this.indexes[i][1]}`, this.position.x, this.position.y + 20 + 10 * i);
+
+			}
+		}
+
 		if (GAME.lineWidth !== 1) GAME.ctx.lineWidth = GAME.lineWidth;
 	}
 
@@ -80,16 +91,5 @@ class Sprite {
 		else
 			return false;
 	} 
-
-	tap(x, y) {
-		if (x > this.x + this.collider.position.x &&
-			x < this.x + this.collider.position.x + this.collider.size.x && 
-			y > this.y + this.collider.position.y && 
-			y < this.y + this.collider.position.y + this.collider.size.y) {
-			return true;
-		} else 
-			return false;
-	}
-
 	
 }

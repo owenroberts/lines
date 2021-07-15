@@ -61,6 +61,17 @@ class ColliderSprite extends Sprite {
 		return false;
 	}
 
+	tap(x, y) {
+		if (x > this.x + this.collider.position.x &&
+			x < this.x + this.collider.position.x + this.collider.size.x && 
+			y > this.y + this.collider.position.y && 
+			y < this.y + this.collider.position.y + this.collider.size.y) {
+			return true;
+		} else 
+			return false;
+	}
+
+
 	outside(other) {
 		var next = this.position.copy();
 		var nextCollider = this.collider.position.copy();

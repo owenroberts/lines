@@ -5,10 +5,10 @@
 class SHGScene extends Scene {
 	constructor(bounds, view) {
 		super();
-		const width = gme.bounds.right - gme.bounds.left;
-		const height = gme.bounds.bottom - gme.bounds.top;
-		this.grid = new SpatialHashGrid(bounds, width / gme.view.width, height / gme.view.height);
-		this.view = [view.width, view.height];
+		const width = bounds.right - bounds.left;
+		const height = bounds.bottom - bounds.top;
+		this.grid = new SpatialHashGrid(bounds, width / view.width, height / view.height);
+		this.view = [view.width, view.height]; // seems nuts but cant get offset right ... 
 	}
 
 	addSprite(sprite) {
@@ -16,14 +16,14 @@ class SHGScene extends Scene {
 	}
 
 	display(position) {
-		const clients = this.grid.findNear(position.x, position.y, this.view[0], this.view[1]);
+		const clients = this.grid.findNear(position[0] - this.view[0] / 2, position[1] - this.view[1] / 2, this.view[0], this.view[1]);
 		for (let i = 0; i < clients.length; i++) {
 			clients[i].sprite.display();
 		}
 	}
 
 	update(offset, position) {
-		const clients = this.grid.findNear(position.x, position.y, this.view[0], this.view[1]);
+		const clients = this.grid.findNear(position[0] - this.view[0] / 2, position[1] - this.view[1] / 2, this.view[0], this.view[1]);
 		for (let i = 0; i < clients.length; i++) {
 			clients[i].sprite.update(offset);
 		}
