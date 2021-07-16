@@ -196,7 +196,6 @@ class Lines {
 			// if (this.startIndexMultiplier !== undefined) {
 			// 	startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
 			// }
-
 			for (let j = startIndex; j < endIndex - 1; j++) {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);

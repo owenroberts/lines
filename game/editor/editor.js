@@ -1,6 +1,6 @@
 const gme = new Game({
 	canvas: "map",
-	width: 1100,
+	width: 1024,
 	height: 700,
 	dps: 30,
 	multiColor: true,
@@ -100,7 +100,7 @@ function start() {
 		left: -5000,
 		top: -4000,
 		right: 5000,
-		bottom: 5000,
+		bottom: 10000, // 5000
 	}
 
 	gme.sprites = {
@@ -218,8 +218,6 @@ function start() {
 	/* settings loaded before map done loading */
 
 	gme.scene = 'game';
-
-
 }
 
 function draw() {

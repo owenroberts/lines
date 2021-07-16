@@ -19,10 +19,9 @@ class Drawing {
 		} else if (Array.isArray(point)) { 	// from json file
 			this.points.push(point);
 		} else {
-			// point.off = []; // maybe ditch cool.js and make LinesVector ? -- 
 			this.points.push([point.x, point.y]);
-			this.offsets.push([[0,0], [0,0]])
 		}
+		this.offsets.push([[0,0], [0,0]]); // default add an offset even for end ... work on better way to update this
 	}
 
 	pop() {
@@ -30,8 +29,8 @@ class Drawing {
 	}
 
 	get(index) {
-		if (index < 0) {
-			return this.points[this.points.length - index];
+		if (index < 0) { // catch for draw.js end func
+			return [this.points[this.points.length - index], this.offsets[this.offsets.length - index]];
 		}
 		return [this.points[index], this.offsets[index]];
 	}
