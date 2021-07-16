@@ -24,12 +24,13 @@ class TextureEditUI extends EditUI {
 			}
 		});
 		textureRow.append(addTexture);
-		edi.ui.keys['t'] = addTexture;
+		edi.ui.keys.t = addTexture;
 
 		let selectAll = new UIToggle({
 			text: "All",
 			class: "all",
 			callback: () => {
+				console.log(this);
 				// edi.tool.clear(); // bad to have references to other components
 				this.allSelected = !this.allSelected;
 				for (let i = 0; i < this.item.locations.length; i++) {
@@ -41,7 +42,7 @@ class TextureEditUI extends EditUI {
 			}
 		});
 		textureRow.append(selectAll);
-		edi.ui.keys['a'] = selectAll;
+		edi.ui.keys.a = selectAll;
 
 		textureRow.append(new UISelect({
 			options: [ 'index', 'random' ],
@@ -79,5 +80,11 @@ class TextureEditUI extends EditUI {
 			});
 
 		super.add();
+	}
+
+	remove() {
+		if (edi.ui.keys.t) delete edi.ui.keys.t;
+		if (edi.ui.keys.a) delete edi.ui.keys.a;
+		super.remove();
 	}
 }

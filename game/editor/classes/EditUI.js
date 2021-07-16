@@ -25,14 +25,17 @@ class EditUI {
 		let ediRow = this.panel.addRow('edit', 'edit');
 		this.rows.push(ediRow);
 
-		ediRow.append(new UIToggle({
+		let mouseable = new UIToggle({
 			text: "🐭",
 			class: "selectable",
 			isOn: this.item.isSelectable,
 			callback: () => {
-				this.item.isSelectable = !this.item.isSelectable
+				this.item.isSelectable = !this.item.isSelectable;
+				this.item.select(false);
 			}
-		}));
+		});
+		ediRow.append(mouseable);
+		edi.ui.keys.m = mouseable;
 
 		ediRow.append(new UIToggle({
 			text: "🔓",
@@ -97,6 +100,7 @@ class EditUI {
 	}
 
 	remove() {
+		if (edi.ui.keys.m) delete edi.ui.keys.m;
 		this.rows.forEach(row => {
 			this.panel.removeRow(row);
 		});
