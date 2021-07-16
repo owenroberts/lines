@@ -1,6 +1,6 @@
 const gme = new Game({
 	canvas: "map",
-	width: 800,
+	width: 1100,
 	height: 700,
 	dps: 30,
 	multiColor: true,
@@ -25,7 +25,7 @@ edi.ui.settings = new Settings(edi, 'edi');
 edi.ui.game = new GameSettings(edi, true); // scene, wiggle
 edi.ui.textures = new Textures();
 edi.ui.items = new Items();
-edi.ui.markers = {};
+edi.ui.markers = [];
 edi.zoom = new Zoom();
 edi.ruler = new Ruler();
 
@@ -40,7 +40,6 @@ edi.tool = {
 	// need a selection class?
 	items: new SpriteCollection(),
 	clear: function() {
-		console.log('clear')
 		edi.tool.items.all(item => {
 			item.select(false); // deselect sprites
 		});
@@ -87,7 +86,7 @@ edi.loadAnimation = function(type, label, src) {
 		.then(response => { return response.json(); })
 		.then(json => {
 			// if (gme.debug) console.timeEnd(`done ${src}`);
-			gme.anims[type][label] = new GameAnim();
+			gme.anims[type][label] = new EditorAnim();
 			gme.anims[type][label].loadData(json, () => {
 				gme.sprites[type][label].addAnimation(gme.anims[type][label]);
 				gme.sprites[type][label].isLoaded = true;
@@ -96,6 +95,13 @@ edi.loadAnimation = function(type, label, src) {
 };
 
 function start() {
+
+	let bounds = {
+		left: -5000,
+		top: -4000,
+		right: 5000,
+		bottom: 5000,
+	}
 
 	gme.sprites = {
 		scenery: {},
@@ -110,7 +116,6 @@ function start() {
 			s.addAnimation(gme.anims.scenery[key]);
 		}
 		gme.scenes.add(s, data.scenes);
-		gme.updateBounds(s.position);
 		gme.sprites.scenery[key] = s;
 	}
 
@@ -135,7 +140,51 @@ function start() {
 	edi.zoom.canvas.height = edi.zoom.view.height = GAME.height;
 	edi.zoom.load();
 	edi.tool.set('zoom');
-	edi.ui.markers.center = new Marker(0, 0);
+	
+	edi.ui.markers.push(new Marker(0, 0));
+	for (let x = bounds.left; x < bounds.right; x += 500) {
+		edi.ui.markers.push(new Marker(x, bounds.top, 200, 50, 5));
+		// edi.ui.markers.push(new Marker(x, 0, 200, 50, 5));
+		edi.ui.markers.push(new Marker(x, bounds.bottom, 200, 50, 5));
+	}
+
+	for (let y = bounds.top; y < bounds.bottom; y += 500) {
+		edi.ui.markers.push(new Marker(bounds.right, y, 50, 200, 5));
+		edi.ui.markers.push(new Marker(0, y, 50, 200, 5));
+		edi.ui.markers.push(new Marker(bounds.left, y, 50, 200, 5));
+	}
+
+	let r = Math.abs(bounds.left) / Math.abs(bounds.top);
+	let y = bounds.top + 500;
+	for (let x = bounds.left + 500; x < 0; x += 500) {
+		edi.ui.markers.push(new Marker(x, y, 100, 100, 5));
+		y += 500 / r;
+	}
+
+
+	r = Math.abs(bounds.right) / Math.abs(bounds.top);
+	y = bounds.top + 500;
+	for (let x = bounds.right - 500; x > 0; x -= 500) {
+		edi.ui.markers.push(new Marker(x, y, 100, 100, 5));
+		y += 500 / r;
+	}
+
+	r = Math.abs(bounds.left) / Math.abs(bounds.bottom);
+	y = bounds.bottom - 500;
+	for (let x = bounds.left + 500; x < 0; x += 500) {
+		edi.ui.markers.push(new Marker(x, y, 100, 100, 5));
+		y -= 500 / r;
+	}
+
+
+	r = Math.abs(bounds.right) / Math.abs(bounds.bottom);
+	y = bounds.bottom - 500;
+	for (let x = bounds.right - 500; x > 0; x -= 500) {
+		edi.ui.markers.push(new Marker(x, y, 100, 100, 5));
+		y -= 500 / r;
+	}
+
+
 	gme.canvas.addEventListener("mousewheel", function(ev) {
 		edi.zoom.wheel(ev, function() {
 			gme.ctx.miterLimit = 1;
@@ -169,6 +218,8 @@ function start() {
 	/* settings loaded before map done loading */
 
 	gme.scene = 'game';
+
+
 }
 
 function draw() {
@@ -180,8 +231,8 @@ function draw() {
 	gme.ctx.font = '16px monaco';
 	gme.ctx.fillStyle = '#bb11ff';
 
-	for (const key in edi.ui.markers) {
-		edi.ui.markers[key].display();
+	for (let i = 0; i < edi.ui.markers.length; i++) {
+		edi.ui.markers[i].display(edi.zoom.view);
 	}
 
 	/* draw sprites -- data, scenes? */
@@ -201,10 +252,10 @@ function mouseMoved(x, y, button) {
 			if (edi.tool.current == 'transform' && 
 				edi.tool.items.length > 0) {
 				edi.tool.items.all(item => {
-					item.update({ 
-						x: Math.round(delta.x),
-						y: Math.round(delta.y) 
-					});
+					item.update([
+						Math.round(delta.x),
+						Math.round(delta.y) 
+					]);
 				});
 			} else {
 				edi.zoom.updateView(delta.x, delta.y);

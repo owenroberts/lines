@@ -45,10 +45,10 @@ class Sprite {
 	addAnimation(animation, callback) {
 		this.animation = animation;
 		this.size = [this.animation.width, this.animation.height];
-		if (this.debug) {
-			const label = this.animation.src.split('/').pop();
-			this.label = label.replace('.json', '');
-		}
+		// if (this.debug) {
+		// 	const label = this.animation.src.split('/').pop();
+		// 	this.label = label.replace('.json', '');
+		// }
 	}
 
 	drawDebug() {

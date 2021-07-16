@@ -321,8 +321,10 @@ select {
 	border: 2px solid $main-color;
 	box-shadow: 1px 1px 4px $ui-highlight;
 	z-index: 9;
-	
 	max-width: 400px;
+	overflow-y: scroll;
+	max-height: 90vh;
+
 	// * { margin-right: 1em; }
 	.break {
 		flex-basis: 100%;

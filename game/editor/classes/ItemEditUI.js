@@ -11,18 +11,21 @@ class ItemEditUI extends EditUI {
 
 		// uis that need to be updated assigned to this
 		this.x = new UIText({
-			value: this.item.position.x,
+			value: this.item.position[0],
 			class: 'x-input',
-			callback: n => { this.item.position.x = +n; }
+			callback: n => { this.item.position[0] = +n; }
 		});
 		locRow.append(this.x);
 
 		locRow.append(new UILabel({ text: "y", class: 'y-label' }));
 
 		this.y = new UIText({
-			value: this.item.position.y,
+			value: this.item.position[1],
 			class: 'y-input',
-			callback: n => { this.item.position.y = +n; }
+			callback: n => { 
+				console.log('y', +n);
+				this.item.position[1] = +n; 
+			}
 		});
 		locRow.append(this.y);
 
@@ -30,8 +33,8 @@ class ItemEditUI extends EditUI {
 			text: "📍",
 			class: 'focus',
 			callback: () => {
-				edi.zoom.view.x = this.item.position.x;
-				edi.zoom.view.y = this.item.position.y;
+				edi.zoom.view.x = this.item.position[0];
+				edi.zoom.view.y = this.item.position[1];
 			}
 		}));
 

@@ -53,7 +53,7 @@ class TextureEdit extends Texture {
 	}
 
 	drawOutline(x, y) {
-		GAME.ctx.strokeStyle = '#000000';
+		GAME.ctx.strokeStyle = this.isSelected ? '#000000' : '#7eaba7';
 		GAME.ctx.strokeRect(x, y, this.animation.width, this.animation.height);
 		GAME.ctx.strokeStyle = this.ui.color; /* ? */
 		GAME.ctx.beginPath();
@@ -125,8 +125,8 @@ class TextureEdit extends Texture {
 	update(offset) {
 		if (!this.isLocked) {
 			this.locations.filter(loc => loc.isSelected).forEach(loc => {
-				loc.x += offset.x;
-				loc.y += offset.y;
+				loc.x += offset[0];
+				loc.y += offset[1];
 			});
 		}
 	}

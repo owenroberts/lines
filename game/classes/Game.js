@@ -30,6 +30,9 @@ class Game {
 
 		this.width = params.width;
 		this.height = params.height;
+
+		this.halfWidth = params.width / 2;
+		this.halfHeight = params.height / 2;
 		
 		this.multiColor = params.multiColor || false; /* param? */
 		this.debug = params.debug || false;
@@ -77,6 +80,8 @@ class Game {
 
 			this.view.width = Math.round(this.width / zoom * ediZoom);
 			this.view.height = Math.round(this.height / zoom * ediZoom);
+			this.view.halfWidth = this.view.width / 2;
+			this.view.halfHeight = this.view.height / 2;
 
 			if (params.zoom) {
 				this.ctx.scale(params.zoom * ediZoom, params.zoom * ediZoom);

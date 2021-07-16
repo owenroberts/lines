@@ -52,6 +52,14 @@ class EditUI {
 		}));
 
 		ediRow.append(new UIButton({
+			text: '⇩',
+			class: 'loader',
+			callback: function() {
+				self.item.isLoaded = !self.item.isLoaded;
+			}
+		}))
+
+		ediRow.append(new UIButton({
 			text: "🗑️",
 			class: 'remove',
 			callback: function() {
