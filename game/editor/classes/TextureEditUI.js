@@ -30,7 +30,6 @@ class TextureEditUI extends EditUI {
 			text: "All",
 			class: "all",
 			callback: () => {
-				console.log(this);
 				// edi.tool.clear(); // bad to have references to other components
 				this.allSelected = !this.allSelected;
 				for (let i = 0; i < this.item.locations.length; i++) {

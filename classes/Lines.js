@@ -199,6 +199,8 @@ class Lines {
 			for (let j = startIndex; j < endIndex - 1; j++) {
 				const s = drawing.get(j);
 				const e = drawing.get(j + 1);
+				// console.log(props.drawingIndex, s, e);
+				if (!s[1]) console.log(j, endIndex, drawing, layer);
 				if (s[0] !== 'end' && e[0] !== 'end') {
 					const off = [];
 					for (let i = 0; i < s[1].length; i++) {

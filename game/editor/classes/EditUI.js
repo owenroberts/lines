@@ -31,7 +31,7 @@ class EditUI {
 			isOn: this.item.isSelectable,
 			callback: () => {
 				this.item.isSelectable = !this.item.isSelectable;
-				this.item.select(false);
+				if (!this.item.isSelectable) this.item.select(false);
 			}
 		});
 		ediRow.append(mouseable);

@@ -81,6 +81,10 @@ const LayerMixin = {
 		return this;
 	},
 
+	resetDrawingEndIndex(index) {
+		this.drawingEndIndex = index;
+	},
+
 	getSaveProps() {
 		const props = {
 			n: this.segmentNum,

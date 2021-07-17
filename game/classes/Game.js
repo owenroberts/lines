@@ -51,7 +51,7 @@ class Game {
 		this.updateInterval = 1000 / 60; // 60 fps
 
 		this.clearBg = true;
-		this.bounds = { top: 0, bottom: 0, left: 0, right: 0 };
+		this.bounds = params.bounds || { top: 0, bottom: 0, left: 0, right: 0 };
 
 		this.scenes = new SceneManager(params.scenes, Scene);
 
@@ -60,6 +60,7 @@ class Game {
 
 		this.useMouseEvents = params.events ? params.events.includes('mouse') : true;
 		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
+		this.useTouchEvents = params.events ? params.events.includes('touch') : false;
 
 		this.view = {
 			width: this.width,
@@ -201,6 +202,7 @@ class Game {
 
 		if (this.useMouseEvents) this.startMouseEvents();
 		if (this.useKeyboardEvents) this.startKeyboardEvents();
+		if (this.useTouchEvents) this.startTouchEvents();
 		if (typeof sizeCanvas === "function") window.addEventListener('resize', sizeCanvas, false);
 	}
 
@@ -291,6 +293,23 @@ class Game {
 				mouseMoved(ev.offsetX, ev.offsetY, ev.which);
 			if (dragStarted) 
 				drag(ev.offsetX, ev.offsetY, dragOffset);
+		}, false);
+	}
+
+	startTouchEvents() {
+		this.canvas.addEventListener('touchstart', function(ev) {
+			ev.preventDefault();
+			if (typeof touchStart === "function") touchStart(ev);
+		}, false);
+
+		this.canvas.addEventListener('touchmove', function(ev) {
+			ev.preventDefault();
+			if (typeof touchMove === "function") touchMove(ev);
+		}, false);
+
+		this.canvas.addEventListener('touchend', function(ev) {
+			ev.preventDefault();
+			if (typeof touchEnd === "function") touchEnd(ev);
 		}, false);
 	}
 
