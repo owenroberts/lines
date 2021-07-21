@@ -6,40 +6,42 @@
 
 class ColliderSprite extends Sprite {
 	constructor(x, y, animation, callback) {
-		super(x, y, animation, callback);
+		super(x, y);
 		
 		this.collider = {
-			position: new Cool.Vector(),
-			size: new Cool.Vector()
+			position: [0, 0],
+			size: [0, 0],
 		};
 
 		this.mouseOver = false;
 		this.waitToGoOut = false;
 		this.clickStarted = false;
 		// onOver, onOut, onUp, onDown, onClick
+
+		if (animation) this.addAnimation(animation, callback);
 	}
 
 	addAnimation(animation, callback) {
 		super.addAnimation(animation, callback);
-		this.collider.size.x = this.animation.width;
-		this.collider.size.y = this.animation.height;
+		this.collider.size[0] = this.animation.width;
+		this.collider.size[1] = this.animation.height;
 	}
 
 	setCollider(x, y, w, h) {
-		this.collider.position.x = x;
-		this.collider.position.y = y;
-		this.collider.size.x = w;
-		this.collider.size.y = h;
+		this.collider.position[0] = x;
+		this.collider.position[1] = y;
+		this.collider.size[0] = w;
+		this.collider.size[1] = h;
 	}
 
 	drawDebug() {
 		GAME.ctx.lineWidth = 1;
 		GAME.ctx.beginPath();
 		GAME.ctx.rect(
-			this.x + this.collider.position.x,
-			this.y + this.collider.position.y,
-			this.collider.size.x, 
-			this.collider.size.y
+			this.x + this.collider.position[0],
+			this.y + this.collider.position[1],
+			this.collider.size[0], 
+			this.collider.size[1]
 		);
 		const temp = GAME.ctx.strokeStyle;
 		GAME.ctx.strokeStyle = this.debugColor;
@@ -48,12 +50,23 @@ class ColliderSprite extends Sprite {
 		if (GAME.lineWidth != 1) GAME.ctx.lineWidth = GAME.lineWidth;
 	}
 
+	get pos() {
+		return [
+			this.x + this.collider.position[0],
+			this.y + this.collider.position[1],
+		];
+	}
+
+	get siz() {
+		return [this.collider.size[0], this.collider.size[1]];
+	}
+
 	collide(other, callback) {
 		if (this.isActive && other.isActive) {
-			if (this.x + this.collider.position.x < other.x + other.collider.position.x + other.collider.size.x &&
-				this.x + this.collider.position.x + this.collider.size.x > other.x + other.collider.position.x &&
-				this.y + this.collider.position.y < other.y + other.collider.position.y + other.collider.size.y &&
-				this.y + this.collider.position.y + this.collider.size.y > other.y + other.collider.position.y) {
+			if (this.pos[0] < other.pos[0] + other.siz[0] &&
+				this.pos[0] + this.siz[0] > other.pos[0] &&
+				this.pos[1] < other.pos[0] + other.siz[1] &&
+				this.pos[1] + this.siz[1] > other.pos[1]) {
 				if (callback) callback(this);
 				return true;
 			} 
@@ -70,7 +83,6 @@ class ColliderSprite extends Sprite {
 		} else 
 			return false;
 	}
-
 
 	outside(other) {
 		var next = this.position.copy();

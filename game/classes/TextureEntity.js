@@ -4,12 +4,11 @@
 */
 
 class TextureEntity extends Entity {
-	constructor(params, stateIndex, debug) {
+	constructor(params, debug) {
 		super(params, debug);
 		this.center = false;
 		this.stateName = `frame-${params.stateIndex}`;
 		this.animation.createNewState(`frame-${params.stateIndex}`, params.stateIndex, params.stateIndex);
-
 	}
 
 	display(editorOnScreen) {

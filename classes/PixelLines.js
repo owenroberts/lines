@@ -27,26 +27,27 @@ class PixelLines extends Lines {
 	drawLines(s, e, props, off) {
 		if (props.segmentNum === 1) { // i rarely use n=1 tho
 			this.simplePixelLine(
-				props.x + s.x + off[0].x,
-				props.y + s.y + off[0].y,
-				props.x + e.x + off[1].x,
-				props.y + e.y + off[1].y
+				props.x + s[0] + off[0][0],
+				props.y + s[1] + off[0][1],
+				props.x + e[0] + off[1][0],
+				props.y + e[1] + off[1][1]
 			);
 		} else {
-			const v = new Cool.Vector(e.x, e.y);
-			v.subtract(s);
-			v.divide(props.segmentNum);
+			// const v = new Cool.Vector(e.x, e.y);
+			const v = [
+				(e[0] - s[0]) / props.segmentNum,
+				(e[1] - s[1]) / props.segmentNum,
+			];
 			
 			for (let k = 0; k < props.segmentNum; k++) {
-				const p0 = s.clone().add(v.clone().multiply(k));
-				const p1 = s.clone().add(v.clone().multiply(k + 1));
-
+				const p0 = [s[0] + (v[0] * k), s[1] + (v[1] * k)];
+				const p1 = [s[0] + (v[0] * (k + 1)), s[1] + (v[1] * (k + 1))];
 				const index = props.breaks ? k : k + 1;
 				this.simplePixelLine(
-					props.x + p0.x + off[k].x,
-					props.y + p0.y + off[k].y,
-					props.x + p1.x + off[k + 1].x,
-					props.y + p1.y + off[k + 1].y,
+					props.x + p0[0] + off[k][0],
+					props.y + p0[1] + off[k][1],
+					props.x + p1[0] + off[k + 1][0],
+					props.y + p1[1] + off[k + 1][1],
 				);
 			}
 		}
@@ -83,7 +84,6 @@ class PixelLines extends Lines {
 			}
 		}
 	}
-
 
 	pixelLine(x1, y1, x2, y2) {
 		const size = this.ctx.lineWidth;
@@ -137,5 +137,4 @@ class PixelLines extends Lines {
 			} while (count--);
 		}
 	}
-
 }

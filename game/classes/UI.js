@@ -15,7 +15,6 @@ class UI extends Sprite {
 		
 		super(x, y);
 		this.debug = debug;
-		console.log(params.center);
 		this.center = params.center !== undefined ? params.center : true;
 
 		if (params.hidden) this.isActive = false; /* hidden prob in garden json ...  */
