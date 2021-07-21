@@ -2,7 +2,7 @@ class TextureEditUI extends EditUI {
 	constructor(item, panel) {
 		super(item, panel);
 		this.allSelected = false;
-		this.prevSelected = undefined;
+		this.prevSelected = undefined; // restore selected to first loc selected
 	}
 
 	add() {
@@ -24,22 +24,24 @@ class TextureEditUI extends EditUI {
 			}
 		});
 		textureRow.append(addTexture);
-		edi.ui.keys['a'] = addTexture;
+		edi.ui.keys.t = addTexture;
 
-		textureRow.append(new UIToggle({
+		let selectAll = new UIToggle({
 			text: "All",
 			class: "all",
 			callback: () => {
-				edi.tool.clear();
+				// edi.tool.clear(); // bad to have references to other components
 				this.allSelected = !this.allSelected;
 				for (let i = 0; i < this.item.locations.length; i++) {
 					if (this.item.locations[i].isSelected) this.prevSelected = i;
 					this.item.locations[i].isSelected = this.allSelected;
 				}
 				if (!this.allSelected && this.prevSelected)
-					this.items[this.prevSelected].isSelected = true;
+					this.item.locations[this.prevSelected].isSelected = true;
 			}
-		}));
+		});
+		textureRow.append(selectAll);
+		edi.ui.keys.a = selectAll;
 
 		textureRow.append(new UISelect({
 			options: [ 'index', 'random' ],
@@ -77,5 +79,11 @@ class TextureEditUI extends EditUI {
 			});
 
 		super.add();
+	}
+
+	remove() {
+		if (edi.ui.keys.t) delete edi.ui.keys.t;
+		if (edi.ui.keys.a) delete edi.ui.keys.a;
+		super.remove();
 	}
 }

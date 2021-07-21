@@ -30,6 +30,9 @@ class Game {
 
 		this.width = params.width;
 		this.height = params.height;
+
+		this.halfWidth = params.width / 2;
+		this.halfHeight = params.height / 2;
 		
 		this.multiColor = params.multiColor || false; /* param? */
 		this.debug = params.debug || false;
@@ -48,7 +51,7 @@ class Game {
 		this.updateInterval = 1000 / 60; // 60 fps
 
 		this.clearBg = true;
-		this.bounds = { top: 0, bottom: 0, left: 0, right: 0 };
+		this.bounds = params.bounds || { top: 0, bottom: 0, left: 0, right: 0 };
 
 		this.scenes = new SceneManager(params.scenes, Scene);
 
@@ -57,6 +60,7 @@ class Game {
 
 		this.useMouseEvents = params.events ? params.events.includes('mouse') : true;
 		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
+		this.useTouchEvents = params.events ? params.events.includes('touch') : false;
 
 		this.view = {
 			width: this.width,
@@ -77,6 +81,8 @@ class Game {
 
 			this.view.width = Math.round(this.width / zoom * ediZoom);
 			this.view.height = Math.round(this.height / zoom * ediZoom);
+			this.view.halfWidth = this.view.width / 2;
+			this.view.halfHeight = this.view.height / 2;
 
 			if (params.zoom) {
 				this.ctx.scale(params.zoom * ediZoom, params.zoom * ediZoom);
@@ -196,6 +202,7 @@ class Game {
 
 		if (this.useMouseEvents) this.startMouseEvents();
 		if (this.useKeyboardEvents) this.startKeyboardEvents();
+		if (this.useTouchEvents) this.startTouchEvents();
 		if (typeof sizeCanvas === "function") window.addEventListener('resize', sizeCanvas, false);
 	}
 
@@ -211,6 +218,7 @@ class Game {
 	}
 
 	update() {
+		if (this.pauseGame) return;
 		if (this.stats) this.stats.begin();
 		requestAnimFrame(() => { this.update(); });  // this context
 
@@ -239,18 +247,18 @@ class Game {
 	}
 
 	setBounds(dir, value) {
-		this.bounds[dir] = value;
+		this.bounds[dir] = Math.round(value);
 	}
 
 	updateBounds(position) {
 		if (position.y < this.bounds.top) 
-			this.bounds.top = position.y;
+			this.bounds.top = Math.round(position.y);
 		if (position.y > this.bounds.bottom) 
-			this.bounds.bottom = position.y + this.height;
+			this.bounds.bottom = Math.round(position.y + this.height);
 		if (position.x > this.bounds.right) 
-			this.bounds.right = position.x + this.width/2;
+			this.bounds.right = Math.round(position.x + this.width / 2);
 		if (position.x < this.bounds.left) 
-			this.bounds.left = position.x - this.width/2;
+			this.bounds.left = Math.round(position.x - this.width / 2);
 	}
 
 	startMouseEvents() {
@@ -285,6 +293,23 @@ class Game {
 				mouseMoved(ev.offsetX, ev.offsetY, ev.which);
 			if (dragStarted) 
 				drag(ev.offsetX, ev.offsetY, dragOffset);
+		}, false);
+	}
+
+	startTouchEvents() {
+		this.canvas.addEventListener('touchstart', function(ev) {
+			ev.preventDefault();
+			if (typeof touchStart === "function") touchStart(ev);
+		}, false);
+
+		this.canvas.addEventListener('touchmove', function(ev) {
+			ev.preventDefault();
+			if (typeof touchMove === "function") touchMove(ev);
+		}, false);
+
+		this.canvas.addEventListener('touchend', function(ev) {
+			ev.preventDefault();
+			if (typeof touchEnd === "function") touchEnd(ev);
 		}, false);
 	}
 

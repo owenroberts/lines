@@ -32,15 +32,17 @@ class Texture {
 
 	addLocations(locations) {
 		if (locations) this.locations.push(...locations);
+
+		// why doesn't this just call add location?
 		for (let i = 0; i < this.locations.length; i++) {
-			if (this.frame == 'index') {
+			if (this.frame === 'index') {
 				this.locations[i].i = i;
 				this.animation.createNewState(`f-${i}`, i, i);
 			}
-			else if (this.frame == 'random') {
+			else if (this.frame === 'random') {
 				this.animation.randomFrames = true;
 			}
-			else if (this.frame == 'randomIndex') {
+			else if (this.frame === 'randomIndex') {
 				let randomIndex = Cool.randomInt(0, this.animation.endFrame);
 				this.locations[i].i = randomIndex;
 				this.animation.createNewState(`f-${randomIndex}`, randomIndex, randomIndex);

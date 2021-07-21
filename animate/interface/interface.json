@@ -148,7 +148,7 @@
 					},
 					{
 						"row": true,
-						"type": "UIRange",
+						"type": "UITextRange",
 						"number":  "x",
 						"label": "X",
 						"params": {
@@ -159,7 +159,7 @@
 						}
 					},
 					{
-						"type": "UIRange",
+						"type": "UITextRange",
 						"number": "y",
 						"label": "Y",
 						"params": {
@@ -170,7 +170,7 @@
 						}
 					},
 					{
-						"type": "UIRange",
+						"type": "UITextRange",
 						"number": "size",
 						"label": "Size",
 						"params": {
@@ -182,7 +182,7 @@
 						}
 					},
 					{
-						"type": "UIRange",
+						"type": "UITextRange",
 						"number": "rotation",
 						"label": "Rotation",
 						"params": {

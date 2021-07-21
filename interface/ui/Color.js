@@ -26,7 +26,8 @@ class UIColor extends UIInput {
 				css: { "background": color },
 				value: color,
 				callback: function() {
-					self.update(color, self.arguments);
+					// console.log(color, self.arguments);
+					self.update(color);
 				}
 			});
 			self.palette.append(btn);
@@ -40,8 +41,8 @@ class UIColor extends UIInput {
 	}
 
 	/* update for loading */
-	update(value) {
-		this.setColor(value);
+	update(value, uiOnly) {
+		if (!uiOnly) this.setColor(value);
 		this.value = value;
 	}
 

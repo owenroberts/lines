@@ -25,10 +25,11 @@ class ItemEdit extends Entity {
 	}
 
 	isInMapBounds(view) {
-		if (this.x + this.width > view.x - GAME.width/2 &&
-			this.x < view.x - GAME.width/2 + view.width &&
-			this.y + this.height > view.y - GAME.height/2 &&
-			this.y < view.y - GAME.height/2 + view.height) {
+		// if (this.debug) console.log(this.x, this.y, this.width, this.height, view)
+		if (this.x + this.width > view.x - GAME.halfWidth &&
+			this.x < view.x - GAME.halfWidth + view.width &&
+			this.y + this.height > view.y - GAME.halfHeight &&
+			this.y < view.y - GAME.halfHeight + view.height) {
 			// console.log('draw');
 			// console.log((this.xy.x + this.width), (view.x - GAME.width/2));
 			return true;
@@ -42,21 +43,21 @@ class ItemEdit extends Entity {
 	}
 
 	drawOutline() {
-		GAME.ctx.strokeStyle = '#000000';
-		GAME.ctx.strokeRect(this.xy.x, this.xy.y, this.width, this.height);
+		GAME.ctx.strokeStyle = this.isSelected ? '#000000' : '#7eaba7';
+		GAME.ctx.strokeRect(this.x, this.y, this.width, this.height);
 		GAME.ctx.strokeStyle = this.ui.color; /* ? */
 		GAME.ctx.beginPath();
-		GAME.ctx.arc(this.position.x, this.position.y, 5, 0, 2 * Math.PI, false);
+		GAME.ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI, false);
 		GAME.ctx.stroke();
 	}
 
 	isMouseOver(x, y, zoom) {
 		if (this.isInMapBounds(zoom.view) && this.isSelectable && this.isLoaded) {
 			const xy = zoom.translate(x, y); // translate mouse coordinates
-			if (xy.x > this.xy.x &&
-				xy.x < this.xy.x + this.width &&
-				xy.y > this.xy.y &&
-				xy.y < this.xy.y + this.height) {
+			if (xy.x > this.x &&
+				xy.x < this.x + this.width &&
+				xy.y > this.y &&
+				xy.y < this.y + this.height) {
 				this.displayLabel = true;
 				this.displayOutline = true;
 				return this;
@@ -81,16 +82,17 @@ class ItemEdit extends Entity {
 
 	update(offset) {
 		if (!this.isLocked) {
-			this.position.add(offset);
-			this.ui.update({ x: this.position.x, y: this.position.y });
+			this.position[0] += offset[0];
+			this.position[1] += offset[1];
+			this.ui.update({ x: this.position[0], y: this.position[1] });
 		}
 	}
 
 	get data() {
 		return {
 			src: this.src,
-			x: this.position.x,
-			y: this.position.y,
+			x: this.position[0],
+			y: this.position[1],
 			scenes: this.scenes
 		};
 	}

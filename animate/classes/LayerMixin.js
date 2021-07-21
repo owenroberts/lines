@@ -81,6 +81,10 @@ const LayerMixin = {
 		return this;
 	},
 
+	resetDrawingEndIndex(index) {
+		this.drawingEndIndex = index;
+	},
+
 	getSaveProps() {
 		const props = {
 			n: this.segmentNum,
@@ -88,14 +92,15 @@ const LayerMixin = {
 			w: this.wiggleRange,
 			v: this.wiggleSpeed,
 			ws: this.wiggleSegments,
-			c: this.isToggled ? this.tempColor : this.color,
+			c: this.color,
 			f: [this.startFrame, this.endFrame],
 			d: this.drawingIndex,
+			b: this.breaks,
+			l: this.linesInterval,
 		};
 		if (this.x) props.x = this.x; // ignore if 0 or undefined
 		if (this.y) props.y = this.y;
 		if (this.tweens) props.t = this.tweens.map(tween => { return [tween.prop, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue]});
-		if (this.order) props.o = this.order;
 		return props;
 	},
 

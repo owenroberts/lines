@@ -23,7 +23,6 @@ class Layer {
 		
 		this.linesInterval = params.linesInterval; // draw count per line update
 		this.linesCount = params.linesCount || 0; // line update counter
-
 	}
 
 	get startFrame() {
@@ -62,6 +61,8 @@ class Layer {
 			color: this.color,
 			startIndex: this.drawingStartIndex,
 			endIndex: this.drawingEndIndex,
+			breaks: this.breaks,
+			linesInterval: this.linesInterval,
 		};
 		if (this.tweens) props.tweens = this.tweens;
 		return props;

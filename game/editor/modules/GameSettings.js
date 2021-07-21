@@ -12,6 +12,10 @@ function GameSettings(editor, suspend) {
 		editor.ui.reset();
 	};
 
+	this.loadAllAnimations = function() {
+		
+	};
+
 	this.loadAnimations = function() {
 
 		const modal = new UIModal("Load Animations", editor, { x: 120, y: 40});
@@ -32,7 +36,6 @@ function GameSettings(editor, suspend) {
 					offText: label,
 					isOn: !sprite.isLoaded,
 					callback: () => {
-						console.log(sprite);
 						if (sprite.isLoaded) {
 							sprite.isLoaded = false;
 							return;

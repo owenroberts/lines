@@ -14,6 +14,8 @@ function Palette() {
 				wiggleRange: lns.draw.layer.wiggleRange,
 				wiggleSpeed: lns.draw.layer.wiggleSpeed,
 				wiggleSegments: lns.draw.layer.wiggleSegments,
+				breaks: lns.draw.layer.breaks,
+				linesInterval: lns.draw.layer.linesInterval,
 				lineWidth: lns.canvas.ctx.lineWidth,
 				mouseInterval: lns.draw.mouseInterval,
 				brush: lns.draw.brush,
@@ -46,7 +48,6 @@ function Palette() {
 		const key = new UIText({
 			text: thisKey,
 			callback: function(value) {
-				console.log(lns.ui.keys[+value])
 				lns.ui.keys[+value].key.value = '';
 				lns.ui.keys[+value].key.el.placeholder = '+';
 				lns.ui.keys[+value] = b;
@@ -116,6 +117,7 @@ function Palette() {
 				wiggleRange: layer.wiggleRange,
 				wiggleSpeed: layer.wiggleSpeed,
 				wiggleSegments: layer.wiggleSegments,
+				linesInterval: lns.draw.layer.linesInterval,
 				breaks: layer.breaks,
 				lineWidth: lns.canvas.ctx.lineWidth,
 				mouseInterval: lns.draw.mouseInterval,
@@ -130,7 +132,7 @@ function Palette() {
 				const palette = self.palettes[key];
 				let samePalette = true;
 				for (const prop in palette) {
-					if (palette[prop] != newPalette[prop]) samePalette = false;
+					if (palette[prop] !== newPalette[prop]) samePalette = false;
 				}
 				if (samePalette) isACopy = true;
 			}
@@ -146,7 +148,7 @@ function Palette() {
 		const modal = new UIModal("Select Pallette", lns, lns.mousePosition);
 
 		for (const key in self.palettes) {
-			if (key != 'current') {
+			if (key !== 'current') {
 				modal.add(new UIButton({
 					text: key,
 					callback: function() {
@@ -169,10 +171,8 @@ function Palette() {
 		const openFile = document.createElement('input');
 		openFile.type = "file";
 		openFile.click();
-		console.log(openFile);
 		openFile.onchange = function() {
 			for (let i = 0, f; f = openFile.files[i]; i++) {
-				console.log(i, f);
 				if (!f.type.match('application/json')) continue;
 				const reader = new FileReader();
 				reader.onload = (function(theFile) {

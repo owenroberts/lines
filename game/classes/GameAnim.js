@@ -6,6 +6,7 @@ class GameAnim extends LinesClass {
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */
 		this.prevFrame = 0;
+		this.frames = [];
 	}
 
 	update() { /* too many things to stick in onPlayedState etc */
@@ -71,5 +72,25 @@ class GameAnim extends LinesClass {
 
 	play() {
 		this.isPlaying = true;
+	}
+
+	loadData(json, callback) {
+		super.loadData(json, callback);
+		for (let i = 0, len = this.layers.length; i < len; i++) {
+			const layer = this.layers[i];
+			for (let j = layer.startFrame; j <= layer.endFrame; j++) {
+				if (!this.frames[j]) this.frames[j] = [];
+				this.frames[j].push(i);
+			}
+		}
+	}
+
+	getLayers() {
+		const indexes = this.frames[this.currentFrame];
+		const layers = [];
+		for (let i = 0; i < indexes.length; i++) {
+			layers.push(this.layers[indexes[i]]);
+		}
+		return layers;
 	}
 }

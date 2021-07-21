@@ -42,7 +42,10 @@ function Timeline() {
 		const w = lns.ui.timeline.panel.el.clientWidth - 11; /* 11 for padding */
 		self.frameWidth = (w - 2 * f) / f; 
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
+		self.frameClass();
+	};
 
+	this.frameClass = function() {
 		// def better way to do this
 		if (self.frameWidth < 5) {
 			self.panel.timeline.addClass('five');
@@ -61,6 +64,7 @@ function Timeline() {
 		self.autoFit = false;
 		self.frameWidth = 120;
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
+		self.frameClass();
 		self.update();
 		self.scrollToFrame();
 	};
@@ -128,13 +132,16 @@ function Timeline() {
 					},
 					callback: function() {
 						// only update the values when toggling on, ignore when toggling off
-						if (!layer.isToggled) lns.draw.setProperties(layer.getEditProps());
+						if (!layer.isToggled) {
+							// set ui only
+							lns.draw.setProperties(layer.getEditProps(), true);
+						}
 						layer.toggle();
 					},
 					moveUp: function() {
 						const swapIndex = lns.anim.layers.indexOf(layers[i - 1]);
 						const layerIndex = lns.anim.layers.indexOf(layer);
-						if (swapIndex) {
+						if (swapIndex >= 0) {
 							[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]]
 						}
 						self.update();
@@ -203,11 +210,10 @@ function Timeline() {
 		layers.filter(l => !l.isToggled)
 			.forEach((l, index) => {
 				self.panel.timeline[`layer-${index}`].toggle.handler(); // why handler?
-
 			});
 	};
 
-	// select all -- error?
+	// select all -- error? -- this is a bad idea right .... 
 	this.selectAll = function() {
 		const allToggled = lns.anim.layers.filter(layer => layer.isToggled).length == lns.anim.layers.length - 1;
 		
