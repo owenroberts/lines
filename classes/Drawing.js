@@ -25,8 +25,8 @@ class Drawing {
 	}
 
 	pop() {
-		this.points.pop();
 		this.offsets.pop();
+		return this.points.pop();
 	}
 
 	get(index) {
