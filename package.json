@@ -18,7 +18,7 @@
 		"gulp-plumber": "^1.2.1",
 		"gulp-postcss": "^9.0.0",
 		"gulp-replace": "^1.0.0",
-		"gulp-sass": "^4.0.2",
+		"gulp-sass": "^5.0.0",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-uglify-es": "^2.0.0",
 		"gulp-util": "^2.2.20",
@@ -27,12 +27,10 @@
 		"lodash.template": ">=4.5.0",
 		"merge-stream": "^2.0.0",
 		"node-notifier": ">=8.0.1",
+		"node-sass": "^6.0.1",
 		"open": ">=6.0.0",
+		"stats.js": "^0.17.0",
 		"y18n": ">=3.2.2",
 		"yargs-parser": ">=5.0.1"
-	},
-	"dependencies": {
-		"node-sass": "^4.14.1",
-		"stats.js": "^0.17.0"
 	}
 }
