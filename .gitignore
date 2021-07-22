@@ -15,4 +15,3 @@ tions/
 node_modules/
 **/src_maps/
 webgl/
-build/lib/
