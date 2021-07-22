@@ -23,7 +23,7 @@ class UIText extends UIInput {
 			if (!this.value) {
 				this.el.placeholder = this.placeholder;
 				this.el.value = '';
-			} else if (this.value != ev.target.value) {
+			} else if (this.value !== ev.target.value) {
 				this.el.value = this.value;
 			}
 		});
@@ -44,7 +44,7 @@ class UIText extends UIInput {
 		// console.log('value', _value);
 		// this.el.value = this.el.placeholder = _value;
 		this._value = _value;
-		this.el.value = _value;
+		// this.el.value = _value;
 		this.el.placeholder = _value;
 		this.el.blur();
 	}

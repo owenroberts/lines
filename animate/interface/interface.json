@@ -72,7 +72,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UIText",
 						"face": "interfaceScale",
 						"label": "Interface Scale",
 						"fromModule": {

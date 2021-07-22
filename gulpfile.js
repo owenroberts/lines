@@ -7,7 +7,7 @@ const uglify = require('gulp-uglify-es').default;
 const merge = require('merge-stream');
 const server = require('gulp-webserver');
 
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
@@ -15,6 +15,8 @@ const cssnano = require('cssnano');
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 const gutil = require('gulp-util');
+
+const npmDist = require('gulp-npm-dist');
 
 const beeper = !process.argv.includes('-q');
 
@@ -118,6 +120,12 @@ function sassTasks() {
 	return merge(...tasks);
 }
 
+function libTask() {
+	console.log(npmDist());
+	return src(npmDist(), { base: './node_modules' })
+    	.pipe(dest('./build/libs'));
+}
+
 function serverTask() {
 	return src('./')
 		.pipe(server({
@@ -157,6 +165,7 @@ function watchTask(){
 
 task('js', jsTasks);
 task('sass', sassTasks);
+task('lib', libTask);
 task('default', parallel(jsTasks, sassTasks));
 task('watch', watchTask);
 task('browser', parallel(jsTasks, sassTasks), series(cacheBustTask, serverTask, watchTask));

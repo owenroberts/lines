@@ -23,6 +23,11 @@ function Data() {
 			if not save previous to new
 			always save current to new
 		*/
+
+		/*
+			use this? https://stackoverflow.com/questions/728360/how-do-i-correctly-clone-a-javascript-object
+		*/
+
 		if (self.saveStates.current.drawings) {
 			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
 			self.saveStates.prev.layers = _.cloneDeep(self.saveStates.current.layers);
@@ -50,7 +55,7 @@ function Data() {
 			console.log("%c Can't undo ", "color:lightblue;background:gray;");
 		}
 
-		/* these functions just call one function, should just call directly .. but this is still being worked on*/
+		/* these functions just call one function, should just call directly .. but this is still being worked on */
 		lns.ui.drawings.clear();
 		lns.ui.update();
 	}; /* ctrl z - undo one save state */

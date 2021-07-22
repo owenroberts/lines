@@ -118,7 +118,14 @@ select {
 }
 
 #quickRef-panel {
-	font-size: calc(var(--quick-ref-font-size) * 1px);
+
+	.row { 
+		font-size: calc(var(--quick-ref-font-size) * 1px);
+	}
+
+	.header {
+		font-size: inherit;
+	}
 }
 
 /* toggle */
