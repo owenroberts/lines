@@ -250,8 +250,9 @@ function Draw(defaults) {
 		} else if (ev.which == 1) {
 			self.isDrawing = false;
 			/* prevent saving single point drawing segments */
-			if (self.drawing.get(-2) !== 'end' && self.drawing.length > 1) {
-				self.drawing.add("end");
+			let last = self.drawing.get(-2);
+			if (last !== 'end' && last !== 'add' && self.drawing.length > 1) {
+				self.drawing.add(ev.shiftKey ? 'add' : 'end');
 			} else {
 				self.drawing.pop();
 			}
