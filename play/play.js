@@ -26,7 +26,6 @@ function LinesPlayer(params) {
 	if (!LinesClass) LinesClass = Lines;
 	this.animation = new LinesClass(this.ctx, this.dps, this.multiColor, this.pixelSize);
 
-	
 	this.width;
 	this.height;
 	

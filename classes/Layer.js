@@ -40,7 +40,6 @@ class Layer {
 
 	set endFrame(f) {
 		this._endFrame = Math.max(0, +f);
-		this.resetTweens();
 	}
 
 	isInFrame(index) {
