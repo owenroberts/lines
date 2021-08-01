@@ -192,15 +192,6 @@ class Lines {
 				if (s[0] === 'end' || s[0] === 'add') continue;
 				let e = drawing.get(j + 1);
 				if (e[0] === 'end') continue;
-
-				// just send offsets to draw lines??
-				const off = [];
-				for (let i = 0; i < s[1].length; i++) {
-					off.push(s[1][i]);
-				}
-				if (e[0] !== 'add' && e[1]) off.push(e[1][0])
-				
-			
 				if (e[0] === 'add') {
 					e = drawing.get(0); // go backwards to find start point of this segment -- start assuming its very begining
 					for (let k = j; k > 0; k--) {
@@ -209,14 +200,6 @@ class Lines {
 							e = drawing.get(k + 1);
 							break;
 						}
-					}
-					off.push(e[1] ? e[1][0] : [0,0]);
-				}
-
-				// fuckin fuck fix... happens  when drawing ??
-				if (off.length < props.segmentNum + 1) {
-					for (let o = off.length - 1; o < props.segmentNum + 1; o++) {
-						off.push([0,0]);
 					}
 				}
 
