@@ -220,7 +220,7 @@ class Lines {
 					}
 				}
 
-				this.drawLines(s[0], e[0], props, off);
+				this.drawLines(s, e, props);
 			}
 			
 		}
@@ -228,37 +228,45 @@ class Lines {
 		if (this.onDraw) this.onDraw();
 	}
 
-	drawLines(s, e, props, off) {
+	drawLines(s, e, props) {
 
 		// fuck do i need to separate move and lineto????
 		this.ctx.moveTo(
-			props.x + s[0] + off[0][0],
-			props.y + s[1] + off[0][1]
+			props.x + s[0][0] + s[1][0][0],
+			props.y + s[0][1] + s[1][0][1]
 		);
 
 		if (props.segmentNum === 1) { // i rarely use n=1 tho
 			this.ctx.lineTo( 
-				props.x + e[0] + off[1][0],
-				props.y + e[1] + off[1][1]
+				props.x + e[0][0] + e[1][1][0],
+				props.y + e[0][1] + e[1][1][1]
 			);
 		} else {
 			const v = [
-				(e[0] - s[0]) / props.segmentNum,
-				(e[1] - s[1]) / props.segmentNum,
+				(e[0][0] - s[0][0]) / props.segmentNum,
+				(e[0][1] - s[0][1]) / props.segmentNum,
 			];
 			
 			// need to spend a little time here ...
 			
 			for (let k = 1; k < props.segmentNum; k++) {
 				const p = [
-					s[0] + v[0] * k,
-					s[1] + v[1] * k
+					s[0][0] + v[0] * k,
+					s[0][1] + v[1] * k
 				];
-				if (!off[k + 1]) console.log('k + 1', k + 1, props, off);
-				const index = props.breaks ? k : k + 1;
+
+				let o = [];
+				if (k === props.segmentNum - 1) {
+					o = e[1][0];
+				} else {
+					o = s[1][k];
+				}
+
+				// if (!off[k + 1]) console.log('k + 1', k + 1, props, off);
+				// const index = props.breaks ? k : k + 1;
 				this.ctx.lineTo( 
-					props.x + p[0] + v[0] + off[index][0],
-					props.y + p[1] + v[1] + off[index][1]
+					props.x + p[0] + v[0] + o[0],
+					props.y + p[1] + v[1] + o[1]
 				);
 			}
 		}
