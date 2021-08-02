@@ -154,7 +154,7 @@ class Lines {
 					if (tween.startFrame <= this.currentFrame && 
 						tween.endFrame >= this.currentFrame) {
 						props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
-						if (tween.prop == 'startIndex' || tween.prop == 'endIndex') {
+						if (tween.prop === 'startIndex' || tween.prop === 'endIndex' || tween.prop === 'segmentNum') {
 							props[tween.prop] = Math.round(props[tween.prop]);
 						}
 					}
@@ -228,6 +228,7 @@ class Lines {
 	}
 
 	drawLines(s, e, props, off) {
+		if (!off[0]) console.log(props);
 		this.ctx.moveTo(
 			props.x + s[0] + off[0][0],
 			props.y + s[1] + off[0][1]

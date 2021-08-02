@@ -10,8 +10,8 @@ class Animator {
 			// min max, randomize
 			segmentNum: [1, 5],
 			jiggleRange: [0, 9],
-			wiggleRange: [0, 8],
-			wiggleSpeed: [0, 2],
+			wiggleRange: [0, 10],
+			wiggleSpeed: [0, 4],
 			linesInterval: [1, 10],
 			startIndex: [0, 'end'],
 			endIndex: [0, 'end'],
@@ -19,22 +19,19 @@ class Animator {
 		};
 	}
 
-
 	update() {
 		this.animation.layers.forEach(layer => {
 
+			// set tween end props to current layer props
 			if (layer.tweens.length) {
 				const p = layer.tweens[0].prop;
 				if (!['startIndex', 'endIndex'].includes(p)) {
 					layer[p] = layer.tweens[0].endValue;
 				}
 			}
-
-			// remove old tweens
-			layer.tweens = [];
-
-			// choose prop
-			const prop = Cool.choice(...Object.keys(this.params));
+			
+			layer.tweens = []; // remove old tweens
+			const prop = Cool.choice(...Object.keys(this.params)); // choose prop
 
 			// change prop or tween
 			if (prop === 'startIndex' || prop === 'endIndex') {
@@ -62,5 +59,4 @@ class Animator {
 				
 		});
 	}
-
 }

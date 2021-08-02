@@ -34,6 +34,8 @@ function LinesPlayer(params) {
 	this.setupCanvas = function() {
 		this.ctx.lineWidth = params.lineWidth || 1;
 		this.ctx.miterLimit = 1;
+		this.ctx.lineCap = 'round';
+		this.ctx.lineJoin = 'round';
 	};
 
 	this.override = function(prop, value) {
