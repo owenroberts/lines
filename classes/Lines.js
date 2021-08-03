@@ -239,7 +239,7 @@ class Lines {
 				];
 
 				let o = [];
-				if (k === props.segmentNum - 1) {
+				if (k === props.segmentNum - 1 && !props.breaks) {
 					o = e[1][0];
 				} else {
 					o = s[1][k];
