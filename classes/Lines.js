@@ -221,8 +221,8 @@ class Lines {
 
 		if (props.segmentNum === 1) { // i rarely use n=1 tho
 			this.ctx.lineTo( 
-				props.x + e[0][0] + e[1][1][0],
-				props.y + e[0][1] + e[1][1][1]
+				props.x + e[0][0] + e[1][0][0],
+				props.y + e[0][1] + e[1][0][1]
 			);
 		} else {
 			const v = [
