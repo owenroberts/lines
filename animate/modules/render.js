@@ -79,6 +79,7 @@ function Render(dps, showStats) {
 
 			lns.bgImage.display();
 
+			// onion skin
 			if (self.onionSkinNum > 0 && self.onionSkinIsVisible) {
 				const temp = lns.anim.currentFrame;
 				for (let o = 1; o <= self.onionSkinNum; o++){
@@ -94,33 +95,27 @@ function Render(dps, showStats) {
 				lns.anim.currentFrame = temp;
 			}
 
-			/* draw before update is cool for now ... */
-			lns.anim.draw();
-			lns.anim.update();
-			window.drawCount++;
-
-			// this nuts??
+			// highlight
 			if (lns.anim.layers.some(l => l.isHighlighted)) {
 				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 					const layer = lns.anim.layers[i];
 					if (layer.isInFrame(lns.anim.currentFrame)) {
-						if (layer.isHighlighted) {
-							lns.anim.overrideProperty('color', 'rgba(127,127,255,0.5)');
-							lns.anim.overrideProperty('jiggleRange', 0);
-							lns.anim.overrideProperty('wiggleRange', 0);
-							lns.anim.overrideProperty('segmentNum', 1);
-							lns.anim.overrideProperty('wiggleSpeed', 0);
-						} else {
-							layer.dontDraw = true;
-						}
+						if (layer.isHighlighted) lns.anim.overrideProperty('color', '#94dfe3');
+						else layer.dontDraw = true;
 					}
 				}
-				lns.anim.draw(5, 5, true);
+				lns.canvas.ctx.lineWidth = 5;
+				lns.anim.draw(0, 0, true);
 				lns.anim.cancelOverride();
+				lns.canvas.ctx.lineWidth = lns.canvas.lineWidth;
 				lns.anim.layers.filter(l => l.dontDraw).forEach(l => {
 					l.dontDraw = false;
 				});
 			}
+
+			lns.anim.update();
+			lns.anim.draw();
+			window.drawCount++;
 		}
 		if (!lns.ui.capture.isCapturing) 
 			window.requestAnimFrame(self.update);
