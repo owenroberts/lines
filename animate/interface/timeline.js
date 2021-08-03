@@ -148,7 +148,6 @@ function Timeline() {
 					}
 				}, layer, i > 0 && layers.length > 2);
 				
-				
 				gridRowStart += 2;
 				gridRowEnd += 2;
 				self.panel.timeline.append(ui, `layer-${i}`);
@@ -205,12 +204,12 @@ function Timeline() {
 
 	// select all layers in frame
 	this.select = function() {
-		const layers = lns.anim.layers.filter(l => l.isInFrame(lns.anim.currentFrame));
-		layers.pop(); // remove draw layer
-		layers.filter(l => !l.isToggled)
-			.forEach((l, index) => {
-				self.panel.timeline[`layer-${index}`].toggle.handler(); // why handler?
-			});
+		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
+			const layer = lns.anim.layers[i];
+			if (layer.isInFrame(lns.anim.currentFrame) && !layer.isToggled) {
+				self.panel.timeline[`layer-${i}`].toggle.handler(); // why handler?
+			}
+		}
 	};
 
 	// select all -- error? -- this is a bad idea right .... 
