@@ -10,6 +10,8 @@ function Canvas(id, _width, _height, color, checkRetina) {
 
 	this.ctx = this.canvas.getContext('2d');
 	this.ctx.miterLimit = 1;
+	this.ctx.lineCap = 'round';
+	this.ctx.lineJoin = 'round';
 	this.lineWidth = 1; // to keep value from getting reset
 
 	this.setBGColor = function(color) {
@@ -22,6 +24,8 @@ function Canvas(id, _width, _height, color, checkRetina) {
 	this.setLineWidth = function(n) {
 		self.ctx.lineWidth = self.lineWidth = +n;
 		self.ctx.miterLimit = 1;
+		self.ctx.lineCap = 'round';
+		self.ctx.lineJoin = 'round';
 	};
 
 	this.setScale = function(n) {
@@ -51,6 +55,8 @@ function Canvas(id, _width, _height, color, checkRetina) {
 		self.canvas.style.zoom = 1 / self.dpr;
 		self.ctx.lineWidth = self.lineWidth;
 		self.ctx.miterLimit = 1;
+		self.ctx.lineCap = 'round';
+		self.ctx.lineJoin = 'round';
 	};
 	
 	/* set initial width and height */

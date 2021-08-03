@@ -14,7 +14,9 @@ class Drawing {
 
 	// add a point
 	add(point) {
-		if (point === 'end' || point === 0) {
+		if (point === 'add' || point === 1) {
+			this.points.push('add');
+		} else if (point === 'end' || point === 0) {
 			this.points.push('end');
 		} else if (Array.isArray(point)) { 	// from json file
 			this.points.push(point);

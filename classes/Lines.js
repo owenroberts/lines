@@ -133,7 +133,6 @@ class Lines {
 	}
 
 	draw(x, y, suspendLinesUpdate) {
-		// if (!this.multiColor) this.ctx.beginPath();
 		let layerColor = this.getColor();
 		this.ctx.beginPath();
 
@@ -179,7 +178,6 @@ class Lines {
 				}
 			}
 
-			// if (this.multiColor) this.ctx.beginPath();
 			if (this.multiColor && props.color !== layerColor) {
 				this.finish();
 				this.setColor(props.color);
@@ -187,76 +185,71 @@ class Lines {
 				this.ctx.beginPath();
 			}
 
-			let { endIndex, startIndex } = props;
-			if (endIndex < 0) endIndex = drawing.length;
-			// text animation
-			// if (this.endIndexMultiplier !== undefined) {
-			// 	endIndex *= this.endIndexMultiplier; 
-			// }
-			// if (this.startIndexMultiplier !== undefined) {
-			// 	startIndex = Math.floor(this.startIndexMultiplier * drawing.length);
-			// }
-			for (let j = startIndex; j < endIndex - 1; j++) {
+			let endIndex = props.endIndex < 0 ? drawing.length - 1 : props.endIndex - 1;
+
+			for (let j = props.startIndex; j < endIndex; j++) {
 				const s = drawing.get(j);
-				const e = drawing.get(j + 1);
-				// console.log(props.drawingIndex, s, e);
-				if (!s[1]) console.log(j, endIndex, drawing, layer);
-				if (s[0] !== 'end' && e[0] !== 'end') {
-					const off = [];
-					for (let i = 0; i < s[1].length; i++) {
-						off.push(s[1][i]);
-					}
-					if (e[1]) off.push(e[1][0])
-					
-					// fuckin fuck fix... happens  when drawing ??
-					if (off.length < props.segmentNum + 1) {
-						for (let k = off.length - 1; k < props.segmentNum + 1; k++) {
-							off.push([0,0]);
+				if (s[0] === 'end' || s[0] === 'add') continue;
+				let e = drawing.get(j + 1);
+				if (e[0] === 'end') continue;
+				if (e[0] === 'add') {
+					e = drawing.get(0); // go backwards to find start point of this segment -- start assuming its very begining
+					for (let k = j; k > 0; k--) {
+						let ep = drawing.get(k)[0];
+						if (ep === 'end' || ep === 'add') {
+							e = drawing.get(k + 1);
+							break;
 						}
 					}
-
-					this.drawLines(s[0], e[0], props, off);
-					// if (this.multiColor) this.setColor(props.color);
 				}
+
+				this.drawLines(s, e, props);
 			}
 			
-			// if (this.multiColor) this.finish();
 		}
-		// if (!this.multiColor) 
 		this.finish();
 		if (this.onDraw) this.onDraw();
 	}
 
-	drawLines(s, e, props, off) {
-		if (!off[0]) console.log(props);
+	drawLines(s, e, props) {
+
+		// fuck do i need to separate move and lineto????
 		this.ctx.moveTo(
-			props.x + s[0] + off[0][0],
-			props.y + s[1] + off[0][1]
+			props.x + s[0][0] + s[1][0][0],
+			props.y + s[0][1] + s[1][0][1]
 		);
 
-		if (props.segmentNum == 1) { // i rarely use n=1 tho
+		if (props.segmentNum === 1) { // i rarely use n=1 tho
 			this.ctx.lineTo( 
-				props.x + e[0] + off[1][0],
-				props.y + e[1] + off[1][1]
+				props.x + e[0][0] + e[1][1][0],
+				props.y + e[0][1] + e[1][1][1]
 			);
 		} else {
 			const v = [
-				(e[0] - s[0]) / props.segmentNum,
-				(e[1] - s[1]) / props.segmentNum,
+				(e[0][0] - s[0][0]) / props.segmentNum,
+				(e[0][1] - s[0][1]) / props.segmentNum,
 			];
 			
 			// need to spend a little time here ...
 			
 			for (let k = 1; k < props.segmentNum; k++) {
 				const p = [
-					s[0] + v[0] * k,
-					s[1] + v[1] * k
+					s[0][0] + v[0] * k,
+					s[0][1] + v[1] * k
 				];
-				if (!off[k + 1]) console.log('k + 1', k + 1, props, off, drawing);
-				const index = props.breaks ? k : k + 1;
+
+				let o = [];
+				if (k === props.segmentNum - 1) {
+					o = e[1][0];
+				} else {
+					o = s[1][k];
+				}
+
+				// if (!off[k + 1]) console.log('k + 1', k + 1, props, off);
+				// const index = props.breaks ? k : k + 1;
 				this.ctx.lineTo( 
-					props.x + p[0] + v[0] + off[index][0],
-					props.y + p[1] + v[1] + off[index][1]
+					props.x + p[0] + v[0] + o[0],
+					props.y + p[1] + v[1] + o[1]
 				);
 			}
 		}

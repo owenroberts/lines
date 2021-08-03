@@ -45,7 +45,11 @@ function Files(params, LinesClass) {
 		json.d = [];
 		for (let i = 0; i < lns.anim.drawings.length; i++) {
 			json.d[i] = drawingIndexes.has(i) ?
-				lns.anim.drawings[i].points.map(point => point == 'end' ? 0 : [Math.round(point[0]), Math.round(point[1])])
+				lns.anim.drawings[i].points.map(point => {
+					if (point === 'end') return 0;
+					else if (point === 'add') return 1;
+					else return [Math.round(point[0]), Math.round(point[1])];
+				}) 
 				: null;
 		}
 
