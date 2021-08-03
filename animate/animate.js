@@ -55,7 +55,6 @@ window.addEventListener("load", function() {
 		if (lns.render.showStats) {
 			lns.ui.panels.play.el.appendChild(lns.render.stats.dom);
 		}
-
 	});
 });
 

@@ -53,26 +53,17 @@ function Interface(app) {
 		fetch(file)
 			.then(response => { return response.json(); })
 			.then(data => {
-
-				self.addQuickRef();
-
-				
-
-
-				
-
-
+				self.addQuickRef(data);
 				for (const key in data) {
 					self.createPanel(key, data[key]);
 				}
-
 				self.addSelect([...Object.keys(data), 'quickRef']);
 				// self.settings.load();
 				if (callback) callback();
 			});
 	};
 
-	this.addQuickRef = function() {
+	this.addQuickRef = function(data) {
 		const quickRef = new UIPanel('quickRef', 'Quick Ref');
 		quickRef.fontSize = 11;
 		quickRef.list = [];
@@ -174,7 +165,6 @@ function Interface(app) {
 				m1.add(p1);
 			}
 		}));
-
 	};
 
 	this.addSelect = function(panelList) {

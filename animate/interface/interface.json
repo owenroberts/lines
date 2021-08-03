@@ -1,4 +1,96 @@
 {
+	"settings": {
+		"label": "Interface",
+		"uis": [
+			{
+				"module": "ui",
+				"sub": "settings",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "ctrl-s",
+						"fromModule": {
+							"callback": "save"
+						},
+						"params": {
+							"text": "Save"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-s",
+						"fromModule": {
+							"callback": "load"
+						},
+						"params": {
+							"text": "Load"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "clear"
+						},
+						"params": {
+							"text": "Clear"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"fromModule": {
+							"callback": "toggleSaveSettings"
+						},
+						"params": {
+							"onText": "Auto Save On",
+							"offText": "Auto Save Off"
+						}
+					}
+				]
+			},
+			{
+				"module": "ui",
+				"list": [
+					{ "type": "UIRow" },
+					{
+						"type": "UIToggle",
+						"face": "rl",
+						"fromModule": {
+							"callback": "toggleRL"
+						},
+						"params": {
+							"onText": "R/L",
+							"offText": "L/R"
+						}
+					},
+					{
+						"type": "UIText",
+						"face": "interfaceScale",
+						"label": "Scale",
+						"fromModule": {
+							"callback": "updateScale"
+						},
+						"params": {
+							"value": 11,
+							"min": 10,
+							"max": 40
+						}
+					},
+					
+					{
+						"type": "UIToggle",
+						"key": "alt-m",
+						"fromModule": {
+							"callback": "cursorToggle"
+						},
+						"params": {
+							"onText": "Hide Cursor",
+							"offText": "Show Cursor"
+						}
+					}
+				]
+			}
+		]
+	},
 	"fio": {
 		"label": "Files IO",
 		"uis": [
@@ -53,46 +145,6 @@
 						},
 						"params": {
 							"text": "Re-Open"
-						}
-					}
-				]
-			},
-			{
-				"module": "ui",
-				"list": [
-					{
-						"type": "UIToggle",
-						"face": "rl",
-						"fromModule": {
-							"callback": "toggleRL"
-						},
-						"params": {
-							"onText": "R/L",
-							"offText": "L/R"
-						}
-					},
-					{
-						"type": "UIText",
-						"face": "interfaceScale",
-						"label": "Interface Scale",
-						"fromModule": {
-							"callback": "updateScale"
-						},
-						"params": {
-							"value": 11,
-							"min": 10,
-							"max": 40
-						}
-					},
-					{
-						"type": "UIToggle",
-						"key": "alt-m",
-						"fromModule": {
-							"callback": "cursorToggle"
-						},
-						"params": {
-							"onText": "Hide Cursor",
-							"offText": "Show Cursor"
 						}
 					}
 				]
@@ -996,58 +1048,8 @@
 			}
 		]
 	},
-	"settings": {
-		"label": "Settings",
-		"uis": [
-			{
-				"module": "ui",
-				"sub": "settings",
-				"list": [
-					{
-						"type": "UIButton",
-						"key": "ctrl-s",
-						"fromModule": {
-							"callback": "save"
-						},
-						"params": {
-							"text": "Save"
-						}
-					},
-					{
-						"type": "UIButton",
-						"key": "alt-s",
-						"fromModule": {
-							"callback": "load"
-						},
-						"params": {
-							"text": "Load"
-						}
-					},
-					{
-						"type": "UIButton",
-						"fromModule": {
-							"callback": "clear"
-						},
-						"params": {
-							"text": "Clear"
-						}
-					},
-					{
-						"type": "UIToggle",
-						"fromModule": {
-							"callback": "toggleSaveSettings"
-						},
-						"params": {
-							"onText": "Auto Save On",
-							"offText": "Auto Save Off"
-						}
-					}
-				]
-			}
-		]
-	},
-	"quickAnim": {
-		"label": "Quick Animate",
+	"animate": {
+		"label": "Animate",
 		"uis": [
 			{
 				"module": "data",
