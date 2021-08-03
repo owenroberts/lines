@@ -27,7 +27,11 @@
 	<script src="../build/base.min.js"></script>
 	<script src="play.js"></script>
 	<script>
-		const p = new LinesPlayer(document.getElementById("lines"), "ex.json", true);
+		const p = new LinesPlayer({
+			canvas: document.getElementById("lines"), 
+			src: "ex.json", 
+			checkRetina: true
+		});
 	</script>
 </body>
 </html>
