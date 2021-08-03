@@ -61,6 +61,7 @@ edi.search = {
 				text: item.label,
 				callback: () => {
 					item.select(toggle.isOn);
+					edi.tool.items.add(item);
 				}
 			});
 			edi.ui.panels.items.itemSearchResults.append(toggle);

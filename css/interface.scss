@@ -148,7 +148,10 @@ select {
 	// margin: 0 0.5em 0.5em 0;
 
 	&.undocked { display: none; }
-	&.closed { height: 25px; }
+	&.closed { 
+		height: 25px; 
+		order: -1;
+	}
 
 	&.block {
 		min-width: 100%;
