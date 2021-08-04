@@ -44,6 +44,7 @@ $anim-off: darkgreen;
 	
 	flex-basis: 100%;
 	display: grid;
+	align-items: baseline;
 	// height: calc(var(--height) * 1px);
 	grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
 	grid-template-rows: 

@@ -146,7 +146,6 @@ function Draw(defaults) {
 
 	this.pop = function() {
 		if (self.drawing.length > 0) {
-			console.log(self.drawing.pop());
 			if (self.drawing.pop() === 'end')
 				self.drawing.pop();
 			self.drawing.add('end');
@@ -158,7 +157,10 @@ function Draw(defaults) {
 		if (self.drawing.length > 0) {
 			self.drawing.pop(); // remove end
 			for (let i = self.drawing.length - 1; i >= 0; i--) {
-				if (self.drawing.points[i] !== 'end') self.drawing.pop();
+				if (self.drawing.points[i] !== 'end' &&
+					self.drawing.points[i] !== 'add') {
+					self.drawing.pop();
+				}
 				else break;
 			}
 		}

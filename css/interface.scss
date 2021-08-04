@@ -62,15 +62,20 @@ select {
 	#draw {
 		order: 0;
 		padding-right: 1em;
-		&.right {
-			order: 2;
-			padding-left: 1em; 
-			padding-right: 0;
-		}
+		
+	}
+
+	&.right #draw {
+		order: 2;
+		padding-left: 1em; 
+		padding-right: 0;
+	}
+
+	&.right #interface #panels {
+		justify-content: flex-end;
 	}
 	
 	#interface { flex: 1; }
-
 }
 
 .btn {
@@ -114,7 +119,7 @@ select {
 	margin-top: 0.25em;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.5rem;
+	gap: 0 0.5rem;
 }
 
 #quickRef-panel {
@@ -144,6 +149,7 @@ select {
 	overflow: hidden;
 	position: relative;
 	height: auto;
+	margin-bottom: 0.5rem;
 
 	// margin: 0 0.5em 0.5em 0;
 
@@ -165,6 +171,7 @@ select {
 	.row {
 		margin-bottom: 0.25em;
 		display: flex;
+		align-items: center;
 		flex-wrap: wrap;
 		
 		label { line-height: 1.5; }
@@ -301,12 +308,16 @@ select {
 	}
 
 	&.headless {
-		padding: 0;
+		padding: 0 3px;
 		border-radius: 0;
 		margin: 0;
 
 		.btn, input {
 			// margin-top: 0;
+		}
+
+		label, .headless-btn {
+			// align-self: baseline;
 		}
 
 		.header {
