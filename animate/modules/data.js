@@ -311,14 +311,12 @@ function Data() {
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];
 			const drawing = lns.anim.drawings[layer.drawingIndex];
-			['x', 'y'].forEach(coord => {
-				if (coord !== 0) {
-					for (let i = 0; i < drawing.length; i++) {
-						drawing.points[i][coord] += layer[coord];
-					}
-					layer[coord] = 0;
-				}
-			});
+			for (let i = 0; i < drawing.length; i++) {
+				drawing.points[i][0] += layer.x;
+				drawing.points[i][1] += layer.y;
+			}
+			layer.x = 0;
+			layer.y = 0;
 		}
 	};
 

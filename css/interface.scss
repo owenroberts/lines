@@ -245,6 +245,7 @@ select {
 			border: none;
 			background-color: $ui-color;
 			padding-right: 0.25em;
+			height: 1.125rem;
 			&:focus {
 				outline: 1px solid $accent-color;
 			}
@@ -317,7 +318,7 @@ select {
 		}
 
 		label, .headless-btn {
-			// align-self: baseline;
+			align-self: baseline;
 		}
 
 		.header {
