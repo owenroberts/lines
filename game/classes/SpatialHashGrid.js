@@ -70,9 +70,8 @@ class SpatialHashGrid {
 	getCellIndex(position) {
 		const x = Math.floor((position[0] - this.bounds[0][0]) / this.cellSize[0]);
 		const y = Math.floor((position[1] - this.bounds[0][1]) / this.cellSize[1]);
-		return [
-			Math.min(0, Math.max(x, this.columns - 1)),
-			Math.min(0, Math.max(y, this.rows - 1)),
-		];
+		const mx = Math.max(0, Math.min(x, this.columns - 1));
+		const my = Math.max(0, Math.min(y, this.rows - 1))
+		return [mx, my];
 	}
 }

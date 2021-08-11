@@ -49,6 +49,7 @@ class Sprite {
 		// 	const label = this.animation.src.split('/').pop();
 		// 	this.label = label.replace('.json', '');
 		// }
+		if (callback) callback();
 	}
 
 	drawDebug() {

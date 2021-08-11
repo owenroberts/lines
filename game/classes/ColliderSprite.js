@@ -57,7 +57,7 @@ class ColliderSprite extends Sprite {
 		];
 	}
 
-	get siz() {
+	get siz() { // wtf
 		return [this.collider.size[0], this.collider.size[1]];
 	}
 

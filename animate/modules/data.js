@@ -233,30 +233,6 @@ function Data() {
 		lns.ui.update();
 	}; /* i, shift-i key */
 
-	this.offsetDrawing = function(offset) {
-		// get toggled layers or offset all layers in frame
-		let layers = lns.anim.layers.filter(layer => layer.isToggled);
-		if (layers.length == 0) {
-			layers = lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame));
-		}
-
-		// then reset drawing to preserve any lines
-		lns.draw.reset();
-
-		if (layers) {
-			self.saveState();
-			if (!offset) offset = new Cool.Vector(+prompt("x"), +prompt("y"));
-			if (offset) {
-				for (let i = 0; i < layers.length; i++) {
-					layers[i].x += offset.x;
-					layers[i].y += offset.y;
-				}
-			}
-		} else {
-			console.log("%c No layers in frame ", "color:yellow; background:black;");
-		}
-	}; /* q key  */
-
 	this.quickAnimate = function(type) {
 		lns.draw.reset();
 		const n = +prompt('Number of frames?');
@@ -306,6 +282,34 @@ function Data() {
 		}
 		lns.ui.update();
 	}; /* a key */
+
+	this.offsetDrawing = function(offset) {
+		// get toggled layers or offset all layers in frame
+		let layers = lns.anim.layers.filter(layer => layer.isToggled);
+		if (layers.length == 0) {
+			layers = lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame));
+		}
+
+		// then reset drawing to preserve any lines
+		lns.draw.reset();
+
+		if (layers) {
+			self.saveState();
+			if (!offset) offset = new Cool.Vector(+prompt("x"), +prompt("y"));
+			if (offset) {
+				for (let i = 0; i < layers.length; i++) {
+					layers[i].x += offset.x;
+					layers[i].y += offset.y;
+				}
+			}
+		} else {
+			console.log("%c No layers in frame ", "color:yellow; background:black;");
+		}
+	}; /* q key  */
+
+	this.trimDrawing = function() {
+		
+	};
 
 	this.applyOffset = function() {
 		for (let i = 0; i < lns.anim.layers.length; i++) {

@@ -1,7 +1,7 @@
 const gme = new Game({
 	canvas: "map",
-	width: 1024,
-	height: 700,
+	width: 1200,
+	height: 800,
 	dps: 30,
 	multiColor: true,
 	checkRetina: true,
