@@ -292,11 +292,18 @@ select {
 			font-size: 1.0625em;
 			padding: 1px;
 			align-self: baseline;
+
+			border-top: 2px solid transparent;
+
 			&.off { background-color: inherit; }
 			&:hover { background: $ui-select; }
 		}
 
-		.order-btn, .undock-btn, .block-btn, .headless-btn {
+		.order-btn, 
+		.undock-btn, 
+		.block-btn, 
+		.headless-btn {
+
 			&:hover {
 				background-color: $ui-color;
 				border-top: 2px solid $ui-select;

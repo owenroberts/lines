@@ -40,6 +40,7 @@ const files = {
 	],
 	game: [
 		'./game/classes/Sprite.js',
+		'./game/classes/ColliderSprite.js',
 		'./game/classes/UI.js',
 		'./game/classes/Scene.js',
 		'./game/classes/*.js',

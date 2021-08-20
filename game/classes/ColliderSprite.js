@@ -75,13 +75,11 @@ class ColliderSprite extends Sprite {
 	}
 
 	tap(x, y) {
-		if (x > this.x + this.collider.position.x &&
-			x < this.x + this.collider.position.x + this.collider.size.x && 
-			y > this.y + this.collider.position.y && 
-			y < this.y + this.collider.position.y + this.collider.size.y) {
-			return true;
-		} else 
-			return false;
+		return (x > this.pos[0] * GAME.zoom &&
+				x < (this.pos[0] + this.siz[0]) * GAME.zoom &&
+				y > this.pos[1] * GAME.zoom &&
+				y < (this.pos[1] + this.siz[1]) * GAME.zoom
+		);
 	}
 
 	outside(other) {
@@ -101,8 +99,8 @@ class ColliderSprite extends Sprite {
 	}
 
 	over(x, y) {
-		// console.log(x, y);
-		// console.log(this.tap(x, y));
+		if (this.debug) console.log(this.tap(x,y))
+			// console.log(x,y, this.x * GAME.zoom, this.y * GAME.zoom);
 		if (this.isActive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
 			this.mouseOver = true;
 			if (this.onOver) this.onOver();
@@ -140,7 +138,7 @@ class ColliderSprite extends Sprite {
 			this.mouseOver = false;
 			if (this.onUp) this.onUp();
 			if (this.onClick) this.onClick();
-			if (this.func) func();
+			if (this.func) this.func();
 			return true;
 		} else {
 			return false;

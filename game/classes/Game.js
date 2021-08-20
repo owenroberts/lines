@@ -77,6 +77,7 @@ class Game {
 			this.canvas.style.zoom = 1 / this.dpr;
 
 			const zoom = params.zoom || 1;
+			this.zoom = params.zoom;
 			const ediZoom = params.isEditor ? this.dpr : 1;
 
 			this.view.width = Math.round(this.width / zoom * ediZoom);
