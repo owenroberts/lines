@@ -17,7 +17,6 @@ class SpatialHashGrid {
 		}
 
 		this.ids = -1;
-
 	}
 
 	findNear(_x, _y, w, h) {
@@ -28,7 +27,8 @@ class SpatialHashGrid {
 		const clients = [];
 		const id = this.ids++;
 
-		for (let x = i[0] - 1; x <= j[0]; x++) {
+
+		for (let x = Math.max(i[0] - 1, 0); x <= j[0]; x++) {
 			for (let y = i[1]; y <= j[1]; y++) {
 				const cell = this.cells[this.columns * y + x];
 				for (let i = 0; i < cell.length; i++) {
