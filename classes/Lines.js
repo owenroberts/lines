@@ -92,7 +92,7 @@ class Lines {
 
 	update() {
 		if (this.isPlaying) {
-			if (this.drawCount == this.drawsPerFrame) {
+			if (this.drawCount === this.drawsPerFrame) {
 				if (this.currentFrame >= this.state.end) {
 					this.currentFrame = this.state.start;
 					if (this.onPlayedState) this.onPlayedState();

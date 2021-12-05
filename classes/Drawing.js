@@ -43,6 +43,7 @@ class Drawing {
 	}
 
 	get needsUpdate() {
+		// refernces global/window drawCount
 		if (this.lastDrawCount < drawCount) {
 			this.lastDrawCount = drawCount;
 			return true;

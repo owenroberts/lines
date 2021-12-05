@@ -205,7 +205,7 @@ class Game {
 				clearInterval(loader);
 				// when will this ever not be game start?
 				// if (callback) callback();
-				this.start();
+				this._start();
 			}
 		}, 1000 / 60);
 	}
@@ -223,35 +223,35 @@ class Game {
 			});
 	}
 
-	start() {
+	_start() {
 		this.drawTime = performance.now();
 		this.updateTime = performance.now();
 		
-		if (typeof start === "function") start(); // should be this method?
-		if (typeof update !== "function") this.noUpdate = true;
-		requestAnimFrame(() => { this.update() });
+		if (this.start) this.start(); // should be this method?
+		if (!this.update) this.noUpdate = true;
+		requestAnimFrame(() => { this._update() });
 
 		if (this.useMouseEvents) this.startMouseEvents();
 		if (this.useKeyboardEvents) this.startKeyboardEvents();
 		if (this.useTouchEvents) this.startTouchEvents();
-		if (typeof sizeCanvas === "function") window.addEventListener('resize', sizeCanvas, false);
+		if (this.sizeCanvas) window.addEventListener('resize', this.sizeCanvas, false);
 	}
 
-	draw(time) {
+	_draw(time) {
 		if (this.stats) this.drawStats.begin();
 		if (this.clearBg) this.ctx.clearRect(0, 0, this.view.width, this.view.height);
 		// add draw scenes ? 
-		draw(time - this.drawTime); // draw defined in each this js file, or not ... 
+		this.draw(time - this.drawTime); // draw defined in each this js file, or not ... 
 		drawCount++;
 
 		this.drawTime = time - ((time - this.drawTime) % this.drawInterval);
 		if (this.stats) this.drawStats.end();
 	}
 
-	update() {
+	_update() {
 		if (this.pauseGame) return;
 		if (this.stats) this.stats.begin();
-		requestAnimFrame(() => { this.update(); });  // this context
+		requestAnimFrame(() => { this._update(); });  // this context
 
 		const time = performance.now();
 		
@@ -268,12 +268,12 @@ class Game {
 			}
 
 
-			if (!this.noUpdate) update(time - this.updateTime); // update defined in each game js file
+			if (!this.noUpdate) this.update(time - this.updateTime); // update defined in each game js file
 			this.updateTime = time - ((time - this.updateTime) % this.updateInterval); // adjust for fps interval being off
 			// this.updateTime = time;
 			// if (this.stats) this.stats.update('FPS', time);
 		}
-		if (time > this.drawTime + this.drawInterval) this.draw(time);
+		if (time > this.drawTime + this.drawInterval) this._draw(time);
 		if (this.stats) this.stats.end();
 	}
 
@@ -296,63 +296,56 @@ class Game {
 		let dragStarted = false;
 		let dragOffset;
 
-		this.canvas.addEventListener('click', function(ev) {
+		this.canvas.addEventListener('click', ev => {
 			ev.preventDefault();
-			if (typeof mouseClicked === "function") 
-				mouseClicked(ev.offsetX, ev.offsetY);
+			if (this.mouseClicked) this.mouseClicked(ev.offsetX, ev.offsetY);
 		}, false);
 
-		this.canvas.addEventListener('mousedown', function(ev) {
+		this.canvas.addEventListener('mousedown', ev => {
 			ev.preventDefault();
-			if (typeof mouseDown === "function") 
-				mouseDown(ev.offsetX, ev.offsetY, ev.which, ev.shiftKey);
-			if (typeof startDrag === "function") {
+			if (this.mouseDown) this.mouseDown(ev.offsetX, ev.offsetY, ev.which, ev.shiftKey);
+			if (this.startDrag) {
 				dragOffset = startDrag(ev.offsetX, ev.offsetY);
 				if (dragOffset) dragStarted = true;
 			}
 		}, false);
 
-		this.canvas.addEventListener('mouseup', function(ev) {
+		this.canvas.addEventListener('mouseup', ev => {
 			ev.preventDefault();
-			if (typeof mouseUp === "function") 
-				mouseUp(ev.offsetX, ev.offsetY, ev.which);
+			if (this.mouseUp) this.mouseUp(ev.offsetX, ev.offsetY, ev.which);
 			if (dragStarted) dragStarted = false;
 		}, false);
 
-		this.canvas.addEventListener('mousemove', function(ev) {
-			if (typeof mouseMoved === "function") 
-				mouseMoved(ev.offsetX, ev.offsetY, ev.which);
-			if (dragStarted) 
-				drag(ev.offsetX, ev.offsetY, dragOffset);
+		this.canvas.addEventListener('mousemove', ev => {
+			if (this.mouseMoved) this.mouseMoved(ev.offsetX, ev.offsetY, ev.which);
+			if (dragStarted) drag(ev.offsetX, ev.offsetY, dragOffset);
 		}, false);
 	}
 
 	startTouchEvents() {
-		this.canvas.addEventListener('touchstart', function(ev) {
+		this.canvas.addEventListener('touchstart', ev => {
 			ev.preventDefault();
-			if (typeof touchStart === "function") touchStart(ev);
+			if (this.touchStart) this.touchStart(ev);
 		}, false);
 
-		this.canvas.addEventListener('touchmove', function(ev) {
+		this.canvas.addEventListener('touchmove', ev => {
 			ev.preventDefault();
-			if (typeof touchMove === "function") touchMove(ev);
+			if (this.touchMove) this.touchMove(ev);
 		}, false);
 
-		this.canvas.addEventListener('touchend', function(ev) {
+		this.canvas.addEventListener('touchend', ev => {
 			ev.preventDefault();
-			if (typeof touchEnd === "function") touchEnd(ev);
+			if (this.touchEnd) this.touchEnd(ev);
 		}, false);
 	}
 
 	startKeyboardEvents() {
-		document.addEventListener('keydown', function(ev) {
-			if (typeof keyDown === "function" && ev.target.tagName != "INPUT") 
-				keyDown(Cool.keys[ev.which]);
+		document.addEventListener('keydown', ev => {
+			if (this.keyDown && ev.target.tagName !== "INPUT") this.keyDown(Cool.keys[ev.which]);
 		});
 
-		document.addEventListener('keyup', function(ev) {
-			if (typeof keyUp === "function" && ev.target.tagName != "INPUT") 
-				keyUp(Cool.keys[ev.which]);
+		document.addEventListener('keyup', ev => {
+			if (this.keyUp && ev.target.tagName !== "INPUT") this.keyUp(Cool.keys[ev.which]);
 		});
 	}
 }
