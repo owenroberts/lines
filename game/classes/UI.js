@@ -8,10 +8,10 @@ class UI extends ColliderSprite {
 		/* xy orientation to game window */
 		let x = params.x;
 		let y = params.y;
-		if (x % 1 !== 0) x = GAME.view.width * x; /* decimal / percentage of window */
-		if (x < 0) x = GAME.view.width + x; /* negative x offset from right side */
-		if (y % 1 != 0) y = GAME.view.height * y; /* decimal / percentage of window */
-		if (y < 0) y = GAME.view.height + y; /* negative y offset from bottom */
+		if (x % 1 !== 0) x = Math.round(GAME.view.width * x); /* decimal / percentage of window */
+		if (x < 0) x = Math.round(GAME.view.width + x); /* negative x offset from right side */
+		if (y % 1 != 0) y = Math.round(GAME.view.height * y); /* decimal / percentage of window */
+		if (y < 0) y = Math.round(GAME.view.height + y); /* negative y offset from bottom */
 		
 		super(x, y);
 		this.debug = debug;

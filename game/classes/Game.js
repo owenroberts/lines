@@ -41,6 +41,8 @@ class Game {
 		this.editorSuspend = false;
 		this.lineWidth = params.lineWidth || 1;
 		this.checkRetina = params.checkRetina !== undefined ? params.checkRetina : true;
+		this.zoom = params.zoom;
+		this.relativeLoadPath = params.relativeLoadPath;
 
 		this.dps = params.dps || 30; // draw per second
 		this.drawTime = performance.now();
@@ -108,6 +110,33 @@ class Game {
 			this.ctx.lineWidth = this.lineWidth;
 			this.ctx.miterLimit = 1; // do this last
 		}
+	}
+
+	setView(width, height) {
+
+		// copy paste for now, redo later
+		this.width = width;
+		this.height = height;
+
+		this.halfWidth = width / 2;
+		this.halfHeight = height / 2;
+
+		this.canvas.width = this.width * this.dpr;
+		this.canvas.height = this.height * this.dpr;
+		this.ctx.scale(this.dpr, this.dpr);
+		this.canvas.style.zoom = 1 / this.dpr;
+
+		this.view.width = Math.round(this.width / this.zoom);
+		this.view.height = Math.round(this.height / this.zoom);
+		this.view.halfWidth = this.view.width / 2;
+		this.view.halfHeight = this.view.height / 2;
+
+		if (this.zoom) {
+			this.ctx.scale(this.zoom, this.zoom);
+		}
+
+		this.ctx.lineWidth = this.lineWidth;
+		this.ctx.miterLimit = 1; // do this last
 	}
 
 	load(files, loadEntriesOnly, callback) {
@@ -182,7 +211,8 @@ class Game {
 	}
 
 	loadJSON(file, key, src) {
-		fetch(src)
+		if (this.relativeLoadPath) src = '.' + src;
+			fetch(src)
 			.then(response => { return response.json(); })
 			.then(json => {
 				this.anims[file][key] = new GameAnim();
