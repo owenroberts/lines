@@ -84,14 +84,32 @@ function jsTasks() {
 			.pipe(concat(name))
 			.pipe(uglify())
 			.pipe(sourcemaps.write('./src_maps'))
-			.pipe(dest(dir)
-		);
+			.pipe(dest(dir));
 	}
 
 	const tasks = [];
 	for (const f in files) {
-		tasks.push( jsTask(files[f], `${f}.min.js`, './build') );
+		tasks.push(jsTask(files[f], `${f}.min.js`, './build'));
 	}
+	return merge(...tasks);
+}
+
+function exportTask() {
+	function jsTask(files, name, dir) {
+		return src(files)
+			.pipe(sourcemaps.init())
+			.pipe(concat(name))
+			.pipe(uglify())
+			.pipe(sourcemaps.write('./src_maps'))
+			.pipe(dest(dir));
+	}
+
+	const tasks = [];
+	for (const f in files) {
+		const nFiles = files[f].map(_f => _f.replace('./', './lines/'));
+		tasks.push(jsTask(nFiles, `${f}.min.js`, './lines/build'));
+	}
+
 	return merge(...tasks);
 }
 
@@ -122,9 +140,8 @@ function sassTasks() {
 }
 
 function libTask() {
-	console.log(npmDist());
 	return src(npmDist(), { base: './node_modules' })
-    	.pipe(dest('./build/libs'));
+		.pipe(dest('./build/lib'));
 }
 
 function serverTask() {
@@ -171,17 +188,7 @@ task('default', parallel(jsTasks, sassTasks));
 task('watch', watchTask);
 task('browser', parallel(jsTasks, sassTasks), series(cacheBustTask, serverTask, watchTask));
 
-// Export the default Gulp task so it can be run
-// Runs the scss and js tasks simultaneously
-// then runs cacheBust, then watch task
-/*
-exports.default = series(
-	parallel(jsTasks),
-	parallel(sassTasks),
-	cacheBustTask,
-	serverTask,
-	watchTask
-);
-*/
-
-exports.lnsFiles = files;
+module.exports = {
+	exportTask: exportTask,
+	files: files
+};
