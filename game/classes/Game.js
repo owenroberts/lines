@@ -31,8 +31,8 @@ class Game {
 		this.width = params.width;
 		this.height = params.height;
 
-		this.halfWidth = params.width / 2;
-		this.halfHeight = params.height / 2;
+		this.halfWidth = Math.round(params.width / 2);
+		this.halfHeight = Math.round(params.height / 2);
 		
 		this.multiColor = params.multiColor || false; /* param? */
 		this.debug = params.debug || false;
@@ -52,7 +52,7 @@ class Game {
 		this.updateTime = performance.now();
 		this.updateInterval = 1000 / 60; // 60 fps
 
-		this.clearBg = true;
+		this.clearBg = params.clearBg !== undefined ? params.clearBg : true;
 		this.bounds = params.bounds || { top: 0, bottom: 0, left: 0, right: 0 };
 
 		this.scenes = new SceneManager(params.scenes, Scene);

@@ -6,9 +6,7 @@
 
 class Sprite {
 	constructor(x, y, animation, callback) {
-		// this.position = new Cool.Vector(Math.round(x), Math.round(y));
 		this.position = [Math.round(x), Math.round(y)];
-		// this.size = new Cool.Vector(); // set by animation
 		this.size = [0, 0]; // set by animation
 
 		this.debug = false;
@@ -45,11 +43,7 @@ class Sprite {
 	addAnimation(animation, callback) {
 		this.animation = animation;
 		this.size = [this.animation.width, this.animation.height];
-		// if (this.debug) {
-		// 	const label = this.animation.src.split('/').pop();
-		// 	this.label = label.replace('.json', '');
-		// }
-		if (callback) callback();
+		if (callback) callback(animation);
 	}
 
 	drawDebug() {
@@ -82,11 +76,10 @@ class Sprite {
 
 	isOnScreen() {
 		return (
-			this.x + this.width > 0 && 
+			this.x + this.width > 0 &&
 			this.y + this.height > 0 &&
 			this.x < GAME.view.width &&
 			this.y < GAME.view.height
 		);
 	} 
-	
 }
