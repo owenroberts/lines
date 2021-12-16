@@ -164,18 +164,26 @@ function cacheBustTask(){
 // Watch task: watch SCSS and JS files for changes
 // If any change, run scss and js tasks simultaneously
 function watchTask(){
-	watch([...files.base, 
+	watch([	
+			...files.base, 
 			...files.interface, 
 			...files.animate, 
 			...files.game,
 			...files.editor,
+		],
+		{interval: 1000, usePolling: true}, //Makes docker work
+		series(
+			parallel(jsTasks),
+		)
+	); 
+
+	watch([
 			...sassFiles.interface,
 			...sassFiles.animate,
 			...sassFiles.editor,
 		],
 		{interval: 1000, usePolling: true}, //Makes docker work
 		series(
-			parallel(jsTasks),
 			parallel(sassTasks),
 		)
 	);    

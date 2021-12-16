@@ -290,6 +290,7 @@ function Draw(defaults) {
 		lns.canvas.canvas.addEventListener('pointermove', self.update);
 		lns.canvas.canvas.addEventListener('pointerdown', self.start);
 		lns.canvas.canvas.addEventListener('pointerup', self.end);
+
 	} else {
 		lns.canvas.canvas.addEventListener('mousemove', self.update);
 		lns.canvas.canvas.addEventListener('mousedown', self.start);
