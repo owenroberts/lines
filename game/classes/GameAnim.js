@@ -49,10 +49,10 @@ class GameAnim extends LinesClass {
 	}
 
 	set state(state) {
-		if (this._state != state && this.states[state]) {
+		if (this._state !== state && this.states[state]) {
 			this._state = state;
 			if (this.state) this.frame = this.state.start;
-			if (!this.isPlaying && state != 'default') this.isPlaying = true; 
+			if (!this.isPlaying && state !== 'default') this.isPlaying = true; 
 		}
 	}
 

@@ -75,10 +75,10 @@ class ColliderSprite extends Sprite {
 	}
 
 	tap(x, y) {
-		return (x > this.pos[0] * GAME.zoom &&
-				x < (this.pos[0] + this.siz[0]) * GAME.zoom &&
-				y > this.pos[1] * GAME.zoom &&
-				y < (this.pos[1] + this.siz[1]) * GAME.zoom
+		return (x > this.pos[0] &&
+				x < (this.pos[0] + this.siz[0]) &&
+				y > this.pos[1] &&
+				y < (this.pos[1] + this.siz[1])
 		);
 	}
 

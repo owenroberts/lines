@@ -46,7 +46,7 @@ class Game {
 
 		this.dps = params.dps || 30; // draw per second
 		this.drawTime = performance.now();
-		this.drawInterval = 1000 / params.dps;
+		this.drawInterval = 1000 / this.dps;
 		window.drawCount = 0; // global referenced in drawings -- prevents double updates for textures and 
 		
 		this.updateTime = performance.now();
@@ -205,6 +205,36 @@ class Game {
 				clearInterval(loader);
 				// when will this ever not be game start?
 				// if (callback) callback();
+				this._start();
+			}
+		}, 1000 / 60);
+	}
+
+	loadAssets(type, files) {
+		if (this.debug) console.log('loading assets');
+		if (this.debug) console.time('load assets');
+
+		const numFiles = Object.keys(files).length;
+		this.assetsLoaded = {};
+		this.data[type] = {};
+		this.anims[type] = {};
+		this.assetsLoaded[type] = {};
+
+		this.data[type].entries = files;
+
+		for (const f in files) {
+			this.assetsLoaded[type][f] = false;
+			this.loadJSON(type, f, files[f]);
+		}
+
+		const loader = setInterval(() => {
+			let loaded = Object.keys(this.assetsLoaded[type]).length === numFiles;
+			for (const f in this.assetsLoaded[type]) {
+				if (!this.assetsLoaded[type][f]) loaded = false;
+			}
+			if (loaded) {
+				if (this.debug) console.timeEnd('load assets');
+				clearInterval(loader);
 				this._start();
 			}
 		}, 1000 / 60);

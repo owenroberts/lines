@@ -62,7 +62,7 @@ class Lines {
 	}
 
 	set state(state) {
-		if (this._state != state && this.states[state]) {
+		if (this._state !== state && this.states[state]) {
 			this._state = state;
 			if (this.state) this.frame = this.state.start;
 		}
@@ -301,6 +301,8 @@ class Lines {
 		}
 
 		const randomCount = Math.round(Math.random() * 5);
+		
+
 		for (let i = 0; i < json.l.length; i++) {
 			const params = this.loadParams(json.l[i]);
 			params.drawingEndIndex = this.drawings[params.drawingIndex].length;
@@ -319,9 +321,9 @@ class Lines {
 				end: json.s[key][1],
 			};
 		}
+		
 
-		if (this.states.default)
-			this.states.default.end = this.endFrame;
+		if (this.states.default) this.states.default.end = this.endFrame;
 
 		this.fps = json.fps;
 
@@ -362,5 +364,13 @@ class Lines {
 	setOnLoad(callback) {
 		if (this.isLoaded) callback();
 		else this.onLoad = callback;
+	}
+
+	play() {
+		this.isPlaying = true;
+	}
+
+	stop() {
+		this.isPlaying = false;
 	}
 }
