@@ -200,9 +200,8 @@ class Lines {
 			}
 
 			// layers save the end index except in lines/animate
-			let endIndex = props.endIndex - 1;
-			// default endIndex is -1
-			if (endIndex < 0) endIndex = drawing.length - 1;
+			// also works with tweens that set endIndex to 0
+			let endIndex = props.endIndex < 0 ? drawing.length - 1 : props.endIndex - 1;
 
 			// loop over points
 			for (let j = props.startIndex; j < endIndex; j++) {
