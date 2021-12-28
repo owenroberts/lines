@@ -32,7 +32,12 @@ class Drawing {
 	}
 
 	get(index) {
+		/*
+			this is pretty confusing for lines
+			check performance if this is { point, offset }
+		*/
 		if (index < 0) { // catch for draw.js end func
+			// [point, offset]
 			return [this.points[this.points.length - index], this.offsets[this.offsets.length - index]];
 		}
 		return [this.points[index], this.offsets[index]];
@@ -54,36 +59,45 @@ class Drawing {
 
 	update(props) {
 
-		const { segmentNum, jiggleRange, wiggleRange, wiggleSpeed, wiggleSegments } = props;
-		const speed = [Cool.random(-wiggleSpeed, wiggleSpeed), Cool.random(-wiggleSpeed, wiggleSpeed)];
-		const offset = [Cool.random(0, wiggleRange), Cool.random(0, wiggleRange)];
+		// test destructuring performance increase
+		// const { segmentNum, jiggleRange, wiggleRange, wiggleSpeed, wiggleSegments } = props;
+
+		// start with speed and offset based on wiggle range
+		// skip this if wiggle range is below 0?
+		const speed = [
+			Cool.random(-props.wiggleSpeed, props.wiggleSpeed), 
+			Cool.random(-props.wiggleSpeed, props.wiggleSpeed)
+		];
+		const wiggle = [Cool.random(0, props.wiggleRange), Cool.random(0, props.wiggleRange)];
 
 		// add random offsets for xy for each segment of the lines
 		for (let i = 0, len = this.points.length; i < len; i++) {
 			if (this.points[i] !== 'end') {
-				// this.points[i].off = []; // point offset 
 				this.offsets[i] = [];
 
-				for (let j = 0; j < segmentNum; j++) {
-					// calculate wiggle 
-					if (wiggleRange > 0 && (j === 0 || wiggleSegments)) {
-						// offset.add(speed);
-						offset[0] += speed[0];
-						offset[1] += speed[1];
+				// one offset for each segment -- do i ever use last offset?
+				for (let j = 0; j < props.segmentNum; j++) {
+					// wiggle increases by point or by segment
+					if (props.wiggleRange > 0 && (j === 0 || props.wiggleSegments)) {
+			
+						// add wiggle speed to wiggle offset
+						wiggle[0] += speed[0];
+						wiggle[1] += speed[1];
 
-						if (offset[0] >= wiggleRange || offset[0] <= -wiggleRange) {
+						// reverse direction when exceeding wiggle range
+						if (wiggle[0] >= props.wiggleRange || wiggle[0] <= -props.wiggleRange) {
 							speed[0] *= -1;
 						}
 
-						if (offset[1] >= wiggleRange || offset[1] <= -wiggleRange) {
+						if (wiggle[1] >= props.wiggleRange || wiggle[1] <= -props.wiggleRange) {
 							speed[1] *= -1;
 						}
 					}
 
 					// add jiggle to wiggle -- needs to figure the fuck out!
 					this.offsets[i].push([
-						Cool.random(-jiggleRange, jiggleRange) + offset[0],
-						Cool.random(-jiggleRange, jiggleRange) + offset[1]
+						Cool.random(-props.jiggleRange, props.jiggleRange) + wiggle[0],
+						Cool.random(-props.jiggleRange, props.jiggleRange) + wiggle[1]
 					]);
 				}
 

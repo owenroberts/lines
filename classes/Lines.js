@@ -119,7 +119,7 @@ class Lines {
 	}
 
 	getColor() {
-		return this.ctx.strokeStyle;
+		return this.ctx.strokeStyle; 
 	}
 
 	getLayers() {
@@ -133,26 +133,35 @@ class Lines {
 	}
 
 	draw(x, y, suspendLinesUpdate) {
+
+		/* 
+			get color and other funcs are bc pixel lines uses fill while regular lines uses stroke
+			this is overly complicated due to pixel lines
+			should consider having pixel lines more separate
+			should test 
+		*/
 		let layerColor = this.getColor();
-		this.ctx.beginPath();
+		this.ctx.beginPath(); // start drawing lines -- wait ...
 
-		const layers = this.getLayers();
+		const layers = this.getLayers(); // GameAnim uses frames for performance upgrade
 		for (let i = 0, len = layers.length; i < len; i++) {
-			const layer = layers[i];
-			const drawing = this.drawings[layer.drawingIndex];
-			const props = layer.drawProps;
+			// draw each layer
+			const layer = layers[i]; 
+			const drawing = this.drawings[layer.drawingIndex]; // drawing has points + offsets
+			const props = layer.drawProps; // color, wiggle, etc
 
+			//  maybe only needed in GameAnim ?? 
 			if (x) props.x += x;
 			if (y) props.y += y;
 			
 			if (props.tweens.length) { // default empty array -- .length didn't hurt
 				for (let j = 0; j < props.tweens.length; j++) {
 					const tween = props.tweens[j];
-					// console.log(tween);
-					// range class lol -- wait Range exists???
 					if (tween.startFrame <= this.currentFrame && 
 						tween.endFrame >= this.currentFrame) {
 						props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
+
+						// fix for floating point array index errors -- move to actual prop calcs?
 						if (tween.prop === 'startIndex' || tween.prop === 'endIndex' || tween.prop === 'segmentNum') {
 							props[tween.prop] = Math.round(props[tween.prop]);
 						}
@@ -169,15 +178,20 @@ class Lines {
 			if (drawing.firstUpdate) { // lazy load -- way to get rid of this check?
 				drawing.firstUpdate = false;
 				drawing.update(props);
-			} else if (!suspendLinesUpdate) {
+			} else if (!suspendLinesUpdate) { 
+				// suspend lines update can be set by renderer if fps drops
 				if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
+					// each layer has its own count for fps update
+					// drawing has count for dps update checked against global drawCount
 					drawing.update(props);
 					layer.linesCount = 0;
 				} else if (drawing.needsUpdate) {
+					// drawing ready but layer is not
 					layer.linesCount++;
 				}
 			}
 
+			// if changing color finish previous ctx draw and start new
 			if (this.multiColor && props.color !== layerColor) {
 				this.finish();
 				this.setColor(props.color);
@@ -185,15 +199,22 @@ class Lines {
 				this.ctx.beginPath();
 			}
 
-			let endIndex = props.endIndex < 0 ? drawing.length - 1 : props.endIndex - 1;
+			// layers save the end index except in lines/animate
+			let endIndex = props.endIndex - 1;
+			// default endIndex is -1
+			if (endIndex < 0) endIndex = drawing.length - 1;
 
+			// loop over points
 			for (let j = props.startIndex; j < endIndex; j++) {
-				const s = drawing.get(j);
-				if (s[0] === 'end' || s[0] === 'add') continue;
-				let e = drawing.get(j + 1);
+				const s = drawing.get(j); // returns [point, offset]
+				if (s[0] === 'end' || s[0] === 'add') continue; // end of line or connected line
+				let e = drawing.get(j + 1); // get next [point, offset]
 				if (e[0] === 'end') continue;
 				if (e[0] === 'add') {
-					e = drawing.get(0); // go backwards to find start point of this segment -- start assuming its very begining
+					// connect end of first point
+					// go backwards to find start point of this segment
+					// start assuming its very begining
+					e = drawing.get(0);
 					for (let k = j; k > 0; k--) {
 						let ep = drawing.get(k)[0];
 						if (ep === 'end' || ep === 'add') {
@@ -203,7 +224,7 @@ class Lines {
 					}
 				}
 
-				this.drawLines(s, e, props);
+				this.drawLines(s, e, props); // draws lines between points
 			}
 			
 		}
@@ -213,45 +234,50 @@ class Lines {
 
 	drawLines(s, e, props) {
 
-		// fuck do i need to separate move and lineto????
+		// move ctx to start point + start offset
+		// s,e = [point, offset] = [[x, y], [offset1, offset2]] = [[x,y], [[x,y], [x,y]]]
 		this.ctx.moveTo(
 			props.x + s[0][0] + s[1][0][0],
 			props.y + s[0][1] + s[1][0][1]
 		);
 
+		// if its just one line draw to end
 		if (props.segmentNum === 1) { // i rarely use n=1 tho
 			this.ctx.lineTo( 
 				props.x + e[0][0] + e[1][0][0],
 				props.y + e[0][1] + e[1][0][1]
 			);
-		} else {
-			const v = [
-				(e[0][0] - s[0][0]) / props.segmentNum,
-				(e[0][1] - s[0][1]) / props.segmentNum,
+			return;
+		}
+
+		// get direction between s and e to divide into vector and distance
+		const v = [
+			(e[0][0] - s[0][0]) / props.segmentNum,
+			(e[0][1] - s[0][1]) / props.segmentNum,
+		];	
+		
+		// segment end points
+		for (let k = 1; k < props.segmentNum; k++) {
+			// line to start + vector * k 
+			const p = [
+				s[0][0] + v[0] * k,
+				s[0][1] + v[1] * k
 			];
-			
-			// need to spend a little time here ...
-			
-			for (let k = 1; k < props.segmentNum; k++) {
-				const p = [
-					s[0][0] + v[0] * k,
-					s[0][1] + v[1] * k
-				];
 
-				let o = [];
-				if (k === props.segmentNum - 1 && !props.breaks) {
-					o = e[1][0];
-				} else {
-					o = s[1][k];
-				}
-
-				// if (!off[k + 1]) console.log('k + 1', k + 1, props, off);
-				// const index = props.breaks ? k : k + 1;
-				this.ctx.lineTo( 
-					props.x + p[0] + v[0] + o[0],
-					props.y + p[1] + v[1] + o[1]
-				);
+			// add offset to segment points
+			let o = [0, 0]; // 0, 0 to prevent missing offset errors
+			if (k === props.segmentNum - 1 && !props.breaks) {
+				o = e[1][0];
+			} else if (s[1][k]) {
+				o = s[1][k];
+				if (!o) console.log('else k', k, o, s, e); // leave debug here
 			}
+			
+			// finish line
+			this.ctx.lineTo( 
+				props.x + p[0] + v[0] + o[0],
+				props.y + p[1] + v[1] + o[1]
+			);
 		}
 	}
 
