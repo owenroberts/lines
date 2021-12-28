@@ -8,8 +8,7 @@ function States() {
 			const state = lns.anim.states[key];
 			const ui = self.panel[key] ? self.panel[key] : self.addUI(key, state, false);
 			for (const part in state) {
-				if (ui[part].value != state[part])
-					ui[part].value = state[part];
+				if (ui[part].value !== state[part]) ui[part].value = state[part];
 			}
 		}
 	};

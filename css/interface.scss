@@ -54,10 +54,18 @@ select {
 }
 
 #container {
+
 	margin: 1rem;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: start;
+
+	&.timeline-display {
+		display: grid;
+		grid-template-areas:
+			'interface draw'
+			'timeline timeline';
+	}
 	
 	#draw {
 		order: 0;
@@ -72,10 +80,21 @@ select {
 	}
 
 	&.right #interface #panels {
-		justify-content: flex-end;
+		// justify-content: flex-end;
 	}
 	
-	#interface { flex: 1; }
+	#interface { 
+		flex: 1; 
+		grid-area: interface;
+	}
+
+	#draw {
+		grid-area: draw;
+	}
+
+	#timeline-panel {
+		grid-area: timeline;
+	}
 }
 
 .btn {
@@ -154,7 +173,7 @@ select {
 
 	// margin: 0 0.5em 0.5em 0;
 
-	&.undocked { display: none; }
+	&.undocked { display: none !important; }
 	&.closed { 
 		height: 25px; 
 		order: -1;
