@@ -70,7 +70,7 @@ function Timeline() {
 	};
 
 	this.scrollToFrame = function() {
-		
+		console.log(lns.anim.currentFrame);		
 		self.panel.timeline.el.scrollTo(lns.ui.panels.timeline.timeline[`frm-${lns.anim.currentFrame}`].el.offsetLeft - 10, 0);
 	};
 

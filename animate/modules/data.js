@@ -228,8 +228,8 @@ function Data() {
 			// insert before dir  0, after 1
 			lns.anim.layers[i].shiftIndex(lns.anim.currentFrame + dir, 1);
 			lns.anim.addLayer(lns.anim.layers[i].removeIndex(lns.anim.currentFrame + dir));
-			lns.anim.frame = lns.anim.currentFrame + dir;
 		}
+		lns.ui.play.next(dir);
 		lns.ui.update();
 	}; /* i, shift-i key */
 

@@ -1,6 +1,7 @@
 function Background() {
 	const self = this;
 
+
 	this.show = true;
 	this.img = new Image();
 	this.x = 0;
@@ -11,6 +12,7 @@ function Background() {
 	this.rotation = 0;
 
 	this.loadImage = function(url) {
+		console.log(url);
 		self.img.src = url;
 		self.img.onload = function() {
 			self.width = self.img.width;
