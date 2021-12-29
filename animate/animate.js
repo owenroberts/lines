@@ -14,7 +14,7 @@ window.addEventListener("load", function() {
 	const LinesClass = params.render === 'pixel' ? PixelLines : Lines; 
 	// modules
 	lns.canvas = new Canvas("lines", 512, 512, "#ffffff", true);
-	lns.render = new Render(30, false); // (dps, stats?)
+	lns.render = new Render(30, true); // (dps, stats?)
 
 	lns.anim = new LinesClass(lns.canvas.ctx, 30, true);
 	lns.draw = new Draw({ 
