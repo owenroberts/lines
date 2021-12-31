@@ -7,11 +7,8 @@
 class ColliderSprite extends Sprite {
 	constructor(x, y, animation, callback) {
 		super(x, y);
-		
-		this.collider = {
-			position: [0, 0],
-			size: [0, 0],
-		};
+
+		this.collider = [0, 0, 0, 0];
 
 		this.mouseOver = false;
 		this.waitToGoOut = false;
@@ -19,54 +16,49 @@ class ColliderSprite extends Sprite {
 		// onOver, onOut, onUp, onDown, onClick
 
 		if (animation) this.addAnimation(animation, callback);
+		// console.log(this);
 	}
 
 	addAnimation(animation, callback) {
 		super.addAnimation(animation, callback);
-		this.collider.size[0] = this.animation.width;
-		this.collider.size[1] = this.animation.height;
+		this.collider[2] = this.animation.width;
+		this.collider[3] = this.animation.height;
 	}
 
 	setCollider(x, y, w, h) {
-		this.collider.position[0] = x;
-		this.collider.position[1] = y;
-		this.collider.size[0] = w;
-		this.collider.size[1] = h;
+		this.collider = [x, y, w, h];
 	}
 
 	drawDebug() {
 		GAME.ctx.lineWidth = 1;
 		GAME.ctx.beginPath();
 		GAME.ctx.rect(
-			this.x + this.collider.position[0],
-			this.y + this.collider.position[1],
-			this.collider.size[0], 
-			this.collider.size[1]
+			this.colliderPosition[0],
+			this.colliderPosition[1],
+			this.collider[2], 
+			this.collider[3]
 		);
+
 		const temp = GAME.ctx.strokeStyle;
 		GAME.ctx.strokeStyle = this.debugColor;
 		GAME.ctx.stroke();
 		GAME.ctx.strokeStyle = temp;
-		if (GAME.lineWidth != 1) GAME.ctx.lineWidth = GAME.lineWidth;
+		if (GAME.lineWidth !== 1) GAME.ctx.lineWidth = GAME.lineWidth;
 	}
 
-	get pos() {
+	get colliderPosition() {
 		return [
-			this.x + this.collider.position[0],
-			this.y + this.collider.position[1],
+			this.x + this.collider[0],
+			this.y + this.collider[1],
 		];
-	}
-
-	get siz() { // wtf
-		return [this.collider.size[0], this.collider.size[1]];
 	}
 
 	collide(other, callback) {
 		if (this.isActive && other.isActive) {
-			if (this.pos[0] < other.pos[0] + other.siz[0] &&
-				this.pos[0] + this.siz[0] > other.pos[0] &&
-				this.pos[1] < other.pos[0] + other.siz[1] &&
-				this.pos[1] + this.siz[1] > other.pos[1]) {
+			if (this.colliderPosition[0] < other.colliderPosition[0] + other.collider[2] &&
+				this.colliderPosition[0] + this.collider[2] > other.colliderPosition[0] &&
+				this.colliderPosition[1] < other.colliderPosition[1] + other.collider[3] &&
+				this.colliderPosition[1] + this.collider[3] > other.colliderPosition[1]) {
 				if (callback) callback(this);
 				return true;
 			} 
@@ -75,14 +67,16 @@ class ColliderSprite extends Sprite {
 	}
 
 	tap(x, y) {
-		return (x > this.pos[0] &&
-				x < (this.pos[0] + this.siz[0]) &&
-				y > this.pos[1] &&
-				y < (this.pos[1] + this.siz[1])
+		return (
+			x > this.colliderPosition[0] &&
+			x < (this.colliderPosition[0] + this.collider[2]) &&
+			y > this.colliderPosition[1] &&
+			y < (this.colliderPosition[1] + this.collider[3])
 		);
 	}
 
 	outside(other) {
+		// rewrite this shit
 		var next = this.position.copy();
 		var nextCollider = this.collider.position.copy();
 		next.add(nextCollider);

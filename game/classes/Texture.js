@@ -9,16 +9,22 @@ class Texture {
 		this.debug = debug;
 		this.center = params.center || false;
 		
-		this.offset = new Cool.Vector(0, 0);
-		if (params.animation) this.animation = params.animation;
+		this.offset = [0, 0];
+		if (params.animation) this.addAnimation(params.animation);
 
 		if (params.locations && params.animation) {
 			this.addLocations()
 		}
 	}
 
+	addAnimation(animation) {
+		this.animation = animation;
+		this.halfWidth = Math.round(animation.width / 2);
+		this.halfHeight = Math.round(animation.height / 2);
+	}
+
 	addLocation(x, y, index) {
-		const loc = new Cool.Vector(x, y);
+		const loc = [x, y];
 		if (index !== undefined) {
 			this.animation.createNewState(`f-${index}`, index, index);
 			loc.i = index;
@@ -51,17 +57,19 @@ class Texture {
 	}
 
 	display() {
+
 		for (let i = 0; i < this.locations.length; i++) {
-			let x = this.locations[i].x + this.offset.x;
-			let y = this.locations[i].y + this.offset.y;
+			let x = this.locations[i][0] + this.offset[0];
+			let y = this.locations[i][1] + this.offset[1];
 			if (this.center) {
-				x -= this.animation.width / 2;
-				y -= this.animation.height / 2;
+				x -= this.halfWidth;
+				y -= this.halfHeight;
 			}
 
 			//  figure out centering later, only draw textures on screen
 			if (x + this.animation.width > 0 && x < GAME.view.width && 
 				y + this.animation.height > 0 && y < GAME.view.height) {
+
 				if (this.locations[i].i !== undefined) this.animation.state = `f-${this.locations[i].i}`;
 				this.animation.draw(x, y, GAME.suspend);
 			}
@@ -71,11 +79,11 @@ class Texture {
 	isOnScreen() {  // debugging
 		let onScreen = [];
 		for (let i = 0; i < this.locations.length; i++) {
-			let x = this.locations[i].x + this.offset.x;
-			let y = this.locations[i].y + this.offset.y;
+			let x = this.locations[i][0] + this.offset[0];
+			let y = this.locations[i][1] + this.offset[1];
 			if (this.center) {
-				x -= this.animation.width / 2;
-				y -= this.animation.height / 2;
+				x -= this.halfWidth;
+				y -= this.halfHeight;
 			}
 			onScreen.push(x + this.animation.width > 0 && x < GAME.view.width && 
 				y + this.animation.height > 0 && y < GAME.view.height);
@@ -84,7 +92,7 @@ class Texture {
 	}
 
 	update(offset) {
-		this.offset.x = offset.x;
-		this.offset.y = offset.y;
+		this.offset[0] = offset[0];
+		this.offset[1] = offset[1];
 	}
 }
