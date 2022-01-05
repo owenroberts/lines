@@ -18,6 +18,7 @@ class Text {
 		this.setBreaks();
 		this.count = 0;
 		this.end = 0;
+		this.countCount = 0.5;
 		this.endCount = 0.5;
 		this.endDelay = GAME.dps || 10;
 		this.hover = false;
@@ -82,48 +83,49 @@ class Text {
 	}
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
-	display(countForward, countBackward, _x, _y) {
-		if (this.isActive) {
-			const len = countForward ? Math.floor(this.count) : this.msg.length;
-			const index = countBackward ? this.end : 0;
-			let x = _x || this.x;
-			let y = _y || this.y;
-			// y -= this.breaks.length * this.lead;
-			for (let i = 0; i < len; i++) {
-				var letter = this.msg[i];
-				// if (!letter.match(/[!a-zA-Z]/g)) console.log(letter);
-				if (letter == ' ' || letter == '_' || i < index) {
-					x += this.track;
-				} else if (letter == '\n' || letter == '\r') {
-					// y += this.lead;
-					// x = _x || this.x;
-				} else {
-					this.letters.state = letter;
-					// only do a line update when its the first instance of letter in message
-					this.letters.draw(x, y);
-					x += this.track;
-				}
-				if (this.breaks.indexOf(i) != -1) {
-					y += this.lead;
-					x = _x || this.x;
-				}
-			}
-			
-			// console.log(this.count, this.msg.length, this.end);
-			if (this.count >= this.msg.length) this.end++;
-			else this.count += this.endCount;
-			if (countBackward) {
-				if (this.end >= this.msg.length) {
-					this.end = 0; /* reset */
-					this.count = 0;
-					return true;
-				}
+	display(countForward, countBackward, _x, _y, yAbove) {
+		if (!this.isActive) return true;
+		const len = countForward ? Math.floor(this.count) : this.msg.length;
+		const index = countBackward ? this.end : 0;
+		let x = _x || this.x;
+		let y = _y || this.y;
+		if (yAbove) y -= this.breaks.length * this.lead;
+		for (let i = 0; i < len; i++) {
+			var letter = this.msg[i];
+			// if (!letter.match(/[!a-zA-Z]/g)) console.log(letter);
+			if (letter === ' ' || letter === '_' || i < index) {
+				x += this.track;
+			} else if (letter === '\n' || letter === '\r') {
+				// y += this.lead;
+				// x = _x || this.x;
+				// ? just make this else !== || !== -->
 			} else {
-				if (this.end >= this.endDelay) { // how long to wait after completed text // hardcoded?
-					this.end = 0;
-					this.count = 0;
-					return true; // ended
-				}
+				this.letters.state = letter;
+				// only do a line update when its the first instance of letter in message
+				this.letters.draw(x, y);
+				x += this.track;
+			}
+			if (this.breaks.indexOf(i) != -1) {
+				y += this.lead;
+				x = _x || this.x;
+			}
+		}
+		
+		// console.log(this.count, this.msg.length, this.end);
+		if (this.count < this.msg.length) this.count += this.countCount;
+		if (this.count >= this.msg.length) this.end += this.endCount;
+		if (countBackward) {
+			// console.log(this.end, this.msg.length)
+			if (this.end >= this.msg.length) {
+				this.end = 0; /* reset */
+				this.count = 0;
+				return true;
+			}
+		} else {
+			if (this.end >= this.endDelay) { // how long to wait after completed text // hardcoded?
+				this.end = 0;
+				this.count = 0;
+				return true; // ended
 			}
 		}
 	}
