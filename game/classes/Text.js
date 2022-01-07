@@ -37,6 +37,10 @@ class Text {
 		this.x = x;
 		this.y = y;
 	}
+
+	center() {
+		this.x -= (this.track * Math.min(this.msg.length, this.wrap)) / 2;
+	}
 	
 	setMsg(msg) {
 		this.msg = msg;

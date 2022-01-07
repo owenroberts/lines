@@ -331,6 +331,9 @@ class Lines {
 		this.width = json.w;
 		this.height = json.h;
 
+		this.halfWidth = Math.round(json.w / 2);
+		this.halfHeight = Math.round(json.h / 2);
+
 		if (callback) callback(json);
 		if (this.onLoad) this.onLoad();
 	}

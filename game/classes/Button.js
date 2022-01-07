@@ -1,5 +1,5 @@
 /*
-	Sprite -> UI -> Button
+	ColliderSprite -> UI -> Button
 */
 
 class Button extends UI {
