@@ -76,13 +76,12 @@ function Canvas(id, _width, _height, color, checkRetina) {
 			const drawing = lns.anim.drawings[layer.drawingIndex];
 			for (let j = 0; j < drawing.length; j++) {
 				const point = drawing.points[j];
-				if (point !== 'end') {
-					tolerance = Math.max(tolerance, layer.jiggleRange * 4); /* account for random jiggle */
-					min.x = Math.min(min.x, point[0] + layer.x);
-					min.y = Math.min(min.y, point[1] + layer.y);
-					max.x = Math.max(max.x, point[0] + layer.x);
-					max.y = Math.max(max.y, point[1] + layer.y);
-				}
+				if (point === 'end' || point === 'add') continue;
+				tolerance = Math.max(tolerance, layer.jiggleRange * 4); /* account for random jiggle */
+				min.x = Math.min(min.x, point[0] + layer.x);
+				min.y = Math.min(min.y, point[1] + layer.y);
+				max.x = Math.max(max.x, point[0] + layer.x);
+				max.y = Math.max(max.y, point[1] + layer.y);
 			}
 		}
 
