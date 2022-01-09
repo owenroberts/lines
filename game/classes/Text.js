@@ -48,6 +48,7 @@ class Text {
 	}
 
 	setBreaks() {
+		// console.log(this.msg);
 		/* 
 			set line breaks in message, 
 			based on message length, new line & return keys
@@ -67,23 +68,55 @@ class Text {
 				this.breaks.push(i);
 				offset = i % this.wrap;
 				breakOnNextSpace = false;
+				continue;
 			}
 
-			else if (i % this.wrap == offset && !breakOnNextSpace) {
-				if (this.msg[i] == ' ') {
+			if (i % this.wrap === offset && !breakOnNextSpace) {
+				// console.log('wrap', i, this.msg[i])
+				// check for letters left before space or \n\r
+				let halfWrap = Math.round(this.wrap / 2);
+				let lettersLeft = this.msg.substring(i, i + halfWrap);
+				// console.log('letters left', i, this.msg[i], lettersLeft);
+				// if wrap falls on space break
+				if (this.msg[i] === ' ') {
+					// console.log('break i', i);
 					this.breaks.push(i);
 					prevBreak = true;
 				}
-				else breakOnNextSpace = true;
+
+				// if its not going to wrap for a while
+				else if (!lettersLeft.match(/[\n\r\s]/g) && lettersLeft.length >= halfWrap) {
+					// go backward to previous space (and reset i??)
+					for (let j = i - 1; j >= halfWrap; j--) {
+						if (this.msg[j] === ' ') {
+							// console.log(i, j, this.msg[i], this.msg[j]);
+							// console.log('break j', j, 'i', i);
+							this.breaks.push(j);
+							// need to add offset ?
+							// offset = i % this.wrap;
+							prevBreak = true;
+							break;
+						}
+					}
+				}
+
+				// if not wait til next -- need paramenter here
+				else {
+					breakOnNextSpace = true;
+				}
+				continue;
 			}
 
-			else if (this.msg[i] == ' ' && breakOnNextSpace) {
+			// if (breakOnNextSpace) console.log('next space', i, this.msg[i]);
+			if (this.msg[i] === ' ' && breakOnNextSpace) {
+				// console.log('break i', i);
 				this.breaks.push(i);
 				offset = i % this.wrap;
 				breakOnNextSpace = false;
 				prevBreak = true;
 			}
 		}
+		// console.log('breaks', this.breaks);
 	}
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
@@ -109,7 +142,7 @@ class Text {
 				this.letters.draw(x, y);
 				x += this.track;
 			}
-			if (this.breaks.indexOf(i) != -1) {
+			if (this.breaks.indexOf(i) !== -1) {
 				y += this.lead;
 				x = _x || this.x;
 			}
