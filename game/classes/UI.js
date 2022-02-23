@@ -61,5 +61,10 @@ class UI extends ColliderSprite {
 		/* shouldnt be attached to window - fine for now */
 
 		if (params.onClick) this.onClick = params.onClick;
+		if (params.onOver) this.onOver = params.onOver;
+		if (params.onOut) this.onOut = params.onOut;
+		if (params.onUp) this.onUp = params.onUp;
+		if (params.onDown) this.onDown = params.onDown;
+
 	}
 }
