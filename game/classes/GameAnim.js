@@ -13,7 +13,7 @@ class GameAnim extends LinesClass {
 		if (this.isPlaying) {
 			if (this.drawCount == this.drawsPerFrame) {
 				if (this.randomFrames) {
-					while (this.prevFrame == this.currentFrame) {
+					while (this.prevFrame === this.currentFrame) {
 						this.currentFrame = Cool.randomInt(this.state.start, this.state.end);
 					}
 					this.prevFrame = this.currentFrame;
