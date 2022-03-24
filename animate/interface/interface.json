@@ -782,6 +782,16 @@
 							"onText": "Hide",
 							"offText": "Show"
 						}
+					},
+					{
+						"type": "UIButton",
+						"key": "u",
+						"fromModule": {
+							"callback": "update"
+						},
+						"params": {
+							"text": "↻"
+						}
 					}
 				]
 			}
