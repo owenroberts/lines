@@ -93,7 +93,7 @@ class ColliderSprite extends Sprite {
 	}
 
 	over(x, y) {
-		if (this.debug) console.log(this.tap(x,y))
+		// if (this.debug) console.log(this.tap(x,y))
 			// console.log(x,y, this.x * GAME.zoom, this.y * GAME.zoom);
 		if (this.isActive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
 			this.mouseOver = true;

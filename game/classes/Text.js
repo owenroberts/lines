@@ -45,6 +45,12 @@ class Text {
 	setMsg(msg) {
 		this.msg = msg;
 		this.setBreaks();
+
+		this.textWidth = this.msg.length < this.wrap ? 
+			this.msg.length * this.track : 
+			this.wrap * this.track;
+
+		this.textHeight = (this.breaks.length + 1) * this.lead;
 	}
 
 	setBreaks() {
