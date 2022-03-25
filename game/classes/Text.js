@@ -43,14 +43,14 @@ class Text {
 	}
 	
 	setMsg(msg) {
-		this.msg = msg;
+		this.msg = msg.replace(/\s+$/, ''); // remove trailing spaces
 		this.setBreaks();
 
-		this.textWidth = this.msg.length < this.wrap ? 
+		this.width = this.msg.length < this.wrap ? 
 			this.msg.length * this.track : 
 			this.wrap * this.track;
 
-		this.textHeight = (this.breaks.length + 1) * this.lead;
+		this.height = (this.breaks.length + 1) * this.lead;
 	}
 
 	setBreaks() {
@@ -122,20 +122,18 @@ class Text {
 				prevBreak = true;
 			}
 		}
-		// console.log('breaks', this.breaks);
 	}
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
-	display(countForward, countBackward, _x, _y, yAbove) {
+	/* do i ever use _x, _y ?? */
+	display(countForward, countBackward, yAbove) {
 		if (!this.isActive) return true;
 		const len = countForward ? Math.floor(this.count) : this.msg.length;
 		const index = countBackward ? this.end : 0;
-		let x = _x || this.x;
-		let y = _y || this.y;
-		if (yAbove) y -= this.breaks.length * this.lead;
+		let x = this.x;
+		let y = this.y - (yAbove ? (this.breaks.length + 1) * this.lead : 0);
 		for (let i = 0; i < len; i++) {
 			var letter = this.msg[i];
-			// if (!letter.match(/[!a-zA-Z]/g)) console.log(letter);
 			if (letter === ' ' || letter === '_' || i < index) {
 				x += this.track;
 			} else if (letter === '\n' || letter === '\r') {
@@ -150,7 +148,7 @@ class Text {
 			}
 			if (this.breaks.indexOf(i) !== -1) {
 				y += this.lead;
-				x = _x || this.x;
+				x = this.x;
 			}
 		}
 		
