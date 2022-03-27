@@ -7,10 +7,6 @@ function Render(dps, showStats) {
 		this.stats.dom.style.top = '-48px';
 		this.stats.dom.style.right = '0';
 		this.stats.dom.style.left = 'auto';
-
-		console.log(this.panel);
-		// this.stats.dom.parentElement.style.overflow = 'auto';
-
 	}
 
 	this.dps = dps || 30; // draws pers second

@@ -134,8 +134,10 @@ function Draw(defaults) {
 	// how often the mousemove records, default 30ms
 	this.mouseTimer = performance.now();  //  independent of draw timer
 	this.mouseInterval = 30;
+	this.distanceThreshold = 5; // distance between points required to record
 	this.isDrawing = false; // for drawStart to drawEnd so its not always moving
 	lns.mousePosition = new Cool.Vector();
+	this.prevPosition = new Cool.Vector();
 
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != lns.canvas.canvas) {
@@ -204,11 +206,17 @@ function Draw(defaults) {
 			self.mouseTimer = performance.now();
 			lns.mousePosition.x = ev.pageX;
 			lns.mousePosition.y = ev.pageY;
-			if (self.isDrawing)
-				if (self.brush <= 0)
-					self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
-				else
+			if (self.isDrawing) {
+				if (self.brush <= 0) {
+					if (lns.mousePosition.dist(self.prevPosition) > self.distanceThreshold) {
+						self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
+						self.prevPosition = lns.mousePosition.clone();
+					}
+				} else  {
 					self.addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
+					
+				}
+			}
 		}
 	};
 
@@ -216,10 +224,12 @@ function Draw(defaults) {
 		if (ev.which == 1 && !lns.render.isPlaying && !ev.altKey) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
-			if (self.brush <= 0)
+			if (self.brush <= 0) {
 				self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
-			else
+				self.prevPosition = lns.mousePosition.clone();
+			} else {
 				self.addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
+			}
 		} else if (ev.altKey) {
 			self.startDots = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY));
 		}
@@ -259,6 +269,7 @@ function Draw(defaults) {
 				self.drawing.pop();
 			}
 		}
+		self.prevPosition = undefined;
 	};
 
 	if (window.navigator.platform.includes('iPad')) {

@@ -79,7 +79,8 @@ function appSave() {
 		canvasScale: lns.ui.faces.canvasScale.value,
 		interfaceScale: lns.ui.faces.interfaceScale.value,
 		quickRefScale: lns.ui.faces.quickRefScale.value,
-		quickRefList: lns.ui.panels.quickRef.list
+		quickRefList: lns.ui.panels.quickRef.list,
+		hideCursor: lns.ui.faces.hideCursor.value,
 	};
 }
 
@@ -96,6 +97,8 @@ function appLoad(settings) {
 	lns.ui.faces.bgColor.update(settings.canvasColor);	
 	lns.ui.faces.viewLayers.update(settings.viewLayers);
 	lns.ui.faces.viewActiveLayers.update(settings.viewActiveLayers);
+	lns.ui.faces.hideCursor.update(settings.hideCursor);
+
 	
 	lns.ui.faces.timelineAutoFit.update(settings.timelineAutoFit);
 
