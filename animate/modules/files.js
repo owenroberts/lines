@@ -29,9 +29,11 @@ function Files(params, LinesClass) {
 		if (params.bg) json.bg = lns.canvas.bgColor;
 
 		if (single) {
-			json.l = lns.anim.layers
-				.filter(layer => layer.isInFrame(lns.anim.currentFrame))
-				.map(layer => {
+			json.l = _.cloneDeep(
+				lns.anim.layers
+					.filter(layer => layer.isInFrame(lns.anim.currentFrame))
+				);
+			json.l = json.l.map(layer => {
 					layer.startFrame = 0;
 					layer.endFrame = 0;
 					return layer.getSaveProps();
@@ -65,9 +67,25 @@ function Files(params, LinesClass) {
 		const jsonfile = JSON.stringify(json);
 		if (self.fileName) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
-			saveAs(blob, `${self.fileName}.json`);
+			saveAs(blob, `${self.fileName}${single ? '-' + lns.anim.frame : ''}.json`);
+			setTimeout(callback, 500);
 			lns.ui.faces.title.value = self.fileName;
 		}
+	};
+
+
+	this.saveFramesToFiles = function() {
+		let i = 0;
+		function saveFrame() {
+			if (i <= lns.anim.endFrame) {
+				lns.anim.frame = i;
+				self.saveFile(true, () => {
+					i++;
+					saveFrame();
+				});
+			}
+		}
+		saveFrame();
 	};
 
 	/* loads from src url */

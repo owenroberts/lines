@@ -23,7 +23,6 @@ class Layer {
 		
 		this.linesInterval = params.linesInterval; // draw count per line update
 		this.linesCount = params.linesCount || 0; // line update counter
-
 	}
 
 	get startFrame() {
@@ -32,7 +31,7 @@ class Layer {
 
 	set startFrame(f) {
 		this._startFrame = Math.max(0, +f);
-		this.resetTweens();
+		// if (this.resetTweens) this.resetTweens();
 	}
 
 	get endFrame() {

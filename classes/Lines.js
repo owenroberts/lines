@@ -46,6 +46,10 @@ class Lines {
 		return this._fps;
 	}
 
+	get frame() {
+		return this.currentFrame;
+	}
+
 	set frame(n) {
 		this.currentFrame = +n;
 		if (this.states.default) {
@@ -59,6 +63,10 @@ class Lines {
 		// when is layers.length 0 ??
 		// return this.layers.length > 0 ? Math.max.apply(Math, endFrame) : 0;
 		return Math.max.apply(Math, endFrame);
+	}
+
+	set endFrame(n) {
+		this.layers.forEach(layer => { layer.endFrame = n; });
 	}
 
 	set state(state) {

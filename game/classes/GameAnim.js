@@ -66,16 +66,12 @@ class GameAnim extends LinesClass {
 		this.onPlayedOnce = callback;
 	}
 
-	stop() {
-		this.isPlaying = false;
-	}
-
-	play() {
-		this.isPlaying = true;
-	}
-
 	loadData(json, callback) {
 		super.loadData(json, callback);
+		this.setFrames();
+	}
+
+	setFrames() {
 		for (let i = 0, len = this.layers.length; i < len; i++) {
 			const layer = this.layers[i];
 			for (let j = layer.startFrame; j <= layer.endFrame; j++) {
