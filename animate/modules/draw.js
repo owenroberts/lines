@@ -125,8 +125,14 @@ function Draw(defaults) {
 		lns.ui.faces.color.el.value = color;
 	}; /* alt-g */
 
-	this.brush = 0;
-	this.brushSpread = 1;
+	this.isBrush = false;
+	this.brushSpreadXLeft = 0;
+	this.brushSpreadXRight = 0;
+	this.brushSpreadY = 0;
+	this.brushRandomX = 0;
+	this.brushRandomY = 0;
+	this.brushSegmentsMin = 1;
+	this.brushSegmentsMax = 3;
 	this.startDots = false;
 	this.dots = 10;
 	this.grass = 0;
@@ -169,36 +175,28 @@ function Draw(defaults) {
 	};
 
 	this.addBrush = function(x, y) {
-		const b = self.brush * self.brush * self.brushSpread;
-		let _y = 1;
-		if (self.grass > 0) _y *= self.grass;
+		// while (point.dist(origin) > self.distanceThreshold){
 		let origin = new Cool.Vector(x, y);
-		for (let i = 0; i < self.brush; i++) {
-			let point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
-			while (point.dist(origin) > b){
-				point = new Cool.Vector(x + Cool.randomInt(-b, b), y + Cool.randomInt(-b, b));
-			}
+		origin.divide(lns.canvas.scale);
+		self.drawing.add(origin.round());
+
+		const numPoints = Cool.randomInt(self.brushSegmentsMin, self.brushSegmentsMax);
+		for (let i = 1; i <= numPoints; i ++) {
+			let _x = Cool.random(-self.brushSpreadXLeft, self.brushSpreadXRight) * (i / numPoints) * (1 - Cool.random(self.brushRandomX));
+			let _y = self.brushSpreadY * (i / numPoints) * (1 - Cool.random(self.brushRandomY));
+
+			let point = new Cool.Vector(x + _x, y - _y);
 			point.divide(lns.canvas.scale);
 			if (point.x > 0 && point.x < lns.canvas.width && 
 				point.y > 0 && point.y < lns.canvas.height) {
-				self.drawing.add(point);
+				self.drawing.add(point.round());
 			}
-			const points = Cool.randomInt(1,3);
-			for (let i = 0; i < points; i ++) {
-				if (point.x > 0 && point.x < lns.canvas.width && 
-					point.y > 0 && point.y < lns.canvas.height) {
-					self.drawing.add(new Cool.Vector(
-						point.x + Cool.randomInt(-1, 1),
-						point.y + Cool.randomInt(_y)
-					));
-				}
-			}
-			self.drawing.add('end');
 		}
+		self.drawing.add('end');
 	};
 
 	this.addLine = function(x, y) {
-		self.drawing.add(new Cool.Vector(x, y).divide(lns.canvas.scale));
+		self.drawing.add(new Cool.Vector(x, y).divide(lns.canvas.scale).round());
 	};
 
 	this.update = function(ev) {
@@ -207,14 +205,13 @@ function Draw(defaults) {
 			lns.mousePosition.x = ev.pageX;
 			lns.mousePosition.y = ev.pageY;
 			if (self.isDrawing) {
-				if (self.brush <= 0) {
+				if (!self.isBrush) {
 					if (lns.mousePosition.dist(self.prevPosition) > self.distanceThreshold) {
 						self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
 						self.prevPosition = lns.mousePosition.clone();
 					}
 				} else  {
 					self.addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
-					
 				}
 			}
 		}
@@ -224,7 +221,7 @@ function Draw(defaults) {
 		if (ev.which == 1 && !lns.render.isPlaying && !ev.altKey) {
 			self.isDrawing = true;
 			self.mouseTimer = performance.now();
-			if (self.brush <= 0) {
+			if (!self.isBrush) {
 				self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
 				self.prevPosition = lns.mousePosition.clone();
 			} else {
