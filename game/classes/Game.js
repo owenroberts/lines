@@ -57,7 +57,8 @@ class Game {
 
 		this.scenes = new SceneManager(params.scenes, Scene);
 
-		this.data = {};
+		this.data = { jsons: {} };
+		this.saveJsons = params.saveJsons || false;
 		this.anims = {};
 
 		this.useMouseEvents = params.events ? params.events.includes('mouse') : true;
@@ -245,6 +246,7 @@ class Game {
 		fetch(src)
 			.then(response => { return response.json(); })
 			.then(json => {
+				if (this.saveJsons) this.data.jsons[src] = json;
 				this.anims[file][key] = new GameAnim();
 				this.anims[file][key].src = src; // debug 
 				this.anims[file][key].loadData(json, () => {

@@ -10,12 +10,12 @@ class Text {
 		this.y = Math.round(y);
 		this.lead = 35; // leading is space between lines
 		this.track = 18; // tracking is space between letters
-		this.msg = msg;
+		// this.msg = msg;
 		this.wrap = wrap;
 		this.isActive = true;
 		this.letters = letters;
 		this.breaks = [];
-		this.setBreaks();
+		// this.setBreaks();
 		this.count = 0;
 		this.end = 0;
 		this.countCount = 0.5;
@@ -23,6 +23,8 @@ class Text {
 		this.endDelay = GAME.dps || 10;
 		this.hover = false;
 		this.clickStarted = false;
+
+		this.setMsg(msg);
 
 		if (!letters.states[0]) {
 			const indexString = letterIndexString || 
@@ -46,11 +48,15 @@ class Text {
 		this.msg = msg.replace(/\s+$/, ''); // remove trailing spaces
 		this.setBreaks();
 
-		this.width = this.msg.length < this.wrap ? 
-			this.msg.length * this.track : 
-			this.wrap * this.track;
+		// text width is the msg length, or the biggest differece between breaks
+
+		this.width = this.breaks.length < 0?
+			this.track * this.msg.length :
+			this.track * (Math.max(...this.breaks.map((n, i) => i > 0 ? n - this.breaks[i] : n)) - 1);
 
 		this.height = (this.breaks.length + 1) * this.lead;
+
+		// console.log(msg, this.breaks, this.wrap);
 	}
 
 	setBreaks() {
