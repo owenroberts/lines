@@ -29,7 +29,6 @@
 		"lodash.template": ">=4.5.0",
 		"merge-stream": "^2.0.0",
 		"node-notifier": ">=8.0.1",
-		"node-sass": "^6.0.1",
 		"open": ">=6.0.0",
 		"sass": "^1.35.2",
 		"y18n": ">=3.2.2",
