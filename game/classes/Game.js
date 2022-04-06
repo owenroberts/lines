@@ -242,7 +242,7 @@ class Game {
 
 	loadJSON(file, key, src) {
 		if (this.relativeLoadPath) src = '.' + src;
-			fetch(src)
+		fetch(src)
 			.then(response => { return response.json(); })
 			.then(json => {
 				this.anims[file][key] = new GameAnim();
