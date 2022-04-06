@@ -52,7 +52,7 @@ class Text {
 
 		this.width = this.breaks.length < 0?
 			this.track * this.msg.length :
-			this.track * (Math.max(...this.breaks.map((n, i) => i > 0 ? n - this.breaks[i] : n)) - 1);
+			this.track * (Math.max(...this.breaks.map((n, i) => i > 0 ? n - this.breaks[i] : n)));
 
 		this.height = (this.breaks.length + 1) * this.lead;
 
