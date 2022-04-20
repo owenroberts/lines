@@ -115,6 +115,16 @@ class Game {
 			this.ctx.lineWidth = this.lineWidth;
 			this.ctx.miterLimit = 1; // do this last
 		}
+
+		if (params.antiFactor) {
+			Object.assign(Lines.prototype, AntiMixin);
+			this.antiFactor = params.antiFactor;
+			this.canvas.width = this.width * this.dpr * this.antiFactor;
+			this.canvas.height = this.height * this.dpr * this.antiFactor;
+			this.canvas.style.width = (this.width * this.dpr) + 'px';  
+			this.canvas.style.height = (this.height * this.dpr) + 'px';
+			this.ctx.lineWidth = this.lineWidth * this.antiFactor;
+		}
 	}
 
 	setView(width, height) {
@@ -275,7 +285,7 @@ class Game {
 
 	_draw(time) {
 		if (this.stats) this.drawStats.begin();
-		if (this.clearBg) this.ctx.clearRect(0, 0, this.view.width, this.view.height);
+		if (this.clearBg) this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		// add draw scenes ? 
 		this.draw(time - this.drawTime); // draw defined in each this js file, or not ... 
 		drawCount++;
