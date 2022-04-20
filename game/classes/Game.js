@@ -44,6 +44,8 @@ class Game {
 		this.zoom = params.zoom;
 		this.relativeLoadPath = params.relativeLoadPath;
 
+		this.z = 3 * this.lineWidth;
+
 		this.dps = params.dps || 30; // draw per second
 		this.drawTime = performance.now();
 		this.drawInterval = 1000 / this.dps;
@@ -74,8 +76,13 @@ class Game {
 			this.ctx = this.canvas.getContext('2d');
 			this.dpr = this.checkRetina ? window.devicePixelRatio || 1 : 1;
 
-			this.canvas.width = this.width * this.dpr;
-			this.canvas.height = this.height * this.dpr;
+			this.canvas.width = this.width * this.dpr * this.z;
+			this.canvas.height = this.height * this.dpr * this.z;
+
+			this.canvas.style.width = this.width + 'px';
+			this.canvas.style.height = this.height + 'px';
+
+
 			this.ctx.scale(this.dpr, this.dpr);
 			this.canvas.style.zoom = 1 / this.dpr;
 
@@ -108,8 +115,9 @@ class Game {
 
 			}
 
-			this.ctx.lineWidth = this.lineWidth;
+			this.ctx.lineWidth = this.lineWidth * this.z;
 			this.ctx.miterLimit = 1; // do this last
+			this.ctx.translate(0.5, 0.5);
 		}
 	}
 
@@ -271,7 +279,7 @@ class Game {
 
 	_draw(time) {
 		if (this.stats) this.drawStats.begin();
-		if (this.clearBg) this.ctx.clearRect(0, 0, this.view.width, this.view.height);
+		if (this.clearBg) this.ctx.clearRect(0, 0, this.view.width * this.z, this.view.height * this.z);
 		// add draw scenes ? 
 		this.draw(time - this.drawTime); // draw defined in each this js file, or not ... 
 		drawCount++;

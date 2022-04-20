@@ -23,7 +23,7 @@ function LinesPlayer(params) {
 	
 	window.drawCount = 0;
 
-	if (!LinesClass) LinesClass = Lines;
+	if (!LinesClass) LinesClass = PixelLines;
 	this.animation = new LinesClass(this.ctx, this.dps, this.multiColor, this.pixelSize);
 
 	this.width;
