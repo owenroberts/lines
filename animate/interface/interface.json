@@ -816,6 +816,16 @@
 						"params": {
 							"text": "↻"
 						}
+					},
+					{
+						"type": "UIToggle",
+						"fromModule": {
+							"callback": "toggleStats"
+						},
+						"params": {
+							"onText": "#",
+							"offText": "#"
+						}
 					}
 				]
 			}

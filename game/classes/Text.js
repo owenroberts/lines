@@ -1,3 +1,4 @@
+
 /*
 	draws text with lettering based on game text string
 	handled by game so that each new text object doesn't have to add all the letters...

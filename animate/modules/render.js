@@ -1,5 +1,6 @@
 function Render(dps, showStats) {
 	const self = this;
+	
 	this.showStats = showStats;
 	if (showStats) {
 		this.stats = new Stats();
@@ -16,6 +17,11 @@ function Render(dps, showStats) {
 
 	this.onionSkinNum = 0;
 	this.onionSkinIsVisible = false;
+
+	this.toggleStats = function(value) {
+		self.showStats = value;
+		self.stats.dom.style.display = value ? 'block' : 'none';
+	};
 
 	/* l key */
 	this.setOnionSkin = function(n) {
