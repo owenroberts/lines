@@ -1,5 +1,4 @@
-window.LinesClass = Lines; // fuck
-class GameAnim extends LinesClass {
+class GameAnim extends Lines {
 	constructor(debug) {
 		super(GAME.ctx, GAME.dps, GAME.multiColor);
 		this.debug = debug;

@@ -1,28 +1,24 @@
 /*
-	draws rect lines using breneham (sp?) instead of canvas lines
+	overwrite lines methods to render pixels
 */
 
-class PixelLines extends Lines {
-	constructor(ctx, dps, multiColor, pixelSize) {
-		super(ctx, dps, multiColor);
+const PixelMixin = {
 
-		// pixel branch, pixels are default
-		this.pixelSize = pixelSize || 2;
-		this.pixelM = this.pixelSize;  // multiplier
-		// set w scale func
-	}
+	init() {
+		this.pixelSize = GAME.pixelSize || GAME.lineWidth || 2;
+	},
 
 	finish() {
 		this.ctx.fill();
-	}
+	},
 
 	setColor(color) {
 		if (this.ctx.fillStyle !== color) this.ctx.fillStyle = color;
-	}
+	},
 
 	getColor() {
 		return this.ctx.fillStyle;
-	}
+	},
 
 	drawLines(s, e, props) {
 		if (props.segmentNum === 1) { // i rarely use n=1 tho
@@ -58,12 +54,7 @@ class PixelLines extends Lines {
 				);
 			}
 		}
-	}
-
-	setPixelM(scale) {
-		this.pixelM = Math.ceil(this.pixelSize * scale);
-		// console.log(this.pixelSize, scale, this.pixelM);
-	}
+	},
 
 	simplePixelLine(x0, y0, x1, y1) {
 
@@ -90,7 +81,7 @@ class PixelLines extends Lines {
 				y0 += sy;
 			}
 		}
-	}
+	},
 
 	pixelLine(x1, y1, x2, y2) {
 		const size = this.ctx.lineWidth;
@@ -144,4 +135,5 @@ class PixelLines extends Lines {
 			} while (count--);
 		}
 	}
-}
+
+};

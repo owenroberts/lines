@@ -30,6 +30,8 @@ class Lines {
 		this.states = { 'default': {start: 0, end: 0 } };
 
 		this.layerColor;
+
+		if (this.init) this.init(); // pixel init
 	}
 
 	randomCount() {
@@ -244,15 +246,15 @@ class Lines {
 		// move ctx to start point + start offset
 		// s,e = [point, offset] = [[x, y], [offset1, offset2]] = [[x,y], [[x,y], [x,y]]]
 		this.ctx.moveTo(
-			(props.x + s[0][0] + s[1][0][0]) * GAME.z,
-			(props.y + s[0][1] + s[1][0][1]) * GAME.z
+			props.x + s[0][0] + s[1][0][0],
+			props.y + s[0][1] + s[1][0][1]
 		);
 
 		// if its just one line draw to end
 		if (props.segmentNum === 1) { // i rarely use n=1 tho
 			this.ctx.lineTo( 
-				(props.x + e[0][0] + e[1][0][0]) * GAME.z,
-				(props.y + e[0][1] + e[1][0][1]) * GAME.z
+				props.x + e[0][0] + e[1][0][0],
+				props.y + e[0][1] + e[1][0][1]
 			);
 			return;
 		}
@@ -282,8 +284,8 @@ class Lines {
 			
 			// finish line
 			this.ctx.lineTo( 
-				(props.x + p[0] + v[0] + o[0]) * GAME.z,
-				(props.y + p[1] + v[1] + o[1]) * GAME.z
+				props.x + p[0] + v[0] + o[0],
+				props.y + p[1] + v[1] + o[1]
 			);
 		}
 	}
