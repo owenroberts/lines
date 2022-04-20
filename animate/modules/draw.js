@@ -206,7 +206,7 @@ function Draw(defaults) {
 			lns.mousePosition.y = ev.pageY;
 			if (self.isDrawing) {
 				if (!self.isBrush) {
-					if (lns.mousePosition.dist(self.prevPosition) > self.distanceThreshold) {
+					if (lns.mousePosition.distance(self.prevPosition) > self.distanceThreshold) {
 						self.addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
 						self.prevPosition = lns.mousePosition.clone();
 					}

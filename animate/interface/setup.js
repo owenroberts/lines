@@ -29,7 +29,7 @@ function setupAnimateInterface(ui) {
 
 	ui.baseFontSize = 11; 
 	ui.updateScale = function(value) {
-		ui.baseFontSize = +value;
+		if (value) ui.baseFontSize = +value;
 		document.body.style.setProperty('--base-font-size', ui.baseFontSize);
 	};
 

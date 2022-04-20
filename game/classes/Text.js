@@ -18,9 +18,12 @@ class Text {
 		// this.setBreaks();
 		this.count = 0;
 		this.end = 0;
+		this.delay = 0;
+		
 		this.countCount = 0.5;
 		this.endCount = 0.5;
 		this.endDelay = GAME.dps || 10;
+
 		this.hover = false;
 		this.clickStarted = false;
 
@@ -49,13 +52,12 @@ class Text {
 		this.setBreaks();
 
 		// text width is the msg length, or the biggest differece between breaks
-
-		this.width = this.breaks.length < 0?
+		let breakLengths = this.breaks.map((n, i) => i > 0 ? n - this.breaks[i] : n);
+		this.width = this.breaks.length <= 0 ?
 			this.track * this.msg.length :
-			this.track * (Math.max(...this.breaks.map((n, i) => i > 0 ? n - this.breaks[i] : n)));
+			this.track * Math.max(...[0, ...breakLengths]);
 
 		this.height = (this.breaks.length + 1) * this.lead;
-
 		// console.log(msg, this.breaks, this.wrap);
 	}
 
@@ -160,7 +162,10 @@ class Text {
 		
 		// console.log(this.count, this.msg.length, this.end);
 		if (this.count < this.msg.length) this.count += this.countCount;
-		if (this.count >= this.msg.length) this.end += this.endCount;
+		if (this.count >= this.msg.length) {
+			if (this.delay < this.endDelay) this.delay += 1;
+			else this.end += this.endCount;
+		}
 		if (countBackward) {
 			// console.log(this.end, this.msg.length)
 			if (this.end >= this.msg.length) {

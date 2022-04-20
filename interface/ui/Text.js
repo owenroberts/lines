@@ -50,6 +50,6 @@ class UIText extends UIInput {
 	}
 
 	get value() {
-		return this._value;
+		return this._value || this.placeholder;
 	}
 }
