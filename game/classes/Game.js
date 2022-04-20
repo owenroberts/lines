@@ -28,8 +28,7 @@ class Game {
 
 		this.canvas = document.getElementById(params.canvas || "lines");
 
-		// this.usePixels = params.usePixels || true;
-		if (params.usePixels || true) {
+		if (params.usePixels) {
 			Object.assign(Lines.prototype, PixelMixin);
 		}
 

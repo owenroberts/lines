@@ -1,4 +1,4 @@
-function Files(params, LinesClass) {
+function Files(params) {
 	const self = this;
 
 	this.saveFilesEnabled = false;
@@ -105,7 +105,7 @@ function Files(params, LinesClass) {
 	};
 
 	this.loadJSON = function(data, callback) {
-		lns.anim = new LinesClass(lns.canvas.ctx, lns.render.dps, true);
+		lns.anim = new Lines(lns.canvas.ctx, lns.render.dps, true);
 		lns.anim.loadData(data, function() {
 			lns.canvas.setWidth(data.w);
 			lns.canvas.setHeight(data.h);

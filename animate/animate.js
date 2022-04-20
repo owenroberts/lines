@@ -36,7 +36,7 @@ window.addEventListener("load", function() {
 		load: true, /* load setttings after file load */
 		reload: false, /* confirm reload */
 		bg: false /* bg color */
-	}, Lines);
+	});
 	
 	lns.ui = new Interface(lns);
 	lns.ui.capture = new Capture();
