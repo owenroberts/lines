@@ -28,10 +28,6 @@ class Game {
 
 		this.canvas = document.getElementById(params.canvas || "lines");
 
-		if (params.usePixels) {
-			Object.assign(Lines.prototype, PixelMixin);
-		}
-
 		this.width = params.width;
 		this.height = params.height;
 
@@ -114,6 +110,10 @@ class Game {
 
 			this.ctx.lineWidth = this.lineWidth;
 			this.ctx.miterLimit = 1; // do this last
+		}
+
+		if (params.usePixels) {
+			Object.assign(Lines.prototype, PixelMixin);
 		}
 
 		if (params.antiFactor) {
