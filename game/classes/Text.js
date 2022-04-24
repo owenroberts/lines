@@ -137,6 +137,10 @@ class Text {
 	/* do i ever use _x, _y ?? */
 	display(countForward, countBackward, yAbove) {
 		if (!this.isActive) return true;
+		countForward = countForward ? countForward : this.countForward;
+		countBackward = countBackward ? countBackward : this.countBackward;
+		yAbove = yAbove ? yAbove : this.yAbove;
+
 		const len = countForward ? Math.floor(this.count) : this.msg.length;
 		const index = countBackward ? this.end : 0;
 		let x = this.x;
