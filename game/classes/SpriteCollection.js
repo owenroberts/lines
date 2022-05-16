@@ -46,4 +46,23 @@ class SpriteCollection {
 	display() {
 		this.all(sprite => { sprite.display(); });
 	}
+
+
+	over(x, y) {
+		this.all(sprite => { sprite.over(x, y); });
+	}
+
+	out(x, y) {
+		this.all(sprite => { sprite.out(x, y); });
+	}
+
+	down(x, y) {
+		this.all(sprite => { sprite.down(x, y); });
+	}
+
+	up(x, y) {
+		this.all(sprite => { sprite.up(x, y); });
+	}
+
+
 }

@@ -72,12 +72,18 @@ class Game {
 
 		if (this.canvas.getContext) {
 			this.ctx = this.canvas.getContext('2d');
+
 			this.dpr = this.checkRetina ? window.devicePixelRatio || 1 : 1;
 
 			this.canvas.width = this.width * this.dpr;
 			this.canvas.height = this.height * this.dpr;
+			this.canvas.style.width = this.width + 'px';
+			this.canvas.style.height = this.height + 'px';
 			this.ctx.scale(this.dpr, this.dpr);
-			this.canvas.style.zoom = 1 / this.dpr;
+		
+			// this.canvas.style.zoom = 1 / this.dpr;
+			// this.canvas.style.transform = `scale(${1 / this.dpr}`;
+			// this.canvas.style.transformOrigin = 'left top';
 
 			const zoom = params.zoom || 1;
 			this.zoom = params.zoom;
@@ -110,6 +116,8 @@ class Game {
 
 			this.ctx.lineWidth = this.lineWidth;
 			this.ctx.miterLimit = 1; // do this last
+			this.ctx.lineCap = 'round';
+			this.ctx.lineJoin = 'round';
 		}
 
 		if (params.usePixels) {
@@ -155,7 +163,6 @@ class Game {
 
 			this.ctx.filter = 'url(#remove-alpha)';
 		}
-
 	}
 
 	setView(width, height) {

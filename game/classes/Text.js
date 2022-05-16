@@ -60,6 +60,7 @@ class Text {
 
 		this.height = (this.breaks.length + 1) * this.lead;
 		// console.log(msg, this.breaks, this.wrap);
+		this.reset();
 	}
 
 	setBreaks() {
@@ -132,11 +133,21 @@ class Text {
 			}
 		}
 	}
+
+	reset() {
+		this.end = 0; /* reset */
+		this.count = 0;
+		this.delay = 0;
+	}
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
 	/* do i ever use _x, _y ?? */
 	display(countForward, countBackward, yAbove) {
 		if (!this.isActive) return true;
+		countForward = countForward ? countForward : this.countForward;
+		countBackward = countBackward ? countBackward : this.countBackward;
+		yAbove = yAbove ? yAbove : this.yAbove;
+
 		const len = countForward ? Math.floor(this.count) : this.msg.length;
 		const index = countBackward ? this.end : 0;
 		let x = this.x;
@@ -161,23 +172,21 @@ class Text {
 			}
 		}
 		
-		// console.log(this.count, this.msg.length, this.end);
 		if (this.count < this.msg.length) this.count += this.countCount;
 		if (this.count >= this.msg.length) {
 			if (this.delay < this.endDelay) this.delay += 1;
 			else this.end += this.endCount;
 		}
 		if (countBackward) {
-			// console.log(this.end, this.msg.length)
 			if (this.end >= this.msg.length) {
-				this.end = 0; /* reset */
-				this.count = 0;
+				this.reset();
+				if (this.onDialogEnd) this.onDialogEnd();
 				return true;
 			}
 		} else {
 			if (this.end >= this.endDelay) { // how long to wait after completed text // hardcoded?
-				this.end = 0;
-				this.count = 0;
+				this.reset();
+				if (this.onDialogEnd) this.onDialogEnd();
 				return true; // ended
 			}
 		}

@@ -226,7 +226,7 @@
 					},
 					{
 						"type": "UIToggle",
-						"key": "b",
+						"key": "alt-b",
 						"toggle":  "show",
 						"params": {
 							"onText": "Hide",
@@ -909,6 +909,7 @@
 				"list": [
 					{
 						"type": "UIToggle",
+						"key": "b",
 						"face": "isBrush",
 						"toggle": "isBrush",
 						"params": {
