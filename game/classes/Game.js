@@ -134,7 +134,6 @@ class Game {
 			const feComponentTransfer = document.createElementNS(svgns, "feComponentTransfer");
 			const feFuncA = document.createElementNS(svgns, "feFuncA");
 
-
 			svg.setAttribute('style', 'position:absolute;z-index:-1;');
 			svg.setAttribute('width', '0');
 			svg.setAttribute('height', '0');
