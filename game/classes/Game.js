@@ -75,27 +75,24 @@ class Game {
 
 			this.dpr = this.checkRetina ? window.devicePixelRatio || 1 : 1;
 
+			const zoom = params.zoom || 1;
+			this.zoom = params.zoom;
+			const ediZoom = params.isEditor ? this.dpr : 1;
+
 			this.canvas.width = this.width * this.dpr;
 			this.canvas.height = this.height * this.dpr;
 			this.canvas.style.width = this.width + 'px';
 			this.canvas.style.height = this.height + 'px';
-			this.ctx.scale(this.dpr, this.dpr);
-		
-			// this.canvas.style.zoom = 1 / this.dpr;
-			// this.canvas.style.transform = `scale(${1 / this.dpr}`;
-			// this.canvas.style.transformOrigin = 'left top';
-
-			const zoom = params.zoom || 1;
-			this.zoom = params.zoom;
-			const ediZoom = params.isEditor ? this.dpr : 1;
 
 			this.view.width = Math.round(this.width / zoom * ediZoom);
 			this.view.height = Math.round(this.height / zoom * ediZoom);
 			this.view.halfWidth = this.view.width / 2;
 			this.view.halfHeight = this.view.height / 2;
 
+			this.ctx.scale(this.dpr, this.dpr);
 			if (params.zoom) {
-				this.ctx.scale(params.zoom * ediZoom, params.zoom * ediZoom);
+				this.ctx.scale(ediZoom, ediZoom);
+				this.ctx.scale(params.zoom, params.zoom);
 			}
 
 			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
@@ -380,12 +377,12 @@ class Game {
 
 		this.canvas.addEventListener('click', ev => {
 			ev.preventDefault();
-			if (this.mouseClicked) this.mouseClicked(ev.offsetX, ev.offsetY);
+			if (this.mouseClicked) this.mouseClicked(ev.offsetX / this.zoom, ev.offsetY / this.zoom);
 		}, false);
 
 		this.canvas.addEventListener('mousedown', ev => {
 			ev.preventDefault();
-			if (this.mouseDown) this.mouseDown(ev.offsetX, ev.offsetY, ev.which, ev.shiftKey);
+			if (this.mouseDown) this.mouseDown(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which, ev.shiftKey);
 			if (this.startDrag) {
 				dragOffset = startDrag(ev.offsetX, ev.offsetY);
 				if (dragOffset) dragStarted = true;
@@ -394,13 +391,13 @@ class Game {
 
 		this.canvas.addEventListener('mouseup', ev => {
 			ev.preventDefault();
-			if (this.mouseUp) this.mouseUp(ev.offsetX, ev.offsetY, ev.which);
+			if (this.mouseUp) this.mouseUp(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which);
 			if (dragStarted) dragStarted = false;
 		}, false);
 
 		this.canvas.addEventListener('mousemove', ev => {
-			if (this.mouseMoved) this.mouseMoved(ev.offsetX, ev.offsetY, ev.which);
-			if (dragStarted) drag(ev.offsetX, ev.offsetY, dragOffset);
+			if (this.mouseMoved) this.mouseMoved(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which);
+			if (dragStarted) drag(ev.offsetX / this.zoom, ev.offsetY / this.zoom, dragOffset);
 		}, false);
 	}
 
