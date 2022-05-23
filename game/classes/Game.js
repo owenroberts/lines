@@ -28,7 +28,7 @@ class Game {
 
 		this.canvas = document.getElementById(params.canvas || "lines");
 
-		const performanceThreshold = 0.05; // test this
+		const performanceThreshold = 0.1; // test this
 		let performanceAverage = 0.01; // high performance
 		
 		if (params.testPerformance) {
@@ -38,8 +38,8 @@ class Game {
 				perf.push(Cool.testPerformance());
 			}
 			performanceAverage = perf.reduce((a, b) => (a + b)) / perf.length;
+			console.log('perf avg', performanceAverage); 
 			console.groupEnd('perf test');
-			console.log('perf avg', performanceAverage); // print this for a while to get sense of performance
 		}
 
 		this.width = params.width;
@@ -104,7 +104,7 @@ class Game {
 			this.view.halfHeight = this.view.height / 2;
 
 			if (performanceAverage > performanceThreshold || params.lowPerformance) {
-				if (!this.debug && !params.stats) alert('Low browser performance detected, graphics quality may be lower, refresh page to test again.');
+				if (!this.debug && !params.stats) alert('Low browser performance detected, the graphics will be smaller, refresh page to test again.');
 				if (this.zoom) {
 					this.width = Math.round(this.width / this.zoom);
 					this.height = Math.round(this.height / this.zoom);
@@ -114,9 +114,10 @@ class Game {
 					this.canvas.height = this.height;
 
 					// small canvas
-					this.canvas.style.width = this.width + 'px';
-					this.canvas.style.height = this.height + 'px';
-				
+					if (params.smallCanvas) {
+						this.canvas.style.width = this.width + 'px';
+						this.canvas.style.height = this.height + 'px';
+					}
 				}
 			} else {
 				this.ctx.scale(this.dpr, this.dpr);
