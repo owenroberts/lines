@@ -35,7 +35,7 @@ window.addEventListener("load", function() {
 		save: false, /* save settings on unload  */
 		load: true, /* load setttings after file load */
 		reload: false, /* confirm reload */
-		bg: false /* bg color */
+		bg: true /* bg color */
 	});
 	
 	lns.ui = new Interface(lns);

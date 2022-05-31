@@ -103,8 +103,14 @@ class Game {
 			this.view.halfWidth = this.view.width / 2;
 			this.view.halfHeight = this.view.height / 2;
 
+			let userLowQuality = false;
 			if (performanceAverage > performanceThreshold || params.lowPerformance) {
-				if (!this.debug && !params.stats) alert('Low browser performance detected, the game window will be smaller, refresh page to test again.');
+				userLowQuality = params.ignoreAlerts ?
+					true :
+					confirm('Low performance detected, click Okay to use low graphics quality, cancel to continue with high graphics quality.');
+			}
+			
+			if (userLowQuality) {
 				if (this.zoom) {
 					this.width = Math.round(this.width / this.zoom);
 					this.height = Math.round(this.height / this.zoom);
@@ -112,11 +118,13 @@ class Game {
 					this.halfHeight = Math.round(this.height / 2);
 					this.canvas.width = this.width;
 					this.canvas.height = this.height;
-
-					// small canvas
 					if (params.smallCanvas) {
 						this.canvas.style.width = this.width + 'px';
 						this.canvas.style.height = this.height + 'px';
+					} else {
+						if (params.useSVGFilterOnLow && !navigator.userAgent.includes('Firefox')) {
+							params.svgFilter = true;
+						}
 					}
 				}
 			} else {
@@ -153,13 +161,15 @@ class Game {
 			Object.assign(Lines.prototype, PixelMixin);
 		}
 
-		if (params.antiFactor) {
+		if (params.antiFactor) { // 3 is good here
 			Object.assign(Lines.prototype, AntiMixin);
 			this.antiFactor = params.antiFactor;
 			this.canvas.width = this.width * this.dpr * this.antiFactor;
 			this.canvas.height = this.height * this.dpr * this.antiFactor;
-			this.canvas.style.width = (this.width * this.dpr) + 'px';  
-			this.canvas.style.height = (this.height * this.dpr) + 'px';
+			if (params.smallCanvas) {
+				this.canvas.style.width = (this.width * this.dpr) + 'px';  
+				this.canvas.style.height = (this.height * this.dpr) + 'px';
+			}
 			this.ctx.lineWidth = this.lineWidth * this.antiFactor;
 		}
 
