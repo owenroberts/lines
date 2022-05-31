@@ -104,7 +104,7 @@ class Game {
 			this.view.halfHeight = this.view.height / 2;
 
 			if (performanceAverage > performanceThreshold || params.lowPerformance) {
-				if (!this.debug && !params.stats) alert('Low browser performance detected, the graphics will be smaller, refresh page to test again.');
+				if (!this.debug && !params.stats) alert('Low browser performance detected, the game window will be smaller, refresh page to test again.');
 				if (this.zoom) {
 					this.width = Math.round(this.width / this.zoom);
 					this.height = Math.round(this.height / this.zoom);
