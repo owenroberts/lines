@@ -1,5 +1,8 @@
-function Capture() {
+function Capture(params) {
 	const self = this;
+
+	let useSequential = params.useSequentialNumbering || false;
+	let frameNum = 0;
 
 	this.ready = true; /* ready to start */
 	this.prev = { f: undefined, n: 0 }; /* keeps track of image names */
@@ -22,6 +25,7 @@ function Capture() {
 	}; /* shift k */
 
 	this.start = function() {
+		frameNum = 0;
 		lns.anim.onDraw = function() {
 			if (self.frames > 0) {
 				self.capture();
@@ -51,11 +55,17 @@ function Capture() {
 				const title = lns.ui.faces.title.value; // this is a UI
 				const frm = Cool.padNumber(lns.anim.currentFrame, 3);
 
-				if (frm == self.prev.f) self.prev.n += 1;
-				else self.prev.n = 0;
+				let fileName;
+				if (useSequential) {
+					fileName = `${title}-${Cool.padNumber(frameNum, 4)}.png`;
+					frameNum++;
+				} else {
+					if (frm === self.prev.f) self.prev.n += 1;
+					else self.prev.n = 0;
 
-				let fileName = `${title}-${frm}-${self.prev.n}.png`;
-				self.prev.f = frm;
+					fileName = `${title}-${frm}-${self.prev.n}.png`;
+					self.prev.f = frm;
+				}
 
 				const f = saveAs(blob, fileName);
 				f.onwriteend = function() { 

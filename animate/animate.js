@@ -39,7 +39,9 @@ window.addEventListener("load", function() {
 	});
 	
 	lns.ui = new Interface(lns);
-	lns.ui.capture = new Capture();
+	lns.ui.capture = new Capture({
+		useSequentialNumbering: true
+	});
 	lns.ui.states = new States();
 	lns.ui.palette = new Palette();
 	lns.ui.drawings = new Drawings();
@@ -79,7 +81,7 @@ function appSave() {
 		viewLayers: lns.ui.faces.viewLayers.value,
 		viewActiveLayers: lns.ui.faces.viewActiveLayers.value,
 		timelineAutoFit: lns.ui.faces.timelineAutoFit.value,
-		timelineView: lns.ui.faces.timelineView,
+		timelineView: lns.ui.faces.timelineView.value,
 		canvasScale: lns.ui.faces.canvasScale.value,
 		interfaceScale: lns.ui.faces.interfaceScale.value,
 		quickRefScale: lns.ui.faces.quickRefScale.value,

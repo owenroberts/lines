@@ -5,7 +5,8 @@ const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
 const merge = require('merge-stream');
-const server = require('gulp-webserver');
+const browserSync = require('browser-sync').create();
+const gulpif = require('gulp-if');
 
 const sass = require('gulp-sass')(require('sass'));
 const postcss = require('gulp-postcss');
@@ -19,6 +20,7 @@ const gutil = require('gulp-util');
 const npmDist = require('gulp-npm-dist');
 
 const beeper = !process.argv.includes('-q');
+let useBrowserSync = true;
 
 const files = {
 	base: [ 
@@ -66,6 +68,15 @@ const sassFiles = {
 	]
 };
 
+function browserSyncTask() {
+	return browserSync.init({
+		port: 8080,
+		server: {
+			baseDir: './',
+		}
+	});
+}
+
 function jsTasks() {
 	function jsTask(files, name, dir){
 		return src(files)
@@ -84,7 +95,8 @@ function jsTasks() {
 			.pipe(concat(name))
 			.pipe(uglify())
 			.pipe(sourcemaps.write('./src_maps'))
-			.pipe(dest(dir));
+			.pipe(dest(dir))
+			.pipe(gulpif(useBrowserSync, browserSync.stream()));
 	}
 
 	const tasks = [];
@@ -113,7 +125,6 @@ function exportTask() {
 	return merge(...tasks);
 }
 
-// Sass task: compiles the style.scss file into style.css
 function sassTask(files, name, dir){    
     return src(files)
     	.pipe(plumber({ errorHandler: function(err) {
@@ -127,8 +138,8 @@ function sassTask(files, name, dir){
         .pipe(sass()) // compile SCSS to CSS
         .pipe(postcss([ autoprefixer(), cssnano() ])) // PostCSS plugins
         .pipe(sourcemaps.write('./src_maps')) // write sourcemaps file in current directory
-        .pipe(dest(dir)
-    ); // put final CSS in dist folder
+        .pipe(dest(dir))
+        .pipe(gulpif(useBrowserSync, browserSync.stream()));
 }
 
 function sassTasks() {
@@ -144,15 +155,6 @@ function libTask() {
 		.pipe(dest('./build/lib'));
 }
 
-function serverTask() {
-	return src('./')
-		.pipe(server({
-			livereload: false,
-			// open: true,
-			port: 8080	// set a port to avoid conflicts with other local apps
-		}));
-}
-
 // Cachebust
 function cacheBustTask(){
 	var cbString = new Date().getTime();
@@ -165,16 +167,13 @@ function cacheBustTask(){
 // If any change, run scss and js tasks simultaneously
 function watchTask(){
 	watch([	
-			...files.base, 
-			...files.interface, 
-			...files.animate, 
+			...files.base,
+			...files.interface,
+			...files.animate,
 			...files.game,
 			...files.editor,
 		],
-		{interval: 1000, usePolling: true}, //Makes docker work
-		series(
-			parallel(jsTasks),
-		)
+		series(jsTasks),
 	); 
 
 	watch([
@@ -182,19 +181,17 @@ function watchTask(){
 			...sassFiles.animate,
 			...sassFiles.editor,
 		],
-		{interval: 1000, usePolling: true}, //Makes docker work
-		series(
-			parallel(sassTasks),
-		)
+		series(sassTasks),
 	);    
 }
 
 task('js', jsTasks);
 task('sass', sassTasks);
 task('lib', libTask);
+task('build', series(libTask, jsTasks, sassTasks));
 task('default', parallel(jsTasks, sassTasks));
 task('watch', watchTask);
-task('browser', parallel(jsTasks, sassTasks), series(cacheBustTask, serverTask, watchTask));
+task('browser', parallel(jsTasks, sassTasks, cacheBustTask, browserSyncTask, watchTask));
 
 module.exports = {
 	exportTask: exportTask,
