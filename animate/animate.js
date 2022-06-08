@@ -65,7 +65,6 @@ window.addEventListener("load", function() {
 });
 
 function appSave() {
-	console.log(lns.ui.faces.viewStats.value);
 	return {
 		canvasColor: lns.canvas.bgColor,
 		lineWidth: lns.canvas.ctx.lineWidth,
@@ -99,6 +98,7 @@ function appLoad(settings) {
 
 	/* environment + ui */
 	lns.ui.faces.onionSkinNum.update(settings.onionSkinNum);
+	lns.ui.faces.onionSkinIsVisible.update(settings.onionSkinIsVisible);
 	lns.ui.faces.mouseInterval.update(settings.mouseInterval);
 	lns.ui.faces.width.update(settings.width);
 	lns.ui.faces.height.update(settings.height);
@@ -106,8 +106,6 @@ function appLoad(settings) {
 	lns.ui.faces.viewLayers.update(settings.viewLayers);
 	lns.ui.faces.viewActiveLayers.update(settings.viewActiveLayers);
 	lns.ui.faces.hideCursor.update(settings.hideCursor);
-
-	console.log(settings.viewStats);
 	lns.ui.faces.viewStats.update(settings.viewStats);
 
 	lns.ui.faces.timelineAutoFit.update(settings.timelineAutoFit);

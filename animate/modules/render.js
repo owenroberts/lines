@@ -19,10 +19,8 @@ function Render(dps, showStats) {
 	this.onionSkinIsVisible = false;
 
 	this.toggleStats = function(value) {
-		console.log(value);
 		self.showStats = value;
 		self.stats.dom.style.display = value ? 'block' : 'none';
-		console.log(self.stats);
 	};
 
 	/* l key */

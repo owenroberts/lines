@@ -83,6 +83,7 @@ function Capture(params) {
 	};
 	
 	this.startVideo = function() {
+		lns.ui.faces.onionSkinIsVisible.off()
 		lns.anim.isPlaying = false;
 		lns.anim.frame = 0;
 

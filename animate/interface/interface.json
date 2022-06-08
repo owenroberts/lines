@@ -802,6 +802,7 @@
 						"type": "UIToggle",
 						"key": "n",
 						"toggle": "onionSkinIsVisible",
+						"face": "onionSkinIsVisible",
 						"params": {
 							"onText": "Hide",
 							"offText": "Show"
