@@ -4,13 +4,17 @@ function setupAnimateInterface(ui) {
 
 	ui.toggleTimelineView = function() {
 		const timeline = document.getElementById('timeline-panel');
+		const play = document.getElementById('play-panel');
 		if (this.isOn) {
 			container.classList.add('timeline-display');
 			container.appendChild(timeline);
+			container.appendChild(play);
+
 		} else {
 			container.classList.remove('timeline-display');
 			const panels = document.getElementById('panels');
 			panels.appendChild(timeline);
+			panels.appendChild(play);
 		}
 
 	};

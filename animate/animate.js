@@ -65,6 +65,7 @@ window.addEventListener("load", function() {
 });
 
 function appSave() {
+	console.log(lns.ui.faces.viewStats.value);
 	return {
 		canvasColor: lns.canvas.bgColor,
 		lineWidth: lns.canvas.ctx.lineWidth,
@@ -87,6 +88,7 @@ function appSave() {
 		quickRefScale: lns.ui.faces.quickRefScale.value,
 		quickRefList: lns.ui.panels.quickRef.list,
 		hideCursor: lns.ui.faces.hideCursor.value,
+		viewStats: lns.ui.faces.viewStats.value,
 	};
 }
 
@@ -104,6 +106,9 @@ function appLoad(settings) {
 	lns.ui.faces.viewLayers.update(settings.viewLayers);
 	lns.ui.faces.viewActiveLayers.update(settings.viewActiveLayers);
 	lns.ui.faces.hideCursor.update(settings.hideCursor);
+
+	console.log(settings.viewStats);
+	lns.ui.faces.viewStats.update(settings.viewStats);
 
 	lns.ui.faces.timelineAutoFit.update(settings.timelineAutoFit);
 	lns.ui.faces.timelineView.update(settings.timelineView);

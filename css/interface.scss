@@ -64,6 +64,7 @@ select {
 		display: grid;
 		grid-template-areas:
 			'interface draw'
+			'play play'
 			'timeline timeline';
 	}
 	
@@ -92,7 +93,10 @@ select {
 		grid-area: draw;
 	}
 
-	#play-panel, #timeline-panel {
+	#play-panel {
+		grid-area: play;
+	}
+	#timeline-panel {
 		grid-area: timeline;
 	}
 }

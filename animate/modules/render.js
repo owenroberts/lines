@@ -2,8 +2,8 @@ function Render(dps, showStats) {
 	const self = this;
 	
 	this.showStats = showStats;
+	this.stats = new Stats();
 	if (showStats) {
-		this.stats = new Stats();
 		this.stats.dom.style.position = 'absolute';
 		this.stats.dom.style.top = '-48px';
 		this.stats.dom.style.right = '0';
@@ -19,8 +19,10 @@ function Render(dps, showStats) {
 	this.onionSkinIsVisible = false;
 
 	this.toggleStats = function(value) {
+		console.log(value);
 		self.showStats = value;
 		self.stats.dom.style.display = value ? 'block' : 'none';
+		console.log(self.stats);
 	};
 
 	/* l key */

@@ -819,6 +819,7 @@
 					},
 					{
 						"type": "UIToggle",
+						"face": "viewStats",
 						"fromModule": {
 							"callback": "toggleStats"
 						},
