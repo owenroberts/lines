@@ -893,6 +893,15 @@
 					{
 						"type": "UIButton",
 						"fromModule": {
+							"callback": "videoFrames"
+						},
+						"params": {
+							"text": "Video Frames"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
 							"callback": "startVideo"
 						},
 						"params": {

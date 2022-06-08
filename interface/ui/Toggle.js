@@ -10,7 +10,7 @@ class UIToggle extends UIButton {
 	}
 
 	update(isOn, uiOnly) {
-		if (!isOn) {
+		if (isOn !== this.isOn) {
 			if (!uiOnly) this.callback();
 			this.toggle();
 		}

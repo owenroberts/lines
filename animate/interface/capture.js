@@ -83,7 +83,7 @@ function Capture(params) {
 	};
 	
 	this.startVideo = function() {
-		lns.ui.faces.onionSkinIsVisible.off()
+
 		lns.anim.isPlaying = false;
 		lns.anim.frame = 0;
 
@@ -98,17 +98,43 @@ function Capture(params) {
 				lns.anim.onPlayedState = undefined;
 			}
 		};
-		self.isVideo = true
+		self.isVideo = true;
 		self.bg = true;
 		self.video();
 		
 		lns.anim.isPlaying = true;
 	}; /* key? */
 
-	this.video = function() {
+	this.videoFrames = function() {
+		let numFrames = +prompt('Number of frames?', 48);
+		let recordEachFrame = confirm('Record each frame?');
+		lns.ui.faces.onionSkinIsVisible.update(false);
+
+		self.frames = numFrames;
+		self.video(true); // start recording
+		lns.anim.onDraw = function() {
+			if (self.frames > 0) {
+				self.frames--;
+			} else if (self.isVideo) {
+				self.video(); // stop recording
+				if (recordEachFrame && lns.anim.currentFrame < lns.anim.endFrame) {
+					self.frames = numFrames;
+					lns.ui.play.next(1); // next frame
+					self.video(true); // start recording
+				} else {
+					lns.anim.isPlaying = false;
+					lns.anim.onDraw = undefined;
+				}
+				
+			}
+		};
+	};
+
+	this.video = function(promptTitle) {
 		if (self.ready) {
+			lns.ui.faces.onionSkinIsVisible.update(false);
 			self.ready = false;
-			self.isVideo = true
+			self.isVideo = true;
 			const stream = lns.canvas.canvas.captureStream(lns.render.dps);
 			self.rec = new MediaRecorder(stream, {
      			videoBitsPerSecond : 3 * 1024 * 1024,
@@ -120,12 +146,13 @@ function Capture(params) {
 				const a = document.createElement('a');
 				document.body.appendChild(a);
 				a.href = url;
-				a.download = `${lns.ui.faces.title.value}.webm` || 'lines.webm';
+				let t = `${lns.ui.faces.title.value}` || 'lines';
+				if (promptTitle) t = prompt('Title?', lns.ui.faces.title.value);
+				a.download = `${t}.webm`;
 				a.click();
-				// window.URL.revokeObjectURL(url);
 			});
 		} else {
-			self.isVideo = false
+			self.isVideo = false;
 			self.ready = true;
 			self.rec.stop();
 		}
