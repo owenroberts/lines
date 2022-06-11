@@ -87,6 +87,8 @@ class UILayer extends UICollection {
 						layer.endFrame = +value;
 					}
 				}));
+
+				modal.adjustPosition();
 			}
 		});
 

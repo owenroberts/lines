@@ -4,9 +4,6 @@ class UIModal extends UICollection {
 		this.addClass('modal');
 		this.append(new UILabel({ text: title }));
 
-		this.el.style.left = `${Math.max(0, position.x - 100)}px`;
-		this.el.style.top = `${Math.max(0, position.y - 20)}px`;
-
 		// better way to do this ?? 
 		document.getElementById('container').appendChild(this.el);
 		
@@ -37,6 +34,27 @@ class UIModal extends UICollection {
 
 		app.ui.keys['escape'] = this.cancel;
 		this.append(this.cancel);
+
+		let x = Math.max(16, position.x - 100);
+		let y = Math.max(16, position.y - 20);
+
+		this.el.style.left = `${x}px`;
+		this.el.style.top = `${y}px`;
+	}
+
+	adjustPosition() {
+		let x = parseInt(this.el.style.left);
+		let y = parseInt(this.el.style.top);
+		let w = parseInt(this.el.offsetWidth);
+		let h = parseInt(this.el.offsetHeight);
+
+		if (x + w > window.innerWidth) {
+			this.el.style.left = `${x - w}px`;
+		}
+
+		if (y + h > window.innerHeight) {
+			this.el.style.top = `${y - h}px`;
+		}
 	}
 
 	add(component) {
