@@ -4,24 +4,36 @@ class UILayer extends UICollection {
 		this.addClass('layer');
 		this.layer = layer;
 		const width = params.width * (layer.endFrame - layer.startFrame + 1);
+		const self = this;
 
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
 			text: `${layer.drawingIndex}`,
-			callback: params.callback
+			isOn: false,
+			callback: function() {
+
+				// only update the values when toggling on, ignore when toggling off
+				if (!layer.isToggled) {
+					lns.draw.setProperties(layer.getEditProps(), true); // set ui only
+				}
+				console.log('toggle');
+				layer.toggle();
+				self.highlight.update(layer.isToggled);
+			}
 		});
 
 		this.highlight = new UIToggle({
 			type: 'layer-highlight',
-			text: '❏',
+			text: '*',
+			isOn: false,
 			callback: function() {
 				layer.isHighlighted = !layer.isHighlighted;
 			}
-		})
+		});
 
 		this.edit = new UIButton({
 			type: 'layer-edit',
-			text: "✎",
+			text: "#",
 			callback: () => {
 				const modal = new UIModal('Edit Layer', lns, this.position, () => {
 					lns.ui.update();
@@ -93,7 +105,7 @@ class UILayer extends UICollection {
 		});
 
 		this.tween = new UIButton({
-			text: "⧉",
+			text: "&",
 			type: 'layer-tween',
 			callback: () => {
 				
@@ -204,6 +216,15 @@ class UILayer extends UICollection {
 			}		
 		});
 
+		this.lock = new UIToggle({
+			type: 'layer-lock',
+			text: '0',
+			isOn: false,
+			callback: function() {
+				layer.isLocked = !layer.isLocked;
+			}
+		});
+
 		this.moveUp = new UIButton({
 			text: '^',
 			type:'move-up',
@@ -217,6 +238,8 @@ class UILayer extends UICollection {
 		if (width > 40) this.append(this.edit);
 		if (width > 60) this.append(this.tween);
 		if (width > 50) this.append(this.remove);
+		if (width > 70) this.append(this.lock);
+		
 		if (width > 90 && hasMultipleLayers) this.append(this.moveUp);
 		
 		if (width > 80) {

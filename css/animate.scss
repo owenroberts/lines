@@ -121,7 +121,9 @@ $anim-off: darkgreen;
 		.layer-tween, 
 		.tween-edit,
 		.move-up,
+		.layer-lock,
 		.remove {
+			font-family: monaco;
 			margin: 0;
 			margin-right: 1px;
 			padding: 1px;
@@ -129,10 +131,17 @@ $anim-off: darkgreen;
 			display: inline-block;
 			cursor: pointer;
 			// background-color: $ui-color;
+
 			&:hover { background-color: $ui-select; }
-			&.off { 
+
+			&.toggle {
 				background-color: $accent-color; 
 				color: white;
+			}
+			
+			&.toggle.off { 
+				background-color: transparent; 
+				color: inherit;
 			}
 		}
 

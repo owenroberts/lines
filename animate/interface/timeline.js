@@ -131,14 +131,6 @@ function Timeline() {
 						gridColumnStart: layer.startFrame * 2 + 1,
 						gridColumnEnd: layer.endFrame * 2 + 3
 					},
-					callback: function() {
-						// only update the values when toggling on, ignore when toggling off
-						if (!layer.isToggled) {
-							// set ui only
-							lns.draw.setProperties(layer.getEditProps(), true);
-						}
-						layer.toggle();
-					},
 					moveUp: function() {
 						const swapIndex = lns.anim.layers.indexOf(layers[i - 1]);
 						const layerIndex = lns.anim.layers.indexOf(layer);
@@ -204,29 +196,33 @@ function Timeline() {
 	};
 
 	// select all layers in frame
-	this.select = function() {
+	this.select = function(isSelect) {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
-			if (layer.isInFrame(lns.anim.currentFrame) && !layer.isToggled) {
-				self.panel.timeline[`layer-${i}`].toggle.handler(); // why handler?
+			if (layer.isInFrame(lns.anim.currentFrame) && layer.isToggled !== isSelect) {
+				self.panel.timeline[`layer-${i}`].toggle.update(isSelect);
 			}
 		}
 	};
 
-	// select all -- error? -- this is a bad idea right .... 
-	this.selectAll = function() {
-		const allToggled = lns.anim.layers.filter(layer => layer.isToggled).length == lns.anim.layers.length - 1;
-		
+	this.deselect = function() {
+		self.select(false);
+	};
+
+	this.lock = function(isLock) {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
-			if (allToggled && layer.isToggled) {
-				self.panel.timeline[`layer-${i}`].toggle.on();
-				lns.anim.layers[i].toggle();
-			} else if (!layer.isToggled) {
-				lns.anim.layers[i].toggle();
-				self.panel.timeline[`layer-${i}`].toggle.off(); // this is weird
+			if (layer.isInFrame(lns.anim.currentFrame) && layer.isLocked !== isLock) {
+				self.panel.timeline[`layer-${i}`].lock.update(isLock);
 			}
 		}
 	};
+
+	this.unlock = function() {
+		self.lock(false);
+	};
+
+
+
 
 }

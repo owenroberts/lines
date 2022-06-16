@@ -7,10 +7,12 @@ class UIToggle extends UIButton {
 		super.text = this.onText;
 		this.isOn = true;
 		if (params.isOn === false) this.toggle();
+		this.addClass('toggle');
 	}
 
 	update(isOn, uiOnly) {
 		if (isOn !== this.isOn) {
+			console.log(isOn, uiOnly);
 			if (!uiOnly) this.callback();
 			this.toggle();
 		}

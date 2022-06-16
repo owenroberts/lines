@@ -1025,6 +1025,26 @@
 			}
 		]
 	},
+	"erase": {
+		"label": "Erase",
+		"uis": [
+			{
+				"module": "draw",
+				"list": [
+					{
+						"type": "UISelect",
+						"face": "stateSelector",
+						"fromModule": {
+							"callback": "setEraseMethod"
+						},
+						"params": {
+							"options": ["points", "lines"]
+						}
+					}
+				]
+			}
+		]
+	},
 	"lines": {
 		"label": "Lines",
 		"uis": [
@@ -1389,12 +1409,31 @@
 					},
 					{
 						"type": "UIButton",
-
 						"fromModule": {
-							"callback": "selectAll"
+							"callback": "deselect"
 						},
 						"params": {
-							"text": "All",
+							"text": "Deselect",
+							"class": "right-end"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "lock"
+						},
+						"params": {
+							"text": "Lock",
+							"class": "left-end"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "unlock"
+						},
+						"params": {
+							"text": "Unlock",
 							"class": "right-end"
 						}
 					},

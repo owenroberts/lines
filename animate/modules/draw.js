@@ -149,6 +149,10 @@ function Draw(defaults) {
 	this.eraseDistance = 10;
 	this.eraseMethod = 'points'; // points, lines
 
+	this.setEraseMethod = function(value) {
+		self.eraseMethod = value;
+	};
+
 	this.outSideCanvas = function(ev) {
 		if (ev.toElement != lns.canvas.canvas) {
 			if (self.isDrawing) self.reset();
@@ -280,9 +284,9 @@ function Draw(defaults) {
 
 	this.start = function(ev) {
 		ev.preventDefault();
-		if (ev.which === 2) self.isErasing = true;
+		if (ev.which >= 2) self.isErasing = true;
 		if (ev.which == 1 && !lns.render.isPlaying && !ev.altKey) {
-			if (ev.metaKey) {
+			if (ev.ctrlKey) {
 				self.isErasing = true;
 			} else {
 				self.isDrawing = true;
@@ -300,6 +304,7 @@ function Draw(defaults) {
 	};
 
 	this.end = function(ev) {
+		self.isErasing = false;
 		if (self.startDots) {
 			const w = Math.abs(self.startDots.x - ev.offsetX);
 			const h = Math.abs(self.startDots.y - ev.offsetY);
@@ -324,7 +329,6 @@ function Draw(defaults) {
 			}
 			self.startDots = false;
 		} else if (ev.which == 1) {
-			self.isErasing = false;
 			self.isDrawing = false;
 
 			/* prevent saving single point drawing segments */
