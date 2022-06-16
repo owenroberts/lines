@@ -1405,6 +1405,13 @@
 						}
 					},
 					{
+						"type": "UIToggle",
+						"toggle": "useScrollToFrame",
+						"params": {
+							"text": "Scroll To Frame"
+						}
+					},
+					{
 						"type": "UIButton",
 						"fromModule": {
 							"callback": "split"

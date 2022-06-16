@@ -5,11 +5,19 @@ function Timeline() {
 	this.viewLayers = true;
 	this.viewActiveLayers = false;
 	this.updateDuringPlay = false;
+	this.useScrollToFrame = true;
 
 	this.init = function() {
 		self.panel.el.addEventListener('wheel', ev => {
 			ev.preventDefault();
-			self.frameWidth += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 20 : 1);
+			if (ev.shiftKey) {
+				let tl = self.panel.timeline.el;
+				let x = tl.scrollLeft;
+				tl.scrollTo(x + 20 * Math.sign(ev.deltaX), 0);
+				return;
+			}
+
+			self.frameWidth += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 5 : 1);
 			self.panel.timeline.setProp('--frame-width', self.frameWidth);
 		});
 
@@ -70,6 +78,7 @@ function Timeline() {
 	};
 
 	this.scrollToFrame = function() {
+		if (!self.useScrollToFrame) return;
 		self.panel.timeline.el.scrollTo(lns.ui.panels.timeline.timeline[`frm-${lns.anim.currentFrame}`].el.offsetLeft - 10, 0);
 	};
 
@@ -221,8 +230,5 @@ function Timeline() {
 	this.unlock = function() {
 		self.lock(false);
 	};
-
-
-
 
 }
