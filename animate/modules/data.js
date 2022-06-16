@@ -308,7 +308,6 @@ function Data() {
 	}; /* q key  */
 
 	this.trimDrawing = function() {
-		
 	};
 
 	this.applyOffset = function() {

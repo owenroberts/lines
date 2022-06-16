@@ -3,7 +3,7 @@ const { src, dest, watch, series, parallel, task } = require('gulp');
 const replace = require('gulp-replace');
 const sourcemaps = require('gulp-sourcemaps');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify-es').default;
+const terser = require('gulp-terser');
 const merge = require('merge-stream');
 const browserSync = require('browser-sync').create();
 const gulpif = require('gulp-if');
@@ -81,7 +81,7 @@ function browserSyncTask() {
 function jsTasks() {
 	function jsTask(files, name, dir){
 		return src(files)
-			.pipe(plumber({ errorHandler: function(err) {
+			/* .pipe(plumber({ errorHandler: function(err) {
 				if (beeper) {
 					notify.onError({
 						title: "Gulp error in " + err.plugin,
@@ -91,10 +91,12 @@ function jsTasks() {
 				} else {
 					console.log("Gulp error in " + err.plugin, err.toString());
 				}
-			}}))
+			}})) */
 			.pipe(sourcemaps.init())
 			.pipe(concat(name))
-			.pipe(uglify())
+			.pipe(terser().on('error', function(ugly) {
+				console.error('* gulp-terser error', ugly.message, ugly.filename, ugly.line, ugly.col, ugly.pos);
+			}))
 			.pipe(sourcemaps.write('./src_maps'))
 			.pipe(dest(dir))
 			.pipe(gulpif(useBrowserSync, browserSync.stream()));

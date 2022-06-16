@@ -203,6 +203,61 @@ function Draw(defaults) {
 		self.drawing.add(new Cool.Vector(x, y).divide(lns.canvas.scale).round());
 	};
 
+	this.erase = function(x, y) {
+		let mousePosition = new Cool.Vector(x, y).divide(lns.canvas.scale).round();
+
+		let layers = [];
+		for (let i = lns.anim.layers.length - 1; i >= 0; i--) {
+			const layer = lns.anim.layers[i];
+			
+			if (layer.isLocked) continue;
+			if (!layer.isInFrame(lns.anim.currentFrame)) continue;
+		
+			const drawing = lns.anim.drawings[layer.drawingIndex];
+			for (let j = drawing.points.length - 1; j >= 0; j--) {
+				const point = new Cool.Vector(drawing.points[j]);
+				const d = mousePosition.distance(point);
+				if (d < self.eraseDistance) {
+					if (self.eraseMethod === 'lines') {
+						let s = j, e = j; // start and end points
+						while (drawing.points[s] !== 'end' && s > 0) {
+							s--;
+						}
+						while (drawing.points[e] !== 'end' && e < drawing.length) {
+							e++;
+						}
+						drawing.points.splice(s, e);
+					} else if (self.eraseMethod === 'points') {
+						drawing.points[j] = 'end';
+					}
+				}
+			}
+
+			if (self.eraseMethod === 'points') {
+				for (let j = drawing.points.length - 1; j >= 0; j--) {
+					if (drawing.points[j] === 'end' && drawing.points[j - 1] === 'end') {
+						drawing.points.splice(j, 1);
+					}
+					if (drawing.points[j + 1] === 'end' && drawing.points[j - 1] === 'end') {
+						drawing.points.splice(j, 1);
+					}
+					if (drawing.points[j] === 'end' && j === 0) {
+						drawing.points.splice(j, 1);
+					}
+				}
+			}
+			
+			if (drawing.points.length === 0 && i !== lns.anim.layers.length - 1) {
+				layer.removeIndex(lns.anim.currentFrame, function() {
+					lns.anim.layers.splice(i, 1);
+					self.reset();
+				});
+			} else {
+				drawing.update(layer.drawProps);
+			}
+		}
+	};
+
 	this.update = function(ev) {
 		if (performance.now() > self.mouseInterval + self.mouseTimer) {
 			self.mouseTimer = performance.now();
@@ -218,54 +273,14 @@ function Draw(defaults) {
 					self.addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
 				}
 			} else if (self.isErasing) {
-				let mousePosition = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY));
-				if (self.eraseMethod === 'lines') {
-					// prob easier to just cut whole lines 
-					for (let i = lns.anim.drawings.length - 1; i >= 0; i--) {
-						const drawing = lns.anim.drawings[i];
-						for (let j = drawing.points.length - 1; j >= 0; j--) {
-							const point = new Cool.Vector(drawing.points[j]);
-							const d = mousePosition.distance(point);
-							// console.log(mousePosition, point);
-							if (d < self.eraseDistance) {
-								let s = j, e = j; // start and end points
-								
-								while (drawing.points[s] !== 'end' && s > 0) {
-									s--;
-								}
-								while (drawing.points[e] !== 'end' && e < drawing.length) {
-									e++;
-								}
-								drawing.points.splice(s, e);
-							}
-						}
-					}
-				} else if (self.eraseMethod === 'points') {
-					for (let i = lns.anim.drawings.length - 1; i >= 0; i--) {
-						const drawing = lns.anim.drawings[i]; 
-						// mark remove points end
-						for (let j = drawing.points.length - 1; j >= 0; j--) {
-							const point = new Cool.Vector(drawing.points[j]);
-							const d = mousePosition.distance(point);
-							// console.log(mousePosition, point);
-							if (d < self.eraseDistance) {
-								drawing.points[j] = 'end';
-							}
-						}
-						// remove extra end points
-						for (let j = drawing.points.length - 1; j >= 0; j--) {
-							if (drawing.points[j] === 'end' &&
-								drawing.points[j - 1] === 'end') {
-								drawing.points.splice(j, 1);
-							}
-						}
-					}
-				}
+				self.erase(Math.round(ev.offsetX), Math.round(ev.offsetY));
 			}
 		}
 	};
 
 	this.start = function(ev) {
+		ev.preventDefault();
+		if (ev.which === 2) self.isErasing = true;
 		if (ev.which == 1 && !lns.render.isPlaying && !ev.altKey) {
 			if (ev.metaKey) {
 				self.isErasing = true;

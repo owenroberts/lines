@@ -1,4 +1,9 @@
 const LayerMixin = {
+
+	init() {
+		this.isToggled = false;
+		this.isLocked = false;
+	},
 	
 	toggle() {
 		this.isToggled = !this.isToggled;
