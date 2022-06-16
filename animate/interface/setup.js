@@ -16,7 +16,6 @@ function setupAnimateInterface(ui) {
 			panels.appendChild(timeline);
 			panels.appendChild(play);
 		}
-
 	};
 
 	ui.toggleRL = function() {
@@ -61,6 +60,45 @@ function setupAnimateInterface(ui) {
 		ui.timeline.update();
 		ui.drawings.update();
 		ui.states.update();
+	};
+
+	ui.saveInterfaceLayout = function() {
+		const jsonfile = JSON.stringify(JSON.parse(localStorage.getItem('settings-lns')).panels);
+		const fileName = prompt('Layout Name:', 'New Layout');
+		const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
+		saveAs(blob, `${fileName}.json`);
+	};
+
+	ui.loadFile = function() {
+		const openFile = document.createElement('input');
+		openFile.type = "file";
+		openFile.click();
+		openFile.onchange = function() {
+			for (let i = 0, f; f = openFile.files[i]; i++) {
+				if (!f.type.match('application/json')) continue;
+				const reader = new FileReader();
+				reader.onload = (function(theFile) {
+					return function(e) {
+						const panels = JSON.parse(e.target.result);
+						console.log(panels);
+						for (const p in panels) {
+							
+							if (panels[p].docked) ui.panels[p].dock();
+							else ui.panels[p].undock();
+							
+							ui.panels[p].open.update(panels[p].open);
+							
+							if (panels[p].block) ui.panels[p].block();
+							if (panels[p].headless) ui.panels[p].headless();
+							
+							ui.panels[p].order = panels[p].order;
+						}
+
+					}
+				})(f);
+				reader.readAsText(f);
+			}
+		};
 	};
 
 }

@@ -16,7 +16,6 @@ class UILayer extends UICollection {
 				if (!layer.isToggled) {
 					lns.draw.setProperties(layer.getEditProps(), true); // set ui only
 				}
-				console.log('toggle');
 				layer.toggle();
 				self.highlight.update(layer.isToggled);
 			}

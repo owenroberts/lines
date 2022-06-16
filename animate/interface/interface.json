@@ -86,7 +86,6 @@
 							"max": 40
 						}
 					},
-					
 					{
 						"type": "UIToggle",
 						"face": "hideCursor",
@@ -97,6 +96,24 @@
 						"params": {
 							"onText": "Hide Cursor",
 							"offText": "Show Cursor"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "saveInterfaceLayout"
+						},
+						"params": {
+							"text": "Save Interface Layout"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "loadFile"
+						},
+						"params": {
+							"text": "Load Interface Layout"
 						}
 					}
 				]

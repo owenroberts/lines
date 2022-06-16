@@ -19,7 +19,7 @@ const gutil = require('gulp-util');
 
 const npmDist = require('gulp-npm-dist');
 
-const beeper = !process.argv.includes('-q');
+const beeper = process.argv.includes('--beep') || !process.argv.includes('-b');
 console.log('beeper is ' + (beeper ? 'active!' : 'not active'));
 let useBrowserSync = true;
 
