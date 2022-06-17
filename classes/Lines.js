@@ -366,6 +366,7 @@ class Lines {
 			wiggleSegments: json.ws,
 			breaks: json.b || false,
 			linesInterval: json.l || 5,
+			groupNumber: json.g,
 		};
 		if (json.t) {
 			params.tweens = json.t.map(t => { 

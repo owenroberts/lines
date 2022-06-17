@@ -1,9 +1,9 @@
 class UILayer extends UICollection {
-	constructor(params, layer, hasMultipleLayers) {
+	constructor(layer, params) {
 		super(params);
 		this.addClass('layer');
 		this.layer = layer;
-		const width = params.width * (layer.endFrame - layer.startFrame + 1);
+		if (params.canMoveUp) this.canMoveUp = params.canMoveUp;
 		const self = this;
 
 		this.toggle = new UIToggle({
@@ -240,7 +240,19 @@ class UILayer extends UICollection {
 			callback: params.moveUp
 		});
 
-		if (layer.startFrame > 0) this.append(this.left);
+		this.addToGroup = new UIButton({
+			text: 'G',
+			type: 'add-to-group',
+			class: 'timeline-btn',
+			callback: params.addToGroup
+		});
+
+		this.setup(params.width);
+		
+	}
+
+	setup(width) {
+		if (this.layer.startFrame > 0) this.append(this.left);
 		if (width > 70) this.append(this.leftRight);
 		this.append(this.toggle);
 		if (width > 30) this.append(this.highlight);
@@ -248,8 +260,9 @@ class UILayer extends UICollection {
 		if (width > 60) this.append(this.edit);
 		if (width > 50) this.append(this.tween);
 		if (width > 70) this.append(this.remove);
-		
-		if (width > 90 && hasMultipleLayers) this.append(this.moveUp);
+		if (width > 80) this.append(this.addToGroup);
+
+		if (width > 90 && this.canMoveUp) this.append(this.moveUp);
 		
 		if (width > 80) {
 			this.append(this.rightLeft);

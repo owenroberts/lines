@@ -6,6 +6,7 @@ function Timeline() {
 	this.viewActiveLayers = false;
 	this.updateDuringPlay = false;
 	this.useScrollToFrame = true;
+	this.groups = [];
 
 	this.init = function() {
 		self.panel.el.addEventListener('wheel', ev => {
@@ -127,13 +128,48 @@ function Timeline() {
 
 			let gridRowStart = 2;
 			let gridRowEnd = 3;
+
+			for (let i = 0, len = self.groups.length; i < len; i++) {
+				let layers = lns.anim.layers.filter(l => l.groupNumber === i);
+				if (self.viewActiveLayers && layers.filter(l => l.isInFrame(lns.anim.currentFrame)).length === 0) continue;
+				const startFrame = layers.reduce((a, b) => { 
+					return a.startFrame < b.startFrame ? a : b;
+				}).startFrame;
+				const endFrame = layers.reduce((a, b) => { 
+					return a.endFrame < b.endFrame ? a : b;
+				}).endFrame;
+				layers.forEach(layer => {
+					if (layer.startFrame !== startFrame) layer.startFrame = startFrame;
+					if (layer.endFrame !== startFrame) layer.endFrame = endFrame;
+				});
+				const ui = new UITimelineGroup(layers, {
+					name: self.groups[i],
+					type: 'group',
+					startFrame: startFrame,
+					endFrame: endFrame,
+					width: self.frameWidth * (endFrame - startFrame + 1),
+					css: {
+						gridRowStart: gridRowStart, // 2 + (i * 2),
+						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
+						gridColumnStart: startFrame * 2 + 1,
+						gridColumnEnd: endFrame * 2 + 3
+					}
+				});
+
+				gridRowStart += 2;
+				gridRowEnd += 2;
+				self.panel.timeline.append(ui, `group-${i}`);
+			}
+
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 				const layer = lns.anim.layers[i];
+				if (layer.groupNumber >= 0) continue;
 				if (self.viewActiveLayers && !layer.isInFrame(lns.anim.currentFrame)) continue;
 				if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
-				const ui = new UILayer({
+				const ui = new UILayer(layer, {
+					canMoveUp: i > 0 && layers.length > 2,
 					type: 'layer',
-					width: self.frameWidth,
+					width: self.frameWidth * (layer.endFrame - layer.startFrame + 1),
 					css: {
 						gridRowStart: gridRowStart, // 2 + (i * 2),
 						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
@@ -147,8 +183,40 @@ function Timeline() {
 							[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]]
 						}
 						self.update();
+					},
+					addToGroup() {
+						if (layer.groupNumber < 0) {
+							if (self.groups.length === 0) {
+								let createGroup = prompt("Name new group", "New Group 0");
+								self.groups.push(createGroup);
+								layer.groupNumber = 0;
+								lns.ui.update();
+							} else {
+								let groupSelector = new UIModal('Select Group', lns, ui.position, function() {
+									layer.groupNumber = +groupSelect.value;
+									lns.ui.update();
+								});
+								groupSelector.addBreak('Groups:');
+								let groupSelect = new UISelect({});
+								for (let i = 0; i < self.groups.length; i++) {
+									groupSelect.addOption(i, i === 0, self.groups[i]);
+								}
+								groupSelector.add(groupSelect);
+								groupSelector.addBreak();
+								groupSelector.add(new UIButton({
+									text: 'New Group',
+									callback: function() {
+										groupSelector.clear();
+										let createGroup = prompt("Name new group", "New Group " + self.groups.length);
+										self.groups.push(createGroup);
+										layer.groupNumber = self.groups.length - 1;
+										lns.ui.update();
+									}
+								}));
+							}
+						}
 					}
-				}, layer, i > 0 && layers.length > 2);
+				});
 				
 				gridRowStart += 2;
 				gridRowEnd += 2;

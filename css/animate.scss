@@ -100,7 +100,7 @@ $anim-off: darkgreen;
 		}
 	}
 
-	.layer, .tween {
+	.layer, .tween, .group {
 		margin: 0;
 		background-color: $main-color;
 		// overflow: hidden;
@@ -134,10 +134,13 @@ $anim-off: darkgreen;
 		.right-margin {
 			margin-left: auto;
 		}
-
 	}
 
 	.tween {
+		background-color: $anim-color;
+	}
+
+	.group {
 		background-color: $anim-color;
 	}
 

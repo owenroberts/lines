@@ -17,18 +17,20 @@ class UISelect extends UIElement {
 		}
 	}
 
-	addOption(value, selected) {
+	addOption(value, selected, text) {
 		const opt = document.createElement("option");
 		opt.value = opt.textContent = value;
 		if (selected) opt.selected = "selected";
+		if (text) opt.textContent = text;
 		this.el.appendChild(opt);
 	}
 
 	setOptions(options, selected) {
 		for (let i = 0; i < options.length; i++) {
 			const opt = Array.from(this.el.options).map(o => o.value);
-			if (!opt.includes(options[i]))
+			if (!opt.includes(options[i])) {
 				this.addOption(options[i], selected == options[i]);
+			}
 		}
 	}
 }

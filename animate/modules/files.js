@@ -55,6 +55,8 @@ function Files(params) {
 				: null;
 		}
 
+		if (lns.ui.timeline.groups.length > 0) json.g = [...lns.ui.timeline.groups];
+
 		if (Object.keys(lns.anim.states).length > 1) {
 			json.s = {};
 			for (const state in lns.anim.states) {
@@ -72,7 +74,6 @@ function Files(params) {
 			lns.ui.faces.title.value = self.fileName;
 		}
 	};
-
 
 	this.saveFramesToFiles = function() {
 		let i = 0;
@@ -111,6 +112,7 @@ function Files(params) {
 			lns.canvas.setHeight(data.h);
 			lns.ui.faces.fps.update(data.fps);
 			if (data.bg) lns.canvas.setBGColor(data.bg);
+			if (data.g) lns.ui.timeline.groups = [...data.g];
 			lns.draw.reset(); 
 			// if (callback) callback(data, params); // why?
 			if (callback) callback(data);

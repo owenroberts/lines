@@ -1,8 +1,9 @@
 const LayerMixin = {
 
-	init() {
+	init(params) {
 		this.isToggled = false;
 		this.isLocked = false;
+		this.groupNumber = typeof params.groupNumber !== 'undefined' ? params.groupNumber : -1;
 	},
 	
 	toggle() {
@@ -102,6 +103,7 @@ const LayerMixin = {
 			d: this.drawingIndex,
 			b: this.breaks,
 			l: this.linesInterval,
+			g: this.groupNumber,
 		};
 		if (this.x) props.x = this.x; // ignore if 0 or undefined
 		if (this.y) props.y = this.y;
