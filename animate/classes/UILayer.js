@@ -8,10 +8,10 @@ class UILayer extends UICollection {
 
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
+			class: 'timeline-btn',
 			text: `${layer.drawingIndex}`,
 			isOn: false,
 			callback: function() {
-
 				// only update the values when toggling on, ignore when toggling off
 				if (!layer.isToggled) {
 					lns.draw.setProperties(layer.getEditProps(), true); // set ui only
@@ -23,6 +23,7 @@ class UILayer extends UICollection {
 
 		this.highlight = new UIToggle({
 			type: 'layer-highlight',
+			class: 'timeline-btn',
 			text: '*',
 			isOn: false,
 			callback: function() {
@@ -32,7 +33,8 @@ class UILayer extends UICollection {
 
 		this.edit = new UIButton({
 			type: 'layer-edit',
-			text: "#",
+			class: 'timeline-btn',
+			text: "E",
 			callback: () => {
 				const modal = new UIModal('Edit Layer', lns, this.position, () => {
 					lns.ui.update();
@@ -104,7 +106,8 @@ class UILayer extends UICollection {
 		});
 
 		this.tween = new UIButton({
-			text: "&",
+			text: "T",
+			class: 'timeline-btn',
 			type: 'layer-tween',
 			callback: () => {
 				
@@ -171,6 +174,7 @@ class UILayer extends UICollection {
 		this.remove = new UIButton({
 			type: 'remove',
 			text: 'X',
+			class: 'timeline-btn',
 			callback: () => {
 				lns.anim.layers.splice(lns.anim.layers.indexOf(layer), 1);
 				lns.ui.update();
@@ -180,6 +184,7 @@ class UILayer extends UICollection {
 		this.left = new UIDragButton({
 			text: '⬗',
 			type: 'left',
+			class: 'timeline-btn',
 			callback: (dir, num) => {
 				layer.startFrame += (dir ? dir : -1) * (num ? num : 1);
 				lns.ui.update();
@@ -189,6 +194,7 @@ class UILayer extends UICollection {
 		this.leftRight = new UIButton({
 			text: '⬖',
 			type: 'left-right',
+			class: 'timeline-btn',
 			callback: () => {
 				if (layer.endFrame == layer.startFrame) layer.endFrame += 1;
 				layer.startFrame += 1;
@@ -199,6 +205,7 @@ class UILayer extends UICollection {
 		this.right = new UIDragButton({
 			text: '⬖',
 			type: 'right',
+			class: 'timeline-btn',
 			callback: (dir, num) => {
 				layer.endFrame += (dir ? dir : 1) * (num ? num : 1);
 				lns.ui.update();
@@ -208,6 +215,7 @@ class UILayer extends UICollection {
 		this.rightLeft = new UIButton({
 			text: '⬖',
 			type: 'right-left',
+			class: 'timeline-btn',
 			callback: () => {
 				if (layer.endFrame === layer.startFrame) layer.endFrame += -1;
 				layer.endFrame += -1;
@@ -217,7 +225,8 @@ class UILayer extends UICollection {
 
 		this.lock = new UIToggle({
 			type: 'layer-lock',
-			text: '0',
+			text: 'L',
+			class: 'timeline-btn',
 			isOn: false,
 			callback: function() {
 				layer.isLocked = !layer.isLocked;
@@ -227,6 +236,7 @@ class UILayer extends UICollection {
 		this.moveUp = new UIButton({
 			text: '^',
 			type:'move-up',
+			class: 'timeline-btn',
 			callback: params.moveUp
 		});
 
@@ -234,10 +244,10 @@ class UILayer extends UICollection {
 		if (width > 70) this.append(this.leftRight);
 		this.append(this.toggle);
 		if (width > 30) this.append(this.highlight);
-		if (width > 40) this.append(this.edit);
-		if (width > 60) this.append(this.tween);
-		if (width > 50) this.append(this.remove);
-		if (width > 70) this.append(this.lock);
+		if (width > 40) this.append(this.lock);
+		if (width > 60) this.append(this.edit);
+		if (width > 50) this.append(this.tween);
+		if (width > 70) this.append(this.remove);
 		
 		if (width > 90 && hasMultipleLayers) this.append(this.moveUp);
 		

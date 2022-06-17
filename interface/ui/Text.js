@@ -20,11 +20,13 @@ class UIText extends UIInput {
 		});
 
 		this.el.addEventListener('blur', ev => {
+
 			if (!this.value) {
 				this.el.placeholder = this.placeholder;
 				this.el.value = '';
-			} else if (this.value !== ev.target.value) {
-				this.el.value = this.value;
+			} else if (this.value != ev.target.value && ev.target.value) {
+				// this.el.value = this.value;
+				this.update(ev.target.value);
 			}
 		});
 	}
@@ -34,6 +36,18 @@ class UIText extends UIInput {
 	}
 
 	update(value, uiOnly) {
+
+		if (typeof value === 'string') {
+			if (value.match(/\D/)) {
+				try {
+					value = eval(value);
+				} catch(e) {
+					alert("Please enter a numerical value or mathematical expression.");
+					return;
+				}
+			}
+		}
+
 		if (this.callback && !uiOnly) this.callback(value);
 		this.value = value;
 		// this.el.blur(); // keep going back and forth on this??
@@ -42,11 +56,11 @@ class UIText extends UIInput {
 
 	set value(_value) {
 		// console.log('value', _value);
-		// this.el.value = this.el.placeholder = _value;
 		this._value = _value;
-		// this.el.value = _value;
+		this.placeholder = _value;
 		this.el.placeholder = _value;
-		this.el.blur();
+		this.el.value = '';
+		// this.el.blur();
 	}
 
 	get value() {

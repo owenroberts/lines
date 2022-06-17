@@ -319,7 +319,7 @@
 					},
 					{
 						"row": true,
-						"type": "UIBlur",
+						"type": "UIText",
 						"face": "width",
 						"label": "Width",
 						"fromModule": {
@@ -329,7 +329,7 @@
 					},
 					{
 						"row": true,
-						"type": "UIBlur",
+						"type": "UIText",
 						"face": "height",
 						"label": "Height",
 						"fromModule": {
@@ -775,7 +775,7 @@
 						"type": "UIRow"
 					},
 					{
-						"type": "UIBlur",
+						"type": "UIText",
 						"label": "FPS",
 						"key": ";",
 						"face": "fps",
@@ -788,7 +788,7 @@
 						}
 					},
 					{
-						"type": "UIBlur",
+						"type": "UIText",
 						"label": "DPS",
 						"key": "'",
 						"face": "dps",

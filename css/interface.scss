@@ -180,7 +180,7 @@ select {
 	&.undocked { display: none !important; }
 	&.closed { 
 		height: 25px; 
-		order: -1;
+		order: -1 !important;
 	}
 
 	&.block {
