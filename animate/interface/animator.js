@@ -18,7 +18,7 @@ function AnimatorInterface() {
 			}), row1);
 
 			const row2 = self.panel.addRow();
-			self.panel.add(new UIBlur({
+			self.panel.add(new UIText({
 				text: "Min",
 				value: range[0],
 				callback: function(n) {
@@ -26,7 +26,7 @@ function AnimatorInterface() {
 				}
 			}), row2, 'min');
 
-			self.panel.add(new UIBlur({
+			self.panel.add(new UIText({
 				text: "Max",
 				value: range[1],
 				callback: function(n) {

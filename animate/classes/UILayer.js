@@ -86,7 +86,7 @@ class UILayer extends UICollection {
 				}));
 
 				modal.addBreak("Start Frame:");
-				modal.add(new UIBlur({
+				modal.add(new UIText({
 					value: layer.startFrame,
 					callback: function(value) {
 						layer.startFrame = +value;
@@ -94,7 +94,7 @@ class UILayer extends UICollection {
 				}));
 
 				modal.addBreak("End Frame:");
-				modal.add(new UIBlur({
+				modal.add(new UIText({
 					value: layer.endFrame,
 					callback: function(value) {
 						layer.endFrame = +value;
@@ -138,7 +138,7 @@ class UILayer extends UICollection {
 				}));
 
 				modal.addBreak('Start Frame:');
-				modal.add(new UIBlur({
+				modal.add(new UIText({
 					value: tween.startFrame,
 					callback: function(value) {
 						tween.startFrame = +value;
@@ -146,7 +146,7 @@ class UILayer extends UICollection {
 				}));
 
 				modal.addBreak('End Frame:');
-				modal.add(new UIBlur({
+				modal.add(new UIText({
 					value: tween.endFrame,
 					callback: function(value) {
 						tween.endFrame = +value;
@@ -154,7 +154,7 @@ class UILayer extends UICollection {
 				}));
 
 				modal.addBreak('Start Value:');
-				modal.add(new UIBlur({
+				modal.add(new UIText({
 					value: tween.startValue,
 					callback: function(value) {
 						tween.startValue = +value;
@@ -162,7 +162,7 @@ class UILayer extends UICollection {
 				}));
 
 				modal.addBreak('End Value:');
-				modal.add(new UIBlur({
+				modal.add(new UIText({
 					value: tween.endValue,
 					callback: function(value) {
 						tween.endValue = +value;

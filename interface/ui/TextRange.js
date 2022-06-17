@@ -5,7 +5,7 @@ class UITextRange extends UICollection {
 		this.callback = params.callback;
 		this.arguments = params.arguments || [];
 
-		this.textInput = new UIBlur({
+		this.textInput = new UIText({
 			...params,
 			callback: this.handler.bind(this)
 		});

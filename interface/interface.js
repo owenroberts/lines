@@ -5,7 +5,6 @@ function Interface(app) {
 		UIElement,
 		UIRange,
 		UIText,
-		UIBlur,
 		UITextRange,
 		UIToggle,
 		UIButton,
