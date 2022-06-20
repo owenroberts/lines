@@ -16,16 +16,17 @@ class UIText extends UIInput {
 
 		/* have to hit enter to confirm value */
 		this.el.addEventListener('keyup', ev => {
-			if (ev.which == 13) this.update(ev.target.value);
+			if (ev.which == 13) {
+				this.update(ev.target.value);
+				this.el.blur();
+			}
 		});
 
 		this.el.addEventListener('blur', ev => {
-
 			if (!this.value) {
 				this.el.placeholder = this.placeholder;
 				this.el.value = '';
 			} else if (this.value != ev.target.value && ev.target.value) {
-				// this.el.value = this.value;
 				this.update(ev.target.value);
 			}
 		});
