@@ -1461,6 +1461,15 @@
 						}
 					},
 					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "resetLayers"
+						},
+						"params": {
+							"text": "Reset Layers"
+						}
+					},
+					{
 						"type": "UIRow",
 						"k": "timeline"
 					}

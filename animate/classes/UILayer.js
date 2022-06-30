@@ -10,7 +10,7 @@ class UILayer extends UICollection {
 			type: 'layer-toggle',
 			class: 'timeline-btn',
 			text: `${layer.drawingIndex}`,
-			isOn: false,
+			isOn: layer.isToggled,
 			callback: function() {
 				// only update the values when toggling on, ignore when toggling off
 				if (!layer.isToggled) {
@@ -25,7 +25,7 @@ class UILayer extends UICollection {
 			type: 'layer-highlight',
 			class: 'timeline-btn',
 			text: '*',
-			isOn: false,
+			isOn: layer.isHighlighted,
 			callback: function() {
 				layer.isHighlighted = !layer.isHighlighted;
 			}
@@ -227,7 +227,7 @@ class UILayer extends UICollection {
 			type: 'layer-lock',
 			text: 'L',
 			class: 'timeline-btn',
-			isOn: false,
+			isOn: layer.isLocked,
 			callback: function() {
 				layer.isLocked = !layer.isLocked;
 			}

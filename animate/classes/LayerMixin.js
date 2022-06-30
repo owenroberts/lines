@@ -3,7 +3,14 @@ const LayerMixin = {
 	init(params) {
 		this.isToggled = false;
 		this.isLocked = false;
+		this.isHighlighted = false;
 		this.groupNumber = typeof params.groupNumber !== 'undefined' ? params.groupNumber : -1;
+	},
+
+	reset() {
+		this.isToggled = false;
+		this.isLocked = false;
+		this.isHighlighted = false;
 	},
 	
 	toggle() {

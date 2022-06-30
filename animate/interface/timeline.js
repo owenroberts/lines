@@ -163,14 +163,13 @@ function Timeline() {
 				gridRowEnd += 2;
 				rowCount++;
 				self.panel.timeline.append(ui, `group-${i}`);
-
 			}
 
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 				const layer = lns.anim.layers[i];
 				if (layer.groupNumber >= 0) continue;
 				if (self.viewActiveLayers && !layer.isInFrame(lns.anim.currentFrame)) continue;
-				if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
+				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				const ui = new UILayer(layer, {
 					canMoveUp: i > 0 && layers.length > 2,
 					type: 'layer',
@@ -303,6 +302,14 @@ function Timeline() {
 
 	this.unlock = function() {
 		self.lock(false);
+	};
+
+	this.resetLayers = function() {
+		for (let i = 0, len = lns.anim.layers.length; i < len; i++) {
+			const layer = lns.anim.layers[i];
+			layer.reset();
+		}
+		self.drawLayers();
 	};
 
 }

@@ -17,8 +17,9 @@ function Play() {
 	// fix for playing animation with nothing in the final frame
 	this.checkEnd = function() {
 		if (lns.anim.currentFrame == lns.anim.endFrame && 
-			!lns.draw.hasDrawing()) 
+			!lns.draw.hasDrawing()) {
 			self.next(-1);
+		}
 	};
 
 	/* call before changing a frame */
