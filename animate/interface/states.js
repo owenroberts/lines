@@ -23,7 +23,7 @@ function States() {
 			text: name
 		}), row);
 
-		self.panel.add(new UIText({
+		self.panel.add(new UINumber({
 			text: "Start",
 			value: state.start,
 			callback: function(n) {
@@ -31,7 +31,7 @@ function States() {
 			}
 		}), row, 'start');
 
-		self.panel.add(new UIText({
+		self.panel.add(new UINumber({
 			text: "End",
 			value: state.end,
 			callback: function(n) {

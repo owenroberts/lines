@@ -15,7 +15,7 @@ class UITween extends UICollection {
 				/* not DRY maybe make an animate class tween-modal */
 
 				modal.addBreak('Start Frame:');
-				modal.add(new UIText({
+				modal.add(new UINumber({
 					value: tween.startFrame,
 					callback: function(value) {
 						tween.startFrame = +value;
@@ -23,7 +23,7 @@ class UITween extends UICollection {
 				}));
 
 				modal.addBreak('End Frame:');
-				modal.add(new UIText({
+				modal.add(new UINumber({
 					value: tween.endFrame,
 					callback: function(value) {
 						tween.endFrame = +value;
@@ -31,7 +31,7 @@ class UITween extends UICollection {
 				}));
 
 				modal.addBreak('Start Value:');
-				modal.add(new UIText({
+				modal.add(new UINumber({
 					value: tween.startValue,
 					callback: function(value) {
 						tween.startValue = +value;
@@ -39,7 +39,7 @@ class UITween extends UICollection {
 				}));
 
 				modal.addBreak('End Value:');
-				modal.add(new UIText({
+				modal.add(new UINumber({
 					value: tween.endValue,
 					callback: function(value) {
 						tween.endValue = +value;

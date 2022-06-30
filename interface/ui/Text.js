@@ -2,7 +2,7 @@ class UIText extends UIInput {
 	constructor(params) {
 		super(params);
 		this.el.type = "text";
-		this.placeholder = this.el.placeholder || params.placeholder || params.text || params.value;
+		this.placeholder = this.el.placeholder || params.placeholder || params.text || params.value || '';
 		this.el.placeholder = this.placeholder;
 
 		this.el.addEventListener('focus', ev => {
@@ -37,17 +37,6 @@ class UIText extends UIInput {
 	}
 
 	update(value, uiOnly) {
-
-		if (typeof value === 'string') {
-			if (value.match(/\D/)) {
-				try {
-					value = eval(value);
-				} catch(e) {
-					alert("Please enter a numerical value or mathematical expression.");
-					return;
-				}
-			}
-		}
 
 		if (this.callback && !uiOnly) this.callback(value);
 		this.value = value;

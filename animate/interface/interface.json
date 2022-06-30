@@ -74,7 +74,7 @@
 						}
 					},
 					{
-						"type": "UIText",
+						"type": "UINumber",
 						"face": "interfaceScale",
 						"label": "Scale",
 						"fromModule": {
@@ -130,7 +130,6 @@
 						"type": "UIText",
 						"face": "title",
 						"params": {
-							"placeholder": "title",
 							"id": "title"
 						}
 					},
@@ -197,7 +196,7 @@
 				"module": "draw",
 				"list": [
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Mouse time",
 						"face": "mouseInterval",
 						"key": "m",
@@ -210,7 +209,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Distance threshold",
 						"face": "distanceThreshold",
 						"key": "shift-m",
@@ -252,7 +251,7 @@
 					},
 					{
 						"row": true,
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"number":  "x",
 						"label": "X",
 						"params": {
@@ -263,7 +262,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"number": "y",
 						"label": "Y",
 						"params": {
@@ -274,7 +273,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"number": "size",
 						"label": "Size",
 						"params": {
@@ -286,7 +285,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"number": "rotation",
 						"label": "Rotation",
 						"params": {
@@ -319,7 +318,7 @@
 					},
 					{
 						"row": true,
-						"type": "UIText",
+						"type": "UINumber",
 						"face": "width",
 						"label": "Width",
 						"fromModule": {
@@ -329,7 +328,7 @@
 					},
 					{
 						"row": true,
-						"type": "UIText",
+						"type": "UINumber",
 						"face": "height",
 						"label": "Height",
 						"fromModule": {
@@ -339,7 +338,7 @@
 					},
 					{
 						"row": true,
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"face": "lineWidth",
 						"label": "Line Width",
 						"fromModule": {
@@ -354,7 +353,7 @@
 					},
 					{
 						"row": true,
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"face": "canvasScale",
 						"label": "Scale",
 						"fromModule": {
@@ -755,7 +754,7 @@
 				"sub": "play",
 				"list": [
 					{
-						"type": "UIText",
+						"type": "UINumber",
 						"key": "f",
 						"face": "frameDisplay",
 						"fromModule": {
@@ -775,7 +774,7 @@
 						"type": "UIRow"
 					},
 					{
-						"type": "UIText",
+						"type": "UINumber",
 						"label": "FPS",
 						"key": ";",
 						"face": "fps",
@@ -788,7 +787,7 @@
 						}
 					},
 					{
-						"type": "UIText",
+						"type": "UINumber",
 						"label": "DPS",
 						"key": "'",
 						"face": "dps",
@@ -803,7 +802,7 @@
 						"type": "UIRow"
 					},
 					{
-						"type": "UIText",
+						"type": "UINumber",
 						"label": "Onion",
 						"key": "l",
 						"face": "onionSkinNum",
@@ -949,7 +948,7 @@
 						"type": "UIRow"
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "X Spread Left",
 						"face": "brushSpreadXLeft",
 						"number":  "brushSpreadXLeft",
@@ -960,7 +959,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "X Direction Right",
 						"face": "brushSpreadXRight",
 						"number":  "brushSpreadXRight",
@@ -971,7 +970,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Y Spread",
 						"face": "brushSpreadY",
 						"number":  "brushSpreadY",
@@ -982,7 +981,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "X Random",
 						"face": "brushRandomX",
 						"number":  "brushRandomX",
@@ -994,7 +993,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Y Random",
 						"face": "brushRandomY",
 						"number":  "brushRandomY",
@@ -1006,7 +1005,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Segments Min",
 						"face": "brushSegmentsMin",
 						"number":  "brushSegmentsMin",
@@ -1017,7 +1016,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Segments Max",
 						"face": "brushSegmentsMax",
 						"number":  "brushSegmentsMax",
@@ -1028,7 +1027,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Dots",
 						"face": "dots",
 						"number": "dots",
@@ -1069,7 +1068,7 @@
 				"module": "draw",
 				"list": [
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Lines Interval",
 						"face": "linesInterval",
 						"fromModule": {
@@ -1082,7 +1081,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Segments",
 						"face": "segmentNum",
 						"fromModule": {
@@ -1095,7 +1094,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Jiggle",
 						"face": "jiggleRange",
 						"fromModule": {
@@ -1108,7 +1107,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Wiggle",
 						"face": "wiggleRange",
 						"fromModule": {
@@ -1121,7 +1120,7 @@
 						}
 					},
 					{
-						"type": "UITextRange",
+						"type": "UINumberRange",
 						"label": "Wiggle Speed",
 						"face": "wiggleSpeed",
 						"fromModule": {

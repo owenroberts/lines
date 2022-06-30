@@ -1,11 +1,11 @@
-class UITextRange extends UICollection {
+class UINumberRange extends UICollection {
 	constructor(params) {
 		super(params);
 
 		this.callback = params.callback;
 		this.arguments = params.arguments || [];
 
-		this.textInput = new UIText({
+		this.textInput = new UINumber({
 			...params,
 			callback: this.handler.bind(this)
 		});

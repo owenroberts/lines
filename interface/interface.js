@@ -5,7 +5,8 @@ function Interface(app) {
 		UIElement,
 		UIRange,
 		UIText,
-		UITextRange,
+		UINumber,
+		UINumberRange,
 		UIToggle,
 		UIButton,
 		UIColor,
@@ -198,9 +199,6 @@ function Interface(app) {
 
 		const params = { ...data.params };
 		if (data.key) params.key = data.key;
-
-
-		// console.log(data);
 
 		// most callbacks
 		for (const k in data.fromModule) {

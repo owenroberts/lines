@@ -69,7 +69,7 @@ class UITimelineGroup extends UICollection {
 				});
 
 				modal.addBreak("Start Frame:");
-				modal.add(new UIText({
+				modal.add(new UINumber({
 					value: params.startFrame,
 					callback: function(value) {
 						layers.forEach(layer => {
@@ -79,7 +79,7 @@ class UITimelineGroup extends UICollection {
 				}));
 
 				modal.addBreak("End Frame:");
-				modal.add(new UIText({
+				modal.add(new UINumber({
 					value: params.endFrame,
 					callback: function(value) {
 						layers.forEach(layer => {
