@@ -114,6 +114,7 @@ function appLoad(settings) {
 	lns.ui.faces.canvasScale.update(settings.canvasScale);
 	lns.ui.faces.interfaceScale.update(settings.interfaceScale);
 	lns.ui.faces.quickRefScale.update(settings.quickRefScale);
+	console.log(lns.ui.faces.quickRefScale, settings.quickRefScale);
 
 	settings.quickRefList.forEach(ref => {
 		lns.ui.createUI(ref, ref.mod, ref.sub, lns.ui.panels.quickRef);

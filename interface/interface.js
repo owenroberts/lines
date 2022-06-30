@@ -71,18 +71,25 @@ function Interface(app) {
 
 		// not handled by individual uis
 		quickRef.add(new UILabel({ text: "Scale" }));
+		
 
-		const quickRefScale = new UIText({
+		const quickRefScale = new UINumber({
 			placeholder: 11,
-			min: 10,
-			max: 40,
 			callback: function(value) {
+				if (!value || value < 10 || value > 40) return;
 				quickRef.fontSize = +value;
-				document.body.style.setProperty('--quick-ref-font-size', quickRef.fontSize);
+				document.body.style.setProperty('--quick-ref-font-size', +value);
 			}
 		});
 		
 		quickRef.add(quickRefScale);
+		quickRef.add(new UIButton({
+			text: 'Reset',
+			callback: function() {
+				quickRefScale.update(11);
+			}
+		}));
+
 		self.faces.quickRefScale = quickRefScale;
 
 		quickRef.add(new UIButton({
@@ -159,9 +166,7 @@ function Interface(app) {
 					}
 				});
 
-				const p1 = new UISelect({
-					options: Object.keys(data)
-				});
+				const p1 = new UISelect({ options: Object.keys(data) });
 				m1.add(p1);
 			}
 		}));
