@@ -1432,6 +1432,7 @@
 					},
 					{
 						"type": "UIButton",
+						"key": "alt-d",
 						"fromModule": {
 							"callback": "deselect"
 						},
@@ -1442,6 +1443,7 @@
 					},
 					{
 						"type": "UIButton",
+						"key": "shift-l",
 						"fromModule": {
 							"callback": "lock"
 						},
@@ -1452,6 +1454,7 @@
 					},
 					{
 						"type": "UIButton",
+						"key": "alt-l",
 						"fromModule": {
 							"callback": "unlock"
 						},
