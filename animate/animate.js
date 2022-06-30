@@ -40,7 +40,11 @@ window.addEventListener("load", function() {
 	
 	lns.ui = new Interface(lns);
 	lns.ui.capture = new Capture({
-		useSequentialNumbering: true
+		useSequentialNumbering: true,
+		captureSettings: {
+			lineWidth: 1,
+			canvasScale: 2,
+		}
 	});
 	lns.ui.states = new States();
 	lns.ui.palette = new Palette();

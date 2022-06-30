@@ -917,12 +917,29 @@
 					},
 					{
 						"type": "UIButton",
+						"key": "j",
 						"fromModule": {
-							"callback": "startVideo"
+							"callback": "videoLoop"
 						},
 						"params": {
 							"text": "Video Loops"
 						}
+					},
+					{
+						"type": "UIRow",
+						"label": "Capture Settings"
+					},
+					{
+						"label": "Line Width",
+						"type": "UINumber",
+						"number": "lineWidth",
+						"face": "captureLineWidth"
+					},
+					{
+						"label": "Canvas Scale",
+						"type": "UINumber",
+						"number": "canvasScale",
+						"face": "captureCanvasScale"
 					}
 				]
 			}
@@ -1463,15 +1480,7 @@
 							"class": "right-end"
 						}
 					},
-					{
-						"type": "UIButton",
-						"fromModule": {
-							"callback": "resetLayers"
-						},
-						"params": {
-							"text": "Reset Layers"
-						}
-					},
+					
 					{
 						"type": "UIRow",
 						"k": "timeline"

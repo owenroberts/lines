@@ -12,7 +12,9 @@ function Capture(params) {
 	this.isCapturing = false;
 
 	this.isVideo = false;
-	this.videoLoops = 0;
+	let videoLoops = 0;
+	this.lineWidth = params.captureSettings.lineWidth || lns.canvas.lineWidth;
+	this.canvasScale = params.captureSettings.canvasScale || lns.canvas.scale;
 	
 	this.one = function() {
 		self.frames = 1;
@@ -82,15 +84,21 @@ function Capture(params) {
 		}
 	};
 	
-	this.startVideo = function() {
+	this.videoLoop = function() {
 
 		lns.anim.isPlaying = false;
 		lns.anim.frame = 0;
 
-		self.videoLoops = +prompt("Number of loops?");
+		if (params.captureSettings) {
+			for (const k in params.captureSettings) {
+				lns.ui.faces[k].update(self[k])
+			}
+		}
+
+		videoLoops = +prompt("Number of loops?", 1);
 		lns.anim.onPlayedState = function() {
-			if (self.videoLoops > 1) {
-				self.videoLoops--;
+			if (videoLoops > 1) {
+				videoLoops--;
 			} else if (self.isVideo) {
 				self.video();
 				self.isVideo = false;
