@@ -52,6 +52,7 @@ function Timeline() {
 		self.frameWidth = (w - 2 * f) / f; 
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
 		self.frameClass();
+		self.drawLayers();
 	};
 
 	this.frameClass = function() {
@@ -76,6 +77,7 @@ function Timeline() {
 		self.frameClass();
 		self.update();
 		self.scrollToFrame();
+		self.drawLayers();
 	};
 
 	this.scrollToFrame = function() {
@@ -124,10 +126,11 @@ function Timeline() {
 				lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame)) :
 				lns.anim.layers;
 
-			self.panel.timeline.setProp('--num-layers', layers.length - 1);
+			// self.panel.timeline.setProp('--num-layers', layers.length - 1);
 
 			let gridRowStart = 2;
 			let gridRowEnd = 3;
+			let rowCount = 0;
 
 			for (let i = 0, len = self.groups.length; i < len; i++) {
 				let layers = lns.anim.layers.filter(l => l.groupNumber === i);
@@ -158,7 +161,9 @@ function Timeline() {
 
 				gridRowStart += 2;
 				gridRowEnd += 2;
+				rowCount++;
 				self.panel.timeline.append(ui, `group-${i}`);
+
 			}
 
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
@@ -220,6 +225,7 @@ function Timeline() {
 				
 				gridRowStart += 2;
 				gridRowEnd += 2;
+				rowCount++;
 				self.panel.timeline.append(ui, `layer-${i}`);
 
 				/* add tweens -- add methods like getTweens */
@@ -241,11 +247,11 @@ function Timeline() {
 					gridRowEnd += 2;
 				}
 			}
-		} else {
-			self.panel.timeline.setProp('--num-layers', 0);
+
+			self.panel.timeline.setProp('--num-layers', rowCount);
 		}
 
-		if (self.autoFit) self.fit();
+		// if (self.autoFit) self.fit(); // infinite loop if updating layer on fit
 	};
 
 	this.toggleViewLayers = function() {
