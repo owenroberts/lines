@@ -1,4 +1,9 @@
 class UINumber extends UIText {
+	constructor(params) {
+		super(params);
+		this.el.classList.add('number');
+	}
+
 	update(value, uiOnly) {
 
 		if (typeof value === 'string') {

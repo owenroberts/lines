@@ -7,6 +7,7 @@ function Interface(app) {
 		UIText,
 		UINumber,
 		UINumberRange,
+		UINumberDrag,
 		UIToggle,
 		UIButton,
 		UIColor,
@@ -39,7 +40,8 @@ function Interface(app) {
 		const ui = self.keys[k];
 
 		if (k && ui && 
-			document.activeElement.type != "text" && 
+			document.activeElement.type !== "text" &&
+			document.activeElement.type !== "number" && 
 			!ev.metaKey) {
 			ev.preventDefault();
 			ui.handler(ev.target.value, true);

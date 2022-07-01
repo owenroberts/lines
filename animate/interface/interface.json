@@ -338,7 +338,7 @@
 					},
 					{
 						"row": true,
-						"type": "UINumberRange",
+						"type": "UINumberDrag",
 						"face": "lineWidth",
 						"label": "Line Width",
 						"fromModule": {

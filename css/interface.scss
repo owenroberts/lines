@@ -280,6 +280,11 @@ select {
 				outline: 1px solid $accent-color;
 			}
 		}
+
+		input.number {
+			text-align: auto;
+			text-align: -webkit-auto;
+		}
 	}
 
 	.btn {

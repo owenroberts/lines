@@ -5,7 +5,7 @@ class UINumberRange extends UICollection {
 		this.callback = params.callback;
 		this.arguments = params.arguments || [];
 
-		this.textInput = new UINumber({
+		this.numberInput = new UINumber({
 			...params,
 			callback: this.handler.bind(this)
 		});
@@ -17,17 +17,17 @@ class UINumberRange extends UICollection {
 
 		if (params.event == 'change') {
 			this.range.el.addEventListener('input', ev => {
-				this.textInput.el.placeholder = ev.currentTarget.value;
+				this.numberInput.el.placeholder = ev.currentTarget.value;
 			});
 		}
 	}
 
 	get html() {
-		return [this.textInput.el, this.range.el];
+		return [this.numberInput.el, this.range.el];
 	}
 
 	handler(value, uiOnly) {
-		if (!uiOnly)this.update(value !== undefined ? +value : prompt(this.prompt));
+		if (!uiOnly) this.update(value !== undefined ? +value : prompt(this.prompt));
 		this.value = value;
 	}
 
@@ -37,11 +37,11 @@ class UINumberRange extends UICollection {
 	}
 
 	set value(value) {
-		this.textInput.value = value;
+		this.numberInput.value = value;
 		this.range.value = value;
 	}
 
 	get value() {
-		return this.textInput.value;
+		return this.numberInput.value;
 	}
 }
