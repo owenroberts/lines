@@ -248,7 +248,6 @@ class UILayer extends UICollection {
 		});
 
 		this.setup(params.width);
-		
 	}
 
 	setup(width) {

@@ -5,12 +5,14 @@ const LayerMixin = {
 		this.isLocked = false;
 		this.isHighlighted = false;
 		this.groupNumber = typeof params.groupNumber !== 'undefined' ? params.groupNumber : -1;
+		this.highlightColor = '#94dfe3'; // default
 	},
 
 	reset() {
 		this.isToggled = false;
 		this.isLocked = false;
 		this.isHighlighted = false;
+		this.highlightColor = '#94dfe3';
 	},
 	
 	toggle() {

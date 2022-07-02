@@ -134,6 +134,7 @@ function Timeline() {
 
 			for (let i = 0, len = self.groups.length; i < len; i++) {
 				let layers = lns.anim.layers.filter(l => l.groupNumber === i);
+				if (layers.length === 0) continue;
 				if (self.viewActiveLayers && layers.filter(l => l.isInFrame(lns.anim.currentFrame)).length === 0) continue;
 				const startFrame = layers.reduce((a, b) => { 
 					return a.startFrame < b.startFrame ? a : b;
@@ -147,6 +148,7 @@ function Timeline() {
 				});
 				const ui = new UITimelineGroup(layers, {
 					name: self.groups[i],
+					index: i,
 					type: 'group',
 					startFrame: startFrame,
 					endFrame: endFrame,
@@ -189,6 +191,7 @@ function Timeline() {
 						self.update();
 					},
 					addToGroup() {
+						lns.draw.reset(); // save current lines
 						if (layer.groupNumber < 0) {
 							if (self.groups.length === 0) {
 								let createGroup = prompt("Name new group", "New Group 0");
@@ -282,7 +285,11 @@ function Timeline() {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
 			if (layer.isInFrame(lns.anim.currentFrame) && layer.isToggled !== isSelect) {
-				self.panel.timeline[`layer-${i}`].toggle.update(isSelect);
+				if (layer.groupNumber >= 0) {
+					self.panel.timeline[`group-${layer.groupNumber}`].toggle.update(isSelect);
+				} else {
+					self.panel.timeline[`layer-${i}`].toggle.update(isSelect);
+				}
 			}
 		}
 	};

@@ -69,7 +69,6 @@ function Render(dps, showStats) {
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
-
 			// what actually need to be update here ?
 			if (lns.anim.isPlaying) lns.ui.timeline.update();
 
@@ -109,8 +108,11 @@ function Render(dps, showStats) {
 				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 					const layer = lns.anim.layers[i];
 					if (layer.isInFrame(lns.anim.currentFrame)) {
-						if (layer.isHighlighted) lns.anim.overrideProperty('color', '#94dfe3');
-						else layer.dontDraw = true;
+						if (layer.isHighlighted) {
+							lns.anim.overrideProperty('color', layer.highlightColor);
+						} else {
+							layer.dontDraw = true;
+						}
 					}
 				}
 				lns.canvas.ctx.lineWidth = 5;

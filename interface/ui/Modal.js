@@ -1,5 +1,5 @@
 class UIModal extends UICollection {
-	constructor(title, app, position, callback) {
+	constructor(title, app, position, callback, onClear) {
 		super({});
 		this.addClass('modal');
 		this.append(new UILabel({ text: title }));
@@ -29,6 +29,7 @@ class UIModal extends UICollection {
 			text: "x",
 			callback: ev => {
 				this.clear();
+				if (onClear) onClear();
 			}
 		});
 

@@ -89,11 +89,7 @@ function Capture(params) {
 		lns.anim.isPlaying = false;
 		lns.anim.frame = 0;
 
-		if (params.captureSettings) {
-			for (const k in params.captureSettings) {
-				lns.ui.faces[k].update(self[k])
-			}
-		}
+		
 
 		videoLoops = +prompt("Number of loops?", 1);
 		lns.anim.onPlayedState = function() {
@@ -140,6 +136,11 @@ function Capture(params) {
 
 	this.video = function(promptTitle) {
 		if (self.ready) {
+			if (params.captureSettings) {
+				for (const k in params.captureSettings) {
+					lns.ui.faces[k].update(self[k])
+				}
+			}
 			lns.ui.faces.onionSkinIsVisible.update(false);
 			self.ready = false;
 			self.isVideo = true;

@@ -122,7 +122,6 @@ class UIPanel extends UICollection {
 			|| this.rows[this.rows.length - 1]
 			|| this.addRow();
 		if (ui.prompt == "Go To Frame") {
-			
 			// console.log(row)
 		}
 		row.append(ui, k);

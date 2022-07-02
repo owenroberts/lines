@@ -25,6 +25,9 @@ function Interface(app) {
 	this.faces = {}; /* references to faces we need to update values ???  */
 	this.panels = new UICollection({ id: "panels" });
 
+	// break between collapsed and uncollapsed panels
+	this.panels.append(new UIElement({ id: 'panel-break' }));
+
 	/* key commands */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];

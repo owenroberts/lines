@@ -87,6 +87,7 @@ select {
 	#interface { 
 		flex: 1; 
 		grid-area: interface;
+		max-width: 500px;
 	}
 
 	#draw {
@@ -144,6 +145,11 @@ select {
 	flex-wrap: wrap;
 	gap: 0 0.5rem;
 	align-items: baseline;
+}
+
+// break in collapsed and uncollapsed panels
+#panel-break {
+	flex-basis: 100%;
 }
 
 #quickRef-panel {

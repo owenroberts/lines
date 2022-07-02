@@ -247,6 +247,7 @@ class Lines {
 		// s,e = [point, offset] = [[x, y], [offset1, offset2]] = [[x,y], [[x,y], [x,y]]]
 
 		if (typeof s[0] === 'undefined') return;
+		if (typeof e[0] === 'undefined') return;
 
 		this.ctx.moveTo(
 			props.x + s[0][0] + s[1][0][0],

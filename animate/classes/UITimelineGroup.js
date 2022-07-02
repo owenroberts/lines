@@ -1,6 +1,7 @@
 class UITimelineGroup extends UICollection {
 	constructor(layers, params) {
 		super(params);
+		this.index = params.index;
 		this.layers = layers;
 		this.addClass('group');
 		this.startFrame = params.startFrame;
@@ -25,7 +26,7 @@ class UITimelineGroup extends UICollection {
 			type: 'group-toggle',
 			class: 'timeline-btn',
 			text: params.name,
-			isOn: false,
+			isOn: this.isToggled,
 			callback: function() {
 				self.isToggled = !self.isToggled;
 				layers.forEach(layer => {
@@ -92,6 +93,38 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
+		this.removeLayer = new UIButton({
+			type: 'group-remove-layer',
+			class: 'timeline-btn',
+			text: 'R',
+			callback: () => {
+				const clearFunc = function() {
+					lns.ui.timeline.resetLayers()
+					lns.ui.update();
+				};
+
+				const modal = new UIModal('Remove Layers', lns, this.position, clearFunc, clearFunc);
+
+				for (let i = 0, len = lns.anim.layers.length; i < len; i++) {
+					if (lns.anim.layers[i].groupNumber !== this.index) continue;
+					const layer = lns.anim.layers[i];
+					// current highlight system cant do diff layers
+					// const color = '#' + Math.floor(Math.random()*16777215).toString(16);
+					// layer.isHighlighted = true;
+					// layer.highlightColor = color;
+					const layerButton = new UIButton({
+						text: `Layer ${i}, Drawing ${layer.drawingIndex}`,
+						// css: { "background": color },
+						callback: function() {
+							layer.groupNumber = -1;
+							modal.remove(layerButton);
+						}
+					});
+					modal.add(layerButton);
+				}
+			}
+		});
+
 		this.left = new UIDragButton({
 			text: '⬗',
 			type: 'left',
@@ -154,6 +187,7 @@ class UITimelineGroup extends UICollection {
 		if (width > 40) this.append(this.lock);
 		if (width > 50) this.append(this.edit);
 		if (width > 60) this.append(this.breakUp);
+		if (width > 70) this.append(this.removeLayer);
 
 		if (width > 80) {
 			this.append(this.rightLeft);
