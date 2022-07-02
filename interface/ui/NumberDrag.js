@@ -2,6 +2,8 @@ class UINumberDrag extends UICollection {
 	constructor(params) {
 		super(params);
 		this.callback = params.callback;
+		this.stepAmount = params.stepAmount || 1;
+		// constrain range
 
 		this.numberInput = new UINumber({
 			...params,
@@ -12,16 +14,16 @@ class UINumberDrag extends UICollection {
 		this.stepDown = new UIButton({
 			text: '<',
 			class: 'left-end',
-			callback: function() {
-				this.update(this.value - 1);
+			callback: () => {
+				this.update(this.value - this.stepAmount);
 			}
 		});
 
 		this.stepUp = new UIButton({
 			text: '>',
 			class: 'right-end',
-			callback: function() {
-				this.update(this.value + 1);
+			callback: () => {
+				this.update(this.value + this.stepAmount);
 			}
 		});
 

@@ -135,7 +135,6 @@ function sassTask(files, name, dir){
 				title: "Gulp error in " + err.plugin,
 				message:  err.toString()
 			})(err);
-			gutil.beep();
 		}}))
         .pipe(sourcemaps.init()) // initialize sourcemaps first
         .pipe(sass()) // compile SCSS to CSS

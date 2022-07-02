@@ -102,7 +102,26 @@ select {
 	}
 }
 
+@mixin left-end {
+	margin-right: 0 !important;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border-right: 1px solid $ui-select;
+}
+
+@mixin middle {
+	margin-right: 0;
+	border-radius: 0;
+	border-right: 1px solid $ui-select;
+}
+
+@mixin right-end {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
 .btn {
+
 	display: inline-block;
 	background-color: $ui-color;
 	padding: 0 0.5em;
@@ -120,23 +139,9 @@ select {
 	white-space: nowrap;
 	&.press { background-color: $accent-two; }
 
-	&.left-end {
-		margin-right: 0 !important;
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
-		border-right: 1px solid $ui-select;
-	}
-
-	&.middle {
-		margin-right: 0;
-		border-radius: 0;
-		border-right: 1px solid $ui-select;
-	}
-
-	&.right-end {
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
-	}
+	&.left-end { @include left-end; }
+	&.middle { @include middle; }
+	&.right-end { @include right-end; }
 }
 
 #panels {
@@ -279,6 +284,18 @@ select {
 			&:focus {
 				outline: 1px solid $accent-color;
 			}
+
+			&.left-end,
+			&.middle,
+			&.right-end { 
+				height: 1.25rem;
+				text-align: center;
+				width: calc(var(--base-font-size)*2*1px);
+			}
+
+			&.left-end { @include left-end; }
+			&.middle { @include middle; }
+			&.right-end { @include right-end; }
 		}
 
 		input.number {
