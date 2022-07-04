@@ -37,7 +37,9 @@ function Interface(app) {
 		k = ev.ctrlKey ? "ctrl-" + k : k;
 		k = ev.altKey ? "alt-" + k : k;
 
+
 		const ui = self.keys[k];
+		console.log(k, ui);
 
 		if (k && ui && 
 			document.activeElement.type !== "text" &&

@@ -297,7 +297,7 @@ select {
 			&.right-end { 
 				height: 1.125rem;
 				text-align: center;
-				width: calc(var(--base-font-size)*2*1px);
+				width: calc(var(--base-font-size) * 3 * 1px);
 			}
 
 			&.left-end { @include left-end; }
@@ -317,6 +317,7 @@ select {
 		margin-top: 0.5em;
 		transition: background-color 100ms ease-in-out;
 		height: 1.125rem;
+		line-height: 1.55;
 
 		&.triggered {
 			background-color: $ui-select;

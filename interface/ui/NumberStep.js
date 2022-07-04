@@ -94,6 +94,10 @@ class UINumberStep extends UICollection {
 		
 	}
 
+	handler(value) {
+		this.update(value !== undefined ? +value : prompt(this.prompt));
+	}
+
 	update(value, uiOnly) {
 		if (value < this.min) return;
 		if (value > this.max) return;
@@ -105,7 +109,6 @@ class UINumberStep extends UICollection {
 	}
 
 	get html() {
-		console.log(this.el);
 		return this.el;
 	}
 

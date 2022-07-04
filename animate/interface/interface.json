@@ -361,9 +361,9 @@
 						"params": {
 							"event": "change",
 							"value": 1,
-							"min": 0.1,
+							"min": 0.5,
 							"max": 4,
-							"step": 0.1
+							"step": 0.05
 						}
 					}
 				]
