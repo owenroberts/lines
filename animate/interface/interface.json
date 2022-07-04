@@ -74,7 +74,7 @@
 						}
 					},
 					{
-						"type": "UINumber",
+						"type": "UINumberStep",
 						"face": "interfaceScale",
 						"label": "Scale",
 						"fromModule": {
@@ -209,8 +209,8 @@
 						}
 					},
 					{
-						"type": "UINumberRange",
-						"label": "Distance threshold",
+						"type": "UINumberStep",
+						"label": "Dist thresh",
 						"face": "distanceThreshold",
 						"key": "shift-m",
 						"number": "distanceThreshold",
@@ -338,7 +338,7 @@
 					},
 					{
 						"row": true,
-						"type": "UINumberDrag",
+						"type": "UINumberStep",
 						"face": "lineWidth",
 						"label": "Line Width",
 						"fromModule": {
@@ -346,14 +346,13 @@
 						},
 						"params": {
 							"value": 1,
-							"min": 0.25,
-							"max": 4,
-							"step": 0.25
+							"min": 1,
+							"max": 4
 						}
 					},
 					{
 						"row": true,
-						"type": "UINumberRange",
+						"type": "UINumberStep",
 						"face": "canvasScale",
 						"label": "Scale",
 						"fromModule": {
@@ -774,7 +773,7 @@
 						"type": "UIRow"
 					},
 					{
-						"type": "UINumber",
+						"type": "UINumberStep",
 						"label": "FPS",
 						"key": ";",
 						"face": "fps",
@@ -787,7 +786,7 @@
 						}
 					},
 					{
-						"type": "UINumber",
+						"type": "UINumberStep",
 						"label": "DPS",
 						"key": "'",
 						"face": "dps",
@@ -802,7 +801,7 @@
 						"type": "UIRow"
 					},
 					{
-						"type": "UINumber",
+						"type": "UINumberStep",
 						"label": "Onion",
 						"key": "l",
 						"face": "onionSkinNum",
@@ -1085,7 +1084,7 @@
 				"module": "draw",
 				"list": [
 					{
-						"type": "UINumberRange",
+						"type": "UINumberStep",
 						"label": "Lines Interval",
 						"face": "linesInterval",
 						"fromModule": {
@@ -1098,7 +1097,8 @@
 						}
 					},
 					{
-						"type": "UINumberRange",
+						"row": true,
+						"type": "UINumberStep",
 						"label": "Segments",
 						"face": "segmentNum",
 						"fromModule": {
@@ -1111,7 +1111,8 @@
 						}
 					},
 					{
-						"type": "UINumberRange",
+						"row": true,
+						"type": "UINumberStep",
 						"label": "Jiggle",
 						"face": "jiggleRange",
 						"fromModule": {
@@ -1124,7 +1125,8 @@
 						}
 					},
 					{
-						"type": "UINumberRange",
+						"row": true,
+						"type": "UINumberStep",
 						"label": "Wiggle",
 						"face": "wiggleRange",
 						"fromModule": {
@@ -1132,11 +1134,12 @@
 						},
 						"params": {
 							"min": 0,
-							"max": 15,
+							"max": 16,
 							"arguments": ["wiggleRange"]
 						}
 					},
 					{
+						"row": true,
 						"type": "UINumberRange",
 						"label": "Wiggle Speed",
 						"face": "wiggleSpeed",
@@ -1171,6 +1174,7 @@
 						}
 					},
 					{
+						"row": true,
 						"type": "UIButton",
 						"fromModule": {
 							"callback": "setDefaults"

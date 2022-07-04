@@ -1,6 +1,7 @@
 class UICollection extends UIElement {
 	constructor(params) {
 		super(params);
+		
 	}
 
 	// k is the key value in the interface object

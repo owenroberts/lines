@@ -7,7 +7,7 @@ function Interface(app) {
 		UIText,
 		UINumber,
 		UINumberRange,
-		UINumberDrag,
+		UINumberStep,
 		UIToggle,
 		UIButton,
 		UIColor,

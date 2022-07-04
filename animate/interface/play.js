@@ -11,6 +11,8 @@ function Play() {
 			lns.draw.layer.endFrame = lns.anim.currentFrame;
 
 			lns.ui.update();
+		} else {
+			lns.ui.faces.frameDisplay.update(lns.anim.currentFrame, true);
 		}
 	}; /* f key */
 

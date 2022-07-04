@@ -199,6 +199,12 @@ select {
 		width: max-content;
 		display: flex;
 		flex-wrap: wrap;
+
+		.row {
+			flex-wrap: nowrap;
+			// border-right: 1px solid $text-color;
+			// padding: 0 1px;
+		}
 	}
 
 	.row label { margin-bottom: 0; }
@@ -281,14 +287,15 @@ select {
 			background-color: $ui-color;
 			padding-right: 0.25em;
 			height: 1.125rem;
+			
 			&:focus {
-				outline: 1px solid $accent-color;
+				border: 1px solid $accent-color;
 			}
 
 			&.left-end,
 			&.middle,
 			&.right-end { 
-				height: 1.25rem;
+				height: 1.125rem;
 				text-align: center;
 				width: calc(var(--base-font-size)*2*1px);
 			}
@@ -299,8 +306,8 @@ select {
 		}
 
 		input.number {
-			text-align: auto;
-			text-align: -webkit-auto;
+			text-align: left;
+			vertical-align: bottom;
 		}
 	}
 
@@ -309,6 +316,8 @@ select {
 		margin-right: 3px;
 		margin-top: 0.5em;
 		transition: background-color 100ms ease-in-out;
+		height: 1.125rem;
+
 		&.triggered {
 			background-color: $ui-select;
 		}
@@ -397,6 +406,7 @@ select {
 			}
 		}	
 	}
+
 }
 
 .modal {

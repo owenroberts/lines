@@ -17,7 +17,8 @@ class UINumber extends UIText {
 			}
 		}
 
-		if (this.callback && !uiOnly) this.callback(value);
 		this.value = value;
+		if (this.callback && !uiOnly) this.callback(value);
+		
 	}
 }
