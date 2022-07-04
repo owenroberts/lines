@@ -756,6 +756,7 @@
 						"type": "UINumber",
 						"key": "f",
 						"face": "frameDisplay",
+						"label": "Frame",
 						"fromModule": {
 							"callback": "setFrame"
 						},
@@ -907,6 +908,7 @@
 					},
 					{
 						"type": "UIButton",
+						"key": "shift-j",
 						"fromModule": {
 							"callback": "videoFrames"
 						},

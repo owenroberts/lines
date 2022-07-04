@@ -5,8 +5,8 @@ const LayerMixin = {
 		this.isLocked = false;
 		this.isHighlighted = false;
 		this.groupNumber = typeof params.groupNumber !== 'undefined' ? params.groupNumber : -1;
-		this.highlightColor = '#94dfe3'; // default
-	},
+		// this.highlightColor = '#94dfe3'; // default -- doesn't currently work
+ 	},
 
 	reset() {
 		this.isToggled = false;

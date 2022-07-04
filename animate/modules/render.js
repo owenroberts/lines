@@ -105,14 +105,11 @@ function Render(dps, showStats) {
 
 			// highlight
 			if (lns.anim.layers.some(l => l.isHighlighted)) {
+				lns.anim.overrideProperty('color', '#94dfe3');
 				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 					const layer = lns.anim.layers[i];
-					if (layer.isInFrame(lns.anim.currentFrame)) {
-						if (layer.isHighlighted) {
-							lns.anim.overrideProperty('color', layer.highlightColor);
-						} else {
-							layer.dontDraw = true;
-						}
+					if (!layer.isInFrame(lns.anim.currentFrame) || !layer.isHighlighted) {
+						layer.dontDraw = true;
 					}
 				}
 				lns.canvas.ctx.lineWidth = 5;

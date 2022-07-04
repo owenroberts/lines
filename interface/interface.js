@@ -32,14 +32,12 @@ function Interface(app) {
 	/* key commands */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
-		if (k == "space") ev.preventDefault();
+		if (k === "space") ev.preventDefault();
 		k = ev.shiftKey ? "shift-" + k : k;
 		k = ev.ctrlKey ? "ctrl-" + k : k;
 		k = ev.altKey ? "alt-" + k : k;
 
-
 		const ui = self.keys[k];
-		console.log(k, ui);
 
 		if (k && ui && 
 			document.activeElement.type !== "text" &&

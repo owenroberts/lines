@@ -9,7 +9,6 @@ class UIDragButton extends UIButton {
 		});
 
 		this.el.addEventListener('mousedown', ev => {
-			console.log(ev);
 			this.down.x = ev.pageX;
 		});
 
