@@ -32,7 +32,6 @@ function Settings(app, name, appSave) {
 					if (!settings.panels[p].open) app.ui.panels[p].open.update();
 					if (settings.panels[p].block) app.ui.panels[p].block();
 					if (settings.panels[p].headless) app.ui.panels[p].headless();
-					console.log(p);
 					app.ui.panels[p].order = settings.panels[p].order;
 				}
 			}

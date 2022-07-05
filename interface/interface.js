@@ -62,7 +62,10 @@ function Interface(app) {
 				for (const key in data) {
 					self.createPanel(key, data[key]);
 				}
-				self.addSelect([...Object.keys(data), 'quickRef']);
+				self.addSelect([
+						...Object.keys(data).map(k => [k, data[k].label]), 
+						['quickRef', 'Quick Ref']
+					]);
 				// self.settings.load();
 				if (callback) callback();
 			});
@@ -179,13 +182,17 @@ function Interface(app) {
 
 	this.addSelect = function(panelList) {
 		const selector = new UICollection({id: 'selector'});
-		selector.append(new UISelectButton({
-			options: panelList,
+		const selectBtn = new UISelectButton({
 			callback: function(value) {
 				self.panels[value].dock();
 			},
 			btn: '+'
-		}));
+		});
+		panelList.forEach(p => {
+			const [option, label] = p;
+			selectBtn.select.addOption(option, false, label);
+		});
+		selector.append(selectBtn);
 	};
 
 	this.createPanel = function(key, data) {
