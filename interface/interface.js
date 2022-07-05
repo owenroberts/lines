@@ -25,6 +25,7 @@ function Interface(app) {
 	this.keys = {};
 	this.faces = {}; /* references to faces we need to update values ???  */
 	this.panels = new UICollection({ id: "panels" });
+	this.quickRef = new QuickRef(app);
 
 	// break between collapsed and uncollapsed panels
 	this.panels.append(new UIElement({ id: 'panel-break' }));
@@ -55,129 +56,21 @@ function Interface(app) {
 
 	// use module ? 
 	this.load = function(file, callback) {
-		fetch(file)
-			.then(response => { return response.json(); })
-			.then(data => {
-				self.addQuickRef(data);
-				for (const key in data) {
-					self.createPanel(key, data[key]);
-				}
-				self.addSelect([
-						...Object.keys(data).map(k => [k, data[k].label]), 
-						['quickRef', 'Quick Ref']
-					]);
-				// self.settings.load();
-				if (callback) callback();
-			});
-	};
-
-	this.addQuickRef = function(data) {
-		const quickRef = new UIPanel('quickRef', 'Quick Ref');
-		quickRef.fontSize = 11;
-		quickRef.list = [];
-		self.panels.append(quickRef, 'quickRef');
-
-		// not handled by individual uis
-		quickRef.add(new UILabel({ text: "Scale" }));
-		
-
-		const quickRefScale = new UINumber({
-			placeholder: 11,
-			callback: function(value) {
-				if (!value || value < 10 || value > 40) return;
-				quickRef.fontSize = +value;
-				document.body.style.setProperty('--quick-ref-font-size', +value);
+		async function loadInterfaceFiles() {
+			const appFile = await fetch(file).then(response => response.json());
+			const interfaceFile = await fetch('../interface/interface.json').then(response => response.json());
+			const data = { ...interfaceFile, ...appFile };
+			for (const key in data) {
+				self.createPanel(key, data[key]);
 			}
-		});
-		
-		quickRef.add(quickRefScale);
-		quickRef.add(new UIButton({
-			text: 'Reset',
-			callback: function() {
-				quickRefScale.update(11);
-			}
-		}));
-
-		self.faces.quickRefScale = quickRefScale;
-
-		quickRef.add(new UIButton({
-			text: "+",
-			callback: function() {
-
-				// m1 choose a panel
-				const m1 = new UIModal("panels", app, quickRef.position, function() {
-					const options = {};
-					data[p1.value].uis.forEach(ui => {
-						ui.list.forEach(el => {
-
-							let createQuickUI = (el.number || el.toggle) ? true : false;
-							if (el.fromModule) createQuickUI = el.fromModule.callback ? true : false;
-
-							if (createQuickUI) {
-								const title = el.params ? 
-									el.params.text || el.params.onText || el.params.label || el.face:
-									el.fromModule.callback;
-								
-								el.mod = ui.module;
-								el.sub = ui.sub;
-
-								options[title] = el;
-							}
-						});
-					});
-
-					if (Object.keys(options).length > 0) {
-						// m2 choose a callback
-						const m2 = new UIModal("ui", app, quickRef.position, function() {
-							const d = options[p2.value];
-							const ui = self.createUI(d, d.mod, d.sub, quickRef);
-							quickRef.list.push(d);
-						});
-
-						const p2 = new UISelect({
-							options: Object.keys(options)
-						});
-						m2.add(p2);
-
-						const callFunc = new UIButton({
-							text: "Execute",
-							callback: function() {
-								m2.clear();
-								const d = options[p2.value];
-								console.log(d);
-
-								const m = d.sub ? app[d.mod][d.sub] : app[d.mod];
-								// most callbacks
-								if (d.fromModule) {
-									if (d.fromModule.callback) {
-										m[d.fromModule.callback]();
-									}
-								}
-
-								/* 
-									direct set properties, toggle, number 
-									doesn't update ui
-								*/
-								if (d.number) {
-									m[d.number] = +prompt(d.prompt || d.label);
-								}
-
-								if (d.toggle) {
-									m[d.toggle] = !m[d.toggle];
-								}
-
-							}
-						});
-						m2.add(callFunc);
-					} else {
-						m1.clear();
-					}
-				});
-
-				const p1 = new UISelect({ options: Object.keys(data) });
-				m1.add(p1);
-			}
-		}));
+			self.addSelect([
+				...Object.keys(data).map(k => [k, data[k].label])
+			]);
+			// self.settings.load();
+			self.quickRef.addData(data);
+			if (callback) callback();
+		}	
+		loadInterfaceFiles();
 	};
 
 	this.addSelect = function(panelList) {

@@ -1,67 +1,10 @@
 {
-	"interface": {
-		"label": "Interface",
+	"appInterface": {
+		"label": "Animate Interface",
 		"uis": [
 			{
 				"module": "ui",
-				"sub": "settings",
 				"list": [
-					{
-						"type": "UIButton",
-						"key": "ctrl-s",
-						"fromModule": {
-							"callback": "save"
-						},
-						"params": {
-							"text": "Save"
-						}
-					},
-					{
-						"type": "UIButton",
-						"key": "alt-s",
-						"fromModule": {
-							"callback": "load"
-						},
-						"params": {
-							"text": "Load"
-						}
-					},
-					{
-						"type": "UIButton",
-						"fromModule": {
-							"callback": "clear"
-						},
-						"params": {
-							"text": "Clear"
-						}
-					},
-					{
-						"type": "UIToggle",
-						"fromModule": {
-							"callback": "toggleSaveSettings"
-						},
-						"params": {
-							"onText": "Auto Save On",
-							"offText": "Auto Save Off"
-						}
-					}
-				]
-			},
-			{
-				"module": "ui",
-				"list": [
-					{ "type": "UIRow" },
-					{
-						"type": "UIToggle",
-						"face": "rl",
-						"fromModule": {
-							"callback": "toggleRL"
-						},
-						"params": {
-							"onText": "R/L",
-							"offText": "L/R"
-						}
-					},
 					{
 						"type": "UIToggle",
 						"face": "timelineView",
@@ -83,19 +26,6 @@
 						"params": {
 							"onText": "Hide Cursor",
 							"offText": "Show Cursor"
-						}
-					},
-					{
-						"type": "UINumberStep",
-						"face": "interfaceScale",
-						"label": "Scale",
-						"fromModule": {
-							"callback": "updateScale"
-						},
-						"params": {
-							"value": 11,
-							"min": 10,
-							"max": 40
 						}
 					}
 				]
