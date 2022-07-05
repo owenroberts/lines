@@ -27,11 +27,12 @@ function Settings(app, name, appSave) {
 			const settings = JSON.parse(localStorage[self.name]);
 			if (appLoad) appLoad(settings);
 			for (const p in settings.panels) {
-				if (p != 'el') { /* fix later */
+				if (p !== 'el') { /* fix later */
 					if (settings.panels[p].docked) app.ui.panels[p].dock();
 					if (!settings.panels[p].open) app.ui.panels[p].open.update();
 					if (settings.panels[p].block) app.ui.panels[p].block();
 					if (settings.panels[p].headless) app.ui.panels[p].headless();
+					console.log(p);
 					app.ui.panels[p].order = settings.panels[p].order;
 				}
 			}

@@ -1,5 +1,5 @@
 {
-	"settings": {
+	"interface": {
 		"label": "Interface",
 		"uis": [
 			{
@@ -74,19 +74,6 @@
 						}
 					},
 					{
-						"type": "UINumberStep",
-						"face": "interfaceScale",
-						"label": "Scale",
-						"fromModule": {
-							"callback": "updateScale"
-						},
-						"params": {
-							"value": 11,
-							"min": 10,
-							"max": 40
-						}
-					},
-					{
 						"type": "UIToggle",
 						"face": "hideCursor",
 						"key": "alt-m",
@@ -99,21 +86,16 @@
 						}
 					},
 					{
-						"type": "UIButton",
+						"type": "UINumberStep",
+						"face": "interfaceScale",
+						"label": "Scale",
 						"fromModule": {
-							"callback": "saveInterfaceLayout"
+							"callback": "updateScale"
 						},
 						"params": {
-							"text": "Save Interface Layout"
-						}
-					},
-					{
-						"type": "UIButton",
-						"fromModule": {
-							"callback": "loadFile"
-						},
-						"params": {
-							"text": "Load Interface Layout"
+							"value": 11,
+							"min": 10,
+							"max": 40
 						}
 					}
 				]
@@ -948,8 +930,8 @@
 						"type": "UINumber",
 						"number": "videoBitsPerSecond",
 						"label": "Bitrate",
-						"params": {
-							"value": 8000000
+						"fromModule": {
+							"value": "videoBitsPerSecond"
 						}
 					},
 					{
@@ -1516,5 +1498,52 @@
 				]
 			}
 		]
+	},
+	"workspaces": {
+		"label": "Workspaces",
+		"uis": [
+			{
+				"module": "ui",
+				"list": [
+				{
+						"type": "UIButton",
+						"key": "alt-w",
+						"fromModule": {
+							"callback": "saveInterfaceLayout"
+						},
+						"params": {
+							"text": "Save Interface Layout"
+						}
+					},
+					{
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "loadInterfaceFile"
+						},
+						"params": {
+							"text": "Load Interface Layout"
+						}
+					},
+					{
+						"row": true,
+						"type": "UILabel",
+						"params": {
+							"text": "Defaults"
+						}
+					},
+					{
+						"row": true,
+						"type": "UIButton",
+						"fromModule": {
+							"callback": "loadInterfaceFile"
+						},
+						"params": {
+							"text": "Animation",
+							"arguments": ["/animate/interface/defaults/Animation.json"]
+						}
+					}
+				]
+			}
+		]	
 	}
 }
