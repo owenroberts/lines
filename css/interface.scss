@@ -122,26 +122,36 @@ select {
 
 .btn {
 
+	--progress-percent: 0;
+
 	display: inline-block;
 	background-color: $ui-color;
 	padding: 0 0.5em;
 	border-radius: 3px;
+	
 	&:hover {
 		background: $ui-select;
 		cursor: pointer;
 	}
+	
 	&:active {
 		background-color: $ui-highlight;
 	}
+	
 	transition: background-color 150ms ease-in;
 	line-height: 1.75;
 	vertical-align: middle;
 	white-space: nowrap;
+	
 	&.press { background-color: $accent-two; }
 
 	&.left-end { @include left-end; }
 	&.middle { @include middle; }
 	&.right-end { @include right-end; }
+
+	&.progress {
+		background: linear-gradient(90deg, $ui-select 0%, $ui-select calc(var(--progress-percent) * 1%), $ui-color calc(var(--progress-percent) * 1%));
+	}
 }
 
 #panels {

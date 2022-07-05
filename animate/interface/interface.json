@@ -909,16 +909,30 @@
 					{
 						"type": "UIButton",
 						"key": "shift-j",
+						"face": "videoFrame",
 						"fromModule": {
 							"callback": "videoFrames"
 						},
 						"params": {
-							"text": "Video Frames"
+							"text": "Video Frame",
+							"arguments": [false]
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "alt-j",
+						"fromModule": {
+							"callback": "videoFrames"
+						},
+						"params": {
+							"text": "Video Frames",
+							"arguments": [true]
 						}
 					},
 					{
 						"type": "UIButton",
 						"key": "j",
+						"face": "videoLoop",
 						"fromModule": {
 							"callback": "videoLoop"
 						},
@@ -929,6 +943,14 @@
 					{
 						"type": "UIRow",
 						"label": "Capture Settings"
+					},
+					{
+						"type": "UINumber",
+						"number": "videoBitsPerSecond",
+						"label": "Bitrate",
+						"params": {
+							"value": 8000000
+						}
 					},
 					{
 						"label": "Line Width",

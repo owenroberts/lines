@@ -4,7 +4,8 @@ function Capture(params) {
 	let useSequential = params.useSequentialNumbering || false;
 	let frameNum = 0;
 
-	this.ready = true; /* ready to start */
+	this.videoBitsPerSecond = 8000000; // youtube 1080p hd
+	this.isReady = true; /* ready to start */
 	this.prev = { f: undefined, n: 0 }; /* keeps track of image names */
 
 	this.frames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
@@ -89,17 +90,27 @@ function Capture(params) {
 		lns.anim.isPlaying = false;
 		lns.anim.frame = 0;
 
-		
+		lns.ui.faces['videoLoop'].addClass('progress');
 
 		videoLoops = +prompt("Number of loops?", 1);
+
+		lns.anim.onDraw = function() {
+			lns.ui.faces['videoLoop'].setProp('--progress-percent', 
+				Math.round(100 * lns.anim.currentFrame / lns.anim.endFrame)
+			);
+		}
+
 		lns.anim.onPlayedState = function() {
 			if (videoLoops > 1) {
 				videoLoops--;
+				
 			} else if (self.isVideo) {
 				self.video();
 				self.isVideo = false;
 				lns.anim.isPlaying = false;
 				lns.anim.onPlayedState = undefined;
+				lns.ui.faces['videoLoop'].removeClass('progress');
+				lns.anim.onDraw = undefined;
 			}
 		};
 		self.isVideo = true;
@@ -109,16 +120,23 @@ function Capture(params) {
 		lns.anim.isPlaying = true;
 	}; /* key? */
 
-	this.videoFrames = function() {
+	this.videoFrames = function(recordEachFrame) {
 		let numFrames = +prompt('Number of frames?', 48);
-		let recordEachFrame = confirm('Record each frame?');
-		lns.ui.faces.onionSkinIsVisible.update(false);
 
 		self.frames = numFrames;
+		lns.anim.isPlaying = false;
+		if (recordEachFrame) lns.anim.frame = 0;
 		self.video(true); // start recording
+
+		const faceProp = 'videoFrame' + recordEachFrame ? 's' : '';
+		lns.ui.faces[faceProp].addClass('progress');
+
 		lns.anim.onDraw = function() {
 			if (self.frames > 0) {
 				self.frames--;
+				lns.ui.faces[faceProp].setProp('--progress-percent', 
+					Math.round(100 * (1 - (self.frames / numFrames)))
+				);
 			} else if (self.isVideo) {
 				self.video(); // stop recording
 				if (recordEachFrame && lns.anim.currentFrame < lns.anim.endFrame) {
@@ -126,27 +144,28 @@ function Capture(params) {
 					lns.ui.play.next(1); // next frame
 					self.video(true); // start recording
 				} else {
-					lns.anim.isPlaying = false;
 					lns.anim.onDraw = undefined;
+					lns.ui.faces[faceProp].removeClass('progress');
 				}
-				
 			}
 		};
 	};
 
 	this.video = function(promptTitle) {
-		if (self.ready) {
+		// start video 		
+		if (self.isReady) {
 			if (params.captureSettings) {
 				for (const k in params.captureSettings) {
 					lns.ui.faces[k].update(self[k])
 				}
 			}
 			lns.ui.faces.onionSkinIsVisible.update(false);
-			self.ready = false;
+			self.isReady = false;
 			self.isVideo = true;
 			const stream = lns.canvas.canvas.captureStream(lns.render.dps);
 			self.rec = new MediaRecorder(stream, {
-     			videoBitsPerSecond : 3 * 1024 * 1024,
+     			videoBitsPerSecond : self.videoBitsPerSecond,
+     			mimeType: 'video/webm;codecs=vp8,opus'
 			});
 			self.rec.start();
 			self.rec.addEventListener('dataavailable', e => {
@@ -160,9 +179,10 @@ function Capture(params) {
 				a.download = `${t}.webm`;
 				a.click();
 			});
+		// end video	
 		} else {
 			self.isVideo = false;
-			self.ready = true;
+			self.isReady = true;
 			self.rec.stop();
 		}
 	};
