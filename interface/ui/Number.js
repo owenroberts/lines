@@ -5,7 +5,7 @@ class UINumber extends UIText {
 	}
 
 	update(value, uiOnly) {
-
+		if (!value) return;
 		if (typeof value === 'string') {
 			if (value.match(/\D/)) {
 				try {
