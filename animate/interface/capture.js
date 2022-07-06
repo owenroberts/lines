@@ -128,7 +128,7 @@ function Capture(params) {
 		if (recordEachFrame) lns.anim.frame = 0;
 		self.video(true); // start recording
 
-		const faceProp = 'videoFrame' + recordEachFrame ? 's' : '';
+		const faceProp = 'videoFrame' + (recordEachFrame ? 's' : '');
 		lns.ui.faces[faceProp].addClass('progress');
 
 		lns.anim.onDraw = function() {
