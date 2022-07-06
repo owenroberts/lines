@@ -26,9 +26,10 @@ class UINumberRange extends UICollection {
 		return [this.numberInput.el, this.range.el];
 	}
 
-	handler(value, uiOnly) {
-		if (!uiOnly) this.update(value !== undefined ? +value : prompt(this.prompt));
-		this.value = value;
+	handler(value, isKeyEvent) {
+		const v = isKeyEvent ? +prompt(this.prompt) : +value;
+		if (!v) return;
+		this.update(v);
 	}
 
 	update(value, uiOnly) {

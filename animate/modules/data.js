@@ -91,7 +91,7 @@ function Data() {
 
 	this.addMultipleCopies = function() {
 		copyFrame = [];
-		let n = +prompt("Number of copies: ");
+		let n = +prompt("Number of copies: ", 1);
 		self.copy();
 		if (n) {
 			for (let i = 0; i < n; i++) {

@@ -13,7 +13,9 @@ class UIRange extends UIInput {
 	}
 
 	handler(value, isKeyEvent) {
-		this.update(isKeyEvent ? prompt(this.prompt) : +value);
+		const v = isKeyEvent ? prompt(this.prompt) : value;
+		if (!v) return;
+		this.update(v);
 	}
 
 	update(value) {
