@@ -155,7 +155,6 @@ class UITimelineGroup extends UICollection {
 			type: 'right',
 			class: 'timeline-btn',
 			callback: (dir, num) => {
-				console.log(layers);
 				layers.forEach(layer => {
 					layer.endFrame += (dir ? dir : 1) * (num ? num : 1);
 				});

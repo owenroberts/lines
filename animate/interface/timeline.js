@@ -4,6 +4,7 @@ function Timeline() {
 	this.autoFit = false;
 	this.viewLayers = true;
 	this.viewActiveLayers = false;
+	this.viewGroups = true;
 	this.updateDuringPlay = false;
 	this.useScrollToFrame = true;
 	this.groups = [];
@@ -121,6 +122,8 @@ function Timeline() {
 
 	this.drawLayers = function() {
 
+		let rowCount = 0; // set rows
+
 		if (self.viewLayers) {
 			const layers = self.viewActiveLayers ?
 				lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame)) :
@@ -130,46 +133,47 @@ function Timeline() {
 
 			let gridRowStart = 2;
 			let gridRowEnd = 3;
-			let rowCount = 0;
 
-			for (let i = 0, len = self.groups.length; i < len; i++) {
-				let layers = lns.anim.layers.filter(l => l.groupNumber === i);
-				if (layers.length === 0) continue;
-				if (self.viewActiveLayers && layers.filter(l => l.isInFrame(lns.anim.currentFrame)).length === 0) continue;
-				const startFrame = layers.reduce((a, b) => { 
-					return a.startFrame < b.startFrame ? a : b;
-				}).startFrame;
-				const endFrame = layers.reduce((a, b) => { 
-					return a.endFrame < b.endFrame ? a : b;
-				}).endFrame;
-				layers.forEach(layer => {
-					if (layer.startFrame !== startFrame) layer.startFrame = startFrame;
-					if (layer.endFrame !== startFrame) layer.endFrame = endFrame;
-				});
-				const ui = new UITimelineGroup(layers, {
-					name: self.groups[i],
-					index: i,
-					type: 'group',
-					startFrame: startFrame,
-					endFrame: endFrame,
-					width: self.frameWidth * (endFrame - startFrame + 1),
-					css: {
-						gridRowStart: gridRowStart, // 2 + (i * 2),
-						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
-						gridColumnStart: startFrame * 2 + 1,
-						gridColumnEnd: endFrame * 2 + 3
-					}
-				});
+			if (self.viewGroups) {
+				for (let i = 0, len = self.groups.length; i < len; i++) {
+					let layers = lns.anim.layers.filter(l => l.groupNumber === i);
+					if (layers.length === 0) continue;
+					if (self.viewActiveLayers && layers.filter(l => l.isInFrame(lns.anim.currentFrame)).length === 0) continue;
+					const startFrame = layers.reduce((a, b) => { 
+						return a.startFrame < b.startFrame ? a : b;
+					}).startFrame;
+					const endFrame = layers.reduce((a, b) => { 
+						return a.endFrame < b.endFrame ? a : b;
+					}).endFrame;
+					layers.forEach(layer => {
+						if (layer.startFrame !== startFrame) layer.startFrame = startFrame;
+						if (layer.endFrame !== startFrame) layer.endFrame = endFrame;
+					});
+					const ui = new UITimelineGroup(layers, {
+						name: self.groups[i],
+						index: i,
+						type: 'group',
+						startFrame: startFrame,
+						endFrame: endFrame,
+						width: self.frameWidth * (endFrame - startFrame + 1),
+						css: {
+							gridRowStart: gridRowStart, // 2 + (i * 2),
+							gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
+							gridColumnStart: startFrame * 2 + 1,
+							gridColumnEnd: endFrame * 2 + 3
+						}
+					});
 
-				gridRowStart += 2;
-				gridRowEnd += 2;
-				rowCount++;
-				self.panel.timeline.append(ui, `group-${i}`);
+					gridRowStart += 2;
+					gridRowEnd += 2;
+					rowCount++;
+					self.panel.timeline.append(ui, `group-${i}`);
+				}
 			}
 
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 				const layer = lns.anim.layers[i];
-				if (layer.groupNumber >= 0) continue;
+				if (layer.groupNumber >= 0 && self.viewGroups) continue;
 				if (self.viewActiveLayers && !layer.isInFrame(lns.anim.currentFrame)) continue;
 				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				const ui = new UILayer(layer, {
@@ -249,11 +253,9 @@ function Timeline() {
 					gridRowEnd += 2;
 				}
 			}
-
-			self.panel.timeline.setProp('--num-layers', rowCount);
 		}
 
-		// if (self.autoFit) self.fit(); // infinite loop if updating layer on fit
+		self.panel.timeline.setProp('--num-layers', rowCount);
 	};
 
 	this.toggleViewLayers = function() {
@@ -263,6 +265,11 @@ function Timeline() {
 
 	this.toggleViewActiveLayers = function() {
 		self.viewActiveLayers = !self.viewActiveLayers;
+		self.update();
+	};
+
+	this.toggleViewGroups = function() {
+		self.viewGroups = !self.viewGroups;
 		self.update();
 	};
 

@@ -1330,6 +1330,16 @@
 						}
 					},
 					{
+						"type": "UIToggle",
+						"face": "viewGroups",
+						"fromModule": {
+							"callback": "toggleViewGroups"
+						},
+						"params": {
+							"text": "G"
+						}
+					},
+					{
 						"type": "UIButton",
 						"key": "alt-f",
 						"fromModule": {
