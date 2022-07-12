@@ -194,7 +194,7 @@ function Timeline() {
 						}
 						self.update();
 					},
-					addToGroup() {
+					addToGroup(position) {
 						lns.draw.reset(); // save current lines
 						if (layer.groupNumber < 0) {
 							if (self.groups.length === 0) {
@@ -203,7 +203,7 @@ function Timeline() {
 								layer.groupNumber = 0;
 								lns.ui.update();
 							} else {
-								let groupSelector = new UIModal('Select Group', lns, ui.position, function() {
+								let groupSelector = new UIModal('Select Group', lns, position, function() {
 									layer.groupNumber = +groupSelect.value;
 									lns.ui.update();
 								});
@@ -228,6 +228,8 @@ function Timeline() {
 						}
 					}
 				});
+
+				
 				
 				gridRowStart += 2;
 				gridRowEnd += 2;

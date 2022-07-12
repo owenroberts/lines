@@ -74,6 +74,14 @@
 							"min": 10,
 							"max": 40
 						}
+					},
+					{
+						"type": "UINumberStep",
+						"label": "Max panels",
+						"number": "maxPanels",
+						"fromModule": {
+							"value": "maxPanels"
+						}
 					}
 				]
 			}

@@ -26,6 +26,7 @@ function Interface(app) {
 	this.faces = {}; /* references to faces we need to update values ???  */
 	this.panels = new UICollection({ id: "panels" });
 	this.quickRef = new QuickRef(app);
+	this.maxPanels = 100; // limit number of panels open at one time, default 100, basically ignore this -- save for when we have abc layout
 
 	// break between collapsed and uncollapsed panels
 	this.panels.append(new UIElement({ id: 'panel-break' }));
@@ -90,7 +91,14 @@ function Interface(app) {
 
 	this.createPanel = function(key, data) {
 		
-		const panel = new UIPanel(key, data.label);
+		const panel = new UIPanel({ 
+			id: key, 
+			label: data.label, 
+			onToggle: function() {
+				let openPanels = lns.ui.panels.list.filter(p => p.isOpen && p.isDocked);
+				// console.log(openPanels) 
+			}
+		});
 		this.panels.append(panel, key);
 		
 		for (let i = 0; i < data.uis.length; i++) {

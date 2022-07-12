@@ -1,7 +1,6 @@
 class UICollection extends UIElement {
 	constructor(params) {
 		super(params);
-		
 	}
 
 	// k is the key value in the interface object
@@ -30,6 +29,10 @@ class UICollection extends UIElement {
 		for (let i = this.el.children.length - 1; i >= 0; --i) {
   			this.el.children[i].remove();
 		}
+	}
+
+	get list() {
+		return Object.keys(this).filter(k => k !== 'el').map(k => this[k]);
 	}
 
 }

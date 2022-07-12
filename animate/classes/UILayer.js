@@ -244,7 +244,9 @@ class UILayer extends UICollection {
 			text: 'G',
 			type: 'add-to-group',
 			class: 'timeline-btn',
-			callback: params.addToGroup
+			callback: () => {
+				params.addToGroup(this.position); // cant get position, node from original is gone?
+			}
 		});
 
 		this.setup(params.width);

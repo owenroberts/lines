@@ -1,6 +1,6 @@
 class UIPanel extends UICollection {
-	constructor(id, label) {
-		super({id: `${id}-panel`});
+	constructor(params) {
+		super({ id: `${params.id}-panel` });
 		this.addClass("panel");
 		this.addClass("undocked");
 		
@@ -15,13 +15,14 @@ class UIPanel extends UICollection {
 			offText: "＋",
 			type: "toggle",
 			callback: () => {
+				if (params.onToggle) params.onToggle();
 				if (this.open.isOn) this.addClass('closed');
 				else this.removeClass('closed');
 			}
 		});
 		this.header.append(this.open);
 
-		this.header.append(new UILabel({ text: label }));
+		this.header.append(new UILabel({ text: params.label }));
 
 		this.header.append(new UIButton({
 			text: 'X',
