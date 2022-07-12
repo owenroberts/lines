@@ -69,7 +69,6 @@ window.addEventListener("load", function() {
 });
 
 function appSave() {
-	console.log(lns.ui.panels.quickRef, lns.ui.quickRef);
 	return {
 		canvasColor: lns.canvas.bgColor,
 		lineWidth: lns.canvas.ctx.lineWidth,
@@ -120,9 +119,7 @@ function appLoad(settings) {
 	lns.ui.faces.interfaceScale.update(settings.interfaceScale);
 	lns.ui.faces.quickRefScale.update(settings.quickRefScale);
 
-	console.log(settings.quickRefList);
 	settings.quickRefList.forEach(ref => {
-		console.log(ref);
 		lns.ui.createUI(ref, ref.mod, ref.sub, lns.ui.panels.quickRef);
 	});
 	lns.ui.panels.quickRef.list = settings.quickRefList;

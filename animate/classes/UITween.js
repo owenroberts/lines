@@ -8,8 +8,13 @@ class UITween extends UICollection {
 			text: '✎',
 			type: 'tween-edit',
 			callback: () => {
-				const modal = new UIModal('Edit Tween', lns, this.position, function() {
-					lns.ui.update();
+				const modal = new UIModal({
+					title: 'Edit Tween', 
+					app: lns, 
+					position: this.position, 
+					callback: function() {
+						lns.ui.update();
+					}
 				});	
 
 				/* not DRY maybe make an animate class tween-modal */

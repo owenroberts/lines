@@ -145,7 +145,11 @@ function Palette() {
 	};
 
 	this.quickSelect = function(ev) {
-		const modal = new UIModal("Select Pallette", lns, lns.mousePosition);
+		const modal = new UIModal({
+			title: "Select Pallette", 
+			app: lns, 
+			position: lns.mousePosition
+		});
 
 		for (const key in self.palettes) {
 			if (key !== 'current') {

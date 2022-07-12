@@ -89,7 +89,7 @@ function Draw(defaults) {
 
 	// open color selector
 	this.quickColorSelect = function() {
-		const modal = new UIModal("Select Color", lns, lns.mousePosition);
+		const modal = new UIModal({ title: "Select Color", app: lns, position: lns.mousePosition });
 		modal.add(new UIColor({
 			callback: function(value) {
 				self.setProperty('color', value);

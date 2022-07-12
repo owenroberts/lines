@@ -36,8 +36,11 @@ class UILayer extends UICollection {
 			class: 'timeline-btn',
 			text: "E",
 			callback: () => {
-				const modal = new UIModal('Edit Layer', lns, this.position, () => {
-					lns.ui.update();
+				const modal = new UIModal({
+					title: 'Edit Layer', 
+					app: lns, 
+					position: this.position, 
+					callback: () => { lns.ui.update(); }
 				});
 
 				modal.add(new UIButton({ 

@@ -20,8 +20,8 @@ function QuickRef(app) {
 	};
 
 	this.addRef = function() {
-		// m1 choose a panel
-		const m1 = new UIModal("panels", app, self.panel.position, function() {
+		
+		function modalOptions() {
 			const options = {};
 			data[p1.value].uis.forEach(ui => {
 				ui.list.forEach(el => {
@@ -44,10 +44,15 @@ function QuickRef(app) {
 
 			if (Object.keys(options).length > 0) {
 				// m2 choose a callback
-				const m2 = new UIModal("ui", app, self.panel.position, function() {
-					const d = options[p2.value];
-					const ui = app.ui.createUI(d, d.mod, d.sub, self.panel);
-					self.list.push(d);
+				const m2 = new UIModal({
+					title: "ui", 
+					app: app, 
+					position: self.panel.position, 
+					callback: function() {
+						const d = options[p2.value];
+						const ui = app.ui.createUI(d, d.mod, d.sub, self.panel);
+						self.list.push(d);
+					}
 				});
 
 				const p2 = new UISelect({
@@ -88,6 +93,13 @@ function QuickRef(app) {
 			} else {
 				m1.clear();
 			}
+		}
+
+		const m1 = new UIModal({
+			title: "panels", 
+			app: app, 
+			position: self.panel.position,
+			callback: modalOptions
 		});
 
 		const p1 = new UISelect({ options: Object.keys(data) });

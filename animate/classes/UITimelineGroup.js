@@ -65,8 +65,13 @@ class UITimelineGroup extends UICollection {
 			class: 'timeline-btn',
 			text: "E",
 			callback: () => {
-				const modal = new UIModal('Edit Layer', lns, this.position, () => {
-					lns.ui.update();
+				const modal = new UIModal({
+					title: 'Edit Layer', 
+					app: lns, 
+					position: this.position, 
+					callback: () => {
+						lns.ui.update();
+					}
 				});
 
 				modal.addBreak("Start Frame:");
@@ -103,7 +108,13 @@ class UITimelineGroup extends UICollection {
 					lns.ui.update();
 				};
 
-				const modal = new UIModal('Remove Layers', lns, this.position, clearFunc, clearFunc);
+				const modal = new UIModal({
+					title: 'Remove Layers', 
+					app: lns, 
+					position: this.position, 
+					callback: clearFunc, 
+					onClear: clearFunc
+				});
 
 				for (let i = 0, len = lns.anim.layers.length; i < len; i++) {
 					if (lns.anim.layers[i].groupNumber !== this.index) continue;

@@ -203,9 +203,14 @@ function Timeline() {
 								layer.groupNumber = 0;
 								lns.ui.update();
 							} else {
-								let groupSelector = new UIModal('Select Group', lns, position, function() {
-									layer.groupNumber = +groupSelect.value;
-									lns.ui.update();
+								let groupSelector = new UIModal({
+									title: 'Select Group',
+									app: lns,
+									position: position, 
+									callback: function() {
+										layer.groupNumber = +groupSelect.value;
+										lns.ui.update();
+									}
 								});
 								groupSelector.addBreak('Groups:');
 								let groupSelect = new UISelect({});

@@ -1,8 +1,10 @@
 class UIModal extends UICollection {
-	constructor(title, app, position, callback, onClear) {
+	constructor(params) {
+
+		// title, app, position, callback, onClear
 		super({});
 		this.addClass('modal');
-		this.append(new UILabel({ text: title }));
+		this.append(new UILabel({ text: params.title }));
 
 		// better way to do this ?? 
 		document.getElementById('container').appendChild(this.el);
@@ -17,27 +19,27 @@ class UIModal extends UICollection {
 		this.submit = new UIButton({
 			text: "Submit",
 			callback: function() {
-				if (callback) callback();
+				if (params.callback) params.callback();
 				self.clear();
 			}
 		});
 
 		this.append(this.submit);
-		app.ui.keys['enter'] = this.submit; /* not modular ... */
+		params.app.ui.keys['enter'] = this.submit; /* not modular ... */
 
 		this.cancel = new UIButton({
 			text: "x",
 			callback: ev => {
 				this.clear();
-				if (onClear) onClear();
+				if (params.onClear) params.onClear();
 			}
 		});
 
-		app.ui.keys['escape'] = this.cancel;
+		params.app.ui.keys['escape'] = this.cancel;
 		this.append(this.cancel);
 
-		let x = Math.max(16, position.x - 100);
-		let y = Math.max(16, position.y - 20);
+		let x = Math.max(16, params.position.x - 100);
+		let y = Math.max(16, params.position.y - 20);
 
 		this.el.style.left = `${x}px`;
 		this.el.style.top = `${y}px`;
