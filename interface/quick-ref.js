@@ -4,11 +4,11 @@
 
 function QuickRef(app) {
 	const self = this;
-	const list = [];
 	const data = {};
 	const defaultFontSize = 11;
 
 	this.fontSize = 11;
+	this.list = [];
 
 	this.setScale = function(value) {
 		self.fontSize = +value;
@@ -47,7 +47,7 @@ function QuickRef(app) {
 				const m2 = new UIModal("ui", app, self.panel.position, function() {
 					const d = options[p2.value];
 					const ui = app.ui.createUI(d, d.mod, d.sub, self.panel);
-					list.push(d);
+					self.list.push(d);
 				});
 
 				const p2 = new UISelect({

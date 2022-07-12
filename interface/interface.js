@@ -95,7 +95,7 @@ function Interface(app) {
 			id: key, 
 			label: data.label, 
 			onToggle: function() {
-				let openPanels = lns.ui.panels.list.filter(p => p.isOpen && p.isDocked);
+				let openPanels = lns.ui.panels.uiList.filter(p => p.isOpen && p.isDocked);
 				// console.log(openPanels) 
 			}
 		});
@@ -145,6 +145,7 @@ function Interface(app) {
 		*/
 		if (data.label) panel.add(new UILabel({ text: data.label}));
 		
+		// console.log(data);
 		let ui = new uiTypes[data.type](params);
 		
 		if (data.type == 'UIRow') panel.addRow(data.k, params.class);

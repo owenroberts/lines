@@ -31,7 +31,7 @@ class UICollection extends UIElement {
 		}
 	}
 
-	get list() {
+	get uiList() {
 		return Object.keys(this).filter(k => k !== 'el').map(k => this[k]);
 	}
 

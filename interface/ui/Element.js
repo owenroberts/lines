@@ -12,8 +12,6 @@ class UIElement {
 
 		if (params.id !== undefined) this.el.id = params.id;
 		if (params.class) this.addClass(params.class); // list?
-
-		
 	}
 
 	set text(_text) {
