@@ -2,6 +2,10 @@ class UINumber extends UIText {
 	constructor(params) {
 		super(params);
 		this.el.classList.add('number');
+		if (!this.placeholder) {
+			this.placeholder = 0;
+			this.el.placeholder = 0;
+		}
 	}
 
 	update(value, uiOnly) {
@@ -17,7 +21,7 @@ class UINumber extends UIText {
 			}
 		}
 
-		this.value = value;
+		this.value = value; // always set value before callback
 		if (this.callback && !uiOnly) this.callback(value);
 	}
 

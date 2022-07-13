@@ -1,6 +1,6 @@
 function Timeline() {
 	const self = this;
-	this.frameWidth = 40;
+	this.frameWidth = 120;
 	this.autoFit = false;
 	this.viewLayers = true;
 	this.viewActiveLayers = false;

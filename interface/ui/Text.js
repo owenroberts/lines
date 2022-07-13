@@ -33,21 +33,18 @@ class UIText extends UIInput {
 	}
 
 	update(value, uiOnly) {
-		this.value = value;
+		this.value = value; // always set value before callback
 		if (this.callback && !uiOnly) this.callback(value);
 		
 		// this.el.blur(); // keep going back and forth on this??
 		// 11.27.2019 to prevent settings not saving when something focused
 	}
 
-	set value(_value) {
-		// console.trace();
-		// console.log('set value', _value);
-		this._value = _value;
-		this.placeholder = _value;
-		this.el.placeholder = _value;
+	set value(value) {
+		this._value = value;
+		this.placeholder = value;
+		this.el.placeholder = value;
 		this.el.value = '';
-		// this.el.blur();
 	}
 
 	get value() {

@@ -18,7 +18,7 @@ class UINumberStep extends UICollection {
 		});
 
 		this.stepDown = new UIButton({
-			text: '<',
+			text: '◀',
 			class: 'left-end',
 			callback: () => {
 				this.update(this.value - this.step);
@@ -26,7 +26,7 @@ class UINumberStep extends UICollection {
 		});
 
 		this.stepUp = new UIButton({
-			text: '>',
+			text: '▶',
 			class: 'right-end',
 			callback: () => {
 				this.update(this.value + this.step);
@@ -102,23 +102,14 @@ class UINumberStep extends UICollection {
 	}
 
 	update(value, uiOnly) {
-		console.log(this.value, value);
-		if (value < this.min) {
-			this.numberInput.el.placeholder = this.value;
-			console.log(this.value, this.numberInput.el.placeholder);
-			return;
-		}
-		if (value > this.max) {
-			console.log(this.value);
-			this.numberInput.el.placeholder = this.value;
-			console.log(this.value, this.numberInput.el.placeholder);
-			return;
-		}
+		if (value < this.min) value = this.min;
+		if (value > this.max) value = this.max;
+		this.value = value;
+		// always set value before callback
 		if (!uiOnly) {
 			if (this.args) this.callback(value, ...this.args);
 			else this.callback(value);
 		}
-		this.value = value;
 	}
 
 	get html() {

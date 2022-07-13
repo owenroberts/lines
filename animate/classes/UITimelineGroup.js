@@ -136,62 +136,41 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		this.left = new UIDragButton({
-			text: '⬗',
-			type: 'left',
+		this.startFrameNumber = new UINumberStep({
+			value: this.startFrame,
 			class: 'timeline-btn',
-			callback: (dir, num) => {
+			min: 0,
+			callback: value => {
 				layers.forEach(layer => {
-					layer.startFrame += (dir ? dir : -1) * (num ? num : 1);
+					layer.startFrame = +value;
+					if (+value > layer.endFrame) {
+						layer.endFrame = +value;
+					}
 				});
 				lns.ui.update();
-			}		
+			}
 		});
 
-		this.leftRight = new UIButton({
-			text: '⬖',
-			type: 'left-right',
+		this.endFrameNumber = new UINumberStep({
+			value: this.endFrame,
 			class: 'timeline-btn',
-			callback: () => {
+			min: 0,
+			callback: value => {
 				layers.forEach(layer => {
-					if (layer.endFrame == layer.startFrame) layer.endFrame += 1;
-					layer.startFrame += 1;
+					layer.endFrame = +value;
+					if (+value < layer.startFrame) {
+						layer.startFrame = +value;
+					}
 				});
 				lns.ui.update();
-			}		
-		});
-
-		this.right = new UIDragButton({
-			text: '⬖',
-			type: 'right',
-			class: 'timeline-btn',
-			callback: (dir, num) => {
-				layers.forEach(layer => {
-					layer.endFrame += (dir ? dir : 1) * (num ? num : 1);
-				});
-				lns.ui.update();
-			}		
-		});
-
-		this.rightLeft = new UIButton({
-			text: '⬖',
-			type: 'right-left',
-			class: 'timeline-btn',
-			callback: () => {
-				layers.forEach(layer => {
-					if (layer.endFrame === layer.startFrame) layer.endFrame += -1;
-					layer.endFrame += -1;
-				});
-				lns.ui.update();
-			}		
+			}
 		});
 
 		this.setup(params.width);
 	}
 
 	setup(width) {
-		if (this.startFrame > 0) this.append(this.left);
-		if (width > 70) this.append(this.leftRight);
+		this.append(this.startFrameNumber);
 		this.append(this.toggle);
 		if (width > 30) this.append(this.highlight);
 		if (width > 40) this.append(this.lock);
@@ -200,11 +179,8 @@ class UITimelineGroup extends UICollection {
 		if (width > 70) this.append(this.removeLayer);
 
 		if (width > 80) {
-			this.append(this.rightLeft);
-			this.rightLeft.addClass('right-margin');
-		} else {
-			this.right.addClass('right-margin');
+			this.append(this.endFrameNumber);
+			this.endFrameNumber.addClass('right-margin');
 		}
-		this.append(this.right);
 	}
 }

@@ -41,7 +41,7 @@ $anim-off: darkgreen;
 	--num-frames: 1;
 	--num-layers: 1;
 	--num-tweens: 0;
-	--frame-width: 40;
+	--frame-width: 120;
 	--layer-height: 1.5;
 	
 	flex-basis: 100%;
@@ -131,9 +131,12 @@ $anim-off: darkgreen;
 
 			&.ui-collection {
 				display: flex;
+				width: 28px;
+
 				&:hover {
 					background: none;
 				}
+				
 				.btn, .number {
 					background: none;
 					margin: 0;
@@ -141,6 +144,11 @@ $anim-off: darkgreen;
 					line-height: 1;
 					border: none;
 					width: 0.75rem;
+					padding: 0;
+					font-family: monaco;
+					&:hover {
+						background: $ui-select;
+					}
 				}
 			}
 			

@@ -88,22 +88,6 @@ class UILayer extends UICollection {
 					}
 				}));
 
-				modal.addBreak("Start Frame:");
-				modal.add(new UINumber({
-					value: layer.startFrame,
-					callback: function(value) {
-						layer.startFrame = +value;
-					}
-				}));
-
-				modal.addBreak("End Frame:");
-				modal.add(new UINumber({
-					value: layer.endFrame,
-					callback: function(value) {
-						layer.endFrame = +value;
-					}
-				}));
-
 				modal.adjustPosition();
 			}
 		});
@@ -191,50 +175,25 @@ class UILayer extends UICollection {
 			max: lns.anim.endFrame + 1,
 			callback: value => {
 				layer.startFrame = +value;
+				// if frame is set move everything -- right functionality?
+				if (+value > layer.endFrame) {
+					layer.endFrame = +value;
+				}
 				lns.ui.update();
 			}
 		});
 
-		this.left = new UIDragButton({
-			text: '⬗',
-			type: 'left',
+		this.endFrameNumber = new UINumberStep({
+			value: layer.endFrame,
 			class: 'timeline-btn',
-			callback: (dir, num) => {
-				layer.startFrame += (dir ? dir : -1) * (num ? num : 1);
+			min: 0,
+			callback: value => {
+				layer.endFrame = +value;
+				if (+value < layer.startFrame) {
+					layer.startFrame = +value;
+				}
 				lns.ui.update();
 			}
-		});
-
-		this.leftRight = new UIButton({
-			text: '⬖',
-			type: 'left-right',
-			class: 'timeline-btn',
-			callback: () => {
-				if (layer.endFrame == layer.startFrame) layer.endFrame += 1;
-				layer.startFrame += 1;
-				lns.ui.update();
-			}		
-		});
-
-		this.right = new UIDragButton({
-			text: '⬖',
-			type: 'right',
-			class: 'timeline-btn',
-			callback: (dir, num) => {
-				layer.endFrame += (dir ? dir : 1) * (num ? num : 1);
-				lns.ui.update();
-			}		
-		});
-
-		this.rightLeft = new UIButton({
-			text: '⬖',
-			type: 'right-left',
-			class: 'timeline-btn',
-			callback: () => {
-				if (layer.endFrame === layer.startFrame) layer.endFrame += -1;
-				layer.endFrame += -1;
-				lns.ui.update();
-			}		
 		});
 
 		this.lock = new UIToggle({
@@ -279,12 +238,9 @@ class UILayer extends UICollection {
 		if (width > 90 && this.canMoveUp) this.append(this.moveUp);
 		
 		if (width > 80) {
-			this.append(this.rightLeft);
-			this.rightLeft.addClass('right-margin');
-		} else {
-			this.right.addClass('right-margin');
-		}
-		this.append(this.right);
+			this.append(this.endFrameNumber);
+			this.endFrameNumber.addClass('right-margin');
+		} 
 	}
 
 	get html() {
