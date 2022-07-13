@@ -42,7 +42,6 @@ $anim-off: darkgreen;
 	--num-layers: 1;
 	--num-tweens: 0;
 	--frame-width: 40;
-	
 	--layer-height: 1.5;
 	
 	flex-basis: 100%;
@@ -129,6 +128,22 @@ $anim-off: darkgreen;
 			}
 
 			&:hover { background-color: $ui-select; }
+
+			&.ui-collection {
+				display: flex;
+				&:hover {
+					background: none;
+				}
+				.btn, .number {
+					background: none;
+					margin: 0;
+					height: 100%;
+					line-height: 1;
+					border: none;
+					width: 0.75rem;
+				}
+			}
+			
 		}
 
 		.right-margin {

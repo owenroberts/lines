@@ -111,8 +111,6 @@ function QuickRef(app) {
 		}
 	};
 
-	// key command setup 
-
 	this.openQuickMenu = function() {
 
 		// populat ui optoins
@@ -146,7 +144,6 @@ function QuickRef(app) {
 
 				// gotta be a better way to do this part
 				const ui = options[input.value];
-				console.log(ui);
 
 				const mod = ui.sub ? app[ui.module][ui.sub] : app[ui.module];
 				let args = [];
@@ -191,7 +188,6 @@ function QuickRef(app) {
 		input.input.el.addEventListener('keydown', ev => {
 			if (Cool.keys[ev.which] === 'escape') m.clear();
 		});
-
 	};
 
 }

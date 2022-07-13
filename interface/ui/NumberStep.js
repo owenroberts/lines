@@ -6,6 +6,7 @@ class UINumberStep extends UICollection {
 		this.step = +params.step || 1;
 		this.min = +params.min || 0;
 		this.max = +params.max || 100;
+
 		// constrain range
 
 		this.addClass('ui-collection');
@@ -89,6 +90,10 @@ class UINumberStep extends UICollection {
 		}
 
 		this.numberInput.el.addEventListener('mousedown', mouseDown);
+
+		if (params.value !== undefined) {
+			this.value = params.value;
+		}
 	}
 
 	keyHandler(value) {
@@ -97,8 +102,18 @@ class UINumberStep extends UICollection {
 	}
 
 	update(value, uiOnly) {
-		if (value < this.min) return;
-		if (value > this.max) return;
+		console.log(this.value, value);
+		if (value < this.min) {
+			this.numberInput.el.placeholder = this.value;
+			console.log(this.value, this.numberInput.el.placeholder);
+			return;
+		}
+		if (value > this.max) {
+			console.log(this.value);
+			this.numberInput.el.placeholder = this.value;
+			console.log(this.value, this.numberInput.el.placeholder);
+			return;
+		}
 		if (!uiOnly) {
 			if (this.args) this.callback(value, ...this.args);
 			else this.callback(value);

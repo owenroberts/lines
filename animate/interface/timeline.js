@@ -24,7 +24,7 @@ function Timeline() {
 		});
 
 		self.panel.el.addEventListener('mousedown', ev => {
-			ev.preventDefault();
+			// ev.preventDefault();
 		});
 
 		self.panel.el.addEventListener('mouseup', ev => {

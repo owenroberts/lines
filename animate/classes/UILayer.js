@@ -184,6 +184,17 @@ class UILayer extends UICollection {
 			}
 		});
 
+		this.startFrameNumber = new UINumberStep({
+			value: layer.startFrame,
+			class: 'timeline-btn',
+			min: 0,
+			max: lns.anim.endFrame + 1,
+			callback: value => {
+				layer.startFrame = +value;
+				lns.ui.update();
+			}
+		});
+
 		this.left = new UIDragButton({
 			text: '⬗',
 			type: 'left',
@@ -191,7 +202,7 @@ class UILayer extends UICollection {
 			callback: (dir, num) => {
 				layer.startFrame += (dir ? dir : -1) * (num ? num : 1);
 				lns.ui.update();
-			}		
+			}
 		});
 
 		this.leftRight = new UIButton({
@@ -256,8 +267,7 @@ class UILayer extends UICollection {
 	}
 
 	setup(width) {
-		if (this.layer.startFrame > 0) this.append(this.left);
-		if (width > 70) this.append(this.leftRight);
+		this.append(this.startFrameNumber);
 		this.append(this.toggle);
 		if (width > 30) this.append(this.highlight);
 		if (width > 40) this.append(this.lock);
