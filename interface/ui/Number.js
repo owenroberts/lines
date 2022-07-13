@@ -5,7 +5,7 @@ class UINumber extends UIText {
 	}
 
 	update(value, uiOnly) {
-		if (!value) return;
+		if (value === undefined) return;
 		if (typeof value === 'string') {
 			if (value.match(/\D/)) {
 				try {
@@ -19,6 +19,9 @@ class UINumber extends UIText {
 
 		this.value = value;
 		if (this.callback && !uiOnly) this.callback(value);
-		
+	}
+
+	keyHandler(value) {
+		this.update(+prompt(this.prompt));
 	}
 }

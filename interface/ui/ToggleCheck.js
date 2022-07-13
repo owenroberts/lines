@@ -27,7 +27,7 @@ class UIToggleCheck extends UICollection {
 		return this.check.el.checked;
 	}
 
-	handler(value) {
+	keyHandler(value) {
 		this.update(value !== undefined ? value : !this.value);
 	}
 

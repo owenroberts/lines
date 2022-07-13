@@ -27,12 +27,12 @@ class UIText extends UIInput {
 		});
 	}
 
-	handler(value) {
-		this.update(value !== undefined ? +value : prompt(this.prompt));
+	keyHandler(value) {
+		// this.update(value !== undefined ? +value : prompt(this.prompt));
+		this.update(prompt(this.prompt));
 	}
 
 	update(value, uiOnly) {
-		
 		this.value = value;
 		if (this.callback && !uiOnly) this.callback(value);
 		

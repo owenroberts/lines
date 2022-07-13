@@ -16,7 +16,7 @@ class UIToggle extends UIButton {
 		}
 	}
 
-	handler() {
+	keyHandler() {
 		// this.callback(...this.args, this.value);
 		this.callback(this.value);
 		this.toggle();

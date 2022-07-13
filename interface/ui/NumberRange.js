@@ -7,12 +7,12 @@ class UINumberRange extends UICollection {
 
 		this.numberInput = new UINumber({
 			...params,
-			callback: this.handler.bind(this)
+			callback: this.update.bind(this)
 		});
 
 		this.range = new UIRange({
 			...params,
-			callback: this.handler.bind(this)
+			callback: this.update.bind(this)
 		});
 
 		if (params.event === 'change') {
@@ -26,10 +26,8 @@ class UINumberRange extends UICollection {
 		return [this.numberInput.el, this.range.el];
 	}
 
-	handler(value, isKeyEvent) {
-		const v = isKeyEvent ? +prompt(this.prompt) : +value;
-		if (!v) return;
-		this.update(v);
+	keyHandler(value, isKeyEvent) {
+		this.update(+prompt(this.prompt));
 	}
 
 	update(value, uiOnly) {

@@ -7,14 +7,12 @@ class UIRange extends UIInput {
 		if (params.step) this.setStep(params.step);
 
 		this.el.addEventListener(params.event || 'input', ev => {
-			this.handler(ev.target.value);
+			this.update(ev.target.value);
 		});
 	}
 
-	handler(value, isKeyEvent) {
-		const v = isKeyEvent ? prompt(this.prompt) : value;
-		if (!v) return;
-		this.update(v);
+	keyHandler(value) {
+		this.update(+prompt(this.prompt));
 	}
 
 	update(value) {

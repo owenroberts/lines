@@ -49,7 +49,7 @@ function Interface(app) {
 			document.activeElement.type !== "number" && 
 			!ev.metaKey) {
 			ev.preventDefault();
-			ui.handler(ev.target.value, true);
+			ui.keyHandler(ev.target.value);
 			ui.onPress(true);
 		}
 	};

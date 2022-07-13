@@ -40,7 +40,7 @@ class UIElement {
 		return this.el.style.getPropertyValue(prop); 
 	}
 
-	handler() {
+	keyHandler() {
 		this.callback();
 	}
 

@@ -92,8 +92,10 @@ class UINumberStep extends UICollection {
 		
 	}
 
-	handler(value) {
-		this.update(value !== undefined ? +value : prompt(this.prompt));
+	keyHandler(value) {
+		// this.update(value !== undefined ? +value : prompt(this.prompt));
+		this.update(+prompt(this.prompt));
+
 	}
 
 	update(value, uiOnly) {
