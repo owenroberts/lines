@@ -82,6 +82,27 @@
 						"fromModule": {
 							"value": "maxPanels"
 						}
+					},
+					{
+						"type": "UIToggle",
+						"fromModule": {
+							"callback": "toggleMaxWidth"
+						},
+						"params": {
+							"text": "Max Width",
+							"class": "left-end"
+						}
+					},
+					{
+						"type": "UINumber",
+						"face": "maxWidthDisplay",
+						"fromModule": {
+							"callback": "setMaxWidth",
+							"value": "maxWidth"
+						},
+						"params": {
+							"class": "right-end"
+						}
 					}
 				]
 			}

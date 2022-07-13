@@ -85,9 +85,13 @@ select {
 	}
 	
 	#interface { 
+		--max-width: 500;
 		flex: 1; 
 		grid-area: interface;
-		max-width: 500px;
+
+		&.max-width {
+			max-width: calc(var(--max-width) * 1px);
+		}
 	}
 
 	#draw {

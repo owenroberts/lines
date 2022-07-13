@@ -27,6 +27,9 @@ function Interface(app) {
 	this.panels = new UICollection({ id: "panels" });
 	this.quickRef = new QuickRef(app);
 	this.maxPanels = 100; // limit number of panels open at one time, default 100, basically ignore this -- save for when we have abc layout
+	this.maxWidth = 500;
+	this.useMaxWidth = false;
+
 
 	// break between collapsed and uncollapsed panels
 	this.panels.append(new UIElement({ id: 'panel-break' }));
@@ -55,27 +58,28 @@ function Interface(app) {
 	window.toolTip = new UILabel({id: 'tool-tip'});
 	document.getElementById('interface').appendChild(window.toolTip.el);
 
+	async function loadInterfaceFiles(file, callback) {
+		const appFile = await fetch(file).then(response => response.json());
+		const interfaceFile = await fetch('../interface/interface.json').then(response => response.json());
+		const data = { ...interfaceFile, ...appFile };
+		for (const key in data) {
+			self.createPanel(key, data[key]);
+		}
+		self.addSelect([
+			...Object.keys(data).map(k => [k, data[k].label])
+		]);
+		// self.settings.load();
+		self.quickRef.addData(data);
+		if (callback) callback();
+	}
+
 	// use module ? 
 	this.load = function(file, callback) {
-		async function loadInterfaceFiles() {
-			const appFile = await fetch(file).then(response => response.json());
-			const interfaceFile = await fetch('../interface/interface.json').then(response => response.json());
-			const data = { ...interfaceFile, ...appFile };
-			for (const key in data) {
-				self.createPanel(key, data[key]);
-			}
-			self.addSelect([
-				...Object.keys(data).map(k => [k, data[k].label])
-			]);
-			// self.settings.load();
-			self.quickRef.addData(data);
-			if (callback) callback();
-		}	
-		loadInterfaceFiles();
+		loadInterfaceFiles(file, callback);
 	};
 
 	this.addSelect = function(panelList) {
-		const selector = new UICollection({id: 'selector'});
+		const selector = new UICollection({ id: 'selector' });
 		const selectBtn = new UISelectButton({
 			callback: function(value) {
 				self.panels[value].dock();
@@ -161,32 +165,54 @@ function Interface(app) {
 
 	// resize interface div
 
+	this.toggleMaxWidth = function() {
+		self.useMaxWidth = !self.useMaxWidth;
+		if (self.useMaxWidth) iDiv.classList.add('max-width');
+		else iDiv.classList.remove('max-width');
+	};
+
+	this.setMaxWidth = function(value) {
+		self.maxWidth = +value;
+		iDiv.style.setProperty('--max-width', self.maxWidth);
+	};
+
 	const iDiv = document.getElementById('interface');
 	const resize = document.createElement('div');
+	self.maxWidth = iDiv.clientWidth;
 	resize.id = 'resize';
 	let dragging = false;
-	let iWidth = iDiv.clientWidth;
-	let resizeX = 0;
 
 	resize.textContent = '|||';
 	iDiv.appendChild(resize);
 
-	resize.addEventListener('mousedown', ev => {
+	function resizeStart(ev) {
 		dragging = true;
-		resizeX = ev.pageX;
-	});
+		document.addEventListener('mouseup', resizeEnd);
+		document.addEventListener('mousemove', resizeUpdate);
+	}
 
-	document.addEventListener('mouseup', ev => {
+	function resizeEnd(ev) {
 		if (dragging) {
 			dragging = false;
-			iWidth = +iDiv.style.maxWidth.replace('px', '');
+			document.removeEventListener('mouseup', resizeEnd);
+			document.removeEventListener('mousemove', resizeUpdate);
 		}
-	});
+	}
 
-	document.addEventListener('mousemove', ev => {
-		if (dragging) {
-			const delta = ev.pageX - resizeX;
-			iDiv.style.maxWidth = `${iWidth + delta}px`;
+	function resizeUpdate(ev) {
+		if (dragging && self.useMaxWidth) {
+			self.maxWidth += ev.movementX;
+			
+			iDiv.style.setProperty('--max-width', self.maxWidth);
+			lns.ui.faces.maxWidthDisplay.value = self.maxWidth;
+
+			if (self.maxWidth > iDiv.clientWidth) {
+				self.maxWidth = iDiv.clientWidth;
+			}
+
 		}
-	});
+	}
+
+	resize.addEventListener('mousedown', resizeStart);
+	
 }
