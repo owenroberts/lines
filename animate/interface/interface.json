@@ -714,8 +714,16 @@
 						"type": "UIRow"
 					},
 					{
+						"type": "UIToggleCheck",
+						"key": "n",
+						"toggle": "onionSkinIsVisible",
+						"face": "onionSkinIsVisible",
+						"params": {
+							"text": "Onion Skin"
+						}
+					},
+					{
 						"type": "UINumberStep",
-						"label": "Onion",
 						"key": "l",
 						"face": "onionSkinNum",
 						"fromModule": {
@@ -724,16 +732,6 @@
 						"params": {
 							"value": 0,
 							"prompt": "Onion skin"
-						}
-					},
-					{
-						"type": "UIToggle",
-						"key": "n",
-						"toggle": "onionSkinIsVisible",
-						"face": "onionSkinIsVisible",
-						"params": {
-							"onText": "Hide",
-							"offText": "Show"
 						}
 					},
 					{
@@ -747,14 +745,13 @@
 						}
 					},
 					{
-						"type": "UIToggle",
+						"type": "UIToggleCheck",
 						"face": "viewStats",
 						"fromModule": {
 							"callback": "toggleStats"
 						},
 						"params": {
-							"onText": "#",
-							"offText": "#"
+							"text": "Stats"
 						}
 					}
 				]

@@ -12,6 +12,7 @@ class UIToggleCheck extends UICollection {
 		this.check.el.type = 'checkbox';
 		this.check.el.addEventListener('change', ev => {
 			if (this.callback) this.callback(ev.target.checked);
+			this.check.el.blur();
 		});
 
 		this.label = new UIElement({ tag: 'label' });

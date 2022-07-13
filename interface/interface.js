@@ -110,6 +110,7 @@ function Interface(app) {
 			for (let j = 0; j < uis.list.length; j++) {
 				self.createUI(uis.list[j], uis.module, uis.sub, panel);
 			}
+			// gives panel to module -- give to all ?
 			if (uis.module == 'ui' && uis.sub) app.ui[uis.sub].panel = panel;
 		}
 	};

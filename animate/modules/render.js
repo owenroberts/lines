@@ -2,14 +2,6 @@ function Render(dps, showStats) {
 	const self = this;
 	
 	this.showStats = showStats;
-	this.stats = new Stats();
-	if (showStats) {
-		this.stats.dom.style.position = 'absolute';
-		this.stats.dom.style.top = '-48px';
-		this.stats.dom.style.right = '0';
-		this.stats.dom.style.left = 'auto';
-	}
-
 	this.dps = dps || 30; // draws pers second
 	this.interval = 1000 / this.dps;  // time interval between draws
 	this.timer = performance.now();
@@ -19,8 +11,20 @@ function Render(dps, showStats) {
 	this.onionSkinIsVisible = false;
 
 	this.toggleStats = function(value) {
-		self.showStats = value;
-		self.stats.dom.style.display = value ? 'block' : 'none';
+		if (value !== undefined) self.showStats = value;
+
+		if (!self.stats && self.showStats) {
+			self.stats = new Stats();
+			self.stats.dom.style.position = 'absolute';
+			self.stats.dom.style.top = '-48px';
+			self.stats.dom.style.right = '0';
+			self.stats.dom.style.left = 'auto';
+			lns.ui.panels.play.el.appendChild(lns.render.stats.dom);
+		} 
+		
+		if (self.stats) {
+			self.stats.dom.style.display = self.showStats ? 'block' : 'none';
+		}
 	};
 
 	/* l key */
@@ -65,7 +69,7 @@ function Render(dps, showStats) {
 	this.clearInterval = 0;
 
 	this.update = function(time) {
-		if (showStats) self.stats.begin();
+		if (self.showStats) self.stats.begin();
 		if (performance.now() > self.interval + self.timer || time == 'cap') {
 			self.timer = performance.now();
 
@@ -127,7 +131,7 @@ function Render(dps, showStats) {
 		}
 		if (!lns.ui.capture.isCapturing) 
 			window.requestAnimFrame(self.update);
-		if (showStats) self.stats.end();
+		if (self.showStats) self.stats.end();
 	};
 
 	this.start = function() {
