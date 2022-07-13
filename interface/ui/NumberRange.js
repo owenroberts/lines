@@ -20,6 +20,8 @@ class UINumberRange extends UICollection {
 				this.numberInput.el.placeholder = ev.currentTarget.value;
 			});
 		}
+
+		if (params.value !== undefined) this.value = params.value;
 	}
 
 	get html() {
