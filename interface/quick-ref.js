@@ -65,7 +65,6 @@ function QuickRef(app) {
 					callback: function() {
 						m2.clear();
 						const d = options[p2.value];
-						console.log(d);
 
 						const m = d.sub ? app[d.mod][d.sub] : app[d.mod];
 						// most callbacks
@@ -110,6 +109,89 @@ function QuickRef(app) {
 		for (const k in newData) {
 			data[k] = newData[k];
 		}
+	};
+
+	// key command setup 
+
+	this.openQuickMenu = function() {
+
+		// populat ui optoins
+		let ignoreUIs = ['UIRow', 'UILabel'];
+		let options = {};
+
+		Object.keys(data).forEach(k => {
+			return data[k].uis.forEach(ui => {
+				return ui.list
+					.filter(u => !ignoreUIs.includes(u.type))
+					.filter(u => u.key !== 'ctrl-space') // this one 
+					.forEach(u => {
+						let label = data[k].label + ' > ';
+						let n = u.label;
+						if (!n && u.params) {  
+							n = u.params.text || u.params.onText || u.params.placeholder;
+						}
+						if (!n) n = u.face;
+						if (!n) console.error('quick search fuck', u);
+						label += n;
+						options[label] = { ...u, module: ui.module, sub: ui.sub };
+					});
+			});
+		});
+
+		const m = new UIModal({
+			title: "Quick Func",
+			app: app,
+			position: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+			callback: function() {
+
+				// gotta be a better way to do this part
+				const ui = options[input.value];
+				console.log(ui);
+
+				const mod = ui.sub ? app[ui.module][ui.sub] : app[ui.module];
+				let args = [];
+				if (ui.params) {
+					if (ui.params.args) {
+						args = ui.params.args;
+					}
+				}
+				
+				if (ui.face) {
+					app.ui.faces[ui.face].keyHandler();
+				}
+
+				else if (ui.fromModule) {
+					if (ui.fromModule.callback) {
+						mod[ui.fromModule.callback](...args);
+					}
+				}
+
+				else if (ui.number) {
+					mod[ui.number] = +prompt(ui.prompt || ui.label);
+				}
+
+				else if (d.toggle) {
+					mod[ui.toggle] = !m[ui.toggle];
+				}
+			}
+		});
+
+		const input = new UIInputList({
+			listName: 'quick-menu-list',
+			options: Object.keys(options),
+			callback: function() {
+				m.clear();
+				m.callback();
+			}
+		});
+
+		m.add(input);
+		input.input.el.focus();
+
+		input.input.el.addEventListener('keydown', ev => {
+			if (Cool.keys[ev.which] === 'escape') m.clear();
+		});
+
 	};
 
 }

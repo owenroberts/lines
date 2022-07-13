@@ -1,8 +1,7 @@
 class UIModal extends UICollection {
 	constructor(params) {
-
-		// title, app, position, callback, onClear
 		super({});
+		if (params.callback) this.callback = params.callback;
 		this.addClass('modal');
 		this.append(new UILabel({ text: params.title }));
 
@@ -61,7 +60,13 @@ class UIModal extends UICollection {
 	}
 
 	add(component) {
-		this.el.insertBefore(component.el, this.break.el);
+		if (Array.isArray(component.html)) {
+			component.html.forEach(el => {
+				this.el.insertBefore(el, this.break.el);
+			});
+		} else {
+			this.el.insertBefore(component.el, this.break.el);
+		}
 	}
 
 	addBreak(label) {

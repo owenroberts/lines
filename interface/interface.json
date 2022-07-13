@@ -145,6 +145,13 @@
 						"params": {
 							"text": "+"
 						}
+					},
+					{
+						"type": "UIButton",
+						"key": "ctrl-space",
+						"fromModule": {
+							"callback": "openQuickMenu"
+						}
 					}
 				]
 			}

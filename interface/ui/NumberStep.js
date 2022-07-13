@@ -89,13 +89,11 @@ class UINumberStep extends UICollection {
 		}
 
 		this.numberInput.el.addEventListener('mousedown', mouseDown);
-		
 	}
 
 	keyHandler(value) {
 		// this.update(value !== undefined ? +value : prompt(this.prompt));
 		this.update(+prompt(this.prompt));
-
 	}
 
 	update(value, uiOnly) {

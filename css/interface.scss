@@ -423,7 +423,6 @@ select {
 			}
 		}	
 	}
-
 }
 
 .modal {
@@ -438,21 +437,19 @@ select {
 	overflow-y: scroll;
 	max-height: 90vh;
 
-	// * { margin-right: 1em; }
-	.break {
-		flex-basis: 100%;
-	}
-
-	input { max-width: 40px; }
-
 	display: flex;
 	flex-wrap: wrap;
 
-	label:first-child {
-		flex: 100%;
-	}
+	.break { flex-basis: 100%; }
 
-	label, .btn, input {
+	input { max-width: 40px; }
+	input.search { max-width: inherit }
+
+	label:first-child { flex: 100%; }
+
+	label, 
+	.btn, 
+	input {
 		margin: 3px;
 	}
 }
