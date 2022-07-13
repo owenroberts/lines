@@ -3,7 +3,6 @@ class UIToggle extends UIButton {
 		super(params);
 		this.onText = params.onText || params.text;
 		this.offText = params.offText || params.text;
-		this.arguments = params.arguments || [];
 		super.text = this.onText;
 		this.isOn = true;
 		if (params.isOn === false) this.toggle();
@@ -18,7 +17,8 @@ class UIToggle extends UIButton {
 	}
 
 	handler() {
-		this.callback(...this.arguments, this.value);
+		// this.callback(...this.args, this.value);
+		this.callback(this.value);
 		this.toggle();
 	}
 

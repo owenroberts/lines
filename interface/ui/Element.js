@@ -11,8 +11,9 @@ class UIElement {
 		}
 
 		if (params.id !== undefined) this.el.id = params.id;
-		if (params.class === 'right-end') console.log(params, this);
 		if (params.class) this.addClass(params.class); // list?
+
+		// if (params.type) this.el.type = params.type; -- get rid of type used for buttons
 	}
 
 	set text(_text) {

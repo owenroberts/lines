@@ -3,7 +3,7 @@ class UINumberRange extends UICollection {
 		super(params);
 
 		this.callback = params.callback;
-		this.arguments = params.arguments || [];
+		this.args = params.args || [];
 
 		this.numberInput = new UINumber({
 			...params,
@@ -15,7 +15,7 @@ class UINumberRange extends UICollection {
 			callback: this.handler.bind(this)
 		});
 
-		if (params.event == 'change') {
+		if (params.event === 'change') {
 			this.range.el.addEventListener('input', ev => {
 				this.numberInput.el.placeholder = ev.currentTarget.value;
 			});
@@ -33,7 +33,7 @@ class UINumberRange extends UICollection {
 	}
 
 	update(value, uiOnly) {
-		if (!uiOnly) this.callback(...[...this.arguments, value]);
+		if (!uiOnly) this.callback(value, ...this.args);
 		this.value = value;
 	}
 

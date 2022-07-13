@@ -2,7 +2,7 @@ class UINumberStep extends UICollection {
 	constructor(params) {
 		super(params);
 		this.callback = params.callback;
-		this.arguments = params.arguments;
+		this.args = params.args;
 		this.step = +params.step || 1;
 		this.min = +params.min || 0;
 		this.max = +params.max || 100;
@@ -75,8 +75,6 @@ class UINumberStep extends UICollection {
 			} else if (drag.timer > 0) {
 				drag.timer--;
 			}
-
-
 		}
 
 		function mouseUp(ev) {
@@ -102,7 +100,7 @@ class UINumberStep extends UICollection {
 		if (value < this.min) return;
 		if (value > this.max) return;
 		if (!uiOnly) {
-			if (this.arguments) this.callback(...[...this.arguments], value);
+			if (this.args) this.callback(value, ...this.args);
 			else this.callback(value);
 		}
 		this.value = value;

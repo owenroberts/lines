@@ -92,6 +92,8 @@ function appSave() {
 		quickRefList: lns.ui.quickRef.list, // lns.ui.panels.quickRef.list, fuck
 		hideCursor: lns.ui.faces.hideCursor.value,
 		viewStats: lns.ui.faces.viewStats.value,
+
+		isBrush: lns.ui.faces.isBrush.value,
 	};
 }
 
@@ -111,6 +113,8 @@ function appLoad(settings) {
 	lns.ui.faces.viewActiveLayers.update(settings.viewActiveLayers);
 	lns.ui.faces.hideCursor.update(settings.hideCursor);
 	lns.ui.faces.viewStats.update(settings.viewStats);
+
+	lns.ui.faces.isBrush.update(settings.isBrush);
 
 	lns.ui.faces.timelineAutoFit.update(settings.timelineAutoFit);
 	lns.ui.faces.timelineView.update(settings.timelineView);

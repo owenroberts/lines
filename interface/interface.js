@@ -9,6 +9,7 @@ function Interface(app) {
 		UINumberRange,
 		UINumberStep,
 		UIToggle,
+		UIToggleCheck,
 		UIButton,
 		UIColor,
 		UISelect,
@@ -29,7 +30,6 @@ function Interface(app) {
 	this.maxPanels = 100; // limit number of panels open at one time, default 100, basically ignore this -- save for when we have abc layout
 	this.maxWidth = 500;
 	this.useMaxWidth = false;
-
 
 	// break between collapsed and uncollapsed panels
 	this.panels.append(new UIElement({ id: 'panel-break' }));
@@ -134,9 +134,11 @@ function Interface(app) {
 			};
 		}
 
+		/* this is fuckin nuts right ... */
 		if (data.toggle) {
-			params.callback = function() {
-				m[data.toggle] = !m[data.toggle];
+			params.callback = function(value) {
+				m[data.toggle] = typeof value !== 'undefined' ? value :
+					!m[data.toggle];
 			};
 		}
 
@@ -147,9 +149,10 @@ function Interface(app) {
 			labels get created before ui, 
 			doesn't work for uis created in js
 		*/
-		if (data.label) panel.add(new UILabel({ text: data.label}));
+		if (data.label) panel.add(new UILabel({ text: data.label }));
 		
 		// console.log(data);
+		// console.log(panel.rows);
 		let ui = new uiTypes[data.type](params);
 		
 		if (data.type == 'UIRow') panel.addRow(data.k, params.class);
@@ -165,8 +168,8 @@ function Interface(app) {
 
 	// resize interface div
 
-	this.toggleMaxWidth = function() {
-		self.useMaxWidth = !self.useMaxWidth;
+	this.toggleMaxWidth = function(value) {
+		self.useMaxWidth = value;
 		if (self.useMaxWidth) iDiv.classList.add('max-width');
 		else iDiv.classList.remove('max-width');
 	};

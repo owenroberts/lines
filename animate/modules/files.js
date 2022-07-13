@@ -5,7 +5,6 @@ function Files(params) {
 	this.saveSettingsOnUnload = params.save || false;
 	this.fileName = undefined;
 
-	/* s key - shift-s for single */
 	this.saveFile = function(single, callback) {
 
 		lns.draw.reset();
@@ -73,7 +72,7 @@ function Files(params) {
 			setTimeout(callback, 500);
 			lns.ui.faces.title.value = self.fileName;
 		}
-	};
+	}; /* s key - shift-s for single */
 
 	this.saveFramesToFiles = function() {
 		let i = 0;
@@ -120,14 +119,14 @@ function Files(params) {
 		});
 	};
 
-	/* shift o */
+	
 	this.reOpenFile = function() {
 		self.saveFile({}, function(fileName) {
 			location.href += `?src=/${ prompt("Enter location:") }/${ fileName }.json`;
 		});
-	};
+	}; /* shift o */
 
-	/* o key */
+	
 	this.openFile = function() {
 		const openFile = document.createElement('input');
 		openFile.type = "file";
@@ -135,7 +134,7 @@ function Files(params) {
 		openFile.onchange = function() {
 			self.readFile(openFile.files, lns.ui.updateFIO);
 		};
-	};
+	}; /* o key */
 
 	this.readFile = function(files, callback) {
 		for (let i = 0, f; f = files[i]; i++) {

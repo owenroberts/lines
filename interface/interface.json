@@ -84,7 +84,7 @@
 						}
 					},
 					{
-						"type": "UIToggle",
+						"type": "UIToggleCheck",
 						"fromModule": {
 							"callback": "toggleMaxWidth"
 						},

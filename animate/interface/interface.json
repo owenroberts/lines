@@ -53,7 +53,7 @@
 						},
 						"params": {
 							"text": "Save",
-							"arguments": [false]
+							"args": [false]
 						}
 					},
 					{
@@ -64,7 +64,7 @@
 						},
 						"params": {
 							"text": "Save Frame",
-							"arguments": [true]
+							"args": [true]
 						}
 					},
 					{
@@ -325,7 +325,7 @@
 							"callback": "setProperty"
 						},
 						"params": {
-							"arguments": ["color"]
+							"args": ["color"]
 						}
 					}
 				]
@@ -549,7 +549,7 @@
 						},
 						"params": {
 							"text": "Insert Before",
-							"arguments": [0]
+							"args": [0]
 						}
 					},
 					{
@@ -560,7 +560,7 @@
 						},
 						"params": {
 							"text": "Insert After",
-							"arguments": [1]
+							"args": [1]
 						}
 					},
 					{
@@ -600,7 +600,7 @@
 						},
 						"params": {
 							"text": "0",
-							"arguments": [0]
+							"args": [0]
 						}
 					},
 					{
@@ -611,7 +611,7 @@
 						},
 						"params": {
 							"text": "<",
-							"arguments": [-1]
+							"args": [-1]
 						}
 					}
 				]
@@ -645,7 +645,7 @@
 						},
 						"params": {
 							"text": ">",
-							"arguments": [1]
+							"args": [1]
 						}
 					},
 					{
@@ -827,7 +827,7 @@
 						},
 						"params": {
 							"text": "Video Frame",
-							"arguments": [false]
+							"args": [false]
 						}
 					},
 					{
@@ -838,7 +838,7 @@
 						},
 						"params": {
 							"text": "Video Frames",
-							"arguments": [true]
+							"args": [true]
 						}
 					},
 					{
@@ -887,13 +887,12 @@
 				"module": "draw",
 				"list": [
 					{
-						"type": "UIToggle",
+						"type": "UIToggleCheck",
 						"key": "b",
 						"face": "isBrush",
 						"toggle": "isBrush",
 						"params": {
-							"onText": "Brush On",
-							"offText": "Brush Off"
+							"text": "Use Brush"
 						}
 					},
 					{
@@ -1029,7 +1028,7 @@
 						"params": {
 							"min": 1,
 							"max": 10,
-							"arguments": ["linesInterval"]
+							"args": ["linesInterval"]
 						}
 					},
 					{
@@ -1043,7 +1042,7 @@
 						"params": {
 							"min": 1,
 							"max": 10,
-							"arguments": ["segmentNum"]
+							"args": ["segmentNum"]
 						}
 					},
 					{
@@ -1057,7 +1056,7 @@
 						"params": {
 							"min": 0,
 							"max": 10,
-							"arguments": ["jiggleRange"]
+							"args": ["jiggleRange"]
 						}
 					},
 					{
@@ -1071,7 +1070,7 @@
 						"params": {
 							"min": 0,
 							"max": 16,
-							"arguments": ["wiggleRange"]
+							"args": ["wiggleRange"]
 						}
 					},
 					{
@@ -1086,7 +1085,7 @@
 							"min": 0,
 							"max": 5,
 							"step": 0.005,
-							"arguments": ["wiggleSpeed"]
+							"args": ["wiggleSpeed"]
 						}
 					},
 					{
@@ -1096,7 +1095,7 @@
 						},
 						"params": {
 							"text":  "Wiggle Segments",
-							"arguments": ["wiggleSegments"]
+							"args": ["wiggleSegments"]
 						}
 					},
 					{
@@ -1106,7 +1105,7 @@
 						},
 						"params": {
 							"text":  "Breaks",
-							"arguments": ["breaks"]
+							"args": ["breaks"]
 						}
 					},
 					{
@@ -1209,7 +1208,7 @@
 						},
 						"params": {
 							"text": "Draw",
-							"arguments": ["Draw"]
+							"args": ["Draw"]
 						}
 					},
 					{
@@ -1220,7 +1219,7 @@
 						},
 						"params": {
 							"text": "Reverse",
-							"arguments": ["Reverse"]
+							"args": ["Reverse"]
 						}
 					},
 					{
@@ -1231,7 +1230,7 @@
 						},
 						"params": {
 							"text": "Draw + Reverse",
-							"arguments": ["DrawReverse"]
+							"args": ["DrawReverse"]
 						}
 					}
 				]
@@ -1479,7 +1478,7 @@
 						},
 						"params": {
 							"text": "Animation",
-							"arguments": ["/animate/interface/defaults/Animation.json"]
+							"args": ["/animate/interface/defaults/Animation.json"]
 						}
 					}
 				]

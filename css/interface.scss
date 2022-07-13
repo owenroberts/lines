@@ -321,6 +321,10 @@ select {
 			text-align: left;
 			vertical-align: bottom;
 		}
+
+		input[type=checkbox].toggle-check {
+			margin: 0;
+		}
 	}
 
 	.btn {

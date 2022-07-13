@@ -4,7 +4,6 @@ class UIRange extends UIInput {
 		this.el.type = "range";
 		this.setRange(params.min, params.max);
 		this.value = params.value || params.min;
-		this.arguments = params.arguments || [];
 		if (params.step) this.setStep(params.step);
 
 		this.el.addEventListener(params.event || 'input', ev => {
