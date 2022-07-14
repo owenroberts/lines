@@ -56,14 +56,20 @@ select {
 #container {
 
 	margin: 1rem;
-	
 	display: grid;
+	grid-gap: 1em;
 	grid-template-areas:
 		'ui main'
 		'timeline timeline';
-	grid-gap: 1em;
+
+	&.RL {
+		grid-template-areas:
+		'main ui'
+		'timeline timeline';
+	}
 
 	#main { grid-area: main; }
+	#ui-timeline { grid-area: timeline }
 	
 	#interface { 
 		--max-width: 500;
@@ -73,22 +79,6 @@ select {
 			max-width: calc(var(--max-width) * 1px);
 		}
 	}
-
-	&.timeline-display {
-		grid-template-areas:
-			'ui main'
-			'timeline timeline';
-	}
-
-	#ui-timeline { grid-area: timeline }
-
-	// #play-panel {
-	// 	grid-area: play;
-	// }
-
-	// #timeline-panel {
-	// 	grid-area: timeline;
-	// }
 }
 
 @mixin left-end {

@@ -49,16 +49,18 @@ function Interface(app) {
 	interface.append(window.toolTip);
 
 	this.toggleTimelineView = function(isOn) {
-		// console.log('timeline', isOn);
 		if (isOn) {
-			// container.addClass('timeline-display');
 			uiTimeline.append(self.panels.play);
 			uiTimeline.append(self.panels.timeline);
 		} else {
-			// container.removeClass('timeline-display');
 			interface.append(self.panels.play);
 			interface.append(self.panels.timeline);
 		}
+	};
+
+	this.toggleRL = function(isOn) {
+		if (isOn) container.addClass('RL');
+		else container.removeClass('RL');
 	};
 
 	/* key commands */

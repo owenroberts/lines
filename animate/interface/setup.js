@@ -2,10 +2,7 @@ function setupAnimateInterface(ui) {
 
 	const container = document.getElementById('container');
 
-	ui.toggleRL = function() {
-		if (this.isOn) container.classList.add('right');
-		else container.classList.remove('right');
-	};
+	
 
 	ui.cursorToggle = function() {
 		if (lns.canvas.canvas.classList.contains('no-cursor')) 
