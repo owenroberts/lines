@@ -1,27 +1,4 @@
 {
-	"appInterface": {
-		"label": "Animate Interface",
-		"uis": [
-			{
-				"module": "ui",
-				"list": [
-					
-					{
-						"type": "UIToggle",
-						"face": "hideCursor",
-						"key": "alt-m",
-						"fromModule": {
-							"callback": "cursorToggle"
-						},
-						"params": {
-							"onText": "Hide Cursor",
-							"offText": "Show Cursor"
-						}
-					}
-				]
-			}
-		]
-	},
 	"fio": {
 		"label": "Files IO",
 		"uis": [
@@ -121,6 +98,20 @@
 							"max": 30,
 							"value": 5,
 							"prompt": "Set distanceThreshold"
+						}
+					}
+				]
+			},
+			{
+				"module": "canvas",
+				"list": [
+					{
+						"type": "UIToggleCheck",
+						"face": "hideCursor",
+						"key": "alt-m",
+						"label": "Hide Cursor",
+						"fromModule": {
+							"callback": "cursorToggle"
 						}
 					}
 				]

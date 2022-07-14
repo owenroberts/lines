@@ -26,8 +26,9 @@ function Interface(app) {
 
 	this.keys = {};
 	this.faces = {}; /* references to faces we need to update values ???  */
-	this.panels = new UICollection({ id: "panels" });
+	this.panels = new UICollection({ id: "ui-panels", class: "panels" });
 	this.quickRef = new QuickRef(app);
+	
 	this.maxPanels = 100; // limit number of panels open at one time, default 100, basically ignore this -- save for when we have abc layout
 	this.maxWidth = 500;
 	this.useMaxWidth = false;
@@ -44,23 +45,31 @@ function Interface(app) {
 	interface.append(this.panels);
 	const uiTimeline = new UICollection({ id: 'ui-timeline' });
 	container.append(uiTimeline);
+	const timelinePanels = new UICollection({ id: 'timeline-panels', class: 'panels' });
+	uiTimeline.append(timelinePanels);
 
 	window.toolTip = new UILabel({id: 'tool-tip'});
 	interface.append(window.toolTip);
 
 	this.toggleTimelineView = function(isOn) {
 		if (isOn) {
-			uiTimeline.append(self.panels.play);
-			uiTimeline.append(self.panels.timeline);
+			timelinePanels.append(self.panels.play);
+			timelinePanels.append(self.panels.timeline);
 		} else {
-			interface.append(self.panels.play);
-			interface.append(self.panels.timeline);
+			self.panels.append(self.panels.play);
+			self.panels.append(self.panels.timeline);
 		}
 	};
 
 	this.toggleRL = function(isOn) {
 		if (isOn) container.addClass('RL');
 		else container.removeClass('RL');
+	};
+
+	let baseFontSize = 11;
+	this.updateScale = function(value) {
+		if (value) baseFontSize = +value;
+		document.body.style.setProperty('--base-font-size', baseFontSize);
 	};
 
 	/* key commands */
@@ -193,56 +202,21 @@ function Interface(app) {
 		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
 	};
 
-	// resize interface div
-
 	this.toggleMaxWidth = function(value) {
 		self.useMaxWidth = value;
-		if (self.useMaxWidth) iDiv.classList.add('max-width');
-		else iDiv.classList.remove('max-width');
+		if (self.useMaxWidth) interface.addClass('max-width');
+		else interface.removeClass('max-width');
 	};
 
 	this.setMaxWidth = function(value) {
 		self.maxWidth = +value;
-		iDiv.style.setProperty('--max-width', self.maxWidth);
+		interface.el.style.setProperty('--max-width', self.maxWidth);
 	};
 
-	const iDiv = document.getElementById('interface');
-	const resize = document.createElement('div');
-	self.maxWidth = iDiv.clientWidth;
-	resize.id = 'resize';
-	let dragging = false;
+	this.update = function() {
+		app.uiUpdate();
+	};
 
-	resize.textContent = '|||';
-	iDiv.appendChild(resize);
-
-	function resizeStart(ev) {
-		dragging = true;
-		document.addEventListener('mouseup', resizeEnd);
-		document.addEventListener('mousemove', resizeUpdate);
-	}
-
-	function resizeEnd(ev) {
-		if (dragging) {
-			dragging = false;
-			document.removeEventListener('mouseup', resizeEnd);
-			document.removeEventListener('mousemove', resizeUpdate);
-		}
-	}
-
-	function resizeUpdate(ev) {
-		if (dragging && self.useMaxWidth) {
-			self.maxWidth += ev.movementX;
-			
-			iDiv.style.setProperty('--max-width', self.maxWidth);
-			lns.ui.faces.maxWidthDisplay.value = self.maxWidth;
-
-			if (self.maxWidth > iDiv.clientWidth) {
-				self.maxWidth = iDiv.clientWidth;
-			}
-
-		}
-	}
-
-	resize.addEventListener('mousedown', resizeStart);
-	
+	// just think this looks nice
+	interface.append(new UILabel({ id: 'resize', text: '|||' }));
 }

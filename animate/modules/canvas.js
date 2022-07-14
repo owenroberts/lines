@@ -48,6 +48,11 @@ function Canvas(id, _width, _height, color, checkRetina) {
 		self.reset();
 	};
 
+	this.cursorToggle = function(isOn) {
+		if (isOn) lns.canvas.canvas.classList.add('no-cursor');
+		else self.canvas.classList.remove('no-cursor');
+	};
+
 	this.reset = function() {
 		// https://www.html5rocks.com/en/tutorials/canvas/hidpi/
 		self.ctx.scale(1, 1); // prevent multiple scales

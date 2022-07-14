@@ -14,9 +14,8 @@ class UIPanel extends UICollection {
 			onText: "－",
 			offText: "＋",
 			type: "toggle",
+			isOn: true, // default open
 			callback: () => {
-				console.log('panel', this.open.isOn);
-				// if (params.onToggle) params.onToggle(); -- didn't work
 				if (!this.open.isOn) this.addClass('closed');
 				else this.removeClass('closed');
 			}

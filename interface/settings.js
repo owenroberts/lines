@@ -8,7 +8,7 @@ function Settings(app, name, appSave) {
 		settings.panels = {};
 
 		for (const p in app.ui.panels) {
-			if (p != 'el') {
+			if (p !== 'el') {
 				settings.panels[p] = {
 					open: app.ui.panels[p].isOpen,
 					docked: app.ui.panels[p].isDocked,
@@ -17,8 +17,8 @@ function Settings(app, name, appSave) {
 					headless: app.ui.panels[p].isHeadless
 				};
 			}
-			// if (p == 'settings') settings.panels[p].open = false;
 		}
+		console.log(settings.panels);
 		localStorage[self.name] = JSON.stringify(settings);
 	};
 

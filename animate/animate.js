@@ -59,12 +59,19 @@ window.addEventListener("load", function() {
 	lns.ui.load('./interface/interface.json', function() {
 		lns.draw.setDefaults();
 		lns.ui.settings.load(appLoad);
-		if (params.src) lns.files.loadFile(params.src.split('.')[0], lns.ui.updateFIO);
+		if (params.src) lns.files.loadFile(params.src.split('.')[0]);
 		lns.ui.update();
 		lns.render.start();
 		lns.ui.timeline.init();
 		lns.render.toggleStats();
 	});
+
+	// update ui for animate specific modules
+	lns.uiUpdate = function() {
+		lns.ui.timeline.update();
+		lns.ui.drawings.update();
+		lns.ui.states.update();
+	};
 });
 
 function appSave() {

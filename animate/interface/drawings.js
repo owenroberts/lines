@@ -44,10 +44,7 @@ function Drawings() {
 					isOn: layer ? layer.isInFrame(lns.anim.currentFrame) : false,
 					callback: function() {
 						let layer = getLayer(i);
-
-						
 						if (!this.isOn) { /* add */
-							console.log(layer);
 							if (layer) {
 								if (layer.isInFrame(lns.anim.currentFrame) ||
 									layer.isInFrame(lns.anim.currentFrame - 1) ||

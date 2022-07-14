@@ -89,14 +89,18 @@ function Files(params) {
 	};
 
 	/* loads from src url */
-	this.loadFile = function(fileName, callback) {
+	this.loadFile = function(fileName) {
+		console.log(fileName);
 		self.fileName = fileName;
 		if (self.fileName) {
-			if (self.fileName.slice(self.fileName.length - 5) != '.json') 
+			if (self.fileName.slice(self.fileName.length - 5) !== '.json')  {
 				self.fileName += '.json';
+			}
 			fetch(self.fileName)
 				.then(response => { return response.json() })
-				.then(data => { self.loadJSON(data, callback); })
+				.then(data => { 
+					self.loadJSON(data, fileName.split('/').pop()); 
+				})
 				.catch(error => {
 					// alert('File not found: ' + error.message);
 					console.error(error);
@@ -104,7 +108,7 @@ function Files(params) {
 		}
 	};
 
-	this.loadJSON = function(data, callback) {
+	this.loadJSON = function(data, fileName) {
 		lns.anim = new Lines(lns.canvas.ctx, lns.render.dps, true);
 		lns.anim.loadData(data, function() {
 			lns.canvas.setWidth(data.w);
@@ -113,12 +117,23 @@ function Files(params) {
 			if (data.bg) lns.canvas.setBGColor(data.bg);
 			if (data.g) lns.ui.timeline.groups = [...data.g];
 			lns.draw.reset(); 
-			// if (callback) callback(data, params); // why?
-			if (callback) callback(data);
-
 		});
-	};
 
+		console.log(self.fileName, fileName);
+		lns.ui.faces.title.value = fileName;
+		lns.ui.faces.fps.value = data.fps;
+		document.title = fileName + ' ~ animate';
+		lns.ui.faces.width.value = data.w;
+		lns.ui.faces.height.value = data.h;
+		lns.anim.layers.forEach(layer => {
+			if (layer) {
+				lns.ui.faces.color.addColor(layer.color);
+				lns.ui.faces.color.value = layer.color;
+			}
+		});
+		if (data.bg) lns.ui.faces.bgColor.value = data.bg;
+		lns.ui.update();
+	};
 	
 	this.reOpenFile = function() {
 		self.saveFile({}, function(fileName) {
@@ -132,7 +147,7 @@ function Files(params) {
 		openFile.type = "file";
 		openFile.click();
 		openFile.onchange = function() {
-			self.readFile(openFile.files, lns.ui.updateFIO);
+			self.readFile(openFile.files);
 		};
 	}; /* o key */
 
@@ -145,7 +160,7 @@ function Files(params) {
 			reader.onload = (function(theFile) {
 				return function(e) {
 					self.fileName = f.name.split('.')[0];
-					self.loadJSON(JSON.parse(e.target.result), callback);
+					self.loadJSON(JSON.parse(e.target.result), self.fileName);
 				};
 			})(f);
 			reader.readAsText(f);

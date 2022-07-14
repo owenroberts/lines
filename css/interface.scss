@@ -61,6 +61,7 @@ select {
 	grid-template-areas:
 		'ui main'
 		'timeline timeline';
+	justify-content: space-between;
 
 	&.RL {
 		grid-template-areas:
@@ -133,7 +134,7 @@ select {
 	}
 }
 
-#panels {
+.panels {
 	margin-top: 0.25em;
 	display: flex;
 	flex-wrap: wrap;
@@ -273,7 +274,7 @@ select {
 			border: none;
 			background-color: $ui-color;
 			padding-right: 0.25em;
-			height: 1.125rem;
+			// height: 1.125rem;
 			
 			&:focus {
 				border: 1px solid $accent-color;
@@ -282,7 +283,7 @@ select {
 			&.left-end,
 			&.middle,
 			&.right-end { 
-				height: 1.125rem;
+				// height: 1.125rem;
 				text-align: center;
 				width: calc(var(--base-font-size) * 3 * 1px);
 			}
@@ -295,6 +296,7 @@ select {
 		input.number {
 			text-align: left;
 			vertical-align: bottom;
+			line-height: 1.6;
 		}
 
 		input[type=checkbox].toggle-check {
@@ -313,7 +315,7 @@ select {
 		margin-right: 3px;
 		margin-top: 0.5em;
 		transition: background-color 100ms ease-in-out;
-		height: 1.125rem;
+		// height: 1.125rem;
 		// line-height: 1.55;
 
 		&.triggered {
@@ -446,7 +448,8 @@ select {
 	}
 }
 
-#interface {
+#interface,
+#ui-timeline {
 	position: relative;
 
 	#resize {
