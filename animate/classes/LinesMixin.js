@@ -18,4 +18,12 @@ const LinesMixin = {
 		if (index >= 0) this.layers.splice(index, 1);
 	},
 
+	updateStates() {
+		for (const k in this.states) {
+			if (this.states[k].end > this.endFrame) {
+				this.states[k].end = this.endFrame;
+			}
+		}
+	}
+
 };

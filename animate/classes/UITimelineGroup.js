@@ -170,11 +170,11 @@ class UITimelineGroup extends UICollection {
 	}
 
 	setup(width) {
-		this.append(this.startFrameNumber);
+		if (width > 20) this.append(this.startFrameNumber);
 		this.append(this.toggle);
-		if (width > 30) this.append(this.highlight);
-		if (width > 40) this.append(this.lock);
-		if (width > 50) this.append(this.edit);
+		this.append(this.highlight);
+		if (width > 40) this.append(this.edit);
+		if (width > 50) this.append(this.lock);
 		if (width > 60) this.append(this.breakUp);
 		if (width > 70) this.append(this.removeLayer);
 

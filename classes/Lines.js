@@ -27,7 +27,7 @@ class Lines {
 
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
-		this.states = { 'default': {start: 0, end: 0 } };
+		this.states = { 'default': { start: 0, end: 0 } };
 
 		this.layerColor;
 

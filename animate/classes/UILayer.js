@@ -88,6 +88,22 @@ class UILayer extends UICollection {
 					}
 				}));
 
+				modal.addBreak("Start Frame:");
+				modal.add(new UINumber({
+					value: layer.startFrame,
+					callback: function(value) {
+						layer.startFrame = +value;
+					}
+				}));
+
+				modal.addBreak("End Frame:");
+				modal.add(new UINumber({
+					value: layer.endFrame,
+					callback: function(value) {
+						layer.endFrame = +value;
+					}
+				}));
+
 				modal.adjustPosition();
 			}
 		});
@@ -226,17 +242,15 @@ class UILayer extends UICollection {
 	}
 
 	setup(width) {
-		this.append(this.startFrameNumber);
+		if (width > 20) this.append(this.startFrameNumber);
 		this.append(this.toggle);
-		if (width > 30) this.append(this.highlight);
-		if (width > 40) this.append(this.lock);
-		if (width > 60) this.append(this.edit);
-		if (width > 50) this.append(this.tween);
+		this.append(this.highlight);
+		if (width > 40) this.append(this.edit);
+		if (width > 50) this.append(this.lock);
+		if (width > 60) this.append(this.tween);
 		if (width > 70) this.append(this.remove);
 		if (width > 80) this.append(this.addToGroup);
-
 		if (width > 90 && this.canMoveUp) this.append(this.moveUp);
-		
 		if (width > 80) {
 			this.append(this.endFrameNumber);
 			this.endFrameNumber.addClass('right-margin');

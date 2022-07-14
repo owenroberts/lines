@@ -186,15 +186,23 @@ function Data() {
 		self.saveState();
 
 		// -2 to skip draw layer
+		const f = lns.anim.currentFrame;
 		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
-			lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
-				lns.anim.layers.splice(i, 1);
-			});
+			const layer = lns.anim.layers[i];
+			if (layer.endFrame < f) continue;
+			else if (layer.startFrame === f && layer.endFrame === f) {
+				lns.anim.removeLayer(layer);
+			}
+			else if (layer.endFrame > f && layer.startFrame > f) {
+				layer.startFrame -= 1;
+				layer.endFrame -= 1;
+			}
+			else if (layer.endFrame > f) {
+				layer.endFrame -= 1;
+			}
+			layer.resetTweens();
 		}
-		
-		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
-			lns.anim.layers[i].shiftIndex(index, -1);
-		}
+		lns.anim.updateStates();
 		lns.ui.update();
 	}; /* d key */
 

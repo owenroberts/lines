@@ -62,17 +62,17 @@ const LayerMixin = {
 			is that sort of stupid?
 		*/
 
-		if (this.startFrame == index && this.endFrame == index) removeFunc();
-		else if (this.startFrame == index) this.startFrame += 1;
-		else if (this.endFrame == index) this.endFrame -= 1;
+		if (this.startFrame === index && this.endFrame === index) removeFunc();
+		else if (this.startFrame === index) this.startFrame += 1;
+		else if (this.endFrame === index) this.endFrame -= 1;
 		else if (index > this.startFrame && index < this.endFrame) {
-			const layer = new Layer(this.getCloneProps());
-			layer.startFrame = index + 1;
-			layer.endFrame = this.endFrame;
-			layer.resetTweens();
+			const clone = new Layer(this.getCloneProps());
+			clone.startFrame = index + 1;
+			clone.endFrame = this.endFrame;
+			clone.resetTweens();
 			this.endFrame = index - 1;
 			this.resetTweens();
-			return layer;
+			return clone;
 		} else {
 			// outside range? fixes insert?
 			return this;
@@ -163,6 +163,7 @@ const LayerMixin = {
 			drawingEndIndex: this.drawingEndIndex,
 			startFrame: this.startFrame,
 			endFrame: this.endFrame,
+			groupNumber: this.groupNumber
 		};
 		// ignore tweens for now
 	}

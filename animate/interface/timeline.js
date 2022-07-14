@@ -136,20 +136,19 @@ function Timeline() {
 
 			if (self.viewGroups) {
 				for (let i = 0, len = self.groups.length; i < len; i++) {
-					let layers = lns.anim.layers.filter(l => l.groupNumber === i);
-					if (layers.length === 0) continue;
-					if (self.viewActiveLayers && layers.filter(l => l.isInFrame(lns.anim.currentFrame)).length === 0) continue;
-					const startFrame = layers.reduce((a, b) => { 
+					let groupLayers = layers.filter(l => l.groupNumber === i);
+					if (groupLayers.length === 0) continue;
+					const startFrame = groupLayers.reduce((a, b) => { 
 						return a.startFrame < b.startFrame ? a : b;
 					}).startFrame;
-					const endFrame = layers.reduce((a, b) => { 
+					const endFrame = groupLayers.reduce((a, b) => { 
 						return a.endFrame < b.endFrame ? a : b;
 					}).endFrame;
-					layers.forEach(layer => {
+					groupLayers.forEach(layer => {
 						if (layer.startFrame !== startFrame) layer.startFrame = startFrame;
 						if (layer.endFrame !== startFrame) layer.endFrame = endFrame;
 					});
-					const ui = new UITimelineGroup(layers, {
+					const ui = new UITimelineGroup(groupLayers, {
 						name: self.groups[i],
 						index: i,
 						type: 'group',
