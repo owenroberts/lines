@@ -35,6 +35,32 @@ function Interface(app) {
 	// break between collapsed and uncollapsed panels
 	this.panels.append(new UIElement({ id: 'panel-break' }));
 
+	// this.layout = new Layout(this); -- later
+	const container = new UICollection({ id: 'container' });
+	const interface = new UICollection({ id: 'interface' });
+	container.append(interface);
+	const selector = new UICollection({ id: 'selector' });
+	interface.append(selector);
+	interface.append(this.panels);
+	const uiTimeline = new UICollection({ id: 'ui-timeline' });
+	container.append(uiTimeline);
+
+	window.toolTip = new UILabel({id: 'tool-tip'});
+	interface.append(window.toolTip);
+
+	this.toggleTimelineView = function(isOn) {
+		// console.log('timeline', isOn);
+		if (isOn) {
+			// container.addClass('timeline-display');
+			uiTimeline.append(self.panels.play);
+			uiTimeline.append(self.panels.timeline);
+		} else {
+			// container.removeClass('timeline-display');
+			interface.append(self.panels.play);
+			interface.append(self.panels.timeline);
+		}
+	};
+
 	/* key commands */
 	this.keyDown = function(ev) {
 		let k = Cool.keys[ev.which];
@@ -55,9 +81,6 @@ function Interface(app) {
 		}
 	};
 	document.addEventListener("keydown", self.keyDown, false);
-
-	window.toolTip = new UILabel({id: 'tool-tip'});
-	document.getElementById('interface').appendChild(window.toolTip.el);
 
 	async function loadInterfaceFiles(file, callback) {
 		const appFile = await fetch(file).then(response => response.json());
@@ -80,7 +103,7 @@ function Interface(app) {
 	};
 
 	this.addSelect = function(panelList) {
-		const selector = new UICollection({ id: 'selector' });
+		
 		const selectBtn = new UISelectButton({
 			callback: function(value) {
 				self.panels[value].dock();

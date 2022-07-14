@@ -15,8 +15,9 @@ class UIPanel extends UICollection {
 			offText: "＋",
 			type: "toggle",
 			callback: () => {
-				if (params.onToggle) params.onToggle();
-				if (this.open.isOn) this.addClass('closed');
+				console.log('panel', this.open.isOn);
+				// if (params.onToggle) params.onToggle(); -- didn't work
+				if (!this.open.isOn) this.addClass('closed');
 				else this.removeClass('closed');
 			}
 		});
@@ -86,6 +87,11 @@ class UIPanel extends UICollection {
 
 	get isOpen() {
 		return this.open.value;
+	}
+
+	close() {
+		this.addClass('closed');
+		this.open.set(false);
 	}
 
 	block() {

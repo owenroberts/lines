@@ -5,17 +5,7 @@
 			{
 				"module": "ui",
 				"list": [
-					{
-						"type": "UIToggle",
-						"face": "timelineView",
-						"fromModule": {
-							"callback": "toggleTimelineView"
-						},
-						"params": {
-							"onText": "Timeline View",
-							"offText": "Timeline View"
-						}
-					},
+					
 					{
 						"type": "UIToggle",
 						"face": "hideCursor",

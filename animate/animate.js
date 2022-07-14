@@ -52,6 +52,7 @@ window.addEventListener("load", function() {
 	lns.ui.play = new Play();
 	lns.ui.timeline = new Timeline();
 	lns.ui.animator = new AnimatorInterface();
+	
 	setupAnimateInterface(lns.ui);
 	lns.ui.settings = new Settings(lns, 'lns', appSave);
 
@@ -67,6 +68,7 @@ window.addEventListener("load", function() {
 });
 
 function appSave() {
+
 	return {
 		canvasColor: lns.canvas.bgColor,
 		lineWidth: lns.canvas.ctx.lineWidth,
@@ -79,11 +81,13 @@ function appSave() {
 		onionSkinNum: lns.render.onionSkinNum,
 		mouseInterval: lns.draw.mouseInterval,
 		palettes: lns.ui.palette.palettes,
+
 		rl: lns.ui.faces.rl.value,
 		viewLayers: lns.ui.faces.viewLayers.value,
 		viewActiveLayers: lns.ui.faces.viewActiveLayers.value,
 		timelineAutoFit: lns.ui.faces.timelineAutoFit.value,
 		timelineView: lns.ui.faces.timelineView.value,
+		
 		canvasScale: lns.ui.faces.canvasScale.value,
 		interfaceScale: lns.ui.faces.interfaceScale.value,
 		quickRefScale: lns.ui.faces.quickRefScale.value,
@@ -115,6 +119,7 @@ function appLoad(settings) {
 	lns.ui.faces.isBrush.update(settings.isBrush);
 
 	lns.ui.faces.timelineAutoFit.update(settings.timelineAutoFit);
+	// console.log('settings', settings.timelineView)
 	lns.ui.faces.timelineView.update(settings.timelineView);
 
 	lns.ui.faces.canvasScale.update(settings.canvasScale);

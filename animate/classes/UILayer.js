@@ -6,6 +6,8 @@ class UILayer extends UICollection {
 		if (params.canMoveUp) this.canMoveUp = params.canMoveUp;
 		const self = this;
 
+		console.log('layer', layer.drawingIndex, layer.isToggled);
+
 		this.toggle = new UIToggle({
 			type: 'layer-toggle',
 			class: 'timeline-btn',

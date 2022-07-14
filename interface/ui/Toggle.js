@@ -4,38 +4,44 @@ class UIToggle extends UIButton {
 		this.onText = params.onText || params.text;
 		this.offText = params.offText || params.text;
 		super.text = this.onText;
-		this.isOn = true;
-		if (params.isOn === false) this.toggle();
+		this.isOn = false;
+		if (params.isOn) this.toggle();
 		this.addClass('toggle');
 	}
 
 	update(isOn, uiOnly) {
 		if (isOn !== this.isOn) {
+			if (this.isOn === undefined) this.isOn = isOn;
 			if (!uiOnly) this.callback(isOn);
-			this.toggle();
+			this.set(isOn);
 		}
 	}
 
 	keyHandler() {
-		// this.callback(...this.args, this.value);
-		this.callback(this.value);
 		this.toggle();
+		this.callback(this.value);
+	}
+
+	set(isOn) {
+		this.isOn = isOn;
+		if (isOn) this.on();
+		else this.off();
 	}
 
 	toggle() {
-		if (this.isOn) this.off();
-		else this.on();
 		this.isOn = !this.isOn;
+		if (this.isOn) this.on();
+		else this.off();
 	}
 
 	on() {
 		this.text = this.onText;
-		this.removeClass('off');
+		this.addClass('on');
 	}
 
 	off() {
 		this.text = this.offText;
-		this.addClass('off');
+		this.removeClass('on');
 	}
 
 	get value() {

@@ -53,6 +53,17 @@
 					{ "type": "UIRow" },
 					{
 						"type": "UIToggle",
+						"face": "timelineView",
+						"fromModule": {
+							"callback": "toggleTimelineView"
+						},
+						"params": {
+							"onText": "Timeline View",
+							"offText": "Timeline View"
+						}
+					},
+					{
+						"type": "UIToggle",
 						"face": "rl",
 						"fromModule": {
 							"callback": "toggleRL"
@@ -63,6 +74,7 @@
 						}
 					},
 					{
+						"row": true,
 						"type": "UINumberStep",
 						"face": "interfaceScale",
 						"label": "Scale",

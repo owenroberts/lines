@@ -8,7 +8,7 @@ $anim-color: #9de0b1;
 $anim-select: green;
 $anim-off: darkgreen;
 
-#draw #lines {
+#lines {
 	border: 1px solid $ui-color;
 	
 	cursor: crosshair; 
@@ -116,16 +116,18 @@ $anim-off: darkgreen;
 			cursor: pointer;
 			// background-color: $ui-color;
 
-			&.toggle {
-				background-color: $accent-color; 
-				color: white;
-			}
-			
-			&.toggle.off { 
+			&.toggle { 
 				background-color: transparent; 
 				color: inherit;
 				&:hover { background-color: $ui-select; }
 			}
+
+			&.toggle.on {
+				background-color: $accent-color; 
+				color: white;
+			}
+			
+			
 
 			&:hover { background-color: $ui-select; }
 

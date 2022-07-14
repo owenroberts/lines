@@ -56,53 +56,39 @@ select {
 #container {
 
 	margin: 1rem;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: start;
-
-	&.timeline-display {
-		display: grid;
-		grid-template-areas:
-			'interface draw'
-			'play play'
-			'timeline timeline';
-	}
 	
-	#draw {
-		order: 0;
-		padding-right: 1em;
-	}
+	display: grid;
+	grid-template-areas:
+		'ui main'
+		'timeline timeline';
+	grid-gap: 1em;
 
-	&.right #draw {
-		order: 2;
-		padding-left: 1em; 
-		padding-right: 0;
-	}
-
-	&.right #interface #panels {
-		// justify-content: flex-end;
-	}
+	#main { grid-area: main; }
 	
 	#interface { 
 		--max-width: 500;
-		flex: 1; 
-		grid-area: interface;
+		grid-area: ui;
 
 		&.max-width {
 			max-width: calc(var(--max-width) * 1px);
 		}
 	}
 
-	#draw {
-		grid-area: draw;
+	&.timeline-display {
+		grid-template-areas:
+			'ui main'
+			'timeline timeline';
 	}
 
-	#play-panel {
-		grid-area: play;
-	}
-	#timeline-panel {
-		grid-area: timeline;
-	}
+	#ui-timeline { grid-area: timeline }
+
+	// #play-panel {
+	// 	grid-area: play;
+	// }
+
+	// #timeline-panel {
+	// 	grid-area: timeline;
+	// }
 }
 
 @mixin left-end {
@@ -182,7 +168,7 @@ select {
 }
 
 /* toggle */
-.off { background-color: $ui-select; }
+.on { background-color: $ui-select; }
 
 .panel {
 	flex-basis: 12em;
@@ -378,7 +364,7 @@ select {
 
 			border-top: 2px solid transparent;
 
-			&.off { background-color: inherit; }
+			&.on { background-color: inherit; }
 			&:hover { background: $ui-select; }
 		}
 
