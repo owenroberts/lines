@@ -71,7 +71,6 @@ select {
 	#draw {
 		order: 0;
 		padding-right: 1em;
-		
 	}
 
 	&.right #draw {
@@ -324,6 +323,12 @@ select {
 
 		input[type=checkbox].toggle-check {
 			margin: 0;
+			width: auto;
+			vertical-align: text-bottom;
+		}
+
+		.ui-collection {
+			padding-right: 0.25em;
 		}
 	}
 

@@ -2,6 +2,7 @@ class UIToggleCheck extends UICollection {
 	constructor(params) {
 		super(params);
 		this.callback = params.callback;
+		this.addClass('ui-collection');
 
 		this.check = new UIElement({
 			tag: 'input',
@@ -18,11 +19,14 @@ class UIToggleCheck extends UICollection {
 		this.label = new UIElement({ tag: 'label' });
 		this.label.text = params.text;
 
+		this.el.appendChild(this.label.el);
+		this.el.appendChild(this.check.el);
+
 	}
 
-	get html() {
-		return [this.label.el, this.check.el];
-	}
+	// get html() {
+	// 	return [this.label.el, this.check.el];
+	// }
 
 	get value() {
 		return this.check.el.checked;
