@@ -232,7 +232,7 @@
 					{
 						"row": true,
 						"type": "UINumberStep",
-						"face": "lineWidth",
+						"face": "zLineWidth",
 						"label": "Line Width",
 						"fromModule": {
 							"callback": "setLineWidth"
@@ -608,8 +608,8 @@
 							"callback": "toggle"
 						},
 						"params": {
-							"onText": "▶",
-							"offText": "❚❚"
+							"onText": "❚❚",
+							"offText": "▶"
 						}
 					}
 				]
@@ -672,11 +672,11 @@
 						"key": ";",
 						"face": "fps",
 						"fromModule": {
-							"callback": "setFps"
+							"callback": "setFps",
+							"value": "fps"
 						},
 						"params": {
-							"prompt": "Set FPS",
-							"value": 10
+							"prompt": "Set FPS"
 						}
 					},
 					{
@@ -685,7 +685,8 @@
 						"key": "'",
 						"face": "dps",
 						"fromModule": {
-							"callback": "setDps"
+							"callback": "setDps",
+							"value": "dps"
 						},
 						"params": {
 							"prompt": "Set Draws/Second"
@@ -799,7 +800,6 @@
 					{
 						"type": "UIButton",
 						"key": "shift-j",
-						"face": "videoFrame",
 						"fromModule": {
 							"callback": "videoFrames"
 						},
@@ -822,7 +822,6 @@
 					{
 						"type": "UIButton",
 						"key": "j",
-						"face": "videoLoop",
 						"fromModule": {
 							"callback": "videoLoop"
 						},
@@ -981,7 +980,7 @@
 				"list": [
 					{
 						"type": "UISelect",
-						"face": "stateSelector",
+						"face": "eraseMethod",
 						"fromModule": {
 							"callback": "setEraseMethod"
 						},

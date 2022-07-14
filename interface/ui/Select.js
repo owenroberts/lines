@@ -10,6 +10,10 @@ class UISelect extends UIElement {
 		});
 	}
 
+	update(option) {
+		this.value = option;
+	}
+
 	removeOption(value) {
 		for (let i = 0; i < this.el.children.length; i++) {
 			if (this.el.children[i].value == value)

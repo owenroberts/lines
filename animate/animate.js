@@ -77,79 +77,11 @@ window.addEventListener("load", function() {
 });
 
 function appSave() {
-
 	return {
-		canvasColor: lns.canvas.bgColor,
-		lineWidth: lns.canvas.ctx.lineWidth,
-		color: lns.draw.layer.color,
-		width: lns.canvas.width,
-		height: lns.canvas.height,
-		fps: lns.anim.fps,
-		dps: lns.render.dps,
-		onionSkinIsVisible: lns.render.onionSkinIsVisible,
-		onionSkinNum: lns.render.onionSkinNum,
-		mouseInterval: lns.draw.mouseInterval,
-		palettes: lns.ui.palette.palettes,
-
-		rl: lns.ui.faces.rl.value,
-		viewLayers: lns.ui.faces.viewLayers.value,
-		viewActiveLayers: lns.ui.faces.viewActiveLayers.value,
-		timelineAutoFit: lns.ui.faces.timelineAutoFit.value,
-		timelineView: lns.ui.faces.timelineView.value,
-		
-		canvasScale: lns.ui.faces.canvasScale.value,
-		interfaceScale: lns.ui.faces.interfaceScale.value,
-		quickRefScale: lns.ui.faces.quickRefScale.value,
-		quickRefList: lns.ui.quickRef.list, // lns.ui.panels.quickRef.list, fuck
-		hideCursor: lns.ui.faces.hideCursor.value,
-		viewStats: lns.ui.faces.viewStats.value,
-
-		isBrush: lns.ui.faces.isBrush.value,
+		palettes: lns.ui.palette.palettes, 
 	};
 }
 
 function appLoad(settings) {
-
-	/* environment + ui + lns.anim */
-	lns.ui.faces.dps.update(settings.dps);
-
-	/* environment + ui */
-	lns.ui.faces.onionSkinNum.update(settings.onionSkinNum);
-	lns.ui.faces.onionSkinIsVisible.update(settings.onionSkinIsVisible);
-	lns.ui.faces.mouseInterval.update(settings.mouseInterval);
-	lns.ui.faces.width.update(settings.width);
-	lns.ui.faces.height.update(settings.height);
-	lns.ui.faces.bgColor.update(settings.canvasColor);	
-	lns.ui.faces.viewLayers.update(settings.viewLayers);
-	lns.ui.faces.viewActiveLayers.update(settings.viewActiveLayers);
-	lns.ui.faces.hideCursor.update(settings.hideCursor);
-	lns.ui.faces.viewStats.update(settings.viewStats);
-
-	lns.ui.faces.isBrush.update(settings.isBrush);
-
-	lns.ui.faces.timelineAutoFit.update(settings.timelineAutoFit);
-	// console.log('settings', settings.timelineView)
-	lns.ui.faces.timelineView.update(settings.timelineView);
-
-	lns.ui.faces.canvasScale.update(settings.canvasScale);
-	lns.ui.faces.interfaceScale.update(settings.interfaceScale);
-	lns.ui.faces.quickRefScale.update(settings.quickRefScale);
-
-	settings.quickRefList.forEach(ref => {
-		lns.ui.createUI(ref, ref.mod, ref.sub, lns.ui.panels.quickRef);
-	});
-	lns.ui.panels.quickRef.list = settings.quickRefList;
-
-	lns.ui.faces.lineWidth.update(settings.lineWidth); // has to be called last bc of reset ... 
-
-	/* lns.anim + ui */
-	lns.ui.faces.fps.update(settings.fps);
-	lns.ui.faces.color.update(settings.color);
-
-	// palettes - no need to separate module from ui bc its all ui 
-	// - only one not a ui with update ... 
 	lns.ui.palette.setup(settings.palettes);
-
-	/* ui only */
-	lns.ui.faces.rl.update(settings.rl);  // toggle not dependent on another value
 }

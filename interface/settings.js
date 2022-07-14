@@ -28,14 +28,23 @@ function Settings(app, name, appSave) {
 
 	function loadInterface(interface) {
 		for (const f in interface) {
-			lns.ui.faces[f] = interface[f];
+			if (f === 'palettes') continue;
+			if (f === 'quickRef') continue;
+			lns.ui.faces[f].update(interface[f]);
 		}
 	}
 
 	this.save = function() {
-		const settings = appSave ? { ...appSave() } : {};
+		const settings = {};
+		
+		const s = {};
+		Object.keys(app.ui.faces).forEach(f => {
+			s[f] = app.ui.faces[f].value;
+		});
+		const interface = appSave ? { ...s, ...appSave() } : { ...s };
+		settings.interface = interface;
+		
 		settings.panels = {};
-
 		for (const p in app.ui.panels) {
 			if (p !== 'el') {
 				settings.panels[p] = {
@@ -47,20 +56,30 @@ function Settings(app, name, appSave) {
 				};
 			}
 		}
-		console.log(settings.panels);
+
+		settings.quickRef = app.ui.quickRef.list;
 		localStorage[appName] = JSON.stringify(settings);
 	};
 
 	this.load = function(appLoad) {
 		if (localStorage[appName]) {
 			const settings = JSON.parse(localStorage[appName]);
-			if (appLoad) appLoad(settings);
-			loadPanels(settings.panels)
+			// if (appLoad) appLoad(settings);
+			loadInterface(settings.interface);
+			loadPanels(settings.panels);
+
+			if (settings.quickRef) {
+				app.ui.quickRef.list = settings.quickRef;
+				settings.quickRef.forEach(ref => {
+					app.ui.createUI(ref, ref.mod, ref.sub, app.ui.panels.quickRef);
+				});
+			}
 		}
 	};
 
 	this.clear = function() {
-		delete localStorage[appName];
+		// delete localStorage[appName];
+		localStorage.setItem(appName, '');
 	};
 
 	// better way to set this up??
