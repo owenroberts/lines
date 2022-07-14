@@ -90,7 +90,6 @@ function Files(params) {
 
 	/* loads from src url */
 	this.loadFile = function(fileName) {
-		console.log(fileName);
 		self.fileName = fileName;
 		if (self.fileName) {
 			if (self.fileName.slice(self.fileName.length - 5) !== '.json')  {
@@ -119,7 +118,6 @@ function Files(params) {
 			lns.draw.reset(); 
 		});
 
-		console.log(self.fileName, fileName);
 		lns.ui.faces.title.value = fileName;
 		lns.ui.faces.fps.value = data.fps;
 		document.title = fileName + ' ~ animate';

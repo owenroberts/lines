@@ -1418,52 +1418,5 @@
 				]
 			}
 		]
-	},
-	"workspaces": {
-		"label": "Workspaces",
-		"uis": [
-			{
-				"module": "ui",
-				"list": [
-				{
-						"type": "UIButton",
-						"key": "alt-w",
-						"fromModule": {
-							"callback": "saveInterfaceLayout"
-						},
-						"params": {
-							"text": "Save Interface Layout"
-						}
-					},
-					{
-						"type": "UIButton",
-						"fromModule": {
-							"callback": "loadInterfaceFile"
-						},
-						"params": {
-							"text": "Load Interface Layout"
-						}
-					},
-					{
-						"row": true,
-						"type": "UILabel",
-						"params": {
-							"text": "Defaults"
-						}
-					},
-					{
-						"row": true,
-						"type": "UIButton",
-						"fromModule": {
-							"callback": "loadInterfaceFile"
-						},
-						"params": {
-							"text": "Animation",
-							"args": ["/animate/interface/defaults/Animation.json"]
-						}
-					}
-				]
-			}
-		]	
 	}
 }

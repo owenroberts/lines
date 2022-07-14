@@ -72,7 +72,8 @@ select {
 	#main { grid-area: main; }
 	#ui-timeline { grid-area: timeline }
 	
-	#interface { 
+	#interface {
+		min-width: 120px;
 		--max-width: 500;
 		grid-area: ui;
 

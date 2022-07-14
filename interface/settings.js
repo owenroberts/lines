@@ -1,7 +1,36 @@
 function Settings(app, name, appSave) {
 	const self = this;
 
-	this.name = `settings-${name}`;
+	const appName = `settings-${name}`;
+	const workspaceFields = [
+		'timelineView', 
+		'interfaceScale', 
+		// 'hideCursor', 
+		'rl'
+	];
+
+	function loadPanels(panels) {
+		for (const p in panels) {
+			if (p === 'el') continue;
+			
+			if (panels[p].docked) app.ui.panels[p].dock();
+			else app.ui.panels[p].undock();
+			
+			// ui.panels[p].open.update(panels[p].open);
+			if (!panels[p].open) app.ui.panels[p].close();
+			
+			if (panels[p].block) app.ui.panels[p].block();
+			if (panels[p].headless) app.ui.panels[p].headless();
+			
+			app.ui.panels[p].order = panels[p].order;
+		}
+	}
+
+	function loadInterface(interface) {
+		for (const f in interface) {
+			lns.ui.faces[f] = interface[f];
+		}
+	}
 
 	this.save = function() {
 		const settings = appSave ? { ...appSave() } : {};
@@ -19,31 +48,66 @@ function Settings(app, name, appSave) {
 			}
 		}
 		console.log(settings.panels);
-		localStorage[self.name] = JSON.stringify(settings);
+		localStorage[appName] = JSON.stringify(settings);
 	};
 
 	this.load = function(appLoad) {
-		if (localStorage[self.name]) {
-			const settings = JSON.parse(localStorage[self.name]);
+		if (localStorage[appName]) {
+			const settings = JSON.parse(localStorage[appName]);
 			if (appLoad) appLoad(settings);
-			for (const p in settings.panels) {
-
-				if (p !== 'el') { /* fix later */
-					if (settings.panels[p].docked) app.ui.panels[p].dock();
-					if (settings.panels[p].block) app.ui.panels[p].block();
-					if (settings.panels[p].headless) app.ui.panels[p].headless();
-					if (!settings.panels[p].open) app.ui.panels[p].close();
-					app.ui.panels[p].order = settings.panels[p].order;
-				}
-			}
+			loadPanels(settings.panels)
 		}
 	};
 
 	this.clear = function() {
-		delete localStorage[self.name];
+		delete localStorage[appName];
 	};
 
+	// better way to set this up??
 	this.toggleSaveSettings = function() {
 		app.files.saveSettingsOnUnload = !app.files.saveSettingsOnUnload;
 	};
+
+	this.saveLayout = function() {
+		self.save();
+		const interfaceSettings = {};
+		workspaceFields.forEach(f => {
+			interfaceSettings[f] = lns.ui.faces[f].value;
+		});
+		const panelSettings = JSON.parse(localStorage.getItem(appName)).panels;
+		const jsonFile = JSON.stringify({ panels: panelSettings, interface: interfaceSettings });
+		const fileName = prompt('Layout Name:', 'New Layout');
+		const blob = new Blob([jsonFile], { type: "application/x-download;charset=utf-8" });
+		saveAs(blob, `${fileName}.json`);
+	};
+
+	this.loadLayoutFile = function(url) {
+		// load default file
+		if (url) {
+			fetch(url)
+				.then(response => { return response.json() })
+				.then(data => { loadInterface(data); })
+				.catch(error => { console.error(error); });
+		} else {
+			// choose file to load
+			const openFile = document.createElement('input');
+			openFile.type = "file";
+			openFile.click();
+			openFile.onchange = function() {
+				for (let i = 0, f; f = openFile.files[i]; i++) {
+					if (!f.type.match('application/json')) continue;
+					const reader = new FileReader();
+					reader.onload = (function(theFile) {
+						return function(e) {
+							const settings = JSON.parse(e.target.result);
+							loadPanels(settings.panels);
+							loadInterface(settings.interface);
+						}
+					})(f);
+					reader.readAsText(f);
+				}
+			};
+		}
+	};
+
 }

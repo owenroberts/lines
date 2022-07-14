@@ -37,6 +37,10 @@ window.addEventListener("load", function() {
 		reload: false, /* confirm reload */
 		bg: true /* bg color */
 	});
+
+	const workspaceFields = [
+		'hideCursor', 
+	];
 	
 	lns.ui = new Interface(lns);
 	lns.ui.capture = new Capture({
@@ -52,8 +56,6 @@ window.addEventListener("load", function() {
 	lns.ui.play = new Play();
 	lns.ui.timeline = new Timeline();
 	lns.ui.animator = new AnimatorInterface();
-	
-	setupAnimateInterface(lns.ui);
 	lns.ui.settings = new Settings(lns, 'lns', appSave);
 
 	lns.ui.load('./interface/interface.json', function() {
