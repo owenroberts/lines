@@ -1,20 +1,13 @@
 @import "interface.scss";
 
-body.mobile {
-	overflow: hidden;
-}
-
 $anim-color: #9de0b1;
 $anim-select: green;
 $anim-off: darkgreen;
 
 #lines {
 	border: 1px solid $ui-color;
-	
 	cursor: crosshair; 
-	&.no-cursor {
-		cursor: none;
-	}
+	&.no-cursor { cursor: none; }
 }
 
 #fio-panel {

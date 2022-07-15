@@ -19,6 +19,8 @@ body {
 	color: $text-color;
 }
 
+body.mobile { overflow: hidden; }
+
 select, input {
 	color: $text-color;
 	font-size: inherit;
