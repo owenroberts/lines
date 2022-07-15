@@ -30,7 +30,7 @@ function Settings(app, name, appSave) {
 		for (const f in interface) {
 			if (f === 'palettes') continue;
 			if (f === 'quickRef') continue;
-			lns.ui.faces[f].update(interface[f]);
+			app.ui.faces[f].update(interface[f]);
 		}
 	}
 

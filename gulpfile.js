@@ -53,6 +53,11 @@ const files = {
 		'./game/editor/modules/*.js',
 		'./game/editor/interface/*.js',
 		'./game/editor/editor.js',
+	],
+	animEditor: [
+		'./editor/classes/*.js',
+		'./editor/modules/*.js',
+		'./editor/editor.js'
 	]
 };
 
@@ -174,6 +179,7 @@ function watchTask(){
 			...files.animate,
 			...files.game,
 			...files.editor,
+			...files.animEditor,
 		],
 		series(jsTasks),
 	); 

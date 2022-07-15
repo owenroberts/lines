@@ -129,6 +129,7 @@ function Interface(app) {
 	};
 
 	this.createPanel = function(key, data) {
+
 		
 		const panel = new UIPanel({ 
 			id: key, 
@@ -147,6 +148,7 @@ function Interface(app) {
 			}
 			// gives panel to module -- give to all ?
 			if (uis.module == 'ui' && uis.sub) app.ui[uis.sub].panel = panel;
+			if (data.addPanel) app[key].panel = panel;
 		}
 	};
 
@@ -157,6 +159,7 @@ function Interface(app) {
 
 		const params = { ...data.params };
 		if (data.key) params.key = data.key;
+		if (data.callback) params.callback = m[data.callback];
 
 		// most callbacks
 		for (const k in data.fromModule) {
@@ -168,6 +171,7 @@ function Interface(app) {
 			params.callback = function(value) {
 				m[data.number] = +value;
 			};
+			params.value = +m[data.number];
 		}
 
 		/* this is fuckin nuts right ... */
@@ -176,6 +180,7 @@ function Interface(app) {
 				m[data.toggle] = typeof value !== 'undefined' ? value :
 					!m[data.toggle];
 			};
+			params.value = m[data.number];
 		}
 
 		if (data.row) panel.addRow();

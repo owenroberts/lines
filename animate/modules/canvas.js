@@ -56,7 +56,7 @@ function Canvas(id, _width, _height, color, checkRetina) {
 	this.reset = function() {
 		// https://www.html5rocks.com/en/tutorials/canvas/hidpi/
 		self.ctx.scale(1, 1); // prevent multiple scales
-		self.ctx.scale(this.dpr * self.scale, self.dpr * self.scale);
+		self.ctx.scale(self.dpr * self.scale, self.dpr * self.scale);
 		self.canvas.style.zoom = 1 / self.dpr;
 		self.ctx.lineWidth = self.lineWidth;
 		self.ctx.miterLimit = 1;

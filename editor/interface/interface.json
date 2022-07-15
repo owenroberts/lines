@@ -1,0 +1,93 @@
+{
+	"canvas": {
+		"label": "Canvas",
+		"uis": [
+			{
+				"module": "canvas",
+				"list": [
+					{
+						"row": true,
+						"type": "UINumber",
+						"face": "width",
+						"label": "Width",
+						"number": "width"
+					},
+					{
+						"row": true,
+						"type": "UINumber",
+						"face": "height",
+						"label": "Height",
+						"number": "height"
+					},
+					{
+						"row": true,
+						"type": "UINumberStep",
+						"face": "canvasScale",
+						"label": "Scale",
+						"number": "scale",
+						"params": {
+							"event": "change",
+							"value": 1,
+							"min": 0.5,
+							"max": 4,
+							"step": 0.05
+						}
+					},
+					{
+						"row": true,
+						"type": "UINumberStep",
+						"face": "zLineWidth",
+						"label": "Line Width",
+						"number": "lineWidth",
+						"params": {
+							"value": 1,
+							"min": 1,
+							"max": 4
+						}
+					}
+				]
+			}
+		]
+	},
+	"footage": {
+		"label": "Footage",
+		"addPanel": true,
+		"uis": [
+			{
+				"module": "footage",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "o",
+						"callback": "openFile",
+						"params": {
+							"text": "Add"
+						}
+					},
+					{
+						"type": "UIRow",
+						"k": "footageRow"
+					}
+				]
+			}
+		]
+	},
+	"fio": {
+		"label": "File IO",
+		"uis": [
+			{
+				"module": "fio",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "s",
+						"callback": "save",
+						"params": {
+							"text": "Save Project"
+						}
+					}
+				]
+			}
+		]
+	}
+}
