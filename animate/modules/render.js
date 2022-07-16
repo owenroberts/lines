@@ -7,8 +7,8 @@ function Render(dps, showStats) {
 	this.timer = performance.now();
 	window.drawCount = 0;
 
-	this.onionSkinNum = 0;
-	this.onionSkinIsVisible = false;
+	this.onionSkinNum = 0; /* l key */
+	this.onionSkinIsVisible = false; /* n key */
 
 	this.toggleStats = function(value) {
 		if (value !== undefined) self.showStats = value;
@@ -25,12 +25,6 @@ function Render(dps, showStats) {
 		if (self.stats) {
 			self.stats.dom.style.display = self.showStats ? 'block' : 'none';
 		}
-	};
-
-	/* l key */
-	this.setOnionSkin = function(n) {
-		self.onionSkinNum = +n;
-		self.onionSkinIsVisible = +n > 0 ? true : false;
 	};
 
 	/* just set drawing back to 0 but might do other things */
@@ -65,7 +59,7 @@ function Render(dps, showStats) {
 		lns.anim.fps = +fps;
 	};
 
-	this.clearCount = 0;
+	this.clearCount = 0; // what is this
 	this.clearInterval = 0;
 
 	this.update = function(time) {
@@ -76,7 +70,7 @@ function Render(dps, showStats) {
 			// what actually need to be update here ?
 			if (lns.anim.isPlaying) lns.ui.timeline.update();
 
-			if (self.clearCount == self.clearInterval) {
+			if (self.clearCount === self.clearInterval) {
 				lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
 				self.clearCount = 0;
 			} else {

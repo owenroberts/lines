@@ -9,16 +9,15 @@ function Footage(app) {
 	const animations = {};
 	this.filePaths = [];
 
-	function loadJSON(data, fileName, filePath) {
-		// console.log(data, fileName);
+	function loadJSON(data, fileName, filePath, fromFile) {
 		// app.render.dps
 		animations[fileName] = new Lines(app.canvas.ctx, 30, true);
 		animations[fileName].loadData(data, () => {
-			if (askToSetFootage && confirm("Set project settings?")) {
+			if (fromFile || (askToSetFootage && confirm("Set project settings?"))) {
 				askToSetFootage = false;
 				app.ui.faces.width.update(data.w);
 				app.ui.faces.height.update(data.h);
-				// app.ui.faces.fps.update(data.fps);
+				// app.ui.faces.fps.update(data.fps); -- global or not???
 				// if (data.bg) app.ui.faces.bgColor.update(data.bg);				
 			}
 		});
@@ -27,13 +26,20 @@ function Footage(app) {
 			text: fileName,
 			callback: () => {
 				console.log(fileName, animations[fileName]);
+				// add footage to track
+				const clip = new Clip({ 
+					name: fileName, 
+					animation: animations[fileName],
+					startFrame: app.renderer.frame
+				})
+				app.timeline.track.addClip(clip);
 			}
 		});
 		self.panel.footageRow.append(btn);
 		self.filePaths.push(filePath);
 	}
 
-	function readFile(files) {
+	function readFile(files, directoryPath) {
 		for (let i = 0, f; f = files[i]; i++) {
 			if (!f.type.match('application/json')) {
 				continue;
@@ -50,24 +56,24 @@ function Footage(app) {
 		}
 	}
 
-	this.load = function(footage) {
+	this.load = function(footage, fromFile) {
 		footage.forEach(filePath => {
 			const fileName = filePath.split('/').pop().replace('.json', '');
 			fetch(filePath)
 				.then(response => response.json())
-				.then(data => loadJSON(data, fileName, filePath))
+				.then(data => loadJSON(data, fileName, filePath, fromFile))
 				.catch(err => { console.error('err', err.message ); });
 		});
 	};
 
 	this.openFile = function() {
-		let directoryPath = prompt('Directory?', '/drawings/');
 		const openFile = document.createElement('input');
 		openFile.type = "file";
 		openFile.multiple = true;
 		openFile.click();
 		openFile.onchange = function() {
-			readFile(openFile.files);
+			let directoryPath = prompt('Directory?', '/drawings/');
+			readFile(openFile.files, directoryPath);
 		};
 	};
 }

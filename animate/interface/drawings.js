@@ -42,9 +42,9 @@ function Drawings() {
 				self.panel.drawings.append(new UIToggle({
 					text: i,
 					isOn: layer ? layer.isInFrame(lns.anim.currentFrame) : false,
-					callback: function() {
+					callback: function(isOn) {
 						let layer = getLayer(i);
-						if (!this.isOn) { /* add */
+						if (isOn) { /* add */
 							if (layer) {
 								if (layer.isInFrame(lns.anim.currentFrame) ||
 									layer.isInFrame(lns.anim.currentFrame - 1) ||

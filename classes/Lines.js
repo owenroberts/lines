@@ -17,7 +17,7 @@ class Lines {
 		this.layers = [];
 		
 		this.dps = dps || 30; // draw per frame from renderer
-		this.fps = 5; // update frames
+		this.fps = 5; // update frames -- why 5 what the helll???
 
 		this.currentFrame = 0;
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
@@ -115,7 +115,6 @@ class Lines {
 				this.drawCount = 0;
 			}
 			this.drawCount++;
-
 			if (this.onUpdate) this.onUpdate();
 		}
 	}
@@ -143,6 +142,7 @@ class Lines {
 	}
 
 	draw(x, y, suspendLinesUpdate) {
+		// console.log('draw');
 
 		/* 
 			get color and other funcs are bc pixel lines uses fill while regular lines uses stroke
@@ -235,7 +235,6 @@ class Lines {
 
 				this.drawLines(s, e, props); // draws lines between points
 			}
-			
 		}
 		this.finish();
 		if (this.onDraw) this.onDraw();

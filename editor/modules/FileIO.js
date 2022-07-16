@@ -3,8 +3,8 @@
 */
 
 function FileIO(app, params) {
+	Object.assign(FileIO.prototype, ModuleMixin);
 	const self = this;
-	Object.assign(FileIO.prototype, app.modulePrototype);
 
 	let projectName = params.projectName || 'Animation_' + new Date().toDateString().replace(/ /g, '-');
 
@@ -17,7 +17,7 @@ function FileIO(app, params) {
 	})
 
 	function loadData(data) {
-		app.footage.load(data.footage);
+		app.footage.load(data.footage, true);
 	}
 
 	this.save = function() {
@@ -29,9 +29,7 @@ function FileIO(app, params) {
 	};
 
 	this.load = function(fileName) {
-		console.log(fileName);
 		self.projectName = fileName.split('/').pop().replace('.json', '');
-
 		fetch(fileName)
 			.then(response => { return response.json(); }) 
 			.then(data => { loadData(data); })

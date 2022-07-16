@@ -2,12 +2,7 @@ function Settings(app, name, appSave) {
 	const self = this;
 
 	const appName = `settings-${name}`;
-	const workspaceFields = [
-		'timelineView', 
-		'interfaceScale', 
-		// 'hideCursor', 
-		'rl'
-	];
+	
 
 	function loadPanels(panels) {
 		for (const p in panels) {
@@ -30,7 +25,7 @@ function Settings(app, name, appSave) {
 		for (const f in interface) {
 			if (f === 'palettes') continue;
 			if (f === 'quickRef') continue;
-			app.ui.faces[f].update(interface[f]);
+			if (app.ui.faces[f]) app.ui.faces[f].update(interface[f]);
 		}
 	}
 
@@ -38,9 +33,11 @@ function Settings(app, name, appSave) {
 		const settings = {};
 		
 		const s = {};
-		Object.keys(app.ui.faces).forEach(f => {
-			s[f] = app.ui.faces[f].value;
-		});
+		Object.keys(app.ui.faces)
+			.filter(f => !app.ui.faces[f].ignoreSettings)
+			.forEach(f => {
+				s[f] = app.ui.faces[f].value;
+			});
 		const interface = appSave ? { ...s, ...appSave() } : { ...s };
 		settings.interface = interface;
 		
@@ -86,6 +83,13 @@ function Settings(app, name, appSave) {
 	this.toggleSaveSettings = function() {
 		app.files.saveSettingsOnUnload = !app.files.saveSettingsOnUnload;
 	};
+
+	const workspaceFields = [
+		'timelineView', 
+		'interfaceScale', 
+		// 'hideCursor', 
+		'rl'
+	];
 
 	this.saveLayout = function() {
 		self.save();

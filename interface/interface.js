@@ -204,7 +204,8 @@ function Interface(app) {
 
 		if (params.prompt) ui.prompt = params.prompt; /* only key commands -- why here? */
 		if (params.key) self.keys[data.key] = ui;
-		if (data.face) self.faces[data.face] = ui; /* wanna cut this */
+		if (data.face) self.faces[data.face] = ui;
+		if (data.face && data.ignoreSettings) ui.ignoreSettings = true;
 	};
 
 	this.toggleMaxWidth = function(value) {

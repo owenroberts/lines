@@ -24,10 +24,6 @@ class UIToggleCheck extends UICollection {
 
 	}
 
-	// get html() {
-	// 	return [this.label.el, this.check.el];
-	// }
-
 	get value() {
 		return this.check.el.checked;
 	}

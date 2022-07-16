@@ -8,6 +8,7 @@
 					{
 						"type": "UIText",
 						"face": "title",
+						"ignoreSettings": true,
 						"params": {
 							"id": "title"
 						}
@@ -232,7 +233,7 @@
 					{
 						"row": true,
 						"type": "UINumberStep",
-						"face": "zLineWidth",
+						"face": "lineWidth",
 						"label": "Line Width",
 						"fromModule": {
 							"callback": "setLineWidth"
@@ -708,11 +709,8 @@
 						"type": "UINumberStep",
 						"key": "l",
 						"face": "onionSkinNum",
-						"fromModule": {
-							"callback": "setOnionSkin"
-						},
+						"number": "onionSkinNum",
 						"params": {
-							"value": 0,
 							"prompt": "Onion skin"
 						}
 					},
@@ -822,6 +820,8 @@
 					{
 						"type": "UIButton",
 						"key": "j",
+						"face": "videoLoop",
+						"ignoreSettings": true,
 						"fromModule": {
 							"callback": "videoLoop"
 						},

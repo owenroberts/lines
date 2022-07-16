@@ -156,7 +156,7 @@ function Capture(params) {
 		if (self.isReady) {
 			if (params.captureSettings) {
 				for (const k in params.captureSettings) {
-					lns.ui.faces[k].update(self[k])
+					lns.ui.faces[k].update(self[k]);
 				}
 			}
 			lns.ui.faces.onionSkinIsVisible.update(false);

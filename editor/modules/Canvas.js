@@ -3,7 +3,7 @@
 */
 
 function Canvas(app, params) {
-	Object.assign(Canvas.prototype, app.modulePrototype);
+	Object.assign(Canvas.prototype, ModuleMixin);
 	const self = this;
 
 	this.canvas = document.getElementById(params.id);
@@ -54,7 +54,7 @@ function Canvas(app, params) {
 	};
 
 	this.reset = function() {
-		// cross browser scaling
+		// cross browser scaling -- need to test this -- ctx scale doesn't work in firefox but fine in chrome so fine for editing -- only necessary in production ...
 		self.canvas.style.width = width * scale + 'px';
 		self.canvas.style.height = height * scale + 'px';
 

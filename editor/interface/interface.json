@@ -89,5 +89,85 @@
 				]
 			}
 		]
+	},
+	"renderer": {
+		"label": "Renderer",
+		"uis": [
+			{
+				"module": "renderer",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "0",
+						"number": "frame",
+						"params": {
+							"text": "⮐",
+							"args": [0]
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "w",
+						"number": "frame",
+						"params": {
+							"text": "◀",
+							"args": ["-1"]
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "space",
+						"toggle": "isPlaying",
+						"params": {
+							"onText": "❚❚",
+							"offText": "▶"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "e",
+						"number": "frame",
+						"params": {
+							"text": "▶",
+							"args": ["+1"]
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "+",
+						"number": "frame",
+						"params": {
+							"args": ["end"],
+							"text": "⮑"
+						}
+					},
+					{
+						"type": "UINumber",
+						"key": "f",
+						"face": "frameDisplay",
+						"label": "F",
+						"number": "frame",						
+						"params": {
+							"value": 0,
+							"prompt": "Go To Frame"
+						}
+					},
+					{
+						"type": "UINumberStep",
+						"key": "'",
+						"number": "dps",
+						"label": "DPS"
+					},
+					{
+						"type": "UIButton",
+						"key": "u",
+						"callback": "update",
+						"params": {
+							"text": "↻"
+						}
+					}
+				]
+			}
+		]
 	}
 }
