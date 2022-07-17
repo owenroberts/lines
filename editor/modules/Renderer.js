@@ -41,7 +41,6 @@ function Renderer(app, dps, fps) {
 	this.addProp('frame', {
 		get: () => { return frame; },
 		set: (value) => {
-			console.log('frame', value);
 			let f = frame;
 			if (value === "+1") f = frame + 1;
 			else if (value === "-1") f = frame - 1;

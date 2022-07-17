@@ -4,10 +4,16 @@ class Clip {
 		this.filePath = params.filePath;
 		this.animation = params.animation;
 		this.startFrame = params.startFrame;
-		this.endFrame = params.startFrame + params.animation.endFrame;
 		this.isVisible = true;
 		this.state = 'default';
+		// console.log(this, this.animation);
+		console.log(params);
 		this.animation.isPlaying = true;
+	}
+
+	get endFrame() {
+		return this.startFrame + this.animation.endFrame;
+		// need to add repeats here
 	}
 
 	update(frame) {

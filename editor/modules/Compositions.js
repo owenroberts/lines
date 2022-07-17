@@ -22,7 +22,9 @@ function Compositions(app) {
 	});
 
 	this.addComposition = function(name, params) {
+		if (!name) name = prompt("Composition name", "New Composition");
 		compositions[name] = new Composition(params ? params : {});
+		self.addUI(name);
 	};
 
 	this.load = function(data) {
@@ -33,6 +35,35 @@ function Compositions(app) {
 
 	this.get = function(name) {
 		return compositions[name];
+	};
+
+	this.addUI = function(name) {
+		const rowName = name + '-row';
+		const row = self.panel.addRow(rowName);
+		
+		self.panel[rowName].append(new UILabel({ text: name }));
+		
+		self.panel[rowName].append(new UIButton({
+			text: 'Edit',
+			callback: () => {
+				app.timeline.composition = name;
+			}
+		}));
+		
+		self.panel[rowName].append(new UIButton({
+			text: '+',
+			callback: () => {
+				app.timeline.composition.addComposition(compositions[name]);
+			}
+		}));
+		
+		self.panel[rowName].append(new UIButton({
+			text: "X",
+			callback: () => {
+				delete compositions[name];
+				self.panel.removeRow(row);
+			}
+		}));
 	};
 
 }

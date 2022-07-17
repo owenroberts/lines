@@ -17,24 +17,25 @@ function FileIO(app, params) {
 	});
 
 	function loadData(data) {
-		app.footage.load(data.footage, true, () => { 
-			loadCompositions(data.compositions)
+		app.footage.load(data.footage, true, () => {
+			loadCompositions(data.compositions);
 		});
 
 	}
 
-	function loadCompositions(compositions) {
-		for (const k in compositions) {
-			for (let i = 0; i < compositions[k].tracks.length; i++) {
-				const track = compositions[k].tracks[i];
+	function loadCompositions(data) {
+		for (const k in data) {
+			for (let i = 0; i < data[k].tracks.length; i++) {
+				const track = data[k].tracks[i];
 				for (let j = 0; j < track.clips.length; j++) {
 					const clip = track.clips[j];
-					compositions[k].tracks[i].clips[j].animation = app.footage.get(clip.name);
+					data[k].tracks[i].clips[j].animation = app.footage.get(clip.name);
 					
 				}
 			}
 		}
-		app.compositions.load(compositions);
+		app.compositions.load(data);
+		app.timeline.addUI(); // set active comp first
 	}
 
 	this.save = function() {
@@ -47,7 +48,6 @@ function FileIO(app, params) {
 	};
 
 	this.load = function(fileName) {
-		console.log(fileName)
 		self.projectName = fileName.split('/').pop().replace('.json', '');
 		fetch(fileName)
 			.then(response => { return response.json(); }) 

@@ -53,10 +53,10 @@ function Interface(app) {
 
 	this.toggleTimelineView = function(isOn) {
 		if (isOn) {
-			timelinePanels.append(self.panels.play);
+			// timelinePanels.append(self.panels.play);
 			timelinePanels.append(self.panels.timeline);
 		} else {
-			self.panels.append(self.panels.play);
+			// self.panels.append(self.panels.play);
 			self.panels.append(self.panels.timeline);
 		}
 	};

@@ -1,0 +1,48 @@
+@import "interface.scss";
+
+#lines {
+	border: 1px solid $ui-color;
+}
+
+#timeline {
+	--num-frames: 1;
+	--num-tracks: 1;
+	--frame-width: 10;
+	--track-height: 30;
+
+	flex-basis: 100%;
+	display: grid;
+	grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
+	grid-template-rows: 1.5em repeat(calc(var(--num-tracks) * calc(var(--track-height) * 1px)));
+
+	.frame {
+		background-color: $ui-color;
+		grid-row: 1 / 1;
+		&.current { background-color: $ui-highlight !important; }
+	}
+
+	.track {
+		background-color: $main-color;
+		display: flex;
+		z-index: 3;
+
+		.timeline-btn {
+
+		}
+	}
+
+	&::-webkit-scrollbar {
+		width: 1em;
+		height: 1em;
+	}
+	 
+	&::-webkit-scrollbar-track {
+		box-shadow: inset 0 0 6px $ui-color;
+	}
+	 
+	&::-webkit-scrollbar-thumb {
+		background-color: darkgrey;
+		outline: 1px solid slategrey;
+	}
+
+}

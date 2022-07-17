@@ -72,6 +72,24 @@
 			}
 		]
 	},
+	"compositions": {
+		"label": "Compositions",
+		"addPanel": true,
+		"uis": [
+			{
+				"module": "compositions",
+				"list": [
+					{
+						"type": "UIButton",
+						"callback": "addComposition",
+						"params": {
+							"text": "Create New"
+						}
+					}
+				]
+			}
+		]
+	},
 	"fio": {
 		"label": "File IO",
 		"uis": [
@@ -165,6 +183,42 @@
 						"params": {
 							"text": "↻"
 						}
+					}
+				]
+			}
+		]
+	},
+	"timeline": {
+		"label": "Timeline",
+		"addPanel": true,
+		"uis": [
+			{
+				"module": "timeline",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "alt-f",
+						"fromModule": {
+							"callback": "fit"
+						},
+						"params": {
+							"class": "left-end",
+							"text": "Fit"
+						}
+					},
+					{
+						"type": "UIToggle",
+						"key": "ctrl-f",
+						"fromModule": {
+							"callback": "fitFrame"
+						},
+						"params": {
+							"text": "Fit Frame"
+						}
+					},
+					{
+						"type": "UIRow",
+						"k": "timeline"
 					}
 				]
 			}

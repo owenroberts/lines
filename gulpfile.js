@@ -62,16 +62,13 @@ const files = {
 };
 
 const sassFiles = {
-	animate: [
-		'./css/animate.scss'
-	],
+	animate: ['./css/animate.scss'],
 	interface: [
 		'./css/colors.scss',
 		'./css/interface.scss'
 	],
-	editor: [
-		'./css/editor.scss'
-	]
+	editor: ['./css/editor.scss'],
+	animEditor: ['./css/animEditor.scss'],
 };
 
 function browserSyncTask() {
@@ -188,6 +185,7 @@ function watchTask(){
 			...sassFiles.interface,
 			...sassFiles.animate,
 			...sassFiles.editor,
+			...sassFiles.animEditor,
 		],
 		series(sassTasks),
 	);    

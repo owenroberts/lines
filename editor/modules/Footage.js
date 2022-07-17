@@ -56,15 +56,20 @@ function Footage(app) {
 	}
 
 	this.load = function(footage, fromFile, callback) {
+		let footageCount = 0;
+		let totalFootage = footage.length;
 		footage.forEach(filePath => {
 			const fileName = filePath.split('/').pop().replace('.json', '');
 			fetch(filePath)
 				.then(response => response.json())
 				.then(data => {
 					loadJSON(data, fileName, filePath, fromFile);
-					if (callback) callback();
+					footageCount++;
+					if (footageCount === totalFootage) {
+						if (callback) callback();
+					}
 				})
-				.catch(err => { console.error('err', err.message ); });
+				// .catch(err => { console.error('err', err.message ); });
 		});
 	};
 

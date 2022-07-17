@@ -1409,7 +1409,6 @@
 							"class": "right-end"
 						}
 					},
-					
 					{
 						"type": "UIRow",
 						"k": "timeline"

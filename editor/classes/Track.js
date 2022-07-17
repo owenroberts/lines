@@ -3,17 +3,18 @@ class Track {
 		this.clips = [];
 		if (params.clips) {
 			params.clips.forEach(clip => {
-				this.addClip(clip);
+				this.addClip(new Clip(clip));
 			});
 		}
+		this.startFrame = params.startFrame || 0;
 	}
 
 	get endFrame() {
-		// end frame of everyhing
+		return this.startFrame + Math.max(...this.clips.map(c => c.endFrame));
 	}
 
 	addClip(clip) {
-		this.clips.push(new Clip(clip));
+		this.clips.push(clip);
 	}
 
 	update(frame) {

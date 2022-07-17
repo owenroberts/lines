@@ -16,6 +16,10 @@ class Composition {
 		this.tracks.push(new Track());
 	}
 
+	addComposition(composition) {
+		this.track.addComposition(composition);
+	}
+
 	get track() {
 		return this.tracks[this.activeTrackIndex];
 	}
@@ -25,7 +29,7 @@ class Composition {
 	}
 
 	get endFrame() {
-		// get last frame of everyting ....
+		return Math.max(...this.tracks.map(t => t.endFrame));
 	}
 
 	update(frame) {

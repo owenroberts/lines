@@ -12,11 +12,11 @@ function Timeline(app) {
 		set: (value) => {
 			// some checks ??
 			activeComposition = value;
+			self.panel.timeline.clear();
 		}
 	});
 
 	this.addClip = function(clip) {
-		console.log(self.composition);
 		self.composition.track.addClip(clip);
 	};
 
@@ -27,5 +27,37 @@ function Timeline(app) {
 	this.draw = function() {
 		self.composition.draw();
 	};
+
+	// set up ui
+	const frameWidth = 10;
+
+	this.addUI = function() {
+		const composition = app.compositions.get(activeComposition);
+		const endFrame = composition.endFrame;
+		console.log(self.panel);
+		self.panel.timeline.setProp('--num-frames', endFrame);
+		
+		// add frames 
+		for (let i = 0; i < endFrame; i++) {
+			const id = 'frame-' + i;
+			const frameBtn = new UIButton({
+				type: "frame",
+				text: `${i}`,
+				css: {
+					gridColumnStart:  1 + (i * 2),
+					gridColumnEnd:  3 + (i * 2)
+				},
+				class: i == app.renderer.frame ? 'current' : '',
+				callback: () => {
+					self.panel.timeline['frame-' + app.renderer.frame].removeClass('current');	
+					app.renderer.frame = i;
+					self.panel.timeline[id].addClass('current');
+				}
+			});
+			self.panel.timeline.append(frameBtn, 'frame-' + i);
+		}
+
+	};
+
 
 }
