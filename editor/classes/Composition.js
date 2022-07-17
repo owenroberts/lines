@@ -13,7 +13,7 @@ class Composition {
 	}
 
 	addTrack() {
-		this.tracks.push(new Track());
+		this.tracks.push(new Track({}));
 	}
 
 	addComposition(composition) {

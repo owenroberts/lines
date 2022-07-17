@@ -28,7 +28,7 @@ class UINumberRange extends UICollection {
 		return [this.numberInput.el, this.range.el];
 	}
 
-	keyHandler(value, isKeyEvent) {
+	keyHandler(value) {
 		this.update(+prompt(this.prompt));
 	}
 

@@ -7,6 +7,8 @@ class Track {
 			});
 		}
 		this.startFrame = params.startFrame || 0;
+		this.label = params.label;
+		this.isVisible = params.isVisible !== undefined ? params.isVisible : true;
 	}
 
 	get endFrame() {
@@ -38,8 +40,12 @@ class Track {
 	}
 
 	get data() {
-		return {
+		const data = { 
 			clips: this.clips.map(c => c.data),
-		};
+			startFrame: this.startFrame,
+			isVisible: this.isVisible,
+		}
+		if (this.label) data.label = this.label
+		return data;
 	}
 }

@@ -29,14 +29,16 @@ function Timeline(app) {
 	};
 
 	// set up ui
+	let uiReady = false;
 	const frameWidth = 10;
 
 	this.addUI = function() {
-		const composition = app.compositions.get(activeComposition);
-		const endFrame = composition.endFrame;
-		console.log(self.panel);
-		self.panel.timeline.setProp('--num-frames', endFrame);
 		
+		const composition = app.compositions.get(activeComposition);
+		const { endFrame, tracks } = composition;
+		self.panel.timeline.setProp('--num-frames', endFrame);
+		self.panel.timeline.setProp('--num-tracks', tracks.length);
+
 		// add frames 
 		for (let i = 0; i < endFrame; i++) {
 			const id = 'frame-' + i;
@@ -44,20 +46,58 @@ function Timeline(app) {
 				type: "frame",
 				text: `${i}`,
 				css: {
-					gridColumnStart:  1 + (i * 2),
-					gridColumnEnd:  3 + (i * 2)
+					gridColumnStart:  2 + (i * 2),
+					gridColumnEnd:  4 + (i * 2)
 				},
-				class: i == app.renderer.frame ? 'current' : '',
+				class: i == app.renderer.frame ? 'current-frame' : '',
 				callback: () => {
-					self.panel.timeline['frame-' + app.renderer.frame].removeClass('current');	
 					app.renderer.frame = i;
-					self.panel.timeline[id].addClass('current');
+					self.updateUI();
 				}
 			});
-			self.panel.timeline.append(frameBtn, 'frame-' + i);
+			self.panel.timeline.append(frameBtn, id);
 		}
 
+		// add tracks
+		for (let i = 0; i < tracks.length; i++) {
+			const id = 'track-' + i;
+			const track = tracks[i];
+			const trackHead = new UITrack(track, { 
+				index: i,
+				class: 'track',
+				css: {
+					gridRowStart: 2,
+					gridRowEnd: 2,
+				}
+			});
+			self.panel.timeline.append(trackHead, id);
+
+			const { clips } = track;
+			for (let j = 0; j < clips.length; j++) {
+				const clip = clips[j];
+				const id = 'clip-' + clip.name;
+				const clipUI = new UIClip(clip, {
+					class: 'clip',
+					css: {
+						gridColumnStart: 2 + track.startFrame + clip.startFrame,
+						gridColumnEnd: 2 + track.startFrame + clip.endFrame * 2
+					}
+				});
+				self.panel.timeline.append(clipUI, id);
+			}
+		}
+
+		uiReady = true;
 	};
+
+	this.updateUI = function() {
+		if (!uiReady) return;
+		const currentFrame = document.getElementsByClassName('current-frame');
+		if (currentFrame[0]) currentFrame[0].classList.remove('current-frame');
+		self.panel.timeline['frame-' + app.renderer.frame].addClass('current-frame');
+	};
+
+
 
 
 }

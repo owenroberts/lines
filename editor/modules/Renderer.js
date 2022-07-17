@@ -8,11 +8,11 @@ function Renderer(app, dps, fps) {
 	const self = this;
 
 	if (!dps) dps = 30; // default
-	if (!fps) fps = dps;
+	// if (!fps) fps = dps;
 	let interval = 1000 / dps;
 	let timer = performance.now();
-	let dpf = Math.round(dps / fps);
-	let drawCount = 0;
+	// let dpf = Math.round(dps / fps);
+	// let drawCount = 0;
 	let isPlaying = false;
 	let frame = 0; // frame part of timeline ??
 	window.drawCount = 0; // needs to be available to lines/drawings
@@ -36,20 +36,24 @@ function Renderer(app, dps, fps) {
 			fps = +value;
 			dpf = Math.round(dps / fps);
 		}
-	})
+	});
+
+	this.nextFrame = function(value) {
+		if (value === "+1") self.frame = frame + 1;
+		else if (value === "-1") self.frame = frame - 1;
+		else if (value === 'end') self.frame = app.timeline.composition.endFrame - 1;
+	};
 
 	this.addProp('frame', {
 		get: () => { return frame; },
 		set: (value) => {
-			let f = frame;
-			if (value === "+1") f = frame + 1;
-			else if (value === "-1") f = frame - 1;
-			else if (value === 'end') f = app.timeline.endFrame;
-			else f = +value;
-			if (f <= app.timeline.endFrame && f >= 0) {
+			let f = +value;
+			if (f <= app.timeline.composition.endFrame - 1 && f >= 0) {
 				frame = f; 
 			}
 			app.ui.faces.frameDisplay.value = frame;
+			app.timeline.updateUI();
+			// app.timeline.update
 			// update ui?
 		}
 	});
@@ -59,9 +63,7 @@ function Renderer(app, dps, fps) {
 		set: (value) => {
 			isPlaying = value;
 		}
-	})
-
-	// fps -- each lns anim has it's own fps 
+	});
 
 	// send capture params all together??
 	this.update = function(time, isCapture) {
@@ -72,17 +74,14 @@ function Renderer(app, dps, fps) {
 			// check bg color is something other than white?
 			// app.canvas.ctx.fillStyle = app.canvas.bgColor;
 			// app.canvas.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
-
-			if (isPlaying) {
-				if (drawCount === dpf) {
-					frame++;
-					drawCount = 0;
-				} else {
-					drawCount++;
-				}
-			}
+			
 			app.timeline.update(frame);
 			app.timeline.draw();
+
+			if (isPlaying) {
+				self.frame++;
+				if (frame >= app.timeline.composition.endFrame) self.frame = 0;
+			}
 
 			// update lines clips // if isPlaying
 			// draw lines clips

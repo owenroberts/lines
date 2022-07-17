@@ -126,7 +126,7 @@
 					{
 						"type": "UIButton",
 						"key": "w",
-						"number": "frame",
+						"callback": "nextFrame",
 						"params": {
 							"text": "◀",
 							"args": ["-1"]
@@ -144,7 +144,7 @@
 					{
 						"type": "UIButton",
 						"key": "e",
-						"number": "frame",
+						"callback": "nextFrame",
 						"params": {
 							"text": "▶",
 							"args": ["+1"]
@@ -153,7 +153,7 @@
 					{
 						"type": "UIButton",
 						"key": "+",
-						"number": "frame",
+						"callback": "nextFrame",
 						"params": {
 							"args": ["end"],
 							"text": "⮑"

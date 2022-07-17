@@ -1,5 +1,8 @@
 @import "interface.scss";
 
+$track-color: yellow;
+$clip-color: $main-color;
+
 #lines {
 	border: 1px solid $ui-color;
 }
@@ -8,27 +11,57 @@
 	--num-frames: 1;
 	--num-tracks: 1;
 	--frame-width: 10;
-	--track-height: 30;
+	--track-height: 32;
+	--track-width: 100;
 
 	flex-basis: 100%;
 	display: grid;
-	grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
-	grid-template-rows: 1.5em repeat(calc(var(--num-tracks) * calc(var(--track-height) * 1px)));
+	grid-template-columns: 
+		calc(var(--track-width) * 1px) 
+		repeat(var(--num-frames), auto);
+		
+	// repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
+	
+	grid-template-rows: 
+		1.5em 
+		repeat(var(--num-tracks), calc(var(--track-height) * 1px));
+
+	&.fit {
+		// grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
+	}
 
 	.frame {
 		background-color: $ui-color;
 		grid-row: 1 / 1;
-		&.current { background-color: $ui-highlight !important; }
+		width: 100%;
+		overflow: hidden;
+		border-left: 1px dashed $bg-color;
+		&.current-frame { background-color: $ui-highlight !important; }
 	}
 
 	.track {
-		background-color: $main-color;
+		background-color: $track-color;
+		grid-column: 1 / 1;
 		display: flex;
-		z-index: 3;
+		height: calc(var(--track-height) * 1px);
+		align-items: baseline;
+		padding: 3px;
 
-		.timeline-btn {
 
+		input[type=text] {
+			width: 72px;
+			text-align: left;
+			font-size: 1.5em;
 		}
+
+	}
+
+	.clip {
+		background-color: $clip-color;
+		display: flex;
+		height: calc(var(--track-height) * 1px);
+		align-items: baseline;
+		padding: 3px;
 	}
 
 	&::-webkit-scrollbar {
