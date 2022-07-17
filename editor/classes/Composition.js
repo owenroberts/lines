@@ -1,9 +1,15 @@
-class Timeline {
+class Composition {
 	constructor(params) {
 		this.tracks = []; // track of animations
-		this.tracks.push(new Track()); // default first track
-		this.activeTrackIndex = 0;
-		this.isVisible = true;
+		if (params.tracks) {
+			params.tracks.forEach(track => {
+				this.tracks.push(new Track(track));
+			});
+		} else {
+			this.tracks.push(new Track({})); // default first track
+		}
+		this.activeTrackIndex = params.activeTrackIndex || 0;
+		this.isVisible = params.isVisible !== undefined ? params.isVisible : true;
 	}
 
 	addTrack() {
@@ -32,5 +38,13 @@ class Timeline {
 		for (let i = 0; i < this.tracks.length; i++) {
 			this.tracks[i].draw(frame);
 		}
+	}
+
+	get data() {
+		return { 
+			tracks: this.tracks.map(t => t.data),
+			activeTrackIndex: this.activeTrackIndex,
+			isVisible: this.isVisible,
+		};
 	}
 }

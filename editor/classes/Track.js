@@ -1,6 +1,11 @@
 class Track {
 	constructor(params) {
 		this.clips = [];
+		if (params.clips) {
+			params.clips.forEach(clip => {
+				this.addClip(clip);
+			});
+		}
 	}
 
 	get endFrame() {
@@ -8,7 +13,7 @@ class Track {
 	}
 
 	addClip(clip) {
-		this.clips.push(clip);
+		this.clips.push(new Clip(clip));
 	}
 
 	update(frame) {
@@ -29,5 +34,11 @@ class Track {
 			clip.draw(frame);
 			break; // only one clip per track can be played
 		}
+	}
+
+	get data() {
+		return {
+			clips: this.clips.map(c => c.data),
+		};
 	}
 }

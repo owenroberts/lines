@@ -1,6 +1,7 @@
 class Clip {
 	constructor(params) {
 		this.name = params.name;
+		this.filePath = params.filePath;
 		this.animation = params.animation;
 		this.startFrame = params.startFrame;
 		this.endFrame = params.startFrame + params.animation.endFrame;
@@ -19,5 +20,15 @@ class Clip {
 	draw() {
 		this.animation.update();
 		this.animation.draw();
+	}
+
+	get data() {
+		return {
+			name: this.name,
+			filePath: this.filePath,
+			startFrame: this.startFrame,
+			isVisible: this.isVisible,
+			state: this.state,
+		};
 	}
 }

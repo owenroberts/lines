@@ -25,14 +25,13 @@ function Footage(app) {
 		const btn = new UIButton({
 			text: fileName,
 			callback: () => {
-				console.log(fileName, animations[fileName]);
-				// add footage to track
-				const clip = new Clip({ 
+				const clip = new Clip({
+					filePath: filePath,
 					name: fileName, 
 					animation: animations[fileName],
 					startFrame: app.renderer.frame
-				})
-				app.timeline.track.addClip(clip);
+				});
+				app.timeline.addClip(clip);
 			}
 		});
 		self.panel.footageRow.append(btn);
@@ -56,12 +55,15 @@ function Footage(app) {
 		}
 	}
 
-	this.load = function(footage, fromFile) {
+	this.load = function(footage, fromFile, callback) {
 		footage.forEach(filePath => {
 			const fileName = filePath.split('/').pop().replace('.json', '');
 			fetch(filePath)
 				.then(response => response.json())
-				.then(data => loadJSON(data, fileName, filePath, fromFile))
+				.then(data => {
+					loadJSON(data, fileName, filePath, fromFile);
+					if (callback) callback();
+				})
 				.catch(err => { console.error('err', err.message ); });
 		});
 	};
@@ -75,5 +77,9 @@ function Footage(app) {
 			let directoryPath = prompt('Directory?', '/drawings/');
 			readFile(openFile.files, directoryPath);
 		};
+	};
+
+	this.get = function(name) {
+		return animations[name];
 	};
 }

@@ -1,1 +1,1 @@
-{"v":"0.1","footage":["/drawings/titles/by_line_2.json","/drawings/titles/by_line.json","/drawings/titles/title.json","/drawings/titles/title_small.json"]}
+{"v":"0.1","footage":["/drawings/titles/by_line_2.json","/drawings/titles/by_line.json","/drawings/titles/title.json","/drawings/titles/title_small.json"],"compositions":{"default":{"tracks":[{"clips":[{"name":"title_small","filePath":"/drawings/titles/title_small.json","startFrame":0,"isVisible":true,"state":"default"}]}],"activeTrackIndex":0,"isVisible":true}}}

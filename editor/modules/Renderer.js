@@ -83,7 +83,7 @@ function Renderer(app, dps, fps) {
 				}
 			}
 			app.timeline.update(frame);
-			app.timeline.draw(frame);
+			app.timeline.draw();
 
 			// update lines clips // if isPlaying
 			// draw lines clips
