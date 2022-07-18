@@ -50,6 +50,9 @@ function Canvas(app, params) {
 	this.updateSize = function() {
 		self.canvas.width = width * dpr * scale;
 		self.canvas.height = height * dpr * scale;
+		self.ctx.scale(1, 1);
+		self.ctx.scale(dpr, dpr);
+		self.ctx.scale(scale, scale);
 		self.reset();
 	};
 
