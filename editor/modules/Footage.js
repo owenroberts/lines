@@ -10,7 +10,6 @@ function Footage(app) {
 	this.filePaths = [];
 
 	function loadJSON(data, fileName, filePath, fromFile) {
-		// app.render.dps
 		animations[fileName] = new Lines(app.canvas.ctx, 30, true);
 		animations[fileName].loadData(data, () => {
 			if (fromFile || (askToSetFootage && confirm("Set project settings?"))) {

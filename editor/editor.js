@@ -2,7 +2,9 @@ window.addEventListener("load", function() {
 
 	const app = {}; // main editor app
 	app.addProp = Object.defineProperty;
-	
+	Object.assign(Lines.prototype, LinesMixin);
+
+
 	const params = {};
 	location.search.substr(1).split('&').map(a => {
 		let [key, value] = a.split('=');
@@ -21,10 +23,14 @@ window.addEventListener("load", function() {
 	// app.capture = new Capture(app);
 
 	app.ui.load('./interface/interface.json', () => {
-		if (params.src) app.fio.load(params.src);
+		if (params.src) app.fio.load(params.src, start); // await here ?
+		else start();
+	});
+
+	function start() {
 		app.ui.settings.load();
 		app.renderer.start();
-	});
+	}
 
 
 	console.log(app);

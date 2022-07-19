@@ -2,8 +2,6 @@ class UIClip extends UICollection {
 	constructor(clip, params) {
 		super(params);
 
-		console.log(clip);
-
 		const label = new UILabel({ text: clip.name });
 
 		const visibilityToggle = new UIToggleCheck({
@@ -21,8 +19,41 @@ class UIClip extends UICollection {
 			}
 		});
 
-		this.append(label);
-		this.append(visibilityToggle);
-		this.append(edit);
+		const remove = new UIButton({
+			text: "X",
+			callback: params.remove
+		});
+
+		const repeat = new UINumberStep({
+			value: clip.repeatCount,
+			callback: (value) => {
+				clip.repeatCount = +value;
+				params.drawUI();
+			}
+		});
+
+		const stateSelector = new UISelect({
+			options: Object.keys(clip.animation.states),
+			selected: clip.state,
+			callback: (value) => {
+				clip.state = value;
+				clip.setup();
+				params.drawUI();
+			}
+		});
+
+		let top = new UIRow();
+		let bot = new UIRow();
+		this.append(top);
+		this.append(bot);
+
+		top.append(label);
+		top.append(visibilityToggle);
+		top.append(edit);
+		top.append(remove);
+		top.append(repeat);
+
+		bot.append(stateSelector);
+		
 	}
 }

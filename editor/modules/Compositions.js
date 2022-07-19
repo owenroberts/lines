@@ -9,7 +9,7 @@ function Compositions(app) {
 	Object.assign(Compositions.prototype, ModuleMixin);
 	const self = this;
 
-	const compositions = { default: new Composition({}) };
+	const compositions = {};
 
 	this.addProp('data', {
 		get: () => {
@@ -40,8 +40,17 @@ function Compositions(app) {
 	this.addUI = function(name) {
 		const rowName = name + '-row';
 		const row = self.panel.addRow(rowName);
+		row.addClass('ui-composition');
 		
-		self.panel[rowName].append(new UILabel({ text: name }));
+
+		self.panel[rowName].append(new UIText({
+			text: name,
+			callback: value => {
+				const comp = Object.getOwnPropertyDescriptor(compositions, name);
+				Object.defineProperty(compositions, value, comp);
+				delete compositions[name];
+			}
+		}));
 		
 		self.panel[rowName].append(new UIButton({
 			text: 'Edit',

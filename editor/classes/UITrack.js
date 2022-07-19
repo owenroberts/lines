@@ -1,7 +1,6 @@
 class UITrack extends UICollection {
 	constructor(track, params) {
 		super(params);
-		console.log(track);
 
 		const label = new UIText({
 			text: track.label || 'Track ' + params.index,

@@ -23,6 +23,8 @@ class Lines {
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
 
+
+
 		this.override = {};
 
 		// most animations use default state, game anims/textures have states for changing frame
@@ -39,13 +41,19 @@ class Lines {
 	}
 
 	set fps(fps) {
+		
 		this._fps = +fps;
 		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
+		// fps is really whatever dps / dpf is 
 	}
 
 	get fps() {
 		return this._fps;
+	}
+
+	get dpf() {
+		return this.drawsPerFrame;
 	}
 
 	get frame() {
@@ -55,7 +63,7 @@ class Lines {
 	set frame(n) {
 		this.currentFrame = +n;
 		if (this.states.default) {
-			if (this.states.default.end != this.endFrame)
+			if (this.states.default.end !== this.endFrame)
 				this.states.default.end = this.endFrame;
 		}
 	}
@@ -106,15 +114,14 @@ class Lines {
 				if (this.currentFrame >= this.state.end) {
 					this.currentFrame = this.state.start;
 					if (this.onPlayedState) this.onPlayedState();
-					if (this.onPlayedOnce) {
-						this.onPlayedOnce();
-					}
+					if (this.onPlayedOnce) this.onPlayedOnce();
 				} else {
 					this.currentFrame++;
 				}
 				this.drawCount = 0;
+			} else {
+				this.drawCount++;
 			}
-			this.drawCount++;
 			if (this.onUpdate) this.onUpdate();
 		}
 	}
@@ -142,7 +149,6 @@ class Lines {
 	}
 
 	draw(x, y, suspendLinesUpdate) {
-		// console.log('draw');
 
 		/* 
 			get color and other funcs are bc pixel lines uses fill while regular lines uses stroke

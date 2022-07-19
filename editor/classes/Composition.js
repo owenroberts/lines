@@ -10,6 +10,7 @@ class Composition {
 		}
 		this.activeTrackIndex = params.activeTrackIndex || 0;
 		this.isVisible = params.isVisible !== undefined ? params.isVisible : true;
+		this.endFrame = this.calcEndFrame();
 	}
 
 	addTrack() {
@@ -28,8 +29,9 @@ class Composition {
 		this.activeTrackIndex = +value;
 	}
 
-	get endFrame() {
-		return Math.max(...this.tracks.map(t => t.endFrame));
+	calcEndFrame() {
+		this.endFrame = Math.max(...this.tracks.map(t => t.calcEndFrame()));
+		return this.endFrame;
 	}
 
 	update(frame) {

@@ -41,14 +41,14 @@ function Renderer(app, dps, fps) {
 	this.nextFrame = function(value) {
 		if (value === "+1") self.frame = frame + 1;
 		else if (value === "-1") self.frame = frame - 1;
-		else if (value === 'end') self.frame = app.timeline.composition.endFrame - 1;
+		else if (value === 'end') self.frame = app.timeline.composition.endFrame;
 	};
 
 	this.addProp('frame', {
 		get: () => { return frame; },
 		set: (value) => {
 			let f = +value;
-			if (f <= app.timeline.composition.endFrame - 1 && f >= 0) {
+			if (f <= app.timeline.composition.endFrame && f >= 0) {
 				frame = f; 
 			}
 			app.ui.faces.frameDisplay.value = frame;
@@ -76,7 +76,7 @@ function Renderer(app, dps, fps) {
 			// app.canvas.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
 			
 			app.timeline.update(frame);
-			app.timeline.draw();
+			app.timeline.draw(frame);
 
 			if (isPlaying) {
 				self.frame++;

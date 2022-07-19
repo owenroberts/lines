@@ -7,18 +7,27 @@ $clip-color: $main-color;
 	border: 1px solid $ui-color;
 }
 
+.ui-composition {
+	input[type=text] {
+		width: 80px;
+		font-size: 1.25em;
+		text-align: left;
+	}
+}
+
+
 #timeline {
 	--num-frames: 1;
 	--num-tracks: 1;
 	--frame-width: 10;
-	--track-height: 32;
+	--track-height: 54;
 	--track-width: 100;
 
 	flex-basis: 100%;
 	display: grid;
 	grid-template-columns: 
 		calc(var(--track-width) * 1px) 
-		repeat(var(--num-frames), auto);
+		repeat(calc(var(--num-frames) * 2), auto);
 		
 	// repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
 	
@@ -34,8 +43,12 @@ $clip-color: $main-color;
 		background-color: $ui-color;
 		grid-row: 1 / 1;
 		width: 100%;
+		height: 100%;
+		min-width: 1px;
 		overflow: hidden;
 		border-left: 1px dashed $bg-color;
+		margin: 0;
+		padding: 0;
 		&.current-frame { background-color: $ui-highlight !important; }
 	}
 
@@ -59,10 +72,19 @@ $clip-color: $main-color;
 	.clip {
 		background-color: $clip-color;
 		display: flex;
+		flex-wrap: wrap;
 		height: calc(var(--track-height) * 1px);
-		align-items: baseline;
+		align-items: inherit;
 		padding: 3px;
+		border: 1px solid $text-color;
+
+		.ui-collection {
+			.number {
+				width: calc(var(--base-font-size) * 2 * 1px);
+			}
+		}
 	}
+
 
 	&::-webkit-scrollbar {
 		width: 1em;
