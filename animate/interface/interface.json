@@ -873,6 +873,17 @@
 						}
 					},
 					{
+						"type": "UINumberRange",
+						"label": "Dots",
+						"face": "dots",
+						"number": "dots",
+						"params": {
+							"min": 10, 
+							"max": 50,
+							"value": 10
+						}
+					},
+					{
 						"type": "UIRow"
 					},
 					{
@@ -890,7 +901,7 @@
 					},
 					{
 						"type": "UINumberRange",
-						"label": "X Direction Right",
+						"label": "X Spread Right",
 						"face": "brushSpreadXRight",
 						"number":  "brushSpreadXRight",
 						"params": {
@@ -914,9 +925,20 @@
 					},
 					{
 						"type": "UINumberRange",
-						"label": "Y Spread",
-						"face": "brushSpreadY",
-						"number":  "brushSpreadY",
+						"label": "Y Spread Left",
+						"face": "brushSpreadYLeft",
+						"number":  "brushSpreadYLeft",
+						"params": {
+							"min": 0, 
+							"max": 50,
+							"value": 0
+						}
+					},
+					{
+						"type": "UINumberRange",
+						"label": "Y Spread Right",
+						"face": "brushSpreadYRight",
+						"number":  "brushSpreadYRight",
 						"params": {
 							"min": 0, 
 							"max": 50,
@@ -957,15 +979,16 @@
 							"value": 3
 						}
 					},
+					
 					{
-						"type": "UINumberRange",
-						"label": "Dots",
-						"face": "dots",
-						"number": "dots",
+						"type": "UINumberStep",
+						"label": "Spread Multiplier",
+						"face": "brushSpreadMultiplier",
+						"number":  "brushSpreadMultiplier",
 						"params": {
-							"min": 10, 
-							"max": 50,
-							"value": 10
+							"min": 1, 
+							"max": 5,
+							"value": 1
 						}
 					}
 				]

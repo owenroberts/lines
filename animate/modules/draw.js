@@ -128,7 +128,9 @@ function Draw(defaults) {
 	this.isBrush = false;
 	this.brushSpreadXLeft = 0;
 	this.brushSpreadXRight = 0;
-	this.brushSpreadY = 0;
+	this.brushSpreadYLeft = 0;
+	this.brushSpreadYRight = 0;
+	this.brushSpreadMultiplier = 1;
 	this.brushRandomX = 0;
 	this.brushRandomY = 0;
 	this.brushSegmentsMin = 1;
@@ -190,8 +192,14 @@ function Draw(defaults) {
 
 		const numPoints = Cool.randomInt(self.brushSegmentsMin, self.brushSegmentsMax);
 		for (let i = 1; i <= numPoints; i ++) {
-			let _x = Cool.random(-self.brushSpreadXLeft, self.brushSpreadXRight) * (i / numPoints) * (1 - Cool.random(self.brushRandomX));
-			let _y = self.brushSpreadY * (i / numPoints) * (1 - Cool.random(self.brushRandomY));
+			let _x = Cool.random(-self.brushSpreadXLeft, self.brushSpreadXRight)
+				* self.brushSpreadMultiplier
+				* (i / numPoints) 
+				* (1 - Cool.random(self.brushRandomX));
+			let _y = Cool.random(-self.brushSpreadYLeft, self.brushSpreadYRight)
+				* self.brushSpreadMultiplier
+				* (i / numPoints) 
+				* (1 - Cool.random(self.brushRandomY));
 
 			let point = new Cool.Vector(x + _x, y - _y);
 			point.divide(lns.canvas.scale);
