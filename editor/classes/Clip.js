@@ -20,13 +20,13 @@ class Clip {
 
 	calcEndFrame() {
 		let f = this.duration * this.animation.dpf * this.repeatCount;
-		this.endFrame = this.startFrame + f;
+		this.endFrame = this.startFrame + f - 1; // starts counting at 1
 		return this.endFrame;
 	}
 
 	update(frame) {
 		let f = frame - this.startFrame; // app frame - the start frame of clip
-		f = Math.round(f / this.animation.dpf);
+		f = Math.floor(f / this.animation.dpf);
 		f = f % this.duration; // cycle state
 		this.animation.currentFrame = this.animation.states[this.state].start + f;
 	}

@@ -92,7 +92,7 @@ function Draw(defaults) {
 		const modal = new UIModal({ title: "Select Color", app: lns, position: lns.mousePosition });
 		modal.add(new UIColor({
 			callback: function(value) {
-				self.setProperty('color', value);
+				self.setProperty(value, 'color');
 				lns.ui.faces.color.el.value = value;
 			}
 		}));
@@ -102,7 +102,7 @@ function Draw(defaults) {
 				css: { "background": color },
 				value: color,
 				callback: function() {
-					self.setProperty('color', color);
+					self.setProperty(color, 'color');
 					lns.ui.faces.color.el.value = color;
 					modal.clear();
 				}
@@ -112,7 +112,7 @@ function Draw(defaults) {
 
 	this.randomColor = function() {
 		const color = '#' + Math.floor(Math.random()*16777215).toString(16);
-		self.setProperty('color', color);
+		self.setProperty(color, 'color');
 		lns.ui.faces.color.el.value = color;
 	}; /* shift-g */
 
@@ -121,7 +121,7 @@ function Draw(defaults) {
 		n += Cool.randomInt(-500, 500);
 		n = Math.max(0, n);
 		const color = '#' + n.toString(16);
-		self.setProperty('color', color);
+		self.setProperty(color, 'color');
 		lns.ui.faces.color.el.value = color;
 	}; /* alt-g */
 

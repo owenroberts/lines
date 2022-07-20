@@ -24,6 +24,11 @@ class UIClip extends UICollection {
 			callback: params.remove
 		});
 
+		const plus = new UIButton({
+			text: '+',
+			callback: params.addClip
+		});
+
 		const repeat = new UINumberStep({
 			value: clip.repeatCount,
 			callback: (value) => {
@@ -51,9 +56,9 @@ class UIClip extends UICollection {
 		top.append(visibilityToggle);
 		top.append(edit);
 		top.append(remove);
-		top.append(repeat);
-
-		bot.append(stateSelector);
+		top.append(plus)
 		
+		bot.append(repeat);
+		bot.append(stateSelector);
 	}
 }

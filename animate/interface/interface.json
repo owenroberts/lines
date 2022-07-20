@@ -1112,18 +1112,24 @@
 					{
 						"type": "UISelect",
 						"face": "stateSelector",
-						"fromModule": {
-							"callback": "set"
-						}
+						"key": "ctrl-t",
+						"callback": "set"
 					},
 					{
 						"type": "UIButton",
 						"key": "t",
-						"fromModule": {
-							"callback": "create"
-						},
+						"callback": "create",
 						"params": {
 							"text": "+"
+						}
+					},
+					{
+						"type": "UIButton",
+						"key": "shift-t",
+						"callback": "set",
+						"params": {
+							"text": "Set Default",
+							"args": ["default"]
 						}
 					}
 				]

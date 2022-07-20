@@ -105,6 +105,12 @@ function Timeline(app) {
 						track.removeClip(clip);
 						self.drawUI();
 					},
+					addClip: () => {
+						let data = clip.data;
+						data.animation = app.footage.get(data.name);
+						self.addClip(new Clip(data));
+						self.drawUI();
+					},
 					drawUI: self.drawUI
 				});
 				// console.log('clip endframe', clip.endFrame);

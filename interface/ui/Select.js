@@ -2,6 +2,7 @@ class UISelect extends UIElement {
 	constructor(params) {
 		params.tag = "select";
 		super(params);
+		if (params.callback) this.callback = params.callback;
 		this.setOptions(params.options || [], params.selected);
 		
 		this.el.addEventListener('change', function(ev) {
@@ -12,6 +13,7 @@ class UISelect extends UIElement {
 
 	update(option) {
 		this.value = option;
+		// callback ??
 	}
 
 	removeOption(value) {

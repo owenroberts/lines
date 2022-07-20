@@ -47,12 +47,32 @@ function States() {
 	};
 
 	this.set = function(state) {
-		lns.anim.state = state;
-		lns.ui.update();
+		if (!state) {
+			const m = new UIModal({
+				app: lns,
+				title: "Choose State",
+				position: lns.mousePosition,
+			});
+			for (const key in lns.anim.states) {
+				m.add(new UIButton({
+					text: key,
+					callback: () => {
+						lns.anim.state = key;
+						lns.ui.faces.stateSelector.value = key;
+						m.clear();
+						lns.ui.update();
+					}
+				}))
+			};
+		} else {
+			lns.anim.state = state;
+			lns.ui.update();
+		}
 	};
 
 	this.create = function() {
 		const name = prompt('Name?');
+		if (!name) return;
 		self.addUI(name, { 
 			start: lns.anim.currentFrame, 
 			end: lns.anim.currentFrame 

@@ -53,7 +53,6 @@ class Track {
 			if (!clip.isVisible) continue;
 			if (frame < this.startFrame + clip.startFrame) continue;
 			if (frame > this.startFrame + clip.endFrame) continue;
-			// console.log('clip', clip.state);
 			clip.draw();
 			break; // only one clip per track can be played
 		}
