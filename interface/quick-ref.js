@@ -131,6 +131,7 @@ function QuickRef(app) {
 						if (!n) n = u.face;
 						if (!n) console.error('quick search fuck', u);
 						label += n;
+						if (u.key) label += ` (key: ${u.key})`;
 						options[label] = { ...u, module: ui.module, sub: ui.sub };
 					});
 			});

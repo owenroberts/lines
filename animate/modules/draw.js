@@ -33,7 +33,7 @@ function Draw(defaults) {
 	};
 
 	this.setProperty = function(value, prop) {
-		lns.anim.updateProperty(prop, value);
+		lns.anim.updateProperty(value, prop);
 		self.layer[prop] = value;
 	};
 
