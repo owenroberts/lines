@@ -176,6 +176,7 @@ function Timeline() {
 				if (self.viewActiveLayers && !layer.isInFrame(lns.anim.currentFrame)) continue;
 				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				const ui = new UILayer(layer, {
+					group: self.viewGroups ? undefined : self.groups[layer.groupNumber],
 					canMoveUp: i > 0 && layers.length > 2,
 					type: 'layer',
 					width: self.frameWidth * (layer.endFrame - layer.startFrame + 1),
@@ -195,40 +196,38 @@ function Timeline() {
 					},
 					addToGroup(position) {
 						lns.draw.reset(); // save current lines
-						if (layer.groupNumber < 0) {
-							if (self.groups.length === 0) {
-								let createGroup = prompt("Name new group", "New Group 0");
-								self.groups.push(createGroup);
-								layer.groupNumber = 0;
-								lns.ui.update();
-							} else {
-								let groupSelector = new UIModal({
-									title: 'Select Group',
-									app: lns,
-									position: position, 
-									callback: function() {
-										layer.groupNumber = +groupSelect.value;
-										lns.ui.update();
-									}
-								});
-								groupSelector.addBreak('Groups:');
-								let groupSelect = new UISelect({});
-								for (let i = 0; i < self.groups.length; i++) {
-									groupSelect.addOption(i, i === 0, self.groups[i]);
+						if (self.groups.length === 0) {
+							let createGroup = prompt("Name new group", "New Group 0");
+							self.groups.push(createGroup);
+							layer.groupNumber = 0;
+							lns.ui.update();
+						} else {
+							let groupSelector = new UIModal({
+								title: 'Select Group',
+								app: lns,
+								position: position, 
+								callback: function() {
+									layer.groupNumber = +groupSelect.value;
+									lns.ui.update();
 								}
-								groupSelector.add(groupSelect);
-								groupSelector.addBreak();
-								groupSelector.add(new UIButton({
-									text: 'New Group',
-									callback: function() {
-										groupSelector.clear();
-										let createGroup = prompt("Name new group", "New Group " + self.groups.length);
-										self.groups.push(createGroup);
-										layer.groupNumber = self.groups.length - 1;
-										lns.ui.update();
-									}
-								}));
+							});
+							groupSelector.addBreak('Groups:');
+							let groupSelect = new UISelect({});
+							for (let i = 0; i < self.groups.length; i++) {
+								groupSelect.addOption(i, i === 0, self.groups[i]);
 							}
+							groupSelector.add(groupSelect);
+							groupSelector.addBreak();
+							groupSelector.add(new UIButton({
+								text: 'New Group',
+								callback: function() {
+									groupSelector.clear();
+									let createGroup = prompt("Name new group", "New Group " + self.groups.length);
+									self.groups.push(createGroup);
+									layer.groupNumber = self.groups.length - 1;
+									lns.ui.update();
+								}
+							}));
 						}
 					}
 				});

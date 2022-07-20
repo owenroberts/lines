@@ -240,6 +240,10 @@ class UILayer extends UICollection {
 			}
 		});
 
+		if (params.group) {
+			this.groupLabel = new UILabel({ text: params.group });
+		}
+
 		this.setup(params.width);
 	}
 
@@ -253,10 +257,14 @@ class UILayer extends UICollection {
 		if (width > 70) this.append(this.remove);
 		if (width > 80) this.append(this.addToGroup);
 		if (width > 90 && this.canMoveUp) this.append(this.moveUp);
+		if (width > 100 && this.groupLabel) this.append(this.groupLabel);
+
+		// has to go last
 		if (width > 80) {
 			this.append(this.endFrameNumber);
 			this.endFrameNumber.addClass('right-margin');
-		} 
+		}
+		
 	}
 
 	get html() {
