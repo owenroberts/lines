@@ -1368,23 +1368,21 @@
 					{
 						"type": "UIButton",
 						"key": "shift-v",
-						"fromModule": {
-							"callback": "select"
-						},
+						"callback": "select",
 						"params": {
 							"text": "Select",
-							"class": "left-end"
+							"class": "left-end",
+							"args": [true]
 						}
 					},
 					{
 						"type": "UIButton",
 						"key": "alt-d",
-						"fromModule": {
-							"callback": "deselect"
-						},
+						"callback": "select",
 						"params": {
 							"text": "Deselect",
-							"class": "right-end"
+							"class": "right-end",
+							"args": [false]
 						}
 					},
 					{

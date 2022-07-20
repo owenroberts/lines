@@ -11,12 +11,14 @@ class UILayer extends UICollection {
 			class: 'timeline-btn',
 			text: `${layer.drawingIndex}`,
 			isOn: layer.isToggled,
-			callback: function() {
-				// only update the values when toggling on, ignore when toggling off
-				if (!layer.isToggled) {
+			callback: function(isOn) {
+				// better way to do this annoying long line?
+				layer.isToggled = isOn !== undefined ? isOn : !layer.isToggled;
+				// set properties
+				if (layer.isToggled) {
 					lns.draw.setProperties(layer.getEditProps(), true); // set ui only
 				}
-				layer.toggle();
+				// self.toggle.set(layer.isToggled);
 				self.highlight.update(layer.isToggled);
 			}
 		});
@@ -26,8 +28,8 @@ class UILayer extends UICollection {
 			class: 'timeline-btn',
 			text: '*',
 			isOn: layer.isHighlighted,
-			callback: function() {
-				layer.isHighlighted = !layer.isHighlighted;
+			callback: function(isOn) {
+				layer.isHighlighted = isOn !== undefined ? isOn : !layer.isHighlighted;
 			}
 		});
 

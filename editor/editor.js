@@ -2,8 +2,7 @@ window.addEventListener("load", function() {
 
 	const app = {}; // main editor app
 	app.addProp = Object.defineProperty;
-	Object.assign(Lines.prototype, LinesMixin);
-
+	// Object.assign(Lines.prototype, LinesMixin);
 
 	const params = {};
 	location.search.substr(1).split('&').map(a => {

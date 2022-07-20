@@ -1,6 +1,6 @@
 const LinesMixin = {
 	
-	updateProperty(prop, value) {
+	updateProperty(value, prop) {
 		/* args from ui */
 		for (let i = 0; i < this.layers.length - 1; i++) {
 			if (this.layers[i].isToggled) this.layers[i][prop] = value;

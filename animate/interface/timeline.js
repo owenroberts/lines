@@ -186,8 +186,8 @@ function Timeline() {
 						gridColumnEnd: layer.endFrame * 2 + 3
 					},
 					moveUp: function() {
-						const swapIndex = lns.anim.layers.indexOf(layers[i - 1]);
 						const layerIndex = lns.anim.layers.indexOf(layer);
+						const swapIndex = layerIndex - 1;
 						if (swapIndex >= 0) {
 							[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]]
 						}
@@ -307,9 +307,6 @@ function Timeline() {
 		}
 	};
 
-	this.deselect = function() {
-		self.select(false);
-	};
 
 	this.lock = function(isLock) {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {

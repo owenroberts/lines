@@ -27,8 +27,8 @@ class UITimelineGroup extends UICollection {
 			class: 'timeline-btn',
 			text: params.name,
 			isOn: this.isToggled,
-			callback: function() {
-				self.isToggled = !self.isToggled;
+			callback: function(isOn) {
+				self.isToggled = isOn !== undefined ? isOn : !self.isToggled;
 				layers.forEach(layer => {
 					layer.toggle(self.isToggled);
 					layer.isHighlighted = self.isToggled;

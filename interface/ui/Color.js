@@ -36,7 +36,7 @@ class UIColor extends UIInput {
 	/* to set color without constantly updating "current" */
 	setColor(value) {
 		this.current = value;
-		this.callback(...[...this.args, value]);
+		this.callback(value, ...this.args);
 	}
 
 	/* update for loading */

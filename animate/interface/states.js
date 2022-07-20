@@ -1,8 +1,6 @@
 function States() {
 	const self = this;
 
-	/* could be module, could be state ui class */
-
 	this.update = function() {
 		for (const key in lns.anim.states) {
 			const state = lns.anim.states[key];
@@ -19,27 +17,23 @@ function States() {
 		lns.anim.states[name] = state;
 		lns.ui.faces.stateSelector.addOption(name);
 
-		self.panel.add(new UILabel({
-			text: name
-		}), row);
+		row.append(new UILabel({ text: name }));
 
-		self.panel.add(new UINumber({
-			text: "Start",
+		row.append(new UINumber({
 			value: state.start,
 			callback: function(n) {
 				state.start = +n;
 			}
-		}), row, 'start');
+		}), 'start');
 
-		self.panel.add(new UINumber({
-			text: "End",
+		row.append(new UINumber({
 			value: state.end,
 			callback: function(n) {
 				state.end = +n;
 			}
-		}), row, 'end');
+		}), 'end');
 
-		self.panel.add(new UIButton({
+		row.append(new UIButton({
 			text: "x",
 			callback: function() {
 				delete lns.anim.states[name];
@@ -48,7 +42,7 @@ function States() {
 				lns.anim.state = 'default';
 				lns.ui.faces.stateSelector.value = 'default';
 			}
-		}), row);
+		}));
 		return row;
 	};
 
