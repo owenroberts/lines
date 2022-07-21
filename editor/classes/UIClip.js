@@ -12,7 +12,7 @@ class UIClip extends UICollection {
 		});
 
 		const edit = new UIButton({
-			text: 'Edit',
+			text: 'E',
 			callback: () => {
 				let locationURL = location.pathname.includes('lines') ? 'lines/' : '';
 				window.open(`${location.origin}/${locationURL}animate/?src=${clip.filePath}`, 'anim');
@@ -47,18 +47,41 @@ class UIClip extends UICollection {
 			}
 		});
 
+		const swap = new UIButton({
+			text: '⮂',
+			callback: params.swap
+		});
+
+		const dpf = new UINumberStep({
+			value: clip.dpf,
+			callback: (value) => {
+				clip.dpf = +value;
+				params.drawUI();
+			}
+		});
+
 		let top = new UIRow();
+		let mid = new UIRow();
 		let bot = new UIRow();
+
 		this.append(top);
+		this.append(mid);
 		this.append(bot);
 
 		top.append(label);
-		top.append(visibilityToggle);
-		top.append(edit);
-		top.append(remove);
-		top.append(plus)
+		mid.append(swap);
+		mid.append(stateSelector);
+		mid.append(plus);
 		
+		top.append(visibilityToggle);
+		
+		top.append(remove);
+		top.append(edit);
+
+		bot.append(new UILabel({ text: 'R' }));
 		bot.append(repeat);
-		bot.append(stateSelector);
+		bot.append(new UILabel({ text: 'DPF' }));
+		bot.append(dpf);
+		
 	}
 }

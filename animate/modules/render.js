@@ -57,6 +57,8 @@ function Render(dps, showStats) {
 	/* ; - fps update frame value in anim*/
 	this.setFps = function(fps) {
 		lns.anim.fps = +fps;
+		// console.log(lns.anim.fps);
+		lns.ui.faces.fps.value = lns.anim.fps;
 	};
 
 	this.clearCount = 0; // what is this

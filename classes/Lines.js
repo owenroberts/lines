@@ -16,14 +16,19 @@ class Lines {
 		this.drawings = [];
 		this.layers = [];
 		
-		this.dps = dps || 30; // draw per frame from renderer
-		this.fps = 5; // update frames -- why 5 what the helll???
+		/*
+			dps is the renderer speed
+			dpf is how many draws per frame, must be int
+			fps is not really relevant but easier to understand
+			default dps is usuall 30 so 10 is good
+			with 24 use 12
+		*/
 
+		if (!dps) dps = 30; // draw per frame from renderer
+		this._fps = dps === 30 ? 10 : 12;
+		this.drawsPerFrame = Math.round(dps / this._fps);
 		this.currentFrame = 0;
-		this.drawsPerFrame = Math.round(this.dps / this.fps);
 		this.drawCount = 0;
-
-
 
 		this.override = {};
 
@@ -40,16 +45,47 @@ class Lines {
 		this.drawCount = Cool.randomInt(this.drawsPerFrame);
 	}
 
-	set fps(fps) {
-		
-		this._fps = +fps;
-		this.drawsPerFrame = Math.round(this.dps / this.fps);
+	set fps(value) {
+		// if (!value || value <= 0) return;
+
+		const dps = this.fps * this.dpf; // reverse engineer current dps
+		this.drawsPerFrame = Math.round(dps / +value);
 		this.drawCount = 0;
 		// fps is really whatever dps / dpf is 
+		const f = dps / this.drawsPerFrame; // "real" fps
+		// fix for step up/down
+		if (f === this.fps && Math.abs(+value - this.fps) === 1) {
+			console.log('if');
+			const d = +value - this.fps;
+			if (d === 1) {
+				for (let n = +value; n < dps; n += d) {
+					let dpf = Math.round(dps / n);
+					if (dps / dpf > this.fps) {
+						this.drawsPerFrame = Math.round(dps / n);
+						break;
+					}
+				}
+			}
+			if (d === -1) {
+				for (let n = +value; n > 0; n += d) {
+					let dpf = Math.round(dps / n);
+					if (dps / dpf < this.fps) {
+						this.drawsPerFrame = Math.round(dps / n);
+						break;
+					}
+				}
+			}
+		}
+		
+		this._fps = +(dps / this.drawsPerFrame).toFixed(3); 
 	}
 
 	get fps() {
 		return this._fps;
+	}
+
+	set dpf(value) {
+		this.drawsPerFrame = +value;
 	}
 
 	get dpf() {

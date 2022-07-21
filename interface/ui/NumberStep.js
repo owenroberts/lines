@@ -1,6 +1,7 @@
 class UINumberStep extends UICollection {
 	constructor(params) {
 		super(params);
+		this.addClass('number-step');
 		this.callback = params.callback;
 		this.args = params.args;
 		this.step = +params.step || 1;

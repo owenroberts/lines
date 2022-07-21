@@ -38,35 +38,45 @@ function Timeline(app) {
 		const composition = self.composition;
 		const { tracks } = composition;
 		tracks.forEach(t => t.resetClips());
-		const numFrames = composition.calcEndFrame();
-		self.panel.timeline.setProp('--num-frames', numFrames);
 		self.panel.timeline.setProp('--num-tracks', tracks.length);
+
+
+		const numFrames = composition.calcEndFrame();
+		
 
 		const w = self.panel.timeline.el.clientWidth - 100;
 		const minFrameWidth = 25;
 		const maxDisplayWidth = w / minFrameWidth;
-		const frameWidthMin = numFrames / maxDisplayWidth;
+		// const frameWidthMin = numFrames / maxDisplayWidth;
 		let fwbIndex = 0;
-		while (frameWidthBases[fwbIndex] < frameWidthMin) {
+		while (w / (numFrames / frameWidthBases[fwbIndex]) < minFrameWidth) {
+			// console.log(w, numFrames, frameWidthBases[fwbIndex], numFrames / frameWidthBases[fwbIndex], w / (numFrames / frameWidthBases[fwbIndex]));
 			fwbIndex++;
 			if (fwbIndex >= frameWidthBases.length - 1) {
 				console.warn('fuck need more pwidths');
 				break;
 			}
 		}
-		let fWidth = frameWidthBases[fwbIndex];
+		let nFrames = Math.floor(numFrames / frameWidthBases[fwbIndex]);
+		let fWidth = Math.floor(w / nFrames);
+		console.log(numFrames, frameWidthBases[fwbIndex], nFrames, fWidth);
+
+		self.panel.timeline.setProp('--num-frames', nFrames);
 
 		// add frames 
-		for (let i = 0; i <= numFrames; i++) {
+		for (let i = 0; i <= numFrames; i += frameWidthBases[fwbIndex]) {
+			// console.log(i);
 			const id = 'frame-' + i;
 			// console.log(i, i % fWidth);
 			const frameBtn = new UIButton({
 				type: "frame",
-				text: i % fWidth === 0 ? `${i}` : '',
+				text: i % frameWidthBases[fwbIndex] === 0 ? `${i}` : '',
 				css: {
 					gridColumnStart:  2 + (i * 2),
-					gridColumnEnd:  4 + (i * 2)
+					gridColumnEnd:  4 + (i * 2),
+					width: fWidth + 'px',
 				},
+				id: id,
 				class: i == app.renderer.frame ? 'current-frame' : '',
 				callback: () => {
 					app.renderer.frame = i;
@@ -111,6 +121,14 @@ function Timeline(app) {
 						self.addClip(new Clip(data));
 						self.drawUI();
 					},
+					swap: () => {
+						if (j === 0) return;
+						let thisIdx = j;
+						let swapIdx = j - 1;
+						[track.clips[thisIdx], track.clips[swapIdx]] = [track.clips[swapIdx], track.clips[thisIdx]];
+						track.clips[swapIdx].startFrame = 0;
+						self.drawUI();
+					},
 					drawUI: self.drawUI
 				});
 				// console.log('clip endframe', clip.endFrame);
@@ -123,9 +141,14 @@ function Timeline(app) {
 
 	this.updateUI = function() {
 		if (!uiReady) return;
-		const currentFrame = document.getElementsByClassName('current-frame');
-		if (currentFrame) currentFrame[0].classList.remove('current-frame');
-		self.panel.timeline['frame-' + app.renderer.frame].addClass('current-frame');
+		if (self.panel.timeline['frame-' + app.renderer.frame]) {
+			const currentFrame = document.getElementsByClassName('current-frame');
+			if (currentFrame[0]) {
+				console.log(currentFrame);
+				currentFrame[0].classList.remove('current-frame');
+			}
+			self.panel.timeline['frame-' + app.renderer.frame].addClass('current-frame');
+		}
 	};
 
 }

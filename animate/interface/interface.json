@@ -677,7 +677,8 @@
 							"value": "fps"
 						},
 						"params": {
-							"prompt": "Set FPS"
+							"prompt": "Set FPS",
+							"min": 1
 						}
 					},
 					{

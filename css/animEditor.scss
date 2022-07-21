@@ -15,12 +15,11 @@ $clip-color: $main-color;
 	}
 }
 
-
 #timeline {
 	--num-frames: 1;
 	--num-tracks: 1;
 	--frame-width: 10;
-	--track-height: 54;
+	--track-height: 80;
 	--track-width: 100;
 
 	flex-basis: 100%;
@@ -34,6 +33,8 @@ $clip-color: $main-color;
 	grid-template-rows: 
 		1.5em 
 		repeat(var(--num-tracks), calc(var(--track-height) * 1px));
+
+	overflow-x: scroll;
 
 	&.fit {
 		// grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
@@ -66,22 +67,45 @@ $clip-color: $main-color;
 			text-align: left;
 			font-size: 1.5em;
 		}
-
 	}
 
 	.clip {
 		background-color: $clip-color;
-		display: flex;
-		flex-wrap: wrap;
+		// display: flex;
+		// flex-wrap: wrap;
 		height: calc(var(--track-height) * 1px);
 		align-items: inherit;
 		padding: 3px;
-		border: 1px solid $text-color;
+		border-right: 1px solid $text-color;
 
 		.ui-collection {
 			.number {
 				width: calc(var(--base-font-size) * 2 * 1px);
 			}
+		}
+	}
+
+	.btn {
+		font-family: monaco;
+	}
+
+	&.ui-collection {
+		display: flex;
+		width: 28px;
+	}
+
+	.number-step .btn,
+	.number-step .number {
+		background: none;
+		// margin: 0;
+		height: 100%;
+		// line-height: 1;
+		border: none;
+		// width: 0.75rem;
+		// padding: 0;
+		font-family: monaco;
+		&:hover {
+			background: $ui-select;
 		}
 	}
 
@@ -99,5 +123,4 @@ $clip-color: $main-color;
 		background-color: darkgrey;
 		outline: 1px solid slategrey;
 	}
-
 }
