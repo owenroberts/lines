@@ -179,7 +179,7 @@
 					{
 						"type": "UIButton",
 						"key": "u",
-						"callback": "update",
+						"callback": "start",
 						"params": {
 							"text": "↻"
 						}

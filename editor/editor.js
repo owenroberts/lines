@@ -23,14 +23,16 @@ window.addEventListener("load", function() {
 
 	app.ui.load('./interface/interface.json', () => {
 		if (params.src) app.fio.load(params.src, start); // await here ?
-		else start();
+		else {
+			app.compositions.addComposition('default', {});
+			start();
+		}
 	});
 
 	function start() {
 		app.ui.settings.load();
 		app.renderer.start();
 	}
-
 
 	console.log(app);
 });
