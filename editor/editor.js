@@ -17,6 +17,12 @@ window.addEventListener("load", function() {
 	app.footage = new Footage(app);
 	app.fio = new FileIO(app, {});
 	app.renderer = new Renderer(app); // dps, fps
+	app.capture = new Capture(app, {
+		captureSettings: {
+			lineWidth: 1,
+			canvasScale: 2,
+		}
+	});
 	app.ui = new Interface(app); // add settings here ?
 	app.ui.settings = new Settings(app, 'anim-editor');
 	// app.capture = new Capture(app);

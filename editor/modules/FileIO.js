@@ -20,7 +20,7 @@ function FileIO(app, params) {
 		app.footage.load(data.footage, true, () => {
 			loadCompositions(data.compositions);
 			app.timeline.activeComposition = data.activeComposition;
-			callback();
+			if (callback) callback();
 			app.timeline.drawUI(); // set active comp first
 		});
 	}
@@ -55,5 +55,11 @@ function FileIO(app, params) {
 			.then(response => { return response.json(); }) 
 			.then(data => { loadData(data, callback); })
 			.catch(err => { console.error('err', err.message ); });
+	};
+
+	this.open = function(data, fileName, filePath) {
+		self.projectName = fileName.split('/').pop().replace('.json', '');
+		loadData(data);
+		window.history.pushState(fileName, fileName, location.href + '?src=' + filePath);
 	};
 }

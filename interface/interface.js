@@ -18,7 +18,8 @@ function Interface(app) {
 		UIList,
 		UIRow,
 		UIInput,
-		UIInputList
+		UIInputList,
+		UIFile,
 	};
 
 	// turn off ipad request desktop
@@ -172,6 +173,13 @@ function Interface(app) {
 				m[data.number] = +value;
 			};
 			params.value = +m[data.number];
+		}
+
+		if (data.string) {
+			params.callback = function(value) {
+				m[data.string] = value;
+			}
+			params.value = +[data.string];
 		}
 
 		/* this is fuckin nuts right ... */

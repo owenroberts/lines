@@ -7,6 +7,13 @@
 				"list": [
 					{
 						"row": true,
+						"type": "UIColor",
+						"face": "bgColor",
+						"string": "bgColor",
+						"label": "Background"
+					},
+					{
+						"row": true,
 						"type": "UINumber",
 						"face": "width",
 						"label": "Width",
@@ -36,7 +43,7 @@
 					{
 						"row": true,
 						"type": "UINumberStep",
-						"face": "zLineWidth",
+						"face": "lineWidth",
 						"label": "Line Width",
 						"number": "lineWidth",
 						"params": {
@@ -57,11 +64,13 @@
 				"module": "footage",
 				"list": [
 					{
-						"type": "UIButton",
-						"key": "o",
-						"callback": "openFile",
+						"type": "UIFile",
+						"key": "ctrl-o",
+						"callback": "open",
 						"params": {
-							"text": "Add"
+							"text": "Add",
+							"multiple": true,
+							"promptDefault": "/drawings/"
 						}
 					},
 					{
@@ -102,6 +111,15 @@
 						"callback": "save",
 						"params": {
 							"text": "Save Project"
+						}
+					},
+					{
+						"type": "UIFile",
+						"key": "alt-o",
+						"callback": "open",
+						"params": {
+							"text": "Open Project",
+							"promptDefault": "projects/"
 						}
 					}
 				]
@@ -219,6 +237,48 @@
 					{
 						"type": "UIRow",
 						"k": "timeline"
+					}
+				]
+			}
+		]
+	},
+	"capture": {
+		"label": "Capture",
+		"uis": [
+			{
+				"module":  "capture",
+				"list": [
+					{
+						"type": "UIButton",
+						"key": "j",
+						"face": "videoCapture",
+						"ignoreSettings": true,
+						"callback": "start",
+						"params": {
+							"text": "Capture Video"
+						}
+					},
+					{
+						"type": "UIRow",
+						"label": "Capture Settings"
+					},
+					{
+						"type": "UINumber",
+						"number": "videoBitsPerSecond",
+						"label": "Bitrate",
+						"number": "videoBitsPerSecond"
+					},
+					{
+						"label": "Line Width",
+						"type": "UINumber",
+						"number": "lineWidth",
+						"face": "captureLineWidth"
+					},
+					{
+						"label": "Canvas Scale",
+						"type": "UINumber",
+						"number": "canvasScale",
+						"face": "captureCanvasScale"
 					}
 				]
 			}

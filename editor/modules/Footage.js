@@ -16,8 +16,7 @@ function Footage(app) {
 				askToSetFootage = false;
 				app.ui.faces.width.update(data.w);
 				app.ui.faces.height.update(data.h);
-				// app.ui.faces.fps.update(data.fps); -- global or not???
-				// if (data.bg) app.ui.faces.bgColor.update(data.bg);				
+				if (data.bg) app.ui.faces.bgColor.update(data.bg);
 			}
 		});
 
@@ -35,23 +34,6 @@ function Footage(app) {
 		});
 		self.panel.footageRow.append(btn);
 		self.filePaths.push(filePath);
-	}
-
-	function readFile(files, directoryPath) {
-		for (let i = 0, f; f = files[i]; i++) {
-			if (!f.type.match('application/json')) {
-				continue;
-			}
-			const reader = new FileReader();
-			reader.onload = (function(theFile) {
-				return function(e) {
-					const filePath = directoryPath + f.name;
-					const fileName = f.name.split('.')[0];
-					loadJSON(JSON.parse(e.target.result), fileName, filePath);
-				};
-			})(f);
-			reader.readAsText(f);
-		}
 	}
 
 	this.load = function(footage, fromFile, callback) {
@@ -72,15 +54,8 @@ function Footage(app) {
 		});
 	};
 
-	this.openFile = function() {
-		const openFile = document.createElement('input');
-		openFile.type = "file";
-		openFile.multiple = true;
-		openFile.click();
-		openFile.onchange = function() {
-			let directoryPath = prompt('Directory?', '/drawings/');
-			readFile(openFile.files, directoryPath);
-		};
+	this.open = function(data, fileName, filePath) {
+		loadJSON(data, fileName, filePath);
 	};
 
 	this.get = function(name) {

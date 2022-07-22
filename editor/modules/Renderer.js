@@ -71,16 +71,25 @@ function Renderer(app, dps, fps) {
 			timer = performance.now();
 			app.canvas.ctx.clearRect(0, 0, app.canvas.width, app.canvas.height);
 
+			// cap need bg 
+			
 			// check bg color is something other than white?
-			// app.canvas.ctx.fillStyle = app.canvas.bgColor;
-			// app.canvas.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
+			app.canvas.ctx.fillStyle = app.canvas.bgColor;
+			app.canvas.ctx.fillRect(0, 0, app.canvas.width, app.canvas.height);
 			
 			app.timeline.update(frame);
 			app.timeline.draw(frame);
 
+			if (self.updateFunc) self.updateFunc();
+
 			if (isPlaying) {
 				self.frame++;
-				if (frame >= app.timeline.composition.endFrame) self.frame = 0;
+				if (frame >= app.timeline.composition.endFrame) {
+					self.frame = 0;
+					if (app.capture.isCapturing) {
+						app.capture.end();
+					}
+				}
 			}
 
 			// update lines clips // if isPlaying

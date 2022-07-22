@@ -31,7 +31,7 @@ function Timeline(app) {
 
 	// set up ui
 	let uiReady = false;
-	const frameWidthBases = [1, 5, 10, 20, 25, 50, 100];
+	const frameWidthBases = [1, 5, 10, 20, 25, 50, 100, 200];
 
 	this.drawUI = function() {
 		self.panel.timeline.clear();
@@ -40,14 +40,10 @@ function Timeline(app) {
 		tracks.forEach(t => t.resetClips());
 		self.panel.timeline.setProp('--num-tracks', tracks.length);
 
-
 		const numFrames = composition.calcEndFrame();
-		
 
-		const w = self.panel.timeline.el.clientWidth - 100;
+		const w = self.panel.timeline.el.clientWidth - 136;
 		const minFrameWidth = 25;
-		const maxDisplayWidth = w / minFrameWidth;
-		// const frameWidthMin = numFrames / maxDisplayWidth;
 		let fwbIndex = 0;
 		while (w / (numFrames / frameWidthBases[fwbIndex]) < minFrameWidth) {
 			// console.log(w, numFrames, frameWidthBases[fwbIndex], numFrames / frameWidthBases[fwbIndex], w / (numFrames / frameWidthBases[fwbIndex]));
@@ -57,14 +53,15 @@ function Timeline(app) {
 				break;
 			}
 		}
-		let nFrames = Math.floor(numFrames / frameWidthBases[fwbIndex]);
-		let fWidth = Math.floor(w / nFrames);
-		console.log(numFrames, frameWidthBases[fwbIndex], nFrames, fWidth);
 
-		self.panel.timeline.setProp('--num-frames', nFrames);
+		let fBase = frameWidthBases[fwbIndex];
+		let nFrames = Math.floor(numFrames / fBase);
+		let fWidth = Math.floor(w / nFrames);
+
+		self.panel.timeline.setProp('--num-frames', numFrames);
 
 		// add frames 
-		for (let i = 0; i <= numFrames; i += frameWidthBases[fwbIndex]) {
+		for (let i = 0; i <= numFrames; i += fBase) {
 			// console.log(i);
 			const id = 'frame-' + i;
 			// console.log(i, i % fWidth);
@@ -72,9 +69,9 @@ function Timeline(app) {
 				type: "frame",
 				text: i % frameWidthBases[fwbIndex] === 0 ? `${i}` : '',
 				css: {
-					gridColumnStart:  2 + (i * 2),
-					gridColumnEnd:  4 + (i * 2),
-					width: fWidth + 'px',
+					gridColumnStart:  2 + (i),
+					gridColumnEnd:  2 + (i + fBase),
+					// width: fWidth + 'px',
 				},
 				id: id,
 				class: i == app.renderer.frame ? 'current-frame' : '',
@@ -108,8 +105,8 @@ function Timeline(app) {
 				const clipUI = new UIClip(clip, {
 					class: 'clip',
 					css: {
-						gridColumnStart: 2 + (track.startFrame + clip.startFrame) * 2,
-						gridColumnEnd: 4 + (track.startFrame + clip.endFrame) * 2
+						gridColumnStart: 2 + (track.startFrame + clip.startFrame),
+						gridColumnEnd: 3 + (track.startFrame + clip.endFrame)
 					},
 					remove: () => {
 						track.removeClip(clip);
@@ -143,10 +140,7 @@ function Timeline(app) {
 		if (!uiReady) return;
 		if (self.panel.timeline['frame-' + app.renderer.frame]) {
 			const currentFrame = document.getElementsByClassName('current-frame');
-			if (currentFrame[0]) {
-				console.log(currentFrame);
-				currentFrame[0].classList.remove('current-frame');
-			}
+			if (currentFrame[0]) currentFrame[0].classList.remove('current-frame');
 			self.panel.timeline['frame-' + app.renderer.frame].addClass('current-frame');
 		}
 	};

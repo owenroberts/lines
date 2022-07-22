@@ -164,8 +164,8 @@ function Capture(params) {
 			self.isVideo = true;
 			const stream = lns.canvas.canvas.captureStream(lns.render.dps);
 			self.rec = new MediaRecorder(stream, {
-     			videoBitsPerSecond : self.videoBitsPerSecond,
-     			mimeType: 'video/webm;codecs=vp8,opus'
+				videoBitsPerSecond : self.videoBitsPerSecond,
+				mimeType: 'video/webm;codecs=vp8,opus'
 			});
 			self.rec.start();
 			self.rec.addEventListener('dataavailable', e => {

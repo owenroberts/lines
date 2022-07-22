@@ -8,6 +8,8 @@ function Canvas(app, params) {
 
 	this.canvas = document.getElementById(params.id);
 	this.ctx = this.canvas.getContext('2d');
+
+	this.bgColor = params.bgColor || '#ffffff'; // setter for string value??
 	
 	let dpr = params.checkRetina ? window.devicePixelRatio || 1 : 1;
 	let lineWidth = params.lineWidth || 1; // to keep value from getting reset
@@ -46,6 +48,9 @@ function Canvas(app, params) {
 			self.reset();
 		}
 	});
+
+	
+
 
 	this.updateSize = function() {
 		self.canvas.width = width * dpr * scale;
