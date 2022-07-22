@@ -21,6 +21,7 @@ function Capture(app, params) {
 
 	this.end = function() {
 		self.rec.stop();
+		app.renderer.updateFunc = undefined;
 		app.ui.faces['videoCapture'].removeClass('progress');
 		self.isCapturing = false;
 		app.renderer.isPlaying = false;
@@ -47,9 +48,9 @@ function Capture(app, params) {
 			
 			const stream = app.canvas.canvas.captureStream(app.renderer.dps);
 			self.rec = new MediaRecorder(stream, {
-				videoBitsPerSecond : self.videoBitsPerSecond,
-				mimeType: 'video/webm;codecs=vp8,opus'
-			});
+				// videoBitsPerSecond : self.videoBitsPerSecond,
+				// mimeType: 'video/webm;codecs=vp8,opus'
+			}); // default settings look better
 			self.rec.start();
 			self.rec.addEventListener('dataavailable', e => {
 				const blob = new Blob([ e.data ], { 'type': 'video/webm' });
