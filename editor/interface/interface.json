@@ -214,24 +214,54 @@
 				"module": "timeline",
 				"list": [
 					{
-						"type": "UIButton",
-						"key": "alt-f",
-						"fromModule": {
-							"callback": "fit"
-						},
+						"type": "UINumberStep",
+						"number": "scale",
+						"face": "timelineScale",
+						"label": "Scale",
 						"params": {
-							"class": "left-end",
-							"text": "Fit"
+							"min": 1,
+							"max": 10,
+							"step": 0.1
 						}
 					},
 					{
-						"type": "UIToggle",
-						"key": "ctrl-f",
-						"fromModule": {
-							"callback": "fitFrame"
-						},
+
+						"label": "Jump frames",
+						"type": "UIButton",
+						"callback": "nextFrame",
+						"key": "shift-w",
 						"params": {
-							"text": "Fit Frame"
+							"text": "◀",
+							"args": [-1]
+						}
+					},
+					{
+						"type": "UIButton",
+						"callback": "nextFrame",
+						"key": "shift-e",
+						"params": {
+							"text": "▶",
+							"args": [1]
+						}
+					},
+					{
+
+						"label": "Jump clips",
+						"type": "UIButton",
+						"callback": "nextClip",
+						"key": "ctrl-w",
+						"params": {
+							"text": "◀",
+							"args": [-1]
+						}
+					},
+					{
+						"type": "UIButton",
+						"callback": "nextClip",
+						"key": "ctrl-e",
+						"params": {
+							"text": "▶",
+							"args": [1]
 						}
 					},
 					{

@@ -31,7 +31,17 @@ function Timeline(app) {
 
 	// set up ui
 	let uiReady = false;
+	let scale = 1;
 	const frameWidthBases = [1, 5, 10, 20, 25, 50, 100, 200];
+	let fBase = 1;
+
+	this.addProp('scale', {
+		get: () => { return scale; },
+		set: value => {
+			scale = +value;
+			self.drawUI();
+		}
+	});
 
 	this.drawUI = function() {
 		self.panel.timeline.clear();
@@ -41,12 +51,12 @@ function Timeline(app) {
 		self.panel.timeline.setProp('--num-tracks', tracks.length);
 
 		const numFrames = composition.calcEndFrame();
-
-		const w = self.panel.timeline.el.clientWidth - 136;
+		let w = self.panel.timeline.el.clientWidth - 136;
+		w = Math.floor(w * scale);
+		// console.log(w, )
 		const minFrameWidth = 25;
 		let fwbIndex = 0;
 		while (w / (numFrames / frameWidthBases[fwbIndex]) < minFrameWidth) {
-			// console.log(w, numFrames, frameWidthBases[fwbIndex], numFrames / frameWidthBases[fwbIndex], w / (numFrames / frameWidthBases[fwbIndex]));
 			fwbIndex++;
 			if (fwbIndex >= frameWidthBases.length - 1) {
 				console.warn('fuck need more pwidths');
@@ -54,8 +64,9 @@ function Timeline(app) {
 			}
 		}
 
-		let fBase = frameWidthBases[fwbIndex];
+		fBase = frameWidthBases[fwbIndex];
 		let nFrames = Math.floor(numFrames / fBase);
+		// let fWidth = Math.floor(Math.floor(w / nFrames) * scale);
 		let fWidth = Math.floor(w / nFrames);
 
 		self.panel.timeline.setProp('--num-frames', numFrames);
@@ -71,7 +82,7 @@ function Timeline(app) {
 				css: {
 					gridColumnStart:  2 + (i),
 					gridColumnEnd:  2 + (i + fBase),
-					// width: fWidth + 'px',
+					width: scale > 1 ? fWidth + 'px' : 'unset'
 				},
 				id: id,
 				class: i == app.renderer.frame ? 'current-frame' : '',
@@ -80,6 +91,7 @@ function Timeline(app) {
 					self.updateUI();
 				}
 			});
+			frameBtn.el.dataset.frameNumber = i;
 			self.panel.timeline.append(frameBtn, id);
 		}
 
@@ -136,13 +148,32 @@ function Timeline(app) {
 		uiReady = true;
 	};
 
-	this.updateUI = function() {
+	this.updateUI = function(frame) {
 		if (!uiReady) return;
-		if (self.panel.timeline['frame-' + app.renderer.frame]) {
+		if (!frame) frame = app.renderer.frame;
+		if (self.panel.timeline['frame-' + frame]) {
 			const currentFrame = document.getElementsByClassName('current-frame');
 			if (currentFrame[0]) currentFrame[0].classList.remove('current-frame');
+			self.panel.timeline['frame-' + frame].addClass('current-frame');
+		}
+	};
+
+	this.nextFrame = function(dir) {
+		const currentFrame = document.getElementsByClassName('current-frame');
+		if (currentFrame[0]) {
+			let nf = +currentFrame[0].dataset.frameNumber + fBase * (dir);
+			app.renderer.frame = nf;
+			currentFrame[0].classList.remove('current-frame');
 			self.panel.timeline['frame-' + app.renderer.frame].addClass('current-frame');
 		}
+	};
+
+	this.nextClip = function(dir) {
+		const clipIndex = app.timeline.composition.track.getClipIndex(app.renderer.frame);
+		if (clipIndex + dir >= 0 && clipIndex + dir < app.timeline.composition.track.clips.length) {
+			app.renderer.frame = app.timeline.composition.track.clips[clipIndex + dir].startFrame;
+		}
+		self.updateUI(Math.floor(app.renderer.frame / fBase) * fBase);
 	};
 
 }

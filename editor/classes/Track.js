@@ -29,6 +29,14 @@ class Track {
 		this.resetClips();
 	}
 
+	getClipIndex(currentFrame) {
+		for (let i = 0; i < this.clips.length; i++) {
+			if (currentFrame >= this.clips[i].startFrame && currentFrame <= this.clips[i].endFrame) {
+				return i;
+			} 
+		}
+	}
+
 	resetClips() {
 		for (let i = 1; i < this.clips.length; i++) {
 			this.clips[i - 1].calcEndFrame();
