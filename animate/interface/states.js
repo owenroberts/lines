@@ -13,7 +13,7 @@ function States() {
 
 	this.addUI = function(name, state, focus) {
 
-		const row = self.panel.addRow(name);
+		const row = self.panel.addRow(name, 'break');
 		lns.anim.states[name] = state;
 		lns.ui.faces.stateSelector.addOption(name);
 

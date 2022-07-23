@@ -119,6 +119,8 @@ class Lines {
 		if (this._state !== state && this.states[state]) {
 			this._state = state;
 			if (this.state) this.frame = this.state.start;
+			// maybe remove this from default and add it to game anim
+			// or add separate setState func with param
 		}
 	}
 

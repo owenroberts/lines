@@ -317,6 +317,10 @@ select {
 		.ui-collection {
 			padding-right: 0.25em;
 		}
+
+		&.break {
+			flex-basis: 100%;
+		}
 	}
 
 	.btn {

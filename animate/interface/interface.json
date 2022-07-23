@@ -1155,6 +1155,12 @@
 							"text": "Set Default",
 							"args": ["default"]
 						}
+					},
+					{
+						"type": "UIRow",
+						"params": {
+							"class": "break"
+						}
 					}
 				]
 			}
