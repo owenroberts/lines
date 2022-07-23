@@ -1321,11 +1321,17 @@
 				"list": [
 					{
 						"type": "UIToggle",
+						"face": "viewGroups",
+						"callback": "toggleViewGroups",
+						"params": {
+							"text": "G"
+						}
+					},
+					{
+						"type": "UIToggle",
 						"key": "ctrl-l",
 						"face": "viewLayers",
-						"fromModule": {
-							"callback": "toggleViewLayers"
-						},
+						"callback": "toggleViewLayers",
 						"params": {
 							"class": "left-end",
 							"onText": "ᐱ",
@@ -1335,9 +1341,7 @@
 					{
 						"type": "UIToggle",
 						"face": "viewActiveLayers",
-						"fromModule": {
-							"callback": "toggleViewActiveLayers"
-						},
+						"callback": "toggleViewActiveLayers",
 						"params": {
 							"onText": "V",
 							"offText": "v",
@@ -1345,60 +1349,39 @@
 						}
 					},
 					{
-						"type": "UIToggle",
-						"face": "viewGroups",
-						"fromModule": {
-							"callback": "toggleViewGroups"
-						},
+						"type": "UINumberStep",
+						"face": "viewLayerRange",
+						"number": "viewLayerRange",
 						"params": {
-							"text": "G"
+							"min": 0,
+							"max": 10
 						}
 					},
 					{
 						"type": "UIButton",
 						"key": "alt-f",
-						"fromModule": {
-							"callback": "fit"
-						},
+						"callback": "fit",
 						"params": {
 							"class": "left-end",
-							"text": "Fit"
-						}
-					},
-					{
-						"type": "UIToggle",
-						"face": "timelineAutoFit",
-						"toggle": "autoFit",
-						"params": {
-							"onText": "Auto",
-							"offText": "Auto",
-							"class": "right-end"
-						}
-					},
-					{
-						"type": "UIToggle",
-						"key": "ctrl-f",
-						"fromModule": {
-							"callback": "fitFrame"
-						},
-						"params": {
-							"text": "Fit Frame"
-						}
-					},
-					{
-						"type": "UIToggle",
-						"toggle": "useScrollToFrame",
-						"params": {
-							"text": "Scroll To Frame"
+							"text": "Fit Timeline"
 						}
 					},
 					{
 						"type": "UIButton",
-						"fromModule": {
-							"callback": "split"
-						},
+						"key": "ctrl-f",
+						"callback": "fitFrame",
 						"params": {
-							"text": "Split"
+							"text": "Fit Frame",
+							"class": "right-end"
+
+						}
+					},
+					{
+						"type": "UIToggleCheck",
+						"face": "useScrollToFrame",
+						"toggle": "useScrollToFrame",
+						"params": {
+							"text": "Follow"
 						}
 					},
 					{
@@ -1424,23 +1407,28 @@
 					{
 						"type": "UIButton",
 						"key": "shift-l",
-						"fromModule": {
-							"callback": "lock"
-						},
+						"callback": "lock",
 						"params": {
 							"text": "Lock",
-							"class": "left-end"
+							"class": "left-end",
+							"args": [true]
 						}
 					},
 					{
 						"type": "UIButton",
 						"key": "alt-l",
-						"fromModule": {
-							"callback": "unlock"
-						},
+						"callback": "lock",
 						"params": {
 							"text": "Unlock",
-							"class": "right-end"
+							"class": "right-end",
+							"args": [false]
+						}
+					},
+					{
+						"type": "UIButton",
+						"callback": "split",
+						"params": {
+							"text": "Split"
 						}
 					},
 					{

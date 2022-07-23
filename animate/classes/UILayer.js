@@ -219,8 +219,9 @@ class UILayer extends UICollection {
 			text: 'L',
 			class: 'timeline-btn',
 			isOn: layer.isLocked,
-			callback: function() {
-				layer.isLocked = !layer.isLocked;
+			callback: function(value) {
+				console.log(value);
+				layer.isLocked = value !== undefined ? value : !layer.isLocked;
 			}
 		});
 

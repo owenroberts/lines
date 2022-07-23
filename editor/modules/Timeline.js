@@ -92,6 +92,11 @@ function Timeline(app) {
 				}
 			});
 			frameBtn.el.dataset.frameNumber = i;
+			frameBtn.el.addEventListener('mouseover', ev => {
+				if (ev.which === 1 && app.renderer.frame !== +ev.target.dataset.frameNumber) {
+					app.renderer.frame = +ev.target.dataset.frameNumber;
+				}
+			});
 			self.panel.timeline.append(frameBtn, id);
 		}
 

@@ -1,35 +1,37 @@
 function Timeline() {
 	const self = this;
 	this.frameWidth = 120;
-	this.autoFit = false;
 	this.viewLayers = true;
 	this.viewActiveLayers = false;
+	this.viewLayerRange = 0;
 	this.viewGroups = true;
 	this.updateDuringPlay = false;
-	this.useScrollToFrame = true;
+	this.useScrollToFrame = false;
 	this.groups = [];
 
 	this.init = function() {
-		self.panel.el.addEventListener('wheel', ev => {
-			ev.preventDefault();
-			if (ev.shiftKey) {
-				let tl = self.panel.timeline.el;
-				let x = tl.scrollLeft;
-				tl.scrollTo(x + 20 * Math.sign(ev.deltaX), 0);
-				return;
-			}
+		// never use this ...
+		// self.panel.el.addEventListener('wheel', ev => {
+		// 	ev.preventDefault();
+		// 	if (ev.shiftKey) {
+		// 		let tl = self.panel.timeline.el;
+		// 		let x = tl.scrollLeft;
+		// 		tl.scrollTo(x + 20 * Math.sign(ev.deltaX), 0);
+		// 		return;
+		// 	}
 
-			self.frameWidth += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 5 : 1);
-			self.panel.timeline.setProp('--frame-width', self.frameWidth);
-		});
+		// 	self.frameWidth += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 5 : 1);
+		// 	self.panel.timeline.setProp('--frame-width', self.frameWidth);
+		// });
 
-		self.panel.el.addEventListener('mousedown', ev => {
-			// ev.preventDefault();
-		});
+		// don't know if these are necessary
+		// self.panel.el.addEventListener('mousedown', ev => {
+		// 	// ev.preventDefault();
+		// });
 
-		self.panel.el.addEventListener('mouseup', ev => {
-			ev.preventDefault();
-		});
+		// self.panel.el.addEventListener('mouseup', ev => {
+		// 	// ev.preventDefault();
+		// });
 
 		self.panel.el.addEventListener('mousemove', ev => {
 			if (ev.which == 1 && ev.target.classList.contains('frame') && 
@@ -42,9 +44,10 @@ function Timeline() {
 			}
 		});
 
-		self.panel.el.oncontextmenu = function() {
-  			return false;
-		};
+		// thing this was for copy/paste action that is not longer used
+		// self.panel.el.oncontextmenu = function() {
+		// 	return false;
+		// };
 	};
 
 	this.fit = function() {
@@ -71,9 +74,7 @@ function Timeline() {
 	};
 
 	this.fitFrame = function() {
-		lns.ui.faces.timelineAutoFit.off(); // better toggle setup ??
-		self.autoFit = false;
-		self.frameWidth = 120;
+		self.frameWidth = 140;
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
 		self.frameClass();
 		self.update();
@@ -126,9 +127,15 @@ function Timeline() {
 
 		if (self.viewLayers) {
 			const layers = self.viewActiveLayers ?
-				lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame)) :
+				lns.anim.layers.filter(layer => {
+					const f = lns.anim.currentFrame;
+					for (let i = f - self.viewLayerRange; i <= f + self.viewLayerRange; i++){
+						console.log(layer.drawingIndex, i);
+						if (layer.isInFrame(i)) return true;
+					}
+					return false;
+				}) :
 				lns.anim.layers;
-
 			// self.panel.timeline.setProp('--num-layers', layers.length - 1);
 
 			let gridRowStart = 2;
@@ -173,7 +180,7 @@ function Timeline() {
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 				const layer = lns.anim.layers[i];
 				if (layer.groupNumber >= 0 && self.viewGroups) continue;
-				if (self.viewActiveLayers && !layer.isInFrame(lns.anim.currentFrame)) continue;
+				if (self.viewActiveLayers && !layers.includes(layer)) continue;
 				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				const ui = new UILayer(layer, {
 					group: self.viewGroups ? undefined : self.groups[layer.groupNumber],
@@ -231,8 +238,6 @@ function Timeline() {
 						}
 					}
 				});
-
-				
 				
 				gridRowStart += 2;
 				gridRowEnd += 2;
@@ -306,7 +311,6 @@ function Timeline() {
 		}
 	};
 
-
 	this.lock = function(isLock) {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
@@ -314,10 +318,6 @@ function Timeline() {
 				self.panel.timeline[`layer-${i}`].lock.update(isLock);
 			}
 		}
-	};
-
-	this.unlock = function() {
-		self.lock(false);
 	};
 
 	this.resetLayers = function() {

@@ -6,6 +6,10 @@
 	touch-action: none; /* this fixes drawing on the onyx */
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 body {
 	--base-font-size: 11;
 	--quick-ref-font-size: 11;
