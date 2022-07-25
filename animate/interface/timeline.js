@@ -130,7 +130,6 @@ function Timeline() {
 				lns.anim.layers.filter(layer => {
 					const f = lns.anim.currentFrame;
 					for (let i = f - self.viewLayerRange; i <= f + self.viewLayerRange; i++){
-						console.log(layer.drawingIndex, i);
 						if (layer.isInFrame(i)) return true;
 					}
 					return false;

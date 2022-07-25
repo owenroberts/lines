@@ -926,9 +926,9 @@
 					},
 					{
 						"type": "UINumberRange",
-						"label": "Y Spread Left",
-						"face": "brushSpreadYLeft",
-						"number":  "brushSpreadYLeft",
+						"label": "Y Spread Down",
+						"face": "brushSpreadYDown",
+						"number":  "brushSpreadYDown",
 						"params": {
 							"min": 0, 
 							"max": 50,
@@ -937,9 +937,9 @@
 					},
 					{
 						"type": "UINumberRange",
-						"label": "Y Spread Right",
-						"face": "brushSpreadYRight",
-						"number":  "brushSpreadYRight",
+						"label": "Y Spread Up",
+						"face": "brushSpreadYUp",
+						"number":  "brushSpreadYUp",
 						"params": {
 							"min": 0, 
 							"max": 50,

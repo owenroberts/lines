@@ -128,8 +128,8 @@ function Draw(defaults) {
 	this.isBrush = false;
 	this.brushSpreadXLeft = 0;
 	this.brushSpreadXRight = 0;
-	this.brushSpreadYLeft = 0;
-	this.brushSpreadYRight = 0;
+	this.brushSpreadYDown = 0;
+	this.brushSpreadYUp = 0;
 	this.brushSpreadMultiplier = 1;
 	this.brushRandomX = 0;
 	this.brushRandomY = 0;
@@ -196,7 +196,7 @@ function Draw(defaults) {
 				* self.brushSpreadMultiplier
 				* (i / numPoints) 
 				* (1 - Cool.random(self.brushRandomX));
-			let _y = Cool.random(-self.brushSpreadYLeft, self.brushSpreadYRight)
+			let _y = Cool.random(-self.brushSpreadYDown, self.brushSpreadYUp)
 				* self.brushSpreadMultiplier
 				* (i / numPoints) 
 				* (1 - Cool.random(self.brushRandomY));

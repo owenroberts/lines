@@ -403,10 +403,6 @@ select {
 		border-radius: 0;
 		margin: 0;
 
-		.btn, input {
-			// margin-top: 0;
-		}
-
 		label, .headless-btn {
 			align-self: baseline;
 		}
@@ -414,7 +410,10 @@ select {
 		.header {
 			margin-bottom: 0;
 			height: 0px;
-			.toggle, .order-btn, .undock-btn, .block-btn {
+			.toggle, 
+			.order-btn, 
+			.undock-btn, 
+			.block-btn {
 				display: none;
 			}
 			label {
@@ -422,6 +421,21 @@ select {
 				font-size: 10px;
 			}
 		}	
+	}
+
+	&.block .row {
+		&::-webkit-scrollbar {
+			display: none;
+		}
+		overflow-x: scroll;
+		overflow-y: hidden;
+
+		.ui-collection {
+			display: flex;
+		}
+		&.header {
+			overflow: initial;
+		}
 	}
 }
 
