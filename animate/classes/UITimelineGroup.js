@@ -6,52 +6,71 @@ class UITimelineGroup extends UICollection {
 		this.addClass('group');
 		this.startFrame = params.startFrame;
 		this.endFrame = params.endFrame;
+		const width = params.width;
 
 		this.isToggled = false;
 		const self = this;
 
-		this.breakUp = new UIButton({
-			type: 'group-breakup',
-			class: 'timeline-btn',
-			text: 'X',
-			callback: function() {
-				layers.forEach(layer => {
-					layer.groupNumber = -1;
-				});
-				lns.ui.update();
-			}
-		});
-
-		this.toggle = new UIToggle({
+		const toggle = new UIToggle({
 			type: 'group-toggle',
 			class: 'timeline-btn',
 			text: params.name,
 			isOn: this.isToggled,
-			callback: function(isOn) {
-				self.isToggled = isOn !== undefined ? isOn : !self.isToggled;
+			callback: value => {
+				this.isToggled = value;
 				layers.forEach(layer => {
-					layer.toggle(self.isToggled);
-					layer.isHighlighted = self.isToggled;
+					layer.toggle(this.isToggled);
+					layer.isHighlighted = value.isToggled;
 				});
 			}
 		});
 
-		this.highlight = new UIToggle({
+		const highlight = new UIToggle({
 			type: 'group-highlight',
 			class: 'timeline-btn',
 			text: '*',
 			isOn: false,
-			callback: function() {
+			callback: value => {
 				layers.forEach(layer => {
-					layer.isHighlighted = !layer.isHighlighted;
+					layer.isHighlighted = value;
 				});
 			}
 		});
 
-		this.lock = new UIToggle({
-			type: 'group-lock',
-			text: 'L',
+		const edit = new UIButton({
+			type: 'layer-edit',
 			class: 'timeline-btn',
+			text: "E",
+			callback: () => {
+				this.editModal(layers, params);
+			}
+		});
+
+		const uis = this.getPropUIs(layers, params, false);
+
+		if (width > 30) this.append(uis.startFrameNumber);
+		this.append(toggle);
+		this.append(highlight);
+		if (width > 20) this.append(edit);
+		if (width > 50) this.append(uis.lock);
+		if (width > 60) this.append(uis.breakUp);
+		if (width > 70) this.append(uis.removeLayer);
+
+		if (width > 80) {
+			this.append(uis.endFrameNumber);
+			uis.endFrameNumber.addClass('right-margin');
+		}
+	}
+
+	getPropUIs(layers, params, isModal) {
+
+		const uis = {};
+		const btnClass = isModal ? 'btn' : 'timeline-btn';		
+
+		uis.lock = new UIToggle({
+			type: 'group-lock',
+			text: isModal ? 'Lock' : 'L',
+			class: btnClass,
 			isOn: false,
 			callback: function() {
 				layers.forEach(layer => {
@@ -60,48 +79,22 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		this.edit = new UIButton({
-			type: 'layer-edit',
-			class: 'timeline-btn',
-			text: "E",
-			callback: () => {
-				const modal = new UIModal({
-					title: 'Edit Layer', 
-					app: lns, 
-					position: this.position, 
-					callback: () => {
-						lns.ui.update();
-					}
+		uis.breakUp = new UIButton({
+			type: 'group-breakup',
+			class: btnClass,
+			text: isModal ? 'Break up' : 'X',
+			callback: function() {
+				layers.forEach(layer => {
+					layer.groupNumber = -1;
 				});
-
-				modal.addBreak("Start Frame:");
-				modal.add(new UINumber({
-					value: params.startFrame,
-					callback: function(value) {
-						layers.forEach(layer => {
-							layer.startFrame = +value;
-						});
-					}
-				}));
-
-				modal.addBreak("End Frame:");
-				modal.add(new UINumber({
-					value: params.endFrame,
-					callback: function(value) {
-						layers.forEach(layer => {
-							layer.endFrame = +value;
-						});
-					}
-				}));
-
-				modal.adjustPosition();
+				lns.ui.update();
 			}
 		});
 
-		this.removeLayer = new UIButton({
+		uis.removeLayer = new UIButton({
 			type: 'group-remove-layer',
-			class: 'timeline-btn',
-			text: 'R',
+			class: btnClass,
+			text: isModal ? 'Remove Layer' : 'R',
 			callback: () => {
 				const clearFunc = function() {
 					lns.ui.timeline.resetLayers()
@@ -136,9 +129,9 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		this.startFrameNumber = new UINumberStep({
+		uis.startFrameNumber = new UINumberStep({
 			value: this.startFrame,
-			class: 'timeline-btn',
+			class: isModal ? '' : btnClass,
 			min: 0,
 			callback: value => {
 				layers.forEach(layer => {
@@ -151,9 +144,9 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		this.endFrameNumber = new UINumberStep({
+		uis.endFrameNumber = new UINumberStep({
 			value: this.endFrame,
-			class: 'timeline-btn',
+			class: isModal ? '' : btnClass,
 			min: 0,
 			callback: value => {
 				layers.forEach(layer => {
@@ -166,21 +159,27 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		this.setup(params.width);
+		return uis;
 	}
 
-	setup(width) {
-		if (width > 20) this.append(this.startFrameNumber);
-		this.append(this.toggle);
-		this.append(this.highlight);
-		if (width > 40) this.append(this.edit);
-		if (width > 50) this.append(this.lock);
-		if (width > 60) this.append(this.breakUp);
-		if (width > 70) this.append(this.removeLayer);
+	editModal(layers, params) {
 
-		if (width > 80) {
-			this.append(this.endFrameNumber);
-			this.endFrameNumber.addClass('right-margin');
+		const modal = new UIModal({
+			title: 'Edit Group', 
+			app: lns, 
+			position: this.position, 
+			callback: () => {
+				lns.ui.update();
+			}
+		});
+
+		const uis = this.getPropUIs(layers, params, true);
+		for (const k in uis) {
+			if (k === 'startFrameNumber') modal.addBreak("Start Frame:");
+			if (k === 'endFrameNumber') modal.addBreak("End Frame:");
+			modal.add(uis[k]);
 		}
+
+		modal.adjustPosition();	
 	}
 }

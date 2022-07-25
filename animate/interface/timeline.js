@@ -1,6 +1,6 @@
 function Timeline() {
 	const self = this;
-	this.frameWidth = 120;
+	this.frameWidth = 120; // not part of ui ... either make part of ui or member var
 	this.viewLayers = true;
 	this.viewActiveLayers = false;
 	this.viewLayerRange = 0;
@@ -55,8 +55,9 @@ function Timeline() {
 		const w = lns.ui.timeline.panel.el.clientWidth - 11; /* 11 for padding */
 		self.frameWidth = (w - 2 * f) / f; 
 		self.panel.timeline.setProp('--frame-width', self.frameWidth);
-		self.frameClass();
-		self.drawLayers();
+		// self.frameClass();
+		// self.drawLayers();
+		self.update();
 	};
 
 	this.frameClass = function() {
@@ -235,6 +236,9 @@ function Timeline() {
 								}
 							}));
 						}
+					},
+					setLinesProperties: function() {
+						lns.draw.setProperties(layer.getEditProps(), true); // set ui only
 					}
 				});
 				
