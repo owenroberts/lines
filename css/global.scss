@@ -1,0 +1,75 @@
+* { 
+	box-sizing: border-box;
+	// touch-action: manipulation; /* not sure why ... */
+	touch-action: none; /* this fixes drawing on the onyx */
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+	--base-font-size: 11;
+	--quick-ref-font-size: 11;
+
+	font-family: Verdana, sans-serif;
+	margin: 0;
+	font-size: calc(var(--base-font-size) * 1px);
+	-webkit-user-select: none;
+	user-select: none;
+	touch-action: manipulation;
+	color: $text-color;
+}
+
+body.mobile { overflow: hidden; }
+
+select, input {
+	color: $text-color;
+	font-size: inherit;
+}
+
+button:focus, 
+select:focus { 
+	outline: none; 
+}
+
+select {
+	vertical-align: middle;
+	height: 1.75em;
+}
+
+#tool-tip {
+	pointer-events: none;
+	position: fixed;
+	z-index: 99;
+	right: 1em;
+	top: 1em;
+	background: $accent-two;
+	border-radius: 3px;
+	font-size: 1em;
+	color: black;
+	padding: 2px 6px;
+	opacity: 0;
+	transition: opacity 100ms ease-in;
+	&.visible {
+		opacity: 1;
+		transition: opacity 400ms ease-out;
+	}
+}
+
+#interface,
+#ui-timeline {
+	position: relative;
+
+	#resize {
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: $text-color;
+		z-index: 9;
+		cursor: grab;
+		&:active {
+			cursor: grabbing;
+		}
+	}
+}

@@ -1,0 +1,10 @@
+.mobile {
+	.menu-panel {
+		flex-basis: 180px;
+		max-width: 220px;
+
+		.row input {
+			flex-basis: 50px;
+		}
+	}
+}
