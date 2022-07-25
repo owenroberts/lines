@@ -141,26 +141,31 @@ function QuickRef(app) {
 			title: "Quick Func",
 			app: app,
 			position: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
-			callback: function() {
+			callback: () => {
 
 				// gotta be a better way to do this part
 				const ui = options[input.value];
 
 				const mod = ui.sub ? app[ui.module][ui.sub] : app[ui.module];
-				let args = [];
+				let args;
 				if (ui.params) {
 					if (ui.params.args) {
-						args = ui.params.args;
+						args = [ui.params.args];
 					}
 				}
 				
 				if (ui.face) {
-					app.ui.faces[ui.face].keyHandler();
+					app.ui.faces[ui.face].update();
 				}
+				else if (ui.callback) {
+					if (args) mod[ui.callback](...args);
+					else mod[ui.callback]();
 
+				}
 				else if (ui.fromModule) {
 					if (ui.fromModule.callback) {
-						mod[ui.fromModule.callback](...args);
+						if (args) mod[ui.fromModule.callback](...args);
+						else mod[ui.fromModule.callback]();
 					}
 				}
 
@@ -168,7 +173,7 @@ function QuickRef(app) {
 					mod[ui.number] = +prompt(ui.prompt || ui.label);
 				}
 
-				else if (d.toggle) {
+				else if (ui.toggle) {
 					mod[ui.toggle] = !m[ui.toggle];
 				}
 			}

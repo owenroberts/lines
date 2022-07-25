@@ -1,6 +1,5 @@
-function Settings(app, name, appSave) {
+function Settings(app, name, appSave, workspaceFields) {
 	const self = this;
-
 	const appName = `settings-${name}`;
 	
 	function loadPanels(panels) {
@@ -86,10 +85,11 @@ function Settings(app, name, appSave) {
 		app.files.saveSettingsOnUnload = !app.files.saveSettingsOnUnload;
 	};
 
-	const workspaceFields = [
+	if (!workspaceFields) workspaceFields = [];
+	workspaceFields = [
+		...workspaceFields,
 		'timelineView', 
 		'interfaceScale', 
-		// 'hideCursor', 
 		'rl'
 	];
 
@@ -97,7 +97,7 @@ function Settings(app, name, appSave) {
 		self.save();
 		const interfaceSettings = {};
 		workspaceFields.forEach(f => {
-			interfaceSettings[f] = lns.ui.faces[f].value;
+			interfaceSettings[f] = app.ui.faces[f].value;
 		});
 		const panelSettings = JSON.parse(localStorage.getItem(appName)).panels;
 		const jsonFile = JSON.stringify({ panels: panelSettings, interface: interfaceSettings });
@@ -111,7 +111,10 @@ function Settings(app, name, appSave) {
 		if (url) {
 			fetch(url)
 				.then(response => { return response.json() })
-				.then(data => { loadInterface(data); })
+				.then(data => { 
+					loadInterface(data.interface); 
+					loadPanels(data.panels);
+				})
 				.catch(error => { console.error(error); });
 		} else {
 			// choose file to load

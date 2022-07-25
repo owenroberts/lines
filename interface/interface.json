@@ -1,4 +1,4 @@
-{
+	{
 	"interface": {
 		"label": "Interface",
 		"uis": [
@@ -200,17 +200,6 @@
 						"type": "UILabel",
 						"params": {
 							"text": "Defaults"
-						}
-					},
-					{
-						"row": true,
-						"type": "UIButton",
-						"fromModule": {
-							"callback": "loadLayoutFile"
-						},
-						"params": {
-							"text": "Animation",
-							"args": ["/animate/interface/defaults/Animation.json"]
 						}
 					}
 				]

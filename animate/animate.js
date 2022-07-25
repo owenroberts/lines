@@ -39,7 +39,7 @@ window.addEventListener("load", function() {
 	});
 
 	const workspaceFields = [
-		'hideCursor', 
+		'hideCursor',
 	];
 	
 	lns.ui = new Interface(lns);
@@ -56,7 +56,7 @@ window.addEventListener("load", function() {
 	lns.ui.play = new Play();
 	lns.ui.timeline = new Timeline();
 	lns.ui.animator = new AnimatorInterface();
-	lns.ui.settings = new Settings(lns, 'lns', appSave);
+	lns.ui.settings = new Settings(lns, 'lns', appSave, workspaceFields);
 
 	lns.ui.load('./interface/interface.json', function() {
 		lns.draw.setDefaults();

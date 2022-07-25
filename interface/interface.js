@@ -96,9 +96,25 @@ function Interface(app) {
 	async function loadInterfaceFiles(file, callback) {
 		const appFile = await fetch(file).then(response => response.json());
 		const interfaceFile = await fetch('../interface/interface.json').then(response => response.json());
-		const data = { ...interfaceFile, ...appFile };
+		
+		const data = { ...interfaceFile };
+		for (const k in appFile) {
+			if (data[k]) data[k].uis.push(...appFile[k].uis);
+			else data[k] = { ...appFile[k] };
+		}
+		
 		for (const key in data) {
-			self.createPanel(key, data[key]);
+			const panel = self.panels[key] || self.createPanel(key, data[key]);
+			const sections = data[key].uis;
+			for (let i = 0; i < sections.length; i++) {
+				const uis = sections[i];
+				for (let j = 0; j < uis.list.length; j++) {
+					self.createUI(uis.list[j], uis.module, uis.sub, panel);
+				}
+				// gives panel to module -- give to all ?
+				if (uis.module == 'ui' && uis.sub) app.ui[uis.sub].panel = panel;
+				if (data.addPanel) app[key].panel = panel;
+			}
 		}
 		self.addSelect([
 			...Object.keys(data).map(k => [k, data[k].label])
@@ -143,9 +159,12 @@ function Interface(app) {
 		selector.append(selectBtn);
 	};
 
+	this.addPanels = function() {
+
+	};
+
 	this.createPanel = function(key, data) {
 
-		
 		const panel = new UIPanel({ 
 			id: key, 
 			label: data.label, 
@@ -156,15 +175,8 @@ function Interface(app) {
 		});
 		this.panels.append(panel, key);
 		
-		for (let i = 0; i < data.uis.length; i++) {
-			const uis = data.uis[i];
-			for (let j = 0; j < uis.list.length; j++) {
-				self.createUI(uis.list[j], uis.module, uis.sub, panel);
-			}
-			// gives panel to module -- give to all ?
-			if (uis.module == 'ui' && uis.sub) app.ui[uis.sub].panel = panel;
-			if (data.addPanel) app[key].panel = panel;
-		}
+		
+		return panel;
 	};
 
 	this.createUI = function(data, mod, sub, panel) {

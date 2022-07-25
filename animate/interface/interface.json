@@ -1438,5 +1438,33 @@
 				]
 			}
 		]
+	},
+	"workspaces": {
+		"uis": [
+			{
+				"module": "ui",
+				"sub": "settings",
+				"list": [
+					{
+						"row": true,
+						"type": "UIButton",
+						"callback": "loadLayoutFile",
+						"params": {
+							"text": "Animation",
+							"args": ["/animate/interface/workspaces/Animation.json"]
+						}
+					},
+					{
+						"row": true,
+						"type": "UIButton",
+						"callback": "loadLayoutFile",
+						"params": {
+							"text": "Drawing",
+							"args": ["/animate/interface/workspaces/Drawing.json"]
+						}
+					}
+				]
+			}
+		]
 	}
 }
