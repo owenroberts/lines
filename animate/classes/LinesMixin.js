@@ -24,6 +24,18 @@ const LinesMixin = {
 				this.states[k].end = this.endFrame;
 			}
 		}
+	},
+
+	merge(a, b, layer) {
+		const dA = lns.anim.drawings[a]; // drawing a
+		const dB = lns.anim.drawings[b];
+		for (let i = 0, len = dB.points.length; i < len; i++) {
+			const p = dB.points[i];
+			dA.add(Array.isArray(p) ? [...p] : p);
+		}
+		if (!layer) console.warn('No layer'); // if need to get layer from draw index
+		lns.anim.drawings[b] = null;
+		layer.drawingEndIndex = dA.length;
 	}
 
 };

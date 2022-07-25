@@ -18,9 +18,9 @@ class UITimelineGroup extends UICollection {
 			isOn: this.isToggled,
 			callback: value => {
 				this.isToggled = value;
+				highlight.update(value);
 				layers.forEach(layer => {
 					layer.toggle(this.isToggled);
-					layer.isHighlighted = value.isToggled;
 				});
 			}
 		});
@@ -96,6 +96,7 @@ class UITimelineGroup extends UICollection {
 			class: btnClass,
 			text: isModal ? 'Remove Layer' : 'R',
 			callback: () => {
+				
 				const clearFunc = function() {
 					lns.ui.timeline.resetLayers()
 					lns.ui.update();

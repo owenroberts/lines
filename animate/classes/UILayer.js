@@ -53,6 +53,7 @@ class UILayer extends UICollection {
 		if (width > 60) this.append(uis.tween);
 		if (width > 70) this.append(uis.remove);
 		if (width > 80) this.append(uis.addToGroup);
+		if (width > 90) this.append(uis.merge)
 		if (width > 90 && this.canMoveUp) this.append(uis.moveUp);
 		if (width > 100 && this.groupLabel) this.append(this.groupLabel);
 
@@ -138,6 +139,55 @@ class UILayer extends UICollection {
 			class: btnClass,
 			callback: () => {
 				params.addToGroup(this.position); // cant get position, node from original is gone?
+			}
+		});
+
+		const clearFunc = function() {
+			lns.ui.timeline.resetLayers()
+			lns.ui.update();
+		};
+
+		uis.merge = new UIButton({
+			text: isModal ? "Merge Layer" : 'M',
+			class: btnClass,
+			type: 'merge-layer',
+			callback: () => {
+				const modal = new UIModal({
+					text: 'Merge Layer',
+					app: lns,
+					position: this.position,
+					callback: clearFunc,
+					clearFunc: clearFunc
+				});
+
+				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
+					const mergeLayer = lns.anim.layers[i];
+					if (mergeLayer === layer) continue;
+					if (!mergeLayer.isInFrame(lns.anim.currentFrame)) continue;
+
+					modal.add(new UILabel({ text: `Layer ${i}, Drawing ${mergeLayer.drawingIndex}` }));
+
+					modal.add(new UIToggle({
+						text: "*",
+						class: "left-end",
+						isOn: mergeLayer.isHighlighted,
+						callback: value => {
+							mergeLayer.isHighlighted = value;
+						}
+					}));
+
+					modal.add(new UIButton({
+						text: "Merge",
+						class: 'right-end',
+						callback: () => {
+							lns.anim.merge(layer.drawingIndex, mergeLayer.drawingIndex, layer);
+							lns.anim.removeLayer(mergeLayer);
+							clearFunc();
+							modal.clear();
+						}
+					}));
+				}
+
 			}
 		});
 
