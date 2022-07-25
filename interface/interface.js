@@ -46,19 +46,18 @@ function Interface(app) {
 	interface.append(this.panels);
 	const uiTimeline = new UICollection({ id: 'ui-timeline' });
 	container.append(uiTimeline);
-	const timelinePanels = new UICollection({ id: 'timeline-panels', class: 'panels' });
-	uiTimeline.append(timelinePanels);
+	const timelineArea = new UICollection({ id: 'timeline-panels', class: 'panels' });
+	uiTimeline.append(timelineArea);
 
 	window.toolTip = new UILabel({id: 'tool-tip'});
 	interface.append(window.toolTip);
 
 	this.toggleTimelineView = function(isOn) {
-		if (isOn) {
-			// timelinePanels.append(self.panels.play);
-			timelinePanels.append(self.panels.timeline);
-		} else {
-			// self.panels.append(self.panels.play);
-			self.panels.append(self.panels.timeline);
+		const area = isOn ? timelineArea : self.panels;
+		for (const p in self.panels) {
+			if (self.panels[p].gridArea === 'timeline') {
+				area.append(self.panels[p]);
+			}
 		}
 	};
 
@@ -117,11 +116,26 @@ function Interface(app) {
 	this.addSelect = function(panelList) {
 		
 		const selectBtn = new UISelectButton({
-			callback: function(value) {
+			callback: value => {
 				self.panels[value].dock();
+				if (self.panels[value].gridArea !== 'default') {
+					self.panels[value].gridArea = 'default';
+					self.panels.append(self.panels[value]);
+				}
 			},
-			btn: '+'
+			btn: '+',
+			btns: [
+				{
+					text: '+t',
+					callback: value => {
+						self.panels[value].dock();
+						self.panels[value].gridArea = 'timeline';
+						self.toggleTimelineView(true); // turn on timeline view if not on
+					}
+				}
+			]
 		});
+
 		panelList.forEach(p => {
 			const [option, label] = p;
 			selectBtn.select.addOption(option, false, label);

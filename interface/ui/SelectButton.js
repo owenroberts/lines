@@ -2,23 +2,36 @@ class UISelectButton extends UICollection {
 	constructor(params) {
 		super(params);
 
-		this.select = new UISelect({
+		const select = new UISelect({
 			options: params.options,
 			callback: function() {
 				// do nothing ? to prevent error 
 			}
 		});
 
-		this.btn = new UIButton({
+		const btn = new UIButton({
 			text: "+",
 			css: { 'margin-left': '1px' },
 			callback: () => {
-				params.callback(this.select.value);
+				params.callback(select.value);
 			}
 		});
-	}
-	
-	get html() {
-		return [this.select.el, this.btn.el];
+
+		this.append(select, 'select');
+		this.append(btn);
+
+		if (params.btns) {
+			params.btns.forEach(btn => {
+				const b = new UIButton({
+					text: btn.text,
+					css: { 'margin-left': '1px' },
+					callback: () => {
+						btn.callback(select.value);
+					}
+				});
+				this.append(b);
+			});
+		}
+
 	}
 }

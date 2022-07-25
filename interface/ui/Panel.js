@@ -3,6 +3,7 @@ class UIPanel extends UICollection {
 		super({ id: `${params.id}-panel` });
 		this.addClass("panel");
 		this.addClass("undocked");
+		this.gridArea = 'default';
 		
 		this.rows = [];
 
@@ -86,6 +87,10 @@ class UIPanel extends UICollection {
 
 	get isOpen() {
 		return this.open.value;
+	}
+
+	get settings() {
+
 	}
 
 	close() {

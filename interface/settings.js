@@ -3,7 +3,6 @@ function Settings(app, name, appSave) {
 
 	const appName = `settings-${name}`;
 	
-
 	function loadPanels(panels) {
 		for (const p in panels) {
 			if (p === 'el') continue;
@@ -18,6 +17,8 @@ function Settings(app, name, appSave) {
 			if (panels[p].headless) app.ui.panels[p].headless();
 			
 			app.ui.panels[p].order = panels[p].order;
+			app.ui.panels[p].gridArea = panels[p].gridArea;
+
 		}
 	}
 
@@ -49,7 +50,8 @@ function Settings(app, name, appSave) {
 					docked: app.ui.panels[p].isDocked,
 					order: app.ui.panels[p].order,
 					block: app.ui.panels[p].isBlock,
-					headless: app.ui.panels[p].isHeadless
+					headless: app.ui.panels[p].isHeadless,
+					gridArea: app.ui.panels[p].gridArea,
 				};
 			}
 		}
@@ -62,8 +64,8 @@ function Settings(app, name, appSave) {
 		if (localStorage[appName]) {
 			const settings = JSON.parse(localStorage[appName]);
 			// if (appLoad) appLoad(settings);
-			loadInterface(settings.interface);
 			loadPanels(settings.panels);
+			loadInterface(settings.interface);
 
 			if (settings.quickRef) {
 				app.ui.quickRef.list = settings.quickRef;
