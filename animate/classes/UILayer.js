@@ -235,6 +235,22 @@ class UILayer extends UICollection {
 		}));
 
 		modal.add(new UIButton({
+			text: "Line to Layer",
+			callback: () => {
+				lns.draw.reset();
+				const drawing = lns.anim.drawings[layer.drawingIndex];
+				const points = [drawing.pop()]; // end
+				for (let i = drawing.length - 1; i > 0; i--) {
+					const p = drawing.pop();
+					if ( p!== 'end') lns.draw.drawing.add(p);
+					else break;
+				}
+				lns.draw.reset();
+				lns.ui.update();
+			}
+		}));
+
+		modal.add(new UIButton({
 			text: "Clone Layer",
 			callback: () => {
 				const props = layer.getCloneProps();
