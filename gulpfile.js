@@ -64,7 +64,7 @@ const files = {
 const sassFiles = {
 	animate: ['./css/animate.scss'],
 	interface: [
-		'./css/colors.scss',
+		// './css/colors.scss',
 		'./css/interface.scss'
 	],
 	editor: ['./css/editor.scss'],

@@ -1,7 +1,7 @@
 .panel {
 	flex-basis: 12em;
 	flex-grow: 1;
-	max-width: 14.5em;
+	max-width: 20em;
 	order: 0;
 
 	background-color: $bg-color;
@@ -29,6 +29,10 @@
 
 		&.headless .row {
 			flex-wrap: nowrap;
+		}
+
+		&.closed {
+			order: -2 !important;
 		}
 	}
 
