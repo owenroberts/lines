@@ -130,9 +130,6 @@ function Data() {
 		lns.ui.update();
 	}; /* alt - v */
 
-	// select all -- copy all ?
-	// clear selected -- clear paste frames?
-
 	this.clearLines = function() {
 		lns.draw.drawing = new Drawing();
 	}; /* x key */
@@ -140,39 +137,37 @@ function Data() {
 	this.clearLayers = function() {
 		self.saveState(); /* will save lines ... */
 		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
-			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
-				lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
-					lns.anim.layers.splice(i, 1);
-				});
-				lns.ui.update();
-			}
+			// console.log(i, lns.anim.layers[i].startFrame);
+			if (!lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) continue;
+			lns.anim.layers[i].removeIndex(lns.anim.currentFrame, () => {
+				lns.anim.layers.splice(i, 1);
+			});
 		}
+		lns.ui.update();
 	}; /* called by clear frame */
 
-	/* are these functions useful anymore with timeline ? */
 	this.cutTopLayer = function() {
 		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
-			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
-				lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
-					lns.anim.layers.splice(i, 1);
-				});
-				lns.ui.update();
-			}
+			if (!lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) continue;
+			if (lns.anim.layers[i].groupNumber >= 0) continue;
+			lns.anim.layers[i].removeIndex(lns.anim.currentFrame, () => {
+				lns.anim.layers.splice(i, 1);
+			});
 			break;
 		}
+		lns.ui.update();
 	}; /* ctrl - x */
 
-	/* consolidate with above ? */
 	this.cutBottomLayer = function() {
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
-				lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
-					lns.anim.layers.splice(i, 1);
-				});
-				lns.ui.update();
-			}
+			if (!lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) continue;
+			if (lns.anim.layers[i].groupNumber >= 0) continue;
+			lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
+				lns.anim.layers.splice(i, 1);
+			});
 			break;
 		}
+		lns.ui.update();
 	}; /* alt - x */
 
 	this.clearFrame = function() {
