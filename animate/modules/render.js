@@ -51,13 +51,21 @@ function Render(dps, showStats) {
 	this.setDps = function(dps) {
 		self.dps = +dps;
 		self.interval = 1000 / self.dps;
-		lns.anim.dps = self.dps;
+		// keep fps constant
+		lns.anim.drawsPerFrame = Math.max(1, Math.round(+dps / lns.anim.fps));
+		lns.ui.faces.fps.value = lns.anim.fps;
+		lns.ui.faces.dpf.value = lns.anim.dpf;
 	};
 
 	/* ; - fps update frame value in anim*/
 	this.setFps = function(fps) {
 		lns.anim.fps = +fps;
-		// console.log(lns.anim.fps);
+		lns.ui.faces.fps.value = lns.anim.fps;
+		lns.ui.faces.dpf.value = lns.anim.dpf;
+	};
+
+	this.setDpf = function(value) {
+		lns.anim.dpf = +value;
 		lns.ui.faces.fps.value = lns.anim.fps;
 	};
 

@@ -46,38 +46,21 @@ class Lines {
 	}
 
 	set fps(value) {
-		// if (!value || value <= 0) return;
-
 		const dps = this.fps * this.dpf; // reverse engineer current dps
-		this.drawsPerFrame = Math.round(dps / +value);
-		this.drawCount = 0;
-		// fps is really whatever dps / dpf is 
-		const f = dps / this.drawsPerFrame; // "real" fps
-		// fix for step up/down
-		if (f === this.fps && Math.abs(+value - this.fps) === 1) {
-			console.log('if');
-			const d = +value - this.fps;
-			if (d === 1) {
-				for (let n = +value; n < dps; n += d) {
-					let dpf = Math.round(dps / n);
-					if (dps / dpf > this.fps) {
-						this.drawsPerFrame = Math.round(dps / n);
-						break;
-					}
-				}
-			}
-			if (d === -1) {
-				for (let n = +value; n > 0; n += d) {
-					let dpf = Math.round(dps / n);
-					if (dps / dpf < this.fps) {
-						this.drawsPerFrame = Math.round(dps / n);
-						break;
-					}
-				}
+		let dpf = dps / +value;
+		
+		// if dpf isn't int, is it +1 -1 or just a new fps
+		if (dpf % 1 > 0) {
+			if (Math.abs(+value - this._fps) === 1) {
+				dpf = this.dpf + Math.sign(this.fps - +value);
+			} else {
+				dpf = Math.round(dpf);
 			}
 		}
 		
-		this._fps = +(dps / this.drawsPerFrame).toFixed(3); 
+		this.drawsPerFrame = dpf;
+		this._fps = +(dps / this.dpf).toFixed(3);
+		this.drawCount = 0;
 	}
 
 	get fps() {
@@ -85,7 +68,9 @@ class Lines {
 	}
 
 	set dpf(value) {
+		const dps = this.fps * this.dpf;
 		this.drawsPerFrame = +value;
+		this._fps = dps / this.drawsPerFrame;
 	}
 
 	get dpf() {

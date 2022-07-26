@@ -683,6 +683,17 @@
 					},
 					{
 						"type": "UINumberStep",
+						"label": "DPF",
+						"callback": "setDpf",
+						"face": "dpf",
+						"ignoreSettings": true,
+						"params": {
+							"prompt": "Set DPF",
+							"min": 1
+						}
+					},
+					{
+						"type": "UINumberStep",
 						"label": "DPS",
 						"key": "'",
 						"face": "dps",

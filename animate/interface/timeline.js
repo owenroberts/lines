@@ -10,29 +10,6 @@ function Timeline() {
 	this.groups = [];
 
 	this.init = function() {
-		// never use this ...
-		// self.panel.el.addEventListener('wheel', ev => {
-		// 	ev.preventDefault();
-		// 	if (ev.shiftKey) {
-		// 		let tl = self.panel.timeline.el;
-		// 		let x = tl.scrollLeft;
-		// 		tl.scrollTo(x + 20 * Math.sign(ev.deltaX), 0);
-		// 		return;
-		// 	}
-
-		// 	self.frameWidth += (ev.deltaY > 0 ? 1 : -1) * (ev.altKey ? 5 : 1);
-		// 	self.panel.timeline.setProp('--frame-width', self.frameWidth);
-		// });
-
-		// don't know if these are necessary
-		// self.panel.el.addEventListener('mousedown', ev => {
-		// 	// ev.preventDefault();
-		// });
-
-		// self.panel.el.addEventListener('mouseup', ev => {
-		// 	// ev.preventDefault();
-		// });
-
 		self.panel.el.addEventListener('mousemove', ev => {
 			if (ev.which == 1 && ev.target.classList.contains('frame') && 
 				lns.anim.currentFrame != +ev.target.textContent) {
@@ -43,11 +20,6 @@ function Timeline() {
 				// scroll right/left
 			}
 		});
-
-		// thing this was for copy/paste action that is not longer used
-		// self.panel.el.oncontextmenu = function() {
-		// 	return false;
-		// };
 	};
 
 	this.fit = function() {
