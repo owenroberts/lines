@@ -130,26 +130,26 @@ function exportTask() {
 	return merge(...tasks);
 }
 
-function sassTask(files, name, dir){    
-    return src(files)
-    	.pipe(plumber({ errorHandler: function(err) {
+function sassTask(files, name, dir) {
+	return src(files)
+		.pipe(plumber({ errorHandler: function(err) {
 			notify.onError({
 				title: "Gulp error in " + err.plugin,
 				message:  err.toString()
 			})(err);
 		}}))
-        .pipe(sourcemaps.init()) // initialize sourcemaps first
-        .pipe(sass()) // compile SCSS to CSS
-        .pipe(postcss([ autoprefixer(), cssnano() ])) // PostCSS plugins
-        .pipe(sourcemaps.write('./src_maps')) // write sourcemaps file in current directory
-        .pipe(dest(dir))
-        .pipe(gulpif(useBrowserSync, browserSync.stream()));
+		.pipe(sourcemaps.init()) // initialize sourcemaps first
+		.pipe(sass()) // compile SCSS to CSS
+		.pipe(postcss([ autoprefixer(), cssnano() ])) // PostCSS plugins
+		.pipe(sourcemaps.write('./src_maps')) // write sourcemaps file in current directory
+		.pipe(dest(dir))
+		.pipe(gulpif(useBrowserSync, browserSync.stream()));
 }
 
 function sassTasks() {
 	const tasks = [];
 	for (const f in sassFiles) {
-		tasks.push( sassTask(sassFiles[f], `${f}.min.js`, './css') );
+		tasks.push(sassTask(sassFiles[f], `${f}.min.js`, './css'));
 	}
 	return merge(...tasks);
 }

@@ -49,6 +49,7 @@ $anim-off: darkgreen;
 	;
 
 	overflow: scroll hidden;
+	* { font-family: monaco, monospace; }
 
 	.frame {
 		// overflow: hidden;
@@ -96,7 +97,6 @@ $anim-off: darkgreen;
 		z-index: 3;
 
 		.timeline-btn {
-			font-family: monaco;
 			margin: 0;
 			margin-right: 1px;
 			padding: 1px;
@@ -134,7 +134,6 @@ $anim-off: darkgreen;
 					border: none;
 					width: 0.75rem;
 					padding: 0;
-					font-family: monaco;
 					&:hover {
 						background: $ui-select;
 					}
