@@ -3,9 +3,9 @@ function Settings(app, name, appSave, workspaceFields) {
 	const appName = `settings-${name}`;
 	
 	function loadPanels(panels) {
-		console.log(panels);
 		for (const p in panels) {
 			if (p === 'el') continue;
+			if (!app.ui.panels[p]) continue;
 			
 			if (panels[p].docked) app.ui.panels[p].dock();
 			else app.ui.panels[p].undock();

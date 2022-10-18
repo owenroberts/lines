@@ -95,7 +95,7 @@ function Interface(app) {
 
 	async function loadInterfaceFiles(file, callback) {
 		const appFile = await fetch(file).then(response => response.json());
-		const interfaceFile = await fetch('../ui/interface.json').then(response => response.json());
+		const interfaceFile = await fetch('../interface/interface.json').then(response => response.json());
 		
 		const data = { ...interfaceFile };
 		for (const k in appFile) {
@@ -126,6 +126,7 @@ function Interface(app) {
 
 	// use module ? 
 	this.load = function(file, callback) {
+		console.log(file);
 		loadInterfaceFiles(file, callback);
 	};
 
