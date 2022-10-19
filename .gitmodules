@@ -1,3 +1,6 @@
 [submodule "lib/cool"]
 	path = lib/cool
 	url = https://gist.github.com/8a7c2a19b8248f61ef94ab733eceb8fb.git
+[submodule "ui"]
+	path = ui
+	url = https://github.com/owenroberts/ui
