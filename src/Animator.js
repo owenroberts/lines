@@ -60,3 +60,5 @@ class Animator {
 		});
 	}
 }
+
+window.Lines.Animator = Animator;

@@ -57,3 +57,6 @@ const AntiMixin = {
 		}
 	}
 };
+
+window.Lines.AntiMixin = AntiMixin;
+

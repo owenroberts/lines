@@ -105,3 +105,5 @@ class Drawing {
 		}
 	}
 }
+
+window.Lines.Drawing = Drawing;

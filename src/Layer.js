@@ -69,3 +69,5 @@ class Layer {
 		return props;
 	}
 }
+
+window.Lines.Layer = Layer;

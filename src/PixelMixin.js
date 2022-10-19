@@ -137,3 +137,5 @@ const PixelMixin = {
 	}
 
 };
+
+window.Lines.PixelMixin = PixelMixin;

@@ -7,6 +7,7 @@ const terser = require('gulp-terser');
 const merge = require('merge-stream');
 const browserSync = require('browser-sync').create();
 const gulpif = require('gulp-if');
+const iife = require('gulp-iife');
 
 const sass = require('gulp-sass')(require('sass'));
 const postcss = require('gulp-postcss');
@@ -23,23 +24,21 @@ const beeper = process.argv.includes('--beep') || !process.argv.includes('-b');
 console.log('beeper is ' + (beeper ? 'active!' : 'not active'));
 let useBrowserSync = true;
 
+const ui = require('./ui/gulpfile');
+const logger = require('node-color-log');
+
+
 const files = {
-	base: [ 
+	lines: [ 
 		'./lib/cool/cool.js',
-		'./classes/*.js',
-	],
-	interface: [
-		'./interface/ui/Element.js',
-		'./interface/ui/Collection.js',
-		'./interface/ui/Input.js',
-		'./interface/ui/Text.js',
-		'./interface/**/*.js',
+		'./src/**/*.js',
 	],
 	animate: [
-		'./animate/modules/*.js',
-		'./animate/classes/*.js',
-		'./animate/interface/*.js',
-		'./animate/animate.js'
+		// './animate/modules/*.js',
+		//'./animate/classes/*.js',
+		//'./animate/interface/*.js',
+		//'./animate/animate.js'
+		'./animate/src/**/*.js'
 	],
 	game: [
 		'./game/classes/Sprite.js',
@@ -80,25 +79,19 @@ function browserSyncTask() {
 	});
 }
 
+function logError(err) {
+	logger
+		.color('red')
+		.log('* gulp-terser error', err.message, err.filename, err.line, err.col, err.pos);
+}
+
 function jsTasks() {
 	function jsTask(files, name, dir){
 		return src(files)
-			/* .pipe(plumber({ errorHandler: function(err) {
-				if (beeper) {
-					notify.onError({
-						title: "Gulp error in " + err.plugin,
-						message:  err.toString()
-					})(err);
-					gutil.beep();
-				} else {
-					console.log("Gulp error in " + err.plugin, err.toString());
-				}
-			}})) */
 			.pipe(sourcemaps.init())
 			.pipe(concat(name))
-			.pipe(terser().on('error', function(ugly) {
-				console.error('* gulp-terser error', ugly.message, ugly.filename, ugly.line, ugly.col, ugly.pos);
-			}))
+			.pipe(iife())
+			.pipe(terser().on('error', logError))
 			.pipe(sourcemaps.write('./src_maps'))
 			.pipe(dest(dir))
 			.pipe(gulpif(useBrowserSync, browserSync.stream()));
@@ -159,7 +152,6 @@ function libTask() {
 		.pipe(dest('./build/lib'));
 }
 
-// Cachebust
 function cacheBustTask(){
 	var cbString = new Date().getTime();
 	return src(['index.html'])
@@ -167,8 +159,6 @@ function cacheBustTask(){
 		.pipe(dest('.'));
 }
 
-// Watch task: watch SCSS and JS files for changes
-// If any change, run scss and js tasks simultaneously
 function watchTask(){
 	watch([	
 			...files.base,
@@ -188,7 +178,19 @@ function watchTask(){
 			...sassFiles.animEditor,
 		],
 		series(sassTasks),
-	);    
+	);
+
+	if (ui) {
+		watch('ui/src/**/*.js', series('ui'));
+		watch(['ui/css/*.scss'], series('sass'));
+	}
+}
+
+function uiCopy() {
+	if (!ui) return;
+	return src('./ui/build/**/*')
+		.pipe(dest('./build'))
+		.pipe(browserSync.stream());
 }
 
 task('js', jsTasks);
@@ -198,6 +200,7 @@ task('build', series(libTask, jsTasks, sassTasks));
 task('default', parallel(jsTasks, sassTasks));
 task('watch', watchTask);
 task('browser', parallel(jsTasks, sassTasks, cacheBustTask, browserSyncTask, watchTask));
+if (ui) task('ui', series(function exporter() { return ui.exportTask(false) }, uiCopy));
 
 module.exports = {
 	exportTask: exportTask,

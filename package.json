@@ -17,6 +17,7 @@
 		"gulp-better-rollup": "^4.0.1",
 		"gulp-concat": "^2.6.1",
 		"gulp-if": "^3.0.0",
+		"gulp-iife": "^0.4.0",
 		"gulp-notify": "^3.2.0",
 		"gulp-npm-dist": "^1.0.3",
 		"gulp-plumber": "^1.2.1",
@@ -31,6 +32,7 @@
 		"is-svg": "^4.3.2",
 		"lodash.template": "^4.5.0",
 		"merge-stream": "^2.0.0",
+		"node-color-log": "^10.0.2",
 		"node-notifier": "^10.0.1",
 		"open": "^8.4.0",
 		"sass": "^1.52.2",
@@ -38,6 +40,7 @@
 		"yargs-parser": "^21.0.1"
 	},
 	"dependencies": {
+		"file-saver": "^2.0.5",
 		"stats.js": "^0.17.0"
 	}
 }

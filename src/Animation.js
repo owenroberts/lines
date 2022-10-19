@@ -6,7 +6,7 @@
 	wiggle is calculated based on the layer offset, default 5 frames
 */
 
-class Lines {
+class Animation {
 	constructor(ctx, dps, multiColor) {
 		this.ctx = ctx;
 		this.isLoaded = false;
@@ -419,3 +419,5 @@ class Lines {
 		this.isPlaying = false;
 	}
 }
+
+window.Lines.Animation = Animation; // this sucks!
