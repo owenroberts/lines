@@ -37,8 +37,8 @@ const AnimationMixin = {
 		layer.drawingEndIndex = dA.length;
 	},
 
-	currentLayer() {
-		return 
+	getDrawLayer() {
+		return this.layers[this.layers.length -1];
 	}
 
 };

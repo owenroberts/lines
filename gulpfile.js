@@ -27,7 +27,6 @@ let useBrowserSync = true;
 const ui = require('./ui/gulpfile');
 const logger = require('node-color-log');
 
-
 const files = {
 	lines: [ 
 		'./lib/cool/cool.js',
@@ -61,13 +60,9 @@ const files = {
 };
 
 const sassFiles = {
-	animate: ['./css/animate.scss'],
-	interface: [
-		// './css/colors.scss',
-		'./css/interface.scss'
-	],
-	editor: ['./css/editor.scss'],
-	animEditor: ['./css/animEditor.scss'],
+	animate: ['./animate/css/animate.scss'],
+	// editor: ['./css/editor.scss'],
+	// animEditor: ['./css/animEditor.scss'],
 };
 
 function browserSyncTask() {
@@ -142,7 +137,7 @@ function sassTask(files, name, dir) {
 function sassTasks() {
 	const tasks = [];
 	for (const f in sassFiles) {
-		tasks.push(sassTask(sassFiles[f], `${f}.min.js`, './css'));
+		tasks.push(sassTask(sassFiles[f], `${f}.min.js`, `./${f}/css/`));
 	}
 	return merge(...tasks);
 }
@@ -161,8 +156,8 @@ function cacheBustTask(){
 
 function watchTask(){
 	watch([	
-			...files.base,
-			...files.interface,
+			...files.lines,
+			// ...files.interface,
 			...files.animate,
 			...files.game,
 			...files.editor,
@@ -172,10 +167,10 @@ function watchTask(){
 	); 
 
 	watch([
-			...sassFiles.interface,
+			// ...sassFiles.interface,
 			...sassFiles.animate,
-			...sassFiles.editor,
-			...sassFiles.animEditor,
+			// ...sassFiles.editor,
+			// ...sassFiles.animEditor,
 		],
 		series(sassTasks),
 	);

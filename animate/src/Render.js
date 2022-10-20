@@ -4,7 +4,7 @@ function Render(dps=30, showStats=false) {
 	// this.dps = dps || 30; // draws pers second
 	window.drawCount = 0; // everything has this... use Lines.drawCount??
 
-	let interval = 1000 / this.dps;  // time interval between draws
+	let interval = 1000 / dps;  // time interval between draws
 	let timer = performance.now();
 
 	let onionSkinNum = 0; /* l key */
@@ -56,7 +56,7 @@ function Render(dps=30, showStats=false) {
 		dps = value;
 		interval = 1000 / dps;
 		// keep fps constant
-		lns.anim.drawsPerFrame = Math.max(1, Math.round(+dps / lns.anim.fps));
+		lns.anim.drawsPerFrame = Math.max(1, Math.round(dps / lns.anim.fps));
 		lns.ui.faces.fps.value = lns.anim.fps;
 		lns.ui.faces.dpf.value = lns.anim.dpf;
 	}
@@ -69,7 +69,7 @@ function Render(dps=30, showStats=false) {
 	}
 
 	function setDPF(value) {
-		lns.anim.dpf = +value;
+		lns.anim.dpf = value;
 		lns.ui.faces.fps.value = lns.anim.fps;
 	}
 
@@ -160,8 +160,11 @@ function Render(dps=30, showStats=false) {
 		
 		playPanel = lns.ui.getPanel('play', { label: 'Play Back'});
 
+		lns.ui.addUIs([
+			{ callback: toggle, value: false, "onText": "❚❚", "offText": "▶", key: 'space' },
+		]);
+
 		lns.ui.addCallbacks([
-			{ callback: toggle, "onText": "❚❚", "offText": "▶", key: 'space' },
 			{ callback: update, "text": "↻", key: 'u' },
 		]);
 
@@ -169,15 +172,15 @@ function Render(dps=30, showStats=false) {
 			'fps': {
 				type: 'UINumberStep',
 				key: ";",
-				value: fps,
-				callback: value => { setFPS(value); }
+				value: lns.anim.fps,
+				callback: value => { setFPS(value); },
 				min: 1,
 				prompt: 'Set Frames/Second',
 			},
 			'dpf': {
 				type: 'UINumberStep',
-				value: dpf,
-				callback: value => { setDPF(value); }
+				value: lns.anim.dpf,
+				callback: value => { setDPF(value); },
 				min: 1,
 				prompt: 'Set Draws/Frame',
 			},
@@ -185,7 +188,7 @@ function Render(dps=30, showStats=false) {
 				type: 'UINumberStep',
 				key: "'",
 				value: dps,
-				callback: value => { setDPS(value); }
+				callback: value => { setDPS(value); },
 				prompt: 'Set Draw/Second',
 			},
 			'onionSkinIsVisible': {
@@ -199,7 +202,7 @@ function Render(dps=30, showStats=false) {
 				type: 'UINumberStep',
 				value: onionSkinNum,
 				key: 'l',
-				callback: value => { onionSkinNum = value;}
+				callback: value => { onionSkinNum = value; }
 			},
 			'viewStats': {
 				type: 'UIToggleCheck',

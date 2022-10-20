@@ -1,8 +1,9 @@
 const { Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
+const { Interface } = UI;
 const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
-Object.assign(Lines.prototype, LinesMixin);
+Object.assign(Animation.prototype, AnimationMixin);
 
 const params = {};
 location.search.substr(1).split('&').map(a => {
@@ -14,22 +15,33 @@ if (params.render === 'pixel') {
 	Object.assign(Lines.prototype, PixelMixin);
 }
 
+/*
+	lns.renderer = Renderer({
+		id: 'lines',
+		width: 512,
+		height: 512,
+		bgColor: '#ffffff',
+		retina: true,
+		dps: 30,
+		stats: true
+	});
+*/
+
 // modules
 lns.canvas = Canvas("lines", 512, 512, "#ffffff", true);
 lns.render = Render(30, true); // (dps, stats?)
-
-lns.anim = new Lines(lns.canvas.ctx, 30, true);
-lns.draw = new Draw({ 
+lns.anim = new Animation(lns.canvas.ctx, 30, true);
+lns.draw = Draw(lns, { 
 	linesInterval: 5, 
 	segmentNum: 2,
 	jiggleRange: 1,
 	wiggleRange: 1, 
 	wiggleSpeed: 0.1,
 	color: '#000000' 
-}); // defaults
-lns.bgImage = new Background();
-lns.data = new Data();
-lns.files = new Files({
+});
+lns.bg = BackgroundImage();
+lns.data = Data(lns);
+lns.files = Files(lns, {
 	fit: false, /* fit to canvas when saving */
 	save: false, /* save settings on unload  */
 	load: true, /* load setttings after file load */
@@ -37,49 +49,61 @@ lns.files = new Files({
 	bg: true /* bg color */
 });
 
-const workspaceFields = [
-	'hideCursor',
-];
+lns.ui = Interface(lns, { useMain: false });
+lns.ui.setup();
+lns.canvas.connect();
+lns.render.connect();
+lns.draw.connect();
+lns.bg.connect();
+lns.data.connect();
 
-lns.ui = new Interface(lns);
-lns.ui.capture = new Capture({
-	useSequentialNumbering: true,
-	captureSettings: {
-		lineWidth: 1,
-		canvasScale: 2,
-	}
-});
-lns.ui.states = new States();
-lns.ui.palette = new Palette();
-lns.ui.drawings = new Drawings();
-lns.ui.play = new Play();
-lns.ui.timeline = new Timeline();
-lns.ui.animator = new AnimatorInterface();
-lns.ui.settings = new Settings(lns, 'lns', appSave, workspaceFields);
+console.log(lns);
 
-lns.ui.load('./interface/interface.json', function() {
-	lns.draw.setDefaults();
-	lns.ui.settings.load(appLoad);
-	if (params.src) lns.files.loadFile(params.src.split('.')[0]);
-	lns.ui.update();
-	lns.render.start();
-	lns.ui.timeline.init();
-	lns.render.toggleStats();
-});
 
-// update ui for animate specific modules
-lns.uiUpdate = function() {
-	lns.ui.timeline.update();
-	lns.ui.drawings.update();
-	lns.ui.states.update();
-};
+// lns.play = Play(lns);
 
-function appSave() {
-	return {
-		palettes: lns.ui.palette.palettes, 
-	};
-}
+// const workspaceFields = [
+// 	'hideCursor',
+// ];
 
-function appLoad(settings) {
-	lns.ui.palette.setup(settings.palettes);
-}
+// lns.ui = new Interface(lns);
+// lns.ui.capture = new Capture({
+// 	useSequentialNumbering: true,
+// 	captureSettings: {
+// 		lineWidth: 1,
+// 		canvasScale: 2,
+// 	}
+// });
+// lns.ui.states = new States();
+// lns.ui.palette = new Palette();
+// lns.ui.drawings = new Drawings();
+// lns.ui.timeline = new Timeline();
+// lns.ui.animator = new AnimatorInterface();
+// lns.ui.settings = new Settings(lns, 'lns', appSave, workspaceFields);
+
+// lns.ui.load('./interface/interface.json', function() {
+// 	lns.draw.setDefaults();
+// 	lns.ui.settings.load(appLoad);
+// 	if (params.src) lns.files.loadFile(params.src.split('.')[0]);
+// 	lns.ui.update();
+// 	lns.render.start();
+// 	lns.ui.timeline.init();
+// 	lns.render.toggleStats();
+// });
+
+// // update ui for animate specific modules
+// lns.uiUpdate = function() {
+// 	lns.ui.timeline.update();
+// 	lns.ui.drawings.update();
+// 	lns.ui.states.update();
+// };
+
+// function appSave() {
+// 	return {
+// 		palettes: lns.ui.palette.palettes, 
+// 	};
+// }
+
+// function appLoad(settings) {
+// 	lns.ui.palette.setup(settings.palettes);
+// }

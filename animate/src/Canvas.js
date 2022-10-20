@@ -18,7 +18,7 @@ function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
 	let scale = 1;
 	let lineWidth = 1; // to keep value from getting reset
 
-	const ctx = this.canvas.getContext('2d');
+	const ctx = canvas.getContext('2d');
 	ctx.miterLimit = 1;
 	ctx.lineCap = 'round';
 	ctx.lineJoin = 'round';
@@ -54,7 +54,7 @@ function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
 
 	function setWidth(value) {
 		width = value;
-		canvas.width = value * self.dpr * self.scale;
+		canvas.width = value * dpr * scale;
 		reset();
 	}
 
@@ -64,8 +64,8 @@ function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
 		reset();
 	}
 
-	function cursorToggle(isOn) {
-		if (isOn) canvas.classList.add('no-cursor');
+	function cursorToggle(value) {
+		if (value) canvas.classList.add('no-cursor');
 		else canvas.classList.remove('no-cursor');
 	}
 
@@ -111,13 +111,13 @@ function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
 
 	function connect() {
 		
-		app.ui.addCallback({
+		lns.ui.addCallback({
 			callback: fitCanvasToDrawing,
 			text: 'Fit Canvas',
 			key: 'shift-f'
-		});
+		}, 'canvas');
 
-		app.ui.addProps({
+		lns.ui.addProps({
 			'width': {
 				value: width,
 				callback: value => { setWidth(value); }
@@ -152,5 +152,5 @@ function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
 		}, 'canvas');
 	}
 
-	return { connect, ctx };
+	return { connect, canvas, ctx };
 }

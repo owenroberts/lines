@@ -420,4 +420,5 @@ class Animation {
 	}
 }
 
+window.Lines = {};
 window.Lines.Animation = Animation; // this sucks!

@@ -5,7 +5,7 @@
 	use css for this ?
 */
 
-function Background() {
+function BackgroundImage() {
 
 	let img = new Image();
 	let show = true;

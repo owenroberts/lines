@@ -1,7 +1,11 @@
-function Play() {
-	const self = this;
+/*
+	merge with playback / render
+*/
+function Play(lns) {
 
-	this.setFrame = function(f) {
+	let frameDisplay;
+
+	function setFrame(f) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// no before ?? 
 			if (lns.anim.frame !== +f) lns.draw.reset();
@@ -12,20 +16,19 @@ function Play() {
 
 			lns.ui.update();
 		} else {
-			lns.ui.faces.frameDisplay.update(lns.anim.currentFrame, true);
+			frameDisplay.update(lns.anim.currentFrame, true);
 		}
-	}; /* f key */
+	}
 
 	// fix for playing animation with nothing in the final frame
-	this.checkEnd = function() {
-		if (lns.anim.currentFrame == lns.anim.endFrame && 
-			!lns.draw.hasDrawing()) {
-			self.next(-1);
+	function checkEnd() {
+		if (lns.anim.currentFrame === lns.anim.endFrame && !lns.draw.hasDrawing()) {
+			next(-1);
 		}
-	};
+	}
 
 	/* call before changing a frame */
-	this.next = function(dir) {
+	function next(dir) {
 
 		const next = lns.anim.currentFrame + dir;
 		
@@ -56,10 +59,30 @@ function Play() {
 
 		lns.data.saveState();
 		lns.ui.update();
-	}; /* e/w key - got to next/previous frame */
+	}
 
-	this.plus = function() {
-		self.setFrame(lns.anim.endFrame);
-		self.next(1);
-	}; /* + key */
+	function plus() {
+		setFrame(lns.anim.endFrame);
+		next(1);
+	}
+
+	function connect() {
+
+		lns.ui.addCallbacks([
+			{ callback: setFrame, key: '0', text: '0', args: [0] },
+			{ callback: next, key: 'w', text: '<', args: [-1] },
+			// play btn
+			{ callback: next, key: 'e', text: '>', args: [1] },
+			{ callback: plus, key: '+', text: '+'}
+		], 'play');
+	
+		frameDisplay = lns.ui.addUI({ 
+			type: "UINumberStep",
+			callback: setFrame, 
+			key: 'f',
+			value: 0,
+		}, 'play');
+	}
+
+	return { connect };
 }

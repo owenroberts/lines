@@ -577,9 +577,7 @@
 					{
 						"type": "UIButton",
 						"key": "0",
-						"fromModule": {
-							"callback": "setFrame"
-						},
+						"callback": "setFrame",
 						"params": {
 							"text": "0",
 							"args": [0]
@@ -588,9 +586,7 @@
 					{
 						"type": "UIButton",
 						"key": "w",
-						"fromModule": {
-							"callback": "next"
-						},
+						"callback": "next",
 						"params": {
 							"text": "<",
 							"args": [-1]
@@ -605,9 +601,7 @@
 						"type": "UIToggle",
 						"key": "space",
 						"face": "play",
-						"fromModule": {
-							"callback": "toggle"
-						},
+						"callback": "toggle",
 						"params": {
 							"onText": "❚❚",
 							"offText": "▶"
@@ -622,9 +616,7 @@
 					{
 						"type": "UIButton",
 						"key": "e",
-						"fromModule": {
-							"callback": "next"
-						},
+						"callback": "next",
 						"params": {
 							"text": ">",
 							"args": [1]
@@ -633,9 +625,7 @@
 					{
 						"type": "UIButton",
 						"key": "+",
-						"fromModule": {
-							"callback": "plus"
-						},
+						"callback": "plus",
 						"params": {
 							"text": "+"
 						}

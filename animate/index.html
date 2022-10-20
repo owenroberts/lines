@@ -4,11 +4,13 @@
 	<title>animate</title>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
-	<link href="../css/animate.css" rel="stylesheet" type="text/css">
+	<link href="css/animate.css" rel="stylesheet" type="text/css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 	<style>
-		/* debug remove  */
+		body {
+			background:  linear-gradient(45deg, LightYellow, PeachPuff, LightYellow);
+		}
 		#log {
 			position: fixed;
 			top: 10px;
@@ -23,6 +25,8 @@
 	<!-- <div id="log">log</div> -->
 	<div id="container">
 		<div id="main">
+			<div id="main-header"></div>
+			<div id="main-panels"></div>
 			<canvas id="lines" oncontextmenu="return false;"></canvas>
 		</div>
 	</div>
@@ -32,7 +36,7 @@
 	<script src="../lib/FileSaver.min.js"></script>
 	<script src='../build/lib/stats.js/build/stats.min.js'></script>
 	<script src="../build/lines.min.js"></script>
-	<script src="../build/interface.min.js"></script>
+	<script src="../build/ui.min.js"></script>
 	<script src="../build/animate.min.js"></script>
 
 </body>
