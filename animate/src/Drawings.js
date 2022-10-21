@@ -1,5 +1,10 @@
-function Drawings() {
-	const self = this;
+/*
+	view all drawings and toggle on/off in frame
+*/
+
+function Drawings(lns) {
+
+	let panel;
 
 	function getLayer(drawingIndex) {
 		// get layers containing drawing
@@ -29,17 +34,17 @@ function Drawings() {
 		}
 		// console.log(layers);
 		return false;
-	};
+	}
 
-	this.update = function() {
-		self.panel.drawings.clear();
+	function update() {
+		panel.drawings.clear();
 		// -1 to ignore draw drawing
 		for (let i = 0; i < lns.anim.drawings.length - 1; i++) {
 			if (lns.anim.drawings[i]) {
 				// const drawing = lns.anim.drawings[i];
 				let layer = getLayer(i); /* check for existing layer */
 
-				self.panel.drawings.append(new UIToggle({
+				panel.append(new UIToggle({
 					text: i,
 					isOn: layer ? layer.isInFrame(lns.anim.currentFrame) : false,
 					callback: function(isOn) {
@@ -56,6 +61,7 @@ function Drawings() {
 									lns.anim.addLayer(new Layer(props));
 								}
 							} else {
+								// get props
 								lns.anim.addLayer(new Layer({
 									drawingIndex: i,
 									linesInterval: +lns.ui.faces.linesInterval.value,
@@ -70,12 +76,10 @@ function Drawings() {
 						} else { /* remove */
 							if (layer) {
 								if (layer.isInFrame(lns.anim.currentFrame)) {
-									const newLayer = layer.removeIndex(lns.anim.currentFrame, function() {
+									const newLayer = layer.removeIndex(lns.anim.currentFrame, () => {
 										lns.anim.removeLayer(layer);
 									});
-									if (newLayer) {
-										lns.anim.addLayer(newLayer);
-									}
+									if (newLayer) lns.anim.addLayer(newLayer);
 								} 
 							} 
 						}
@@ -85,9 +89,11 @@ function Drawings() {
 				}), i);
 			}
 		}
-	};
+	}
 
-	this.clear = function() {
-		self.panel.drawings.clear();
-	};
+	function connect() {
+		panel = lns.ui.getPanel('drawings');
+	}
+
+	return { connect };
 }

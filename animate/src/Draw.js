@@ -156,10 +156,6 @@ function Draw(lns, defaults) {
 	let eraseDistance = 10;
 	let eraseMethod = 'points'; // points, lines
 
-	function setEraseMethod(value) {
-		eraseMethod = value;
-	}
-
 	/* update all of this shit with returns */
 
 	function outSideCanvas(ev) {
@@ -468,6 +464,74 @@ function Draw(lns, defaults) {
 			{ callback: reset, key: 'r', text: 'Save Lines' },
 			{ callback: setDefaults, text: 'Reset Defaults' },
 		], 'draw');
+
+		lns.ui.addProp('eraseMethod', {
+			type: 'UISelect',
+			option: ['points', 'lines'],
+			callback: value => { eraseMethod = value; },
+		}, 'erase');
+
+		lns.ui.addProps({
+			'isBrush': {
+				type: 'UIToggleCheck',
+				value: isBrush,
+				label: 'Use Brush',
+				key: 'b',
+				callback: value => { isBrush = value; }
+			},
+			'dots': {
+				type: 'UINumberRange',
+				range: [10, 50],
+				value: 10,
+				callback: value => { dots = value; }
+			},
+			'brushSpreadXLeft': {
+				row: true,
+				type: 'UINumberRange',
+				range: [0, 50],
+				callback: value => { brushSpreadXLeft = value; },
+			},
+			'brushSpreadXRight': {
+				type: 'UINumberRange',
+				range: [0, 50],
+				callback: value => { brushSpreadXRight = value; },
+			},
+			'brushSpreadYDown': {
+				type: 'UINumberRange',
+				range: [0, 50],
+				callback: value => { brushSpreadYUp = value; },
+			},
+			'brushRandomX': {
+				type: 'UINumberRange',
+				range: [0, 1],
+				step: 0.01,
+				callback: value => { brushRandomX = value; },
+			},
+			'brushRandomY': {
+				type: 'UINumberRange',
+				range: [0, 1],
+				step: 0.01,
+				callback: value => { brushRandomY = value; },
+			},
+			'brushSegmentsMin': {
+				type: 'UINumberStep',
+				range: [1, 5],
+				value: 1,
+				callback: value => { brushSegmentsMin = value; },
+			},
+			'brushSegmentsMax': {
+				type: 'UINumberStep',
+				range: [1, 5],
+				value: 3,
+				callback: value => { brushSegmentsMax = value; },
+			},
+			'brushSpreadMultiplier': {
+				type: 'UINumberStep',
+				range: [1, 5],
+				value: 1,
+				callback: value => { brushSpreadMultiplier = value; },
+			},
+		}, 'brush')
 	}
 
 	return { connect, reset };

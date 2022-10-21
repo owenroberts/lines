@@ -2,9 +2,9 @@
 	add randomized tweens
 	anim needs to be longer than 1 frame
 */
-function AnimatorInterface() {
-	const self = this;
+function AnimatorUI() {
 
+	let panel;
 	let animator;
 
 	function addUI() {
@@ -13,12 +13,12 @@ function AnimatorInterface() {
 			const row1 = self.panel.addRow();
 			const range = animator.params[param];
 
-			self.panel.add(new UILabel({
+			panel.add(new UILabel({
 				text: param
 			}), row1);
 
 			const row2 = self.panel.addRow();
-			self.panel.add(new UINumber({
+			panel.add(new UINumber({
 				text: "Min",
 				value: range[0],
 				callback: function(n) {
@@ -26,7 +26,7 @@ function AnimatorInterface() {
 				}
 			}), row2, 'min');
 
-			self.panel.add(new UINumber({
+			panel.add(new UINumber({
 				text: "Max",
 				value: range[1],
 				callback: function(n) {
@@ -36,21 +36,32 @@ function AnimatorInterface() {
 		}
 	}
 
-	this.add = function() {
+	function add() {
 		animator = new Animator(lns.anim);
-		lns.anim.onPlayedState = function() {
+		lns.anim.onPlayedState = () => {
 			animator.update();
 		};
 		addUI();
-	};
+	}
 
-	this.remove = function() {
+	function remove() {
 		animator = undefined;
 		lns.anim.onPlayedState = undefined;
-		for (let i = self.panel.rows.length - 1; i > 0; i--) {
-			self.panel.rows[i].clear();
-			self.panel.removeRow(self.panel.rows[i]);
+		for (let i = panel.rows.length - 1; i > 0; i--) {
+			panel.rows[i].clear();
+			panel.removeRow(panel.rows[i]);
 		}
-	};
+	}
+
+	function connect() {
+		panel = lns.ui.getPanel('animator');
+
+		lns.ui.addCallbacks([
+			{ callback: add, text: 'Add' },
+			{ callback: remove, text: 'Remove' },
+		]);
+	}
+
+	return { connect };
 
 }

@@ -1,5 +1,6 @@
 const { Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
 const { Interface } = UI;
+const { UIFile, UILabel, UIModal, UIButton, UINumberStep } = UI.Elements;
 const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
@@ -41,13 +42,27 @@ lns.draw = Draw(lns, {
 });
 lns.bg = BackgroundImage();
 lns.data = Data(lns);
-lns.files = Files(lns, {
+lns.fio = FilesIO(lns, {
 	fit: false, /* fit to canvas when saving */
 	save: false, /* save settings on unload  */
 	load: true, /* load setttings after file load */
 	reload: false, /* confirm reload */
 	bg: true /* bg color */
 });
+lns.play = Play(lns);
+lns.capture = Capture(lns, {
+	useSequentialNumbering: true,
+	captureSettings: {
+		lineWidth: 1,
+		canvasScale: 2,
+	}
+});
+lns.states = States(lns);
+lns.palette = Palette(lns);
+lns.drawings = Drawings(lns);
+lns.timeline = Timeline();
+lns.animator = AnimatorUI();
+
 
 lns.ui = Interface(lns, { useMain: false });
 lns.ui.setup();
@@ -56,29 +71,22 @@ lns.render.connect();
 lns.draw.connect();
 lns.bg.connect();
 lns.data.connect();
+lns.fio.connect();
+lns.play.connect();
+lns.capture.connect();
+lns.states.connect();
+lns.palette.connect();
+lns.drawings.connect();
+lns.animator.connect();
+lns.timeline.connect();
 
 console.log(lns);
 
-
-// lns.play = Play(lns);
 
 // const workspaceFields = [
 // 	'hideCursor',
 // ];
 
-// lns.ui = new Interface(lns);
-// lns.ui.capture = new Capture({
-// 	useSequentialNumbering: true,
-// 	captureSettings: {
-// 		lineWidth: 1,
-// 		canvasScale: 2,
-// 	}
-// });
-// lns.ui.states = new States();
-// lns.ui.palette = new Palette();
-// lns.ui.drawings = new Drawings();
-// lns.ui.timeline = new Timeline();
-// lns.ui.animator = new AnimatorInterface();
 // lns.ui.settings = new Settings(lns, 'lns', appSave, workspaceFields);
 
 // lns.ui.load('./interface/interface.json', function() {

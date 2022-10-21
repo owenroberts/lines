@@ -1,74 +1,79 @@
-function Timeline() {
-	const self = this;
-	this.frameWidth = 120; // not part of ui ... either make part of ui or member var
-	this.viewLayers = true;
-	this.viewActiveLayers = false;
-	this.viewLayerRange = 0;
-	this.viewGroups = true;
-	this.updateDuringPlay = false;
-	this.useScrollToFrame = false;
-	this.groups = [];
+/*
+	main editing timeline
+*/
 
-	this.init = function() {
-		self.panel.el.addEventListener('mousemove', ev => {
+function Timeline() {
+
+	let panel, timeline;
+
+	let frameWidth = 120; // not part of ui ... either make part of ui or member var
+	let viewLayers = true;
+	let viewActiveLayers = false;
+	let viewLayerRange = 0;
+	let viewGroups = true;
+	let updateDuringPlay = false;
+	let useScrollToFrame = false;
+	let groups = [];
+
+	function init() {
+		panel.el.addEventListener('mousemove', ev => {
+			// quick select while moving over frames
 			if (ev.which == 1 && ev.target.classList.contains('frame') && 
 				lns.anim.currentFrame != +ev.target.textContent) {
 				lns.draw.reset();
 				lns.ui.play.setFrame(+ev.target.textContent);
 				lns.ui.update();
 			} else if (ev.which == 3) {
-				// scroll right/left
+				// scroll right/left -- do this shit ...
 			}
 		});
-	};
+	}
 
-	this.fit = function() {
+	function fit() {
 		const f = lns.anim.endFrame + 1;
-		const w = lns.ui.timeline.panel.el.clientWidth - 11; /* 11 for padding */
-		self.frameWidth = (w - 2 * f) / f; 
-		self.panel.timeline.setProp('--frame-width', self.frameWidth);
-		// self.frameClass();
-		// self.drawLayers();
-		self.update();
-	};
+		const w = panel.el.clientWidth - 11; /* 11 for padding */
+		frameWidth = (w - 2 * f) / f; 
+		timeline.setProp('--frame-width', frameWidth);
+		update();
+	}
 
-	this.frameClass = function() {
-		// def better way to do this
-		if (self.frameWidth < 5) {
-			self.panel.timeline.addClass('five');
-			self.panel.timeline.removeClass('ten');
-		} else if (self.frameWidth < 10) {
-			self.panel.timeline.addClass('ten');
-			self.panel.timeline.removeClass('five');
+	function frameClass() {
+		// def better way to do this -- did i do something in sequencer??
+		if (frameWidth < 5) {
+			timeline.addClass('five');
+			timeline.removeClass('ten');
+		} else if (frameWidth < 10) {
+			timeline.addClass('ten');
+			timeline.removeClass('five');
 		} else {
-			self.panel.timeline.removeClass('ten');
-			self.panel.timeline.removeClass('five');
+			timeline.removeClass('ten');
+			timeline.removeClass('five');
 		}
-	};
+	}
 
-	this.fitFrame = function() {
-		self.frameWidth = 140;
-		self.panel.timeline.setProp('--frame-width', self.frameWidth);
-		self.frameClass();
-		self.update();
-		self.scrollToFrame();
-		self.drawLayers();
-	};
+	function fitFrame() {
+		frameWidth = 140;
+		timeline.setProp('--frame-width', frameWidth);
+		frameClass();
+		update();
+		scrollToFrame();
+		drawLayers();
+	}
 
-	this.scrollToFrame = function() {
-		if (!self.useScrollToFrame) return;
-		self.panel.timeline.el.scrollTo(lns.ui.panels.timeline.timeline[`frm-${lns.anim.currentFrame}`].el.offsetLeft - 10, 0);
-	};
+	function scrollToFrame() {
+		if (!useScrollToFrame) return;
+		timeline.el.scrollTo(timeline[`frm-${lns.anim.currentFrame}`].el.offsetLeft - 10, 0);
+	}
 
 	/* creates all the layer ui new each time */
-	this.update = function() {
+	function update() {
 
 		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame; // eek
 
-		self.panel.timeline.setProp('--num-frames', lns.anim.endFrame + 1);
-		self.panel.timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.tweens.length, 0));
+		timeline.setProp('--num-frames', lns.anim.endFrame + 1);
+		timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.tweens.length, 0));
 
-		self.panel.timeline.clear();
+		timeline.clear();
 
 		const numFrames = lns.anim.endFrame + 1;
 		for (let i = 0; i < numFrames; i++) {
@@ -87,34 +92,33 @@ function Timeline() {
 				}	
 			});
 			// lns.ui.keys[i] = frameBtn;
-			self.panel.timeline.append(frameBtn, `frm-${i}`);
+			timeline.append(frameBtn, `frm-${i}`);
 		}
 		
-		if (self.updateDuringPlay || !lns.anim.isPlaying) this.drawLayers();
-		self.scrollToFrame();
-	};
+		if (updateDuringPlay || !lns.anim.isPlaying) this.drawLayers();
+		scrollToFrame();
+	}
 
-	this.drawLayers = function() {
+	function drawLayers() {
 
 		let rowCount = 0; // set rows
 
-		if (self.viewLayers) {
-			const layers = self.viewActiveLayers ?
+		if (viewLayers) {
+			const layers = viewActiveLayers ?
 				lns.anim.layers.filter(layer => {
 					const f = lns.anim.currentFrame;
-					for (let i = f - self.viewLayerRange; i <= f + self.viewLayerRange; i++){
+					for (let i = f - viewLayerRange; i <= f + viewLayerRange; i++){
 						if (layer.isInFrame(i)) return true;
 					}
 					return false;
 				}) :
 				lns.anim.layers;
-			// self.panel.timeline.setProp('--num-layers', layers.length - 1);
 
 			let gridRowStart = 2;
 			let gridRowEnd = 3;
 
-			if (self.viewGroups) {
-				for (let i = 0, len = self.groups.length; i < len; i++) {
+			if (viewGroups) {
+				for (let i = 0, len = groups.length; i < len; i++) {
 					let groupLayers = layers.filter(l => l.groupNumber === i);
 					if (groupLayers.length === 0) continue;
 					const startFrame = groupLayers.reduce((a, b) => { 
@@ -128,12 +132,12 @@ function Timeline() {
 						if (layer.endFrame !== startFrame) layer.endFrame = endFrame;
 					});
 					const ui = new UITimelineGroup(groupLayers, {
-						name: self.groups[i],
+						name: groups[i],
 						index: i,
 						type: 'group',
 						startFrame: startFrame,
 						endFrame: endFrame,
-						width: self.frameWidth * (endFrame - startFrame + 1),
+						width: frameWidth * (endFrame - startFrame + 1),
 						css: {
 							gridRowStart: gridRowStart, // 2 + (i * 2),
 							gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
@@ -145,14 +149,14 @@ function Timeline() {
 					gridRowStart += 2;
 					gridRowEnd += 2;
 					rowCount++;
-					self.panel.timeline.append(ui, `group-${i}`);
+					timeline.append(ui, `group-${i}`);
 				}
 			}
 
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 				const layer = lns.anim.layers[i];
-				if (layer.groupNumber >= 0 && self.viewGroups) continue;
-				if (self.viewActiveLayers && !layers.includes(layer)) continue;
+				if (layer.groupNumber >= 0 && viewGroups) continue;
+				if (viewActiveLayers && !layers.includes(layer)) continue;
 				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				const ui = new UILayer(layer, {
 					group: self.viewGroups ? undefined : self.groups[layer.groupNumber],
@@ -171,11 +175,11 @@ function Timeline() {
 						if (swapIndex >= 0) {
 							[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]]
 						}
-						self.update();
+						update();
 					},
 					addToGroup(position) {
 						lns.draw.reset(); // save current lines
-						if (self.groups.length === 0) {
+						if (groups.length === 0) {
 							let createGroup = prompt("Name new group", "New Group 0");
 							self.groups.push(createGroup);
 							layer.groupNumber = 0;
@@ -201,9 +205,9 @@ function Timeline() {
 								text: 'New Group',
 								callback: function() {
 									groupSelector.clear();
-									let createGroup = prompt("Name new group", "New Group " + self.groups.length);
-									self.groups.push(createGroup);
-									layer.groupNumber = self.groups.length - 1;
+									let createGroup = prompt("Name new group", "New Group " + groups.length);
+									groups.push(createGroup);
+									layer.groupNumber = groups.length - 1;
 									lns.ui.update();
 								}
 							}));
@@ -217,7 +221,7 @@ function Timeline() {
 				gridRowStart += 2;
 				gridRowEnd += 2;
 				rowCount++;
-				self.panel.timeline.append(ui, `layer-${i}`);
+				timeline.append(ui, `layer-${i}`);
 
 				/* add tweens -- add methods like getTweens */
 				for (let j = 0; j < layer.tweens.length; j++) {
@@ -232,7 +236,7 @@ function Timeline() {
 						},
 					}, tween, layer);
 					
-					self.panel.timeline.append(tweenUI, `tween-${j}-layer-${i}`);
+					timeline.append(tweenUI, `tween-${j}-layer-${i}`);
 					
 					gridRowStart += 2;
 					gridRowEnd += 2;
@@ -240,25 +244,10 @@ function Timeline() {
 			}
 		}
 
-		self.panel.timeline.setProp('--num-layers', rowCount);
-	};
+		timeline.setProp('--num-layers', rowCount);
+	}
 
-	this.toggleViewLayers = function() {
-		self.viewLayers = !self.viewLayers;
-		self.update();
-	};
-
-	this.toggleViewActiveLayers = function() {
-		self.viewActiveLayers = !self.viewActiveLayers;
-		self.update();
-	};
-
-	this.toggleViewGroups = function() {
-		self.viewGroups = !self.viewGroups;
-		self.update();
-	};
-
-	this.split = function() {
+	function split() {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
 			if (layer.isInFrame(lns.anim.currentFrame)) {
@@ -269,38 +258,103 @@ function Timeline() {
 				layer.endFrame = lns.anim.currentFrame;
 			}
 		}
-		lns.ui.play.setFrame(lns.anim.currentFrame + 1);
-	};
+		lns.play.setFrame(lns.anim.currentFrame + 1);
+	}
 
 	// select all layers in frame
-	this.select = function(isSelect) {
+	function select(isSelect) {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
 			if (layer.isInFrame(lns.anim.currentFrame) && layer.isToggled !== isSelect) {
 				if (layer.groupNumber >= 0) {
-					self.panel.timeline[`group-${layer.groupNumber}`].toggle.update(isSelect);
+					timeline[`group-${layer.groupNumber}`].toggle.update(isSelect);
 				} else {
-					self.panel.timeline[`layer-${i}`].toggle.update(isSelect);
+					timeline[`layer-${i}`].toggle.update(isSelect);
 				}
 			}
 		}
-	};
+	}
 
-	this.lock = function(isLock) {
+	function lock(isLock) {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
 			if (layer.isInFrame(lns.anim.currentFrame) && layer.isLocked !== isLock) {
-				self.panel.timeline[`layer-${i}`].lock.update(isLock);
+				timeline[`layer-${i}`].lock.update(isLock);
 			}
 		}
-	};
+	}
 
-	this.resetLayers = function() {
+	function resetLayers() {
 		for (let i = 0, len = lns.anim.layers.length; i < len; i++) {
 			const layer = lns.anim.layers[i];
 			layer.reset();
 		}
-		self.drawLayers();
-	};
+		drawLayers();
+	}
+
+	function connect() {
+		panel = lns.ui.getPanel('timeline');
+
+		// toggle checks with text need to ignore prop label
+		lns.ui.addProps({
+			'viewGroups': {
+				type: 'UIToggleCheck',
+				value: viewGroups,
+				text: 'Groups',
+				callback: value => {
+					viewGroups = value;
+					update();
+				}
+			},
+			'viewLayers': {
+				type: 'UIToggleCheck',
+				value: viewLayers,
+				key: 'ctrl-l',
+				text: 'V',
+				class: 'left-end',
+				callback: value => {
+					viewLayers = value;
+					update();
+				}
+			},
+			'viewActiveLayers': {
+				type: 'UIToggleCheck',
+				value: viewActiveLayers,
+				key: 'ctrl-l',
+				text: 'V', // toggle text in check ??
+				class: 'left-end',
+				callback: value => {
+					viewActiveLayers = value;
+					update();
+				}
+			},
+			'viewLayerRange': {
+				type: 'UINumberStep',
+				value: viewLayerRange,
+				callback: value => { viewLayerRange = value; },
+				range: [0, 10],
+			},
+			'useScrollToFrame': {
+				type: 'UIToggleCheck',
+				text: 'Follow',
+				value: useScrollToFrame,
+				callback: value => { useScrollToFrame = value; }
+			}
+		});
+
+		lns.ui.addCallbacks([
+			{ callback: fit, text: '⇿', key: 'alt-f', class: 'left-end', },
+			{ callback: fitFrame, text: '⏛', key: 'ctrl-f', class: 'right-end', },
+			{ callback: select, text: 'Select', key: 'shift-v', class: 'left-end', args: [true] },
+			{ callback: select, text: 'Deselect', key: 'alt-d', class: 'right-end', args: [false] },
+			{ callback: lock, text: 'Lock', key: 'shift-l', class: 'left-end', args: [true] },
+			{ callback: lock, text: 'Unlock', key: 'alt-l', class: 'right-end', args: [false] },
+			{ callback: split, text: 'Split' },
+		]);
+
+		timeline = panel.addRow('timeline');
+	}
+
+	return { connect };
 
 }
