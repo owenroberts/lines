@@ -1,6 +1,6 @@
 const { Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
-const { Interface } = UI;
-const { UIFile, UILabel, UIModal, UIButton, UINumberStep } = UI.Elements;
+const { Interface, Settings } = UI;
+const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect } = UI.Elements;
 const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
@@ -30,7 +30,7 @@ if (params.render === 'pixel') {
 
 // modules
 lns.canvas = Canvas("lines", 512, 512, "#ffffff", true);
-lns.render = Render(30, true); // (dps, stats?)
+lns.render = Render(30, false); // (dps, stats?)
 lns.anim = new Animation(lns.canvas.ctx, 30, true);
 lns.draw = Draw(lns, { 
 	linesInterval: 5, 
@@ -49,7 +49,6 @@ lns.fio = FilesIO(lns, {
 	reload: false, /* confirm reload */
 	bg: true /* bg color */
 });
-lns.play = Play(lns);
 lns.capture = Capture(lns, {
 	useSequentialNumbering: true,
 	captureSettings: {
@@ -63,7 +62,6 @@ lns.drawings = Drawings(lns);
 lns.timeline = Timeline();
 lns.animator = AnimatorUI();
 
-
 lns.ui = Interface(lns, { useMain: false });
 lns.ui.setup();
 lns.canvas.connect();
@@ -72,7 +70,6 @@ lns.draw.connect();
 lns.bg.connect();
 lns.data.connect();
 lns.fio.connect();
-lns.play.connect();
 lns.capture.connect();
 lns.states.connect();
 lns.palette.connect();
@@ -80,38 +77,41 @@ lns.drawings.connect();
 lns.animator.connect();
 lns.timeline.connect();
 
+lns.ui.update = function() {
+	lns.timeline.update();
+	lns.drawings.update();
+	lns.states.update();
+};
+lns.ui.update();
+
+lns.ui.settings = new Settings(lns, {
+	name: 'lns', 
+	workspaceFields: ['hideCursor'],
+	workspaces: [
+		{
+			text: 'Animation',
+			url: '/animate/workspaces/Animation.json',
+		},
+		{
+			text: 'Drawing',
+			url: '/animate/workspaces/Drawing.json',
+		}
+	],
+	appSave() {
+		return {
+			palettes: lns.palette.getPalettes(), 
+		};
+	},
+	addLoad(settings) {
+		lns.palette.setup(settings.palettes);
+	}
+});
+lns.ui.settings.load();
+lns.draw.setDefaults();
+if (params.src) lns.fio.loadFile(params.src.split('.')[0]);
+lns.render.start();
+lns.timeline.init();
+lns.render.toggleStats();
+
 console.log(lns);
 
-
-// const workspaceFields = [
-// 	'hideCursor',
-// ];
-
-// lns.ui.settings = new Settings(lns, 'lns', appSave, workspaceFields);
-
-// lns.ui.load('./interface/interface.json', function() {
-// 	lns.draw.setDefaults();
-// 	lns.ui.settings.load(appLoad);
-// 	if (params.src) lns.files.loadFile(params.src.split('.')[0]);
-// 	lns.ui.update();
-// 	lns.render.start();
-// 	lns.ui.timeline.init();
-// 	lns.render.toggleStats();
-// });
-
-// // update ui for animate specific modules
-// lns.uiUpdate = function() {
-// 	lns.ui.timeline.update();
-// 	lns.ui.drawings.update();
-// 	lns.ui.states.update();
-// };
-
-// function appSave() {
-// 	return {
-// 		palettes: lns.ui.palette.palettes, 
-// 	};
-// }
-
-// function appLoad(settings) {
-// 	lns.ui.palette.setup(settings.palettes);
-// }

@@ -21,8 +21,8 @@ function Capture(lns, params) {
 	let isVideo = false;
 	let videoLoops = 0;
 	let rec;
-	let lineWidth = params.captureSettings.lineWidth || lns.canvas.lineWidth;
-	let canvasScale = params.captureSettings.canvasScale || lns.canvas.scale;
+	let lineWidth = params.captureSettings.lineWidth || lns.canvas.getLineWidth();
+	let canvasScale = params.captureSettings.canvasScale || lns.canvas.getScale();
 
 	/* better names */
 	
@@ -32,8 +32,8 @@ function Capture(lns, params) {
 	} /* k key */
 
 	function multiple() {
-		self.frames = +prompt("Capture how many frames?");
-		self.start();
+		frames = +prompt("Capture how many frames?");
+		start();
 	} /* shift k */
 
 	/* put capture code in callback */
@@ -44,7 +44,7 @@ function Capture(lns, params) {
 				capture();
 				frames--;
 				isCapturing = true;
-			} else if (self.isCapturing) {
+			} else if (isCapturing) {
 				isCapturing = false;
 				lns.anim.isPlaying = false;
 				lns.anim.onDraw = undefined;
@@ -73,11 +73,11 @@ function Capture(lns, params) {
 					fileName = `${title}-${Cool.padNumber(frameNum, 4)}.png`;
 					frameNum++;
 				} else {
-					if (frm === self.prev.f) self.prev.n += 1;
-					else self.prev.n = 0;
+					if (frm === prev.f) prev.n += 1;
+					else prev.n = 0;
 
-					fileName = `${title}-${frm}-${self.prev.n}.png`;
-					self.prev.f = frm;
+					fileName = `${title}-${frm}-${prev.n}.png`;
+					prev.f = frm;
 				}
 
 				const f = saveAs(blob, fileName);
@@ -91,7 +91,7 @@ function Capture(lns, params) {
 			});
 		} else {
 			// does this ever happen?
-			const cap = self.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+			const cap = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 			window.location.href = cap;
 		}
 	}
@@ -115,9 +115,9 @@ function Capture(lns, params) {
 			if (videoLoops > 1) {
 				videoLoops--;
 				
-			} else if (self.isVideo) {
-				self.video();
-				self.isVideo = false;
+			} else if (isVideo) {
+				video();
+				isVideo = false;
 				lns.anim.isPlaying = false;
 				lns.anim.onPlayedState = undefined;
 				lns.ui.faces['videoLoop'].removeClass('progress');
@@ -152,7 +152,7 @@ function Capture(lns, params) {
 				video(); // stop recording
 				if (recordEachFrame && lns.anim.currentFrame < lns.anim.endFrame) {
 					frames = numFrames;
-					lns.ui.play.next(1); // next frame
+					lns.render.next(1); // next frame
 					video(true); // start recording
 				} else {
 					lns.anim.onDraw = undefined;
@@ -176,7 +176,7 @@ function Capture(lns, params) {
 			isVideo = true;
 			const stream = lns.canvas.canvas.captureStream(lns.render.dps);
 			rec = new MediaRecorder(stream, {
-				videoBitsPerSecond : self.videoBitsPerSecond,
+				videoBitsPerSecond : videoBitsPerSecond,
 				mimeType: 'video/webm;codecs=vp8,opus'
 			});
 			rec.start();
@@ -247,5 +247,5 @@ function Capture(lns, params) {
 		});
 	}
 
-	return { connect };
+	return { connect, isCapturing() { return isCapturing; } };
 }

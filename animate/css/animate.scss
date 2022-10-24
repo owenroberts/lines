@@ -120,13 +120,11 @@ $anim-off: darkgreen;
 
 			&.ui-collection {
 				display: flex;
-				width: 28px;
+				// width: 28px;
 
-				&:hover {
-					background: none;
-				}
+				&:hover { background: none; }
 				
-				.btn, .number {
+				.btn, .number, .drag {
 					background: none;
 					margin: 0;
 					height: 100%;
@@ -134,9 +132,7 @@ $anim-off: darkgreen;
 					border: none;
 					width: 0.75rem;
 					padding: 0;
-					&:hover {
-						background: $ui-select;
-					}
+					&:hover { background: $ui-select; }
 				}
 			}
 			

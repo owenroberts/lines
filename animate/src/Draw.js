@@ -17,7 +17,6 @@ function Draw(lns, defaults) {
 		lns.anim.drawings[lns.anim.drawings.length = 1] = drawing;
 	}
 
-
 	lns.anim.drawings.push(new Drawing());
 	lns.anim.layers.push(new Layer({ 
 		...defaults, 
@@ -35,8 +34,8 @@ function Draw(lns, defaults) {
 		}
 	}
 
-	function setProperty(value, prop) { // why is this differnt ?? -- really should be prop value
-		lns.anim.updateProperty(value, prop);
+	function setProperty(prop, value) { // why is this differnt ?? -- really should be prop value
+		lns.anim.updateProperty(prop, value);
 		getDrawLayer()[prop] = value;
 	}
 
@@ -105,7 +104,7 @@ function Draw(lns, defaults) {
 				css: { background: color },
 				value: color,
 				callback: () => {
-					setProperty(color, 'color');
+					setProperty('color', color,);
 					lns.ui.faces.color.el.value = color;
 					modal.clear();
 				}
@@ -147,7 +146,7 @@ function Draw(lns, defaults) {
 	// how often the mousemove records, default 30ms
 	let mouseTimer = performance.now();  //  independent of draw timer
 	let mouseInterval = 30;
-	let distanceThreshold = 5; // distance between points required to record
+	let distanceThreshold = 2; // distance between points required to record
 	let isDrawing = false; // for drawStart to drawEnd so its not always moving
 	let prevPosition = new Cool.Vector();
 	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
@@ -160,7 +159,7 @@ function Draw(lns, defaults) {
 
 	function outSideCanvas(ev) {
 		if (ev.toElement !== lns.canvas.canvas) {
-			if (isDrawing) self.reset();
+			if (isDrawing) reset();
 			isDrawing = false;
 		}
 	}
@@ -191,7 +190,7 @@ function Draw(lns, defaults) {
 	function addBrush(x, y) {
 		const drawing = getCurrentDrawing();
 		let origin = new Cool.Vector(x, y);
-		origin.divide(lns.canvas.scale);
+		origin.divide(lns.canvas.getScale());
 		drawing.add(origin.round());
 
 		const numPoints = Cool.randomInt(brushSegmentsMin, brushSegmentsMax);
@@ -206,9 +205,9 @@ function Draw(lns, defaults) {
 				* (1 - Cool.random(brushRandomY));
 
 			let point = new Cool.Vector(x + _x, y - _y);
-			point.divide(lns.canvas.scale);
-			if (point.x > 0 && point.x < lns.canvas.width && 
-				point.y > 0 && point.y < lns.canvas.height) {
+			point.divide(lns.canvas.getScale());
+			if (point.x > 0 && point.x < lns.canvas.getWidth() && 
+				point.y > 0 && point.y < lns.canvas.getHeight()) {
 				drawing.add(point.round());
 			}
 		}
@@ -216,11 +215,11 @@ function Draw(lns, defaults) {
 	}
 
 	function addLine(x, y) {
-		getCurrentDrawing().add(new Cool.Vector(x, y).divide(lns.canvas.scale).round());
+		getCurrentDrawing().add(new Cool.Vector(x, y).divide(lns.canvas.getScale()).round());
 	}
 
 	function erase(x, y) {
-		let mousePosition = new Cool.Vector(x, y).divide(lns.canvas.scale).round();
+		let mousePosition = new Cool.Vector(x, y).divide(lns.canvas.getScale()).round();
 
 		let layers = [];
 		for (let i = lns.anim.layers.length - 1; i >= 0; i--) {
@@ -243,13 +242,13 @@ function Draw(lns, defaults) {
 							e++;
 						}
 						drawing.points.splice(s, e);
-					} else if (self.eraseMethod === 'points') {
+					} else if (eraseMethod === 'points') {
 						drawing.points[j] = 'end';
 					}
 				}
 			}
 
-			if (self.eraseMethod === 'points') {
+			if (eraseMethod === 'points') {
 				for (let j = drawing.points.length - 1; j >= 0; j--) {
 					if (drawing.points[j] === 'end' && drawing.points[j - 1] === 'end') {
 						drawing.points.splice(j, 1);
@@ -326,10 +325,10 @@ function Draw(lns, defaults) {
 			const r = h / (1 / ratio * dots / 2);
 			let [startX, endX] = startDots.x < ev.offsetX ? 
 				[startDots.x, ev.offsetX] : 
-				[ev.offsetX, self.startDots.x];
+				[ev.offsetX, startDots.x];
 			let [startY, endY] = startDots.y < ev.offsetY ? 
 				[startDots.y, ev.offsetY] : 
-				[ev.offsetY, self.startDots.y];
+				[ev.offsetY, startDots.y];
 			
 			for (let x = startX; x < endX; x += c) {
 				for (let y = startY; y < endY; y += r) {
@@ -349,9 +348,7 @@ function Draw(lns, defaults) {
 		} else if (ev.which === 1) {
 			isDrawing = false;
 			const drawing = getCurrentDrawing();
-
-			/* prevent saving single point drawing segments */
-			let last = drawing.get(-2);
+			let last = drawing.get(-2); /* prevent saving single point drawing segments */
 			if (last !== 'end' && last !== 'add' && drawing.length > 1) {
 				drawing.add(ev.shiftKey ? 'add' : 'end');
 			} else {
@@ -397,7 +394,7 @@ function Draw(lns, defaults) {
 		lns.canvas.canvas.addEventListener('mouseup', end);
 	}
 
-	document.addEventListener('mousemove', self.outSideCanvas);
+	document.addEventListener('mousemove', outSideCanvas);
 
 	function connect() {
 		lns.ui.addProps({
@@ -417,45 +414,59 @@ function Draw(lns, defaults) {
 			},
 		}, 'mouse');
 
+		const drawPanel = lns.ui.getPanel('draw', { label: 'Lines' });
+
 		lns.ui.addCallbacks([
 			{ callback: quickColorSelect, key: 'g', text: 'Quick Color', },
 			{ callback: randomColor, key: 'shift-g', text: 'Random Color', },
 			{ callback: colorVariation, key: 'alt-g', text: 'Color Variation', },
-		], 'lineColor');
+		], 'draw');
 
 		lns.ui.addProps({
 			'color': {
 				type: 'UIColor',
-				// value: color, // huh lns.anim.getProps ? 
+				value: defaults.color, // huh lns.anim.getProps ? 
 				callback: value => { setProperty('color', value); }
+			},
+			'linesInterval': {
+				type: 'UINumberStep',
+				value: defaults.linesInterval,
+				range: [1, 10],
+				callback: value => { setProperty('linesInterval', value); }
 			},
 			'segmentNum': {
 				type: 'UINumberStep',
+				value: defaults.segmentNum,
 				range: [1, 10],
 				callback: value => { setProperty('segmentNum', value); }
 			},
 			'jiggleRange': {
 				type: 'UINumberStep',
+				value: defaults.jiggleRange,
 				range: [0, 10],
 				callback: value => { setProperty('jiggleRange', value); }
 			},
 			'wiggleRange': {
 				type: 'UINumberStep',
+				value: defaults.wiggleRange,
 				range: [0, 16],
 				callback: value => { setProperty('wiggleRange', value); }
 			},
 			'wiggleSpeed': {
 				type: 'UINumberStep',
+				value: defaults.wiggleSpeed,
 				range: [0, 8],
 				step: 0.005,
 				callback: value => { setProperty('wiggleSpeed', value); }
 			},
 			'wiggleSegments': {
-				type: 'UIToggle',
+				type: 'UIToggleCheck',
+				value: defaults.wiggleSegments,
 				callback: value => { setProperty('wiggleSegments', value); }
 			},
 			'breaks': {
-				type: 'UIToggle',
+				type: 'UIToggleCheck',
+				value: defaults.breaks,
 				callback: value => { setProperty('breaks', value); }
 			}
 		}, 'draw');
@@ -534,5 +545,11 @@ function Draw(lns, defaults) {
 		}, 'brush')
 	}
 
-	return { connect, reset };
+	return { 
+		connect, reset, setDefaults, 
+		getDrawLayer, getCurrentDrawing, hasDrawing, 
+		setProperties,
+		isDrawing() { return isDrawing; },
+		stop() { isDrawing = false; },
+	};
 }

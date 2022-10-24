@@ -11,7 +11,7 @@ function FilesIO(lns, params) {
 	function saveFile(single, callback) {
 
 		lns.draw.reset();
-		lns.ui.play.checkEnd();
+		lns.render.checkEnd();
 		
 		lns.anim.drawings.pop();
 		lns.anim.layers.pop();
@@ -57,7 +57,8 @@ function FilesIO(lns, params) {
 				: null;
 		}
 
-		if (lns.ui.timeline.groups.length > 0) json.g = [...lns.ui.timeline.groups];
+		const groups = lns.timeline.getGroups();
+		if (groups.length > 0) json.g = [...groups];
 
 		if (Object.keys(lns.anim.states).length > 1) {
 			json.s = {};
@@ -71,7 +72,7 @@ function FilesIO(lns, params) {
 		const jsonfile = JSON.stringify(json);
 		if (fileName) {
 			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
-			saveAs(blob, `${self.fileName}${single ? '-' + lns.anim.frame : ''}.json`);
+			saveAs(blob, `${fileName}${single ? '-' + lns.anim.frame : ''}.json`);
 			setTimeout(callback, 500);
 			lns.ui.faces.title.value = fileName;
 		}
@@ -120,7 +121,7 @@ function FilesIO(lns, params) {
 			lns.canvas.setHeight(data.h);
 			lns.ui.faces.fps.update(data.fps);
 			if (data.bg) lns.canvas.setBGColor(data.bg);
-			if (data.g) lns.ui.timeline.groups = [...data.g];
+			if (data.g) lns.timeline.setGroups([...data.g]);
 			lns.draw.reset(); 
 		});
 
@@ -190,7 +191,7 @@ function FilesIO(lns, params) {
 	}
 
 	window.addEventListener("beforeunload", function(ev) {
-		if (self.saveSettingsOnUnload) lns.ui.settings.saveSettings();
+		if (saveSettingsOnUnload) lns.ui.settings.saveSettings();
 		if (params.reload) ev.returnValue = 'Did you save dumbhole?';
 	});
 

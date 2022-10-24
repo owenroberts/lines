@@ -7,7 +7,7 @@ class UILayer extends UICollection {
 		const width = params.width;
 
 		const toggle = new UIToggle({
-			type: 'layer-toggle',
+			btnClass: 'layer-toggle',
 			class: 'timeline-btn',
 			text: `${layer.drawingIndex}`,
 			isOn: layer.isToggled,
@@ -21,7 +21,7 @@ class UILayer extends UICollection {
 		});
 
 		const highlight = new UIToggle({
-			type: 'layer-highlight',
+			btnClass: 'layer-highlight',
 			class: 'timeline-btn',
 			text: '*',
 			isOn: layer.isHighlighted,
@@ -31,7 +31,7 @@ class UILayer extends UICollection {
 		});
 
 		const edit = new UIButton({
-			type: 'layer-edit',
+			btnClass: 'layer-edit',
 			class: 'timeline-btn',
 			text: "E",
 			callback: () => {
@@ -72,14 +72,14 @@ class UILayer extends UICollection {
 		uis.tween = new UIButton({
 			text: isModal ? "Add Tween" : "T",
 			class: btnClass,
-			type: 'layer-tween',
+			btnClass: 'layer-tween',
 			callback: () => {
 				this.tweenModal(layer);
 			}
 		});
 
 		uis.remove = new UIButton({
-			type: 'remove',
+			btnClass: 'remove',
 			text: isModal ? "Remove" : "X",
 			class: btnClass,
 			callback: () => {
@@ -117,7 +117,7 @@ class UILayer extends UICollection {
 		});
 
 		uis.lock = new UIToggle({
-			type: 'layer-lock',
+			btnClass: 'layer-lock',
 			text: isModal ? 'Lock' : 'L',
 			class: btnClass,
 			isOn: layer.isLocked,
@@ -128,14 +128,14 @@ class UILayer extends UICollection {
 
 		uis.moveUp = new UIButton({
 			text: isModal ? "Move Up" : '^',
-			type:'move-up',
+			btnClass:'move-up',
 			class: btnClass,
 			callback: params.moveUp
 		});
 
 		uis.addToGroup = new UIButton({
 			text: isModal ? 'Add to Group' : 'G',
-			type: 'add-to-group',
+			btnClass: 'add-to-group',
 			class: btnClass,
 			callback: () => {
 				params.addToGroup(this.position); // cant get position, node from original is gone?
@@ -143,14 +143,14 @@ class UILayer extends UICollection {
 		});
 
 		const clearFunc = function() {
-			lns.ui.timeline.resetLayers()
+			lns.timeline.resetLayers()
 			lns.ui.update();
 		};
 
 		uis.merge = new UIButton({
 			text: isModal ? "Merge Layer" : 'M',
 			class: btnClass,
-			type: 'merge-layer',
+			btnClass: 'merge-layer',
 			callback: () => {
 				const modal = new UIModal({
 					text: 'Merge Layer',
@@ -256,7 +256,7 @@ class UILayer extends UICollection {
 				const props = layer.getCloneProps();
 				props.startFrame = props.endFrame = layer.endFrame + 1;
 				lns.anim.addLayer(new Layer(props));
-				lns.ui.play.setFrame(layer.endFrame + 1);
+				lns.render.setFrame(layer.endFrame + 1);
 			}
 		}));
 
@@ -267,7 +267,7 @@ class UILayer extends UICollection {
 				props.startFrame = lns.anim.currentFrame + 1;
 				layer.endFrame = lns.anim.currentFrame;
 				lns.anim.addLayer(new Layer(props));
-				lns.ui.play.setFrame(layer.endFrame + 1);
+				lns.render.setFrame(layer.endFrame + 1);
 			}
 		}));
 

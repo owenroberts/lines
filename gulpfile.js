@@ -36,7 +36,9 @@ const files = {
 		// './animate/modules/*.js',
 		//'./animate/classes/*.js',
 		//'./animate/interface/*.js',
-		//'./animate/animate.js'
+		'./animate/src/AnimationMixin.js',
+		'./animate/src/LayerMixin.js',
+		'./animate/src/animate.js',
 		'./animate/src/**/*.js'
 	],
 	game: [
@@ -95,6 +97,23 @@ function jsTasks() {
 	const tasks = [];
 	for (const f in files) {
 		tasks.push(jsTask(files[f], `${f}.min.js`, './build'));
+	}
+	return merge(...tasks);
+}
+
+function testBuild() {
+	function jsTask(files, name, dir){
+		return src(files)
+			.pipe(sourcemaps.init())
+			.pipe(terser().on('error', logError))
+			.pipe(sourcemaps.write('./src_maps'))
+			.pipe(dest(dir))
+			.pipe(gulpif(useBrowserSync, browserSync.stream()));
+	}
+
+	const tasks = [];
+	for (const f in files) {
+		tasks.push(jsTask(files[f], `${f}.min.js`, './buildTest'));
 	}
 	return merge(...tasks);
 }
@@ -196,6 +215,7 @@ task('default', parallel(jsTasks, sassTasks));
 task('watch', watchTask);
 task('browser', parallel(jsTasks, sassTasks, cacheBustTask, browserSyncTask, watchTask));
 if (ui) task('ui', series(function exporter() { return ui.exportTask(false) }, uiCopy));
+task('test', testBuild);
 
 module.exports = {
 	exportTask: exportTask,

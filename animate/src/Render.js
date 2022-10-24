@@ -13,7 +13,7 @@ function Render(dps=30, showStats=false) {
 	let clearCount = 0; // what is this -- lol
 	let clearCountInterval = 0;
 
-	let stats, playPanel;
+	let stats, playPanel, frameDisplay;
 
 	function toggleStats(value) {
 		if (value !== undefined) showStats = value;
@@ -24,11 +24,14 @@ function Render(dps=30, showStats=false) {
 			stats.dom.style.top = '-48px';
 			stats.dom.style.right = '0';
 			stats.dom.style.left = 'auto';
-			playPanel.el.appendChild(lns.render.stats.dom);
+			playPanel.el.appendChild(stats.dom);
 		} 
 		
 		if (stats) {
 			stats.dom.style.display = showStats ? 'block' : 'none';
+			playPanel.setProp('overflow', 'visible');
+		} else {
+			playPanel.setProp('overflow', 'hidden');
 		}
 	}
 
@@ -42,13 +45,15 @@ function Render(dps=30, showStats=false) {
 
 	function toggle() {
 		if (!lns.anim.isPlaying) {
-			lns.ui.play.checkEnd();
+			checkEnd();
 			lns.draw.reset();
 		} else {
-			lns.draw.layer.startFrame = lns.draw.layer.endFrame = lns.anim.currentFrame;
+			const layer = lns.draw.getDrawLayer();
+			layer.startFrame = lns.anim.currentFrame;
+			layer.endFrame = lns.anim.currentFrame;
 		}
 		lns.anim.isPlaying = !lns.anim.isPlaying;
-		lns.ui.timeline.update();
+		lns.timeline.update();
 	}
 
 	/* ' - dps is property of render engine, not individual animations */
@@ -73,13 +78,76 @@ function Render(dps=30, showStats=false) {
 		lns.ui.faces.fps.value = lns.anim.fps;
 	}
 
+	function setFrame(f) {
+		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
+			// no before ?? 
+			if (lns.anim.frame !== +f) lns.draw.reset();
+			lns.anim.frame = +f;
+
+			lns.draw.getDrawLayer().startFrame = lns.anim.currentFrame;
+			lns.draw.getDrawLayer().endFrame = lns.anim.currentFrame;
+			
+			lns.ui.update();
+		} else {
+			frameDisplay.update(lns.anim.currentFrame, true);
+		}
+	}
+
+	// fix for playing animation with nothing in the final frame
+	function checkEnd() {
+		if (lns.anim.currentFrame === lns.anim.endFrame && !lns.draw.hasDrawing()) {
+			next(-1);
+		}
+	}
+
+	/* call before changing a frame */
+	function next(dir) {
+
+		const next = lns.anim.currentFrame + dir;
+		
+		if (lns.anim.isPlaying) lns.ui.faces.play.update(); // ?
+		// lns.draw.isDrawing = false; /* prototype here with render, anim, draw, isActive or something ? */
+		lns.draw.stop();
+		
+		if (lns.draw.getCurrentDrawing().length > 0) {
+			// drawing to save - can add frame
+			lns.draw.reset(next);
+			lns.anim.frame = next;
+		} else {
+			// put in reset? 
+			const layer = lns.draw.getDrawLayer();
+			if (dir > 0) {
+				if (lns.anim.currentFrame < lns.anim.state.end || 
+					(lns.anim.stateName == 'default' && lns.draw.hasDrawing())) {
+					layer.startFrame = next;
+					layer.endFrame = next;	
+					lns.anim.frame = next;
+				}
+			}
+
+			if (dir < 0 && lns.anim.currentFrame > lns.anim.state.start) {
+				layer.startFrame = next;
+				layer.endFrame = next;
+				lns.anim.frame = next;
+			}
+		}
+
+		lns.data.saveState();
+		lns.ui.update();
+	}
+
+	function plus() {
+		setFrame(lns.anim.endFrame);
+		next(1);
+	}
+
 	function update(time) {
 		if (showStats) stats.begin();
 		if (performance.now() > interval + timer || time == 'cap') {
 			timer = performance.now();
 
 			// what actually need to be update here ?
-			if (lns.anim.isPlaying) lns.ui.timeline.update();
+			if (lns.anim.isPlaying) lns.timeline.update();
 
 			if (clearCount === clearCountInterval) {
 				/*
@@ -87,7 +155,7 @@ function Render(dps=30, showStats=false) {
 					canvas.getWidth(), canvas.getHeight()
 					or lns.ui.faces.width, lns.ui.faces.height ... 
 				*/
-				lns.canvas.ctx.clearRect(0, 0, lns.canvas.width, lns.canvas.height);
+				lns.canvas.ctx.clearRect(0, 0, lns.canvas.getWidth(), lns.canvas.getHeight());
 				clearCount = 0;
 			} else {
 				clearCount++;
@@ -96,12 +164,12 @@ function Render(dps=30, showStats=false) {
 			/* in capture set animation onDraw 
 				move this logic to capture
 			*/
-			if (lns.ui.capture.bg && (lns.ui.capture.frames > 0 || lns.ui.capture.isVideo)) {
-				lns.canvas.ctx.fillStyle = lns.canvas.bgColor;
-				lns.canvas.ctx.fillRect(0, 0, lns.canvas.width, lns.canvas.height);
+			if (lns.capture.bg && (lns.capture.frames > 0 || lns.capture.isVideo)) {
+				lns.canvas.ctx.fillStyle = lns.canvas.getBGColor();
+				lns.canvas.ctx.fillRect(0, 0, lns.canvas.getWidth(), lns.canvas.getHeight());
 			}
 
-			lns.bgImage.display(); // part of canvas module?
+			lns.bg.display(); // part of canvas module?
 
 			// onion skin
 			if (onionSkinNum > 0 && onionSkinIsVisible) {
@@ -137,7 +205,7 @@ function Render(dps=30, showStats=false) {
 				lns.canvas.ctx.lineWidth = 5; // set through ui or make it a class
 				lns.anim.draw(0, 0, true);
 				lns.anim.cancelOverride();
-				lns.canvas.ctx.lineWidth = lns.canvas.lineWidth;
+				lns.canvas.ctx.lineWidth = lns.canvas.getLineWidth();
 				lns.anim.layers.filter(l => l.dontDraw).forEach(l => {
 					l.dontDraw = false;
 				});
@@ -147,8 +215,7 @@ function Render(dps=30, showStats=false) {
 			lns.anim.draw();
 			window.drawCount++;
 		}
-		if (!lns.ui.capture.isCapturing) 
-			window.requestAnimFrame(self.update);
+		if (!lns.capture.isCapturing()) window.requestAnimFrame(update);
 		if (showStats) stats.end();
 	}
 
@@ -160,9 +227,22 @@ function Render(dps=30, showStats=false) {
 		
 		playPanel = lns.ui.getPanel('play', { label: 'Play Back'});
 
-		lns.ui.addUIs([
-			{ callback: toggle, value: false, "onText": "❚❚", "offText": "▶", key: 'space' },
-		]);
+		lns.ui.addCallbacks([
+			{ callback: setFrame, key: '0', text: '0', args: [0] },
+			{ callback: next, key: 'w', text: '<', args: [-1] },
+			// play btn
+			{ callback: toggle, type: 'UIToggle', value: false, text: 'Play', "onText": "❚❚", "offText": "▶", key: 'space' },
+			{ callback: next, key: 'e', text: '>', args: [1] },
+			{ callback: plus, key: '+', text: '+'}
+		], 'play');
+	
+		frameDisplay = lns.ui.addUI({ 
+			type: "UINumberStep",
+			callback: setFrame, 
+			face: 'frameDisplay',
+			key: 'f',
+			value: 0,
+		}, 'play');
 
 		lns.ui.addCallbacks([
 			{ callback: update, "text": "↻", key: 'u' },
@@ -194,13 +274,14 @@ function Render(dps=30, showStats=false) {
 			'onionSkinIsVisible': {
 				type: 'UIToggleCheck',
 				value: onionSkinIsVisible,
-				text: 'Onion Skin',
+				label: 'Onion Skin',
 				key: 'n',
 				callback: value => { onionSkinIsVisible = value; }
 			},
 			'onionSkinNum': {
 				type: 'UINumberStep',
 				value: onionSkinNum,
+				label: 'Frames',
 				key: 'l',
 				callback: value => { onionSkinNum = value; }
 			},
@@ -212,5 +293,5 @@ function Render(dps=30, showStats=false) {
 		});
 	}
 
-	return { connect, reset, start };
+	return { connect, reset, start, toggleStats, setFrame };
 }

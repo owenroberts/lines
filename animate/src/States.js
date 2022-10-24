@@ -101,5 +101,5 @@ function States(lns) {
 		panel.addRow(undefined, 'break');
 	}
 
-	return { connect };
+	return { connect, update };
 }

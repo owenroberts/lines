@@ -152,5 +152,15 @@ function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
 		}, 'canvas');
 	}
 
-	return { connect, canvas, ctx };
+	return { 
+		connect, canvas, ctx,
+		fitCanvasToDrawing,
+		setWidth, setHeight,
+		setBGColor,
+		getScale() { return scale; },
+		getWidth() { return width; },
+		getHeight() { return height; },
+		getLineWidth() { return lineWidth; },
+		getBGColor() { return color; },
+	};
 }

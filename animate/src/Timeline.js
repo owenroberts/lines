@@ -21,7 +21,7 @@ function Timeline() {
 			if (ev.which == 1 && ev.target.classList.contains('frame') && 
 				lns.anim.currentFrame != +ev.target.textContent) {
 				lns.draw.reset();
-				lns.ui.play.setFrame(+ev.target.textContent);
+				lns.render.setFrame(+ev.target.textContent);
 				lns.ui.update();
 			} else if (ev.which == 3) {
 				// scroll right/left -- do this shit ...
@@ -78,24 +78,25 @@ function Timeline() {
 		const numFrames = lns.anim.endFrame + 1;
 		for (let i = 0; i < numFrames; i++) {
 			const frameBtn = new UIButton({
-				type: "frame",
 				text: `${i}`,
 				css: {
 					gridColumnStart:  1 + (i * 2),
 					gridColumnEnd:  3 + (i * 2)
 				},
-				class: i == lns.anim.currentFrame ? 'current' : '',
+				class: 'frame',
 				callback: function() {
 					lns.draw.reset();
-					lns.ui.play.setFrame(i);
+					lns.render.setFrame(i);
 					lns.ui.update();
 				}	
 			});
+			if (i == lns.anim.currentFrame) frameBtn.addClass('current');
+			frameBtn.removeClass('btn');
 			// lns.ui.keys[i] = frameBtn;
 			timeline.append(frameBtn, `frm-${i}`);
 		}
 		
-		if (updateDuringPlay || !lns.anim.isPlaying) this.drawLayers();
+		if (updateDuringPlay || !lns.anim.isPlaying) drawLayers();
 		scrollToFrame();
 	}
 
@@ -159,10 +160,10 @@ function Timeline() {
 				if (viewActiveLayers && !layers.includes(layer)) continue;
 				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				const ui = new UILayer(layer, {
-					group: self.viewGroups ? undefined : self.groups[layer.groupNumber],
+					group: viewGroups ? undefined : groups[layer.groupNumber],
 					canMoveUp: i > 0 && layers.length > 2,
 					type: 'layer',
-					width: self.frameWidth * (layer.endFrame - layer.startFrame + 1),
+					width: frameWidth * (layer.endFrame - layer.startFrame + 1),
 					css: {
 						gridRowStart: gridRowStart, // 2 + (i * 2),
 						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
@@ -181,7 +182,7 @@ function Timeline() {
 						lns.draw.reset(); // save current lines
 						if (groups.length === 0) {
 							let createGroup = prompt("Name new group", "New Group 0");
-							self.groups.push(createGroup);
+							groups.push(createGroup);
 							layer.groupNumber = 0;
 							lns.ui.update();
 						} else {
@@ -196,8 +197,8 @@ function Timeline() {
 							});
 							groupSelector.addBreak('Groups:');
 							let groupSelect = new UISelect({});
-							for (let i = 0; i < self.groups.length; i++) {
-								groupSelect.addOption(i, i === 0, self.groups[i]);
+							for (let i = 0; i < groups.length; i++) {
+								groupSelect.addOption(i, i === 0, groups[i]);
 							}
 							groupSelector.add(groupSelect);
 							groupSelector.addBreak();
@@ -258,7 +259,7 @@ function Timeline() {
 				layer.endFrame = lns.anim.currentFrame;
 			}
 		}
-		lns.play.setFrame(lns.anim.currentFrame + 1);
+		lns.render.setFrame(lns.anim.currentFrame + 1);
 	}
 
 	// select all layers in frame
@@ -298,31 +299,31 @@ function Timeline() {
 		// toggle checks with text need to ignore prop label
 		lns.ui.addProps({
 			'viewGroups': {
-				type: 'UIToggleCheck',
 				value: viewGroups,
-				text: 'Groups',
+				text: 'G',
+				noLabel: true,
 				callback: value => {
 					viewGroups = value;
 					update();
 				}
 			},
 			'viewLayers': {
-				type: 'UIToggleCheck',
 				value: viewLayers,
 				key: 'ctrl-l',
 				text: 'V',
 				class: 'left-end',
+				noLabel: true,
 				callback: value => {
 					viewLayers = value;
 					update();
 				}
 			},
 			'viewActiveLayers': {
-				type: 'UIToggleCheck',
 				value: viewActiveLayers,
 				key: 'ctrl-l',
 				text: 'V', // toggle text in check ??
-				class: 'left-end',
+				class: 'right-end',
+				noLabel: true,
 				callback: value => {
 					viewActiveLayers = value;
 					update();
@@ -331,12 +332,14 @@ function Timeline() {
 			'viewLayerRange': {
 				type: 'UINumberStep',
 				value: viewLayerRange,
+				noLabel: true,
 				callback: value => { viewLayerRange = value; },
 				range: [0, 10],
 			},
 			'useScrollToFrame': {
-				type: 'UIToggleCheck',
+				type: 'UIToggle',
 				text: 'Follow',
+				noLabel: true,
 				value: useScrollToFrame,
 				callback: value => { useScrollToFrame = value; }
 			}
@@ -355,6 +358,10 @@ function Timeline() {
 		timeline = panel.addRow('timeline');
 	}
 
-	return { connect };
+	return { 
+		connect, update, init, 
+		getGroups() { return groups; },
+		setGroups(value) { groups = value; },
+	};
 
 }

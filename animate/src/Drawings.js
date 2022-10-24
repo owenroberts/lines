@@ -93,7 +93,8 @@ function Drawings(lns) {
 
 	function connect() {
 		panel = lns.ui.getPanel('drawings');
+		panel.addRow('drawings');
 	}
 
-	return { connect };
+	return { connect, update };
 }

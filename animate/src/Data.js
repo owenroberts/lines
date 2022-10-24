@@ -41,35 +41,34 @@ function Data(lns) {
 			use this? https://stackoverflow.com/questions/728360/how-do-i-correctly-clone-a-javascript-object
 		*/
 
-		if (self.saveStates.current.drawings) {
-			self.saveStates.prev.drawings = _.cloneDeep(self.saveStates.current.drawings);
-			self.saveStates.prev.layers = _.cloneDeep(self.saveStates.current.layers);
+		if (saveStates.current.drawings) {
+			saveStates.prev.drawings = _.cloneDeep(saveStates.current.drawings);
+			saveStates.prev.layers = _.cloneDeep(saveStates.current.layers);
 		} else {
-			self.saveStates.prev.drawings = _.cloneDeep(lns.anim.drawings);
-			self.saveStates.prev.layers = _.cloneDeep(lns.anim.layers);
+			saveStates.prev.drawings = _.cloneDeep(lns.anim.drawings);
+			saveStates.prev.layers = _.cloneDeep(lns.anim.layers);
 		}
 
-		self.saveStates.current.drawings = _.cloneDeep(lns.anim.drawings);
-		self.saveStates.current.layers = _.cloneDeep(lns.anim.layers);
+		saveStates.current.drawings = _.cloneDeep(lns.anim.drawings);
+		saveStates.current.layers = _.cloneDeep(lns.anim.layers);
 	}
 	
 	function undo() {
 
-		if (self.saveStates.prev.drawings) {
-			lns.anim.drawings = _.cloneDeep(self.saveStates.prev.drawings);
-			lns.anim.layers = _.cloneDeep(self.saveStates.prev.layers);
+		if (saveStates.prev.drawings) {
+			lns.anim.drawings = _.cloneDeep(saveStates.prev.drawings);
+			lns.anim.layers = _.cloneDeep(saveStates.prev.layers);
 			
-			self.saveStates.current.drawings = _.cloneDeep(self.saveStates.prev.drawings);
-			self.saveStates.current.layers = _.cloneDeep(self.saveStates.prev.layers);
-
-			self.saveStates.prev.drawings = undefined;
-			self.saveStates.prev.layers = undefined;
+			saveStates.current.drawings = _.cloneDeep(saveStates.prev.drawings);
+			saveStates.current.layers = _.cloneDeep(saveStates.prev.layers);
+			saveStates.prev.drawings = undefined;
+			saveStates.prev.layers = undefined;
 		} else {
 			console.log("%c Can't undo ", "color:lightblue;background:gray;");
 		}
 
 		/* these functions just call one function, should just call directly .. but this is still being worked on */
-		lns.ui.drawings.clear();
+		lns.drawings.clear();
 		lns.ui.update();
 	} /* ctrl z - undo one save state */
 
@@ -85,7 +84,7 @@ function Data(lns) {
 	} /* c key */
 
 	function paste() {
-		self.saveState();
+		saveState();
 
 		if (pasteFrames.length == 0) pasteFrames.push(lns.anim.currentFrame);
 
@@ -108,7 +107,7 @@ function Data(lns) {
 		copy();
 		if (n) {
 			for (let i = 0; i < n; i++) {
-				lns.ui.play.next(1);
+				lns.render.next(1);
 				paste();
 			}
 		}
@@ -137,7 +136,7 @@ function Data(lns) {
 					if (layer) lns.anim.addLayer(layer);
 				}
 			}
-			lns.ui.play.next(1);
+			lns.render.next(1);
 		}
 		lns.draw.reset();
 		lns.ui.update();
@@ -220,11 +219,11 @@ function Data(lns) {
 
 		if (endFrame > 0) {
 			for (let i = endFrame; i >= startFrame; i--) {
-				self.deleteFrame(i);
+				deleteFrame(i);
 			}
 
 			lns.draw.cutEnd();
-			lns.ui.play.setFrame(0);
+			lns.render.setFrame(0);
 		}
 	} /* shift - d */
 
@@ -244,7 +243,7 @@ function Data(lns) {
 			lns.anim.layers[i].shiftIndex(lns.anim.currentFrame + dir, 1);
 			lns.anim.addLayer(lns.anim.layers[i].removeIndex(lns.anim.currentFrame + dir));
 		}
-		lns.ui.play.next(dir);
+		lns.render.next(dir);
 		lns.ui.update();
 	} /* i, shift-i key */
 

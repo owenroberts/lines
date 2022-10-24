@@ -179,8 +179,7 @@ function Palette(lns) {
 			text: 'Load File',
 			callback: data => { setup(data) }
 		}));
-
 	}
 
-	return { connect };
+	return { connect, getPalettes() { return palettes; } };
 }

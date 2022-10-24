@@ -98,7 +98,7 @@ class UITimelineGroup extends UICollection {
 			callback: () => {
 				
 				const clearFunc = function() {
-					lns.ui.timeline.resetLayers()
+					lns.timeline.resetLayers()
 					lns.ui.update();
 				};
 

@@ -10,14 +10,14 @@ function AnimatorUI() {
 	function addUI() {
 		for (const param in animator.params) {
 
-			const row1 = self.panel.addRow();
+			const row1 = panel.addRow();
 			const range = animator.params[param];
 
 			panel.add(new UILabel({
 				text: param
 			}), row1);
 
-			const row2 = self.panel.addRow();
+			const row2 = panel.addRow();
 			panel.add(new UINumber({
 				text: "Min",
 				value: range[0],
