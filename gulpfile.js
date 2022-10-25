@@ -176,7 +176,6 @@ function cacheBustTask(){
 function watchTask(){
 	watch([	
 			...files.lines,
-			// ...files.interface,
 			...files.animate,
 			...files.game,
 			...files.editor,

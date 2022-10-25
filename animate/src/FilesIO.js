@@ -13,8 +13,8 @@ function FilesIO(lns, params) {
 		lns.draw.reset();
 		lns.render.checkEnd();
 		
-		lns.anim.drawings.pop();
-		lns.anim.layers.pop();
+		lns.anim.drawings.pop(); // remove empty drawing
+		lns.anim.layers.pop(); // remove empty draw layer
 
 		fileName = lns.ui.faces.title.value || prompt("Name this file:");
 
@@ -23,12 +23,12 @@ function FilesIO(lns, params) {
 
 		const json = {
 			v: "2.5",
-			w: +lns.canvas.width,
-			h: +lns.canvas.height,
+			w: +lns.canvas.getWidth(),
+			h: +lns.canvas.getHeight(),
 			fps: +lns.anim.fps,
-			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1,
+			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1, // filter
 		};
-		if (params.bg) json.bg = lns.canvas.bgColor;
+		if (params.bg) json.bg = lns.canvas.getBGColor();
 
 		if (single) {
 			json.l = _.cloneDeep(
@@ -92,10 +92,10 @@ function FilesIO(lns, params) {
 		saveFrame();
 	}
 
-	/* loads from src url */
+	/* loads from src url or dragged data ... */
 	function loadFile(file, fName) {
 		if (typeof file === 'string') { // url
-			fileName = f;
+			fileName = file;
 			if (fileName) {
 				if (fileName.slice(fileName.length - 5) !== '.json')  {
 					fileName += '.json';
@@ -103,19 +103,20 @@ function FilesIO(lns, params) {
 				fetch(fileName)
 					.then(response => { return response.json() })
 					.then(data => { 
+						console.log(data);
 						loadJSON(data, fileName.split('/').pop()); 
 					})
 					.catch(error => {console.error(error); });
 			}
-		} else {
-			// json
-			// fileName = f.name.split('.')[0];
+		} else { // json 
+			fileName = f.name.split('.')[0];
 			loadJSON(file, fName);
 		}
 	}
 
 	function loadJSON(data, fName) {
-		lns.anim = new Lines(lns.canvas.ctx, lns.render.dps, true);
+		console.log(data, fName);
+		lns.anim = new Animation(lns.canvas.ctx, lns.render.dps, true);
 		lns.anim.loadData(data, function() {
 			lns.canvas.setWidth(data.w);
 			lns.canvas.setHeight(data.h);
@@ -128,6 +129,7 @@ function FilesIO(lns, params) {
 		lns.ui.faces.title.value = fName;
 		lns.ui.faces.fps.value = data.fps;
 		document.title = fName + ' ~ animate';
+		console.log(data.w, data.h);
 		lns.ui.faces.width.value = data.w;
 		lns.ui.faces.height.value = data.h;
 		lns.anim.layers.forEach(layer => {
@@ -218,5 +220,5 @@ function FilesIO(lns, params) {
 		});
 	}
 
-	return { connect };
+	return { connect, loadFile };
 }

@@ -40,7 +40,7 @@ lns.draw = Draw(lns, {
 	wiggleSpeed: 0.1,
 	color: '#000000' 
 });
-lns.bg = BackgroundImage();
+lns.bg = Background();
 lns.data = Data(lns);
 lns.fio = FilesIO(lns, {
 	fit: false, /* fit to canvas when saving */
@@ -108,7 +108,7 @@ lns.ui.settings = new Settings(lns, {
 });
 lns.ui.settings.load();
 lns.draw.setDefaults();
-if (params.src) lns.fio.loadFile(params.src.split('.')[0]);
+if (params.src) lns.fio.loadFile(params.src);
 lns.render.start();
 lns.timeline.init();
 lns.render.toggleStats();

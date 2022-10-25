@@ -293,5 +293,5 @@ function Render(dps=30, showStats=false) {
 		});
 	}
 
-	return { connect, reset, start, toggleStats, setFrame };
+	return { connect, reset, start, toggleStats, setFrame, checkEnd };
 }
