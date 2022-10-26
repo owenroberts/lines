@@ -20,7 +20,6 @@ function Brush(lns) {
 	let fillArea = 10;
 	let fillStartPoint;
 
-
 	function add(drawing, origin) {
 
 		drawing.add(origin);

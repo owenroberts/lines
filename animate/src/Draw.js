@@ -135,11 +135,6 @@ function Draw(lns, defaults) {
 	let prevPosition = new Cool.Vector();
 	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
 
-	let isErasing = false;
-	let eraseDistance = 10;
-	let eraseMethod = 'points'; // points, lines
-
-	/* update all of this shit with returns */
 
 	function outSideCanvas(ev) {
 		if (ev.toElement !== lns.canvas.canvas) {
@@ -171,67 +166,13 @@ function Draw(lns, defaults) {
 		}
 	}
 
-	function erase(x, y) {
-		let mousePosition = new Cool.Vector(x, y).divide(lns.canvas.getScale()).round();
-
-		let layers = [];
-		for (let i = lns.anim.layers.length - 1; i >= 0; i--) {
-			const layer = lns.anim.layers[i];
-			
-			if (layer.isLocked) continue;
-			if (!layer.isInFrame(lns.anim.currentFrame)) continue;
-		
-			const drawing = lns.anim.drawings[layer.drawingIndex];
-			for (let j = drawing.points.length - 1; j >= 0; j--) {
-				const point = new Cool.Vector(drawing.points[j]);
-				const d = mousePosition.distance(point);
-				if (d < eraseDistance) {
-					if (eraseMethod === 'lines') {
-						let s = j, e = j; // start and end points
-						while (drawing.points[s] !== 'end' && s > 0) {
-							s--;
-						}
-						while (drawing.points[e] !== 'end' && e < drawing.length) {
-							e++;
-						}
-						drawing.points.splice(s, e);
-					} else if (eraseMethod === 'points') {
-						drawing.points[j] = 'end';
-					}
-				}
-			}
-
-			if (eraseMethod === 'points') {
-				for (let j = drawing.points.length - 1; j >= 0; j--) {
-					if (drawing.points[j] === 'end' && drawing.points[j - 1] === 'end') {
-						drawing.points.splice(j, 1);
-					}
-					if (drawing.points[j + 1] === 'end' && drawing.points[j - 1] === 'end') {
-						drawing.points.splice(j, 1);
-					}
-					if (drawing.points[j] === 'end' && j === 0) {
-						drawing.points.splice(j, 1);
-					}
-				}
-			}
-			
-			if (drawing.points.length === 0 && i !== lns.anim.layers.length - 1) {
-				layer.removeIndex(lns.anim.currentFrame, function() {
-					lns.anim.layers.splice(i, 1);
-					reset();
-				});
-			} else {
-				drawing.update(layer.drawProps);
-			}
-		}
-	}
-
 	function update(ev) {
 		if (performance.now() > mouseInterval + mouseTimer) {
 			mouseTimer = performance.now();
-			lns.mousePosition.x = ev.pageX;
-			lns.mousePosition.y = ev.pageY;
+			lns.mousePosition.x = Math.round(ev.pageX);
+			lns.mousePosition.y = Math.round(ev.pageY);
 
+			const drawing = getCurrentDrawing();
 			const point = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY))
 				.divide(lns.canvas.getScale())
 				.round();
@@ -241,12 +182,13 @@ function Draw(lns, defaults) {
 					lns.brush.add(getCurrentDrawing(), point);
 				} else {
 					if (lns.mousePosition.distance(prevPosition) > distanceThreshold) {
-						addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
+						// addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
+						drawing.add(point);
 						prevPosition = lns.mousePosition.clone();
 					}
 				}
-			} else if (isErasing) {
-				erase(Math.round(ev.offsetX), Math.round(ev.offsetY));
+			} else if (lns.eraser.isActive()) {
+				lns.eraser.erase(point);
 			}
 		}
 	}
@@ -259,11 +201,11 @@ function Draw(lns, defaults) {
 			.divide(lns.canvas.getScale())
 			.round();
 
-		if (ev.which >= 2) isErasing = true;
+		if (ev.which >= 2) lns.eraser.start();
 		if (ev.which == 1 && !lns.render.isPlaying && !ev.altKey) {
 
 			if (ev.ctrlKey) {
-				isErasing = true;
+				lns.eraser.start(point);
 			} else {
 				isDrawing = true;
 				mouseTimer = performance.now();
@@ -280,12 +222,13 @@ function Draw(lns, defaults) {
 	}
 
 	function end(ev) {
-		isErasing = false;
+		lns.eraser.end();
+
 		const drawing = getCurrentDrawing();
 		const point = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY))
 			.divide(lns.canvas.getScale())
 			.round();
-			
+
 		if (lns.brush.fillActive()) {
 			lns.brush.endFill(drawing, point);
 		} else if (ev.which === 1) {
@@ -413,19 +356,11 @@ function Draw(lns, defaults) {
 			},
 		}, 'draw');
 
-		
-
 		lns.ui.addCallbacks([
 			{ callback: quickColorSelect, key: 'g', text: 'Quick Color', row: true, },
 			{ callback: randomColor, key: 'shift-g', text: 'Random Color', },
 			{ callback: colorVariation, key: 'alt-g', text: 'Color Variation', },
 		], 'draw');
-
-		lns.ui.addProp('eraseMethod', {
-			type: 'UISelect',
-			option: ['points', 'lines'],
-			callback: value => { eraseMethod = value; },
-		}, 'erase');
 	}
 
 	return { 

@@ -41,6 +41,7 @@ lns.draw = Draw(lns, {
 	color: '#000000' 
 });
 lns.brush = Brush(lns);
+lns.eraser = Eraser(lns);
 lns.bg = Background();
 lns.data = Data(lns);
 lns.fio = FilesIO(lns, {
@@ -69,6 +70,7 @@ lns.canvas.connect();
 lns.render.connect();
 lns.draw.connect();
 lns.brush.connect();
+lns.eraser.connect();
 lns.bg.connect();
 lns.data.connect();
 lns.fio.connect();

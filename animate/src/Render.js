@@ -187,9 +187,6 @@ function Render(dps=30, showStats=false) {
 								'color', 
 								`rgba(105,150,255,${ 1.5 - (o / onionSkinNum) })`
 							);
-							/* 
-								this triggers capture, turn off onion skin for clean capture  -- think i did this?
-							*/
 							lns.anim.draw();
 						}
 					}
@@ -215,6 +212,8 @@ function Render(dps=30, showStats=false) {
 						l.dontDraw = false;
 					});
 				}
+
+				lns.eraser.display();
 			}
 
 			lns.anim.update();
