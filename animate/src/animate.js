@@ -40,6 +40,7 @@ lns.draw = Draw(lns, {
 	wiggleSpeed: 0.1,
 	color: '#000000' 
 });
+lns.brush = Brush(lns);
 lns.bg = Background();
 lns.data = Data(lns);
 lns.fio = FilesIO(lns, {
@@ -67,6 +68,7 @@ lns.ui.setup();
 lns.canvas.connect();
 lns.render.connect();
 lns.draw.connect();
+lns.brush.connect();
 lns.bg.connect();
 lns.data.connect();
 lns.fio.connect();

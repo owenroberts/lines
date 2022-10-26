@@ -127,22 +127,6 @@ function Draw(lns, defaults) {
 		lns.ui.faces.color.el.value = color; // el ?
 	} /* alt-g */
 
-	/* feels like a totally unrelated section ...*/
-
-	let isBrush = false;
-	let brushSpreadXLeft = 0;
-	let brushSpreadXRight = 0;
-	let brushSpreadYDown = 0;
-	let brushSpreadYUp = 0;
-	let brushSpreadMultiplier = 1;
-	let brushRandomX = 0;
-	let brushRandomY = 0;
-	let brushSegmentsMin = 1;
-	let brushSegmentsMax = 3;
-	let startDots = false;
-	let dots = 10;
-	let grass = 0;
-
 	// how often the mousemove records, default 30ms
 	let mouseTimer = performance.now();  //  independent of draw timer
 	let mouseInterval = 30;
@@ -185,37 +169,6 @@ function Draw(lns, defaults) {
 				else break;
 			}
 		}
-	}
-
-	function addBrush(x, y) {
-		const drawing = getCurrentDrawing();
-		let origin = new Cool.Vector(x, y);
-		origin.divide(lns.canvas.getScale());
-		drawing.add(origin.round());
-
-		const numPoints = Cool.randomInt(brushSegmentsMin, brushSegmentsMax);
-		for (let i = 1; i <= numPoints; i ++) {
-			let _x = Cool.random(-brushSpreadXLeft, brushSpreadXRight)
-				* brushSpreadMultiplier
-				* (i / numPoints) 
-				* (1 - Cool.random(brushRandomX));
-			let _y = Cool.random(-brushSpreadYDown, brushSpreadYUp)
-				* brushSpreadMultiplier
-				* (i / numPoints) 
-				* (1 - Cool.random(brushRandomY));
-
-			let point = new Cool.Vector(x + _x, y - _y);
-			point.divide(lns.canvas.getScale());
-			if (point.x > 0 && point.x < lns.canvas.getWidth() && 
-				point.y > 0 && point.y < lns.canvas.getHeight()) {
-				drawing.add(point.round());
-			}
-		}
-		drawing.add('end');
-	}
-
-	function addLine(x, y) {
-		getCurrentDrawing().add(new Cool.Vector(x, y).divide(lns.canvas.getScale()).round());
 	}
 
 	function erase(x, y) {
@@ -278,14 +231,19 @@ function Draw(lns, defaults) {
 			mouseTimer = performance.now();
 			lns.mousePosition.x = ev.pageX;
 			lns.mousePosition.y = ev.pageY;
+
+			const point = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY))
+				.divide(lns.canvas.getScale())
+				.round();
+
 			if (isDrawing) {
-				if (!isBrush) {
+				if (lns.brush.isActive()) {
+					lns.brush.add(getCurrentDrawing(), point);
+				} else {
 					if (lns.mousePosition.distance(prevPosition) > distanceThreshold) {
 						addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
 						prevPosition = lns.mousePosition.clone();
 					}
-				} else  {
-					addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
 				}
 			} else if (isErasing) {
 				erase(Math.round(ev.offsetX), Math.round(ev.offsetY));
@@ -295,59 +253,44 @@ function Draw(lns, defaults) {
 
 	function start(ev) {
 		ev.preventDefault();
+
+		const drawing = getCurrentDrawing();
+		const point = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY))
+			.divide(lns.canvas.getScale())
+			.round();
+
 		if (ev.which >= 2) isErasing = true;
 		if (ev.which == 1 && !lns.render.isPlaying && !ev.altKey) {
+
 			if (ev.ctrlKey) {
 				isErasing = true;
 			} else {
 				isDrawing = true;
 				mouseTimer = performance.now();
-				if (!isBrush) {
-					addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
-					prevPosition = lns.mousePosition.clone();
+				if (lns.brush.isActive()) {
+					lns.brush.add(drawing, point);
 				} else {
-					addBrush(Math.round(ev.offsetX), Math.round(ev.offsetY));
+					drawing.add(point);
+					prevPosition = lns.mousePosition.clone();
 				}
 			}
 		} else if (ev.altKey) {
-			startDots = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY));
+			lns.brush.startFill(point);
 		}
 	}
 
 	function end(ev) {
 		isErasing = false;
-		if (startDots) { // make func
-			const drawing = getCurrentDrawing();
-			const w = Math.abs(startDots.x - ev.offsetX);
-			const h = Math.abs(startDots.y - ev.offsetY);
-			const ratio =  w / h;
-			const c = w / (ratio * dots / 2);
-			const r = h / (1 / ratio * dots / 2);
-			let [startX, endX] = startDots.x < ev.offsetX ? 
-				[startDots.x, ev.offsetX] : 
-				[ev.offsetX, startDots.x];
-			let [startY, endY] = startDots.y < ev.offsetY ? 
-				[startDots.y, ev.offsetY] : 
-				[ev.offsetY, startDots.y];
+		const drawing = getCurrentDrawing();
+		const point = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY))
+			.divide(lns.canvas.getScale())
+			.round();
 			
-			for (let x = startX; x < endX; x += c) {
-				for (let y = startY; y < endY; y += r) {
-					const _x = Math.round(x) + Cool.randomInt(-c/2, c/2);
-					const _y = Math.round(y) + Cool.randomInt(-r/2, r/2);
-					const points = Cool.randomInt(1,3);
-					for (let i = 0; i < points; i ++) {
-						drawing.add(new Cool.Vector(
-							_x + Cool.randomInt(-1, 1),
-							_y + Cool.randomInt(-1, 1)
-						));
-					}
-					drawing.add('end');
-				}
-			}
-			startDots = false;
+		if (lns.brush.fillActive()) {
+			lns.brush.endFill(drawing, point);
 		} else if (ev.which === 1) {
 			isDrawing = false;
-			const drawing = getCurrentDrawing();
+			
 			let last = drawing.get(-2); /* prevent saving single point drawing segments */
 			if (last !== 'end' && last !== 'add' && drawing.length > 1) {
 				drawing.add(ev.shiftKey ? 'add' : 'end');
@@ -483,68 +426,6 @@ function Draw(lns, defaults) {
 			option: ['points', 'lines'],
 			callback: value => { eraseMethod = value; },
 		}, 'erase');
-
-		lns.ui.addProps({
-			'isBrush': {
-				type: 'UIToggleCheck',
-				value: isBrush,
-				label: 'Use Brush',
-				key: 'b',
-				callback: value => { isBrush = value; }
-			},
-			'dots': {
-				type: 'UINumberRange',
-				range: [10, 50],
-				value: 10,
-				callback: value => { dots = value; }
-			},
-			'brushSpreadXLeft': {
-				row: true,
-				type: 'UINumberRange',
-				range: [0, 50],
-				callback: value => { brushSpreadXLeft = value; },
-			},
-			'brushSpreadXRight': {
-				type: 'UINumberRange',
-				range: [0, 50],
-				callback: value => { brushSpreadXRight = value; },
-			},
-			'brushSpreadYDown': {
-				type: 'UINumberRange',
-				range: [0, 50],
-				callback: value => { brushSpreadYUp = value; },
-			},
-			'brushRandomX': {
-				type: 'UINumberRange',
-				range: [0, 1],
-				step: 0.01,
-				callback: value => { brushRandomX = value; },
-			},
-			'brushRandomY': {
-				type: 'UINumberRange',
-				range: [0, 1],
-				step: 0.01,
-				callback: value => { brushRandomY = value; },
-			},
-			'brushSegmentsMin': {
-				type: 'UINumberStep',
-				range: [1, 5],
-				value: 1,
-				callback: value => { brushSegmentsMin = value; },
-			},
-			'brushSegmentsMax': {
-				type: 'UINumberStep',
-				range: [1, 5],
-				value: 3,
-				callback: value => { brushSegmentsMax = value; },
-			},
-			'brushSpreadMultiplier': {
-				type: 'UINumberStep',
-				range: [1, 5],
-				value: 1,
-				callback: value => { brushSpreadMultiplier = value; },
-			},
-		}, 'brush')
 	}
 
 	return { 
