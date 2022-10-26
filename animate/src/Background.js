@@ -50,16 +50,21 @@ function Background() {
 
 			for (let x = 0; x <= gridColumns; x++) {
 				for (let y = 0; y <= gridRows; y++){
+					
 					let _x = x * w;
 					let _y = y * h;
+
+					const tempWidth = lns.canvas.getLineWidth();
+					lns.canvas.ctx.strokeStyle = gridColor;
+					lns.canvas.ctx.fillStyle = gridColor;
 					
 					if (lineGrid && y > 0 && y < gridRows) {
-						lns.canvas.ctx.strokeStyle = gridColor;
 						lns.canvas.ctx.beginPath();
 						lns.canvas.ctx.moveTo(_x, _y);
 						lns.canvas.ctx.lineTo(_x + w, _y);
 						lns.canvas.ctx.stroke();
 					}
+
 					if (lineGrid && x > 0 && x < gridColumns) {
 						lns.canvas.ctx.beginPath();
 						lns.canvas.ctx.moveTo(_x, _y);
@@ -67,13 +72,19 @@ function Background() {
 						lns.canvas.ctx.stroke();
 					}
 					
-					if (!dotGrid) continue;
-					if (dotEdges && (x === 0 || x === gridColumns)) continue;
-					if (dotEdges && (y === 0 || y === gridRows)) continue; 
-					lns.canvas.ctx.fillStyle = gridColor;
-					lns.canvas.ctx.beginPath();
-					lns.canvas.ctx.arc(_x, _y, dotSize, 0, Math.PI * 2);
-					lns.canvas.ctx.fill();
+					if (dotGrid) {
+						let drawDot = true;
+						if (dotEdges && (x === 0 || x === gridColumns)) drawDot = false;
+						if (dotEdges && (y === 0 || y === gridRows)) drawDot = false;
+					
+						if (drawDot) {
+							lns.canvas.ctx.beginPath();
+							lns.canvas.ctx.arc(_x, _y, dotSize, 0, Math.PI * 2);
+							lns.canvas.ctx.fill();
+						}
+					}
+					
+					lns.canvas.ctx.lineWidth = tempWidth; // remove after adding lw to layers later
 				}
 			}
 		}

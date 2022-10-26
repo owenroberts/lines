@@ -91,10 +91,14 @@ function Drawings(lns) {
 		}
 	}
 
+	function clear() {
+		panel.drawings.clear();
+	}
+
 	function connect() {
 		panel = lns.ui.getPanel('drawings');
 		panel.addRow('drawings');
 	}
 
-	return { connect, update };
+	return { connect, update, clear };
 }

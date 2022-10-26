@@ -102,6 +102,7 @@ function Data(lns) {
 	} /* v key */
 
 	function addMultipleCopies() {
+		saveState();
 		copyFrame = [];
 		let n = +prompt("Number of copies: ", 1);
 		copy();
@@ -115,6 +116,7 @@ function Data(lns) {
 	} /* shift - c */
 
 	function copyRange() {
+		saveState();
 		const start = +prompt("Start frame:");
 		const end = +prompt("end frame:");
 		copyFrames = [];
@@ -128,6 +130,7 @@ function Data(lns) {
 	} /* alt - c */
 
 	function pasteRange() {
+		saveState();
 		for (let i = 0; i < copyFrames.length; i++) {
 			const layers = copyFrames[i];
 			if (layers) {
@@ -143,7 +146,8 @@ function Data(lns) {
 	} /* alt - v */
 
 	function clearLines() {
-		lns.draw.drawing = new Drawing();
+		saveState();
+		lns.draw.setCurrentDrawing(new Drawing());
 	} /* x key */
 
 	function clearLayers() {
@@ -159,6 +163,7 @@ function Data(lns) {
 	} /* called by clear frame */
 
 	function cutTopLayer() {
+		saveState();
 		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
 			if (!lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) continue;
 			if (lns.anim.layers[i].groupNumber >= 0) continue;
@@ -171,6 +176,7 @@ function Data(lns) {
 	} /* ctrl - x */
 
 	function cutBottomLayer() {
+		saveState();
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			if (!lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) continue;
 			if (lns.anim.layers[i].groupNumber >= 0) continue;
@@ -183,16 +189,17 @@ function Data(lns) {
 	} /* alt - x */
 
 	function clearFrame() {
+		saveState();
 		clearLines();
 		clearLayers();
 	}	/* shift - x */
 
 	function deleteFrame(_index) {
-		const index = _index !== undefined ? _index : lns.anim.currentFrame;
 		saveState();
 
-		// -2 to skip draw layer
+		const index = _index !== undefined ? _index : lns.anim.currentFrame;
 		const f = lns.anim.currentFrame;
+		// -2 to skip draw layer
 		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
 			const layer = lns.anim.layers[i];
 			if (layer.endFrame < f) continue;
@@ -214,6 +221,7 @@ function Data(lns) {
 
 	function deleteFrameRange() {
 		saveState();
+
 		const startFrame = +prompt("Start frame:");
 		const endFrame = +prompt("End frame:");
 
@@ -228,10 +236,12 @@ function Data(lns) {
 	} /* shift - d */
 
 	function cutLastSegment() {
+		saveState();
 		lns.draw.pop(); 
 	} /* z key */
 
 	function cutLastLine() {
+		saveState();
 		lns.draw.popOff();
 	} /* shift z */
 
@@ -249,6 +259,7 @@ function Data(lns) {
 
 	function quickAnimate(type) {
 		lns.draw.reset();
+		saveState();
 		const n = +prompt('Number of frames?');
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
@@ -298,6 +309,7 @@ function Data(lns) {
 	} /* a key */
 
 	function offsetDrawing(offset) {
+		saveState();
 		// get toggled layers or offset all layers in frame
 		let layers = lns.anim.layers.filter(layer => layer.isToggled);
 		if (layers.length == 0) {
@@ -322,10 +334,13 @@ function Data(lns) {
 	} /* q key  */
 
 	function applyOffset() {
+		saveState();
 		for (let i = 0; i < lns.anim.layers.length; i++) {
 			const layer = lns.anim.layers[i];
 			const drawing = lns.anim.drawings[layer.drawingIndex];
 			for (let i = 0; i < drawing.length; i++) {
+				if (drawing.points[i] === 'end') continue;
+				if (drawing.points[i] === 'add') continue;
 				drawing.points[i][0] += layer.x;
 				drawing.points[i][1] += layer.y;
 			}
@@ -335,6 +350,7 @@ function Data(lns) {
 	}
 
 	function pruneDrawings() {
+		saveState();
 
 		const nonNulls = []
 

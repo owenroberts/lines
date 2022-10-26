@@ -14,7 +14,7 @@ function Draw(lns, defaults) {
 
 	// use this ??
 	function setCurrentDrawing(drawing) {
-		lns.anim.drawings[lns.anim.drawings.length = 1] = drawing;
+		lns.anim.drawings[lns.anim.drawings.length - 1] = drawing;
 	}
 
 	lns.anim.drawings.push(new Drawing());
@@ -71,7 +71,7 @@ function Draw(lns, defaults) {
 	function cutEnd() {
 		/* make sure draw layer doesn't extend to far */
 		let endFrame = 0;
-		// write with reduce
+		// rewrite with reduce
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
 			if (layer.endFrame > endFrame) endFrame = layer.endFrame;
@@ -114,7 +114,7 @@ function Draw(lns, defaults) {
 
 	function randomColor() {
 		const color = '#' + Math.floor(Math.random()*16777215).toString(16);
-		setProperty(color, 'color');
+		setProperty('color', color);
 		lns.ui.faces.color.el.value = color;
 	} /* shift-g */
 
@@ -123,7 +123,7 @@ function Draw(lns, defaults) {
 		n += Cool.randomInt(-500, 500);
 		n = Math.max(0, n);
 		const color = '#' + n.toString(16);
-		setProperty(color, 'color');
+		setProperty('color', color);
 		lns.ui.faces.color.el.value = color; // el ?
 	} /* alt-g */
 
@@ -417,17 +417,11 @@ function Draw(lns, defaults) {
 		const drawPanel = lns.ui.getPanel('draw', { label: 'Lines' });
 
 		lns.ui.addCallbacks([
-			{ callback: quickColorSelect, key: 'g', text: 'Quick Color', },
-			{ callback: randomColor, key: 'shift-g', text: 'Random Color', },
-			{ callback: colorVariation, key: 'alt-g', text: 'Color Variation', },
+			{ callback: reset, key: 'r', text: 'Save Lines' },
+			{ callback: setDefaults, text: 'Reset Defaults' },
 		], 'draw');
 
 		lns.ui.addProps({
-			'color': {
-				type: 'UIColor',
-				value: defaults.color, // huh lns.anim.getProps ? 
-				callback: value => { setProperty('color', value); }
-			},
 			'linesInterval': {
 				type: 'UINumberStep',
 				value: defaults.linesInterval,
@@ -468,12 +462,20 @@ function Draw(lns, defaults) {
 				type: 'UIToggleCheck',
 				value: defaults.breaks,
 				callback: value => { setProperty('breaks', value); }
-			}
+			},
+			'color': {
+				type: 'UIColor',
+				value: defaults.color, // huh lns.anim.getProps ? 
+				callback: value => { setProperty('color', value); }
+			},
 		}, 'draw');
 
+		
+
 		lns.ui.addCallbacks([
-			{ callback: reset, key: 'r', text: 'Save Lines' },
-			{ callback: setDefaults, text: 'Reset Defaults' },
+			{ callback: quickColorSelect, key: 'g', text: 'Quick Color', row: true, },
+			{ callback: randomColor, key: 'shift-g', text: 'Random Color', },
+			{ callback: colorVariation, key: 'alt-g', text: 'Color Variation', },
 		], 'draw');
 
 		lns.ui.addProp('eraseMethod', {
@@ -547,7 +549,9 @@ function Draw(lns, defaults) {
 
 	return { 
 		connect, reset, setDefaults, 
-		getDrawLayer, getCurrentDrawing, hasDrawing, 
+		getDrawLayer, getCurrentDrawing, setCurrentDrawing,
+		popOff, pop, cutEnd,
+		hasDrawing, 
 		setProperties,
 		isDrawing() { return isDrawing; },
 		stop() { isDrawing = false; },

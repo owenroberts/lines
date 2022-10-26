@@ -103,7 +103,6 @@ function FilesIO(lns, params) {
 				fetch(fileName)
 					.then(response => { return response.json() })
 					.then(data => { 
-						console.log(data);
 						loadJSON(data, fileName.split('/').pop()); 
 					})
 					.catch(error => {console.error(error); });
@@ -115,7 +114,6 @@ function FilesIO(lns, params) {
 	}
 
 	function loadJSON(data, fName) {
-		console.log(data, fName);
 		lns.anim = new Animation(lns.canvas.ctx, lns.render.dps, true);
 		lns.anim.loadData(data, function() {
 			lns.canvas.setWidth(data.w);
@@ -129,7 +127,6 @@ function FilesIO(lns, params) {
 		lns.ui.faces.title.value = fName;
 		lns.ui.faces.fps.value = data.fps;
 		document.title = fName + ' ~ animate';
-		console.log(data.w, data.h);
 		lns.ui.faces.width.value = data.w;
 		lns.ui.faces.height.value = data.h;
 		lns.anim.layers.forEach(layer => {

@@ -147,7 +147,7 @@ const LayerMixin = {
 	},
 
 	getCloneProps() {
-		return props = {
+		return {
 			drawingIndex: this.drawingIndex,
 			segmentNum: this.segmentNum,
 			jiggleRange: this.jiggleRange,

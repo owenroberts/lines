@@ -143,7 +143,7 @@ function Render(dps=30, showStats=false) {
 
 	function update(time) {
 		if (showStats) stats.begin();
-		if (performance.now() > interval + timer || time == 'cap') {
+		if (performance.now() > interval + timer || time === 'cap') {
 			timer = performance.now();
 
 			// what actually need to be update here ?
@@ -155,6 +155,7 @@ function Render(dps=30, showStats=false) {
 					canvas.getWidth(), canvas.getHeight()
 					or lns.ui.faces.width, lns.ui.faces.height ... 
 				*/
+				// console.log('clear');
 				lns.canvas.ctx.clearRect(0, 0, lns.canvas.getWidth(), lns.canvas.getHeight());
 				clearCount = 0;
 			} else {
@@ -164,51 +165,56 @@ function Render(dps=30, showStats=false) {
 			/* in capture set animation onDraw 
 				move this logic to capture
 			*/
-			if (lns.capture.bg && (lns.capture.frames > 0 || lns.capture.isVideo)) {
+			if (lns.capture.withBackground() && 
+				(lns.capture.isCapturing() || lns.capture.isVideo())) {
+				// console.log('fill bg')
 				lns.canvas.ctx.fillStyle = lns.canvas.getBGColor();
 				lns.canvas.ctx.fillRect(0, 0, lns.canvas.getWidth(), lns.canvas.getHeight());
 			}
 
-			lns.bg.display(); // part of canvas module?
+			// ignore bg, onion, highlight while capturing
+			if (!lns.capture.isCapturing() && !lns.capture.isVideo()) {
+				lns.bg.display(); // part of canvas module?
 
-			// onion skin
-			if (onionSkinNum > 0 && onionSkinIsVisible) {
-				const temp = lns.anim.currentFrame;
-				for (let o = 1; o <= onionSkinNum; o++){
-					const index = temp - o;
-					if (index >= 0) {
-						lns.anim.currentFrame = index;
-						lns.anim.overrideProperty(
-							'color', 
-							`rgba(105,150,255,${ 1.5 - (o / onionSkinNum) })`
-						);
-						/* 
-							this triggers capture, turn off onion skin for clean capture  -- think i did this?
-						*/
-						lns.anim.draw();
+				// onion skin
+				if (onionSkinNum > 0 && onionSkinIsVisible) {
+					const temp = lns.anim.currentFrame;
+					for (let o = 1; o <= onionSkinNum; o++){
+						const index = temp - o;
+						if (index >= 0) {
+							lns.anim.currentFrame = index;
+							lns.anim.overrideProperty(
+								'color', 
+								`rgba(105,150,255,${ 1.5 - (o / onionSkinNum) })`
+							);
+							/* 
+								this triggers capture, turn off onion skin for clean capture  -- think i did this?
+							*/
+							lns.anim.draw();
+						}
 					}
+					lns.anim.cancelOverride();
+					lns.anim.currentFrame = temp;
 				}
-				lns.anim.cancelOverride();
-				lns.anim.currentFrame = temp;
-			}
 
-			// highlight
-			// difficulty of making this generic .. think about
-			if (lns.anim.layers.some(l => l.isHighlighted)) {
-				lns.anim.overrideProperty('color', '#94dfe3');
-				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
-					const layer = lns.anim.layers[i];
-					if (!layer.isInFrame(lns.anim.currentFrame) || !layer.isHighlighted) {
-						layer.dontDraw = true;
+				// highlight
+				// difficulty of making this generic .. think about
+				if (lns.anim.layers.some(l => l.isHighlighted)) {
+					lns.anim.overrideProperty('color', '#94dfe3');
+					for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
+						const layer = lns.anim.layers[i];
+						if (!layer.isInFrame(lns.anim.currentFrame) || !layer.isHighlighted) {
+							layer.dontDraw = true;
+						}
 					}
+					lns.canvas.ctx.lineWidth = 5; // set through ui or make it a class
+					lns.anim.draw(0, 0, true);
+					lns.anim.cancelOverride();
+					lns.canvas.ctx.lineWidth = lns.canvas.getLineWidth();
+					lns.anim.layers.filter(l => l.dontDraw).forEach(l => {
+						l.dontDraw = false;
+					});
 				}
-				lns.canvas.ctx.lineWidth = 5; // set through ui or make it a class
-				lns.anim.draw(0, 0, true);
-				lns.anim.cancelOverride();
-				lns.canvas.ctx.lineWidth = lns.canvas.getLineWidth();
-				lns.anim.layers.filter(l => l.dontDraw).forEach(l => {
-					l.dontDraw = false;
-				});
 			}
 
 			lns.anim.update();
@@ -293,5 +299,8 @@ function Render(dps=30, showStats=false) {
 		});
 	}
 
-	return { connect, reset, start, toggleStats, setFrame, checkEnd };
+	return { 
+		connect, reset, start, update, toggleStats, setFrame, checkEnd, next,
+		getDPS() { return dps; },
+	};
 }
