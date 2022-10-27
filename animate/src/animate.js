@@ -1,6 +1,6 @@
 const { Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
 const { Interface, Settings } = UI;
-const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect } = UI.Elements;
+const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText } = UI.Elements;
 const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
@@ -62,7 +62,7 @@ lns.states = States(lns);
 lns.palette = Palette(lns);
 lns.drawings = Drawings(lns);
 lns.timeline = Timeline();
-lns.animator = AnimatorUI();
+lns.animator = AnimatorUI(lns);
 
 lns.ui = Interface(lns, { useMain: false });
 lns.ui.setup();
@@ -106,8 +106,8 @@ lns.ui.settings = new Settings(lns, {
 			palettes: lns.palette.getPalettes(), 
 		};
 	},
-	addLoad(settings) {
-		lns.palette.setup(settings.palettes);
+	appLoad(settings) {
+		lns.palette.setup(settings.interface.palettes);
 	}
 });
 lns.ui.settings.load();

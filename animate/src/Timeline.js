@@ -144,7 +144,9 @@ function Timeline() {
 							gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
 							gridColumnStart: startFrame * 2 + 1,
 							gridColumnEnd: endFrame * 2 + 3
-						}
+						},
+						update() { lns.ui.update(); },
+						reset() { resetLayers(); },
 					});
 
 					gridRowStart += 2;
@@ -198,7 +200,7 @@ function Timeline() {
 							groupSelector.addBreak('Groups:');
 							let groupSelect = new UISelect({});
 							for (let i = 0; i < groups.length; i++) {
-								groupSelect.addOption(i, i === 0, groups[i]);
+								groupSelect.addOption(i, groups[i]);
 							}
 							groupSelector.add(groupSelect);
 							groupSelector.addBreak();
@@ -216,7 +218,11 @@ function Timeline() {
 					},
 					setLinesProperties: function() {
 						lns.draw.setProperties(layer.getEditProps(), true); // set ui only
-					}
+					},
+					update() { lns.ui.update(); },
+					reset() { resetLayers(); },
+					
+					remove(layer) { lns.anim.removeLayer(layer); },
 				});
 				
 				gridRowStart += 2;

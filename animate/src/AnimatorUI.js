@@ -2,7 +2,7 @@
 	add randomized tweens
 	anim needs to be longer than 1 frame
 */
-function AnimatorUI() {
+function AnimatorUI(lns) {
 
 	let panel;
 	let animator;
@@ -15,24 +15,20 @@ function AnimatorUI() {
 
 			panel.add(new UILabel({
 				text: param
-			}), row1);
+			}), 'label', row1);
 
 			const row2 = panel.addRow();
-			panel.add(new UINumber({
+			panel.add(new UINumberStep({
 				text: "Min",
 				value: range[0],
-				callback: function(n) {
-					range[0] = +n;
-				}
-			}), row2, 'min');
+				callback: n => { range[0] = n; }
+			}), 'min', row2, );
 
-			panel.add(new UINumber({
+			panel.add(new UINumberStep({
 				text: "Max",
 				value: range[1],
-				callback: function(n) {
-					range[1] = +n;
-				}
-			}), row2, 'max');
+				callback: n => { range[1] = n; }
+			}), 'max', row2);
 		}
 	}
 

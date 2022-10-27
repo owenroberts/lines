@@ -6,7 +6,10 @@ class UITimelineGroup extends UICollection {
 		this.addClass('group');
 		this.startFrame = params.startFrame;
 		this.endFrame = params.endFrame;
+		this.update = params.update;
+		this.reset = params.reset;
 		const width = params.width;
+
 
 		this.isToggled = false;
 		const self = this;
@@ -83,11 +86,11 @@ class UITimelineGroup extends UICollection {
 			type: 'group-breakup',
 			class: btnClass,
 			text: isModal ? 'Break up' : 'X',
-			callback: function() {
+			callback: () => {
 				layers.forEach(layer => {
 					layer.groupNumber = -1;
 				});
-				lns.ui.update();
+				this.update();
 			}
 		});
 
@@ -97,9 +100,9 @@ class UITimelineGroup extends UICollection {
 			text: isModal ? 'Remove Layer' : 'R',
 			callback: () => {
 				
-				const clearFunc = function() {
-					lns.timeline.resetLayers()
-					lns.ui.update();
+				const clearFunc = () => {
+					this.reset();
+					this.update();
 				};
 
 				const modal = new UIModal({
@@ -141,7 +144,7 @@ class UITimelineGroup extends UICollection {
 						layer.endFrame = +value;
 					}
 				});
-				lns.ui.update();
+				this.update();
 			}
 		});
 
@@ -156,7 +159,7 @@ class UITimelineGroup extends UICollection {
 						layer.startFrame = +value;
 					}
 				});
-				lns.ui.update();
+				this.update();
 			}
 		});
 
@@ -167,11 +170,9 @@ class UITimelineGroup extends UICollection {
 
 		const modal = new UIModal({
 			title: 'Edit Group', 
-			app: lns, 
+			app: lns,
 			position: this.position, 
-			callback: () => {
-				lns.ui.update();
-			}
+			callback: () => { this.update(); }
 		});
 
 		const uis = this.getPropUIs(layers, params, true);

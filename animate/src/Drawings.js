@@ -11,7 +11,6 @@ function Drawings(lns) {
 		// this would be easier if layrs inside of drawing ...
 		const layers = lns.anim.layers
 			.filter((layer, index) => index < lns.anim.layers.length - 1 && layer.drawingIndex == drawingIndex);
-		// console.log(drawingIndex, layers);
 
 		if (layers.length > 0) {
 			// get a layer in the current frame if it exists
@@ -37,57 +36,55 @@ function Drawings(lns) {
 	}
 
 	function update() {
-		panel.drawings.clear();
+		clear();
 		// -1 to ignore draw drawing
 		for (let i = 0; i < lns.anim.drawings.length - 1; i++) {
-			if (lns.anim.drawings[i]) {
-				// const drawing = lns.anim.drawings[i];
-				let layer = getLayer(i); /* check for existing layer */
-
-				panel.append(new UIToggle({
-					text: i,
-					isOn: layer ? layer.isInFrame(lns.anim.currentFrame) : false,
-					callback: function(isOn) {
-						let layer = getLayer(i);
-						if (isOn) { /* add */
-							if (layer) {
-								if (layer.isInFrame(lns.anim.currentFrame) ||
-									layer.isInFrame(lns.anim.currentFrame - 1) ||
-									layer.isInFrame(lns.anim.currentFrame + 1)) {
-									layer.addIndex(lns.anim.currentFrame);
-								} else {
-									const props = layer.getCloneProps();
-									props.startFrame = props.endFrame = lns.anim.currentFrame;
-									lns.anim.addLayer(new Layer(props));
-								}
+			if (!lns.anim.drawings[i]) continue;
+			// const drawing = lns.anim.drawings[i];
+			let layer = getLayer(i); /* check for existing layer */
+			panel.drawings.append(new UIToggle({
+				text: i,
+				isOn: layer ? layer.isInFrame(lns.anim.currentFrame) : false,
+				callback: isOn => {
+					let layer = getLayer(i);
+					if (isOn) { /* add */
+						if (layer) {
+							if (layer.isInFrame(lns.anim.currentFrame) ||
+								layer.isInFrame(lns.anim.currentFrame - 1) ||
+								layer.isInFrame(lns.anim.currentFrame + 1)) {
+								layer.addIndex(lns.anim.currentFrame);
 							} else {
-								// get props
-								lns.anim.addLayer(new Layer({
-									drawingIndex: i,
-									linesInterval: +lns.ui.faces.linesInterval.value,
-									segmentNum: +lns.ui.faces.segmentNum.value,
-									jiggleRange: +lns.ui.faces.jiggleRange.value,
-									wiggleRange: +lns.ui.faces.wiggleRange.value,
-									wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
-									color: lns.ui.faces.color.value,
-									startFrame: lns.anim.currentFrame,
-								}));
+								const props = layer.getCloneProps();
+								props.startFrame = props.endFrame = lns.anim.currentFrame;
+								lns.anim.addLayer(new Layer(props));
 							}
-						} else { /* remove */
-							if (layer) {
-								if (layer.isInFrame(lns.anim.currentFrame)) {
-									const newLayer = layer.removeIndex(lns.anim.currentFrame, () => {
-										lns.anim.removeLayer(layer);
-									});
-									if (newLayer) lns.anim.addLayer(newLayer);
-								} 
-							} 
+						} else {
+							// get props
+							lns.anim.addLayer(new Layer({
+								drawingIndex: i,
+								linesInterval: +lns.ui.faces.linesInterval.value,
+								segmentNum: +lns.ui.faces.segmentNum.value,
+								jiggleRange: +lns.ui.faces.jiggleRange.value,
+								wiggleRange: +lns.ui.faces.wiggleRange.value,
+								wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
+								color: lns.ui.faces.color.value,
+								startFrame: lns.anim.currentFrame,
+							}));
 						}
-						
-						lns.ui.update();
+					} else { /* remove */
+						if (layer) {
+							if (layer.isInFrame(lns.anim.currentFrame)) {
+								const newLayer = layer.removeIndex(lns.anim.currentFrame, () => {
+									lns.anim.removeLayer(layer);
+								});
+								if (newLayer) lns.anim.addLayer(newLayer);
+							} 
+						} 
 					}
-				}), i);
-			}
+					
+					lns.ui.update();
+				}
+			}), i);
 		}
 	}
 

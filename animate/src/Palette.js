@@ -4,33 +4,63 @@
 
 function Palette(lns) {
 	
-	let panel;
-	const palettes = {}; // palette.palettes ? what about list?
-	let current;
+	const palettes = {};
+	let current; // face
+	let panel, currentSelect;
 	let keyIndex = 1;
+	let resetOnChange = true; // will save lines before changing
+
+	// list of props/faces to save
+	const paletteProps = [
+		
+		// layer
+		'linesInterval',
+		'segmentNum',
+		'jiggleRange',
+		'wiggleRange',
+		'wiggleSpeed',
+		'wiggleSegments',
+		'breaks',
+		'color',
+
+		// brush
+		'brushIsActive',
+		'brushSpreadXLeft',
+		'brushSpreadXRight',
+		'brushSpreadYDown',
+		'brushSpreadYUp',
+		'brushSpreadMultiplier',
+		'brushRandomX',
+		'brushRandomY',
+		'brushSegmentsMin',
+		'brushSegmentsMax',
+
+		// mouse
+		'mouseInterval',
+		'distanceThreshold',
+
+		// env
+		'lineWidth',
+	];
 
 	function add() {
 		lns.draw.reset();
-		const name = current = prompt('Name this palette.');
+		const name = prompt('Name this palette.');
+		if (!name) return;
+		current = name;
 		if (name) {
-			palettes[name] = {
-				color: lns.draw.layer.color,
-				segmentNum: lns.draw.layer.segmentNum,
-				jiggleRange: lns.draw.layer.jiggleRange,
-				wiggleRange: lns.draw.layer.wiggleRange,
-				wiggleSpeed: lns.draw.layer.wiggleSpeed,
-				wiggleSegments: lns.draw.layer.wiggleSegments,
-				breaks: lns.draw.layer.breaks,
-				linesInterval: lns.draw.layer.linesInterval,
-				lineWidth: lns.canvas.ctx.lineWidth,
-				mouseInterval: lns.draw.mouseInterval,
-				brush: lns.draw.brush,
-				brushSpread: lns.draw.brushSpread,
-				dots: lns.draw.dots,
-				grass: lns.draw.grass
-			}; // get props ... 
+			palettes[name] = createPallete();
+			console.log('palettes', palettes);
 			addUI(name);
 		}
+	}
+
+	function createPallete(data) {
+		const palette = { ...data }; // data to create pallettes from existing layers
+		paletteProps.forEach(prop => {
+			if (!palette[prop]) palette[prop] = lns.ui.faces[prop].value;
+		});
+		return palette;
 	}
 
 	function addUI(name) {
@@ -38,8 +68,21 @@ function Palette(lns) {
 		
 		const b = panel.add(new UIButton({
 			text: name,
+			class: 'left-end',
 			callback: () => { load(name); }
-		})); // why ??
+		}));
+
+		panel.add(new UIButton({
+			text: '✎',
+			class: 'right-end',
+			callback: () => {
+				let rename = prompt('Rename: ');
+				if (!rename) return;
+				palettes[rename] = _.cloneDeep(palettes[name]); // remove clone
+				addUI(rename);
+				remove(name);
+			}
+		}));
 
 		let thisKey = '+';
 		if (keyIndex < 10) {
@@ -59,15 +102,6 @@ function Palette(lns) {
 		b.key = key;
 		panel.add(key);
 
-		panel.add(new UIButton({
-			text: '✎',
-			callback: function() {
-				const rename = prompt('Rename: ');
-				palettes[rename] = _.cloneDeep(palettes[name]); // remove clone
-				addUI(rename);
-				remove(name);
-			}
-		}));
 
 		panel.add(new UIButton({
 			text: 'X',
@@ -82,45 +116,26 @@ function Palette(lns) {
 
 	function setup(data) {
 		for (const key in data) {
-			if (key === 'current') continue;
 			addUI(key);
 			palettes[key] = data[key];
+			currentSelect.addOption(key);
 		}
-		if (data.current) load(data.current);
 	}
 
 	function load(name) {
-		lns.draw.reset();
-		palettes.current = name;
+		if (resetOnChange) lns.draw.reset();
 		const palette = palettes[name];
-		for (prop in palette) {
+		for (const prop in palette) {
 			if (lns.ui.faces[prop] === undefined) continue;
 			lns.ui.faces[prop].update(palette[prop]);
 		}
 	}
 
 	function buildFromAnimation() {
-		for (let i = 0; i < lns.anim.layers.length; i++) {
+		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const name = `Layer ${i}`;
 			const layer = lns.anim.layers[i];
-			// replace with paletteProps
-			const newPalette = {
-				color: layer.color,
-				segmentNum: layer.segmentNum,
-				jiggleRange: layer.jiggleRange,
-				wiggleRange: layer.wiggleRange,
-				wiggleSpeed: layer.wiggleSpeed,
-				wiggleSegments: layer.wiggleSegments,
-				linesInterval: lns.draw.layer.linesInterval,
-				breaks: layer.breaks,
-				lineWidth: lns.canvas.ctx.lineWidth,
-				mouseInterval: lns.draw.mouseInterval,
-				brush: 0,
-				brushSpread: lns.draw.brushSpread,
-				dots: lns.draw.dots,
-				grass: lns.draw.grass
-			}; // get from layer
-			
+			const newPalette = createPallete(layer.getEditProps());
 			let isACopy = false;
 			for (const key in palettes) {
 				const palette =  palettes[key];
@@ -168,18 +183,38 @@ function Palette(lns) {
 	function connect(){
 		panel = lns.ui.getPanel('palette');
 
+		currentSelect = lns.ui.addProp('currentPalette', {
+			type: 'UISelect',
+			value: 'None',
+			options: ['None'],
+			callback: value => { current = value; },
+		});
+		
+		lns.ui.addProps({
+			'paletteResetOnChange': {
+				type: 'UIToggleCheck',
+				value: resetOnChange,
+				label: 'Reset',
+				callback: value => { resetOnChange = value; },
+			}
+		});
+
 		lns.ui.addCallbacks([
-			{ callback: saveFile, text: 'Save File', },
+			{ callback: saveFile, text: 'Save File', row: true, },
 			{ callback: buildFromAnimation, key: 'shift-p', text: 'Build', },
-			{ callback: add, key: 'p', text: '+', },
 			{ callback: quickSelect, key: 'q', text: 'Quick Select', },
 		]);
 
 		panel.add(new UIFile({
 			text: 'Load File',
+			promptDefault: 'palettes',
 			callback: data => { setup(data) }
 		}));
+
+		lns.ui.addCallbacks([
+			{ callback: add, key: 'p', text: '+', row: true, },
+		]);
 	}
 
-	return { connect, getPalettes() { return palettes; } };
+	return { connect, setup, getPalettes() { return palettes; } };
 }

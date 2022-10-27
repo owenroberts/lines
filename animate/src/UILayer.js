@@ -5,6 +5,10 @@ class UILayer extends UICollection {
 		this.layer = layer;
 		if (params.canMoveUp) this.canMoveUp = params.canMoveUp;
 		const width = params.width;
+		this.update = params.update;
+		this.reset = params.reset;
+		this.remove = params.remove;
+		this.drawReset = params.drawReset;
 
 		const toggle = new UIToggle({
 			btnClass: 'layer-toggle',
@@ -83,8 +87,8 @@ class UILayer extends UICollection {
 			text: isModal ? "Remove" : "X",
 			class: btnClass,
 			callback: () => {
-				lns.anim.removeLayer(layer);
-				lns.ui.update();
+				this.remove(layer);
+				this.update();
 			}
 		});
 
@@ -99,7 +103,7 @@ class UILayer extends UICollection {
 				if (+value > layer.endFrame) {
 					layer.endFrame = +value;
 				}
-				lns.ui.update();
+				this.update();
 			}
 		});
 
@@ -112,7 +116,7 @@ class UILayer extends UICollection {
 				if (+value < layer.startFrame) {
 					layer.startFrame = +value;
 				}
-				lns.ui.update();
+				this.update();
 			}
 		});
 
@@ -121,7 +125,7 @@ class UILayer extends UICollection {
 			text: isModal ? 'Lock' : 'L',
 			class: btnClass,
 			isOn: layer.isLocked,
-			callback: function(value) {
+			callback: (value) => {
 				layer.isLocked = value;
 			}
 		});
@@ -142,9 +146,9 @@ class UILayer extends UICollection {
 			}
 		});
 
-		const clearFunc = function() {
-			lns.timeline.resetLayers()
-			lns.ui.update();
+		const clearFunc = () => {
+			this.reset()
+			this.update();
 		};
 
 		uis.merge = new UIButton({
@@ -237,7 +241,7 @@ class UILayer extends UICollection {
 		modal.add(new UIButton({
 			text: "Line to Layer",
 			callback: () => {
-				lns.draw.reset();
+				this.drawReset();
 				const drawing = lns.anim.drawings[layer.drawingIndex];
 				const points = [drawing.pop()]; // end
 				for (let i = drawing.length - 1; i > 0; i--) {
@@ -245,8 +249,8 @@ class UILayer extends UICollection {
 					if ( p!== 'end') lns.draw.drawing.add(p);
 					else break;
 				}
-				lns.draw.reset();
-				lns.ui.update();
+				this.drawReset();
+				this.update();
 			}
 		}));
 
@@ -263,6 +267,7 @@ class UILayer extends UICollection {
 		modal.add(new UIButton({
 			text: "Split",
 			callback: () => {
+				// move to layer mixin
 				const props = layer.getCloneProps();
 				props.startFrame = lns.anim.currentFrame + 1;
 				layer.endFrame = lns.anim.currentFrame;
@@ -291,7 +296,7 @@ class UILayer extends UICollection {
 			callback: () => {
 				tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
 				layer.addTween(tween);
-				lns.ui.update();
+				this.update();
 			}
 		});
 
