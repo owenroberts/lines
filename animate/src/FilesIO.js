@@ -8,6 +8,30 @@ function FilesIO(lns, params) {
 	let saveFilesEnabled = false;
 	let fileName = undefined;
 
+	function getSaveData(isSingleFrame) {
+
+		const json = {
+			v: "2.5",
+			w: +lns.canvas.getWidth(),
+			h: +lns.canvas.getHeight(),
+			fps: +lns.anim.fps,
+			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1, // filter
+		};
+		if (params.bg) json.bg = lns.canvas.getBGColor();
+
+		lns.draw.reset();
+		lns.render.checkEnd();
+		
+
+		// get props or clone drawings and layers ??
+
+
+	}
+
+	function saveLocal() {
+		const data = getSaveData(false);
+	}
+
 	function saveFile(single, callback) {
 
 		lns.draw.reset();
@@ -18,8 +42,7 @@ function FilesIO(lns, params) {
 
 		fileName = lns.ui.faces.title.value || prompt("Name this file:");
 
-		if (params.fit && confirm("Fit canvas?"))
-			lns.canvas.fitCanvasToDrawing();
+		if (params.fit && confirm("Fit canvas?")) lns.canvas.fitCanvasToDrawing();
 
 		const json = {
 			v: "2.5",
