@@ -17,17 +17,15 @@ if (params.render === 'pixel') {
 	Object.assign(Lines.prototype, PixelMixin);
 }
 
-/*
-	lns.renderer = Renderer({
-		id: 'lines',
-		width: 512,
-		height: 512,
-		bgColor: '#ffffff',
-		retina: true,
-		dps: 30,
-		stats: true
-	});
-*/
+lns.renderer = Renderer({
+	id: 'lines',
+	width: 512,
+	height: 512,
+	bgColor: '#ffffff',
+	retina: true,
+	dps: 30,
+	stats: true
+});
 
 // modules
 lns.canvas = Canvas("lines", 512, 512, "#ffffff", true);
@@ -43,7 +41,7 @@ lns.draw = Draw(lns, {
 });
 lns.brush = Brush(lns);
 lns.eraser = Eraser(lns);
-lns.bg = Background();
+lns.bg = Background(lns);
 lns.data = Data(lns);
 lns.fio = FilesIO(lns, {
 	fit: false, /* fit to canvas when saving */

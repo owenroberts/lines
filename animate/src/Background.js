@@ -5,7 +5,9 @@
 	use css for this ?
 */
 
-function Background() {
+function Background(lns) {
+
+	const { canvas, ctx } = lns.canvas;
 
 	let img = new Image();
 	let show = true;
@@ -35,11 +37,11 @@ function Background() {
 	function display() {
 		if (img.src && show) {
 			if (rotation > 0) {
-				lns.canvas.ctx.save();
-				lns.canvas.ctx.rotate(rotation * Math.PI / 180);
+				ctx.save();
+				ctx.rotate(rotation * Math.PI / 180);
 			}
-			lns.canvas.ctx.drawImage(img, x, y, size * width, height * size);
-			if (rotation > 0) lns.canvas.ctx.restore();
+			ctx.drawImage(img, x, y, size * width, height * size);
+			if (rotation > 0) ctx.restore();
 		}
 
 		if (dotGrid || lineGrid) {
@@ -55,21 +57,21 @@ function Background() {
 					let _y = y * h;
 
 					const tempWidth = lns.canvas.getLineWidth();
-					lns.canvas.ctx.strokeStyle = gridColor;
-					lns.canvas.ctx.fillStyle = gridColor;
+					ctx.strokeStyle = gridColor;
+					ctx.fillStyle = gridColor;
 					
 					if (lineGrid && y > 0 && y < gridRows) {
-						lns.canvas.ctx.beginPath();
-						lns.canvas.ctx.moveTo(_x, _y);
-						lns.canvas.ctx.lineTo(_x + w, _y);
-						lns.canvas.ctx.stroke();
+						ctx.beginPath();
+						ctx.moveTo(_x, _y);
+						ctx.lineTo(_x + w, _y);
+						ctx.stroke();
 					}
 
 					if (lineGrid && x > 0 && x < gridColumns) {
-						lns.canvas.ctx.beginPath();
-						lns.canvas.ctx.moveTo(_x, _y);
-						lns.canvas.ctx.lineTo(_x, _y + h);
-						lns.canvas.ctx.stroke();
+						ctx.beginPath();
+						ctx.moveTo(_x, _y);
+						ctx.lineTo(_x, _y + h);
+						ctx.stroke();
 					}
 					
 					if (dotGrid) {
@@ -78,13 +80,13 @@ function Background() {
 						if (dotEdges && (y === 0 || y === gridRows)) drawDot = false;
 					
 						if (drawDot) {
-							lns.canvas.ctx.beginPath();
-							lns.canvas.ctx.arc(_x, _y, dotSize, 0, Math.PI * 2);
-							lns.canvas.ctx.fill();
+							ctx.beginPath();
+							ctx.arc(_x, _y, dotSize, 0, Math.PI * 2);
+							ctx.fill();
 						}
 					}
 					
-					lns.canvas.ctx.lineWidth = tempWidth; // remove after adding lw to layers later
+					ctx.lineWidth = tempWidth; // remove after adding lw to layers later
 				}
 			}
 		}

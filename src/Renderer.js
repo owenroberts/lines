@@ -8,18 +8,23 @@ function Renderer(params) {
 	// create canvas if !canvas
 
 	let dpr = retina ? window.devicePixelRatio || 1 : 1;
-	// let scale = 1;
-	// let lineWidth = 1;
+	let scale = 1;
+	let lineWidth = 1;
 
-	const ctx = this.canvas.getContext('2d');
+	const ctx = canvas.getContext('2d');
 	ctx.lineWidth = lineWidth;
 	ctx.miterLimit = 1;
 	ctx.lineCap = 'round';
 	ctx.lineJoin = 'round';
 
-	canvas.style.backgroundColor = bgColor;
-	canvas.width = width * dpr * scale;
-	canvas.height = height * dpr * scale;
+	if (bgColor) canvas.style.backgroundColor = bgColor;
+	if (width) canvas.width = width * dpr * scale;
+	if (height) canvas.height = height * dpr * scale;
+
+	window.drawCount = 0; // lns.drawCount?
+	let interval = 1000 / dps;  // time interval between draws
+	let timer = performance.now();
+
 
 	function reset() {
 		ctx.scale(1, 1); // prevent multiple scales
