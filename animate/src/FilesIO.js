@@ -11,6 +11,7 @@ function FilesIO(lns, params) {
 	function getSaveData(isSingleFrame) {
 
 		const json = {
+			title: lns.ui.faces.title.value || prompt("Name this file:"),
 			v: "2.5",
 			w: +lns.canvas.getWidth(),
 			h: +lns.canvas.getHeight(),
@@ -18,87 +19,90 @@ function FilesIO(lns, params) {
 			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1, // filter
 		};
 		if (params.bg) json.bg = lns.canvas.getBGColor();
+		if (!lns.ui.faces.title.value) lns.ui.faces.title.value = json.title;
 
 		lns.draw.reset();
 		lns.render.checkEnd();
-		
 
-		// get props or clone drawings and layers ??
+		json.d = lns.anim.drawings.map(d => d ? d.getData() : null);
+		json.d.pop(); // remove active drawing
+		if (json.d.length === 0) return;
 
+		json.l = isSingleFrame ? 
+			lns.anim.layers
+				.filter(l => l.isInFrame(lns.anim.currentFrame)) 
+				.map(l => { return { ...l.getSaveProps(), f: [0, 0] }}) :
+			lns.anim.layers.map(l => l.getSaveProps());
 
-	}
-
-	function saveLocal() {
-		const data = getSaveData(false);
-	}
-
-	function saveFile(single, callback) {
-
-		lns.draw.reset();
-		lns.render.checkEnd();
-		
-		lns.anim.drawings.pop(); // remove empty drawing
-		lns.anim.layers.pop(); // remove empty draw layer
-
-		fileName = lns.ui.faces.title.value || prompt("Name this file:");
-
-		if (params.fit && confirm("Fit canvas?")) lns.canvas.fitCanvasToDrawing();
-
-		const json = {
-			v: "2.5",
-			w: +lns.canvas.getWidth(),
-			h: +lns.canvas.getHeight(),
-			fps: +lns.anim.fps,
-			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1, // filter
-		};
-		if (params.bg) json.bg = lns.canvas.getBGColor();
-
-		if (single) {
-			json.l = _.cloneDeep(
-				lns.anim.layers
-					.filter(layer => layer.isInFrame(lns.anim.currentFrame))
-				);
-			json.l = json.l.map(layer => {
-					layer.startFrame = 0;
-					layer.endFrame = 0;
-					return layer.getSaveProps();
-				});
-		} else {
-			json.l = lns.anim.layers.map(layer => { return layer.getSaveProps() });
-		}
-
-		const drawingIndexes = new Set(json.l.map(layer => layer.d));
-
-		json.d = [];
-		for (let i = 0; i < lns.anim.drawings.length; i++) {
-			json.d[i] = drawingIndexes.has(i) ?
-				lns.anim.drawings[i].points.map(point => {
-					if (point === 'end') return 0;
-					else if (point === 'add') return 1;
-					else return [Math.round(point[0]), Math.round(point[1])];
-				}) 
-				: null;
-		}
+		json.l.pop(); // remove active layer
+		if (json.l.length === 0) return;
 
 		const groups = lns.timeline.getGroups();
 		if (groups.length > 0) json.g = [...groups];
 
-		if (Object.keys(lns.anim.states).length > 1) {
+		const states = Object.keys(lns.anim.states).filter(s => s !== 'default');
+		if (states.length > 1) {
 			json.s = {};
 			for (const state in lns.anim.states) {
-				if (state != 'default') {
-					json.s[state] = [lns.anim.states[state].start, lns.anim.states[state].end];
-				}
+				json.s[state] = [lns.anim.states[state].start, lns.anim.states[state].end];
 			}
 		}
 
-		const jsonfile = JSON.stringify(json);
-		if (fileName) {
-			const blob = new Blob([jsonfile], { type: "application/x-download;charset=utf-8" });
-			saveAs(blob, `${fileName}${single ? '-' + lns.anim.frame : ''}.json`);
-			setTimeout(callback, 500);
-			lns.ui.faces.title.value = fileName;
+		return json;
+	}
+
+	function clearLocal() {
+		localStorage.removeItem('lines');
+	}
+
+	function saveLocal() {
+		const json = getSaveData(false);
+		if (!json) return alert('No data.');
+		localStorage.setItem('lines-' + json.title, JSON.stringify(json));
+	}
+
+	function loadLocal() {
+		const title = lns.ui.faces.title.value || prompt('Search title');
+		if (!title) return alert('No title.');
+		
+		const localData = localStorage.getItem('lines-' + title);
+		if (!localData) return alert('No data, Locals: ' + Object.keys(localStorage).filter(k => k.includes('lines')));
+		
+		const data = JSON.parse(localData);
+		lns.fio.loadJSON(data);
+	}
+
+	function saveFile(isSingleFrame, callback) {
+		
+		if (params.fit && confirm("Fit canvas?")) lns.canvas.fitCanvasToDrawing();
+		
+		const json = getSaveData(isSingleFrame);
+		if (!json) return alert('No data.');
+
+		// const drawingIndexes = new Set(json.l.map(layer => layer.d));
+		let drawingIndexes = json.l.map(l => l.d);
+		drawingIndexes = drawingIndexes.filter((v, i) => drawingIndexes.indexOf(v) === i);
+
+		json.d = json.d.map((d, i) => drawingIndexes.includes(i) ? d : null); 
+
+		// prune out drawings
+		if (json.d.includes(null)) {
+			const nonNulls = json.d
+				.map((v, i) => { if (json.d[i]) return i; })
+				.filter(i => i !== undefined);
+
+			json.l.forEach(l => {
+				l.d = nonNulls.indexOf(l.d)
+			});
+
+			json.d = json.d.filter(d => d !== null);
 		}
+
+		const jsonFile = JSON.stringify(json);
+
+		const blob = new Blob([jsonFile], { type: "application/x-download;charset=utf-8" });
+		saveAs(blob, `${json.title}${isSingleFrame ? '-' + lns.anim.frame : ''}.json`);
+		setTimeout(callback, 500);
 	} /* s key - shift-s for single */
 
 	function saveFramesToFiles() {
@@ -118,38 +122,30 @@ function FilesIO(lns, params) {
 	/* loads from src url or dragged data ... */
 	function loadFile(file, fName) {
 		if (typeof file === 'string') { // url
-			fileName = file;
-			if (fileName) {
-				if (fileName.slice(fileName.length - 5) !== '.json')  {
-					fileName += '.json';
-				}
-				fetch(fileName)
-					.then(response => { return response.json() })
-					.then(data => { 
-						loadJSON(data, fileName.split('/').pop()); 
-					})
-					.catch(error => {console.error(error); });
-			}
+			fetch(file)
+				.then(response => { return response.json(); })
+				.then(data => { loadJSON(data); })
+				.catch(error => {console.error(error); });
+
 		} else { // json 
-			fileName = f.name.split('.')[0];
-			loadJSON(file, fName);
+			loadJSON(file);
 		}
 	}
 
 	function loadJSON(data, fName) {
 		lns.anim = new Animation(lns.canvas.ctx, lns.render.dps, true);
-		lns.anim.loadData(data, function() {
+		lns.anim.loadData(data, () => {
 			lns.canvas.setWidth(data.w);
 			lns.canvas.setHeight(data.h);
 			lns.ui.faces.fps.update(data.fps);
 			if (data.bg) lns.canvas.setBGColor(data.bg);
 			if (data.g) lns.timeline.setGroups([...data.g]);
-			lns.draw.reset(); 
+			lns.draw.reset();
 		});
 
-		lns.ui.faces.title.value = fName;
+		lns.ui.faces.title.value = data.title || prompt('Name animation?');
 		lns.ui.faces.fps.value = data.fps;
-		document.title = fName + ' ~ animate';
+		document.title = lns.ui.faces.title.value + ' ~ animate';
 		lns.ui.faces.width.value = data.w;
 		lns.ui.faces.height.value = data.h;
 		lns.anim.layers.forEach(layer => {
@@ -186,8 +182,7 @@ function FilesIO(lns, params) {
 			const reader = new FileReader();
 			reader.onload = (function(theFile) {
 				return function(e) {
-					fileName = f.name.split('.')[0];
-					loadJSON(JSON.parse(e.target.result), fileName);
+					loadJSON(JSON.parse(e.target.result));
 				};
 			})(f);
 			reader.readAsText(f);
@@ -226,7 +221,10 @@ function FilesIO(lns, params) {
 		});	
 
 		lns.ui.addCallbacks([
-			{ callback: saveFile, key: 's', text: 'Save File', args: [false], },
+			{ callback: saveLocal, key: 's', text: 'Save Local', args: [false], },
+			{ callback: loadLocal,  text: 'Load Local', },
+			{ callback: clearLocal, key: 'alt-c', text: 'Clear Local', },
+			{ callback: saveFile, key: 'alt-s', text: 'Save File', args: [false], },
 			{ callback: saveFile, key: 'shift-s', text: 'Save Frame', args: [true], },
 			{ callback: saveFramesToFiles, key: 'shift-e', text: 'Save Frames to Files', },
 			// { callback: openFile, key: 'o', text: 'Open', },
@@ -240,5 +238,5 @@ function FilesIO(lns, params) {
 		});
 	}
 
-	return { connect, loadFile };
+	return { connect, loadFile, loadJSON };
 }

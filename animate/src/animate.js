@@ -5,6 +5,7 @@ const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
 Object.assign(Animation.prototype, AnimationMixin);
+Object.assign(Drawing.prototype, DrawingMixin);
 
 const params = {};
 location.search.substr(1).split('&').map(a => {
@@ -112,10 +113,14 @@ lns.ui.settings = new Settings(lns, {
 });
 lns.ui.settings.load();
 lns.draw.setDefaults();
-if (params.src) lns.fio.loadFile(params.src);
-lns.render.start();
+
 lns.timeline.init();
 lns.render.toggleStats();
+lns.render.start();
+
+if (params.src) {
+	lns.fio.loadFile(params.src);
+}
 
 console.log(lns);
 

@@ -46,7 +46,7 @@ function Draw(lns, defaults) {
 	function reset(f) {
 		let drawing = getCurrentDrawing();
 		let newDrawing = drawing ? false : true;
-		if (drawing.length > 0) newDrawing = true;
+		if (drawing) if (drawing.length > 0) newDrawing = true;
 
 		if (newDrawing) {
 			lns.anim.drawings.push(new Drawing()); // new Drawing?

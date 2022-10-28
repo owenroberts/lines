@@ -353,7 +353,7 @@ function Data(lns) {
 	function pruneDrawings() {
 		saveState();
 
-		const nonNulls = []
+		const nonNulls = [];
 
 		for (let i = 0; i < lns.anim.drawings.length; i++) {
 			const drawing = lns.anim.drawings[i];

@@ -38,6 +38,8 @@ const files = {
 		//'./animate/interface/*.js',
 		'./animate/src/AnimationMixin.js',
 		'./animate/src/LayerMixin.js',
+		'./animate/src/DrawingMixin.js',
+		// './animate/src/UILayer.js',
 		'./animate/src/animate.js',
 		'./animate/src/**/*.js'
 	],

@@ -161,6 +161,7 @@ function Timeline() {
 				if (layer.groupNumber >= 0 && viewGroups) continue;
 				if (viewActiveLayers && !layers.includes(layer)) continue;
 				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
+				// console.log(UILayer);
 				const ui = new UILayer(layer, {
 					group: viewGroups ? undefined : groups[layer.groupNumber],
 					canMoveUp: i > 0 && layers.length > 2,
