@@ -42,6 +42,7 @@ function Capture(lns, params) {
 
 	/* put capture code in callback */
 	function start() {
+		lns.renderer.suspend();
 		frameNum = 0;
 		lns.anim.onDraw = function() {
 			if (frames > 0) {
@@ -51,6 +52,7 @@ function Capture(lns, params) {
 			else {
 				lns.anim.isPlaying = false;
 				lns.anim.onDraw = undefined;
+				lns.renderer.start();
 			}
 		};
 	}
@@ -62,7 +64,7 @@ function Capture(lns, params) {
 		lns.anim.frame = lns.anim.endFrame;
 		lns.anim.isPlaying = true;
 		// capture as many frames as necessary for lines ratio or 1 of every frame
-		frames = lns.anim.endFrame * Math.max(1, lns.render.getDPS() / lns.anim.fps) + 1;
+		frames = lns.anim.endFrame * Math.max(1, lns.renderer.getProps().dps / lns.anim.fps) + 1;
 		start();
 	} /* ctrl-k - start at beginning and capture one of every frame */
 
@@ -88,7 +90,7 @@ function Capture(lns, params) {
 				f.onwriteend = function() { 
 					setTimeout(() => {
 						window.requestAnimFrame(() => {
-							lns.render.update('cap'); 
+							lns.renderer.update('capture'); 
 						});
 					}, 100); // delay fixes bug where is stops after 10-12 frames
 				};
@@ -151,7 +153,7 @@ function Capture(lns, params) {
 				stopVideo(); // stop recording
 				if (recordEachFrame && lns.anim.currentFrame < lns.anim.endFrame) {
 					videoFrames = numFrames;
-					lns.render.next(1); // next frame
+					lns.playback.next(1); // next frame
 					startVideo(true); // start recording
 				} else {
 					lns.anim.onDraw = undefined;
@@ -179,7 +181,7 @@ function Capture(lns, params) {
 			}
 			isReady = false;
 			isVideo = true;
-			const stream = lns.canvas.canvas.captureStream(lns.render.dps);
+			const stream = lns.canvas.canvas.captureStream(lns.renderer.getProps().dps);
 			rec = new MediaRecorder(stream, {
 				videoBitsPerSecond : videoBitsPerSecond,
 				mimeType: 'video/webm;codecs=vp8,opus'

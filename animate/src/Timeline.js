@@ -21,7 +21,7 @@ function Timeline() {
 			if (ev.which == 1 && ev.target.classList.contains('frame') && 
 				lns.anim.currentFrame != +ev.target.textContent) {
 				lns.draw.reset();
-				lns.render.setFrame(+ev.target.textContent);
+				lns.playback.setFrame(+ev.target.textContent);
 				lns.ui.update();
 			} else if (ev.which == 3) {
 				// scroll right/left -- do this shit ...
@@ -86,7 +86,7 @@ function Timeline() {
 				class: 'frame',
 				callback: function() {
 					lns.draw.reset();
-					lns.render.setFrame(i);
+					lns.playback.setFrame(i);
 					lns.ui.update();
 				}	
 			});
@@ -266,7 +266,7 @@ function Timeline() {
 				layer.endFrame = lns.anim.currentFrame;
 			}
 		}
-		lns.render.setFrame(lns.anim.currentFrame + 1);
+		lns.playback.setFrame(lns.anim.currentFrame + 1);
 	}
 
 	// select all layers in frame

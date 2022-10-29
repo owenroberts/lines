@@ -22,7 +22,7 @@ function FilesIO(lns, params) {
 		if (!lns.ui.faces.title.value) lns.ui.faces.title.value = json.title;
 
 		lns.draw.reset();
-		lns.render.checkEnd();
+		lns.playback.checkEnd();
 
 		json.d = lns.anim.drawings.map(d => d ? d.getData() : null);
 		json.d.pop(); // remove active drawing
@@ -133,12 +133,16 @@ function FilesIO(lns, params) {
 	}
 
 	function loadJSON(data, fName) {
-		lns.anim = new Animation(lns.canvas.ctx, lns.render.dps, true);
+		const { ctx, canvas } = lns.renderer;
+		const { dps } = lns.renderer.getProps();
+		lns.anim = new Animation(ctx, dps, true);
 		lns.anim.loadData(data, () => {
-			lns.canvas.setWidth(data.w);
-			lns.canvas.setHeight(data.h);
+			// lns.canvas.setWidth(data.w);
+			// lns.canvas.setHeight(data.h);
+			lns.ui.faces.width.update(data.w);
+			lns.ui.faces.height.update(data.h);
 			lns.ui.faces.fps.update(data.fps);
-			if (data.bg) lns.canvas.setBGColor(data.bg);
+			if (data.bg) lns.ui.faces.bgColor.update(data.bg);
 			if (data.g) lns.timeline.setGroups([...data.g]);
 			lns.draw.reset();
 		});
@@ -192,8 +196,8 @@ function FilesIO(lns, params) {
 	if (window.File && window.FileReader && window.FileList && window.Blob) {
 		saveFilesEnabled = true;
 		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
-		lns.canvas.canvas.addEventListener('dragover', dragOverHandler);
-		lns.canvas.canvas.addEventListener('drop', dropHandler);
+		lns.renderer.canvas.addEventListener('dragover', dragOverHandler);
+		lns.renderer.canvas.addEventListener('drop', dropHandler);
 		// https://gist.github.com/andjosh/7867934
 	}
 

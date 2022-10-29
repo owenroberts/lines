@@ -137,7 +137,7 @@ function Draw(lns, defaults) {
 
 
 	function outSideCanvas(ev) {
-		if (ev.toElement !== lns.canvas.canvas) {
+		if (ev.toElement !== lns.renderer.canvas) {
 			if (isDrawing) reset();
 			isDrawing = false;
 		}
@@ -202,7 +202,7 @@ function Draw(lns, defaults) {
 			.round();
 
 		if (ev.which >= 2) lns.eraser.start();
-		if (ev.which == 1 && !lns.render.isPlaying && !ev.altKey) {
+		if (ev.which == 1 && !lns.anim.isPlaying && !ev.altKey) {
 
 			if (ev.ctrlKey) {
 				lns.eraser.start(point);
@@ -260,24 +260,24 @@ function Draw(lns, defaults) {
 		}
 
 		/* apple pencil - safari doesn't support pointer event */
-		lns.canvas.canvas.addEventListener('touchstart', ev => {
+		lns.renderer.canvas.addEventListener('touchstart', ev => {
 			toucher(ev, start);
 		});
-		lns.canvas.canvas.addEventListener('touchmove', ev => {
+		lns.renderer.canvas.addEventListener('touchmove', ev => {
 			toucher(ev, update);
 		});
-		lns.canvas.canvas.addEventListener('touchend', ev => {
+		lns.renderer.canvas.addEventListener('touchend', ev => {
 			end(lastTouch);
 		});
 	} else if (window.PointerEvent) {
-		lns.canvas.canvas.addEventListener('pointermove', update);
-		lns.canvas.canvas.addEventListener('pointerdown', start);
-		lns.canvas.canvas.addEventListener('pointerup', end);
+		lns.renderer.canvas.addEventListener('pointermove', update);
+		lns.renderer.canvas.addEventListener('pointerdown', start);
+		lns.renderer.canvas.addEventListener('pointerup', end);
 
 	} else {
-		lns.canvas.canvas.addEventListener('mousemove', update);
-		lns.canvas.canvas.addEventListener('mousedown', start);
-		lns.canvas.canvas.addEventListener('mouseup', end);
+		lns.renderer.canvas.addEventListener('mousemove', update);
+		lns.renderer.canvas.addEventListener('mousedown', start);
+		lns.renderer.canvas.addEventListener('mouseup', end);
 	}
 
 	document.addEventListener('mousemove', outSideCanvas);

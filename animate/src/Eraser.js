@@ -88,10 +88,10 @@ function Eraser(lns) {
 	function display() {
 		if (!isActive) return;
 		if (!position) return;
-		lns.canvas.ctx.fillStyle = "rgba(150, 50, 200, 0.25)";
-		lns.canvas.ctx.beginPath();
-		lns.canvas.ctx.arc(position.x, position.y, distance, 0, Math.PI * 2);
-		lns.canvas.ctx.fill();
+		lns.renderer.ctx.fillStyle = "rgba(150, 50, 200, 0.25)";
+		lns.renderer.ctx.beginPath();
+		lns.renderer.ctx.arc(position.x, position.y, distance, 0, Math.PI * 2);
+		lns.renderer.ctx.fill();
 	}
 
 	return {

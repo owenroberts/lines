@@ -8,74 +8,21 @@
 	not strictly UI
 */
 
-function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
+function Canvas(lns, params) {
 
-	/* width and height are pixel dimensions
-		canvas width and height are dependent on dpr */
-	const canvas = document.getElementById(id); // lns.canvas.canvas is html elem
-	// this.canvas.style.imageRendering = 'pixelated'; // doesn't really look different
-	let dpr = checkRetina ? window.devicePixelRatio || 1 : 1;
-	let scale = 1;
-	let lineWidth = 1; // to keep value from getting reset
+	const { canvas, ctx } = lns.renderer;
+	let { width, height, scale, lineWidth, bgColor } = lns.renderer.getProps();
 
-	const ctx = canvas.getContext('2d');
-	ctx.miterLimit = 1;
-	ctx.lineCap = 'round';
-	ctx.lineJoin = 'round';
+	setBGColor(bgColor);
 
-	// let color = color || '#ffffff';
-	// let width = _width || 512;
-	// let height = _height || 512;
-
-	setBGColor(color);
-	setWidth(width);
-	setHeight(height);
-
-	function canvasUpdate() {
-		ctx.miterLimit = 1;
-		ctx.lineCap = 'round';
-		ctx.lineJoin = 'round';
-	}
-
-	function setBGColor(color) {
-		canvas.style.backgroundColor = color;
-	}
-
-	function setLineWidth(value) {
-		ctx.lineWidth = lineWidth = +value;
-		canvasUpdate();
-	}
-
-	function setScale(value) {
-		scale = value;
-		setWidth(width);
-		setHeight(height);
-	}
-
-	function setWidth(value) {
-		width = value;
-		canvas.width = value * dpr * scale;
-		reset();
-	}
-
-	function setHeight(value) {
-		height = value;
-		canvas.height = value * dpr * scale;
-		reset();
+	function setBGColor(value) {
+		bgColor = value;
+		canvas.style.backgroundColor = bgColor;
 	}
 
 	function cursorToggle(value) {
 		if (value) canvas.classList.add('no-cursor');
 		else canvas.classList.remove('no-cursor');
-	}
-
-	function reset() {
-		// https://www.html5rocks.com/en/tutorials/canvas/hidpi/
-		ctx.scale(1, 1); // prevent multiple scales
-		ctx.scale(dpr * scale, dpr * scale);
-		canvas.style.zoom = 1 / dpr;
-		ctx.lineWidth = lineWidth;
-		canvasUpdate();
 	}
 
 	function fitCanvasToDrawing() {
@@ -120,34 +67,34 @@ function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
 		lns.ui.addProps({
 			'width': {
 				value: width,
-				callback: value => { setWidth(value); }
+				callback: value => { lns.renderer.setWidth(value); }
 			},
 			'height': {
 				value: height,
-				callback: value => { setHeight(value); }
+				callback: value => { lns.renderer.setHeight(value); }
 			},
 			'lineWidth': {
 				type: 'UINumberStep',
-				value: 1,
+				value: lineWidth,
 				range: [1, 100],
-				callback: value => { setLineWidth(value); }
+				callback: value => { lns.renderer.setLineWidth(value); }
 			},	
 			'canvasScale': {
 				type: 'UINumberStep',
-				value: 1,
+				value: scale,
 				range: [0.5, 4],
 				step: 0.05,
-				callback: value => { setScale(value); }
+				callback: value => { lns.renderer.setScale(value); }
 			},
 			'bgColor': {
 				type: 'UIColor',
-				value: color,
+				value: bgColor,
 				callback: value => { setBGColor(value); }
 			},
 			'hideCursor': {
 				type: 'UIToggleCheck',
 				key: 'alt-m',
-				callback: value => { cursorToggle(value) }
+				callback: value => { cursorToggle(value); }
 			}
 		}, 'canvas');
 	}
@@ -155,12 +102,11 @@ function Canvas(id, width=512, height=512, color='#ffffff', checkRetina= true) {
 	return { 
 		connect, canvas, ctx,
 		fitCanvasToDrawing,
-		setWidth, setHeight,
 		setBGColor,
-		getScale() { return scale; },
-		getWidth() { return width; },
-		getHeight() { return height; },
-		getLineWidth() { return lineWidth; },
-		getBGColor() { return color; },
+		getScale() { return lns.renderer.getProps().scale; },
+		getWidth() { return lns.renderer.getProps().width; },
+		getHeight() { return lns.renderer.getProps().height; },
+		getLineWidth() { return lns.renderer.getProps().lineWidth; },
+		getBGColor() { return bgColor; },
 	};
 }

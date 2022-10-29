@@ -7,7 +7,7 @@
 
 function Background(lns) {
 
-	const { canvas, ctx } = lns.canvas;
+	const { canvas, ctx } = lns.renderer;
 
 	let img = new Image();
 	let show = true;

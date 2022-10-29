@@ -1,4 +1,4 @@
-const { Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
+const { Renderer, Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
 const { Interface, Settings } = UI;
 const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText } = UI.Elements;
 const lns = {};
@@ -17,20 +17,19 @@ if (params.render === 'pixel') {
 	Object.assign(Lines.prototype, PixelMixin);
 }
 
-// lns.renderer = Renderer({
-// 	id: 'lines',
-// 	width: 512,
-// 	height: 512,
-// 	bgColor: '#ffffff',
-// 	retina: true,
-// 	dps: 30,
-// 	stats: true
-// });
+lns.renderer = Renderer({
+	width: 512,
+	height: 512,
+	bgColor: '#ffffff',
+	retina: true,
+	dps: 30,
+});
+
+lns.anim = new Animation(lns.renderer.ctx, 30, true);
 
 // modules
-lns.canvas = Canvas("lines", 512, 512, "#ffffff", true);
-lns.render = Render(30, false); // (dps, stats?)
-lns.anim = new Animation(lns.canvas.ctx, 30, true);
+lns.playback = Playback(lns, { stats: false }); // (dps, stats?)
+lns.canvas = Canvas(lns);
 lns.draw = Draw(lns, { 
 	linesInterval: 5, 
 	segmentNum: 2,
@@ -66,7 +65,7 @@ lns.animator = AnimatorUI(lns);
 lns.ui = Interface(lns, { useMain: false });
 lns.ui.setup();
 lns.canvas.connect();
-lns.render.connect();
+lns.playback.connect();
 lns.draw.connect();
 lns.brush.connect();
 lns.eraser.connect();
@@ -113,8 +112,8 @@ lns.ui.settings.load();
 lns.draw.setDefaults();
 
 lns.timeline.init();
-lns.render.toggleStats();
-lns.render.start();
+lns.playback.toggleStats();
+lns.renderer.start();
 
 if (params.src) lns.fio.loadFile(params.src);
 

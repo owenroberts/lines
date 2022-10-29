@@ -108,7 +108,7 @@ function Data(lns) {
 		copy();
 		if (n) {
 			for (let i = 0; i < n; i++) {
-				lns.render.next(1);
+				lns.playback.next(1);
 				paste();
 			}
 		}
@@ -139,7 +139,7 @@ function Data(lns) {
 					if (layer) lns.anim.addLayer(layer);
 				}
 			}
-			lns.render.next(1);
+			lns.playback.next(1);
 		}
 		lns.draw.reset();
 		lns.ui.update();
@@ -231,7 +231,7 @@ function Data(lns) {
 			}
 
 			lns.draw.cutEnd();
-			lns.render.setFrame(0);
+			lns.playback.setFrame(0);
 		}
 	} /* shift - d */
 

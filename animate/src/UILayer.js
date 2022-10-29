@@ -260,7 +260,7 @@ class UILayer extends UICollection {
 				const props = layer.getCloneProps();
 				props.startFrame = props.endFrame = layer.endFrame + 1;
 				lns.anim.addLayer(new Layer(props));
-				lns.render.setFrame(layer.endFrame + 1);
+				lns.playback.setFrame(layer.endFrame + 1);
 			}
 		}));
 
@@ -272,7 +272,7 @@ class UILayer extends UICollection {
 				props.startFrame = lns.anim.currentFrame + 1;
 				layer.endFrame = lns.anim.currentFrame;
 				lns.anim.addLayer(new Layer(props));
-				lns.render.setFrame(layer.endFrame + 1);
+				lns.playback.setFrame(layer.endFrame + 1);
 			}
 		}));
 

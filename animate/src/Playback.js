@@ -1,19 +1,20 @@
-function Render(dps=30, showStats=false) {
+/*
+	play back stfuff
+*/
+
+function Playback(lns, params) {
+
+	const { canvas, ctx } = lns.renderer;
 	
-	// this.showStats = showStats;
-	// this.dps = dps || 30; // draws pers second
-	window.drawCount = 0; // everything has this... use Lines.drawCount??
-
-	let interval = 1000 / dps;  // time interval between draws
-	let timer = performance.now();
-
 	let onionSkinNum = 0; /* l key */
 	let onionSkinIsVisible = false; /* n key */
 
-	let clearCount = 0; // what is this -- lol
-	let clearCountInterval = 0;
-
 	let stats, playPanel, frameDisplay;
+	let showStats = params.showStats || false;
+
+	lns.renderer.addCallback(update);
+	lns.renderer.addCallback(preTime, 'preTime');
+	lns.renderer.addCallback(postRender, 'post');
 
 	function toggleStats(value) {
 		if (value !== undefined) showStats = value;
@@ -39,7 +40,6 @@ function Render(dps=30, showStats=false) {
 	function reset() {
 		lns.anim.frame = 0;
 		lns.anim.isPlaying = false;
-		// lns.canvas.ctx.miterLimit = 1; /* maybe not needed? happens in canvas reset*/
 		lns.ui.update();
 	}
 
@@ -58,10 +58,8 @@ function Render(dps=30, showStats=false) {
 
 	/* ' - dps is property of render engine, not individual animations */
 	function setDPS(value) {
-		dps = value;
-		interval = 1000 / dps;
-		// keep fps constant
-		lns.anim.drawsPerFrame = Math.max(1, Math.round(dps / lns.anim.fps));
+		lns.renderer.setDPS(value);
+		lns.anim.drawsPerFrame = Math.max(1, Math.round(lns.renderer.dps / lns.anim.fps));
 		lns.ui.faces.fps.value = lns.anim.fps;
 		lns.ui.faces.dpf.value = lns.anim.dpf;
 	}
@@ -141,91 +139,75 @@ function Render(dps=30, showStats=false) {
 		next(1);
 	}
 
-	function update(time) {
+	function preTime() {
 		if (showStats) stats.begin();
-		if (performance.now() > interval + timer || time === 'cap') {
-			timer = performance.now();
+	}
 
-			// what actually need to be update here ?
-			if (lns.anim.isPlaying) lns.timeline.update();
-
-			if (clearCount === clearCountInterval) {
-				/*
-					this is where "this" is useful, this becomes
-					canvas.getWidth(), canvas.getHeight()
-					or lns.ui.faces.width, lns.ui.faces.height ... 
-				*/
-				// console.log('clear');
-				lns.canvas.ctx.clearRect(0, 0, lns.canvas.getWidth(), lns.canvas.getHeight());
-				clearCount = 0;
-			} else {
-				clearCount++;
-			}
-
-			/* in capture set animation onDraw 
-				move this logic to capture
-			*/
-			if (lns.capture.withBackground() && 
-				(lns.capture.isCapturing() || lns.capture.isVideo())) {
-				// console.log('fill bg')
-				lns.canvas.ctx.fillStyle = lns.canvas.getBGColor();
-				lns.canvas.ctx.fillRect(0, 0, lns.canvas.getWidth(), lns.canvas.getHeight());
-			}
-
-			// ignore bg, onion, highlight while capturing
-			if (!lns.capture.isCapturing() && !lns.capture.isVideo()) {
-				lns.bg.display(); // part of canvas module?
-
-				// onion skin
-				if (onionSkinNum > 0 && onionSkinIsVisible) {
-					const temp = lns.anim.currentFrame;
-					for (let o = 1; o <= onionSkinNum; o++){
-						const index = temp - o;
-						if (index >= 0) {
-							lns.anim.currentFrame = index;
-							lns.anim.overrideProperty(
-								'color', 
-								`rgba(105,150,255,${ 1.5 - (o / onionSkinNum) })`
-							);
-							lns.anim.draw();
-						}
-					}
-					lns.anim.cancelOverride();
-					lns.anim.currentFrame = temp;
-				}
-
-				// highlight
-				// difficulty of making this generic .. think about
-				if (lns.anim.layers.some(l => l.isHighlighted)) {
-					lns.anim.overrideProperty('color', '#94dfe3');
-					for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
-						const layer = lns.anim.layers[i];
-						if (!layer.isInFrame(lns.anim.currentFrame) || !layer.isHighlighted) {
-							layer.dontDraw = true;
-						}
-					}
-					lns.canvas.ctx.lineWidth = 5; // set through ui or make it a class
-					lns.anim.draw(0, 0, true);
-					lns.anim.cancelOverride();
-					lns.canvas.ctx.lineWidth = lns.canvas.getLineWidth();
-					lns.anim.layers.filter(l => l.dontDraw).forEach(l => {
-						l.dontDraw = false;
-					});
-				}
-
-				lns.eraser.display();
-			}
-
-			lns.anim.update();
-			lns.anim.draw();
-			window.drawCount++;
-		}
-		if (!lns.capture.isCapturing()) window.requestAnimFrame(update);
+	function postRender() {
 		if (showStats) stats.end();
 	}
 
-	function start() {
-		window.requestAnimFrame(update);
+	function update() {
+		
+		if (lns.anim.isPlaying) lns.timeline.update();
+
+		/* 
+			in capture set animation onDraw 
+			move this logic to capture
+		*/
+		if (lns.capture.withBackground() && 
+			(lns.capture.isCapturing() || lns.capture.isVideo())) {
+			// console.log('fill bg')
+			ctx.fillStyle = lns.canvas.getBGColor();
+			ctx.fillRect(0, 0, lns.canvas.getWidth(), lns.canvas.getHeight());
+		}
+
+		// ignore bg, onion, highlight while capturing
+		if (!lns.capture.isCapturing() && !lns.capture.isVideo()) {
+			lns.bg.display(); // part of canvas module?
+
+			// onion skin
+			if (onionSkinNum > 0 && onionSkinIsVisible) {
+				const temp = lns.anim.currentFrame;
+				for (let o = 1; o <= onionSkinNum; o++){
+					const index = temp - o;
+					if (index >= 0) {
+						lns.anim.currentFrame = index;
+						lns.anim.overrideProperty(
+							'color', 
+							`rgba(105,150,255,${ 1.5 - (o / onionSkinNum) })`
+						);
+						lns.anim.draw();
+					}
+				}
+				lns.anim.cancelOverride();
+				lns.anim.currentFrame = temp;
+			}
+
+			// highlight
+			// difficulty of making this generic .. think about
+			if (lns.anim.layers.some(l => l.isHighlighted)) {
+				lns.anim.overrideProperty('color', '#94dfe3');
+				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
+					const layer = lns.anim.layers[i];
+					if (!layer.isInFrame(lns.anim.currentFrame) || !layer.isHighlighted) {
+						layer.dontDraw = true;
+					}
+				}
+				ctx.lineWidth = 5; // set through ui or make it a class
+				lns.anim.draw(0, 0, true);
+				lns.anim.cancelOverride();
+				ctx.lineWidth = lns.canvas.getLineWidth();
+				lns.anim.layers.filter(l => l.dontDraw).forEach(l => {
+					l.dontDraw = false;
+				});
+			}
+
+			lns.eraser.display();
+		}
+
+		lns.anim.update();
+		lns.anim.draw();
 	}
 
 	function connect() {
@@ -272,7 +254,7 @@ function Render(dps=30, showStats=false) {
 			'dps': {
 				type: 'UINumberStep',
 				key: "'",
-				value: dps,
+				value: lns.renderer.dps,
 				callback: value => { setDPS(value); },
 				prompt: 'Set Draw/Second',
 			},
@@ -292,14 +274,14 @@ function Render(dps=30, showStats=false) {
 			},
 			'viewStats': {
 				type: 'UIToggleCheck',
-				value: showStats,
+				value: params.showStats,
 				callback: value => { toggleStats(value); }
 			},
 		});
 	}
 
 	return { 
-		connect, reset, start, update, toggleStats, setFrame, checkEnd, next,
+		connect, reset, update, toggleStats, setFrame, checkEnd, next,
 		getDPS() { return dps; },
 	};
 }
