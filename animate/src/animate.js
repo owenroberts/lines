@@ -17,15 +17,15 @@ if (params.render === 'pixel') {
 	Object.assign(Lines.prototype, PixelMixin);
 }
 
-lns.renderer = Renderer({
-	id: 'lines',
-	width: 512,
-	height: 512,
-	bgColor: '#ffffff',
-	retina: true,
-	dps: 30,
-	stats: true
-});
+// lns.renderer = Renderer({
+// 	id: 'lines',
+// 	width: 512,
+// 	height: 512,
+// 	bgColor: '#ffffff',
+// 	retina: true,
+// 	dps: 30,
+// 	stats: true
+// });
 
 // modules
 lns.canvas = Canvas("lines", 512, 512, "#ffffff", true);
@@ -43,7 +43,7 @@ lns.brush = Brush(lns);
 lns.eraser = Eraser(lns);
 lns.bg = Background(lns);
 lns.data = Data(lns);
-lns.fio = FilesIO(lns, {
+lns.fio = FilesIO(lns, { // verbose params ...
 	fit: false, /* fit to canvas when saving */
 	save: false, /* save settings on unload  */
 	load: true, /* load setttings after file load */
@@ -116,9 +116,7 @@ lns.timeline.init();
 lns.render.toggleStats();
 lns.render.start();
 
-if (params.src) {
-	lns.fio.loadFile(params.src);
-}
+if (params.src) lns.fio.loadFile(params.src);
 
 console.log(lns);
 
