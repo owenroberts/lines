@@ -59,7 +59,7 @@ function Playback(lns, params) {
 	/* ' - dps is property of render engine, not individual animations */
 	function setDPS(value) {
 		lns.renderer.setDPS(value);
-		lns.anim.drawsPerFrame = Math.max(1, Math.round(lns.renderer.dps / lns.anim.fps));
+		lns.anim.drawsPerFrame = Math.max(1, Math.round(lns.renderer.getProps().dps / lns.anim.fps));
 		lns.ui.faces.fps.value = lns.anim.fps;
 		lns.ui.faces.dpf.value = lns.anim.dpf;
 	}
@@ -254,7 +254,7 @@ function Playback(lns, params) {
 			'dps': {
 				type: 'UINumberStep',
 				key: "'",
-				value: lns.renderer.dps,
+				value: lns.renderer.getProps().dps,
 				callback: value => { setDPS(value); },
 				prompt: 'Set Draw/Second',
 			},
@@ -282,6 +282,6 @@ function Playback(lns, params) {
 
 	return { 
 		connect, reset, update, toggleStats, setFrame, checkEnd, next,
-		getDPS() { return dps; },
+		getDPS() { return lns.renderer.getProps().dps; },
 	};
 }

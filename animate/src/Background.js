@@ -47,14 +47,15 @@ function Background(lns) {
 		if (dotGrid || lineGrid) {
 			let width = lns.canvas.getWidth();
 			let height = lns.canvas.getHeight();
+			let scale = lns.canvas.getScale();
 			let w = width / gridColumns;
 			let h = height / gridRows;
 
 			for (let x = 0; x <= gridColumns; x++) {
 				for (let y = 0; y <= gridRows; y++){
 					
-					let _x = x * w;
-					let _y = y * h;
+					let _x = x * w / scale;
+					let _y = y * h / scale;
 
 					const tempWidth = lns.canvas.getLineWidth();
 					ctx.strokeStyle = gridColor;
@@ -76,8 +77,8 @@ function Background(lns) {
 					
 					if (dotGrid) {
 						let drawDot = true;
-						if (dotEdges && (x === 0 || x === gridColumns)) drawDot = false;
-						if (dotEdges && (y === 0 || y === gridRows)) drawDot = false;
+						if (!dotEdges && (x === 0 || x === gridColumns)) drawDot = false;
+						if (!dotEdges && (y === 0 || y === gridRows)) drawDot = false;
 					
 						if (drawDot) {
 							ctx.beginPath();

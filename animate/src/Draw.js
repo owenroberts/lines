@@ -166,6 +166,16 @@ function Draw(lns, defaults) {
 		}
 	}
 
+	function transformPoint(x, y) {
+		// console.log(lns.canvas.getScale());
+		console.log('event', Math.round(x), Math.round(y));
+		const point = new Cool.Vector(x, y)
+			// .divide(lns.canvas.getScale())
+			.round();
+		console.log('point', point.x, point.y);
+		return point;
+	}
+
 	function update(ev) {
 		if (performance.now() > mouseInterval + mouseTimer) {
 			mouseTimer = performance.now();
@@ -173,9 +183,7 @@ function Draw(lns, defaults) {
 			lns.mousePosition.y = Math.round(ev.pageY);
 
 			const drawing = getCurrentDrawing();
-			const point = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY))
-				.divide(lns.canvas.getScale())
-				.round();
+			const point = transformPoint(ev.offsetX, ev.offsetY);
 
 			if (isDrawing) {
 				if (lns.brush.isActive()) {
@@ -197,9 +205,7 @@ function Draw(lns, defaults) {
 		ev.preventDefault();
 
 		const drawing = getCurrentDrawing();
-		const point = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY))
-			.divide(lns.canvas.getScale())
-			.round();
+		const point = transformPoint(ev.offsetX, ev.offsetY);
 
 		if (ev.which >= 2) lns.eraser.start();
 		if (ev.which == 1 && !lns.anim.isPlaying && !ev.altKey) {
@@ -225,9 +231,7 @@ function Draw(lns, defaults) {
 		lns.eraser.end();
 
 		const drawing = getCurrentDrawing();
-		const point = new Cool.Vector(Math.round(ev.offsetX), Math.round(ev.offsetY))
-			.divide(lns.canvas.getScale())
-			.round();
+		const point = transformPoint(ev.offsetX, ev.offsetY);
 
 		if (lns.brush.fillActive()) {
 			lns.brush.endFill(drawing, point);

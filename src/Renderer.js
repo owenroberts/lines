@@ -63,7 +63,7 @@ function Renderer(params) {
 
 	function setHeight(value) {
 		height = value;
-		canvas.height = width * dpr * scale;
+		canvas.height = height * dpr * scale;
 		reset();
 	}
 
