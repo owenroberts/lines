@@ -52,7 +52,9 @@ function FilesIO(lns, params) {
 	}
 
 	function clearLocal() {
-		localStorage.removeItem('lines');
+		const title = lns.ui.faces.title.value;
+		if (!title) alert('No title');
+		localStorage.removeItem('lines-' + title);
 	}
 
 	function saveLocal() {

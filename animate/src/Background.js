@@ -34,7 +34,7 @@ function Background(lns) {
 		}
 	}
 
-	function display() {
+	function display(width, height) {
 		if (img.src && show) {
 			if (rotation > 0) {
 				ctx.save();
@@ -45,19 +45,17 @@ function Background(lns) {
 		}
 
 		if (dotGrid || lineGrid) {
-			let width = lns.canvas.getWidth();
-			let height = lns.canvas.getHeight();
-			let scale = lns.canvas.getScale();
 			let w = width / gridColumns;
 			let h = height / gridRows;
 
 			for (let x = 0; x <= gridColumns; x++) {
 				for (let y = 0; y <= gridRows; y++){
 					
-					let _x = x * w / scale;
-					let _y = y * h / scale;
+					let _x = x * w;
+					let _y = y * h;
 
 					const tempWidth = lns.canvas.getLineWidth();
+					ctx.lineWidth = 1;
 					ctx.strokeStyle = gridColor;
 					ctx.fillStyle = gridColor;
 					
@@ -144,6 +142,9 @@ function Background(lns) {
 				callback: value => { rotation = value; },
 				// input: 'x-range' ??
 			},
+		}, 'background');
+
+		lns.ui.addProps({
 			'dotGrid': {
 				type: 'UIToggleCheck',
 				value: dotGrid,
@@ -179,7 +180,7 @@ function Background(lns) {
 				value: gridColor,
 				callback: value => { gridColor = value; }
 			},
-		}, 'background');
+		}, 'grid');
 	}
 
 	return { connect, display };

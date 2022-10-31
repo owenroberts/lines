@@ -150,21 +150,21 @@ function Playback(lns, params) {
 	function update() {
 		
 		if (lns.anim.isPlaying) lns.timeline.update();
+		const { width, height } = lns.renderer.getProps();
 
 		/* 
 			in capture set animation onDraw 
 			move this logic to capture
 		*/
-		if (lns.capture.withBackground() && 
-			(lns.capture.isCapturing() || lns.capture.isVideo())) {
-			// console.log('fill bg')
-			ctx.fillStyle = lns.canvas.getBGColor();
-			ctx.fillRect(0, 0, lns.canvas.getWidth(), lns.canvas.getHeight());
-		}
-
-		// ignore bg, onion, highlight while capturing
-		if (!lns.capture.isCapturing() && !lns.capture.isVideo()) {
-			lns.bg.display(); // part of canvas module?
+		if ((lns.capture.isCapturing() || lns.capture.isVideo())) {
+			if (lns.capture.withBackground()) {
+				ctx.fillStyle = lns.canvas.getBGColor();
+				ctx.fillRect(0, 0, width, height);
+			}
+		} else {
+			// ignore bg, onion, highlight while capturing
+	
+			lns.bg.display(width, height); // part of canvas module?
 
 			// onion skin
 			if (onionSkinNum > 0 && onionSkinIsVisible) {
@@ -185,7 +185,6 @@ function Playback(lns, params) {
 			}
 
 			// highlight
-			// difficulty of making this generic .. think about
 			if (lns.anim.layers.some(l => l.isHighlighted)) {
 				lns.anim.overrideProperty('color', '#94dfe3');
 				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {

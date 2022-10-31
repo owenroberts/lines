@@ -77,7 +77,10 @@ function Canvas(lns, params) {
 				type: 'UINumberStep',
 				value: lineWidth,
 				range: [1, 100],
-				callback: value => { lns.renderer.setLineWidth(value); }
+				callback: value => { 
+					console.log('canv con', value);
+					lns.renderer.setLineWidth(value); 
+				}
 			},	
 			'canvasScale': {
 				type: 'UINumberStep',

@@ -168,11 +168,11 @@ function Draw(lns, defaults) {
 
 	function transformPoint(x, y) {
 		// console.log(lns.canvas.getScale());
-		console.log('event', Math.round(x), Math.round(y));
+		// console.log('event', Math.round(x), Math.round(y));
 		const point = new Cool.Vector(x, y)
-			// .divide(lns.canvas.getScale())
+			.divide(lns.renderer.getProps().scale)
 			.round();
-		console.log('point', point.x, point.y);
+		// console.log('point', point.x, point.y);
 		return point;
 	}
 

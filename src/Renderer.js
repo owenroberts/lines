@@ -43,6 +43,8 @@ function Renderer(params) {
 	const postTime = [];
 	const preTime = [];
 
+
+
 	function setDPS(value) {
 		dps = value;
 		interval = 1000 / dps;
@@ -52,7 +54,6 @@ function Renderer(params) {
 		scale = value;
 		setWidth(width);
 		setHeight(height);
-		reset();
 	}
 
 	function setWidth(value) {
@@ -68,18 +69,27 @@ function Renderer(params) {
 	}
 
 	function setLineWidth(value) {
+		console.log(lineWidth, ctx.lineWidth);
 		lineWidth = value;
-		reset();
+		ctx.lineWidth = lineWidth;
+		console.log(lineWidth, ctx.lineWidth);
+		// reset();
+		canvasUpdate();
+	}
+
+	function canvasUpdate() {
+		ctx.miterLimit = 1;
+		ctx.lineCap = 'round';
+		ctx.lineJoin = 'round';
 	}
 
 	function reset() {
+		// console.log('reset');
 		ctx.scale(1, 1); // prevent multiple scales
 		ctx.scale(dpr * scale, dpr * scale);
 		canvas.style.zoom = 1 / dpr;
 		ctx.lineWidth = lineWidth;
-		ctx.miterLimit = 1;
-		ctx.lineCap = 'round';
-		ctx.lineJoin = 'round';
+		canvasUpdate();
 	}
 
 	function addCallback(func, type) {

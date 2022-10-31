@@ -23,6 +23,7 @@ lns.renderer = Renderer({
 	bgColor: '#ffffff',
 	retina: true,
 	dps: 30,
+	lineWidth: 2,
 });
 
 lns.anim = new Animation(lns.renderer.ctx, 30, true);
