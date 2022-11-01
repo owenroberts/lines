@@ -222,26 +222,26 @@ function FilesIO(lns, params) {
 
 		const panel = lns.ui.getPanel('fio', { label: 'Files IO' });
 		
-		lns.ui.addUIs({
+		lns.ui.addProps({
 			'title': { id: 'title',  value: fileName, type: 'UIText'} // what?
 		});	
 
 		lns.ui.addCallbacks([
 			{ callback: saveLocal, key: 's', text: 'Save Local', args: [false], },
-			{ callback: loadLocal,  text: 'Load Local', },
+			{ callback: loadLocal, key: 'l', text: 'Load Local', },
 			{ callback: clearLocal, key: 'alt-c', text: 'Clear Local', },
 			{ callback: saveFile, key: 'alt-s', text: 'Save File', args: [false], },
 			{ callback: saveFile, key: 'shift-s', text: 'Save Frame', args: [true], },
 			{ callback: saveFramesToFiles, key: 'shift-e', text: 'Save Frames to Files', },
-			// { callback: openFile, key: 'o', text: 'Open', },
 			{ callback: reOpenFile, key: 'shift-o', text: 'Re-Open', },
 		]);
 
-		const openFile = new UIFile({
-			'text': 'Open',
+		lns.ui.addUI({
+			type: 'UIFile',
 			key: 'o',
 			callback: (data, fName, fPath) => { loadFile(data, fName, fPath); }
-		});
+		})
+
 	}
 
 	return { connect, loadFile, loadJSON };

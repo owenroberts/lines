@@ -78,7 +78,6 @@ function Canvas(lns, params) {
 				value: lineWidth,
 				range: [1, 100],
 				callback: value => { 
-					console.log('canv con', value);
 					lns.renderer.setLineWidth(value); 
 				}
 			},	

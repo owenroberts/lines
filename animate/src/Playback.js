@@ -268,7 +268,8 @@ function Playback(lns, params) {
 				type: 'UINumberStep',
 				value: onionSkinNum,
 				label: 'Frames',
-				key: 'l',
+				key: 'shift-n',
+				prompt: 'Onion Skin Frames',
 				callback: value => { onionSkinNum = value; }
 			},
 			'viewStats': {

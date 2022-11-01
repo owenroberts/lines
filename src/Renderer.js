@@ -69,12 +69,9 @@ function Renderer(params) {
 	}
 
 	function setLineWidth(value) {
-		console.log(lineWidth, ctx.lineWidth);
 		lineWidth = value;
 		ctx.lineWidth = lineWidth;
-		console.log(lineWidth, ctx.lineWidth);
-		// reset();
-		canvasUpdate();
+		canvasUpdate(); // idk
 	}
 
 	function canvasUpdate() {
