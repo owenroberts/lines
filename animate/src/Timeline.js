@@ -60,8 +60,8 @@ function Timeline() {
 		drawLayers();
 	}
 
-	function scrollToFrame() {
-		if (!useScrollToFrame) return;
+	function scrollToFrame(overrideScroll) {
+		if (!useScrollToFrame && !overrideScroll) return;
 		timeline.el.scrollTo(timeline[`frm-${lns.anim.currentFrame}`].el.offsetLeft - 10, 0);
 	}
 
@@ -71,7 +71,7 @@ function Timeline() {
 		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame; // eek
 
 		timeline.setProp('--num-frames', lns.anim.endFrame + 1);
-		timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.tweens.length, 0));
+		// timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.tweens.length, 0));
 
 		timeline.clear();
 
@@ -103,6 +103,7 @@ function Timeline() {
 	function drawLayers() {
 
 		let rowCount = 0; // set rows
+		let tweenCount = 0; // tweens
 
 		if (viewLayers) {
 			const layers = viewActiveLayers ?
@@ -245,7 +246,7 @@ function Timeline() {
 					}, tween, layer);
 					
 					timeline.append(tweenUI, `tween-${j}-layer-${i}`);
-					
+					tweenCount++;
 					gridRowStart += 2;
 					gridRowEnd += 2;
 				}
@@ -253,6 +254,8 @@ function Timeline() {
 		}
 
 		timeline.setProp('--num-layers', rowCount);
+		timeline.setProp('--num-tweens', tweenCount);
+
 	}
 
 	function split() {
@@ -316,7 +319,7 @@ function Timeline() {
 			},
 			'viewLayers': {
 				value: viewLayers,
-				key: 'ctrl-l',
+				key: '[',
 				text: 'V',
 				class: 'left-end',
 				noLabel: true,
@@ -327,7 +330,7 @@ function Timeline() {
 			},
 			'viewActiveLayers': {
 				value: viewActiveLayers,
-				key: 'ctrl-l',
+				key: ']',
 				text: 'V', // toggle text in check ??
 				class: 'right-end',
 				noLabel: true,
@@ -353,6 +356,7 @@ function Timeline() {
 		});
 
 		lns.ui.addCallbacks([
+			{ callback: scrollToFrame, key: 'shift-f', text: '⊙', args: [true], },
 			{ callback: fit, text: '⇿', key: 'alt-f', class: 'left-end', },
 			{ callback: fitFrame, text: '⏛', key: 'ctrl-f', class: 'right-end', },
 			{ callback: select, text: 'Select', key: 'shift-v', class: 'left-end', args: [true] },

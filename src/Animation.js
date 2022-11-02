@@ -83,6 +83,8 @@ class Animation {
 
 	set frame(n) {
 		this.currentFrame = +n;
+
+		// reset end of default anim to anim end
 		if (this.states.default) {
 			if (this.states.default.end !== this.endFrame)
 				this.states.default.end = this.endFrame;

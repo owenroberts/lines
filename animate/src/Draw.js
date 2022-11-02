@@ -167,12 +167,11 @@ function Draw(lns, defaults) {
 	}
 
 	function transformPoint(x, y) {
-		// console.log(lns.canvas.getScale());
-		// console.log('event', Math.round(x), Math.round(y));
-		const point = new Cool.Vector(x, y)
-			.divide(lns.renderer.getProps().scale)
-			.round();
-		// console.log('point', point.x, point.y);
+		const scale = lns.renderer.getProps().scale;
+		const point = [
+			Math.round(x / scale),
+			Math.round(y / scale),
+		];
 		return point;
 	}
 

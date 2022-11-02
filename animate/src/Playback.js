@@ -150,15 +150,19 @@ function Playback(lns, params) {
 	function update() {
 		
 		if (lns.anim.isPlaying) lns.timeline.update();
-		const { width, height } = lns.renderer.getProps();
+		const { width, height, bgColor } = lns.renderer.getProps();
 
 		/* 
 			in capture set animation onDraw 
 			move this logic to capture
 		*/
+
+		// ctx.fillStyle = bgColor; // lns.canvas.getBGColor();
+		// ctx.fillRect(0, 0, width, height);
+
 		if ((lns.capture.isCapturing() || lns.capture.isVideo())) {
 			if (lns.capture.withBackground()) {
-				ctx.fillStyle = lns.canvas.getBGColor();
+				ctx.fillStyle = bgColor;
 				ctx.fillRect(0, 0, width, height);
 			}
 		} else {
@@ -228,6 +232,7 @@ function Playback(lns, params) {
 			face: 'frameDisplay',
 			key: 'f',
 			value: 0,
+			prompt: 'Set Frame',
 		}, 'play');
 
 		lns.ui.addCallbacks([

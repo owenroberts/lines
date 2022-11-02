@@ -43,8 +43,6 @@ function Renderer(params) {
 	const postTime = [];
 	const preTime = [];
 
-
-
 	function setDPS(value) {
 		dps = value;
 		interval = 1000 / dps;

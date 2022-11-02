@@ -21,7 +21,7 @@ function Capture(lns, params) {
 	let isVideo = false;
 	let videoLoops = 0;
 	let videoFrames = 0;
-	let rec;
+	let recording;
 	let lineWidth = params.captureSettings.lineWidth || lns.canvas.getLineWidth();
 	let canvasScale = params.captureSettings.canvasScale || lns.canvas.getScale();
 	let saveFilesEnabled = window.File && window.FileReader && window.FileList && window.Blob;
@@ -104,7 +104,7 @@ function Capture(lns, params) {
 	
 	function videoLoop() {
 
-		lns.anim.isPlaying = false;
+		// lns.anim.isPlaying = false;
 		lns.anim.frame = 0;
 		videoLoops = +prompt("Number of loops?", 1);
 
@@ -112,7 +112,7 @@ function Capture(lns, params) {
 			videoLoopButton.setProp('--progress-percent', 
 				Math.round(100 * lns.anim.currentFrame / lns.anim.endFrame)
 			);
-		}
+		};
 
 		lns.anim.onPlayedState = function() {
 			if (videoLoops > 1) {
@@ -126,11 +126,10 @@ function Capture(lns, params) {
 				lns.anim.onDraw = undefined;
 			}
 		};
-		isVideo = true;
-		bg = true;
-		startVideo();
-		
-		lns.anim.isPlaying = true;
+
+		startVideo(false, () => {
+			lns.anim.isPlaying = true;
+		});
 	} /* key? */
 
 	function startVideoFrames(recordEachFrame) {
@@ -166,28 +165,37 @@ function Capture(lns, params) {
 	function stopVideo() {
 		isVideo = false;
 		isReady = true;
-		rec.stop();
+		recording.stop();
 	}
 
-	function startVideo(promptTitle) {
+	function startVideo(promptTitle, onDrawCallback) {
 		if (isReady) {
+			
+			isReady = false;
+			isVideo = true;
+			
 			let tempSettings = {};
 			if (params.captureSettings) {
 				tempSettings.lineWidth = lns.ui.faces.lineWidth.value;
 				tempSettings.canvasScale = lns.ui.faces.canvasScale.value;
-
-				lns.ui.faces.lineWidth.update(lineWidth);
 				lns.ui.faces.canvasScale.update(canvasScale);
+				lns.ui.faces.lineWidth.update(lineWidth);
+				lns.playback.update(); // reset
 			}
-			isReady = false;
-			isVideo = true;
+			
 			const stream = lns.canvas.canvas.captureStream(lns.renderer.getProps().dps);
-			rec = new MediaRecorder(stream, {
+			recording = new MediaRecorder(stream, {
 				videoBitsPerSecond : videoBitsPerSecond,
 				mimeType: 'video/webm;codecs=vp8,opus'
 			});
-			rec.start();
-			rec.addEventListener('dataavailable', e => {
+
+			lns.anim.onDraw = function() {
+				recording.start(); // wait one draw to start recording
+				if (onDrawCallback) onDrawCallback();
+				lns.anim.onDraw = undefined;
+			};
+			
+			recording.addEventListener('dataavailable', e => {
 				const blob = new Blob([ e.data ], { 'type': 'video/webm' });
 				const url = URL.createObjectURL(blob);
 				const a = document.createElement('a');
@@ -238,7 +246,6 @@ function Capture(lns, params) {
 			class: 'progress' 
 		});
 
-
 		lns.ui.addUIs([
 			{
 				value: false,
@@ -251,6 +258,7 @@ function Capture(lns, params) {
 				}
 			},
 		]);
+
 		lns.ui.addProps({
 			'withBackground': {
 				type: 'UIToggleCheck', 
