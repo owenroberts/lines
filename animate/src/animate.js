@@ -121,3 +121,4 @@ if (params.src) lns.fio.loadFile(params.src);
 
 console.log(lns);
 
+window.lns = lns;

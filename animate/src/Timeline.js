@@ -223,7 +223,6 @@ function Timeline() {
 					},
 					update() { lns.ui.update(); },
 					reset() { resetLayers(); },
-					
 					remove(layer) { lns.anim.removeLayer(layer); },
 				});
 				
@@ -255,7 +254,6 @@ function Timeline() {
 
 		timeline.setProp('--num-layers', rowCount);
 		timeline.setProp('--num-tweens', tweenCount);
-
 	}
 
 	function split() {

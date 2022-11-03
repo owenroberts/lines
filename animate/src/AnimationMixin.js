@@ -29,8 +29,8 @@ const AnimationMixin = {
 	merge(a, b, layer) {
 		const dA = lns.anim.drawings[a]; // drawing a
 		const dB = lns.anim.drawings[b];
-		for (let i = 0, len = dB.length; i < len; i++) {
-			dA.add(dB.pop());
+		while (dB.length > 0) {
+			dA.add(dB.shift());
 		}
 		if (!layer) console.warn('No layer'); // if need to get layer from draw index
 		lns.anim.drawings[b] = null;

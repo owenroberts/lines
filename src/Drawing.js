@@ -14,7 +14,6 @@ class Drawing {
 
 	// add a point
 	add(point) {
-		// console.log('drawing', point.x, point.y);
 		if (point === 'add' || point === 1) {
 			this.points.push('add');
 		} else if (point === 'end' || point === 0) {
@@ -27,13 +26,16 @@ class Drawing {
 
 		// this is prob where offset errors come from, update this to use layer segNum
 		this.offsets.push([[0,0], [0,0]]); // default add an offset even for end ... work on better way to update this
-
-		// console.log(this.points);
 	}
 
 	pop() {
 		this.offsets.pop();
 		return this.points.pop();
+	}
+
+	shift() {
+		this.offsets.shift();
+		return this.points.shift();
 	}
 
 	get(index) {
