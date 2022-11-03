@@ -37,7 +37,8 @@ lns.draw = Draw(lns, {
 	jiggleRange: 1,
 	wiggleRange: 1, 
 	wiggleSpeed: 0.1,
-	color: '#000000' 
+	color: '#000000',
+	lineWidth: 1
 });
 lns.brush = Brush(lns);
 lns.eraser = Eraser(lns);

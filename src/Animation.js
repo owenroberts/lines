@@ -151,7 +151,10 @@ class Animation {
 		}
 	}
 
-	finish() {
+	finish(props) {
+		if (this.ctx.lineWidth !== props.lineWidth) {
+			this.ctx.lineWidth = props.lineWidth;
+		}
 		this.ctx.stroke();
 	}
 
@@ -182,6 +185,7 @@ class Animation {
 			should test 
 		*/
 		let layerColor = this.getColor();
+		let lineWidth = this.ctx.lineWidth;
 		this.ctx.beginPath(); // start drawing lines -- wait ...
 
 		const layers = this.getLayers(); // GameAnim uses frames for performance upgrade
@@ -234,7 +238,7 @@ class Animation {
 
 			// if changing color finish previous ctx draw and start new
 			if (this.multiColor && props.color !== layerColor) {
-				this.finish();
+				this.finish(props);
 				this.setColor(props.color);
 				layerColor = props.color;
 				this.ctx.beginPath();
@@ -267,7 +271,7 @@ class Animation {
 				this.drawLines(s, e, props); // draws lines between points
 			}
 		}
-		this.finish();
+		this.finish({ lineWidth });
 		if (this.onDraw) this.onDraw();
 	}
 
@@ -390,6 +394,7 @@ class Animation {
 			x: json.x || 0,
 			y: json.y || 0,
 			color: json.c,
+			lineWidth: json.lw || 1,
 			segmentNum: json.n,
 			jiggleRange: json.r,
 			wiggleRange: json.w,

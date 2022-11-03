@@ -108,6 +108,7 @@ const LayerMixin = {
 			v: this.wiggleSpeed,
 			ws: this.wiggleSegments,
 			c: this.color,
+			lw: this.lineWidth,
 			f: [this.startFrame, this.endFrame],
 			d: this.drawingIndex,
 			b: this.breaks,
@@ -130,6 +131,7 @@ const LayerMixin = {
 			linesInterval: this.linesInterval,
 			breaks: this.breaks,
 			color: this.color,
+			lineWidth: this.lineWidth,
 		};
 	},
 
@@ -159,6 +161,7 @@ const LayerMixin = {
 			x: this.x,
 			y: this.y,
 			color: this.color,
+			lineWidth: this.lineWidth,
 			drawingStartIndex: this.drawingStartIndex,
 			drawingEndIndex: this.drawingEndIndex,
 			startFrame: this.startFrame,

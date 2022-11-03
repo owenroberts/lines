@@ -73,14 +73,6 @@ function Canvas(lns, params) {
 				value: height,
 				callback: value => { lns.renderer.setHeight(value); }
 			},
-			'lineWidth': {
-				type: 'UINumberStep',
-				value: lineWidth,
-				range: [1, 100],
-				callback: value => { 
-					lns.renderer.setLineWidth(value); 
-				}
-			},	
 			'canvasScale': {
 				type: 'UINumberStep',
 				value: scale,

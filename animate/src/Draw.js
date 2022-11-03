@@ -356,6 +356,12 @@ function Draw(lns, defaults) {
 				value: defaults.color, // huh lns.anim.getProps ? 
 				callback: value => { setProperty('color', value); }
 			},
+			lineWidth: {
+				type: 'UINumberStep',
+				type: 'UINumberStep',
+				value: defaults.lineWidth,
+				callback: value => { setProperty('lineWidth', value); }
+			}
 		}, 'draw');
 
 		lns.ui.addCallbacks([
