@@ -17,6 +17,8 @@ function FilesIO(lns, params) {
 			h: +lns.canvas.getHeight(),
 			fps: +lns.anim.fps,
 			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1, // filter
+			mw: [...new Set(lns.anim.layers.map(layer => layer.lineWidth))].length > 1,
+
 		};
 		if (params.bg) json.bg = lns.canvas.getBGColor();
 		if (!lns.ui.faces.title.value) lns.ui.faces.title.value = json.title;

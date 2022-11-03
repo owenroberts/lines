@@ -7,11 +7,12 @@
 */
 
 class Animation {
-	constructor(ctx, dps, multiColor) {
+	constructor(ctx, dps, multiColor, multiWidth) {
 		this.ctx = ctx;
 		this.isLoaded = false;
 		this.isPlaying = false;
 		this.multiColor = multiColor || false;
+		this.multiWidth = multiWidth || false;
 
 		this.drawings = [];
 		this.layers = [];
@@ -152,9 +153,6 @@ class Animation {
 	}
 
 	finish(props) {
-		if (this.ctx.lineWidth !== props.lineWidth) {
-			this.ctx.lineWidth = props.lineWidth;
-		}
 		this.ctx.stroke();
 	}
 
@@ -176,6 +174,13 @@ class Animation {
 		return layers;
 	}
 
+	getCurrentProps() {
+		return {
+			color: this.ctx.strokeStyle,
+			lineWidth: this.ctx.lineWidth,
+		};
+	}
+
 	draw(x, y, suspendLinesUpdate) {
 
 		/* 
@@ -184,8 +189,9 @@ class Animation {
 			should consider having pixel lines more separate
 			should test 
 		*/
-		let layerColor = this.getColor();
-		let lineWidth = this.ctx.lineWidth;
+		// let layerColor = this.getColor();
+		let currentProps = this.getCurrentProps();
+		// let lineWidth = this.ctx.lineWidth;
 		this.ctx.beginPath(); // start drawing lines -- wait ...
 
 		const layers = this.getLayers(); // GameAnim uses frames for performance upgrade
@@ -236,14 +242,29 @@ class Animation {
 				}
 			}
 
-			// if changing color finish previous ctx draw and start new
-			if (this.multiColor && props.color !== layerColor) {
-				this.finish(props);
-				this.setColor(props.color);
-				layerColor = props.color;
-				this.ctx.beginPath();
-			}
+			// if props change, stroke previous layers and change to new ...
+			// console.log(this.multiWidth);
+			if (this.multiColor || this.multiWidth) {
+				
+				if (props.color !== currentProps.color || props.lineWidth !== currentProps.lineWidth) {
+					this.finish();
 
+					if (props.color !== currentProps.color) {
+						this.setColor(props.color);
+						currentProps.color = props.color;
+					}
+
+					if (props.lineWidth !== currentProps.lineWidth) {
+						if (this.ctx.lineWidth !== props.lineWidth) {
+							this.ctx.lineWidth = props.lineWidth;
+						}
+						currentProps.lineWidth = props.lineWidth;
+					}
+
+					this.ctx.beginPath();
+				}
+			}
+			
 			// layers save the end index except in lines/animate
 			// also works with tweens that set endIndex to 0
 			let endIndex = props.endIndex < 0 ? drawing.length - 1 : props.endIndex - 1;
@@ -271,7 +292,7 @@ class Animation {
 				this.drawLines(s, e, props); // draws lines between points
 			}
 		}
-		this.finish({ lineWidth });
+		this.finish();
 		if (this.onDraw) this.onDraw();
 	}
 
@@ -375,6 +396,7 @@ class Animation {
 		this.fps = json.fps;
 
 		if (json.mc) this.multiColor = json.mc;
+		if (json.mw) this.multiWidth = json.mw;
 
 		this.width = json.w;
 		this.height = json.h;

@@ -59,6 +59,7 @@ function Draw(lns, defaults) {
 				wiggleRange: +lns.ui.faces.wiggleRange.value,
 				wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
 				color: lns.ui.faces.color.value,
+				lineWidth: lns.ui.faces.lineWidth.value,
 				drawingIndex: lns.anim.drawings.length - 1,
 				startFrame: +f || lns.anim.currentFrame,
 			}));
@@ -134,6 +135,7 @@ function Draw(lns, defaults) {
 	let isDrawing = false; // for drawStart to drawEnd so its not always moving
 	let prevPosition = new Cool.Vector();
 	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
+
 
 	function outSideCanvas(ev) {
 		if (ev.toElement !== lns.renderer.canvas) {

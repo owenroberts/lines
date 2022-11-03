@@ -13,6 +13,7 @@ class Layer {
 		this.drawingEndIndex = params.drawingEndIndex || -1;
 		
 		this.color = params.color || '#000000';
+		this.lineWidth = params.lineWidth || 1;
 
 		this.segmentNum =  params.segmentNum; // need to fix these ... 
 		this.jiggleRange = params.jiggleRange;
@@ -60,6 +61,7 @@ class Layer {
 			x: this.x,
 			y: this.y,
 			color: this.color,
+			lineWidth: this.lineWidth,
 			startIndex: this.drawingStartIndex,
 			endIndex: this.drawingEndIndex,
 			breaks: this.breaks,

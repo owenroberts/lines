@@ -23,10 +23,10 @@ lns.renderer = Renderer({
 	bgColor: '#ffffff',
 	retina: true,
 	dps: 30,
-	lineWidth: 2,
+	lineWidth: 1,
 });
 
-lns.anim = new Animation(lns.renderer.ctx, 30, true);
+lns.anim = new Animation(lns.renderer.ctx, 30, true, true);
 
 // modules
 lns.playback = Playback(lns, { stats: false }); // (dps, stats?)
