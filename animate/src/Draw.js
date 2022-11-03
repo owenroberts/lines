@@ -135,7 +135,6 @@ function Draw(lns, defaults) {
 	let prevPosition = new Cool.Vector();
 	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
 
-
 	function outSideCanvas(ev) {
 		if (ev.toElement !== lns.renderer.canvas) {
 			if (isDrawing) reset();

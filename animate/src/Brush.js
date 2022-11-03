@@ -35,10 +35,10 @@ function Brush(lns) {
 				* (i / numPoints) 
 				* (1 - Cool.random(brushRandomY));
 
-			let point = new Cool.Vector(origin.x + _x, origin.y - _y);
-			if (point.x > 0 && point.x < lns.canvas.getWidth() && 
-				point.y > 0 && point.y < lns.canvas.getHeight()) {
-				drawing.add(point.round());
+			let point = [origin[0] + Math.round(_x), origin[1] - Math.round(_y)];
+			if (point[0] > 0 && point[0] < lns.canvas.getWidth() && 
+				point[1] > 0 && point[1] < lns.canvas.getHeight()) {
+				drawing.add(point);
 			}
 		}
 		drawing.add('end');
