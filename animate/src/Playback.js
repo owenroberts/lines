@@ -13,7 +13,7 @@ function Playback(lns, params) {
 	let showStats = params.showStats || false;
 
 	lns.renderer.addCallback(update);
-	lns.renderer.addCallback(preTime, 'preTime');
+	lns.renderer.addCallback(preTime, 'pre');
 	lns.renderer.addCallback(postRender, 'post');
 
 	function toggleStats(value) {
@@ -26,6 +26,12 @@ function Playback(lns, params) {
 			stats.dom.style.right = '0';
 			stats.dom.style.left = 'auto';
 			playPanel.el.appendChild(stats.dom);
+
+			// check if its visible
+			const rect = stats.dom.getBoundingClientRect();
+			if (rect.y < 0) {
+				stats.dom.style.top = `-${48 + Math.ceil(rect.y)}px`;
+			}
 		} 
 		
 		if (stats) {
