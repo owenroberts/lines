@@ -242,6 +242,7 @@ function Timeline() {
 							gridColumnStart: tween.startFrame * 2 + 1,
 							gridColumnEnd: tween.endFrame * 2 + 3
 						},
+						update() { lns.ui.update(); },
 					}, tween, layer);
 					
 					timeline.append(tweenUI, `tween-${j}-layer-${i}`);

@@ -5,16 +5,15 @@ class UITween extends UICollection {
 		this.tween = tween;
 
 		this.edit = new UIButton({
-			text: '✎',
-			type: 'tween-edit',
+			text: 'E',
+			btnClass: 'timeline-btn',
+			class: 'tween-edit',
 			callback: () => {
 				const modal = new UIModal({
 					title: 'Edit Tween', 
 					app: lns, 
 					position: this.position, 
-					callback: function() {
-						lns.ui.update();
-					}
+					callback: () => { params.update(); }
 				});	
 
 				/* not DRY maybe make an animate class tween-modal */
@@ -22,7 +21,7 @@ class UITween extends UICollection {
 				modal.addBreak('Start Frame:');
 				modal.add(new UINumber({
 					value: tween.startFrame,
-					callback: function(value) {
+					callback(value) {
 						tween.startFrame = +value;
 					}
 				}));
@@ -30,9 +29,7 @@ class UITween extends UICollection {
 				modal.addBreak('End Frame:');
 				modal.add(new UINumber({
 					value: tween.endFrame,
-					callback: function(value) {
-						tween.endFrame = +value;
-					}
+					callback(value) { tween.endFrame = value; }
 				}));
 
 				modal.addBreak('Start Value:');
@@ -53,37 +50,53 @@ class UITween extends UICollection {
 			}
 		});
 
-		this.left = new UIDragButton({
-			text: '⬗',
-			type: 'left',
-			callback: (dir, num) => {
-				tween.startFrame += (dir ? dir : -1) * (num ? num : 1);
-				lns.ui.update();
-			}		
-		});
-
-		this.right = new UIDragButton({
-			text: '⬖',
-			type: 'right',
-			callback: (dir, num) => {
-				this.tween.endFrame += (dir ? dir : 1) * (num ? num : 1);
-				lns.ui.update();
-			}		
-		});
-
 		this.remove = new UIButton({
-			type: 'remove',
-			text: '🗑',
+			class: 'remove',
+			text: 'X',
+			btnClass: 'timeline-btn',
 			callback: () => {
 				layer.tweens.splice(layer.tweens.indexOf(this), 1);
 				lns.ui.update();
 			}
 		});
 
+		const uis = this.getPropUIs(tween, layer, params, false);
+		uis.endFrame.addClass('right-margin');
+
+		this.append(uis.startFrame);
 		this.append(this.edit);
 		this.append(this.remove);
-		this.append(this.left);
-		this.append(this.right);
+		this.append(uis.endFrame);
+
+	}
+
+	getPropUIs(tween, layer, params, isModal) {
+
+		const btnClass = isModal ? 'btn' : 'timeline-btn';
+
+		const startFrame = new UINumberStep({
+			value: tween.startFrame,
+			class: isModal ? '' : btnClass,
+			callback: value => {
+				tween.startFrame = value >= layer.startFrame ?
+					value :
+					layer.startFrame;
+				params.update();
+			}
+		});
+
+		const endFrame = new UINumberStep({
+			value: tween.endFrame,
+			class: isModal ? '' : btnClass,
+			callback: value => {
+				tween.endFrame = value <= layer.endFrame ?
+					value :
+					layer.endFrame;
+				params.update();
+			}
+		});
+
+		return { startFrame, endFrame };
 	}
 
 	get html() {
