@@ -104,7 +104,6 @@ class Animation {
 	}
 
 	set state(state) {
-		console.log(state, this.states);
 		if (this._state !== state && this.states[state]) {
 			this._state = state;
 			if (this.state) this.frame = this.state.start;

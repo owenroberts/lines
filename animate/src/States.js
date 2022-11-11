@@ -55,14 +55,10 @@ function States(lns) {
 	}
 
 	function set(state) {
-		console.log(state);
 		if (state) {
-			console.log(lns.anim.stateName)
 			lns.anim.state = state;
-			console.log(lns.anim.stateName)
 			lns.ui.faces.stateSelect.value = state;
 			lns.ui.update();
-			console.log(lns.anim.stateName)
 			return;
 		}
 

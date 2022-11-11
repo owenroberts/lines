@@ -32,6 +32,7 @@ $anim-off: darkgreen;
 	--num-tweens: 0;
 	--frame-width: 120;
 	--layer-height: 1.5;
+	--state-height: 0;
 	
 	flex-basis: 100%;
 	display: grid;
@@ -39,7 +40,7 @@ $anim-off: darkgreen;
 	// height: calc(var(--height) * 1px);
 	grid-template-columns: repeat(var(--num-frames), 2px calc(var(--frame-width) * 1px));
 	grid-template-rows: 
-		1.5em 
+		calc(calc(1.5 + var(--state-height)) * 1em)
 		repeat(
 			calc(var(--num-layers) + var(--num-tweens)),  
 			calc(var(--layer-height) * 1em) 
@@ -149,6 +150,12 @@ $anim-off: darkgreen;
 
 	.group {
 		background-color: $anim-color;
+	}
+
+	.state {
+		grid-row: 1 / span 1;
+		margin-top: 1.5em;
+		background-color: blue;
 	}
 
 	&::-webkit-scrollbar {

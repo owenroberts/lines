@@ -12,7 +12,6 @@ function Timeline() {
 	let viewLayerRange = 0;
 	let viewGroups = true;
 	let viewState = false;
-	let updateDuringPlay = false;
 	let useScrollToFrame = false;
 	let groups = [];
 
@@ -68,20 +67,27 @@ function Timeline() {
 
 	/* creates all the layer ui new each time */
 	function update() {
+		let prevFrame = lns.ui.faces.frameDisplay.value;
+		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame;
+		if (!lns.anim.isPlaying) {
+			timeline.clear();
+			drawFrames();
+			drawLayers();
+		} else {
+			updateFrame(prevFrame);
+		}
+	}
 
-		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame; // eek
+	function updateFrame(prevFrame) {
+		timeline['frm-' + prevFrame].removeClass('current');
+		timeline['frm-' + lns.anim.currentFrame].addClass('current');
+	}
 
+	function drawFrames() {
 		timeline.setProp('--num-frames', lns.anim.endFrame + 1);
-		timeline.clear();
 
 		const numFrames = lns.anim.endFrame + 1;
-
-		let startFrame = viewState ? lns.anim.state.start : 0;
-		let endFrame = viewState ? lns.anim.state.end + 1: numFrames;
-
-		// move up ??
-
-		for (let i = startFrame; i < endFrame; i++) {
+		for (let i = 0; i < numFrames; i++) {
 			const frameBtn = new UIButton({
 				text: `${i}`,
 				css: {
@@ -95,14 +101,26 @@ function Timeline() {
 					lns.ui.update();
 				}	
 			});
-			if (i == lns.anim.currentFrame) frameBtn.addClass('current');
-			// add state class ...
+			if (i === lns.anim.currentFrame) frameBtn.addClass('current');
 			frameBtn.removeClass('btn');
 			// lns.ui.keys[i] = frameBtn;
 			timeline.append(frameBtn, `frm-${i}`);
 		}
+
+		if (lns.anim.stateName !== 'default') {
+			timeline.setProp('--state-height', 1);
+			const stateLine = new UIElement({
+				class: 'state',
+				css: {
+					gridColumnStart: lns.anim.state.start * 2 + 1,
+					gridColumnEnd: (lns.anim.state.end + 1) * 2 + 1,
+				}
+			});
+			timeline.append(stateLine);
+		} else {
+			timeline.setProp('--state-height', 0);
+		}
 		
-		if (updateDuringPlay || !lns.anim.isPlaying) drawLayers();
 		scrollToFrame();
 	}
 
@@ -163,7 +181,7 @@ function Timeline() {
 				}
 			}
 
-
+			
 
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 				const layer = lns.anim.layers[i];
@@ -379,15 +397,6 @@ function Timeline() {
 				key: 'ctrl-t',
 				label: 'State',
 				callback: value => { lns.states.set(value); }
-			},
-			'stateDisplay': {
-				type: 'UIToggleCheck',
-				key: 'alt-t',
-				label: 'State View',
-				callback(value) { 
-					viewState = value; 
-					update();
-				}
 			}
 		});
 

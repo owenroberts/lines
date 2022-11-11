@@ -1,6 +1,6 @@
 const { Renderer, Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
 const { Interface, Settings } = UI;
-const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText } = UI.Elements;
+const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText, UIElement } = UI.Elements;
 const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
