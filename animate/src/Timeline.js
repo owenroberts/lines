@@ -13,6 +13,7 @@ function Timeline() {
 	let viewGroups = true;
 	let viewState = false;
 	let useScrollToFrame = false;
+	let autoFit = false;
 	let groups = [];
 
 	function init() {
@@ -34,7 +35,7 @@ function Timeline() {
 		const w = panel.el.clientWidth - 11; /* 11 for padding */
 		frameWidth = (w - 2 * f) / f; 
 		timeline.setProp('--frame-width', frameWidth);
-		update();
+		// update();
 	}
 
 	function frameClass() {
@@ -55,9 +56,9 @@ function Timeline() {
 		frameWidth = 140;
 		timeline.setProp('--frame-width', frameWidth);
 		frameClass();
-		update();
-		scrollToFrame();
+		// update();
 		drawLayers();
+		scrollToFrame();
 	}
 
 	function scrollToFrame(overrideScroll) {
@@ -71,6 +72,7 @@ function Timeline() {
 		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame;
 		if (!lns.anim.isPlaying) {
 			timeline.clear();
+			if (autoFit) fit();
 			drawFrames();
 			drawLayers();
 		} else {
@@ -160,7 +162,7 @@ function Timeline() {
 					const ui = new UITimelineGroup(groupLayers, {
 						name: groups[i],
 						index: i,
-						type: 'group',
+						class: 'group',
 						startFrame: startFrame,
 						endFrame: endFrame,
 						width: frameWidth * (endFrame - startFrame + 1),
@@ -173,7 +175,6 @@ function Timeline() {
 						update() { lns.ui.update(); },
 						reset() { resetLayers(); },
 					});
-
 					gridRowStart += 2;
 					gridRowEnd += 2;
 					rowCount++;
@@ -392,11 +393,16 @@ function Timeline() {
 		]);
 
 		lns.ui.addProps({
+			'autoFit': {
+				type: 'UIToggleCheck',
+				value: autoFit,
+				callback(value) { autoFit = value; }
+			},
 			'stateSelect': {
 				type: 'UISelect',
 				key: 'ctrl-t',
 				label: 'State',
-				callback: value => { lns.states.set(value); }
+				callback(value) { lns.states.set(value); }
 			}
 		});
 

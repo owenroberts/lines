@@ -15,8 +15,8 @@ class UITimelineGroup extends UICollection {
 		const self = this;
 
 		const toggle = new UIToggle({
-			type: 'group-toggle',
-			class: 'timeline-btn',
+			class: 'group-toggle',
+			btnClass: 'timeline-btn',
 			text: params.name,
 			isOn: this.isToggled,
 			callback: value => {
@@ -29,8 +29,8 @@ class UITimelineGroup extends UICollection {
 		});
 
 		const highlight = new UIToggle({
-			type: 'group-highlight',
-			class: 'timeline-btn',
+			class: 'group-highlight',
+			btnClass: 'timeline-btn',
 			text: '*',
 			isOn: false,
 			callback: value => {
@@ -41,8 +41,8 @@ class UITimelineGroup extends UICollection {
 		});
 
 		const edit = new UIButton({
-			type: 'layer-edit',
-			class: 'timeline-btn',
+			class: 'layer-edit',
+			btnClass: 'timeline-btn',
 			text: "E",
 			callback: () => {
 				this.editModal(layers, params);
@@ -58,6 +58,7 @@ class UITimelineGroup extends UICollection {
 		if (width > 50) this.append(uis.lock);
 		if (width > 60) this.append(uis.breakUp);
 		if (width > 70) this.append(uis.removeLayer);
+		if (width > 80) this.append(uis.tween);
 
 		if (width > 80) {
 			this.append(uis.endFrameNumber);
@@ -67,13 +68,12 @@ class UITimelineGroup extends UICollection {
 
 	getPropUIs(layers, params, isModal) {
 
-		const uis = {};
 		const btnClass = isModal ? 'btn' : 'timeline-btn';		
 
-		uis.lock = new UIToggle({
-			type: 'group-lock',
+		const lock = new UIToggle({
+			class: 'group-lock',
 			text: isModal ? 'Lock' : 'L',
-			class: btnClass,
+			btnClass: btnClass,
 			isOn: false,
 			callback: function() {
 				layers.forEach(layer => {
@@ -82,9 +82,9 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		uis.breakUp = new UIButton({
-			type: 'group-breakup',
-			class: btnClass,
+		const breakUp = new UIButton({
+			class: 'group-breakup',
+			btnClass: btnClass,
 			text: isModal ? 'Break up' : 'X',
 			callback: () => {
 				layers.forEach(layer => {
@@ -94,9 +94,9 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		uis.removeLayer = new UIButton({
-			type: 'group-remove-layer',
-			class: btnClass,
+		const removeLayer = new UIButton({
+			class: 'group-remove-layer',
+			btnClass: btnClass,
 			text: isModal ? 'Remove Layer' : 'R',
 			callback: () => {
 				
@@ -133,7 +133,7 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		uis.startFrameNumber = new UINumberStep({
+		const startFrameNumber = new UINumberStep({
 			value: this.startFrame,
 			class: isModal ? '' : btnClass,
 			min: 0,
@@ -148,7 +148,7 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		uis.endFrameNumber = new UINumberStep({
+		const endFrameNumber = new UINumberStep({
 			value: this.endFrame,
 			class: isModal ? '' : btnClass,
 			min: 0,
@@ -163,7 +163,14 @@ class UITimelineGroup extends UICollection {
 			}
 		});
 
-		return uis;
+		const tween = new UIButton({
+			text: isModal ? "Add Tween" : "T",
+			class: btnClass,
+			btnClass: 'group-tween',
+			callback: () => { this.tweenModal(layers); }
+		});
+
+		return { lock, breakUp, removeLayer, startFrameNumber, endFrameNumber, tween };
 	}
 
 	editModal(layers, params) {
@@ -183,5 +190,64 @@ class UITimelineGroup extends UICollection {
 		}
 
 		modal.adjustPosition();	
+	}
+
+	tweenModal(layers) {
+
+		// not DRY
+
+		const tween = {
+			prop: 'endIndex',
+			startFrame: lns.anim.currentFrame,
+			endFrame: lns.anim.currentFrame + 10,
+			startValue: 0,
+			endValue: 'end'
+		};
+
+		const modal = new UIModal({
+			title: 'Add Tween', 
+			app: lns, 
+			position: this.position, 
+			callback: () => {
+				layers.forEach(layer => {
+					tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
+					layer.addTween(tween)
+				});
+				this.update();
+			}
+		});
+
+		modal.addBreak('Property:');
+		modal.add(new UISelect({
+			options: Object.keys(layers[0].getTweenProps()),
+			value: 'endIndex',
+			selected: 'endIndex',
+			callback(value) { tween.prop = value; }
+		}));
+
+		modal.addBreak('Start Frame:');
+		modal.add(new UINumber({
+			value: tween.startFrame,
+			callback(value) { tween.startFrame = value; }
+		}));
+
+		modal.addBreak('End Frame:');
+		modal.add(new UINumber({
+			value: tween.endFrame,
+			callback(value) { tween.endFrame = value; }
+		}));
+
+		modal.addBreak('Start Value:');
+		modal.add(new UINumber({
+			value: tween.startValue,
+			callback(value) { tween.startValue = value; }
+		}));
+
+		modal.addBreak('End Value:');
+		modal.add(new UINumber({
+			value: tween.endValue,
+			callback(value) { tween.endValue = value; }
+		}));
+
 	}
 }

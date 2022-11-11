@@ -117,9 +117,13 @@ lns.timeline.init();
 lns.playback.toggleStats();
 lns.renderer.start();
 
-if (params.src) lns.fio.loadFile(params.src, () => {
+if (params.src) {
+	lns.fio.loadFile(params.src, () => {
+		lns.ui.settings.load();
+	});
+} else {
 	lns.ui.settings.load();
-});
+}
 
 console.log(lns);
 

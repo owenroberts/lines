@@ -11,7 +11,7 @@ function Eraser(lns) {
 
 	function erase(mousePosition) {
 		// let mousePosition = new Cool.Vector(x, y).divide(lns.canvas.getScale()).round();
-		position = mousePosition;
+		position = new Cool.Vector(mousePosition);
 		let layers = [];
 		for (let i = lns.anim.layers.length - 1; i >= 0; i--) {
 			const layer = lns.anim.layers[i];
@@ -26,7 +26,7 @@ function Eraser(lns) {
 				if (drawing.points[j] === 'add') continue; // prob need to deal w this
 
 				const point = new Cool.Vector(drawing.points[j]);
-				const d = mousePosition.distance(point);
+				const d = position.distance(point);
 				
 				if (d < distance) {
 					if (method === 'lines') {

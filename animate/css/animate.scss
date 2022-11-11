@@ -105,9 +105,9 @@ $anim-off: darkgreen;
 			display: inline-block;
 			cursor: pointer;
 			// background-color: $ui-color;
+			background-color: transparent; 
 
 			&.toggle { 
-				background-color: transparent; 
 				color: inherit;
 				&:hover { background-color: $ui-select; }
 			}

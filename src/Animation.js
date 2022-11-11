@@ -189,9 +189,8 @@ class Animation {
 			should consider having pixel lines more separate
 			should test 
 		*/
-		// let layerColor = this.getColor();
+		
 		let currentProps = this.getCurrentProps();
-		// let lineWidth = this.ctx.lineWidth;
 		this.ctx.beginPath(); // start drawing lines -- wait ...
 
 		const layers = this.getLayers(); // GameAnim uses frames for performance upgrade

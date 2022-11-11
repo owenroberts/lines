@@ -197,16 +197,15 @@ function Playback(lns, params) {
 			// highlight
 			if (lns.anim.layers.some(l => l.isHighlighted)) {
 				lns.anim.overrideProperty('color', '#94dfe3');
+				lns.anim.overrideProperty('lineWidth', 5);
 				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 					const layer = lns.anim.layers[i];
 					if (!layer.isInFrame(lns.anim.currentFrame) || !layer.isHighlighted) {
 						layer.dontDraw = true;
 					}
 				}
-				ctx.lineWidth = 5; // set through ui or make it a class
 				lns.anim.draw(0, 0, true);
 				lns.anim.cancelOverride();
-				ctx.lineWidth = lns.canvas.getLineWidth();
 				lns.anim.layers.filter(l => l.dontDraw).forEach(l => {
 					l.dontDraw = false;
 				});

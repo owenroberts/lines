@@ -27,6 +27,7 @@ function Background(lns) {
 	let dotEdges = true;
 
 	function loadImage(url) {
+		if (url === 'URL') return; // dumb default to prevent error
 		img.src = url;
 		img.onload = function() {
 			width = img.width;
@@ -95,7 +96,7 @@ function Background(lns) {
 		lns.ui.addProps({
 			'bgImage': {
 				type: 'UIText',
-				placeholder: 'URL',
+				// placeholder: 'URL',
 				css: { 'flex-basis': '100%' },
 				callback: value => { loadImage(value); },
 			},

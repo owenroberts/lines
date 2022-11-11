@@ -70,10 +70,9 @@ class UILayer extends UICollection {
 
 	getPropUIs(layer, params, isModal) {
 
-		const uis = {};
 		const btnClass = isModal ? 'btn' : 'timeline-btn';
 
-		uis.tween = new UIButton({
+		const tween = new UIButton({
 			text: isModal ? "Add Tween" : "T",
 			class: btnClass,
 			btnClass: 'layer-tween',
@@ -82,7 +81,7 @@ class UILayer extends UICollection {
 			}
 		});
 
-		uis.remove = new UIButton({
+		const remove = new UIButton({
 			btnClass: 'remove',
 			text: isModal ? "Remove" : "X",
 			class: btnClass,
@@ -92,7 +91,7 @@ class UILayer extends UICollection {
 			}
 		});
 
-		uis.startFrameNumber = new UINumberStep({
+		const startFrameNumber = new UINumberStep({
 			value: layer.startFrame,
 			class: isModal ? '' : btnClass,
 			min: 0,
@@ -107,7 +106,7 @@ class UILayer extends UICollection {
 			}
 		});
 
-		uis.endFrameNumber = new UINumberStep({
+		const endFrameNumber = new UINumberStep({
 			value: layer.endFrame,
 			class: isModal ? '' : btnClass,
 			min: 0,
@@ -120,7 +119,7 @@ class UILayer extends UICollection {
 			}
 		});
 
-		uis.lock = new UIToggle({
+		const lock = new UIToggle({
 			btnClass: 'layer-lock',
 			text: isModal ? 'Lock' : 'L',
 			class: btnClass,
@@ -130,14 +129,14 @@ class UILayer extends UICollection {
 			}
 		});
 
-		uis.moveUp = new UIButton({
+		const moveUp = new UIButton({
 			text: isModal ? "Move Up" : '^',
 			btnClass:'move-up',
 			class: btnClass,
 			callback: params.moveUp
 		});
 
-		uis.addToGroup = new UIButton({
+		const addToGroup = new UIButton({
 			text: isModal ? 'Add to Group' : 'G',
 			btnClass: 'add-to-group',
 			class: btnClass,
@@ -151,7 +150,7 @@ class UILayer extends UICollection {
 			this.update();
 		};
 
-		uis.merge = new UIButton({
+		const merge = new UIButton({
 			text: isModal ? "Merge Layer" : 'M',
 			class: btnClass,
 			btnClass: 'merge-layer',
@@ -195,7 +194,7 @@ class UILayer extends UICollection {
 			}
 		});
 
-		return uis;
+		return { tween, remove, startFrameNumber, endFrameNumber, lock, moveUp, addToGroup, merge };
 	}
 
 	editModal(layer, params) {
@@ -307,41 +306,31 @@ class UILayer extends UICollection {
 			options: Object.keys(layer.getTweenProps()),
 			value: 'endIndex',
 			selected: 'endIndex',
-			callback: function(value) {
-				tween.prop = value;
-			}
+			callback(value) { tween.prop = value; }
 		}));
 
 		modal.addBreak('Start Frame:');
 		modal.add(new UINumber({
 			value: tween.startFrame,
-			callback: function(value) {
-				tween.startFrame = +value;
-			}
+			callback(value) { tween.startFrame = value; }
 		}));
 
 		modal.addBreak('End Frame:');
 		modal.add(new UINumber({
 			value: tween.endFrame,
-			callback: function(value) {
-				tween.endFrame = +value;
-			}
+			callback(value) { tween.endFrame = value; }
 		}));
 
 		modal.addBreak('Start Value:');
 		modal.add(new UINumber({
 			value: tween.startValue,
-			callback: function(value) {
-				tween.startValue = +value;
-			}
+			callback(value) { tween.startValue = value; }
 		}));
 
 		modal.addBreak('End Value:');
 		modal.add(new UINumber({
 			value: tween.endValue,
-			callback: function(value) {
-				tween.endValue = +value;
-			}
+			callback(value) { tween.endValue = value; }
 		}));
 	}
 }

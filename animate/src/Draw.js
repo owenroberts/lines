@@ -94,8 +94,8 @@ function Draw(lns, defaults) {
 	function quickColorSelect() {
 		const modal = new UIModal({ title: "Select Color", app: lns, position: lns.mousePosition });
 		modal.add(new UIColor({
-			callback: value => {
-				setProperty(value, 'color');
+			callback(value){
+				setProperty('color', value);
 				lns.ui.faces.color.el.value = value;
 			}
 		}));
@@ -104,7 +104,7 @@ function Draw(lns, defaults) {
 				text: color,
 				css: { background: color },
 				value: color,
-				callback: () => {
+				callback() {
 					setProperty('color', color,);
 					lns.ui.faces.color.el.value = color;
 					modal.clear();
@@ -136,10 +136,9 @@ function Draw(lns, defaults) {
 	let prevPosition = new Cool.Vector();
 	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
 
-
 	function outSideCanvas(ev) {
 		if (ev.toElement !== lns.renderer.canvas) {
-			if (isDrawing) reset();
+			getCurrentDrawing().add('end');
 			isDrawing = false;
 		}
 	}
