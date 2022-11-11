@@ -225,10 +225,10 @@ function Playback(lns, params) {
 
 		lns.ui.addCallbacks([
 			{ callback: setFrame, key: '0', text: '0', args: [0] },
-			{ callback: next, key: 'w', text: '<', args: [-1] },
+			{ callback: next, key: 'w', text: '◀', args: [-1] },
 			// play btn
 			{ callback: toggle, type: 'UIToggle', value: false, text: 'Play', "onText": "❚❚", "offText": "▶", key: 'space' },
-			{ callback: next, key: 'e', text: '>', args: [1] },
+			{ callback: next, key: 'e', text: '▶', args: [1] },
 			{ callback: plus, key: '+', text: '+'}
 		], 'play');
 	

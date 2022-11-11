@@ -124,16 +124,14 @@ function FilesIO(lns, params) {
 	}
 
 	/* loads from src url or dragged data ... */
-	function loadFile(file, fName) {
-		if (typeof file === 'string') { // url
-			fetch(file)
-				.then(response => { return response.json(); })
-				.then(data => { loadJSON(data); })
-				.catch(error => {console.error(error); });
-
-		} else { // json 
-			loadJSON(file);
-		}
+	function loadFile(file, callback) {
+		fetch(file)
+			.then(response => { return response.json(); })
+			.then(data => { 
+				loadJSON(data);
+				if (callback) callback();
+			})
+			.catch(error => { console.error(error); });
 	}
 
 	function loadJSON(data, fName) {
@@ -241,7 +239,7 @@ function FilesIO(lns, params) {
 		lns.ui.addUI({
 			type: 'UIFile',
 			key: 'o',
-			callback: (data, fName, fPath) => { loadFile(data, fName, fPath); }
+			callback: (data, fName, fPath) => { loadJSON(data, fName, fPath); }
 		})
 
 	}

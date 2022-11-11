@@ -4,7 +4,7 @@
 
 function States(lns) {
 
-	let panel, selector;
+	let panel;
 
 	function update() {
 		for (const key in lns.anim.states) {
@@ -20,9 +20,16 @@ function States(lns) {
 
 		const row = panel.addRow(name, 'break');
 		lns.anim.states[name] = state;
-		selector.addOption(name);
+		
+		// selector.addOption(name);
+		lns.ui.faces.stateSelect.addOption(name);
 
 		row.append(new UILabel({ text: name }));
+
+		row.append(new UIButton({
+			text: '⊙',
+			callback() { set(name); }
+		}))
 
 		row.append(new UINumberStep({
 			value: state.start,
@@ -39,18 +46,23 @@ function States(lns) {
 			callback: function() {
 				delete lns.anim.states[name];
 				panel.removeRow(row);
-				selector.removeOption(name);
 				lns.anim.state = 'default';
-				selector.value = 'default';
+				lns.ui.faces.stateSelect.value = 'default';
+				lns.ui.faces.stateSelect.removeOption(name);
 			}
 		}));
 		return row;
 	}
 
 	function set(state) {
+		console.log(state);
 		if (state) {
+			console.log(lns.anim.stateName)
 			lns.anim.state = state;
+			console.log(lns.anim.stateName)
+			lns.ui.faces.stateSelect.value = state;
 			lns.ui.update();
+			console.log(lns.anim.stateName)
 			return;
 		}
 
@@ -65,7 +77,7 @@ function States(lns) {
 				text: key,
 				callback: () => {
 					lns.anim.state = key;
-					selector.value = key;
+					lns.ui.faces.stateSelect.value = key;
 					m.clear();
 					lns.ui.update();
 				}
@@ -81,25 +93,18 @@ function States(lns) {
 			end: lns.anim.currentFrame 
 		}, true);
 		lns.anim.state = name;
-		selector.value = name;
+		lns.ui.faces.stateSelect.value = name;
 	}
 
 	function connect() {
 		panel = lns.ui.getPanel('states');
 
-		selector = lns.ui.addProp('stateSelect', {
-			type: 'UISelect',
-			key: 'ctrl-t',
-			callback: value => { set(value); }
-		});
-
 		lns.ui.addCallbacks([
-			{ callback: create, key: 't', text: '+',  },
-			{ callback: set, key: 'shift-t', text: 'Set Default', args: ['default'], },
+			{ callback: create, key: 't', text: 'Create New',  },
 		]);
 
 		panel.addRow(undefined, 'break');
 	}
 
-	return { connect, update };
+	return { connect, update, set };
 }

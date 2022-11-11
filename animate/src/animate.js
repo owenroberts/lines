@@ -110,14 +110,16 @@ lns.ui.settings = new Settings(lns, {
 		lns.palette.setup(settings.interface.palettes);
 	}
 });
-lns.ui.settings.load();
+// lns.ui.settings.load();
 lns.draw.setDefaults();
 
 lns.timeline.init();
 lns.playback.toggleStats();
 lns.renderer.start();
 
-if (params.src) lns.fio.loadFile(params.src);
+if (params.src) lns.fio.loadFile(params.src, () => {
+	lns.ui.settings.load();
+});
 
 console.log(lns);
 

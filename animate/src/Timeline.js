@@ -11,6 +11,7 @@ function Timeline() {
 	let viewActiveLayers = false;
 	let viewLayerRange = 0;
 	let viewGroups = true;
+	let viewState = false;
 	let updateDuringPlay = false;
 	let useScrollToFrame = false;
 	let groups = [];
@@ -71,12 +72,16 @@ function Timeline() {
 		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame; // eek
 
 		timeline.setProp('--num-frames', lns.anim.endFrame + 1);
-		// timeline.setProp('--num-tweens', lns.anim.layers.reduce((n, l) => n + l.tweens.length, 0));
-
 		timeline.clear();
 
 		const numFrames = lns.anim.endFrame + 1;
-		for (let i = 0; i < numFrames; i++) {
+
+		let startFrame = viewState ? lns.anim.state.start : 0;
+		let endFrame = viewState ? lns.anim.state.end + 1: numFrames;
+
+		// move up ??
+
+		for (let i = startFrame; i < endFrame; i++) {
 			const frameBtn = new UIButton({
 				text: `${i}`,
 				css: {
@@ -91,6 +96,7 @@ function Timeline() {
 				}	
 			});
 			if (i == lns.anim.currentFrame) frameBtn.addClass('current');
+			// add state class ...
 			frameBtn.removeClass('btn');
 			// lns.ui.keys[i] = frameBtn;
 			timeline.append(frameBtn, `frm-${i}`);
@@ -156,6 +162,8 @@ function Timeline() {
 					timeline.append(ui, `group-${i}`);
 				}
 			}
+
+
 
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 				const layer = lns.anim.layers[i];
@@ -364,6 +372,24 @@ function Timeline() {
 			{ callback: lock, text: 'Unlock', key: 'alt-l', class: 'right-end', args: [false] },
 			{ callback: split, text: 'Split' },
 		]);
+
+		lns.ui.addProps({
+			'stateSelect': {
+				type: 'UISelect',
+				key: 'ctrl-t',
+				label: 'State',
+				callback: value => { lns.states.set(value); }
+			},
+			'stateDisplay': {
+				type: 'UIToggleCheck',
+				key: 'alt-t',
+				label: 'State View',
+				callback(value) { 
+					viewState = value; 
+					update();
+				}
+			}
+		});
 
 		timeline = panel.addRow('timeline');
 	}
