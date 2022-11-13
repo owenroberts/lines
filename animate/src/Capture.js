@@ -291,9 +291,10 @@ function Capture(lns, params) {
 	}
 
 	return { 
-		connect,
+		connect, startVideo, stopVideo,
 		withBackground() { return bg; },
 		isVideo() { return isVideo; },
 		isCapturing() { return frames > 0; },
+		isActive() { return isVideo || frames > 0; },
 	};
 }

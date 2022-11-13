@@ -50,6 +50,9 @@ function FilesIO(lns, params) {
 			}
 		}
 
+		const sequences = lns.sequencer.getData();
+		if (sequences) json.q = sequences;
+
 		return json;
 	}
 
@@ -161,6 +164,7 @@ function FilesIO(lns, params) {
 			}
 		});
 		if (data.bg) lns.ui.faces.bgColor.value = data.bg;
+		if (data.q) lns.sequencer.load(data.q);
 		lns.ui.update();
 	}
 	

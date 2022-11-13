@@ -1,6 +1,6 @@
 const { Renderer, Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
 const { Interface, Settings } = UI;
-const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText, UIElement } = UI.Elements;
+const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText, UIElement, UIRow } = UI.Elements;
 const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
@@ -61,7 +61,8 @@ lns.capture = Capture(lns, {
 lns.states = States(lns);
 lns.palette = Palette(lns);
 lns.drawings = Drawings(lns);
-lns.timeline = Timeline();
+lns.timeline = Timeline(lns);
+lns.sequencer = Sequencer(lns);
 lns.animator = AnimatorUI(lns);
 
 lns.ui = Interface(lns, { useMain: false });
@@ -80,6 +81,8 @@ lns.palette.connect();
 lns.drawings.connect();
 lns.animator.connect();
 lns.timeline.connect();
+lns.sequencer.connect();
+
 
 lns.ui.update = function() {
 	lns.timeline.update();
@@ -116,13 +119,12 @@ lns.draw.setDefaults();
 lns.timeline.init();
 lns.playback.toggleStats();
 lns.renderer.start();
+const settings = lns.ui.settings.load();
 
 if (params.src) {
 	lns.fio.loadFile(params.src, () => {
-		lns.ui.settings.load();
+		// lns.ui.faces.stateSelect = 		
 	});
-} else {
-	lns.ui.settings.load();
 }
 
 console.log(lns);

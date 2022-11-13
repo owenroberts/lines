@@ -163,10 +163,7 @@ function Playback(lns, params) {
 			move this logic to capture
 		*/
 
-		// ctx.fillStyle = bgColor; // lns.canvas.getBGColor();
-		// ctx.fillRect(0, 0, width, height);
-
-		if ((lns.capture.isCapturing() || lns.capture.isVideo())) {
+		if (lns.capture.isActive()) {
 			if (lns.capture.withBackground()) {
 				ctx.fillStyle = bgColor;
 				ctx.fillRect(0, 0, width, height);
@@ -214,7 +211,15 @@ function Playback(lns, params) {
 			lns.eraser.display();
 		}
 
-		lns.anim.update();
+		if (lns.sequencer.isActive()) {
+			const f = lns.sequencer.getFrame();
+			lns.anim.frame = f;
+			frameDisplay.value = f;
+			if (lns.sequencer.isPlaying()) lns.timeline.update();
+		} else {
+			lns.anim.update();
+		}
+
 		lns.anim.draw();
 	}
 
