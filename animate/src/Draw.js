@@ -45,8 +45,14 @@ function Draw(lns, defaults) {
 
 	function reset(f) {
 		let drawing = getCurrentDrawing();
+		console.log('reset', drawing);
 		let newDrawing = drawing ? false : true;
-		if (drawing) if (drawing.length > 0) newDrawing = true;
+		if (drawing) {
+			if (drawing.length > 0) {
+				newDrawing = true;
+			}
+		}
+
 
 		if (newDrawing) {
 			lns.anim.drawings.push(new Drawing()); // new Drawing?
@@ -137,10 +143,8 @@ function Draw(lns, defaults) {
 	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
 
 	function outSideCanvas(ev) {
-		if (ev.toElement !== lns.renderer.canvas) {
-			getCurrentDrawing().add('end');
-			isDrawing = false;
-		}
+		if (ev.toElement === lns.renderer.canvas) return;
+		if (isDrawing) endPoint(ev);
 	}
 
 	function pop() {
@@ -226,25 +230,31 @@ function Draw(lns, defaults) {
 		}
 	}
 
+	function endPoint(ev) {
+		isDrawing = false;
+		const drawing = getCurrentDrawing();
+		let last = drawing.get(-2)[0]; /* prevent saving single point drawing segments */
+		// console.log('last', last);
+		if (last !== 'end' && last !== 'add' && drawing.length > 1) {
+			drawing.add(ev.shiftKey ? 'add' : 'end');
+		} else {
+			// if its just one point pop it off ...
+			drawing.pop();
+		}
+	}
+
 	function end(ev) {
 		lns.eraser.end();
 
-		const drawing = getCurrentDrawing();
-		const point = transformPoint(ev.offsetX, ev.offsetY);
-
 		if (lns.brush.fillActive()) {
+			const drawing = getCurrentDrawing();
+			const point = transformPoint(ev.offsetX, ev.offsetY);
 			lns.brush.endFill(drawing, point);
 		} else if (ev.which === 1) {
-			isDrawing = false;
-			
-			let last = drawing.get(-2); /* prevent saving single point drawing segments */
-			if (last !== 'end' && last !== 'add' && drawing.length > 1) {
-				drawing.add(ev.shiftKey ? 'add' : 'end');
-			} else {
-				drawing.pop();
-			}
+			endPoint(ev);
 		}
 		prevPosition = undefined;
+		
 	}
 
 	if (window.navigator.platform.includes('iPad')) {

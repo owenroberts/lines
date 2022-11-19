@@ -45,7 +45,7 @@ class Drawing {
 		*/
 		if (index < 0) { // catch for draw.js end func
 			// [point, offset]
-			return [this.points[this.points.length - index], this.offsets[this.offsets.length - index]];
+			return [this.points[this.points.length + index], this.offsets[this.offsets.length + index]];
 		}
 		return [this.points[index], this.offsets[index]];
 	}
