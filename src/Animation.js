@@ -38,6 +38,7 @@ class Animation {
 		this.states = { 'default': { start: 0, end: 0 } };
 
 		this.layerColor;
+		this.suspendUpdate = false;
 
 		if (this.init) this.init(); // pixel init
 	}
@@ -228,7 +229,7 @@ class Animation {
 			if (drawing.firstUpdate) { // lazy load -- way to get rid of this check?
 				drawing.firstUpdate = false;
 				drawing.update(props);
-			} else if (!suspendLinesUpdate) { 
+			} else if (!suspendLinesUpdate && !this.suspendUpdate) { 
 				// suspend lines update can be set by renderer if fps drops
 				if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
 					// each layer has its own count for fps update

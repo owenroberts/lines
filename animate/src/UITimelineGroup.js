@@ -52,10 +52,10 @@ class UITimelineGroup extends UICollection {
 		const uis = this.getPropUIs(layers, params, false);
 
 		if (width > 30) this.append(uis.startFrameNumber);
-		this.append(toggle);
+		this.append(toggle, 'toggle');
 		this.append(highlight);
 		if (width > 20) this.append(edit);
-		if (width > 50) this.append(uis.lock);
+		if (width > 50) this.append(uis.lock, 'lock');
 		if (width > 60) this.append(uis.breakUp);
 		if (width > 70) this.append(uis.removeLayer);
 		if (width > 80) this.append(uis.tween);

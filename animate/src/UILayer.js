@@ -50,10 +50,10 @@ class UILayer extends UICollection {
 		const uis = this.getPropUIs(layer, params, false);
 
 		if (width > 40) this.append(uis.startFrameNumber);
-		this.append(toggle);
+		this.append(toggle, 'toggle');
 		this.append(highlight);
 		if (width > 20) this.append(edit);
-		if (width > 50) this.append(uis.lock);
+		if (width > 50) this.append(uis.lock, 'lock');
 		if (width > 60) this.append(uis.tween);
 		if (width > 70) this.append(uis.remove);
 		if (width > 80) this.append(uis.addToGroup);

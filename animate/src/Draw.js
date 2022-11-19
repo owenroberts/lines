@@ -305,6 +305,18 @@ function Draw(lns, defaults) {
 
 		const drawPanel = lns.ui.getPanel('draw', { label: 'Lines' });
 
+		lns.ui.addUI({
+			type: 'UIToggleCheck',
+			label: 'Suspend',
+			value: false,
+			key: '/',
+			callback: value => {
+				lns.anim.suspendUpdate = value;
+			}
+		});
+
+		drawPanel.addRow();
+
 		lns.ui.addCallbacks([
 			{ callback: reset, key: 'r', text: 'Save Lines' },
 			{ callback: setDefaults, text: 'Reset Defaults' },
