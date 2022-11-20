@@ -40,3 +40,5 @@ class Button extends UI {
 		return up;
 	}
 }
+
+window.LinesEngine.Button = Button;

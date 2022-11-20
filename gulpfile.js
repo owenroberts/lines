@@ -44,22 +44,18 @@ const files = {
 		'./animate/src/**/*.js'
 	],
 	game: [
-		'./game/classes/Sprite.js',
-		'./game/classes/ColliderSprite.js',
-		'./game/classes/UI.js',
-		'./game/classes/Scene.js',
-		'./game/classes/*.js',
+		'./game/src/Game.js',
+		'./game/src/Sprite.js',
+		'./game/src/ColliderSprite.js',
+		'./game/src/UI.js',
+		'./game/src/Scene.js',
+		'./game/src/*.js',
 	],
 	editor: [
 		'./game/editor/classes/*.js',
 		'./game/editor/modules/*.js',
 		'./game/editor/interface/*.js',
 		'./game/editor/editor.js',
-	],
-	animEditor: [
-		'./editor/classes/*.js',
-		'./editor/modules/*.js',
-		'./editor/editor.js'
 	]
 };
 
@@ -85,7 +81,7 @@ function logError(err) {
 }
 
 function jsTasks() {
-	function jsTask(files, name, dir){
+	function jsTask(files, name, dir) {
 		return src(files)
 			.pipe(sourcemaps.init())
 			.pipe(concat(name))
@@ -181,7 +177,6 @@ function watchTask(){
 			...files.animate,
 			...files.game,
 			...files.editor,
-			...files.animEditor,
 		],
 		series(jsTasks),
 	); 

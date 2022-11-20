@@ -13,6 +13,7 @@ function Renderer(params) {
 	let multiColor = params.multiColor || false;
 	let width = params.width;
 	let height = params.height;
+	let clearBg = params.clearBg !== undefined ? params.clearBg : true;
 
 	const canvas = document.getElementById(id);
 	if (!canvas) {
@@ -24,18 +25,69 @@ function Renderer(params) {
 	const ctx = canvas.getContext('2d');
 	if (!ctx) return alert('No canvas context??');
 	ctx.lineWidth = lineWidth;
-	ctx.miterLimit = 1;
-	ctx.lineCap = 'round';
-	ctx.lineJoin = 'round';
+	if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
+	canvasUpdate();
 
 	if (bgColor) canvas.style.backgroundColor = bgColor;
 	if (width) canvas.width = width * dpr * scale;
 	if (height) canvas.height = height * dpr * scale;
 
-	window.drawCount = 0; // lns.drawCount?
+	if (params.zoom) {
+		let zoom = params.zoom;
+		// necessary ?
+		canvas.style.width = width + 'px';
+		canvas.style.height = height + 'px';
+	}
+
+	if (params.usePixels) {
+		Object.assign(Lines.prototype, PixelMixin);
+	}
+
+	if (params.antiFactor) { // 3 is good here
+		Object.assign(Lines.prototype, AntiMixin);
+		canvas.width = width * dpr * params.antiFactor;
+		canvas.height = height * dpr * params.antiFactor;
+		if (params.smallCanvas) {
+			canvas.style.width = (width * dpr) + 'px';  
+			canvas.style.height = (height * dpr) + 'px';
+		}
+		ctx.lineWidth = lineWidth * params.antiFactor;
+	}
+
+	if (params.svgFilter) {
+		const svgns = "http://www.w3.org/2000/svg";
+		const svg = document.createElementNS(svgns, "svg");
+		const defs = document.createElementNS(svgns, "defs");
+		const filter = document.createElementNS(svgns, "filter");
+		const feComponentTransfer = document.createElementNS(svgns, "feComponentTransfer");
+		const feFuncA = document.createElementNS(svgns, "feFuncA");
+
+		svg.setAttribute('style', 'position:absolute;z-index:-1;');
+		svg.setAttribute('width', '0');
+		svg.setAttribute('height', '0');
+
+		document.body.appendChild(svg);
+		svg.appendChild(defs);
+		defs.appendChild(filter);
+
+		filter.setAttribute('id', 'remove-alpha');
+		filter.setAttribute('x', '0');
+		filter.setAttribute('y', '0');
+		filter.setAttribute('width', '100%');
+		filter.setAttribute('height', '100%');
+		filter.appendChild(feComponentTransfer);
+		feComponentTransfer.appendChild(feFuncA);
+
+		feFuncA.setAttribute('type', 'discrete');
+		feFuncA.setAttribute('tableValues', '0 1');
+
+		ctx.filter = 'url(#remove-alpha)';
+	}
+
+	window.drawCount = 0; // lns.drawCount? ... window.updateCount ...
 	
-	let interval = 1000 / dps;  // time interval between draws
-	let timer = performance.now();
+	let interval = 1000 / dps;  // time interval between updates
+	let updateTime = performance.now();
 
 	let suspendRender = false;
 
@@ -105,12 +157,15 @@ function Renderer(params) {
 			}
 		}
 	
-		if (performance.now() > interval + timer || time === 'capture') {
-			timer = performance.now();
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
+		if (time > interval + updateTime || time === 'capture') {
+			// updateTime = time;
+			// adjust for fps being off
+			updateTime = time - ((time - updateTime) % interval);
+
+			if (clearBg) ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			for (let i = 0; i < callbacks.length; i++) {
-				callbacks[i](time);
+				callbacks[i](time - updateTime);
 			}
 
 			window.drawCount++;
@@ -118,7 +173,7 @@ function Renderer(params) {
 
 		if (postTime.length) {
 			for (let i = 0; i < postTime.length; i++) {
-				postTime[i](time);
+				postTime[i]();
 			}
 		}
 		
@@ -131,6 +186,7 @@ function Renderer(params) {
 	}
 
 	function start() {
+		updateTime = performance.now();
 		window.requestAnimFrame(update);
 		if (suspendRender) suspendRender = false;
 	}
@@ -141,7 +197,7 @@ function Renderer(params) {
 		setSuspend,
 		setWidth, setHeight, setScale, setDPS, setLineWidth,
 		getProps() {
-			return { width, height, scale, lineWidth, bgColor, dps };
+			return { width, height, scale, lineWidth, bgColor, dps, multiColor };
 		}
 	};
 }

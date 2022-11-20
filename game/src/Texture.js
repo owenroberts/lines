@@ -96,3 +96,5 @@ class Texture {
 		this.offset[1] = offset[1];
 	}
 }
+
+window.LinesEngine.Texture = Texture;

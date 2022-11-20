@@ -42,15 +42,19 @@ class Scene {
 	}
 
 	display(view) {
-		this.displaySprites.all(sprite => { sprite.display(view) });
+		this.displaySprites.all(sprite => {
+			if (!sprite.display) console.log(sprite);
+			sprite.display(view);
+		});
 	}
 
 	update(offset) {
-		this.updateSprites.all(sprite => { sprite.update(offset) });
+		this.updateSprites.all(sprite => { sprite.update(offset); });
 	}
 
 	mouseMoved(x, y) {
 		this.uiSprites.all(sprite => {
+			if (!sprite.over) console.log(sprite)
 			sprite.over(x, y);
 			sprite.out(x, y);
 		});

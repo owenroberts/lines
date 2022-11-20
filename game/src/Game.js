@@ -22,11 +22,15 @@
 	mouseUp(x, y, which)
 */
 
+const { Renderer, Loader } = window.Lines;
+
 class Game {
 	constructor(params) {
 		window.GAME = this; // for references in sub classes
-
-		this.canvas = document.getElementById(params.canvas || "lines");
+		this.renderer = new Renderer({ dps: 60, clearBg: false, ...params }); // update 60
+		this.drawCount = 0;
+		this.drawInterval = Math.round(60 / (params.dps || 30));
+		this.drawTime = 1000 / (params.dps || 30);
 
 		const performanceThreshold = 0.1; // test this
 		let performanceAverage = 0.01; // high performance
@@ -44,195 +48,113 @@ class Game {
 
 		this.width = params.width;
 		this.height = params.height;
-
 		this.halfWidth = Math.round(params.width / 2);
 		this.halfHeight = Math.round(params.height / 2);
 		
-		this.multiColor = params.multiColor || false; /* param? */
 		this.debug = params.debug || false;
 		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
 		this.suspend = false;
 		this.editorSuspend = false;
-		this.lineWidth = params.lineWidth || 1;
-		this.checkRetina = params.checkRetina !== undefined ? params.checkRetina : true;
-		this.zoom = params.zoom;
-		this.relativeLoadPath = params.relativeLoadPath;
-
-		this.dps = params.dps || 30; // draw per second
-		this.drawTime = performance.now();
-		this.drawInterval = 1000 / this.dps;
-		window.drawCount = 0; // global referenced in drawings -- prevents double updates for textures and 
 		
-		this.updateTime = performance.now();
-		this.updateInterval = 1000 / 60; // 60 fps
+		this.loader = new Loader({
+			relativeLoadPath: params.relativeLoadPath
+		});
 
-		this.clearBg = params.clearBg !== undefined ? params.clearBg : true;
-		this.bounds = params.bounds || { top: 0, bottom: 0, left: 0, right: 0 };
-
-		this.scenes = new SceneManager(params.scenes, Scene);
-
+		this.data = {};
 		this.data = { jsons: {} };
 		this.saveJsons = params.saveJsons || false;
 		this.anims = {};
+		
+		this.bounds = params.bounds || { top: 0, bottom: 0, left: 0, right: 0 };
+		this.scenes = new SceneManager(params.scenes, Scene);
 
 		this.useMouseEvents = params.events ? params.events.includes('mouse') : true;
 		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
 		this.useTouchEvents = params.events ? params.events.includes('touch') : false;
+
+		// view is for zooming in and out, could stay in game, could be part of renderer or its own module ...
 
 		this.view = {
 			width: this.width,
 			height: this.height,
 		};
 
-		if (this.canvas.getContext) {
-			this.ctx = this.canvas.getContext('2d');
+		this.zoom = params.zoom || 1;
+		let ediZoom = params.isEditor ? this.renderer.getProps().dpr : 1;
+		this.view.width = Math.round(this.width / this.zoom * ediZoom);
+		this.view.height = Math.round(this.height / this.zoom * ediZoom);
+		this.view.halfWidth = this.view.width / 2;
+		this.view.halfHeight = this.view.height / 2;
 
-			this.dpr = this.checkRetina ? window.devicePixelRatio || 1 : 1;
-
-			const zoom = params.zoom || 1;
-			this.zoom = params.zoom;
-			const ediZoom = params.isEditor ? this.dpr : 1;
-
-			this.canvas.width = this.width * this.dpr;
-			this.canvas.height = this.height * this.dpr;
-			this.canvas.style.width = this.width + 'px';
-			this.canvas.style.height = this.height + 'px';
-
-			this.view.width = Math.round(this.width / zoom * ediZoom);
-			this.view.height = Math.round(this.height / zoom * ediZoom);
-			this.view.halfWidth = this.view.width / 2;
-			this.view.halfHeight = this.view.height / 2;
-
-			let userLowQuality = false;
-			if (performanceAverage > performanceThreshold || params.lowPerformance) {
-				userLowQuality = params.ignoreAlerts ?
-					true :
-					confirm('Low performance detected, click Okay to use low graphics quality, cancel to continue with high graphics quality.');
-			}
+		let userLowQuality = false;
+		if (performanceAverage > performanceThreshold || params.lowPerformance) {
+			userLowQuality = params.ignoreAlerts ?
+				true :
+				confirm('Low performance detected, click Okay to use low graphics quality, cancel to continue with high graphics quality.');
+		}
 			
-			if (userLowQuality) {
-				if (this.zoom) {
-					this.width = Math.round(this.width / this.zoom);
-					this.height = Math.round(this.height / this.zoom);
-					this.halfWidth = Math.round(this.width / 2);
-					this.halfHeight = Math.round(this.height / 2);
-					this.canvas.width = this.width;
-					this.canvas.height = this.height;
-					if (params.smallCanvas) {
-						this.canvas.style.width = this.width + 'px';
-						this.canvas.style.height = this.height + 'px';
-					} else {
-						if (params.useSVGFilterOnLow && !navigator.userAgent.includes('Firefox')) {
-							params.svgFilter = true;
-						}
+		if (userLowQuality) {
+			if (this.zoom) {
+				this.width = Math.round(this.width / this.zoom);
+				this.height = Math.round(this.height / this.zoom);
+				this.halfWidth = Math.round(this.width / 2);
+				this.halfHeight = Math.round(this.height / 2);
+				this.renderer.setWidth(this.width);
+				this.renderer.setHeight(this.height);
+				this.renderer.setScale(1);
+				
+				if (params.smallCanvas) {
+					this.renderer.canvas.style.width = this.width + 'px';
+					this.renderer.canvas.style.height = this.height + 'px';
+				} else {
+					if (params.useSVGFilterOnLow && !navigator.userAgent.includes('Firefox')) {
+						params.svgFilter = true;
 					}
 				}
-			} else {
-				this.ctx.scale(this.dpr, this.dpr);
-				if (params.zoom) {
-					this.ctx.scale(ediZoom, ediZoom);
-					this.ctx.scale(params.zoom, params.zoom);
-				}
 			}
-
-			if (params.lineColor) this.ctx.strokeStyle = params.lineColor;
-
-			if (params.stats) {
-				this.stats = new Stats();
-				document.body.appendChild(this.stats.dom);
-				this.stats.dom.style.left = 'auto';
-				this.stats.dom.style.right = '0px';
-
-				this.drawStats = new Stats();
-				document.body.appendChild(this.drawStats.dom);
-				this.drawStats.dom.style.left = 'auto';
-				this.drawStats.dom.style.right = '0px';
-				this.drawStats.dom.style.top = '48px';
-
+		} else {
+			if (params.zoom) {
+				this.renderer.setScale(ediZoom * params.zoom);
 			}
-
-			this.ctx.lineWidth = this.lineWidth;
-			this.ctx.miterLimit = 1; // do this last
-			this.ctx.lineCap = 'round';
-			this.ctx.lineJoin = 'round';
 		}
 
-		if (params.usePixels) {
-			Object.assign(Lines.prototype, PixelMixin);
+		if (params.stats) {
+			this.stats = new Stats();
+			document.body.appendChild(this.stats.dom);
+			this.stats.dom.style.left = 'auto';
+			this.stats.dom.style.right = '0px';
+
+			this.drawStats = new Stats();
+			document.body.appendChild(this.drawStats.dom);
+			this.drawStats.dom.style.left = 'auto';
+			this.drawStats.dom.style.right = '0px';
+			this.drawStats.dom.style.top = '48px';
+
 		}
-
-		if (params.antiFactor) { // 3 is good here
-			Object.assign(Lines.prototype, AntiMixin);
-			this.antiFactor = params.antiFactor;
-			this.canvas.width = this.width * this.dpr * this.antiFactor;
-			this.canvas.height = this.height * this.dpr * this.antiFactor;
-			if (params.smallCanvas) {
-				this.canvas.style.width = (this.width * this.dpr) + 'px';  
-				this.canvas.style.height = (this.height * this.dpr) + 'px';
-			}
-			this.ctx.lineWidth = this.lineWidth * this.antiFactor;
-		}
-
-		if (params.svgFilter) {
-			const svgns = "http://www.w3.org/2000/svg";
-			const svg = document.createElementNS(svgns, "svg");
-			const defs = document.createElementNS(svgns, "defs");
-			const filter = document.createElementNS(svgns, "filter");
-			const feComponentTransfer = document.createElementNS(svgns, "feComponentTransfer");
-			const feFuncA = document.createElementNS(svgns, "feFuncA");
-
-			svg.setAttribute('style', 'position:absolute;z-index:-1;');
-			svg.setAttribute('width', '0');
-			svg.setAttribute('height', '0');
-
-			document.body.appendChild(svg);
-			svg.appendChild(defs);
-			defs.appendChild(filter);
-
-			filter.setAttribute('id', 'remove-alpha');
-			filter.setAttribute('x', '0');
-			filter.setAttribute('y', '0');
-			filter.setAttribute('width', '100%');
-			filter.setAttribute('height', '100%');
-			filter.appendChild(feComponentTransfer);
-			feComponentTransfer.appendChild(feFuncA);
-
-			feFuncA.setAttribute('type', 'discrete');
-			feFuncA.setAttribute('tableValues', '0 1');
-
-			this.ctx.filter = 'url(#remove-alpha)';
-		}
+		
 	}
 
 	setView(width, height) {
 
 		// copy paste for now, redo later
+		this.renderer.setWidth(width);
+		this.renderer.setHeight(height);
 		this.width = width;
 		this.height = height;
 
-		this.halfWidth = width / 2;
-		this.halfHeight = height / 2;
-
-		this.canvas.width = this.width * this.dpr;
-		this.canvas.height = this.height * this.dpr;
-		this.ctx.scale(this.dpr, this.dpr);
-		this.canvas.style.zoom = 1 / this.dpr;
+		this.halfWidth = Math.round(width / 2);
+		this.halfHeight = Math.round(height / 2);
 
 		this.view.width = Math.round(this.width / this.zoom);
 		this.view.height = Math.round(this.height / this.zoom);
 		this.view.halfWidth = this.view.width / 2;
 		this.view.halfHeight = this.view.height / 2;
 
-		if (this.zoom) {
-			this.ctx.scale(this.zoom, this.zoom);
-		}
-
-		this.ctx.lineWidth = this.lineWidth;
-		this.ctx.miterLimit = 1; // do this last
+		this.renderer.reset();
 	}
 
 	load(files, loadEntriesOnly, callback) {
-		/* loads one instance of all animations to be used/shared by sprites */
+		// this.loader.load(files, loadEntriesOnly, callback);
 		if (this.debug) console.log('loading data');
 		if (this.debug) console.time('load data');
 		this.assetsLoaded = {};
@@ -348,11 +270,21 @@ class Game {
 
 	_start() {
 		this.drawTime = performance.now();
-		this.updateTime = performance.now();
-		
+
+		this.renderer.start();
 		if (this.start) this.start(); // should be this method?
 		if (!this.update) this.noUpdate = true;
-		requestAnimFrame(() => { this._update() });
+
+		this.renderer.addCallback(delta => { this._update(delta) });
+		
+		if (this.stats) {
+			this.renderer.addCallback(() => {
+				this.stats.begin();
+			}, 'pre');
+			this.renderer.addCallback(() => {
+				this.stats.end();
+			}, 'pre');
+		}
 
 		if (this.useMouseEvents) this.startMouseEvents();
 		if (this.useKeyboardEvents) this.startKeyboardEvents();
@@ -360,42 +292,28 @@ class Game {
 		if (this.sizeCanvas) window.addEventListener('resize', this.sizeCanvas, false);
 	}
 
-	_draw(time) {
+	_draw() {
 		if (this.stats) this.drawStats.begin();
-		if (this.clearBg) this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		// add draw scenes ? 
-		this.draw(time - this.drawTime); // draw defined in each this js file, or not ... 
-		drawCount++;
-
-		this.drawTime = time - ((time - this.drawTime) % this.drawInterval);
+		this.renderer.ctx.clearRect(0, 0, this.width, this.height);
+		this.draw(); // need time ??
 		if (this.stats) this.drawStats.end();
 	}
 
-	_update() {
+	_update(delta) {
 		if (this.pauseGame) return;
-		if (this.stats) this.stats.begin();
-		requestAnimFrame(() => { this._update(); });  // this context
+		if (!this.noUpdate) this.update(delta);
+		if (delta > this.drawTime + this.drawInterval) this._draw(time);
+		if (this.drawCount === 0) this._draw(); // need time?
+		this.drawCount = (this.drawCount + 1) % this.drawInterval;
 
-		const time = performance.now();
-		
-		if (time > this.updateTime + this.updateInterval) {
-
-			// interesting approach to fixing performance but looks mad choppy
-			// would be better to suspend a bit, like only every other or something
-			if (this.suspendOnTimeOver && !this.editorSuspend) {
-				if (!this.suspend && time - this.updateTime > this.drawInterval * 1.5) {
-					this.suspend = true;
-				} else if (this.suspend) {
-					this.suspend = false;
-				}
+		// suspend lines update if performance is dragging
+		if (this.suspendOnTimeOver && !this.editorSuspend) {
+			if (!this.suspend && delta > this.drawTime * 1.5) {
+				this.suspend = true;
+			} else if (this.suspend) {
+				this.suspend = false;
 			}
-
-
-			if (!this.noUpdate) this.update(time - this.updateTime); // update defined in each game js file
-			this.updateTime = time - ((time - this.updateTime) % this.updateInterval); // adjust for fps interval being off
 		}
-		if (time > this.drawTime + this.drawInterval) this._draw(time);
-		if (this.stats) this.stats.end();
 	}
 
 	setBounds(dir, value) {
@@ -416,13 +334,14 @@ class Game {
 	startMouseEvents() {
 		let dragStarted = false;
 		let dragOffset;
+		let { canvas } = this.renderer;
 
-		this.canvas.addEventListener('click', ev => {
+		canvas.addEventListener('click', ev => {
 			ev.preventDefault();
 			if (this.mouseClicked) this.mouseClicked(ev.offsetX / this.zoom, ev.offsetY / this.zoom);
 		}, false);
 
-		this.canvas.addEventListener('mousedown', ev => {
+		canvas.addEventListener('mousedown', ev => {
 			ev.preventDefault();
 			if (this.mouseDown) this.mouseDown(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which, ev.shiftKey);
 			if (this.startDrag) {
@@ -431,13 +350,13 @@ class Game {
 			}
 		}, false);
 
-		this.canvas.addEventListener('mouseup', ev => {
+		canvas.addEventListener('mouseup', ev => {
 			ev.preventDefault();
 			if (this.mouseUp) this.mouseUp(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which);
 			if (dragStarted) dragStarted = false;
 		}, false);
 
-		this.canvas.addEventListener('mousemove', ev => {
+		canvas.addEventListener('mousemove', ev => {
 			if (this.mouseMoved) this.mouseMoved(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which);
 			if (dragStarted) drag(ev.offsetX / this.zoom, ev.offsetY / this.zoom, dragOffset);
 		}, false);
@@ -470,3 +389,6 @@ class Game {
 		});
 	}
 }
+
+window.LinesEngine = {};
+window.LinesEngine.Game = Game; // need for iife and prob need later, still weird

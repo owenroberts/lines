@@ -1,6 +1,9 @@
-class GameAnim extends Lines {
+
+const { Animation } = window.Lines;
+class GameAnim extends Animation {
 	constructor(debug) {
-		super(GAME.ctx, GAME.dps, GAME.multiColor);
+		const { dps, multiColor } = GAME.renderer.getProps();
+		super(GAME.renderer.ctx, dps, multiColor);
 		this.debug = debug;
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */

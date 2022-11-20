@@ -91,3 +91,5 @@ class Sprite {
 		);
 	} 
 }
+
+window.LinesEngine.Sprite = Sprite;

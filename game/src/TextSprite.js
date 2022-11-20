@@ -5,7 +5,7 @@
 	maybe just check first?
 */
 
-class Text {
+class TextSprite {
 	constructor(x, y, msg, wrap, letters, letterIndexString) { // params?
 		this.x = Math.round(x);
 		this.y = Math.round(y);
@@ -193,3 +193,4 @@ class Text {
 	}
 }
 
+window.LinesEngine.TextSprite = TextSprite;

@@ -2,6 +2,9 @@
 	just an example to set up a game file
 	not necessarily best approach
 */
+
+const { Game, Texture, Button, TextSprite } = window.LinesEngine;
+
 const gme = new Game({
 	width: window.innerWidth, 
 	height: window.innerHeight, 
@@ -18,10 +21,10 @@ gme.scene = 'walk';
 let char;
 let waves;
 
-function start() {
+gme.start = function() {
 
 	char = new Character(300, 300);
-	gme.scenes.walk.add(char);
+	gme.scenes.walk.addSprite(char);
 
 	waves = new Texture({
 		frame: 'random',
@@ -37,8 +40,7 @@ function start() {
 	// waves.animation.randomFrames = true;
 	gme.scenes.walk.addToDisplay(waves);
 
-
-	const title = new Text(10, 40, "welcome to the game", 10, gme.anims.data.letters);
+	const title = new TextSprite(10, 40, "welcome to the game", 10, gme.anims.data.letters, 'abcdefghijklmnopqrstuvwxyz0123456789.,:?EFASDW....MJKLQ');
 	gme.scenes.walk.addToDisplay(title);
 
 	const joinGame = new Button({ 
@@ -55,67 +57,68 @@ function start() {
 		}
 	});
 	gme.scenes.walk.addUI(joinGame);
-}
 
-function draw() {
-	gme.scenes[gme.scene].display();
-}
+};
 
-function update() {
+gme.update = function() {
 	gme.scenes[gme.scene].update();
-}
+};
+
+gme.draw = function() {
+	gme.scenes[gme.scene].display();
+};
 
 /* events */
-function keyDown(key) {
+gme.keyDown = function(key) {
 	switch (key) {
 		case 'a':
 		case 'left':
-			char.speed.x = -5;
+			char.speed[0] = -5;
 			break;
 		case 'd':
 		case 'right':
-			char.speed.x = 5;
+			char.speed[0] = 5;
 			break;
 		case 'w':
 		case 'up':
-			char.speed.y = -5;
+			char.speed[1] = -5;
 			break;
 		case 's':
 		case 'down':
-			char.speed.y = 5;
+			char.speed[1] = 5;
 			break;
 	}
-}
+};
 
-function keyUp(key) {
+gme.keyUp = function(key) {
 	switch (key) {
 		case 'a':
 		case 'left':
-			char.speed.x = 0;
+			char.speed[0] = 0;
 			break;
 		case 'd':
 		case 'right':
-			char.speed.x = 0;
+			char.speed[0] = 0;
 			break;
 		case 'w':
 		case 'up':
-			char.speed.y = 0;
+			char.speed[1] = 0;
 			break;
 		case 's':
 		case 'down':
-			char.speed.y = 0;
+			char.speed[1] = 0;
 			break;
 	}
-}
+};
 
-function mouseMoved(x, y) {
+gme.mouseMoved = function(x, y) {
 	gme.scenes[gme.scene].mouseMoved(x, y);
-}
+};
 
-function mouseDown(x, y) {
+gme.mouseDown = function(x, y) {
 	gme.scenes[gme.scene].mouseDown(x, y);
-}
+};
 
-function mouseUp(x, y) {
+gme.mouseUp = function(x, y) {
 	gme.scenes[gme.scene].mouseUp(x, y);
-}
+};

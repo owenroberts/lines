@@ -369,7 +369,6 @@ class Animation {
 		}
 
 		const randomCount = Math.round(Math.random() * 5);
-		
 
 		for (let i = 0; i < json.l.length; i++) {
 			const params = this.loadParams(json.l[i]);
