@@ -97,11 +97,12 @@ class UILayer extends UICollection {
 			min: 0,
 			max: lns.anim.endFrame + 1,
 			callback: value => {
-				layer.startFrame = +value;
+				layer.startFrame = value;
 				// if frame is set move everything -- right functionality?
-				if (+value > layer.endFrame) {
-					layer.endFrame = +value;
+				if (value > layer.endFrame) {
+					layer.endFrame = value;
 				}
+				layer.resetTweens();
 				this.update();
 			}
 		});
@@ -111,10 +112,11 @@ class UILayer extends UICollection {
 			class: isModal ? '' : btnClass,
 			min: 0,
 			callback: value => {
-				layer.endFrame = +value;
-				if (+value < layer.startFrame) {
-					layer.startFrame = +value;
+				layer.endFrame = value;
+				if (value < layer.startFrame) {
+					layer.startFrame = value;
 				}
+				layer.resetTweens();
 				this.update();
 			}
 		});

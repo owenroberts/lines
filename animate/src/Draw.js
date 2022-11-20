@@ -45,7 +45,6 @@ function Draw(lns, defaults) {
 
 	function reset(f) {
 		let drawing = getCurrentDrawing();
-		console.log('reset', drawing);
 		let newDrawing = drawing ? false : true;
 		if (drawing) {
 			if (drawing.length > 0) {

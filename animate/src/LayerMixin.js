@@ -37,6 +37,8 @@ const LayerMixin = {
 			const tween = this.tweens[i];
 			if (tween.startFrame < this.startFrame) tween.startFrame = this.startFrame;
 			if (tween.endFrame > this.endFrame) tween.endFrame = this.endFrame;
+
+			if (tween.endFrame < tween.startFrame) tween.endFrame = tween.startFrame;
 		}
 	},
 
