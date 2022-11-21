@@ -53,7 +53,7 @@ function Playback(lns, params) {
 		if (!lns.anim.isPlaying) {
 			checkEnd();
 			lns.draw.reset();
-		} else {
+		} else { // ?
 			const layer = lns.draw.getDrawLayer();
 			layer.startFrame = lns.anim.currentFrame;
 			layer.endFrame = lns.anim.currentFrame;

@@ -139,10 +139,11 @@ class UITimelineGroup extends UICollection {
 			min: 0,
 			callback: value => {
 				layers.forEach(layer => {
-					layer.startFrame = +value;
-					if (+value > layer.endFrame) {
-						layer.endFrame = +value;
+					layer.startFrame = value;
+					if (value > layer.endFrame) {
+						layer.endFrame = value;
 					}
+					layer.resetTweens();
 				});
 				this.update();
 			}
@@ -154,10 +155,11 @@ class UITimelineGroup extends UICollection {
 			min: 0,
 			callback: value => {
 				layers.forEach(layer => {
-					layer.endFrame = +value;
-					if (+value < layer.startFrame) {
-						layer.startFrame = +value;
+					layer.endFrame = value;
+					if (value < layer.startFrame) {
+						layer.startFrame = value;
 					}
+					layer.resetTweens();
 				});
 				this.update();
 			}
@@ -211,7 +213,8 @@ class UITimelineGroup extends UICollection {
 			callback: () => {
 				layers.forEach(layer => {
 					tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
-					layer.addTween(tween)
+					console.log(layer.drawingIndex, tween.endValue);
+					layer.addTween({ ...tween })
 				});
 				this.update();
 			}

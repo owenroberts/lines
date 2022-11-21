@@ -8,7 +8,7 @@ class UILayer extends UICollection {
 		this.update = params.update;
 		this.reset = params.reset;
 		this.remove = params.remove;
-		this.drawReset = params.drawReset;
+		this.lineToLayer = params.lineToLayer;
 
 		const toggle = new UIToggle({
 			btnClass: 'layer-toggle',
@@ -241,18 +241,7 @@ class UILayer extends UICollection {
 
 		modal.add(new UIButton({
 			text: "Line to Layer",
-			callback: () => {
-				this.drawReset();
-				const drawing = lns.anim.drawings[layer.drawingIndex];
-				const points = [drawing.pop()]; // end
-				for (let i = drawing.length - 1; i > 0; i--) {
-					const p = drawing.pop();
-					if ( p!== 'end') lns.draw.drawing.add(p);
-					else break;
-				}
-				this.drawReset();
-				this.update();
-			}
+			callback: () => { this.lineToLayer(); }
 		}));
 
 		modal.add(new UIButton({

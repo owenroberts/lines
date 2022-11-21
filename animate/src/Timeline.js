@@ -182,8 +182,6 @@ function Timeline() {
 				}
 			}
 
-			
-
 			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 				const layer = lns.anim.layers[i];
 				if (layer.groupNumber >= 0 && viewGroups) continue;
@@ -250,6 +248,28 @@ function Timeline() {
 					},
 					update() { lns.ui.update(); },
 					reset() { resetLayers(); },
+					lineToLayer: () => {
+						lns.draw.reset();
+						const layerDrawing = lns.anim.drawings[layer.drawingIndex];
+						const currentDrawing = lns.draw.getCurrentDrawing();
+						const currentLayer = lns.draw.getDrawLayer();
+						currentLayer.startFrame = layer.startFrame;
+						currentLayer.endFrame = layer.endFrame;
+						const points = [layerDrawing.pop()]; // end
+						const temp = []; // points added backwards
+						for (let i = layerDrawing.length - 1; i > 0; i--) {
+							const p = layerDrawing.pop();
+							// if (p !== 'end') currentDrawing.add(p);
+							if (p !== 'end') temp.push(p);
+							else break;
+						}
+						for (let i = temp.length - 1; i > 0; i--) {
+							currentDrawing.add(temp[i]);
+						}
+						lns.draw.reset();
+						resetLayers();
+						update();
+					},
 					remove(layer) { lns.anim.removeLayer(layer); },
 				});
 				
@@ -338,6 +358,7 @@ function Timeline() {
 				value: viewGroups,
 				text: 'G',
 				noLabel: true,
+				key: 'backslash',
 				callback: value => {
 					viewGroups = value;
 					update();
