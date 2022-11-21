@@ -32,7 +32,7 @@ function Renderer(params) {
 	if (width) canvas.width = width * dpr * scale;
 	if (height) canvas.height = height * dpr * scale;
 
-	if (params.zoom) {
+	if (params.zoom || dpr > 1) {
 		let zoom = params.zoom;
 		// necessary ?
 		canvas.style.width = width + 'px';
@@ -131,10 +131,10 @@ function Renderer(params) {
 	}
 
 	function reset() {
-		// console.log('reset');
 		ctx.scale(1, 1); // prevent multiple scales
 		ctx.scale(dpr * scale, dpr * scale);
-		canvas.style.zoom = 1 / dpr;
+		// this is the part i dont want i think
+		// canvas.style.zoom = 1 / dpr; 
 		ctx.lineWidth = lineWidth;
 		canvasUpdate();
 	}
@@ -186,6 +186,7 @@ function Renderer(params) {
 	}
 
 	function start() {
+		reset();
 		updateTime = performance.now();
 		window.requestAnimFrame(update);
 		if (suspendRender) suspendRender = false;

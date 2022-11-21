@@ -4,51 +4,108 @@
 
 function Loader(params) {
 
-	let relativeLoadPath = params.relativeLoadPath;
 	let debug = params.debug || false;
-	let data = {
-		animations: {},
-	};
-	// let totalFiles = 0;
-	let assetsLoaded = {};
+	let relativeLoadPath = params.relativeLoadPath;
+	let saveAnimationData = params.saveAnimationData || false;
+	let assets = {};
+	let loadCallback;
+
+	function loadAnimation(fileName, key, src) {
+		if (relativeLoadPath) src = '.' + src;
+		fetch(src)
+			.then(response => { return response.json() })
+			.then(json => {
+				assets[fileName][key].json = json;
+				// assets[fileName][key].animation = new GameAnim();
+				assets[fileName][key].src = src; // need this?
+				assets[fileName][key].isLoaded = true;
+				checkLoader();
+				// assets[fileName][key].animation.loadData(json, () => {
+				// });
+			});
+	}
+
+	function checkLoader() {
+
+		let isLoaded = true;
+		for (const file in assets) {
+			for (const key in assets[file]) {
+				if (!assets[file][key].isLoaded) isLoaded = false;
+			}
+		}
+
+		if (isLoaded) {
+			loadCallback(assets);
+			loadCallback = undefined;
+		}
+	}
 
 	function handleResponse(response) {
 		if (response.ok) {
-			return response.url.include('csv') ?
+			return response.url.includes('csv') ?
 				response.text() :
 				response.json();
 		}
 		throw new Error('Network response error');
 	}
 
-	function handleData(data) {
-
+	function handleData(fileName, data, loadDataOnly) {
+		if (typeof data === 'object') {
+			assets[fileName] = {};
+			for (const key in data) {
+				assets[fileName][key] = {};
+				assets[fileName][key].data = data[key];
+				assets[fileName][key].isLoaded = loadDataOnly ? true : false;
+				loadAnimation(fileName, key, data[key].src);
+			}
+		} else {
+			const csv = CSVToArray(data, ',').splice(0);
+			const keys = csv[0];
+			assets[fileName] = { items: [] };
+			for (let i = 1; i < csv.length; i++) {
+				const itemData = { isLoaded: false };
+				for (let j = 0; j < keys.length; j++) {
+					itemData[keys[j]] = csv[i][j];
+				}
+				assets[fileName].items.push(itemData);
+				loadAnimation(fileName, itemData.label, `drawings/${fileName}/${itemData.label}.json`);
+			}
+		}
 	}
 
 	function handleError(error, fileName) {
-		console.log('file load error', error);
-		assetsLoaded[fileName] = true; // need this?
+		console.error('file load error', error);
+		console.log(data,fileName);
+		assets[fileName].loaded = true; // need this?
 	}
 
-	function load(files, loadEntriesOnly, callback) {
+	function load(files, loadDataOnly, callback) {
 		if (debug) console.log('loading data');
 		if (debug) console.time('load data');
-
-		let fileCount = 0;
-		let totalFiles = Object.keys(files).length;
-
+		loadCallback = callback;
 		for (const fileName in files) {
 			const file = files[fileName];
+			assets[fileName] = { loaded: false };
 			fetch(file)
-				.then(response => handleResponse)
-				.then(data => handleData)
+				.then(response => { return handleResponse(response); })
+				.then(data => { handleData(fileName, data, loadDataOnly); })
 				.catch(error => { handleError(error, fileName); }); 
 		}
-
-
 	}
 
-	return { load };
+	function getAnimation(fileName, key) {
+		return assets[fileName][key].animation;
+	}
+
+	function getAnimationData(fileName, key) {
+		return assets[fileName][key];
+	}
+
+	function getFile(fileName) {
+		return assets[fileName];
+	}
+
+	return { load, getAnimation, getAnimationData, getFile };
 
 }
 

@@ -92,3 +92,5 @@ class GameAnim extends Animation {
 		return layers;
 	}
 }
+
+window.LinesEngine.GameAnim = GameAnim;

@@ -57,12 +57,11 @@ class Game {
 		this.editorSuspend = false;
 		
 		this.loader = new Loader({
-			relativeLoadPath: params.relativeLoadPath
+			relativeLoadPath: params.relativeLoadPath,
+			saveAnimationData: params.saveAnimationData || params.saveJsons || false,
+
 		});
 
-		this.data = {};
-		this.data = { jsons: {} };
-		this.saveJsons = params.saveJsons || false;
 		this.anims = {};
 		
 		this.bounds = params.bounds || { top: 0, bottom: 0, left: 0, right: 0 };
@@ -153,119 +152,17 @@ class Game {
 		this.renderer.reset();
 	}
 
-	load(files, loadEntriesOnly, callback) {
-		// this.loader.load(files, loadEntriesOnly, callback);
-		if (this.debug) console.log('loading data');
-		if (this.debug) console.time('load data');
-		this.assetsLoaded = {};
-		const numFiles = Object.keys(files).length;
-		for (const f in files) {
-			const file = files[f];
-			fetch(file)
-				.then(response => {
-					if (response.ok) return response.url.includes('csv') ? response.text() : response.json();
-					throw new Error('Network response was not ok.');
-				})
-				.then(data => {
-					
-					// are we loading anything that's not an animation? just attach data to anims?
-					this.data[f] = {};
-					this.anims[f] = {};
-					this.assetsLoaded[f] = {};
-
-					if (typeof data == 'object') {
-						// why can't these just be arrays?
-						this.data[f].entries = data;
-						for (const key in data) {
-							this.assetsLoaded[f][key] = loadEntriesOnly ? true : false; // for editor loading
-							if (!loadEntriesOnly) this.loadJSON(f, key, data[key].src);
-							this.data[f].entries[key].src = data[key].src;
-						}
-					} else {
-						// csv item names have to match drawing names
-						const csv = CSVToArray(data, ',').splice(0);
-
-						// convert to json? 
-						this.data[f].entries = [];
-						const keys = csv[0];
-						for (let i = 1; i < csv.length; i++) {
-							const itemData = {};
-							for (let j = 0; j < keys.length; j++) {
-								itemData[keys[j]] = csv[i][j];
-							}
-							this.data[f].entries.push(itemData);
-							// const itemName = csv[i][0];
-							this.assetsLoaded[f][itemData.label] = false;
-							// drawings included in path for json files ...
-							this.loadJSON(f, itemData.label, `drawings/${f}/${itemData.label}.json`);
-						}
-					}
-				})
-				.catch(error => {
-					console.error(error);
-					this.assetsLoaded[f] = true;
-				});
-		}
-
-		const loader = setInterval(() => {
-			let loaded = Object.keys(this.assetsLoaded).length == numFiles;
-			for (const f in this.assetsLoaded) {
-				for (const k in this.assetsLoaded[f]) {
-					if (!this.assetsLoaded[f][k]) loaded = false;
+	load(files, loadDataOnly, callback) {
+		this.loader.load(files, loadDataOnly, assets => {
+			for (const file in assets) {
+				this.anims[file] = {};
+				for (const key in assets[file]) {
+					this.anims[file][key] = new GameAnim();
+					this.anims[file][key].loadData(assets[file][key].json);
 				}
 			}
-			if (loaded) {
-				if (this.debug) console.timeEnd('load data');
-				clearInterval(loader);
-				// when will this ever not be game start?
-				// if (callback) callback();
-				this._start();
-			}
-		}, 1000 / 60);
-	}
-
-	loadAssets(type, files) {
-		if (this.debug) console.log('loading assets');
-		if (this.debug) console.time('load assets');
-
-		const numFiles = Object.keys(files).length;
-		this.assetsLoaded = {};
-		this.data[type] = {};
-		this.anims[type] = {};
-		this.assetsLoaded[type] = {};
-
-		this.data[type].entries = files;
-
-		for (const f in files) {
-			this.assetsLoaded[type][f] = false;
-			this.loadJSON(type, f, files[f]);
-		}
-
-		const loader = setInterval(() => {
-			let loaded = Object.keys(this.assetsLoaded[type]).length === numFiles;
-			for (const f in this.assetsLoaded[type]) {
-				if (!this.assetsLoaded[type][f]) loaded = false;
-			}
-			if (loaded) {
-				if (this.debug) console.timeEnd('load assets');
-				clearInterval(loader);
-				this._start();
-			}
-		}, 1000 / 60);
-	}
-
-	loadJSON(file, key, src) {
-		if (this.relativeLoadPath) src = '.' + src;
-		fetch(src)
-			.then(response => { return response.json(); })
-			.then(json => {
-				if (this.saveJsons) this.data.jsons[src] = json;
-				this.anims[file][key] = new GameAnim();
-				this.anims[file][key].src = src; // debug 
-				this.anims[file][key].loadData(json, () => {
-					this.assetsLoaded[file][key] = true;
-				});
-			});
+			this._start();
+		});
 	}
 
 	_start() {
