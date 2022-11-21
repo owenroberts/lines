@@ -350,10 +350,13 @@ class Animation {
 	}
 
 	load(src, callback) {
-		fetch(src)
-			.then(response => { return response.json() })
-			.then(data => { this.loadData(data, callback); })
-			.catch(error => { console.error(error) });
+		if (typeof src === 'object') loadJSON(src, callback);
+		else {
+			fetch(src)
+				.then(response => { return response.json() })
+				.then(data => { this.loadData(data, callback); })
+				.catch(error => { console.error(error) });
+		}
 	}
 
 	loadJSON(json, callback) {
