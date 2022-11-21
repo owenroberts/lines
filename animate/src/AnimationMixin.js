@@ -54,6 +54,10 @@ const AnimationMixin = {
 			return layer.isInFrame(this.currentFrame) &&
 				this.drawings[layer.drawingIndex].length > 0;
 			});
+	},
+
+	getLayersInFrame(frame) {
+		return this.layers.filter(l => l.isInFrame(frame));
 	}
 
 };

@@ -4,18 +4,6 @@
 
 function Draw(lns, defaults) {
 
-	function getDrawLayer() {
-		return lns.anim.getDrawLayer();
-	}
-
-	function getCurrentDrawing() {
-		return lns.anim.getCurrentDrawing();
-	}
-
-	function setCurrentDrawing(drawing) {
-		lns.anim.drawings[lns.anim.drawings.length - 1] = drawing;
-	}
-
 	lns.anim.drawings.push(new Drawing());
 	lns.anim.layers.push(new Layer({ 
 		...defaults, 
@@ -25,8 +13,9 @@ function Draw(lns, defaults) {
 
 	function setProperties(props, uiOnly) {
 		for (const prop in props) {
-			if (getDrawLayer()[prop] !== undefined) {
-				getDrawLayer()[prop] = props[prop]; // should just be layer prop right??
+			const layer = lns.anim.getDrawLayer();
+			if (layer[prop] !== undefined) {
+				layer[prop] = props[prop]; // should just be layer prop right??
 				// lns.anim.updateProperty(prop, props[prop]);
 				if (lns.ui.faces[prop]) lns.ui.faces[prop].update(props[prop], uiOnly); // should just do this .. jesus christ
 			}
@@ -35,7 +24,7 @@ function Draw(lns, defaults) {
 
 	function setProperty(prop, value) { // why is this differnt ?? -- really should be prop value
 		lns.anim.updateProperty(prop, value);
-		getDrawLayer()[prop] = value;
+		lns.anim.getDrawLayer()[prop] = value;
 	}
 
 	function setDefaults() {
@@ -44,6 +33,7 @@ function Draw(lns, defaults) {
 
 	function reset(f) {
 		let drawing = lns.anim.getCurrentDrawing();
+		const layer = lns.anim.getDrawLayer();
 		let newDrawing = drawing ? false : true;
 		if (drawing) {
 			if (drawing.length > 0) {
@@ -54,23 +44,27 @@ function Draw(lns, defaults) {
 		if (newDrawing) {
 			lns.anim.newDrawing(); // new Drawing?
 			/* seems repetietive - settings class ... ? */
-			lns.ui.faces.color.addColor(getDrawLayer().color); // add color to color pallette
-			lns.anim.layers.push(new Layer({
-				linesInterval: +lns.ui.faces.linesInterval.value,
-				segmentNum: +lns.ui.faces.segmentNum.value,
-				jiggleRange: +lns.ui.faces.jiggleRange.value,
-				wiggleRange: +lns.ui.faces.wiggleRange.value,
-				wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
-				color: lns.ui.faces.color.value,
-				lineWidth: lns.ui.faces.lineWidth.value,
-				drawingIndex: lns.anim.drawings.length - 1,
-				startFrame: +f || lns.anim.currentFrame,
-			}));
+			lns.ui.faces.color.addColor(layer.color); // add color to color pallette
+			lns.anim.layers.push(getNewLayer(f));
 			lns.data.saveState();
 		}  
 		// or just change layer frame ?
 		lns.ui.update();
 	} /* r key */
+
+	function getNewLayer(f) {
+		return new Layer({
+			linesInterval: +lns.ui.faces.linesInterval.value,
+			segmentNum: +lns.ui.faces.segmentNum.value,
+			jiggleRange: +lns.ui.faces.jiggleRange.value,
+			wiggleRange: +lns.ui.faces.wiggleRange.value,
+			wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
+			color: lns.ui.faces.color.value,
+			lineWidth: lns.ui.faces.lineWidth.value,
+			drawingIndex: lns.anim.drawings.length - 1,
+			startFrame: +f || lns.anim.currentFrame,
+		});
+	}
 
 	function cutEnd() {
 		/* make sure draw layer doesn't extend to far */
@@ -121,6 +115,8 @@ function Draw(lns, defaults) {
 		setProperty('color', color);
 		lns.ui.faces.color.el.value = color; // el ?
 	} /* alt-g */
+
+	
 
 	function connect() {
 
@@ -207,7 +203,6 @@ function Draw(lns, defaults) {
 
 	return { 
 		connect, reset, setDefaults, 
-		getDrawLayer, getCurrentDrawing, setCurrentDrawing,
 		setProperties,
 		cutEnd,
 	};
