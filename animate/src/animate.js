@@ -42,6 +42,7 @@ lns.draw = Draw(lns, {
 });
 lns.brush = Brush(lns);
 lns.eraser = Eraser(lns);
+lns.events = Events(lns);
 lns.bg = Background(lns);
 lns.data = Data(lns);
 lns.fio = FilesIO(lns, { // verbose params ...
@@ -70,6 +71,7 @@ lns.ui.setup();
 lns.canvas.connect();
 lns.playback.connect();
 lns.draw.connect();
+lns.events.connect();
 lns.brush.connect();
 lns.eraser.connect();
 lns.bg.connect();
@@ -82,7 +84,6 @@ lns.drawings.connect();
 lns.animator.connect();
 lns.timeline.connect();
 lns.sequencer.connect();
-
 
 lns.ui.update = function() {
 	lns.timeline.update();

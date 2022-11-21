@@ -9,10 +9,9 @@ function Draw(lns, defaults) {
 	}
 
 	function getCurrentDrawing() {
-		return lns.anim.drawings[lns.anim.drawings.length - 1];
+		return lns.anim.getCurrentDrawing();
 	}
 
-	// use this ??
 	function setCurrentDrawing(drawing) {
 		lns.anim.drawings[lns.anim.drawings.length - 1] = drawing;
 	}
@@ -44,7 +43,7 @@ function Draw(lns, defaults) {
 	}
 
 	function reset(f) {
-		let drawing = getCurrentDrawing();
+		let drawing = lns.anim.getCurrentDrawing();
 		let newDrawing = drawing ? false : true;
 		if (drawing) {
 			if (drawing.length > 0) {
@@ -52,9 +51,8 @@ function Draw(lns, defaults) {
 			}
 		}
 
-
 		if (newDrawing) {
-			lns.anim.drawings.push(new Drawing()); // new Drawing?
+			lns.anim.newDrawing(); // new Drawing?
 			/* seems repetietive - settings class ... ? */
 			lns.ui.faces.color.addColor(getDrawLayer().color); // add color to color pallette
 			lns.anim.layers.push(new Layer({
@@ -82,20 +80,11 @@ function Draw(lns, defaults) {
 			const layer = lns.anim.layers[i];
 			if (layer.endFrame > endFrame) endFrame = layer.endFrame;
 		}
-		if (getDrawLayer().endFrame > endFrame) 
-			getDrawLayer().endFrame = endFrame;
+		const layer = lns.anim.getDrawLayer();
+		if (layer.endFrame > endFrame) layer.endFrame = endFrame;
 		/* layer loop function?? its called forEach dumbass */
 	}
 
-	function hasDrawing() {
-		// write with filters
-		return lns.anim.layers.some(layer => {
-			return layer.isInFrame(lns.anim.currentFrame) && 
-				lns.anim.drawings[layer.drawingIndex].length > 0; 
-			});
-	}
-
-	// open color selector -- why here ?? -- should be in color right??
 	function quickColorSelect() {
 		const modal = new UIModal({ title: "Select Color", app: lns, position: lns.mousePosition });
 		modal.add(new UIColor({
@@ -133,184 +122,7 @@ function Draw(lns, defaults) {
 		lns.ui.faces.color.el.value = color; // el ?
 	} /* alt-g */
 
-	// how often the mousemove records, default 30ms
-	let mouseTimer = performance.now();  //  independent of draw timer
-	let mouseInterval = 30;
-	let distanceThreshold = 2; // distance between points required to record
-	let isDrawing = false; // for drawStart to drawEnd so its not always moving
-	let prevPosition = new Cool.Vector();
-	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
-
-	function outSideCanvas(ev) {
-		if (ev.toElement === lns.renderer.canvas) return;
-		if (isDrawing) endPoint(ev);
-	}
-
-	function pop() {
-		const drawing = getCurrentDrawing();
-		if (drawing.length > 0) {
-			if (drawing.pop() === 'end') drawing.pop();
-			drawing.add('end');
-		}
-	}
-
-	/* could be drawing class */
-	function popOff() {
-		const drawing = getCurrentDrawing();
-		if (drawing.length > 0) {
-			drawing.pop(); // remove end
-			for (let i = drawing.length - 1; i >= 0; i--) {
-				if (drawing.points[i] !== 'end' &&
-					drawing.points[i] !== 'add') {
-					drawing.pop();
-				}
-				else break;
-			}
-		}
-	}
-
-	function transformPoint(x, y) {
-		const scale = lns.renderer.getProps().scale;
-		const point = [
-			Math.round(x / scale),
-			Math.round(y / scale),
-		];
-		return point;
-	}
-
-	function update(ev) {
-		if (performance.now() > mouseInterval + mouseTimer) {
-			mouseTimer = performance.now();
-			lns.mousePosition.x = Math.round(ev.pageX);
-			lns.mousePosition.y = Math.round(ev.pageY);
-
-			const drawing = getCurrentDrawing();
-			const point = transformPoint(ev.offsetX, ev.offsetY);
-
-			if (isDrawing) {
-				if (lns.brush.isActive()) {
-					lns.brush.add(getCurrentDrawing(), point);
-				} else {
-					if (lns.mousePosition.distance(prevPosition) > distanceThreshold) {
-						// addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
-						drawing.add(point);
-						prevPosition = lns.mousePosition.clone();
-					}
-				}
-			} else if (lns.eraser.isActive()) {
-				lns.eraser.erase(point);
-			}
-		}
-	}
-
-	function start(ev) {
-		ev.preventDefault();
-
-		const drawing = getCurrentDrawing();
-		const point = transformPoint(ev.offsetX, ev.offsetY);
-
-		if (ev.which >= 2) lns.eraser.start();
-		if (ev.which == 1 && !lns.anim.isPlaying && !ev.altKey) {
-
-			if (ev.ctrlKey) {
-				lns.eraser.start(point);
-			} else {
-				isDrawing = true;
-				mouseTimer = performance.now();
-				if (lns.brush.isActive()) {
-					lns.brush.add(drawing, point);
-				} else {
-					drawing.add(point);
-					prevPosition = lns.mousePosition.clone();
-				}
-			}
-		} else if (ev.altKey) {
-			lns.brush.startFill(point);
-		}
-	}
-
-	function endPoint(ev) {
-		isDrawing = false;
-		const drawing = getCurrentDrawing();
-		let last = drawing.get(-2)[0]; /* prevent saving single point drawing segments */
-		// console.log('last', last);
-		if (last !== 'end' && last !== 'add' && drawing.length > 1) {
-			drawing.add(ev.shiftKey ? 'add' : 'end');
-		} else {
-			// if its just one point pop it off ...
-			drawing.pop();
-		}
-	}
-
-	function end(ev) {
-		lns.eraser.end();
-
-		if (lns.brush.fillActive()) {
-			const drawing = getCurrentDrawing();
-			const point = transformPoint(ev.offsetX, ev.offsetY);
-			lns.brush.endFill(drawing, point);
-		} else if (ev.which === 1) {
-			endPoint(ev);
-		}
-		prevPosition = undefined;
-		
-	}
-
-	if (window.navigator.platform.includes('iPad')) {
-		const lastTouch = { which: 1 };
-		const dpr = window.devicePixelRatio;
-
-		function toucher(ev, callback) {
-			ev.preventDefault();
-			if (ev.touches[0]) {
-				const rect = ev.target.getBoundingClientRect();
-				lastTouch.offsetX = ev.targetTouches[0].pageX - rect.left / dpr;
-				lastTouch.offsetY = ev.targetTouches[0].pageY - rect.top / dpr;
-				lastTouch.which = 1;
-				callback(lastTouch);
-			}
-		}
-
-		/* apple pencil - safari doesn't support pointer event */
-		lns.renderer.canvas.addEventListener('touchstart', ev => {
-			toucher(ev, start);
-		});
-		lns.renderer.canvas.addEventListener('touchmove', ev => {
-			toucher(ev, update);
-		});
-		lns.renderer.canvas.addEventListener('touchend', ev => {
-			end(lastTouch);
-		});
-	} else if (window.PointerEvent) {
-		lns.renderer.canvas.addEventListener('pointermove', update);
-		lns.renderer.canvas.addEventListener('pointerdown', start);
-		lns.renderer.canvas.addEventListener('pointerup', end);
-
-	} else {
-		lns.renderer.canvas.addEventListener('mousemove', update);
-		lns.renderer.canvas.addEventListener('mousedown', start);
-		lns.renderer.canvas.addEventListener('mouseup', end);
-	}
-
-	document.addEventListener('mousemove', outSideCanvas);
-
 	function connect() {
-		lns.ui.addProps({
-			'mouseInterval': {
-				type: 'UINumberRange',
-				key: 'm',
-				value: mouseInterval,
-				callback: value => { mouseInterval = value; },
-				range: [0, 100],
-			},
-			'distanceThreshold': {
-				type: 'UINumberStep',
-				key: 'shift-m',
-				range: [0, 30],
-				value: distanceThreshold,
-				callback: value => { distanceThreshold = value; },
-			},
-		}, 'mouse');
 
 		const drawPanel = lns.ui.getPanel('draw', { label: 'Lines' });
 
@@ -396,10 +208,7 @@ function Draw(lns, defaults) {
 	return { 
 		connect, reset, setDefaults, 
 		getDrawLayer, getCurrentDrawing, setCurrentDrawing,
-		popOff, pop, cutEnd,
-		hasDrawing, 
 		setProperties,
-		isDrawing() { return isDrawing; },
-		stop() { isDrawing = false; },
+		cutEnd,
 	};
 }

@@ -251,8 +251,8 @@ function Timeline() {
 					lineToLayer: () => {
 						lns.draw.reset();
 						const layerDrawing = lns.anim.drawings[layer.drawingIndex];
-						const currentDrawing = lns.draw.getCurrentDrawing();
-						const currentLayer = lns.draw.getDrawLayer();
+						const currentDrawing = lns.anim.getCurrentDrawing();
+						const currentLayer = lns.anim.getDrawLayer();
 						currentLayer.startFrame = layer.startFrame;
 						currentLayer.endFrame = layer.endFrame;
 						const points = [layerDrawing.pop()]; // end

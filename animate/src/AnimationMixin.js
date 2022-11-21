@@ -38,7 +38,22 @@ const AnimationMixin = {
 	},
 
 	getDrawLayer() {
-		return this.layers[this.layers.length -1];
+		return this.layers[this.layers.length - 1];
+	},
+
+	getCurrentDrawing() {
+		return this.drawings[lns.anim.drawings.length - 1];
+	},
+
+	newDrawing() {
+		this.drawings.push(new Drawing());
+	},
+
+	isDrawingInFrame() {
+		return this.layers.some(layer => {
+			return layer.isInFrame(this.currentFrame) &&
+				this.drawings[layer.drawingIndex].length > 0;
+			});
 	}
 
 };

@@ -54,7 +54,7 @@ function Playback(lns, params) {
 			checkEnd();
 			lns.draw.reset();
 		} else { // ?
-			const layer = lns.draw.getDrawLayer();
+			const layer = lns.anim.getDrawLayer();
 			layer.startFrame = lns.anim.currentFrame;
 			layer.endFrame = lns.anim.currentFrame;
 		}
@@ -88,8 +88,9 @@ function Playback(lns, params) {
 			if (lns.anim.frame !== +f) lns.draw.reset();
 			lns.anim.frame = +f;
 
-			lns.draw.getDrawLayer().startFrame = lns.anim.currentFrame;
-			lns.draw.getDrawLayer().endFrame = lns.anim.currentFrame;
+			const layer = lns.anim.getDrawLayer();
+			layer.startFrame = lns.anim.currentFrame;
+			layer.endFrame = lns.anim.currentFrame;
 			
 			lns.ui.update();
 		} else {
@@ -99,7 +100,7 @@ function Playback(lns, params) {
 
 	// fix for playing animation with nothing in the final frame
 	function checkEnd() {
-		if (lns.anim.currentFrame === lns.anim.endFrame && !lns.draw.hasDrawing()) {
+		if (lns.anim.currentFrame === lns.anim.endFrame && !lns.anim.isDrawingInFrame()) {
 			next(-1);
 		}
 	}
@@ -110,19 +111,18 @@ function Playback(lns, params) {
 		const next = lns.anim.currentFrame + dir;
 		
 		if (lns.anim.isPlaying) lns.ui.faces.play.update(); // ?
-		// lns.draw.isDrawing = false; /* prototype here with render, anim, draw, isActive or something ? */
-		lns.draw.stop();
+		lns.events.stop();
 		
-		if (lns.draw.getCurrentDrawing().length > 0) {
+		if (lns.anim.getCurrentDrawing().length > 0) {
 			// drawing to save - can add frame
 			lns.draw.reset(next);
 			lns.anim.frame = next;
 		} else {
 			// put in reset? 
-			const layer = lns.draw.getDrawLayer();
+			const layer = lns.anim.getDrawLayer();
 			if (dir > 0) {
 				if (lns.anim.currentFrame < lns.anim.state.end || 
-					(lns.anim.stateName == 'default' && lns.draw.hasDrawing())) {
+					(lns.anim.stateName == 'default' && lns.anim.isDrawingInFrame())) {
 					layer.startFrame = next;
 					layer.endFrame = next;	
 					lns.anim.frame = next;

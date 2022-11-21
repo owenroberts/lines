@@ -147,7 +147,7 @@ function Data(lns) {
 
 	function clearLines() {
 		saveState();
-		lns.draw.setCurrentDrawing(new Drawing());
+		lns.anim.getCurrentDrawing().reset();
 	} /* x key */
 
 	function clearLayers() {
@@ -237,12 +237,12 @@ function Data(lns) {
 
 	function cutLastSegment() {
 		saveState();
-		lns.draw.pop(); 
+		lns.anim.getCurrentDrawing().popPoint();
 	} /* z key */
 
 	function cutLastLine() {
 		saveState();
-		lns.draw.popOff();
+		lns.anim.getCurrentDrawing().popLine();
 	} /* shift z */
 
 	function insert(dir) {
