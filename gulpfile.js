@@ -121,7 +121,8 @@ function exportTask() {
 		return src(files)
 			.pipe(sourcemaps.init())
 			.pipe(concat(name))
-			.pipe(uglify())
+			.pipe(iife())
+			.pipe(terser().on('error', logError))
 			.pipe(sourcemaps.write('./src_maps'))
 			.pipe(dest(dir));
 	}
