@@ -37,7 +37,7 @@ function Events(lns) {
 
 			if (isDrawing) {
 				if (lns.brush.isActive()) {
-					lns.brush.add(getCurrentDrawing(), point);
+					lns.brush.add(drawing, point);
 				} else {
 					if (lns.mousePosition.distance(prevPosition) > distanceThreshold) {
 						// addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
