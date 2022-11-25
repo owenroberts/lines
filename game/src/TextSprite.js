@@ -6,16 +6,19 @@
 */
 
 class TextSprite {
-	constructor(x, y, msg, wrap, letters, letterIndexString) { // params?
-		this.x = Math.round(x);
-		this.y = Math.round(y);
-		this.lead = 35; // leading is space between lines
-		this.track = 18; // tracking is space between letters
+	constructor(params) { 
+		this.x = Math.round(params.x || 0);
+		this.y = Math.round(params.y || 0);
+		this.lead = params.lead || 35; // leading is space between lines
+		this.track = params.track || 18; // tracking is space between letters
 		// this.msg = msg;
-		this.wrap = wrap;
+		this.wrap = params.wrap || wrap;
 		this.isActive = true;
-		this.letters = letters;
+		this.letters = params.letters;
 		this.breaks = [];
+		this.countForward = params.countForward || false;
+		this.countBackward = params.countBackward || false;
+
 		// this.setBreaks();
 		this.count = 0;
 		this.end = 0;
@@ -28,13 +31,13 @@ class TextSprite {
 		this.hover = false;
 		this.clickStarted = false;
 
-		this.setMsg(msg);
+		this.setMsg(params.msg);
 
-		if (!letters.states[0]) {
-			const indexString = letterIndexString || 
+		if (!params.letters.states[0]) {
+			const indexString = params.letterIndexString || 
 				"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"!";
 			for (let i = 0; i < indexString.length; i++) {
-				letters.createNewState(indexString[i], i, i);
+				params.letters.createNewState(indexString[i], i, i);
 			}
 		}
 	}

@@ -4,10 +4,10 @@
 */
 
 class TextButton extends UI {
-	constructor(x, y, msg, wrap, letters) {
-		super({x: x, y: y});
+	constructor(params) {
+		super(params);
 		this.center = false;
-		this.text = new Text(this.position.x, this.position.y, msg, wrap, letters);
+		this.text = new TextSprite(params);
 		this.setCollider();
 	}
 
@@ -18,8 +18,11 @@ class TextButton extends UI {
 	}
 
 	setCollider() {
-		this.size.x = this.collider.size.x = (this.text.wrap < this.text.msg.length ? this.text.wrap : this.text.msg.length) * this.text.track;
-		this.size.y = this.collider.size.y = (this.text.breaks.length + 1) * this.text.letters.height;
+		this.collider[0] = 0;
+		this.collider[1] = 0;
+
+		this.collider[2] = (this.text.wrap < this.text.msg.length ? this.text.wrap : this.text.msg.length) * this.text.track;
+		this.collider[3] = (this.text.breaks.length + 1) * this.text.letters.height;
 	}
 
 	display() {
@@ -33,3 +36,5 @@ class TextButton extends UI {
 		this.text.setPosition(x, y);
 	}
 }
+
+LinesEngine.TextButton = TextButton;
