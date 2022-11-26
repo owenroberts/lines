@@ -22,16 +22,16 @@ class TextSprite {
 		// this.setBreaks();
 		this.count = 0;
 		this.end = 0;
-		this.delay = 0;
+		this.delay = params.delay || 0;
 		
 		this.countCount = 0.5;
 		this.endCount = 0.5;
-		this.endDelay = GAME.dps || 10;
+		this.endDelay = params.endDelay || GAME.dps || 10;
 
 		this.hover = false;
 		this.clickStarted = false;
 
-		this.setMsg(params.msg);
+		if (params.msg) this.setMsg(params.msg);
 
 		if (!params.letters.states[0]) {
 			const indexString = params.letterIndexString || 
@@ -196,4 +196,4 @@ class TextSprite {
 	}
 }
 
-window.LinesEngine.TextSprite = TextSprite;
+LinesEngine.TextSprite = TextSprite;
