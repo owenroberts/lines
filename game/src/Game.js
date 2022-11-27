@@ -1,12 +1,4 @@
 /*
-	this is really more like the game loader, renderer, doesn't handle game logic
-	loads files
-	renders and updates
-	manage canvas
-	manages scenes
-	start function called when load ends ... calls start, update, draw
-	params.events - mouse, keyboard, mouse+keyboard
-
 	user defined functions:
 	start - create anything using loaded animations
 	draw - draw sprites, anything not in scenes
@@ -174,14 +166,14 @@ class Game {
 
 		this.renderer.addCallback(delta => { this._update(delta) });
 		
-		if (this.stats) {
-			this.renderer.addCallback(() => {
-				this.stats.begin();
-			}, 'pre');
-			this.renderer.addCallback(() => {
-				this.stats.end();
-			}, 'pre');
-		}
+		// if (this.stats) {
+		// 	this.renderer.addCallback(() => {
+		// 		this.stats.begin();
+		// 	}, 'pre');
+		// 	this.renderer.addCallback(() => {
+		// 		this.stats.end();
+		// 	}, 'post');
+		// }
 
 		if (this.useMouseEvents) this.startMouseEvents();
 		if (this.useKeyboardEvents) this.startKeyboardEvents();
@@ -189,19 +181,23 @@ class Game {
 		if (this.sizeCanvas) window.addEventListener('resize', this.sizeCanvas, false);
 	}
 
-	_draw() {
+	_draw(delta) {
 		if (this.stats) this.drawStats.begin();
+		// if (clearBg) ctx.clearRect(0, 0, canvas.width, canvas.height);
 		this.renderer.ctx.clearRect(0, 0, this.width, this.height);
-		this.draw(); // need time ??
+		this.draw(delta); // need time ??
 		if (this.stats) this.drawStats.end();
 	}
 
 	_update(delta) {
+		// console.log('_update', delta);
 		if (this.pauseGame) return;
+		if (this.stats) this.stats.begin();
 		if (!this.noUpdate) this.update(delta);
-		if (delta > this.drawTime + this.drawInterval) this._draw(time);
-		if (this.drawCount === 0) this._draw(); // need time?
+		// if (delta > this.drawTime + this.drawInterval) this._draw(delta);
+		if (this.drawCount === 0) this._draw(delta); // need time?
 		this.drawCount = (this.drawCount + 1) % this.drawInterval;
+		// console.log(this.drawCount);
 
 		// suspend lines update if performance is dragging
 		if (this.suspendOnTimeOver && !this.editorSuspend) {
@@ -211,6 +207,7 @@ class Game {
 				this.suspend = false;
 			}
 		}
+		if (this.stats) this.stats.end();
 	}
 
 	setBounds(dir, value) {

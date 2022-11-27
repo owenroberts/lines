@@ -4,7 +4,7 @@
 function Renderer(params) {
 
 	let id = params.id || 'lines';
-	let dps = params.dps || 30;
+	let dps = params.dps || 30; // ?
 	let retina = params.retina !== undefined ? params.retina : true;
 	let dpr = Math.max(1, retina ? window.devicePixelRatio || 1 : 1);
 	let scale = params.scale || 1;
@@ -86,8 +86,9 @@ function Renderer(params) {
 
 	window.drawCount = 0; // lns.drawCount? ... window.updateCount ...
 	
-	let interval = 1000 / dps;  // time interval between updates
+	let interval = 1000 / (params.frameRate || 60);  // time interval between updates
 	let updateTime = performance.now();
+	let elapsed;
 
 	let suspendRender = false;
 
@@ -151,32 +152,22 @@ function Renderer(params) {
 
 	function update(time) {
 
-		if (preTime.length) {
-			for (let i = 0; i < preTime.length; i++) {
-				preTime[i]();
-			}
-		}
-	
-		if (time > interval + updateTime || time === 'capture') {
-			// updateTime = time;
-			// adjust for fps being off
-			updateTime = time - ((time - updateTime) % interval);
+		// const time = performance.now();
+		elapsed = time - updateTime;
+		if (elapsed > interval || time === 'capture') {
+
+			updateTime = time - (elapsed % interval);
 
 			if (clearBg) ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			for (let i = 0; i < callbacks.length; i++) {
-				callbacks[i](time - updateTime);
+				callbacks[i](elapsed);
 			}
 
 			window.drawCount++;
+
 		}
 
-		if (postTime.length) {
-			for (let i = 0; i < postTime.length; i++) {
-				postTime[i]();
-			}
-		}
-		
 		if (suspendRender) return;
 		window.requestAnimFrame(update);
 	}
