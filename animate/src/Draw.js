@@ -108,15 +108,13 @@ function Draw(lns, defaults) {
 	} /* shift-g */
 
 	function colorVariation() {
-		let n = parseInt(getDrawLayer().color.substr(1), 16);
+		let n = parseInt(lns.anim.getDrawLayer().color.substr(1), 16);
 		n += Cool.randomInt(-500, 500);
 		n = Math.max(0, n);
 		const color = '#' + n.toString(16);
 		setProperty('color', color);
 		lns.ui.faces.color.el.value = color; // el ?
 	} /* alt-g */
-
-	
 
 	function connect() {
 

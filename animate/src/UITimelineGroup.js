@@ -59,6 +59,8 @@ class UITimelineGroup extends UICollection {
 		if (width > 60) this.append(uis.breakUp);
 		if (width > 70) this.append(uis.removeLayer);
 		if (width > 80) this.append(uis.tween);
+		if (width > 90) this.append(uis.moveUp);
+
 
 		if (width > 80) {
 			this.append(uis.endFrameNumber);
@@ -172,7 +174,21 @@ class UITimelineGroup extends UICollection {
 			callback: () => { this.tweenModal(layers); }
 		});
 
-		return { lock, breakUp, removeLayer, startFrameNumber, endFrameNumber, tween };
+		const moveUp = new UIButton({
+			text: isModal ? "Move Up" : '^',
+			btnClass:'move-up',
+			class: btnClass,
+			callback: params.moveUp
+		});
+
+		const moveToBack = new UIButton({
+			text: isModal ? "Move To Back" : '^',
+			btnClass:'move-up',
+			class: btnClass,
+			callback: params.moveToBack
+		});
+
+		return { lock, breakUp, removeLayer, startFrameNumber, endFrameNumber, tween, moveUp, moveToBack };
 	}
 
 	editModal(layers, params) {

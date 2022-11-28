@@ -237,7 +237,7 @@ function FilesIO(lns, params) {
 			{ callback: saveFile, key: 'alt-s', text: 'Save File', args: [false], },
 			{ callback: saveFile, key: 'shift-s', text: 'Save Frame', args: [true], },
 			{ callback: saveFramesToFiles, key: 'shift-e', text: 'Save Frames to Files', },
-			{ callback: reOpenFile, key: 'shift-o', text: 'Re-Open', },
+			{ callback: reOpenFile, key: 'ctrl-o', text: 'Re-Open', },
 		]);
 
 		lns.ui.addUI({

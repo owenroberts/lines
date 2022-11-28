@@ -138,6 +138,13 @@ class UILayer extends UICollection {
 			callback: params.moveUp
 		});
 
+		const moveToBack = new UIButton({
+			text: isModal ? "Move To Back" : '^',
+			btnClass:'move-up',
+			class: btnClass,
+			callback: params.moveToBack
+		});
+
 		const addToGroup = new UIButton({
 			text: isModal ? 'Add to Group' : 'G',
 			btnClass: 'add-to-group',
@@ -196,7 +203,7 @@ class UILayer extends UICollection {
 			}
 		});
 
-		return { tween, remove, startFrameNumber, endFrameNumber, lock, moveUp, addToGroup, merge };
+		return { tween, remove, startFrameNumber, endFrameNumber, lock, moveUp, moveToBack, addToGroup, merge };
 	}
 
 	editModal(layer, params) {

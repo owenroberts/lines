@@ -85,6 +85,12 @@ function Timeline() {
 		timeline['frm-' + lns.anim.currentFrame].addClass('current');
 	}
 
+	function sortLayer(layerIndex, swapIndex) {
+		if (swapIndex < 0) return;
+		[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]];
+		update();
+	}
+
 	function drawFrames() {
 		timeline.setProp('--num-frames', lns.anim.endFrame + 1);
 
@@ -174,6 +180,21 @@ function Timeline() {
 						},
 						update() { lns.ui.update(); },
 						reset() { resetLayers(); },
+						moveUp() {
+							// not sure this will work ...
+							groupLayers.forEach(layer => {
+								const layerIndex = lns.anim.layers.indexOf(layer);
+								const swapIndex = layerIndex - 1;
+								sortLayer(layerIndex, swapIndex);
+							});
+						},
+						moveToBack() {
+							// go backwards to keep the order
+							for (let i = groupLayers.length - 1; i >= 0; i--) {
+								const layerIndex = lns.anim.layers.indexOf(groupLayers[i]);
+								sortLayer(layerIndex, 0);
+							}
+						}
 					});
 					gridRowStart += 2;
 					gridRowEnd += 2;
@@ -199,13 +220,14 @@ function Timeline() {
 						gridColumnStart: layer.startFrame * 2 + 1,
 						gridColumnEnd: layer.endFrame * 2 + 3
 					},
-					moveUp: function() {
+					moveUp() {
 						const layerIndex = lns.anim.layers.indexOf(layer);
 						const swapIndex = layerIndex - 1;
-						if (swapIndex >= 0) {
-							[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]]
-						}
-						update();
+						sortLayer(layerIndex, swapIndex);
+					},
+					moveToBack() {
+						const layerIndex = lns.anim.layers.indexOf(layer);
+						sortLayer(layerIndex, 0);
 					},
 					addToGroup(position) {
 						lns.draw.reset(); // save current lines
@@ -248,7 +270,7 @@ function Timeline() {
 					},
 					update() { lns.ui.update(); },
 					reset() { resetLayers(); },
-					lineToLayer: () => {
+					lineToLayer() {
 						lns.draw.reset();
 						const layerDrawing = lns.anim.drawings[layer.drawingIndex];
 						const currentDrawing = lns.anim.getCurrentDrawing();
