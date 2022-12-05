@@ -12,12 +12,13 @@ class TextSprite {
 		this.lead = params.lead || 35; // leading is space between lines
 		this.track = params.track || 18; // tracking is space between letters
 		// this.msg = msg;
-		this.wrap = params.wrap || wrap;
+		this.wrap = params.wrap || 12;
 		this.isActive = true;
 		this.letters = params.letters;
 		this.breaks = [];
 		this.countForward = params.countForward || false;
 		this.countBackward = params.countBackward || false;
+		this.repeatCount = params.repeatCount || false; 
 
 		// this.setBreaks();
 		this.count = 0;
@@ -182,13 +183,13 @@ class TextSprite {
 		}
 		if (countBackward) {
 			if (this.end >= this.msg.length) {
-				this.reset();
+				if (this.repeatCount) this.reset();
 				if (this.onDialogEnd) this.onDialogEnd();
 				return true;
 			}
 		} else {
 			if (this.end >= this.endDelay) { // how long to wait after completed text // hardcoded?
-				this.reset();
+				if (this.repeatCount) this.reset();
 				if (this.onDialogEnd) this.onDialogEnd();
 				return true; // ended
 			}

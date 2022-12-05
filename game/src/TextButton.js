@@ -6,9 +6,11 @@
 class TextButton extends UI {
 	constructor(params) {
 		super(params);
-		this.center = false;
+		// this.center = params.center || false;
 		this.text = new TextSprite(params);
+		if (params.center) this.text.center();
 		this.setCollider();
+
 	}
 
 	setMsg(msg) {
@@ -18,10 +20,9 @@ class TextButton extends UI {
 	}
 
 	setCollider() {
-		this.collider[0] = 0;
-		this.collider[1] = 0;
-
-		this.collider[2] = (this.text.wrap < this.text.msg.length ? this.text.wrap : this.text.msg.length) * this.text.track;
+		this.collider[0] = this.center ? -this.text.width / 2 : 0;
+		this.collider[1] = this.center ? -this.text.height / 2 : 0;
+		this.collider[2] = (this.text.wrap < this.text.msg.length ? this.text.wrap : this.text.msg.length + 1) * this.text.track;
 		this.collider[3] = (this.text.breaks.length + 1) * this.text.letters.height;
 	}
 
