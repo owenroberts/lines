@@ -172,3 +172,13 @@ $anim-off: darkgreen;
 		outline: 1px solid slategrey;
 	}
 }
+
+#container {
+	&.full-size {
+		grid-template-areas:
+			"main main"
+			"ui ui"
+			"timeline timeline";
+
+	}
+}

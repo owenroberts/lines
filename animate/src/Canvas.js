@@ -12,6 +12,8 @@ function Canvas(lns, params) {
 
 	const { canvas, ctx } = lns.renderer;
 	let { width, height, scale, lineWidth, bgColor } = lns.renderer.getProps();
+	console.log(width, height);
+	let canvasTempScale = 1; // for full sizing
 
 	setBGColor(bgColor);
 
@@ -67,18 +69,28 @@ function Canvas(lns, params) {
 		lns.ui.addProps({
 			'width': {
 				value: width,
-				callback: value => { lns.renderer.setWidth(value); }
+				callback: value => {
+					console.log('width', typeof value)
+					width = value;
+					lns.renderer.setWidth(value); 
+				}
 			},
 			'height': {
 				value: height,
-				callback: value => { lns.renderer.setHeight(value); }
+				callback: value => { 
+					height = value;
+					lns.renderer.setHeight(value); 
+				}
 			},
 			'canvasScale': {
 				type: 'UINumberStep',
 				value: scale,
 				range: [0.5, 4],
 				step: 0.05,
-				callback: value => { lns.renderer.setScale(value); }
+				callback: value => { 
+					scale = value;
+					lns.renderer.setScale(value); 
+				}
 			},
 			'bgColor': {
 				type: 'UIColor',
@@ -90,6 +102,48 @@ function Canvas(lns, params) {
 				key: 'alt-m',
 				callback: value => { cursorToggle(value); }
 			}
+		}, 'canvas');
+
+		lns.ui.addCallback({
+			type: 'UIToggle',
+			callback: value => {
+				console.log('size', value);
+				const { container } = lns.ui.getLayout();
+				
+				if (value) {
+					canvasTempScale = scale;
+					
+					// const rect = container.el.getBoundingClientRect();
+					const w = window.innerWidth - 32;
+					const h = window.innerHeight - 32;
+
+					// console.dir(container.el)
+					// console.log(w, h, width, height);
+					// console.log(width/height, w/h);
+
+					// width proportion larger, scale to height
+					if (width / height < w / h) {
+						let s = h > height ? h / height : height / h;
+						// console.log('h', s);
+						lns.renderer.setScale(s);
+						scale = s;
+					} else {
+						let s = w > width ? w / width : width / w;
+						// console.log('w', s);
+						lns.renderer.setScale(s);
+						scale = s;
+					}
+
+					container.addClass('full-size');
+
+				} else {
+					lns.ui.getLayout().container.removeClass('full-size');
+					lns.renderer.setScale(canvasTempScale);
+					scale = canvasTempScale;
+				}
+			},
+			text: 'Full Size',
+			key: '`'
 		}, 'canvas');
 	}
 

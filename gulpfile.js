@@ -33,13 +33,9 @@ const files = {
 		'./src/**/*.js',
 	],
 	animate: [
-		// './animate/modules/*.js',
-		//'./animate/classes/*.js',
-		//'./animate/interface/*.js',
 		'./animate/src/AnimationMixin.js',
 		'./animate/src/LayerMixin.js',
 		'./animate/src/DrawingMixin.js',
-		// './animate/src/UILayer.js',
 		'./animate/src/animate.js',
 		'./animate/src/**/*.js'
 	],
@@ -183,17 +179,15 @@ function watchTask(){
 	); 
 
 	watch([
-			// ...sassFiles.interface,
 			...sassFiles.animate,
-			// ...sassFiles.editor,
-			// ...sassFiles.animEditor,
 		],
 		series(sassTasks),
 	);
 
 	if (ui) {
+		console.log(ui);
 		watch('ui/src/**/*.js', series('ui'));
-		watch(['ui/css/*.scss'], series('sass'));
+		watch('ui/css/*.scss', series('sass'));
 	}
 }
 
