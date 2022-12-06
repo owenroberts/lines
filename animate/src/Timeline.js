@@ -11,6 +11,7 @@ function Timeline() {
 	let viewActiveLayers = false;
 	let viewLayerRange = 0;
 	let viewGroups = true;
+	let lastGroup; // set last group
 	let viewState = false;
 	let useScrollToFrame = false;
 	let autoFit = false;
@@ -243,6 +244,7 @@ function Timeline() {
 								position: position, 
 								callback: function() {
 									layer.groupNumber = +groupSelect.value;
+									lastGroup = +groupSelect.value;
 									lns.ui.update();
 								}
 							});
@@ -251,6 +253,7 @@ function Timeline() {
 							for (let i = 0; i < groups.length; i++) {
 								groupSelect.addOption(i, groups[i]);
 							}
+							if (lastGroup) groupSelect.value = lastGroup;
 							groupSelector.add(groupSelect);
 							groupSelector.addBreak();
 							groupSelector.add(new UIButton({
@@ -260,6 +263,7 @@ function Timeline() {
 									let createGroup = prompt("Name new group", "New Group " + groups.length);
 									groups.push(createGroup);
 									layer.groupNumber = groups.length - 1;
+									lastGroup = layer.groupNumber;
 									lns.ui.update();
 								}
 							}));
