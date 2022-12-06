@@ -12,7 +12,6 @@ function Canvas(lns, params) {
 
 	const { canvas, ctx } = lns.renderer;
 	let { width, height, scale, lineWidth, bgColor } = lns.renderer.getProps();
-	console.log(width, height);
 	let canvasTempScale = 1; // for full sizing
 
 	setBGColor(bgColor);
@@ -70,7 +69,6 @@ function Canvas(lns, params) {
 			'width': {
 				value: width,
 				callback: value => {
-					console.log('width', typeof value)
 					width = value;
 					lns.renderer.setWidth(value); 
 				}
@@ -107,7 +105,6 @@ function Canvas(lns, params) {
 		lns.ui.addCallback({
 			type: 'UIToggle',
 			callback: value => {
-				console.log('size', value);
 				const { container } = lns.ui.getLayout();
 				
 				if (value) {

@@ -174,7 +174,8 @@ $anim-off: darkgreen;
 }
 
 #container {
-	&.full-size {
+	&.full-sizes,
+	&.UP.full-size {
 		grid-template-areas:
 			"main main"
 			"ui ui"

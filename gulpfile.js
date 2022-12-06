@@ -57,8 +57,6 @@ const files = {
 
 const sassFiles = {
 	animate: ['./animate/css/animate.scss'],
-	// editor: ['./css/editor.scss'],
-	// animEditor: ['./css/animEditor.scss'],
 };
 
 function browserSyncTask() {
@@ -178,14 +176,9 @@ function watchTask(){
 		series(jsTasks),
 	); 
 
-	watch([
-			...sassFiles.animate,
-		],
-		series(sassTasks),
-	);
+	watch([...sassFiles.animate], series(sassTasks));
 
 	if (ui) {
-		console.log(ui);
 		watch('ui/src/**/*.js', series('ui'));
 		watch('ui/css/*.scss', series('sass'));
 	}
