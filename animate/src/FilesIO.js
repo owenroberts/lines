@@ -7,11 +7,12 @@ function FilesIO(lns, params) {
 	let saveSettingsOnUnload = params.save || false; // use this ??
 	let saveFilesEnabled = false;
 	let fileName = undefined;
+	let titleDisplay;
 
 	function getSaveData(isSingleFrame) {
 
 		const json = {
-			title: lns.ui.faces.title.value || prompt("Name this file:"),
+			title: titleDisplay.value || prompt("Name this file:"),
 			v: "2.5",
 			w: +lns.canvas.getWidth(),
 			h: +lns.canvas.getHeight(),
@@ -21,7 +22,7 @@ function FilesIO(lns, params) {
 
 		};
 		if (params.bg) json.bg = lns.canvas.getBGColor();
-		if (!lns.ui.faces.title.value) lns.ui.faces.title.value = json.title;
+		if (!titleDisplay.value) titleDisplay.value = json.title;
 
 		lns.draw.reset();
 		lns.playback.checkEnd();
@@ -57,19 +58,23 @@ function FilesIO(lns, params) {
 	}
 
 	function clearLocal() {
-		const title = lns.ui.faces.title.value;
+		const title = titleDisplay.value;
 		if (!title) alert('No title');
 		localStorage.removeItem('lines-' + title);
+		localStorage.removeItem('lines-title');
 	}
 
 	function saveLocal() {
 		const json = getSaveData(false);
 		if (!json) return alert('No data.');
 		localStorage.setItem('lines-' + json.title, JSON.stringify(json));
+		localStorage.setItem('lines-title', json.title);
 	}
 
 	function loadLocal() {
-		const title = lns.ui.faces.title.value || prompt('Search title');
+		let title = titleDisplay.value;
+		if (!title) title = localStorage.getItem('lines-title');
+		if (!title) prompt('Search title');
 		if (!title) return alert('No title.');
 		
 		const localData = localStorage.getItem('lines-' + title);
@@ -152,9 +157,9 @@ function FilesIO(lns, params) {
 			lns.draw.reset();
 		});
 
-		lns.ui.faces.title.value = data.title || prompt('Name animation?');
+		titleDisplay.value = data.title || prompt('Name animation?');
 		lns.ui.faces.fps.value = data.fps;
-		document.title = lns.ui.faces.title.value + ' ~ animate';
+		document.title = titleDisplay.value + ' ~ animate';
 		lns.ui.faces.width.value = data.w;
 		lns.ui.faces.height.value = data.h;
 		lns.anim.layers.forEach(layer => {
@@ -226,9 +231,7 @@ function FilesIO(lns, params) {
 
 		const panel = lns.ui.getPanel('fio', { label: 'Files IO' });
 		
-		lns.ui.addProps({
-			'title': { id: 'title',  value: fileName, type: 'UIText'} // what?
-		});	
+		titleDisplay = lns.ui.addUI({ id: 'title', value: fileName, type: 'UIText' });
 
 		lns.ui.addCallbacks([
 			{ callback: saveLocal, key: 's', text: 'Save Local', args: [false], },

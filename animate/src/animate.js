@@ -120,12 +120,10 @@ lns.draw.setDefaults();
 lns.timeline.init();
 lns.playback.toggleStats();
 lns.renderer.start();
-const settings = lns.ui.settings.load();
+lns.ui.settings.load();
 
 if (params.src) {
-	lns.fio.loadFile(params.src, () => {
-		// lns.ui.faces.stateSelect = 		
-	});
+	lns.fio.loadFile(params.src);
 }
 
 console.log(lns);

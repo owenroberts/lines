@@ -71,7 +71,7 @@ function Capture(lns, params) {
 	function capture() {
 		if (saveFilesEnabled) { // face or getter
 			lns.canvas.canvas.toBlob(blob =>  {
-				const title = lns.ui.faces.title.value; // this is a UI
+				const title = titleDisplay.value; // this is a UI
 				const frm = Cool.padNumber(lns.anim.currentFrame, 3);
 
 				let fileName;
@@ -201,8 +201,8 @@ function Capture(lns, params) {
 				const a = document.createElement('a');
 				document.body.appendChild(a);
 				a.href = url;
-				let t = `${lns.ui.faces.title.value}` || 'lines';
-				if (promptTitle) t = prompt('Title?', lns.ui.faces.title.value);
+				let t = `${titleDisplay.value}` || 'lines';
+				if (promptTitle) t = prompt('Title?', titleDisplay.value);
 				a.download = `${t}.webm`;
 				a.click();
 				lns.ui.faces.lineWidth.update(tempSettings.lineWidth);
