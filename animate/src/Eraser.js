@@ -31,13 +31,17 @@ function Eraser(lns) {
 				if (d < distance) {
 					if (method === 'lines') {
 						let s = j, e = j; // start and end points
+
 						while (drawing.points[s] !== 'end' && s > 0) {
 							s--;
 						}
+						
 						while (drawing.points[e] !== 'end' && e < drawing.length) {
 							e++;
 						}
-						drawing.points.splice(s, e);
+					
+						drawing.points.splice(s, e - s);
+
 					} else if (method === 'points') {
 						drawing.points[j] = 'end';
 					}

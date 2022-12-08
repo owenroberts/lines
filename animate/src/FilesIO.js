@@ -251,5 +251,8 @@ function FilesIO(lns, params) {
 
 	}
 
-	return { connect, loadFile, loadJSON };
+	return { 
+		connect, loadFile, loadJSON,
+		getTitle() { return titleDisplay.value; }
+	};
 }

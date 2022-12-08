@@ -201,8 +201,8 @@ function Capture(lns, params) {
 				const a = document.createElement('a');
 				document.body.appendChild(a);
 				a.href = url;
-				let t = `${titleDisplay.value}` || 'lines';
-				if (promptTitle) t = prompt('Title?', titleDisplay.value);
+				let t = `${lns.fio.getTitle()}` || 'lines';
+				if (promptTitle) t = prompt('Title?', lns.fio.getTitle());
 				a.download = `${t}.webm`;
 				a.click();
 				lns.ui.faces.lineWidth.update(tempSettings.lineWidth);
