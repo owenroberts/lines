@@ -83,7 +83,7 @@ function Canvas(lns, params) {
 			'canvasScale': {
 				type: 'UINumberStep',
 				value: scale,
-				range: [0.5, 4],
+				range: [0.5, 10],
 				step: 0.05,
 				callback: value => { 
 					scale = value;
@@ -141,7 +141,23 @@ function Canvas(lns, params) {
 			},
 			text: 'Full Size',
 			key: '`'
-		}, 'canvas');
+		});
+
+		lns.ui.addCallback({
+			type: 'UIToggle',
+			callback: value => {
+				if (value) {
+					canvasTempScale = scale;
+					lns.renderer.setScale(1);
+					scale = 1;
+				} else {
+					lns.renderer.setScale(canvasTempScale);
+					scale = canvasTempScale;
+				}
+			},
+			text: 'x1',
+			key: '1'
+		});
 	}
 
 	return { 

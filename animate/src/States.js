@@ -97,6 +97,7 @@ function States(lns) {
 
 		lns.ui.addCallbacks([
 			{ callback: create, key: 't', text: 'Create New',  },
+			{ callback() { set('default'); }, key: 'shift-t', text: 'Default' },
 		]);
 
 		panel.addRow(undefined, 'break');

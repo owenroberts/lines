@@ -58,6 +58,15 @@ const AnimationMixin = {
 
 	getLayersInFrame(frame) {
 		return this.layers.filter(l => l.isInFrame(frame));
+	},
+
+	shiftStates(index) {
+		// shift states when inserting
+		for (const name in this.states) {
+			const state = this.states[name];
+			if (state.start >= index) state.start++;
+			if (state.end >= index) state.end++;
+		}
 	}
 
 };

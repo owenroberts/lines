@@ -291,7 +291,9 @@ class UILayer extends UICollection {
 			app: lns, 
 			position: this.position, 
 			callback: () => {
-				tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
+				if (tween.endValue === 'end' && tween.prop === 'endIndex') {
+					tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
+				}
 				layer.addTween(tween);
 				this.update();
 			}

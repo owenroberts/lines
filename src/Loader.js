@@ -89,7 +89,7 @@ function Loader(params) {
 			fetch(file)
 				.then(response => { return handleResponse(response); })
 				.then(data => { handleData(fileName, data, loadDataOnly); })
-				.catch(error => { handleError(error, fileName); }); 
+				.catch(error => { handleError(error, fileName); });
 		}
 	}
 

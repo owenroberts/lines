@@ -98,11 +98,11 @@ lns.ui.settings = new Settings(lns, {
 	workspaces: [
 		{
 			text: 'Animation',
-			url: '/animate/workspaces/Animation.json',
+			url: 'workspaces/Animation.json',
 		},
 		{
 			text: 'Drawing',
-			url: '/animate/workspaces/Drawing.json',
+			url: 'workspaces/Drawing.json',
 		}
 	],
 	appSave() {

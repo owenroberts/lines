@@ -253,6 +253,7 @@ function Data(lns) {
 			lns.anim.layers[i].shiftIndex(lns.anim.currentFrame + dir, 1);
 			lns.anim.addLayer(lns.anim.layers[i].removeIndex(lns.anim.currentFrame + dir));
 		}
+		lns.anim.shiftStates(lns.anim.currentFrame + dir);
 		lns.playback.next(dir);
 		lns.ui.update();
 	} /* i, shift-i key */
