@@ -68,3 +68,5 @@ class Scene {
 		this.uiSprites.all(sprite => { sprite.up(x, y); });
 	}
 }
+
+LinesEngine.Scene = Scene;

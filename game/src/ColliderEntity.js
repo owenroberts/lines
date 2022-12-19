@@ -34,3 +34,5 @@ class ColliderEntity extends ColliderSprite {
 		this.origin[1] = y;
 	}
 }
+
+LinesEngine.ColliderEntity = ColliderEntity;

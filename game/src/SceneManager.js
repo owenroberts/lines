@@ -16,4 +16,13 @@ class SceneManager extends Manager {
 	addUI(item, scenes) {
 		this.add(item, scenes, 'ui');
 	}
+
+	isCurrent(sceneName) {
+		return this.currentName === sceneName;
+	}
+
+	addScene(scene, key) {
+		this[key] = scene;
+		this.names.push(key);
+	}
 }

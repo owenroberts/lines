@@ -47,7 +47,6 @@ class SpriteCollection {
 		this.all(sprite => { sprite.display(); });
 	}
 
-
 	over(x, y) {
 		this.all(sprite => { sprite.over(x, y); });
 	}
@@ -66,3 +65,5 @@ class SpriteCollection {
 
 
 }
+
+LinesEngine.SpriteCollection = SpriteCollection;

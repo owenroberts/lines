@@ -14,7 +14,6 @@ class ColliderSprite extends Sprite {
 		this.waitToGoOut = false;
 		this.clickStarted = false;
 		// onOver, onOut, onUp, onDown, onClick
-
 		if (animation) this.addAnimation(animation, callback);
 		// console.log(this);
 	}
@@ -30,20 +29,20 @@ class ColliderSprite extends Sprite {
 	}
 
 	drawDebug() {
-		GAME.ctx.lineWidth = 1;
-		GAME.ctx.beginPath();
-		GAME.ctx.rect(
+		GAME.renderer.ctx.lineWidth = 1;
+		GAME.renderer.ctx.beginPath();
+		GAME.renderer.ctx.rect(
 			this.colliderPosition[0],
 			this.colliderPosition[1],
 			this.collider[2], 
 			this.collider[3]
 		);
 
-		const temp = GAME.ctx.strokeStyle;
-		GAME.ctx.strokeStyle = this.debugColor;
-		GAME.ctx.stroke();
-		GAME.ctx.strokeStyle = temp;
-		if (GAME.lineWidth !== 1) GAME.ctx.lineWidth = GAME.lineWidth;
+		const temp = GAME.renderer.ctx.strokeStyle;
+		GAME.renderer.ctx.strokeStyle = this.debugColor;
+		GAME.renderer.ctx.stroke();
+		GAME.renderer.ctx.strokeStyle = temp;
+		if (GAME.lineWidth !== 1) GAME.renderer.ctx.lineWidth = GAME.lineWidth;
 	}
 
 	get colliderPosition() {
@@ -141,3 +140,5 @@ class ColliderSprite extends Sprite {
 		this.clickStarted = false;
 	}
 }
+
+LinesEngine.ColliderSprite = ColliderSprite;

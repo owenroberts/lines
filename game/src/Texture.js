@@ -28,10 +28,12 @@ class Texture {
 		if (index !== undefined) {
 			this.animation.createNewState(`f-${index}`, index, index);
 			loc.i = index;
-		}  else if (this.frame == 'randomIndex') {
+		}  else if (this.frame === 'randomIndex') {
 			let r = Cool.randomInt(0, this.animation.endFrame);
 			this.animation.createNewState(`f-${r}`, r, r);
 			loc.i = r;
+		} else {
+			loc.i = index;
 		}
 		this.locations.push(loc);
 	}

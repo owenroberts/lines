@@ -51,7 +51,6 @@ class Game {
 		this.loader = new Loader({
 			relativeLoadPath: params.relativeLoadPath,
 			saveAnimationData: params.saveAnimationData || params.saveJsons || false,
-
 		});
 
 		this.anims = {};

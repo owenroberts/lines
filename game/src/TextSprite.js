@@ -41,6 +41,8 @@ class TextSprite {
 				params.letters.createNewState(indexString[i], i, i);
 			}
 		}
+
+		if (params.center) this.center();
 	}
 
 	setPosition(x, y) {
@@ -142,6 +144,11 @@ class TextSprite {
 		this.end = 0; /* reset */
 		this.count = 0;
 		this.delay = 0;
+	}
+
+	skip() {
+		this.count = this.msg.length;
+		this.countBackward = false;
 	}
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */

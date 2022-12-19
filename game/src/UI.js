@@ -68,3 +68,5 @@ class UI extends ColliderSprite {
 
 	}
 }
+
+LinesEngine.UI = UI;
