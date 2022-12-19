@@ -14,9 +14,9 @@ function Canvas(lns, params) {
 	let { width, height, scale, lineWidth, bgColor } = lns.renderer.getProps();
 	let canvasTempScale = 1; // for full sizing
 
-	setBGColor(bgColor);
+	setBackgroundColor(bgColor);
 
-	function setBGColor(value) {
+	function setBackgroundColor(value) {
 		bgColor = value;
 		canvas.style.backgroundColor = bgColor;
 	}
@@ -93,7 +93,10 @@ function Canvas(lns, params) {
 			'bgColor': {
 				type: 'UIColor',
 				value: bgColor,
-				callback: value => { setBGColor(value); }
+				callback: value => { 
+					setBackgroundColor(value); 
+					lns.renderer.setBackgroundColor(value);
+				}
 			},
 			'hideCursor': {
 				type: 'UIToggleCheck',
@@ -163,7 +166,7 @@ function Canvas(lns, params) {
 	return { 
 		connect, canvas, ctx,
 		fitCanvasToDrawing,
-		setBGColor,
+		setBackgroundColor,
 		getScale() { return lns.renderer.getProps().scale; },
 		getWidth() { return lns.renderer.getProps().width; },
 		getHeight() { return lns.renderer.getProps().height; },

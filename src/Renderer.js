@@ -125,6 +125,10 @@ function Renderer(params) {
 		canvasUpdate(); // idk
 	}
 
+	function setBackgroundColor(value) {
+		bgColor = value;
+	}
+
 	function canvasUpdate() {
 		ctx.miterLimit = 1;
 		ctx.lineCap = 'round';
@@ -187,7 +191,7 @@ function Renderer(params) {
 		canvas, ctx, reset, start, suspend, update, 
 		addCallback, 
 		setSuspend,
-		setWidth, setHeight, setScale, setDPS, setLineWidth,
+		setWidth, setHeight, setScale, setDPS, setLineWidth, setBackgroundColor,
 		getProps() {
 			return { width, height, scale, lineWidth, bgColor, dps, multiColor };
 		}
