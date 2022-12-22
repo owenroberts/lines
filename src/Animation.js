@@ -73,6 +73,7 @@ class Animation {
 		const dps = this.fps * this.dpf;
 		this.drawsPerFrame = +value;
 		this._fps = dps / this.drawsPerFrame;
+		// this.drawCount = 0;
 	}
 
 	get dpf() {
@@ -137,7 +138,7 @@ class Animation {
 
 	update() {
 		if (this.isPlaying) {
-			if (this.drawCount === this.drawsPerFrame) {
+			if (this.drawCount >= this.drawsPerFrame) { // >== instead of === in case dpf changed
 				if (this.currentFrame >= this.state.end) {
 					this.currentFrame = this.state.start;
 					if (this.onPlayedState) this.onPlayedState();

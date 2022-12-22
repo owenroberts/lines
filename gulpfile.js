@@ -195,9 +195,9 @@ task('js', jsTasks);
 task('sass', sassTasks);
 task('lib', libTask);
 task('build', series(libTask, jsTasks, sassTasks));
-task('default', parallel(jsTasks, sassTasks));
 task('watch', watchTask);
 task('browser', parallel(jsTasks, sassTasks, cacheBustTask, browserSyncTask, watchTask));
+task('default', series('browser'));
 if (ui) task('ui', series(function exporter() { return ui.exportTask(false) }, uiCopy));
 task('test', testBuild);
 
