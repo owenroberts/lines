@@ -228,9 +228,10 @@ class UITimelineGroup extends UICollection {
 			position: this.position, 
 			callback: () => {
 				layers.forEach(layer => {
-					tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
-					console.log(layer.drawingIndex, tween.endValue);
-					layer.addTween({ ...tween })
+					if (tween.endValue === 'end' && tween.prop === 'endIndex') {
+						tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
+					}
+					layer.addTween({ ...tween });
 				});
 				this.update();
 			}

@@ -150,6 +150,7 @@ class Game {
 				for (const key in assets[file]) {
 					this.anims[file][key] = new GameAnim();
 					this.anims[file][key].loadData(assets[file][key].json);
+					this.anims[file][key].src = file + '.' + key;
 				}
 			}
 			this._start();
