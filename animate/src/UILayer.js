@@ -59,6 +59,7 @@ class UILayer extends UICollection {
 		if (width > 80) this.append(uis.addToGroup);
 		if (width > 90) this.append(uis.merge)
 		if (width > 90 && this.canMoveUp) this.append(uis.moveUp);
+	// move to back
 		if (width > 100 && this.groupLabel) this.append(this.groupLabel);
 
 		// has to go last
@@ -207,6 +208,7 @@ class UILayer extends UICollection {
 	}
 
 	editModal(layer, params) {
+		
 		const modal = new UIModal({
 			title: 'Edit Layer', 
 			app: lns, 
@@ -271,6 +273,11 @@ class UILayer extends UICollection {
 				lns.anim.addLayer(new Layer(props));
 				lns.playback.setFrame(layer.endFrame + 1);
 			}
+		}));
+
+		modal.add(new UIButton({
+			text: 'Clone Drawing',
+			callback: params.cloneDrawing
 		}));
 
 		modal.adjustPosition();

@@ -297,6 +297,25 @@ function Timeline() {
 						update();
 					},
 					remove(layer) { lns.anim.removeLayer(layer); },
+					cloneDrawing() {
+						const props = layer.getCloneProps();
+						const drawing = lns.anim.drawings[props.drawingIndex];
+						const clone = new Drawing();
+						for (let i = 0; i < drawing.length; i++) {
+							clone.add([...drawing.get(i)[0]]);
+						}
+						lns.anim.drawings.pop();
+						lns.anim.drawings.push(clone);
+						
+						// not sure why but dont need this
+						// const newLayer = new Layer({ 
+						// 	...props, 
+						// 	drawingIndex: lns.anim.drawings.length - 1,
+						// });
+						// lns.anim.addLayer(newLayer);
+						
+						lns.draw.reset();
+					}
 				});
 				
 				gridRowStart += 2;

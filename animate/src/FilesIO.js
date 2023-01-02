@@ -245,9 +245,10 @@ function FilesIO(lns, params) {
 
 		lns.ui.addUI({
 			type: 'UIFile',
+			label: 'Load File',
 			key: 'o',
 			callback: (data, fName, fPath) => { loadJSON(data, fName, fPath); }
-		})
+		});
 
 	}
 

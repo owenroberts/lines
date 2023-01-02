@@ -71,7 +71,7 @@ function Capture(lns, params) {
 	function capture() {
 		if (saveFilesEnabled) { // face or getter
 			lns.canvas.canvas.toBlob(blob =>  {
-				const title = titleDisplay.value; // this is a UI
+				const title = lns.fio.getTitle(); // this is a UI
 				const frm = Cool.padNumber(lns.anim.currentFrame, 3);
 
 				let fileName;
@@ -185,8 +185,8 @@ function Capture(lns, params) {
 			
 			const stream = lns.canvas.canvas.captureStream(lns.renderer.getProps().dps);
 			recording = new MediaRecorder(stream, {
-				videoBitsPerSecond : videoBitsPerSecond,
-				mimeType: 'video/webm;codecs=vp8,opus'
+				videoBitsPerSecond: videoBitsPerSecond,
+				mimeType: 'video/webm;codecs=vp8,vp9,opus'
 			});
 
 			lns.anim.onDraw = function() {
