@@ -138,7 +138,8 @@ class Animation {
 
 	update() {
 		if (this.isPlaying) {
-			if (this.drawCount >= this.drawsPerFrame) { // >== instead of === in case dpf changed
+			// console.log(this.currentFrame, this.drawCount, this.drawsPerFrame);
+			if (this.drawCount >= this.drawsPerFrame - 1) { // >== instead of === in case dpf changed
 				if (this.currentFrame >= this.state.end) {
 					this.currentFrame = this.state.start;
 					if (this.onPlayedState) this.onPlayedState();

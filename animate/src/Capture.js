@@ -29,6 +29,22 @@ function Capture(lns, params) {
 	let videoFrameButton, videoFramesButton, videoLoopButton;
 
 	/* better names */
+
+	let tempSettings = {};
+	function setCaptureSettings() {
+		if (params.captureSettings) {
+			tempSettings.lineWidth = lns.ui.faces.lineWidth.value;
+			tempSettings.canvasScale = lns.ui.faces.canvasScale.value;
+			lns.ui.faces.canvasScale.update(canvasScale);
+			lns.ui.faces.lineWidth.update(lineWidth);
+			lns.playback.update(); // reset
+		}
+	}
+
+	function unsetCaptureSettings() {
+		lns.ui.faces.lineWidth.update(tempSettings.lineWidth);
+		lns.ui.faces.canvasScale.update(tempSettings.canvasScale);
+	}
 	
 	function one() {
 		frames = 1;
@@ -37,19 +53,22 @@ function Capture(lns, params) {
 
 	function multiple() {
 		frames = +prompt("Capture how many frames?");
-		start();
+		start(false);
 	} /* shift k */
 
 	/* put capture code in callback */
-	function start() {
+	function start(advanceFrame) {
+		console.log('break 1');
 		lns.renderer.suspend();
 		frameNum = 0;
 		lns.anim.onDraw = function() {
+		console.log('break 2');
 			if (frames > 0) {
 				capture();
 				frames--;
 			} 
 			else {
+				unsetCaptureSettings();
 				lns.anim.isPlaying = false;
 				lns.anim.onDraw = undefined;
 				lns.renderer.start();
@@ -60,12 +79,14 @@ function Capture(lns, params) {
 	// make progress buttn
 	function cycle() {
 		lns.draw.reset();
+		setCaptureSettings();
 		/* set animation to last frame because it updates frames before draw */
-		lns.anim.frame = lns.anim.endFrame;
-		lns.anim.isPlaying = true;
+		lns.anim.frame = 0;
+		lns.anim.isPlaying = true;	
 		// capture as many frames as necessary for lines ratio or 1 of every frame
-		frames = lns.anim.endFrame * Math.max(1, lns.renderer.getProps().dps / lns.anim.fps) + 1;
-		start();
+		frames = lns.anim.endFrame * Math.max(1, lns.anim.dpf);
+		// console.log('start? 1');
+		start(true);
 	} /* ctrl-k - start at beginning and capture one of every frame */
 
 	function capture() {
@@ -173,15 +194,7 @@ function Capture(lns, params) {
 			
 			isReady = false;
 			isVideo = true;
-			
-			let tempSettings = {};
-			if (params.captureSettings) {
-				tempSettings.lineWidth = lns.ui.faces.lineWidth.value;
-				tempSettings.canvasScale = lns.ui.faces.canvasScale.value;
-				lns.ui.faces.canvasScale.update(canvasScale);
-				lns.ui.faces.lineWidth.update(lineWidth);
-				lns.playback.update(); // reset
-			}
+			setCaptureSettings();
 			
 			const stream = lns.canvas.canvas.captureStream(lns.renderer.getProps().dps);
 			recording = new MediaRecorder(stream, {
@@ -205,8 +218,7 @@ function Capture(lns, params) {
 				if (promptTitle) t = prompt('Title?', lns.fio.getTitle());
 				a.download = `${t}.webm`;
 				a.click();
-				lns.ui.faces.lineWidth.update(tempSettings.lineWidth);
-				lns.ui.faces.canvasScale.update(tempSettings.canvasScale);
+				unsetCaptureSettings();
 			});
 		} 
 	}

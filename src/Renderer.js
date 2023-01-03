@@ -155,23 +155,17 @@ function Renderer(params) {
 	}
 
 	function update(time) {
-
+		// console.log(time);
 		// const time = performance.now();
 		elapsed = time - updateTime;
 		if (elapsed > interval || time === 'capture') {
-
 			updateTime = time - (elapsed % interval);
-
 			if (clearBg) ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 			for (let i = 0; i < callbacks.length; i++) {
 				callbacks[i](elapsed);
 			}
-
 			window.drawCount++;
-
 		}
-
 		if (suspendRender) return;
 		window.requestAnimFrame(update);
 	}
