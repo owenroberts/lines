@@ -52,17 +52,18 @@ function Capture(lns, params) {
 	} /* k key */
 
 	function multiple() {
+		setCaptureSettings();
 		frames = +prompt("Capture how many frames?");
 		start(false);
 	} /* shift k */
 
 	/* put capture code in callback */
 	function start(advanceFrame) {
-		console.log('break 1');
+		// console.log('break 1');
 		lns.renderer.suspend();
 		frameNum = 0;
 		lns.anim.onDraw = function() {
-		console.log('break 2');
+		// console.log('break 2');
 			if (frames > 0) {
 				capture();
 				frames--;
