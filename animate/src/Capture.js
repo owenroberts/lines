@@ -17,6 +17,7 @@ function Capture(lns, params) {
 	let frames = 0; // set by canvas, makes the draw loop capture canvas for a number of frames
 	let bg = true; /*  n key  default capture bg */
 	// let isCapturing = false;
+	let cycleCount = params.cycleCount || 1;
 
 	let isVideo = false;
 	let videoLoops = 0;
@@ -79,13 +80,14 @@ function Capture(lns, params) {
 
 	// make progress buttn
 	function cycle() {
+
 		lns.draw.reset();
 		setCaptureSettings();
 		/* set animation to last frame because it updates frames before draw */
 		lns.anim.frame = 0;
 		lns.anim.isPlaying = true;	
 		// capture as many frames as necessary for lines ratio or 1 of every frame
-		frames = lns.anim.endFrame * Math.max(1, lns.anim.dpf);
+		frames = lns.anim.endFrame * Math.max(1, lns.anim.dpf) * cycleCount;
 		// console.log('start? 1');
 		start(true);
 	} /* ctrl-k - start at beginning and capture one of every frame */
@@ -231,6 +233,15 @@ function Capture(lns, params) {
 			{ callback: multiple, key: 'shift-k', text: 'Frames', },
 			{ callback: cycle, key: 'ctrl-k', text: 'Cycle', },
 		]);
+
+		lns.ui.addProp('cycleCount', {
+			type: 'UINumberStep',
+			label: 'Cycle Count',
+			value: cycleCount,
+			callback: value => {
+				cycleCount = value;
+			}
+		})
 		
 		videoFrameButton = lns.ui.addUI({ 
 			row: true,
