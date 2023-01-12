@@ -136,7 +136,7 @@ function Brush(lns) {
 			},
 			'brushSpreadMultiplier': {
 				type: 'UINumberStep',
-				range: [1, 5],
+				range: [1, 32],
 				value: 1,
 				callback: value => { brushSpreadMultiplier = value; },
 			},

@@ -302,7 +302,9 @@ function Timeline() {
 						const drawing = lns.anim.drawings[props.drawingIndex];
 						const clone = new Drawing();
 						for (let i = 0; i < drawing.length; i++) {
-							clone.add([...drawing.get(i)[0]]);
+							if (drawing.get(i)[0] === 'add') clone.add('add');
+							else if (drawing.get(i)[0] === 'end') clone.add('end');
+							else clone.add([...drawing.get(i)[0]]);
 						}
 						lns.anim.drawings.pop();
 						lns.anim.drawings.push(clone);

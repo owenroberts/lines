@@ -64,7 +64,8 @@ function browserSyncTask() {
 		port: 8080,
 		server: {
 			baseDir: './',
-		}
+		},
+		ghostMode: false,
 	});
 }
 
