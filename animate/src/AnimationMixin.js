@@ -45,6 +45,10 @@ const AnimationMixin = {
 		return this.drawings[lns.anim.drawings.length - 1];
 	},
 
+	addDrawing(drawing) {
+		this.drawings.splice(lns.anim.drawings.length - 1, 0, drawing);
+	},
+
 	newDrawing() {
 		this.drawings.push(new Drawing());
 	},

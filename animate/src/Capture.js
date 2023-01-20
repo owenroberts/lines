@@ -54,7 +54,7 @@ function Capture(lns, params) {
 
 	function multiple() {
 		setCaptureSettings();
-		frames = +prompt("Capture how many frames?");
+		frames = +prompt("Capture how many frames?", 24);
 		start(false);
 	} /* shift k */
 
@@ -62,9 +62,19 @@ function Capture(lns, params) {
 	function start(advanceFrame) {
 		// console.log('break 1');
 		lns.renderer.suspend();
+		let waitFrame = true; // wait once so render isn't called twice
 		frameNum = 0;
+
 		lns.anim.onDraw = function() {
-		// console.log('break 2');
+			// console.log('break 2');
+			if (waitFrame) {
+				waitFrame = false;
+				window.requestAnimFrame(() => {
+					lns.renderer.update('capture'); 
+				});
+				// console.log('wait');  // seems to work
+				return;
+			}
 			if (frames > 0) {
 				capture();
 				frames--;
@@ -80,20 +90,19 @@ function Capture(lns, params) {
 
 	// make progress buttn
 	function cycle() {
-
 		lns.draw.reset();
 		setCaptureSettings();
 		/* set animation to last frame because it updates frames before draw */
-		lns.anim.frame = 0;
+		lns.anim.frame = lns.anim.state.start;
 		lns.anim.isPlaying = true;	
 		// capture as many frames as necessary for lines ratio or 1 of every frame
 		frames = lns.anim.endFrame * Math.max(1, lns.anim.dpf) * cycleCount;
-		// console.log('start? 1');
 		start(true);
 	} /* ctrl-k - start at beginning and capture one of every frame */
 
 	function capture() {
 		if (saveFilesEnabled) { // face or getter
+			// console.log('start cap');
 			lns.canvas.canvas.toBlob(blob =>  {
 				const title = lns.fio.getTitle(); // this is a UI
 				const frm = Cool.padNumber(lns.anim.currentFrame, 3);
@@ -111,8 +120,11 @@ function Capture(lns, params) {
 				}
 
 				const f = saveAs(blob, fileName);
+				// console.log('save as');
 				f.onwriteend = function() { 
+					// console.log('on write end');
 					setTimeout(() => {
+						// console.log('blob timeout');
 						window.requestAnimFrame(() => {
 							lns.renderer.update('capture'); 
 						});
@@ -305,10 +317,12 @@ function Capture(lns, params) {
 			},
 			'captureLineWidth': {
 				value: lineWidth,
+				label: 'Line Width',
 				callback: value => { lineWidth = value; }
 			},
 			'captureCanvasScale': {
 				value: canvasScale,
+				label: 'Canvas Scale',
 				callback: value => { canvasScale = value; }
 			},
 		});

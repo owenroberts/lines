@@ -171,6 +171,14 @@ const LayerMixin = {
 			groupNumber: this.groupNumber
 		};
 		// ignore tweens for now
+	},
+
+	setParams(json) {
+		const params = this.loadParams(json);
+		for (const k in params) {
+			this[k] = params[k];
+		}
+		// console.log(this);
 	}
 
 };

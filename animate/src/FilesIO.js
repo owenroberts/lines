@@ -44,11 +44,11 @@ function FilesIO(lns, params) {
 		if (groups.length > 0) json.g = [...groups];
 
 		const states = Object.keys(lns.anim.states).filter(s => s !== 'default');
-		if (states.length > 1) {
+		if (states.length > 0) {
 			json.s = {};
-			for (const state in lns.anim.states) {
+			states.forEach(state => {
 				json.s[state] = [lns.anim.states[state].start, lns.anim.states[state].end];
-			}
+			});
 		}
 
 		const sequences = lns.sequencer.getData();
@@ -172,7 +172,32 @@ function FilesIO(lns, params) {
 		if (data.q) lns.sequencer.load(data.q);
 		lns.ui.update();
 	}
-	
+
+	function addDrawingsFromFile(data, isOverlay) {
+		const drawings = data.d;
+		const layers = data.l;
+		const drawingsAdded = [];
+		const addFrames = isOverlay ? 0 : lns.anim.endFrame + 1;
+
+		for (let i = 0; i < layers.length; i++) {
+			const params = lns.anim.loadParams(layers[i]); // weird hack
+			params.startFrame = params.startFrame + addFrames;
+			params.endFrame = params.endFrame + addFrames;
+			const newDrawingIndex = lns.anim.drawings.length - 1;
+			const drawing = new Drawing(drawings[params.drawingIndex]);
+			lns.anim.addDrawing(drawing);
+			params.drawingIndex = newDrawingIndex;
+			const layer = new Layer(params);
+			lns.anim.addLayer(layer);
+		}
+
+		const drawLayer = lns.anim.getDrawLayer();
+		drawLayer.drawingIndex = lns.anim.drawings.length - 1;
+
+		lns.draw.reset();
+		lns.ui.update();
+	}
+
 	function reOpenFile() {
 		saveFile({}, fName => {
 			location.href += `?src=/${ prompt("Enter location:") }/${ fName }.json`;
@@ -240,15 +265,20 @@ function FilesIO(lns, params) {
 			{ callback: saveFile, key: 'alt-s', text: 'Save File', args: [false], },
 			{ callback: saveFile, key: 'shift-s', text: 'Save Frame', args: [true], },
 			{ callback: saveFramesToFiles, key: 'shift-e', text: 'Save Frames to Files', },
-			// { callback: reOpenFile, key: 'ctrl-o', text: 'Re-Open', },
+
+			{ callback: (data, fName, fPath) => { loadJSON(data, fName, fPath); }, type: 'UIFile', text: 'Load File', key: 'o' },
+			{ callback: (data) => { addDrawingsFromFile(data, true); }, type: 'UIFile', text: 'Overlay Drawings', },
+			{ callback: (data) => { addDrawingsFromFile(data, false); }, type: 'UIFile', text: 'Append Drawings', },
+
+			// { callback: overlayDrawings, text: 'Overlay Drawings', },
 		]);
 
-		lns.ui.addUI({
-			type: 'UIFile',
-			label: 'Load File',
-			key: 'o',
-			callback: (data, fName, fPath) => { loadJSON(data, fName, fPath); }
-		});
+		// lns.ui.addUI({
+		// 	type: 'UIFile',
+		// 	text: 'Load File',
+		// 	key: 'o',
+			
+		// });
 
 	}
 
