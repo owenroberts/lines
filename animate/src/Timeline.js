@@ -86,9 +86,16 @@ function Timeline() {
 		timeline['frm-' + lns.anim.currentFrame].addClass('current');
 	}
 
-	function sortLayer(layerIndex, swapIndex) {
+	function swapLayer(layerIndex, swapIndex) {
 		if (swapIndex < 0) return;
 		[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]];
+		update();
+	}
+
+	function sortLayer(layerIndex, swapIndex) {
+		if (swapIndex < 0) return;
+		const layer = lns.anim.layers.splice(layerIndex, 1);
+		lns.anim.layers.splice(swapIndex, 0, layer[0]);
 		update();
 	}
 
@@ -186,7 +193,7 @@ function Timeline() {
 							groupLayers.forEach(layer => {
 								const layerIndex = lns.anim.layers.indexOf(layer);
 								const swapIndex = layerIndex - 1;
-								sortLayer(layerIndex, swapIndex);
+								swapLayer(layerIndex, swapIndex);
 							});
 						},
 						moveToBack() {
@@ -224,7 +231,7 @@ function Timeline() {
 					moveUp() {
 						const layerIndex = lns.anim.layers.indexOf(layer);
 						const swapIndex = layerIndex - 1;
-						sortLayer(layerIndex, swapIndex);
+						swapLayer(layerIndex, swapIndex);
 					},
 					moveToBack() {
 						const layerIndex = lns.anim.layers.indexOf(layer);
