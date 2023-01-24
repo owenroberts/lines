@@ -29,6 +29,7 @@ const AnimationMixin = {
 	merge(a, b, layer) {
 		const dA = lns.anim.drawings[a]; // drawing a
 		const dB = lns.anim.drawings[b];
+		if (dA.points[dA.points.length - 1] !== 'end') dA.add('end');
 		while (dB.length > 0) {
 			dA.add(dB.shift());
 		}

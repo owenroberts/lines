@@ -67,8 +67,13 @@ function FilesIO(lns, params) {
 	function saveLocal() {
 		const json = getSaveData(false);
 		if (!json) return alert('No data.');
-		localStorage.setItem('lines-' + json.title, JSON.stringify(json));
-		localStorage.setItem('lines-title', json.title);
+		try {
+			localStorage.setItem('lines-' + json.title, JSON.stringify(json));
+			localStorage.setItem('lines-title', json.title);
+		} catch(error) {
+			if (error.name === 'QuotaExceededError') alert('Local storage full');
+			else alert(error.name);
+		}
 	}
 
 	function loadLocal() {
