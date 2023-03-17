@@ -75,7 +75,7 @@ class Drawing {
 			Cool.random(-props.wiggleSpeed, props.wiggleSpeed), 
 			Cool.random(-props.wiggleSpeed, props.wiggleSpeed)
 		];
-		const wiggle = [Cool.random(0, props.wiggleRange), Cool.random(0, props.wiggleRange)];
+		const wiggle = [Cool.random(0, -props.wiggleRange), Cool.random(0, props.wiggleRange)];
 
 		// add random offsets for xy for each segment of the lines
 		for (let i = 0, len = this.points.length; i < len; i++) {

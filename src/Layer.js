@@ -3,27 +3,27 @@ class Layer {
 		this.drawingIndex = params.drawingIndex; // fix some time
 		this.tweens = params.tweens || [];
 
-		this.x = params.x || 0;
-		this.y = params.y || 0;
+		this.x = params.x ?? 0;
+		this.y = params.y ?? 0;
 		
-		this._startFrame = params.startFrame;
-		this._endFrame = params.endFrame || params.startFrame;
+		this._startFrame = params.startFrame ?? 0;
+		this._endFrame = params.endFrame || params.startFrame || 0;
 
-		this.drawingStartIndex = params.drawingStartIndex || 0;
-		this.drawingEndIndex = params.drawingEndIndex || -1;
+		this.drawingStartIndex = params.drawingStartIndex ?? 0;
+		this.drawingEndIndex = params.drawingEndIndex ?? -1;
 		
-		this.color = params.color || '#000000';
-		this.lineWidth = params.lineWidth || 1;
+		this.color = params.color ?? '#000000';
+		this.lineWidth = params.lineWidth ?? 1;
 
-		this.segmentNum =  params.segmentNum; // need to fix these ... 
-		this.jiggleRange = params.jiggleRange;
-		this.wiggleRange = params.wiggleRange;
-		this.wiggleSpeed = params.wiggleSpeed;
-		this.wiggleSegments = params.wiggleSegments || false; // true/false
-		this.breaks = params.breaks || false;
+		this.segmentNum =  params.segmentNum ?? 2; // need to fix these ... 
+		this.jiggleRange = params.jiggleRange ?? 1;
+		this.wiggleRange = params.wiggleRange ?? 1;
+		this.wiggleSpeed = params.wiggleSpeed ?? 0.1;
+		this.wiggleSegments = params.wiggleSegments ?? false; // true/false
+		this.breaks = params.breaks ?? false;
 		
-		this.linesInterval = params.linesInterval; // draw count per line update
-		this.linesCount = params.linesCount || 0; // line update counter
+		this.linesInterval = params.linesInterval ?? 5; // draw count per line update
+		this.linesCount = params.linesCount ?? 0; // line update counter
 
 		if (this.init) this.init(params); // mixin init
 	}

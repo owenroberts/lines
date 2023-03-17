@@ -56,8 +56,10 @@ function States(lns) {
 
 	function set(state) {
 		if (state) {
+			const f = lns.anim.state.start;
 			lns.anim.state = state;
 			lns.ui.faces.stateSelect.value = state;
+			if (state === 'default') lns.anim.currentFrame = f;
 			lns.ui.update();
 			return;
 		}
