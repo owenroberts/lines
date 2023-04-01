@@ -4,10 +4,10 @@
 
 class Texture {
 	constructor(params, debug) {
-		this.locations = params.locations || [];
-		this.frame = params.frame || 'index'; // bad name
 		this.debug = debug;
-		this.center = params.center || false;
+		this.locations = params.locations || [];
+		this.frame = params.frame ?? 'index'; // bad name
+		this.center = params.center ?? false;
 		
 		this.offset = [0, 0];
 		if (params.animation) this.addAnimation(params.animation);

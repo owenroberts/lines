@@ -32,6 +32,10 @@ class Counter {
 	ratio() {
 		return this.count / this.duration;
 	}
+
+	end() {
+		this.count = this.duration;
+	}
 }
 
 LinesEngine.Counter = Counter;
