@@ -76,18 +76,41 @@ function FilesIO(lns, params) {
 		}
 	}
 
-	function loadLocal() {
-		let title = titleDisplay.value;
+	function loadLocal(titleFromList) {
+		let title = titleFromList || titleDisplay.value;
 		if (!title) title = localStorage.getItem('lines-title');
 		if (!title) prompt('Search title');
 		if (!title) return alert('No title.');
 		
 		const localData = localStorage.getItem('lines-' + title);
-		if (!localData) return alert('No data, Locals: ' + Object.keys(localStorage).filter(k => k.includes('lines')));
+		if (!localData) {
+			return alert('No data, Locals: ' + Object.keys(localStorage).filter(k => k.includes('lines')));
+		}
 		
 		const data = JSON.parse(localData);
 		lns.fio.loadJSON(data);
 	}
+
+	function listLocal() {
+		const m = new UIModal({
+			app: lns,
+			title: 'Local Saves',
+			position: { x: 200, y: 120 },
+		});
+
+		const localSaves = Object.keys(localStorage).filter(k => k.includes('lines'));
+		localSaves.forEach(title => {
+			m.add(new UIButton({
+				text: title.replace('lines-', ''),
+				callback: () => { 
+					loadLocal(title.replace('lines-', ''));
+					m.clear();
+				}
+			}));
+		});
+		
+	}
+
 
 	function saveFile(isSingleFrame, callback) {
 		
@@ -266,14 +289,33 @@ function FilesIO(lns, params) {
 		lns.ui.addCallbacks([
 			{ callback: saveLocal, key: 's', text: 'Save Local', args: [false], },
 			{ callback: loadLocal, key: 'l', text: 'Load Local', },
+			{ callback: listLocal, key: 'ctrl-l', text: 'List Local' },
 			{ callback: clearLocal, key: 'alt-c', text: 'Clear Local', },
 			{ callback: saveFile, key: 'alt-s', text: 'Save File', args: [false], },
 			{ callback: saveFile, key: 'shift-s', text: 'Save Frame', args: [true], },
 			{ callback: saveFramesToFiles, key: 'shift-e', text: 'Save Frames to Files', },
 
-			{ callback: (data, fName, fPath) => { loadJSON(data, fName, fPath); }, type: 'UIFile', text: 'Load File', key: 'o' },
-			{ callback: (data) => { addDrawingsFromFile(data, true); }, type: 'UIFile', text: 'Overlay Drawings', },
-			{ callback: (data) => { addDrawingsFromFile(data, false); }, type: 'UIFile', text: 'Append Drawings', },
+			{ 
+				type: 'UIFile', 
+				text: 'Load File', key: 'o',
+				callback: (data, fName, fPath) => { 
+					loadJSON(data, fName, fPath); 
+				}, 
+			},
+			{ 
+				type: 'UIFile', 
+				text: 'Overlay Drawings',
+				callback: (data) => { 
+					addDrawingsFromFile(data, true); 
+				}, 
+			},
+			{ 
+				type: 'UIFile', 
+				text: 'Append Drawings', 
+				callback: (data) => { 
+					addDrawingsFromFile(data, false); 
+				}, 
+			},
 
 			// { callback: overlayDrawings, text: 'Overlay Drawings', },
 		]);
