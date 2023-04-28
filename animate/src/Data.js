@@ -262,10 +262,10 @@ function Data(lns) {
 		lns.draw.reset();
 		saveState();
 		const n = +prompt('Number of frames?');
+		if (!n) return;
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
 			if (!layer.isInFrame(lns.anim.currentFrame)) continue;
-
 			layer.endFrame = layer.startFrame + n;
 			if (lns.anim.state.end < layer.endFrame) lns.anim.state.end = layer.endFrame;
 

@@ -5,6 +5,7 @@
 function Brush(lns) {
 	
 	let isActive = false;
+	let isGrass = false;
 
 	let brushSpreadXLeft = 0;
 	let brushSpreadXRight = 0;
@@ -22,19 +23,28 @@ function Brush(lns) {
 
 	function add(drawing, origin) {
 
-		drawing.add(origin);
 
 		const numPoints = Cool.randomInt(brushSegmentsMin, brushSegmentsMax);
+		const dist = [
+			Cool.random(-brushSpreadXLeft, brushSpreadXRight) * brushSpreadMultiplier,  
+			Cool.random(-brushSpreadYDown, brushSpreadYUp) * brushSpreadMultiplier
+		];
 		for (let i = 1; i <= numPoints; i ++) {
-			let _x = Cool.random(-brushSpreadXLeft, brushSpreadXRight)
-				* brushSpreadMultiplier
-				* (i / numPoints) 
-				* (1 - Cool.random(brushRandomX));
-			let _y = Cool.random(-brushSpreadYDown, brushSpreadYUp)
-				* brushSpreadMultiplier
-				* (i / numPoints) 
-				* (1 - Cool.random(brushRandomY));
-
+			
+			let _x = (isGrass ? 
+				Cool.random(-brushSpreadXLeft, brushSpreadXRight)
+			 	* brushSpreadMultiplier 
+				* (1 - Cool.random(brushRandomX)) : // this does nothing ... already random
+			 	dist[0])
+				* (isGrass ? (i / numPoints) : 1);
+			
+			let _y = (isGrass ? 
+				Cool.random(-brushSpreadYDown, brushSpreadYUp)
+			 	* brushSpreadMultiplier
+			 	* (1 - Cool.random(brushRandomY)) :
+			 	dist[1])
+				* (isGrass ? (i / numPoints) : 1);
+			
 			let point = [origin[0] + Math.round(_x), origin[1] - Math.round(_y)];
 			if (point[0] > 0 && point[0] < lns.canvas.getWidth() && 
 				point[1] > 0 && point[1] < lns.canvas.getHeight()) {
@@ -89,25 +99,32 @@ function Brush(lns) {
 				key: 'b',
 				callback: value => { isActive = value; }
 			},
+			'isGrass': {
+				type: 'UIToggleCheck',
+				value: isGrass,
+				label: 'Is Grass',
+				key: 'ctrl-b',
+				callback: value => { isGrass = value; }
+			},
 			'brushSpreadXLeft': {
 				row: true,
 				type: 'UINumberRange',
-				range: [0, 50],
+				range: [0, 10],
 				callback: value => { brushSpreadXLeft = value; },
 			},
 			'brushSpreadXRight': {
 				type: 'UINumberRange',
-				range: [0, 50],
+				range: [0, 10],
 				callback: value => { brushSpreadXRight = value; },
 			},
 			'brushSpreadYDown': {
 				type: 'UINumberRange',
-				range: [0, 50],
+				range: [0, 10],
 				callback: value => { brushSpreadYDown = value; },
 			},
 			'brushSpreadYUp': {
 				type: 'UINumberRange',
-				range: [0, 50],
+				range: [0, 10],
 				callback: value => { brushSpreadYUp = value; },
 			},
 			'brushRandomX': {
@@ -130,7 +147,7 @@ function Brush(lns) {
 			},
 			'brushSegmentsMax': {
 				type: 'UINumberStep',
-				range: [1, 5],
+				range: [2, 5],
 				value: 3,
 				callback: value => { brushSegmentsMax = value; },
 			},

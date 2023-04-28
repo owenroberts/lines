@@ -52,6 +52,7 @@ class UILayer extends UICollection {
 		if (width > 40) this.append(uis.startFrameNumber);
 		this.append(toggle, 'toggle');
 		this.append(highlight);
+		if (width < 20) this.append(uis.toEnd);
 		if (width > 20) this.append(edit);
 		if (width > 50) this.append(uis.lock, 'lock');
 		if (width > 60) this.append(uis.tween);
@@ -118,6 +119,15 @@ class UILayer extends UICollection {
 					layer.startFrame = value;
 				}
 				layer.resetTweens();
+				this.update();
+			}
+		});
+
+		const toEnd = new UIButton({
+			text: '>>',
+			class: isModal ? '' : btnClass,
+			callback: () => {
+				this.layer.endFrame = lns.anim.endFrame;
 				this.update();
 			}
 		});
@@ -204,7 +214,7 @@ class UILayer extends UICollection {
 			}
 		});
 
-		return { tween, remove, startFrameNumber, endFrameNumber, lock, moveUp, moveToBack, addToGroup, merge };
+		return { tween, remove, startFrameNumber, endFrameNumber, lock, moveUp, moveToBack, addToGroup, merge, toEnd };
 	}
 
 	editModal(layer, params) {
