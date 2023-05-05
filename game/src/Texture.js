@@ -58,6 +58,10 @@ class Texture {
 		}
 	}
 
+	clear() {
+		this.locations = [];
+	}
+
 	display() {
 
 		for (let i = 0; i < this.locations.length; i++) {

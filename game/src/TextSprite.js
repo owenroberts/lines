@@ -1,4 +1,3 @@
-
 /*
 	draws text with lettering based on game text string
 	handled by game so that each new text object doesn't have to add all the letters...
@@ -10,7 +9,9 @@ class TextSprite {
 		this.x = Math.round(params.x || 0);
 		this.y = Math.round(params.y || 0);
 		this.lead = params.lead || 35; // leading is space between lines
+		// console.log(params);
 		this.track = params.track || 18; // tracking is space between letters
+
 		// this.msg = msg;
 		this.wrap = params.wrap || 12;
 		this.isActive = true;
@@ -148,7 +149,13 @@ class TextSprite {
 
 	skip() {
 		this.count = this.msg.length;
+		this.end = this.endDelay;
+		this.delay = this.endDelay;
 		this.countBackward = false;
+	}
+
+	isDone() {
+		return this.count >= this.msg.length;
 	}
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
@@ -183,6 +190,7 @@ class TextSprite {
 			}
 		}
 		
+		console.log()
 		if (this.count < this.msg.length) this.count += this.countCount;
 		if (this.count >= this.msg.length) {
 			if (this.delay < this.endDelay) this.delay += 1;

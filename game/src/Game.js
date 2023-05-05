@@ -12,6 +12,11 @@
 	mouseMoved(x, y, which)
 	mouseDown(x, y, which)
 	mouseUp(x, y, which)
+
+	load -- load animations and data
+	gme.load({ animations: {}, data: {} })
+	animations load files in each file, data returns data from whatever file
+	later add sound
 */
 
 const { Renderer, Loader } = window.Lines;
@@ -144,13 +149,21 @@ class Game {
 	}
 
 	load(files, loadDataOnly, callback) {
+		this.data = {};
 		this.loader.load(files, loadDataOnly, assets => {
-			for (const file in assets) {
-				this.anims[file] = {};
-				for (const key in assets[file]) {
-					this.anims[file][key] = new GameAnim();
-					this.anims[file][key].loadData(assets[file][key].json);
-					this.anims[file][key].src = file + '.' + key;
+			console.log('assets callback', assets);
+			for (const type in assets) {
+				if (type !== 'animations') {
+					this.data[type] = assets[type];
+				} else {
+					for (const file in assets.animations) {
+						this.anims[file] = {};
+						for (const key in assets.animations[file]) {
+							this.anims[file][key] = new GameAnim();
+							this.anims[file][key].loadData(assets.animations[file][key].json);
+							this.anims[file][key].src = file + '.' + key;
+						}
+					}
 				}
 			}
 			this._start();

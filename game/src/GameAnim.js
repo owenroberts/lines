@@ -1,5 +1,5 @@
-
 const { Animation } = window.Lines;
+
 class GameAnim extends Animation {
 	constructor(debug) {
 		const { dps, multiColor } = GAME.renderer.getProps();
@@ -84,7 +84,13 @@ class GameAnim extends Animation {
 	}
 
 	getLayers() {
+		// current frame is -1 how?
+		if (this.currentFrame < 0) {
+			console.log('current frame', this.currentFrame, this);
+			return false;
+		}
 		const indexes = this.frames[this.currentFrame];
+		if (!indexes) console.log(this);
 		const layers = [];
 		for (let i = 0; i < indexes.length; i++) {
 			layers.push(this.layers[indexes[i]]);

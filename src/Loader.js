@@ -15,22 +15,26 @@ function Loader(params) {
 		fetch(src)
 			.then(response => { return response.json() })
 			.then(json => {
-				assets[fileName][key].json = json;
-				// assets[fileName][key].animation = new GameAnim();
-				assets[fileName][key].src = src; // need this?
-				assets[fileName][key].isLoaded = true;
+				assets.animations[fileName][key].json = json;
+				assets.animations[fileName][key].src = src; // need this?
+				assets.animations[fileName][key].isLoaded = true;
 				checkLoader();
-				// assets[fileName][key].animation.loadData(json, () => {
-				// });
 			});
 	}
 
 	function checkLoader() {
 
 		let isLoaded = true;
-		for (const file in assets) {
-			for (const key in assets[file]) {
-				if (!assets[file][key].isLoaded) isLoaded = false;
+
+		for (const type in assets) {
+			for (const file in assets[type]) {
+				if (type === 'animations') {
+					for (const key in assets[type][file]) {
+						if (!assets[type][file][key].isLoaded) isLoaded = false;
+					}
+				} else {
+					if (!assets[type][file].isLoaded) isLoaded = false;					
+				}
 			}
 		}
 
@@ -49,27 +53,34 @@ function Loader(params) {
 		throw new Error('Network response error');
 	}
 
-	function handleData(fileName, data, loadDataOnly) {
-		if (typeof data === 'object') {
-			assets[fileName] = {};
-			for (const key in data) {
-				assets[fileName][key] = {};
-				assets[fileName][key].data = data[key];
-				assets[fileName][key].isLoaded = loadDataOnly ? true : false;
-				loadAnimation(fileName, key, data[key].src);
+	function handleData(type, fileName, data, loadDataOnly) {
+		if (type === 'animations') {
+			assets[type] = {};
+			if (typeof data === 'object') {
+				assets[type][fileName] = {};
+				for (const key in data) {
+					assets[type][fileName][key] = {};
+					assets[type][fileName][key].data = data[key];
+					assets[type][fileName][key].isLoaded = loadDataOnly ? true : false;
+					loadAnimation(fileName, key, data[key].src);
+				}
+			} else {
+				const csv = CSVToArray(data, ',').splice(0);
+				const keys = csv[0];
+				assets[type][fileName] = { items: [] };
+				for (let i = 1; i < csv.length; i++) {
+					const itemData = { isLoaded: false };
+					for (let j = 0; j < keys.length; j++) {
+						itemData[keys[j]] = csv[i][j];
+					}
+					assets[type][fileName].items.push(itemData);
+					loadAnimation(fileName, itemData.label, `drawings/${fileName}/${itemData.label}.json`);
+				}
 			}
 		} else {
-			const csv = CSVToArray(data, ',').splice(0);
-			const keys = csv[0];
-			assets[fileName] = { items: [] };
-			for (let i = 1; i < csv.length; i++) {
-				const itemData = { isLoaded: false };
-				for (let j = 0; j < keys.length; j++) {
-					itemData[keys[j]] = csv[i][j];
-				}
-				assets[fileName].items.push(itemData);
-				loadAnimation(fileName, itemData.label, `drawings/${fileName}/${itemData.label}.json`);
-			}
+			assets[type][fileName] = data;
+			assets[type][fileName].isLoaded = true;
+
 		}
 	}
 
@@ -83,13 +94,17 @@ function Loader(params) {
 		if (debug) console.log('loading data');
 		if (debug) console.time('load data');
 		loadCallback = callback;
-		for (const fileName in files) {
-			const file = files[fileName];
-			assets[fileName] = { loaded: false };
-			fetch(file)
-				.then(response => { return handleResponse(response); })
-				.then(data => { handleData(fileName, data, loadDataOnly); })
-				.catch(error => { handleError(error, fileName); });
+		for (const type  in files) {
+			assets[type] = {};
+			for (const fileName in files[type]) {
+				const file = files[type][fileName];
+				assets[type][fileName] = { loaded: false };
+				console.log(file);
+				fetch(file)
+					.then(response => { return handleResponse(response); })
+					.then(data => { handleData(type, fileName, data, loadDataOnly); })
+					.catch(error => { handleError(error, fileName); });
+			}
 		}
 	}
 
