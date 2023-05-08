@@ -111,7 +111,6 @@ function FilesIO(lns, params) {
 		
 	}
 
-
 	function saveFile(isSingleFrame, callback) {
 		
 		if (params.fit && confirm("Fit canvas?")) lns.canvas.fitCanvasToDrawing();

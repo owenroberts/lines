@@ -43,12 +43,14 @@ function Capture(lns, params) {
 	}
 
 	function unsetCaptureSettings() {
+		console.log(tempSettings);
 		lns.ui.faces.lineWidth.update(tempSettings.lineWidth);
 		lns.ui.faces.canvasScale.update(tempSettings.canvasScale);
 	}
 	
 	function one() {
 		frames = 1;
+		setCaptureSettings();
 		start();
 	} /* k key */
 
@@ -60,13 +62,11 @@ function Capture(lns, params) {
 
 	/* put capture code in callback */
 	function start(advanceFrame) {
-		// console.log('break 1');
 		lns.renderer.suspend();
 		let waitFrame = true; // wait once so render isn't called twice
 		frameNum = 0;
 
 		lns.anim.onDraw = function() {
-			// console.log('break 2');
 			if (waitFrame) {
 				waitFrame = false;
 				window.requestAnimFrame(() => {
