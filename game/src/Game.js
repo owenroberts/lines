@@ -151,7 +151,6 @@ class Game {
 	load(files, loadDataOnly, callback) {
 		this.data = {};
 		this.loader.load(files, loadDataOnly, assets => {
-			console.log('assets callback', assets);
 			for (const type in assets) {
 				if (type !== 'animations') {
 					this.data[type] = assets[type];

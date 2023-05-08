@@ -162,6 +162,7 @@ class TextSprite {
 	/* do i ever use _x, _y ?? */
 	display(countForward, countBackward, yAbove) {
 		if (!this.isActive) return true;
+		if (!this.msg) return console.warn('This TextSprite has no text.');
 		countForward = countForward ? countForward : this.countForward;
 		countBackward = countBackward ? countBackward : this.countBackward;
 		yAbove = yAbove ? yAbove : this.yAbove;
@@ -190,7 +191,6 @@ class TextSprite {
 			}
 		}
 		
-		console.log()
 		if (this.count < this.msg.length) this.count += this.countCount;
 		if (this.count >= this.msg.length) {
 			if (this.delay < this.endDelay) this.delay += 1;

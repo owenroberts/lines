@@ -99,7 +99,6 @@ function Loader(params) {
 			for (const fileName in files[type]) {
 				const file = files[type][fileName];
 				assets[type][fileName] = { loaded: false };
-				console.log(file);
 				fetch(file)
 					.then(response => { return handleResponse(response); })
 					.then(data => { handleData(type, fileName, data, loadDataOnly); })
