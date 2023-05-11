@@ -1,6 +1,8 @@
 /*
 	load and serve sounds
-	make loader class ....
+	not part of regular game load because silent is typically an option, so don't want to load sounds until necessary
+
+	key and url don't have to match, but key and sequence url do
 
 	sfx = SoundProvider({
 		audioFiles: [
@@ -12,10 +14,12 @@
 	})
 */
 
+const { random } = Cool;
+
 function SoundProvider(params, callback) {
 	const sounds = {};
-	const baseUrl = params.baseUrl ?? './sfx/';
-	const audioFiles = params.audioFiles;
+	const baseUrl = params.baseUrl ?? './public/sfx/';
+	const audioFiles = params.audioFiles ?? []; // blank sound provider just does nothing
 
 	let fileCount = 0;
 	let loaded = 0;
@@ -23,10 +27,11 @@ function SoundProvider(params, callback) {
 	for (let i = 0; i < audioFiles.length; i++) {
 		const { key, url, sequence } = audioFiles[i];
 		if (sequence) {
+			sounds[key] = [];
 			const [s, e] = sequence;
 			for (let k = s; k <= e; k++) {
 				fileCount++;
-				preloadAudio(`${key}_${k}`, `${baseUrl}${key}_${k}.wav`);
+				preloadAudio(key, `${baseUrl}${key}_${k}.wav`, true);
 			}
 		} else {
 			fileCount++;
@@ -37,23 +42,63 @@ function SoundProvider(params, callback) {
 	const loader = setInterval(() => {
 		if (loaded === fileCount) {
 			clearInterval(loader);
+			console.log('sounds', sounds);
 			if (callback) callback(sounds);
 		}
 	}, 1000 / 30);
 
-	function preloadAudio(key, url) {
+	function preloadAudio(key, url, isSequence) {
 		var audio = new Audio();
 		audio.addEventListener('canplaythrough', loadedAudio, false);
 		audio.src = url;
 		audio.load();
-		sounds[key] = audio;
+		if (isSequence) sounds[key].push(audio);
+		else sounds[key] = audio;
 	}
 	
 	function loadedAudio() {
 		loaded++;
 	}
 
-	return { sounds };
+	function play(key, randomRate, rateMin, rateMax) {
+		if (!sounds[key]) return console.warn('No sound', key);
+		const s = Array.isArray(sounds[key]) ? random(sounds[key]) : sounds[key];
+		if (randomRate) s.playbackRate = random(rateMin ?? 0.9, rateMax ?? 1.1);
+		s.play();
+	}
+
+	function keepPlaying(key, randomRate, rateMin, rateMax) {
+		if (!sounds[key]) return console.warn('No sound', key);
+		if (Array.isArray(sounds[key]) && sounds[key].every(s => s.paused)) {
+			play(key, randomRate, rateMin, rateMax);
+		} else {
+			if (sounds[key].paused) play(key, randomRate, rateMin, rateMax);
+		}
+	}
+
+	function pause(key) {
+		if (!sounds[key]) return console.warn('No sound', key);
+		if (Array.isArray(sounds[key])) {
+			sounds[key]
+				.filter(a => !a.paused)
+				.forEach(a => { a.pause(); });
+		} else {
+			sounds[key].pause();
+		}
+	}
+
+	function stop(key) {
+		if (!sounds[key]) return console.warn('No sound', key);
+		if (Array.isArray(sounds[key])) {
+			sounds[key]
+				.filter(a => !a.paused)
+				.forEach(a => { a.stop(); });
+		} else {
+			sounds[key].pause();
+		}
+	}
+
+	return { sounds, play, pause, stop, keepPlaying };
 
 }
 

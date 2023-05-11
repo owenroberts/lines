@@ -9,6 +9,7 @@ class Scene {
 		this.displaySprites.add(sprite);
 		this.updateSprites.add(sprite);
 		this.uiSprites.add(sprite);
+		return sprite;
 	}
 
 	remove(sprite, type) {
@@ -22,23 +23,28 @@ class Scene {
 	addSprite(sprite) {
 		this.displaySprites.add(sprite);
 		this.updateSprites.add(sprite);
+		return sprite;
 	}
 
 	addUI(sprite) {
 		this.displaySprites.add(sprite);
 		this.uiSprites.add(sprite);
+		return sprite;
 	}
 
 	addToDisplay(sprite) {
 		this.displaySprites.add(sprite);
+		return sprite;
 	}
 
 	addToUpdate(sprite) {
 		this.updateSprites.add(sprite);
+		return sprite;
 	}
 
 	addToUI(sprite) {
 		this.uiSprites.add(sprite);
+		return sprite;
 	}
 
 	display(view) {
