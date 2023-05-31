@@ -42,7 +42,6 @@ function SoundProvider(params, callback) {
 	const loader = setInterval(() => {
 		if (loaded === fileCount) {
 			clearInterval(loader);
-			console.log('sounds', sounds);
 			if (callback) callback(sounds);
 		}
 	}, 1000 / 30);

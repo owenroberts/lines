@@ -21,6 +21,11 @@ class Scene {
 	}
 
 	addSprite(sprite) {
+		if (Array.isArray(sprite)) {
+			sprite.forEach(s => { this.addSprite(s) });
+			return;
+		}
+
 		this.displaySprites.add(sprite);
 		this.updateSprites.add(sprite);
 		return sprite;

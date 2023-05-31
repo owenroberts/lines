@@ -8,6 +8,7 @@ function Loader(params) {
 	let relativeLoadPath = params.relativeLoadPath;
 	let saveAnimationData = params.saveAnimationData || false;
 	let assets = {};
+	let loaded = {}; // mirror assets
 	let loadCallback;
 
 	function loadAnimation(fileName, key, src) {
@@ -16,8 +17,9 @@ function Loader(params) {
 			.then(response => { return response.json() })
 			.then(json => {
 				assets.animations[fileName][key].json = json;
-				assets.animations[fileName][key].src = src; // need this?
-				assets.animations[fileName][key].isLoaded = true;
+				assets.animations[fileName][key].src = src;
+				assets.animations[fileName][key].isLoaded = true; // for checking animations loaded later
+				loaded.animations[fileName][key].isLoaded = true;
 				checkLoader();
 			});
 	}
@@ -30,10 +32,10 @@ function Loader(params) {
 			for (const file in assets[type]) {
 				if (type === 'animations') {
 					for (const key in assets[type][file]) {
-						if (!assets[type][file][key].isLoaded) isLoaded = false;
+						if (!loaded[type][file][key].isLoaded) isLoaded = false;
 					}
 				} else {
-					if (!assets[type][file].isLoaded) isLoaded = false;					
+					if (!loaded[type][file].isLoaded) isLoaded = false;					
 				}
 			}
 		}
@@ -56,38 +58,46 @@ function Loader(params) {
 	function handleData(type, fileName, data, loadDataOnly) {
 		if (type === 'animations') {
 			assets[type] = {};
+			loaded[type] = {};
 			if (typeof data === 'object') {
 				assets[type][fileName] = {};
+				loaded[type][fileName] = {};
 				for (const key in data) {
 					assets[type][fileName][key] = {};
+					loaded[type][fileName][key] = {};
 					assets[type][fileName][key].data = data[key];
+					loaded[type][fileName][key].data = data[key];
 					assets[type][fileName][key].isLoaded = loadDataOnly ? true : false;
+					loaded[type][fileName][key].isLoaded = loadDataOnly ? true : false;
 					loadAnimation(fileName, key, data[key].src);
 				}
 			} else {
 				const csv = CSVToArray(data, ',').splice(0);
 				const keys = csv[0];
 				assets[type][fileName] = { items: [] };
+				loaded[type][fileName] = { items: [] };
+
 				for (let i = 1; i < csv.length; i++) {
 					const itemData = { isLoaded: false };
 					for (let j = 0; j < keys.length; j++) {
 						itemData[keys[j]] = csv[i][j];
 					}
 					assets[type][fileName].items.push(itemData);
+					loaded[type][fileName].items.push(itemData);
 					loadAnimation(fileName, itemData.label, `drawings/${fileName}/${itemData.label}.json`);
 				}
 			}
 		} else {
 			assets[type][fileName] = data;
-			assets[type][fileName].isLoaded = true;
-
+			loaded[type][fileName].isLoaded = true;
 		}
 	}
 
 	function handleError(error, fileName) {
 		console.error('file load error', error);
 		console.log(data,fileName);
-		assets[fileName].loaded = true; // need this?
+		// assets[fileName].loaded = true; //  need this? --> prob not since i didn't use right syntax
+		// loaded[fileName].isLoaded = true; 
 	}
 
 	function load(files, loadDataOnly, callback) {
@@ -96,9 +106,12 @@ function Loader(params) {
 		loadCallback = callback;
 		for (const type  in files) {
 			assets[type] = {};
+			loaded[type] = {};
+
 			for (const fileName in files[type]) {
 				const file = files[type][fileName];
 				assets[type][fileName] = { loaded: false };
+				loaded[type][fileName] = { loaded: false };
 				fetch(file)
 					.then(response => { return handleResponse(response); })
 					.then(data => { handleData(type, fileName, data, loadDataOnly); })

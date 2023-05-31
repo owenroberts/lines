@@ -34,6 +34,7 @@ class TextSprite {
 		this.clickStarted = false;
 
 		if (params.msg) this.setMsg(params.msg);
+		if (params.breakWithOutSpaces) this.setBreaks(true);
 
 		if (!params.letters.states[0]) {
 			const indexString = params.letterIndexString || 
@@ -70,7 +71,7 @@ class TextSprite {
 		this.reset();
 	}
 
-	setBreaks() {
+	setBreaks(breakWithOutSpaces=false) {
 		// console.log(this.msg);
 		/* 
 			set line breaks in message, 
@@ -94,8 +95,7 @@ class TextSprite {
 				continue;
 			}
 
-			if (i % this.wrap === offset && !breakOnNextSpace) {
-				// console.log('wrap', i, this.msg[i])
+			if (i % this.wrap === offset && (!breakOnNextSpace || breakWithOutSpaces)) {
 				// check for letters left before space or \n\r
 				let halfWrap = Math.round(this.wrap / 2);
 				let lettersLeft = this.msg.substring(i, i + halfWrap);
@@ -104,6 +104,11 @@ class TextSprite {
 				if (this.msg[i] === ' ') {
 					// console.log('break i', i);
 					this.breaks.push(i);
+					prevBreak = true;
+				}
+
+				else if (breakWithOutSpaces) {
+					this.breaks.push(i - 1);
 					prevBreak = true;
 				}
 
@@ -173,7 +178,7 @@ class TextSprite {
 		let y = this.y - (yAbove ? (this.breaks.length + 1) * this.lead : 0);
 		for (let i = 0; i < len; i++) {
 			var letter = this.msg[i];
-			if (letter === ' ' || letter === '_' || i < index) {
+			if ((letter === ' ' || letter === '_' || i < index)) {
 				x += this.track;
 			} else if (letter === '\n' || letter === '\r') {
 				// y += this.lead;
@@ -185,7 +190,7 @@ class TextSprite {
 				this.letters.draw(x, y);
 				x += this.track;
 			}
-			if (this.breaks.indexOf(i) !== -1) {
+			if (this.breaks.includes(i)) {
 				y += this.lead;
 				x = this.x;
 			}

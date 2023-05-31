@@ -63,7 +63,7 @@ class Texture {
 	}
 
 	display() {
-
+		// console.log(this.offset);
 		for (let i = 0; i < this.locations.length; i++) {
 			let x = this.locations[i][0] + this.offset[0];
 			let y = this.locations[i][1] + this.offset[1];

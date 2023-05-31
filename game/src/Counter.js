@@ -29,12 +29,23 @@ class Counter {
 		this.count = 0;
 	}
 
-	ratio() {
+	getRatio() {
 		return this.count / this.duration;
 	}
 
 	end() {
 		this.count = this.duration;
+	}
+
+	set(count) {
+		// console.log('set count');
+		// console.log(count, this.count, this.duration)
+		if (count < 0) {
+			this.count = Math.min(this.duration + count, this.duration - 1);
+		} else {
+			this.count = Math.min(count, this.duration - 1)
+		}
+		// console.log(count, this.count, this.duration)
 	}
 }
 
