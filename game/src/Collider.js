@@ -21,6 +21,6 @@ class Collider {
 		this.position = [x, y];
 		this.size = [x, y];
 	}
-
-
 }
+
+LinesEngine.Collider = Collider;

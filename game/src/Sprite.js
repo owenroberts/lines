@@ -53,7 +53,6 @@ class Sprite {
 	}
 
 	drawDebug() {
-
 		GAME.ctx.lineWidth = 1;
 		GAME.ctx.beginPath();
 		GAME.ctx.rect(this.x, this.y, this.width, this.height);

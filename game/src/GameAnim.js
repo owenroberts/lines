@@ -86,7 +86,7 @@ class GameAnim extends Animation {
 	getLayers() {
 		// current frame is -1 how?
 		if (this.currentFrame < 0) {
-			console.log('current frame', this.currentFrame, this);
+			// console.log('current frame', this.currentFrame, this);
 			return false;
 		}
 		const indexes = this.frames[this.currentFrame];
