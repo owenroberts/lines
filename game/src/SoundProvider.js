@@ -16,7 +16,7 @@
 
 const { random } = Cool;
 
-function SoundProvider(params, callback) {
+function SoundProvider(params={}, callback) {
 	const sounds = {};
 	const baseUrl = params.baseUrl ?? './public/sfx/';
 	const audioFiles = params.audioFiles ?? []; // blank sound provider just does nothing
@@ -60,14 +60,16 @@ function SoundProvider(params, callback) {
 	}
 
 	function play(key, randomRate, rateMin, rateMax) {
-		if (!sounds[key]) return console.warn('No sound', key);
+		if (!sounds[key] && loaded > 0) return console.warn('No sound', key);
+		if (!sounds[key]) return;
 		const s = Array.isArray(sounds[key]) ? random(sounds[key]) : sounds[key];
 		if (randomRate) s.playbackRate = random(rateMin ?? 0.9, rateMax ?? 1.1);
 		s.play();
 	}
 
 	function keepPlaying(key, randomRate, rateMin, rateMax) {
-		if (!sounds[key]) return console.warn('No sound', key);
+		if (!sounds[key] && loaded > 0) return console.warn('No sound', key);
+		if (!sounds[key]) return;
 		if (Array.isArray(sounds[key]) && sounds[key].every(s => s.paused)) {
 			play(key, randomRate, rateMin, rateMax);
 		} else {
@@ -76,7 +78,8 @@ function SoundProvider(params, callback) {
 	}
 
 	function pause(key) {
-		if (!sounds[key]) return console.warn('No sound', key);
+		if (!sounds[key] && loaded > 0) return console.warn('No sound', key);
+		if (!sounds[key]) return;
 		if (Array.isArray(sounds[key])) {
 			sounds[key]
 				.filter(a => !a.paused)
@@ -87,7 +90,9 @@ function SoundProvider(params, callback) {
 	}
 
 	function stop(key) {
-		if (!sounds[key]) return console.warn('No sound', key);
+		if (!sounds[key] && loaded > 0) return console.warn('No sound', key);
+		if (!sounds[key]) return;
+
 		if (Array.isArray(sounds[key])) {
 			sounds[key]
 				.filter(a => !a.paused)
