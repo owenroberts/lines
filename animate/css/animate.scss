@@ -56,37 +56,19 @@ $anim-off: darkgreen;
 		// overflow: hidden;
 		margin: 0;
 		background-color: $ui-color;
-		grid-row: 1 / span calc(var(--num-layers) * 2 + 2);
+		grid-row: 1 / span calc(var(--num-layers) * 2 + var(--num-tweens) * 2 + 2);
 		width: 100%;
+		// max-width: 120px;
 		overflow: hidden;
+		border: none;
 		border-left: 1px dashed $bg-color;
+		padding: 0;
+		padding-left: 3px;
+		display: inline-flex;
+		align-items: flex-start;
 
 		&.current {
 			background-color: $ui-highlight !important;
-		}
-	}
-
-	&.ten {
-		.frame {
-			text-indent: -4em;
-		}
-		.frame:nth-child(5n+1) {
-			text-indent: 0;
-			overflow: visible;
-			z-index: 2;
-			background-color: darkgray;
-		}
-	}
-
-	&.five {
-		.frame {
-			text-indent: -4em;
-		}
-		.frame:nth-child(10n+1) {
-			text-indent: 0;
-			overflow: visible;
-			z-index: 2;
-			background-color: darkgray;
 		}
 	}
 
@@ -106,6 +88,7 @@ $anim-off: darkgreen;
 			cursor: pointer;
 			// background-color: $ui-color;
 			background-color: transparent; 
+			border: none;
 
 			&.toggle { 
 				color: inherit;

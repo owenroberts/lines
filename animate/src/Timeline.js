@@ -17,6 +17,11 @@ function Timeline() {
 	let autoFit = false;
 	let groups = [];
 
+	// timeline frames
+	const tlSteps = [1, 2, 4, 5, 6, 10, 12, 20, 30, 40, 50, 100, 200, 500, 1000];
+	let tlInc = 1;
+
+
 	function init() {
 		panel.el.addEventListener('mousemove', ev => {
 			// quick select while moving over frames
@@ -34,7 +39,7 @@ function Timeline() {
 	function fit() {
 		const f = lns.anim.endFrame + 1;
 		const w = panel.el.clientWidth - 11; /* 11 for padding */
-		frameWidth = (w - 2 * f) / f; 
+		frameWidth = (w - 2 * f) / f;
 		timeline.setProp('--frame-width', frameWidth);
 		// update();
 	}
@@ -82,8 +87,13 @@ function Timeline() {
 	}
 
 	function updateFrame(prevFrame) {
-		timeline['frm-' + prevFrame].removeClass('current');
-		timeline['frm-' + lns.anim.currentFrame].addClass('current');
+		let prevFrameDisplay = Math.floor(prevFrame / tlInc) * tlInc;
+		let nextFrameDisplay = Math.floor(lns.anim.currentFrame / tlInc) * tlInc;
+
+		if (prevFrameDisplay === nextFrameDisplay) return;
+
+		timeline['frm-' + prevFrameDisplay].removeClass('current');
+		timeline['frm-' + nextFrameDisplay].addClass('current');
 	}
 
 	function swapLayer(layerIndex, swapIndex) {
@@ -102,13 +112,37 @@ function Timeline() {
 	function drawFrames() {
 		timeline.setProp('--num-frames', lns.anim.endFrame + 1);
 
+		// skip frames at various thresholds
 		const numFrames = lns.anim.endFrame + 1;
-		for (let i = 0; i < numFrames; i++) {
+		const tlWidth = panel.el.clientWidth - 11; /* 11 for padding */
+		const maxFrameWidth = tlWidth / numFrames;
+		frameWidth = Math.floor(tlWidth / numFrames + 1);
+		// const roundedFrameWidth = 
+		// console.log('df', tlWidth, numFrames, maxFrameWidth);
+		if (tlWidth < 0) return;
+		const minFrameWidth = 24;
+		let nFrameWidth = maxFrameWidth;
+		
+		let index = 0;
+		while (nFrameWidth < minFrameWidth) {
+			nFrameWidth = tlWidth / (numFrames / tlSteps[index]);
+			index++;
+		}
+		tlInc = tlSteps[index];
+		
+		const nf = Math.floor(numFrames / tlInc) + 1;
+
+		timeline.setProp('--num-frames', nf);
+		timeline.setProp('--frame-width', Math.floor(tlWidth / nf) - 1);
+
+		// console.log('tl', Math.floor(numFrames / tlInc) + 1, Math.floor(nFrameWidth), tlWidth)
+
+		for (let i = 0; i < numFrames; i += tlInc) {
 			const frameBtn = new UIButton({
 				text: `${i}`,
 				css: {
-					gridColumnStart:  1 + (i * 2),
-					gridColumnEnd:  3 + (i * 2)
+					gridColumnStart:  1 + (Math.floor(i / tlInc) * 2),
+					gridColumnEnd:  3 + (Math.floor(i / tlInc) * 2)
 				},
 				class: 'frame',
 				callback: function() {
@@ -117,7 +151,10 @@ function Timeline() {
 					lns.ui.update();
 				}	
 			});
-			if (i === lns.anim.currentFrame) frameBtn.addClass('current');
+			// if (i === lns.anim.currentFrame) frameBtn.addClass('current');
+			if (Math.floor(i / tlInc) === Math.floor(lns.anim.currentFrame / tlInc)) {
+				frameBtn.addClass('current');
+			}
 			frameBtn.removeClass('btn');
 			// lns.ui.keys[i] = frameBtn;
 			timeline.append(frameBtn, `frm-${i}`);
@@ -223,10 +260,11 @@ function Timeline() {
 					type: 'layer',
 					width: frameWidth * (layer.endFrame - layer.startFrame + 1),
 					css: {
+						width: frameWidth * (layer.endFrame - layer.startFrame + 1) + 'px',
 						gridRowStart: gridRowStart, // 2 + (i * 2),
 						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
-						gridColumnStart: layer.startFrame * 2 + 1,
-						gridColumnEnd: layer.endFrame * 2 + 3
+						gridColumnStart: Math.floor(layer.startFrame / tlInc) * 2 + 1,
+						gridColumnEnd: Math.floor(layer.endFrame / tlInc) * 2 + 3
 					},
 					moveUp() {
 						const layerIndex = lns.anim.layers.indexOf(layer);
@@ -338,10 +376,11 @@ function Timeline() {
 					const tweenUI = new UITween({
 						type: 'tween',
 						css: {
+							width: frameWidth * (tween.endFrame - tween.startFrame + 1) + 'px',
 							gridRowStart: gridRowStart, 
-							gridRowEnd: gridRowEnd, 	
-							gridColumnStart: tween.startFrame * 2 + 1,
-							gridColumnEnd: tween.endFrame * 2 + 3
+							gridRowEnd: gridRowEnd, 
+							gridColumnStart: Math.floor(tween.startFrame / tlInc) * 2 + 1,
+							gridColumnEnd: Math.floor(tween.endFrame / tlInc) * 2 + 3
 						},
 						update() { lns.ui.update(); },
 					}, tween, layer);
