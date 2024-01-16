@@ -26,6 +26,12 @@ $anim-off: darkgreen;
 	}
 }
 
+#big-frame-display {
+	font-family: monaco, monospace;
+	font-size: 19px;
+	line-height: 1em;
+}
+
 #timeline {
 	--num-frames: 1;
 	--num-layers: 1;

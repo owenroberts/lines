@@ -1,10 +1,14 @@
 /*
 	main editing timeline
+
+	timeline grid structure
+
+
 */
 
 function Timeline() {
 
-	let panel, timeline;
+	let panel, timeline, bigFrameDisplay;
 
 	let frameWidth = 120; // not part of ui ... either make part of ui or member var
 	let viewLayers = true;
@@ -20,6 +24,7 @@ function Timeline() {
 	// timeline frames
 	const tlSteps = [1, 2, 4, 5, 6, 10, 12, 20, 30, 40, 50, 100, 200, 500, 1000];
 	let tlInc = 1;
+	let tlWidth, tlFrameWidth;
 
 
 	function init() {
@@ -76,6 +81,7 @@ function Timeline() {
 	function update() {
 		let prevFrame = lns.ui.faces.frameDisplay.value;
 		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame;
+		bigFrameDisplay.text = lns.anim.currentFrame;
 		if (!lns.anim.isPlaying) {
 			timeline.clear();
 			if (autoFit) fit();
@@ -114,7 +120,7 @@ function Timeline() {
 
 		// skip frames at various thresholds
 		const numFrames = lns.anim.endFrame + 1;
-		const tlWidth = panel.el.clientWidth - 11; /* 11 for padding */
+		tlWidth = panel.el.clientWidth - 11; /* 11 for padding */
 		const maxFrameWidth = tlWidth / numFrames;
 		frameWidth = Math.floor(tlWidth / numFrames + 1);
 		// const roundedFrameWidth = 
@@ -131,9 +137,10 @@ function Timeline() {
 		tlInc = tlSteps[index];
 		
 		const nf = Math.floor(numFrames / tlInc) + 1;
+		tlFrameWidth = Math.floor(tlWidth / nf) - 1;
 
 		timeline.setProp('--num-frames', nf);
-		timeline.setProp('--frame-width', Math.floor(tlWidth / nf) - 1);
+		timeline.setProp('--frame-width', tlFrameWidth);
 
 		// console.log('tl', Math.floor(numFrames / tlInc) + 1, Math.floor(nFrameWidth), tlWidth)
 
@@ -210,6 +217,7 @@ function Timeline() {
 						if (layer.startFrame !== startFrame) layer.startFrame = startFrame;
 						if (layer.endFrame !== startFrame) layer.endFrame = endFrame;
 					});
+
 					const ui = new UITimelineGroup(groupLayers, {
 						name: groups[i],
 						index: i,
@@ -254,13 +262,19 @@ function Timeline() {
 				if (viewActiveLayers && !layers.includes(layer)) continue;
 				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				// console.log(UILayer);
+				console.log('layer', i, layer.startFrame, layer.endFrame)
+				console.log('inc', tlInc, tlFrameWidth)
+				console.log('column', Math.floor(layer.startFrame / tlInc) * 2 + 1, Math.floor(layer.endFrame / tlInc) * 2 + 3)
+				const colWidth = (tlFrameWidth + 2) * (Math.floor((layer.endFrame - layer.startFrame) / tlInc) + 1);
+				console.log('colWidth', colWidth)
+
 				const ui = new UILayer(layer, {
 					group: viewGroups ? undefined : groups[layer.groupNumber],
 					canMoveUp: i > 0 && layers.length > 2,
 					type: 'layer',
-					width: frameWidth * (layer.endFrame - layer.startFrame + 1),
+					width: colWidth,
 					css: {
-						width: frameWidth * (layer.endFrame - layer.startFrame + 1) + 'px',
+						width: colWidth + 'px',
 						gridRowStart: gridRowStart, // 2 + (i * 2),
 						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
 						gridColumnStart: Math.floor(layer.startFrame / tlInc) * 2 + 1,
@@ -518,6 +532,12 @@ function Timeline() {
 				label: 'State',
 				callback(value) { lns.states.set(value); }
 			}
+		});
+
+		bigFrameDisplay = lns.ui.addUI({
+			type: 'UILabel',
+			text: '0',
+			id: 'big-frame-display'
 		});
 
 		timeline = panel.addRow('timeline');
