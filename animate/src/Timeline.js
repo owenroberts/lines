@@ -122,7 +122,7 @@ function Timeline() {
 		const numFrames = lns.anim.endFrame + 1;
 		tlWidth = panel.el.clientWidth - 11; /* 11 for padding */
 		const maxFrameWidth = tlWidth / numFrames;
-		frameWidth = Math.floor(tlWidth / numFrames + 1);
+		frameWidth = Math.floor(tlWidth / numFrames); // +1 ??
 		// const roundedFrameWidth = 
 		// console.log('df', tlWidth, numFrames, maxFrameWidth);
 		if (tlWidth < 0) return;
@@ -137,7 +137,7 @@ function Timeline() {
 		tlInc = tlSteps[index];
 		
 		const nf = Math.floor(numFrames / tlInc) + 1;
-		tlFrameWidth = Math.floor(tlWidth / nf) - 1;
+		tlFrameWidth = Math.floor(tlWidth / nf);
 
 		timeline.setProp('--num-frames', nf);
 		timeline.setProp('--frame-width', tlFrameWidth);
@@ -262,12 +262,8 @@ function Timeline() {
 				if (viewActiveLayers && !layers.includes(layer)) continue;
 				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
 				// console.log(UILayer);
-				console.log('layer', i, layer.startFrame, layer.endFrame)
-				console.log('inc', tlInc, tlFrameWidth)
-				console.log('column', Math.floor(layer.startFrame / tlInc) * 2 + 1, Math.floor(layer.endFrame / tlInc) * 2 + 3)
-				const colWidth = (tlFrameWidth + 2) * (Math.floor((layer.endFrame - layer.startFrame) / tlInc) + 1);
-				console.log('colWidth', colWidth)
 
+				const colWidth = (tlFrameWidth + 2) * (Math.floor(layer.endFrame / tlInc) - Math.floor(layer.startFrame / tlInc) + 1)
 				const ui = new UILayer(layer, {
 					group: viewGroups ? undefined : groups[layer.groupNumber],
 					canMoveUp: i > 0 && layers.length > 2,
