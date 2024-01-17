@@ -8,6 +8,7 @@ function Events(lns) {
 	let mouseTimer = performance.now();  //  independent of draw timer
 	let mouseInterval = 30;
 	let distanceThreshold = 2; // distance between points required to record
+	let connectLines = false;
 	let isDrawing = false; // for drawStart to drawEnd so its not always moving
 	let prevPosition = new Cool.Vector();
 	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
@@ -82,7 +83,7 @@ function Events(lns) {
 		const drawing = lns.anim.getCurrentDrawing();
 		let last = drawing.get(-2)[0]; /* prevent saving single point drawing segments */
 		if (last !== 'end' && last !== 'add' && drawing.length > 1) {
-			drawing.add(ev.shiftKey ? 'add' : 'end');
+			drawing.add((connectLines || ev.shiftKey) ? 'add' : 'end');
 		} else {
 			drawing.popPoint(); // if its just one point pop it off ...
 		}
@@ -90,7 +91,6 @@ function Events(lns) {
 
 	function end(ev) {
 		lns.eraser.end();
-
 		if (lns.brush.fillActive()) {
 			const drawing = lns.anim.getCurrentDrawing();
 			const point = transformPoint(ev.offsetX, ev.offsetY);
@@ -99,7 +99,6 @@ function Events(lns) {
 			endPoint(ev);
 		}
 		prevPosition = undefined;
-		
 	}
 
 	if (window.navigator.platform.includes('iPad')) {
@@ -156,6 +155,12 @@ function Events(lns) {
 				value: distanceThreshold,
 				callback: value => { distanceThreshold = value; },
 			},
+			'connectLines': {
+				type: 'UIToggleCheck',
+				key: 'alt-o',
+				value: connectLines,
+				callback: value => { connectLines = value; },
+			}
 		}, 'mouse');
 	}
 

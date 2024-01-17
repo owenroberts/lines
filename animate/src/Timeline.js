@@ -41,40 +41,10 @@ function Timeline() {
 		});
 	}
 
-	function fit() {
-		const f = lns.anim.endFrame + 1;
-		const w = panel.el.clientWidth - 11; /* 11 for padding */
-		frameWidth = (w - 2 * f) / f;
-		timeline.setProp('--frame-width', frameWidth);
-		// update();
-	}
-
-	function frameClass() {
-		// def better way to do this -- did i do something in sequencer??
-		if (frameWidth < 5) {
-			timeline.addClass('five');
-			timeline.removeClass('ten');
-		} else if (frameWidth < 10) {
-			timeline.addClass('ten');
-			timeline.removeClass('five');
-		} else {
-			timeline.removeClass('ten');
-			timeline.removeClass('five');
-		}
-	}
-
-	function fitFrame() {
-		frameWidth = 140;
-		timeline.setProp('--frame-width', frameWidth);
-		frameClass();
-		// update();
-		drawLayers();
-		scrollToFrame();
-	}
-
 	function scrollToFrame(overrideScroll) {
 		if (!useScrollToFrame && !overrideScroll) return;
-		timeline.el.scrollTo(timeline[`frm-${lns.anim.currentFrame}`].el.offsetLeft - 10, 0);
+		const closestFrame = Math.round(lns.anim.currentFrame / tlInc) * tlInc;
+		timeline.el.scrollTo(timeline[`frm-${closestFrame}`].el.offsetLeft - 10, 0);
 	}
 
 	/* creates all the layer ui new each time */
@@ -84,7 +54,7 @@ function Timeline() {
 		bigFrameDisplay.text = lns.anim.currentFrame;
 		if (!lns.anim.isPlaying) {
 			timeline.clear();
-			if (autoFit) fit();
+			// if (autoFit) fit();
 			drawFrames();
 			drawLayers();
 		} else {
@@ -137,7 +107,7 @@ function Timeline() {
 		tlInc = tlSteps[index];
 		
 		const nf = Math.floor(numFrames / tlInc) + 1;
-		tlFrameWidth = Math.floor(tlWidth / nf);
+		tlFrameWidth = Math.floor(tlWidth / nf) - 2; // border ... 
 
 		timeline.setProp('--num-frames', nf);
 		timeline.setProp('--frame-width', tlFrameWidth);
@@ -193,7 +163,7 @@ function Timeline() {
 			const layers = viewActiveLayers ?
 				lns.anim.layers.filter(layer => {
 					const f = lns.anim.currentFrame;
-					for (let i = f - viewLayerRange; i <= f + viewLayerRange; i++){
+					for (let i = f - viewLayerRange; i <= f + viewLayerRange; i++) {
 						if (layer.isInFrame(i)) return true;
 					}
 					return false;
@@ -506,9 +476,9 @@ function Timeline() {
 		});
 
 		lns.ui.addCallbacks([
-			{ callback: scrollToFrame, key: 'shift-f', text: '⊙', args: [true], },
-			{ callback: fit, text: '⇿', key: 'alt-f', class: 'left-end', },
-			{ callback: fitFrame, text: '⏛', key: 'ctrl-f', class: 'right-end', },
+			// { callback: scrollToFrame, key: 'shift-f', text: '⊙', args: [true], },
+			// { callback: fit, text: '⇿', key: 'alt-f', class: 'left-end', },
+			// { callback: fitFrame, text: '⏛', key: 'ctrl-f', class: 'right-end', },
 			{ callback: select, text: 'Select', key: 'shift-v', class: 'left-end', args: [true] },
 			{ callback: select, text: 'Deselect', key: 'alt-d', class: 'right-end', args: [false] },
 			{ callback: lock, text: 'Lock', key: 'shift-l', class: 'left-end', args: [true] },
@@ -517,11 +487,11 @@ function Timeline() {
 		]);
 
 		lns.ui.addProps({
-			'autoFit': {
-				type: 'UIToggleCheck',
-				value: autoFit,
-				callback(value) { autoFit = value; }
-			},
+			// 'autoFit': {
+			// 	type: 'UIToggleCheck',
+			// 	value: autoFit,
+			// 	callback(value) { autoFit = value; }
+			// },
 			'stateSelect': {
 				type: 'UISelect',
 				key: 'ctrl-t',
