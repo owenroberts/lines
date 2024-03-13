@@ -29,8 +29,8 @@ class UI extends ColliderSprite {
 		
 		if (params.states) {
 			this.animation.states = params.states;
-			this.animation.state = 'idle';
 		}
+		this.animation.state = 'idle';
 
 		if (params.isButton) {
 			this.animation.states = {

@@ -26,8 +26,8 @@ class TextSprite {
 		this.end = 0;
 		this.delay = params.delay || 0;
 		
-		this.countCount = 0.5;
-		this.endCount = 0.5;
+		this.countCount = params.countCount ?? 0.5;
+		this.endCount = params.endCount ?? 0.5;
 		this.endDelay = params.endDelay || GAME.dps || 10;
 
 		this.hover = false;
