@@ -81,7 +81,11 @@ function jsTasks() {
 			.pipe(sourcemaps.init())
 			.pipe(concat(name))
 			.pipe(iife())
-			.pipe(terser().on('error', logError))
+			.pipe(terser({ mangle: {
+        properties: {
+            regex: /(^P1|^p1|^_p1)[A-Z]\w*/
+        }
+    	}}).on('error', logError))
 			.pipe(sourcemaps.write('./src_maps'))
 			.pipe(dest(dir))
 			.pipe(gulpif(useBrowserSync, browserSync.stream()));
