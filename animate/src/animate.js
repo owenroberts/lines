@@ -1,6 +1,38 @@
-const { Renderer, Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } = Lines;
-const { Interface, Settings } = UI;
-const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText, UIElement, UIRow } = UI.Elements;
+import '../css/animate.scss';
+
+import { Renderer, Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } from '../../src/Lines.js';
+
+import { Interface, Settings, Elements } from '../../../ui/src/UI.js';
+
+const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText, UIElement, UIRow } = Elements;
+
+import { LayerMixin } from './LayerMixin.js';
+import { AnimationMixin } from './AnimationMixin.js';
+import { DrawingMixin } from './DrawingMixin.js';
+
+import { AnimatorUI } from './AnimatorUI.js';
+import { Background } from './Background.js';
+import { Brush } from './Brush.js';
+import { Canvas } from './Canvas.js';
+import { Capture } from './Capture.js';
+import { Data } from './Data.js';
+import { Draw } from './Draw.js';
+import { Drawings } from './Drawings.js';
+import { Eraser } from './Eraser.js';
+import { Events } from './Events.js';
+import { FilesIO } from './FilesIO.js';
+import { Palette } from './Palette.js';
+import { Playback } from './Playback.js';
+import { Sequencer } from './Sequencer.js';
+import { States } from './States.js';
+import { Timeline } from './Timeline.js';
+
+// import { Clip } from './UI/Clip.js';
+// import { Layer } from './UI/Layer.js';
+// import { Sequence } from './UI/Sequence.js';
+// import { TimelineGroup } from './UI/TimelineGroup.js';
+// import { Tween } from './UI/Tween.js';
+
 const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
@@ -26,6 +58,7 @@ lns.renderer = Renderer({
 	lineWidth: 1,
 });
 
+
 lns.anim = new Animation(lns.renderer.ctx, 30, true, true);
 
 // modules
@@ -46,12 +79,13 @@ lns.events = Events(lns);
 lns.bg = Background(lns);
 lns.data = Data(lns);
 lns.fio = FilesIO(lns, { // verbose params ...
-	fit: false, /* fit to canvas when saving */
-	save: false, /* save settings on unload  */
-	load: true, /* load setttings after file load */
-	reload: false, /* confirm reload */
-	bg: true /* bg color */
+	fit: false, // fit to canvas when saving
+	save: false, // save settings on unload
+	load: true, // load setttings after file load
+	reload: false, // confirm reload
+	bg: true // bg color
 });
+
 lns.capture = Capture(lns, {
 	useSequentialNumbering: true,
 	captureSettings: {
@@ -92,6 +126,7 @@ lns.ui.update = function() {
 };
 lns.ui.update();
 
+
 lns.ui.settings = new Settings(lns, {
 	name: 'lns', 
 	workspaceFields: ['hideCursor'],
@@ -106,12 +141,13 @@ lns.ui.settings = new Settings(lns, {
 		}
 	],
 	appSave() {
+
 		return {
 			palettes: lns.palette.getPalettes(), 
 		};
 	},
 	appLoad(settings) {
-		lns.palette.setup(settings.interface.palettes);
+		if (settings.interface) lns.palette.setup(settings.interface.palettes);
 	}
 });
 // lns.ui.settings.load();
@@ -126,6 +162,4 @@ if (params.src) {
 	lns.fio.loadFile(params.src);
 }
 
-console.log(lns);
-
-window.lns = lns;
+console.log('lns', lns);

@@ -1,4 +1,7 @@
-class UIClip extends UICollection {
+import { Elements } from '../../../ui/src/UI.js';
+const { UICollection } = Elements;
+
+export class UIClip extends UICollection {
 	constructor(params) {
 		super(params);
 		if (!params.state) this.setState();
@@ -37,7 +40,6 @@ class UIClip extends UICollection {
 
 		// edit button to return timeline
 		// swap button if its useful
-		
 	}
 
 	setState() {

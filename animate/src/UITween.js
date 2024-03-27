@@ -1,4 +1,7 @@
-class UITween extends UICollection {
+import { Elements } from '../../../ui/src/UI.js';
+const { UICollection, UIButton, UINumberStep, UIModal } = Elements;
+
+export class UITween extends UICollection {
 	constructor(params, tween, layer) {
 		super(params);
 		this.addClass('tween');

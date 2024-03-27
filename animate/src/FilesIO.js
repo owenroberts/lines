@@ -2,7 +2,7 @@
 	some of this should be in ui now
 */
 
-function FilesIO(lns, params) {
+export function FilesIO(lns, params) {
 
 	let saveSettingsOnUnload = params.save || false; // use this ??
 	let saveFilesEnabled = false;

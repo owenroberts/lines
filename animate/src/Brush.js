@@ -2,7 +2,7 @@
 	properties for drawing with brush
 */
 
-function Brush(lns) {
+export function Brush(lns) {
 	
 	let isActive = false;
 	let isGrass = false;

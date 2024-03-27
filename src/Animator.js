@@ -2,7 +2,7 @@
 	animation params
 */
 
-class Animator {
+export class Animator {
 
 	constructor(animation, params_) {
 		this.animation = animation;
@@ -60,5 +60,3 @@ class Animator {
 		});
 	}
 }
-
-window.Lines.Animator = Animator;

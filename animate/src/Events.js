@@ -2,7 +2,9 @@
 	mouse / pointer events
 */
 
-function Events(lns) {
+import * as Cool from '../../../cool/cool.js';
+
+export function Events(lns) {
 
 	// how often the mousemove records, default 30ms
 	let mouseTimer = performance.now();  //  independent of draw timer

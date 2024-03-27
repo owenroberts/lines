@@ -2,7 +2,7 @@
 	play back stfuff
 */
 
-function Playback(lns, params) {
+export function Playback(lns, params) {
 
 	const { canvas, ctx } = lns.renderer;
 	
@@ -36,9 +36,9 @@ function Playback(lns, params) {
 		
 		if (stats) {
 			stats.dom.style.display = showStats ? 'block' : 'none';
-			playPanel.setProp('overflow', 'visible');
+			playPanel.setStyle('overflow', 'visible');
 		} else {
-			playPanel.setProp('overflow', 'hidden');
+			playPanel.setStyle('overflow', 'hidden');
 		}
 	}
 

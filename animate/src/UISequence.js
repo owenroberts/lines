@@ -1,4 +1,4 @@
-class UISequence extends UICollection {
+export class UISequence extends UICollection {
 	constructor(params) {
 		super(params);
 		this.name = params.name;
@@ -17,11 +17,11 @@ class UISequence extends UICollection {
 	}
 
 	show() {
-		this.setProp('display', 'flex');
+		this.setStyle('display', 'flex');
 	}
 
 	hide() {
-		this.setProp('display', 'none');
+		this.setStyle('display', 'none');
 	}
 
 	getEndFrame() {

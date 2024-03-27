@@ -1,12 +1,14 @@
 /*
 	main editing timeline
-
 	timeline grid structure
-
-
 */
 
-function Timeline() {
+import { UILayer } from './UILayer.js';
+import { UITween } from './UITween.js';
+import { Elements } from '../../../ui/src/UI.js';
+const { UIButton } = Elements;
+
+export function Timeline(lns) {
 
 	let panel, timeline, bigFrameDisplay;
 
@@ -86,7 +88,7 @@ function Timeline() {
 	}
 
 	function drawFrames() {
-		timeline.setProp('--num-frames', lns.anim.endFrame + 1);
+		timeline.setStyle('--num-frames', lns.anim.endFrame + 1);
 
 		// skip frames at various thresholds
 		const numFrames = lns.anim.endFrame + 1;
@@ -109,8 +111,8 @@ function Timeline() {
 		const nf = Math.floor(numFrames / tlInc) + 1;
 		tlFrameWidth = Math.floor(tlWidth / nf) - 2; // border ... 
 
-		timeline.setProp('--num-frames', nf);
-		timeline.setProp('--frame-width', tlFrameWidth);
+		timeline.setStyle('--num-frames', nf);
+		timeline.setStyle('--frame-width', tlFrameWidth);
 
 		// console.log('tl', Math.floor(numFrames / tlInc) + 1, Math.floor(nFrameWidth), tlWidth)
 
@@ -138,7 +140,7 @@ function Timeline() {
 		}
 
 		if (lns.anim.stateName !== 'default') {
-			timeline.setProp('--state-height', 1);
+			timeline.setStyle('--state-height', 1);
 			const stateLine = new UIElement({
 				class: 'state',
 				css: {
@@ -148,7 +150,7 @@ function Timeline() {
 			});
 			timeline.append(stateLine);
 		} else {
-			timeline.setProp('--state-height', 0);
+			timeline.setStyle('--state-height', 0);
 		}
 		
 		scrollToFrame();
@@ -230,11 +232,19 @@ function Timeline() {
 				const layer = lns.anim.layers[i];
 				if (layer.groupNumber >= 0 && viewGroups) continue;
 				if (viewActiveLayers && !layers.includes(layer)) continue;
-				// if (layer.isToggled) layer.toggle();  // for rebuilding interface constantly
-				// console.log(UILayer);
 
-				const colWidth = (tlFrameWidth + 2) * (Math.floor(layer.endFrame / tlInc) - Math.floor(layer.startFrame / tlInc) + 1)
+				const colWidth = (tlFrameWidth + 2) * (Math.floor(layer.endFrame / tlInc) - Math.floor(layer.startFrame / tlInc) + 1);
+
+				console.log({
+						width: colWidth + 'px',
+						gridRowStart: gridRowStart, // 2 + (i * 2),
+						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
+						gridColumnStart: Math.floor(layer.startFrame / tlInc) * 2 + 1,
+						gridColumnEnd: Math.floor(layer.endFrame / tlInc) * 2 + 3
+					}
+					)
 				const ui = new UILayer(layer, {
+					lns: lns,
 					group: viewGroups ? undefined : groups[layer.groupNumber],
 					canMoveUp: i > 0 && layers.length > 2,
 					type: 'layer',
@@ -344,6 +354,8 @@ function Timeline() {
 						lns.draw.reset();
 					}
 				});
+
+				console.log(ui);
 				
 				gridRowStart += 2;
 				gridRowEnd += 2;
@@ -373,8 +385,8 @@ function Timeline() {
 			}
 		}
 
-		timeline.setProp('--num-layers', rowCount);
-		timeline.setProp('--num-tweens', tweenCount);
+		timeline.setStyle('--num-layers', rowCount);
+		timeline.setStyle('--num-tweens', tweenCount);
 	}
 
 	function split() {

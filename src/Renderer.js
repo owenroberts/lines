@@ -1,7 +1,7 @@
 /*
 	imagining renderer src
 */
-function Renderer(params) {
+export function Renderer(params) {
 
 	let id = params.id || 'lines';
 	let dps = params.dps || 30; // ?
@@ -191,5 +191,3 @@ function Renderer(params) {
 		}
 	};
 }
-
-window.Lines.Renderer = Renderer;

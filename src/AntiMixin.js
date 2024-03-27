@@ -58,5 +58,5 @@ const AntiMixin = {
 	}
 };
 
-window.Lines.AntiMixin = AntiMixin;
+export { AntiMixin };
 

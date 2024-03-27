@@ -27,9 +27,6 @@ const LayerMixin = {
 		this.tweens.push(tween);
 		if (tween.startFrame < this.startFrame) this.startFrame = tween.startFrame;
 		if (tween.endFrame > this.endFrame) this.endFrame = tween.endFrame;
-		if (lns.anim.stateName == 'default' && lns.anim.state.end < this.endFrame) {
-			lns.anim.state.end = this.endFrame;
-		}
 	},
 
 	resetTweens() {
@@ -180,5 +177,6 @@ const LayerMixin = {
 		}
 		// console.log(this);
 	}
-
 };
+
+export { LayerMixin };

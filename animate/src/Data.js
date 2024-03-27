@@ -12,7 +12,7 @@
 	partly all here because it does save state after each ...
 */
 
-function Data(lns) {
+export function Data(lns) {
 
 	let copyFrame = []; // copy layers in frame
 	let copyFrames = []; // copy multiple frames
@@ -42,25 +42,25 @@ function Data(lns) {
 		*/
 
 		if (saveStates.current.drawings) {
-			saveStates.prev.drawings = _.cloneDeep(saveStates.current.drawings);
-			saveStates.prev.layers = _.cloneDeep(saveStates.current.layers);
+			saveStates.prev.drawings = structuredClone(saveStates.current.drawings);
+			saveStates.prev.layers = structuredClone(saveStates.current.layers);
 		} else {
-			saveStates.prev.drawings = _.cloneDeep(lns.anim.drawings);
-			saveStates.prev.layers = _.cloneDeep(lns.anim.layers);
+			saveStates.prev.drawings = structuredClone(lns.anim.drawings);
+			saveStates.prev.layers = structuredClone(lns.anim.layers);
 		}
 
-		saveStates.current.drawings = _.cloneDeep(lns.anim.drawings);
-		saveStates.current.layers = _.cloneDeep(lns.anim.layers);
+		saveStates.current.drawings = structuredClone(lns.anim.drawings);
+		saveStates.current.layers = structuredClone(lns.anim.layers);
 	}
 	
 	function undo() {
 
 		if (saveStates.prev.drawings) {
-			lns.anim.drawings = _.cloneDeep(saveStates.prev.drawings);
-			lns.anim.layers = _.cloneDeep(saveStates.prev.layers);
+			lns.anim.drawings = structuredClone(saveStates.prev.drawings);
+			lns.anim.layers = structuredClone(saveStates.prev.layers);
 			
-			saveStates.current.drawings = _.cloneDeep(saveStates.prev.drawings);
-			saveStates.current.layers = _.cloneDeep(saveStates.prev.layers);
+			saveStates.current.drawings = structuredClone(saveStates.prev.drawings);
+			saveStates.current.layers = structuredClone(saveStates.prev.layers);
 			saveStates.prev.drawings = undefined;
 			saveStates.prev.layers = undefined;
 		} else {
@@ -305,6 +305,11 @@ function Data(lns) {
 						endValue: lns.anim.drawings[layer.drawingIndex].length
 					});
 				break;
+			}
+
+			// reset end of anim
+			if (lns.anim.stateName == 'default' && lns.anim.state.end < layer.endFrame) {
+				lns.anim.state.end = layer.endFrame;
 			}
 		}
 		lns.ui.update();

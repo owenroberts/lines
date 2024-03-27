@@ -2,7 +2,10 @@
 	animation states, subset of frames 
 */
 
-function States(lns) {
+import { Elements } from '../../../ui/src/UI.js';
+const { UILabel, UIButton, UINumberStep } = Elements;
+
+export function States(lns) {
 
 	let panel;
 

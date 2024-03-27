@@ -2,7 +2,7 @@
 	play sequences based on states
 */
 
-function Sequencer(app) {
+export function Sequencer(lns) {
 
 	let panel, sequenceSelector, playToggle, frameDisplay, renderSequencer;
 

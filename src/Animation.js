@@ -6,7 +6,12 @@
 	wiggle is calculated based on the layer offset, default 5 frames
 */
 
-class Animation {
+import * as Cool from '../../cool/cool.js';
+import { Drawing } from './Drawing.js';
+import { Layer } from './Layer.js';
+
+
+export class Animation {
 	constructor(ctx, dps, multiColor, multiWidth) {
 		this.ctx = ctx;
 		this.isLoaded = false;
@@ -452,6 +457,3 @@ class Animation {
 		this.isPlaying = false;
 	}
 }
-
-window.Lines = {};
-window.Lines.Animation = Animation; // this sucks!

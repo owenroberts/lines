@@ -1,4 +1,4 @@
-class UITimelineGroup extends UICollection {
+export class UITimelineGroup extends UICollection {
 	constructor(layers, params) {
 		super(params);
 		this.index = params.index;

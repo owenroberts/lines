@@ -5,7 +5,7 @@
 	use css for this ?
 */
 
-function Background(lns) {
+export function Background(lns) {
 
 	const { canvas, ctx } = lns.renderer;
 

@@ -2,7 +2,9 @@
 	this is more like mouse events or something ... 
 */
 
-function Draw(lns, defaults) {
+import {  Drawing, Layer } from '../../src/Lines.js';
+
+export function Draw(lns, defaults) {
 
 	lns.anim.drawings.push(new Drawing());
 	lns.anim.layers.push(new Layer({ 

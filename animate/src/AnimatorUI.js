@@ -2,7 +2,7 @@
 	add randomized tweens
 	anim needs to be longer than 1 frame
 */
-function AnimatorUI(lns) {
+export function AnimatorUI(lns) {
 
 	let panel;
 	let animator;

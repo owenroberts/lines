@@ -2,7 +2,10 @@
 	collection of lines layeer settings
 */
 
-function Palette(lns) {
+import { Elements } from '../../../ui/src/UI.js';
+const { UIFile } = Elements;
+
+export function Palette(lns) {
 	
 	const palettes = {};
 	let current; // face

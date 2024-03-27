@@ -1,4 +1,4 @@
-class Layer {
+export class Layer {
 	constructor(params, drawingEndIndex) {
 		this.drawingIndex = params.drawingIndex; // fix some time
 		this.tweens = params.tweens || [];
@@ -71,5 +71,3 @@ class Layer {
 		return props;
 	}
 }
-
-window.Lines.Layer = Layer;

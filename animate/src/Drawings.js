@@ -2,7 +2,10 @@
 	view all drawings and toggle on/off in frame
 */
 
-function Drawings(lns) {
+import { Elements } from '../../../ui/src/UI.js';
+const { UIToggle } = Elements;
+
+export function Drawings(lns) {
 
 	let panel;
 

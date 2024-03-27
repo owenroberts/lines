@@ -1,3 +1,5 @@
+import { Drawing } from '../../src/Lines.js';
+
 const AnimationMixin = {
 	
 	updateProperty(prop, value) {
@@ -43,7 +45,7 @@ const AnimationMixin = {
 	},
 
 	getCurrentDrawing() {
-		return this.drawings[lns.anim.drawings.length - 1];
+		return this.drawings[this.drawings.length - 1];
 	},
 
 	addDrawing(drawing) {
@@ -73,5 +75,6 @@ const AnimationMixin = {
 			if (state.end >= index) state.end++;
 		}
 	}
-
 };
+
+export { AnimationMixin };

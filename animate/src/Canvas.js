@@ -8,7 +8,7 @@
 	not strictly UI
 */
 
-function Canvas(lns, params) {
+export function Canvas(lns, params) {
 
 	const { canvas, ctx } = lns.renderer;
 	let { width, height, scale, lineWidth, bgColor } = lns.renderer.getProps();

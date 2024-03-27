@@ -2,7 +2,7 @@
 	load and serve sprites
 */
 
-function Loader(params) {
+export function Loader(params) {
 
 	let debug = params.debug || false;
 	let relativeLoadPath = params.relativeLoadPath;
@@ -136,5 +136,3 @@ function Loader(params) {
 	return { load, getAnimation, getAnimationData, getFile };
 
 }
-
-window.Lines.Loader = Loader;

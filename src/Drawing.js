@@ -1,4 +1,6 @@
-class Drawing {
+import * as Cool from '../../cool/cool.js';
+
+export class Drawing {
 	constructor(points) {
 		this.points = [];
 		this.offsets = [];
@@ -111,7 +113,4 @@ class Drawing {
 			}
 		}
 	}
-
 }
-
-window.Lines.Drawing = Drawing;

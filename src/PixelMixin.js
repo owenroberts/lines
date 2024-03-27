@@ -138,4 +138,4 @@ const PixelMixin = {
 
 };
 
-window.Lines.PixelMixin = PixelMixin;
+export { PixelMixin };

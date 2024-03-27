@@ -2,7 +2,7 @@
 	eraser stuff
 */
 
-function Eraser(lns) {
+export function Eraser(lns) {
 
 	let isActive = false;
 	let distance = 10;

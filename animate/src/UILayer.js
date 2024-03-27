@@ -1,7 +1,13 @@
-class UILayer extends UICollection {
+import { Elements } from '../../../ui/src/UI.js';
+const { UICollection, UIToggle, UIButton, UINumberStep } = Elements;
+
+export class UILayer extends UICollection {
 	constructor(layer, params) {
 		super(params);
 		this.addClass('layer');
+
+		this.lns = params.lns; // fuck make this better ... 
+
 		this.layer = layer;
 		if (params.canMoveUp) this.canMoveUp = params.canMoveUp;
 		const width = params.width;
@@ -97,7 +103,7 @@ class UILayer extends UICollection {
 			value: layer.startFrame,
 			class: isModal ? '' : btnClass,
 			min: 0,
-			max: lns.anim.endFrame + 1,
+			max: this.lns.anim.endFrame + 1,
 			callback: value => {
 				layer.startFrame = value;
 				// if frame is set move everything -- right functionality?
@@ -127,7 +133,7 @@ class UILayer extends UICollection {
 			text: '>>',
 			class: isModal ? '' : btnClass,
 			callback: () => {
-				this.layer.endFrame = lns.anim.endFrame;
+				this.layer.endFrame = this.lns.anim.endFrame;
 				this.update();
 			}
 		});
@@ -177,16 +183,16 @@ class UILayer extends UICollection {
 			callback: () => {
 				const modal = new UIModal({
 					text: 'Merge Layer',
-					app: lns,
+					app: this.lns,
 					position: this.position,
 					callback: clearFunc,
 					clearFunc: clearFunc
 				});
 
-				for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
-					const mergeLayer = lns.anim.layers[i];
+				for (let i = 0, len = this.lns.anim.layers.length - 1; i < len; i++) {
+					const mergeLayer = this.lns.anim.layers[i];
 					if (mergeLayer === layer) continue;
-					if (!mergeLayer.isInFrame(lns.anim.currentFrame)) continue;
+					if (!mergeLayer.isInFrame(this.lns.anim.currentFrame)) continue;
 
 					modal.add(new UILabel({ text: `Layer ${i}, Drawing ${mergeLayer.drawingIndex}` }));
 
@@ -203,8 +209,8 @@ class UILayer extends UICollection {
 						text: "Merge",
 						class: 'right-end',
 						callback: () => {
-							lns.anim.merge(layer.drawingIndex, mergeLayer.drawingIndex, layer);
-							lns.anim.removeLayer(mergeLayer);
+							this.lns.anim.merge(layer.drawingIndex, mergeLayer.drawingIndex, layer);
+							this.lns.anim.removeLayer(mergeLayer);
 							clearFunc();
 							modal.clear();
 						}
@@ -221,9 +227,9 @@ class UILayer extends UICollection {
 		
 		const modal = new UIModal({
 			title: 'Edit Layer', 
-			app: lns, 
+			app: this.lns, 
 			position: this.position, 
-			callback: () => { lns.ui.update(); }
+			callback: () => { this.lns.ui.update(); }
 		});
 
 		const uis = this.getPropUIs(layer, params, true);
@@ -237,7 +243,7 @@ class UILayer extends UICollection {
 		modal.add(new UIButton({ 
 			text: "Cut Segment",
 			callback: () => {
-				const drawing = lns.anim.drawings[layer.drawingIndex];
+				const drawing = this.lns.anim.drawings[layer.drawingIndex];
 				drawing.pop(); /* remove "end" */
 				drawing.pop(); /* remove segment */
 				drawing.add('end'); /* new end */
@@ -248,7 +254,7 @@ class UILayer extends UICollection {
 		modal.add(new UIButton({
 			text: "Cut Line",
 			callback: () => {
-				const drawing = lns.anim.drawings[layer.drawingIndex];
+				const drawing = this.lns.anim.drawings[layer.drawingIndex];
 				drawing.pop(); /* remove "end" */
 				for (let i = drawing.length - 1; i > 0; i--) {
 					if (drawing.get(i)[0] !== 'end') drawing.pop();
@@ -268,8 +274,8 @@ class UILayer extends UICollection {
 			callback: () => {
 				const props = layer.getCloneProps();
 				props.startFrame = props.endFrame = layer.endFrame + 1;
-				lns.anim.addLayer(new Layer(props));
-				lns.playback.setFrame(layer.endFrame + 1);
+				this.lns.anim.addLayer(new Layer(props));
+				this.lns.playback.setFrame(layer.endFrame + 1);
 			}
 		}));
 
@@ -278,10 +284,10 @@ class UILayer extends UICollection {
 			callback: () => {
 				// move to layer mixin
 				const props = layer.getCloneProps();
-				props.startFrame = lns.anim.currentFrame + 1;
-				layer.endFrame = lns.anim.currentFrame;
-				lns.anim.addLayer(new Layer(props));
-				lns.playback.setFrame(layer.endFrame + 1);
+				props.startFrame = this.lns.anim.currentFrame + 1;
+				layer.endFrame = this.lns.anim.currentFrame;
+				this.lns.anim.addLayer(new Layer(props));
+				this.lns.playback.setFrame(layer.endFrame + 1);
 			}
 		}));
 
@@ -297,20 +303,20 @@ class UILayer extends UICollection {
 
 		const tween = {
 			prop: 'endIndex',
-			startFrame: lns.anim.currentFrame,
-			endFrame: lns.anim.currentFrame + 10,
+			startFrame: this.lns.anim.currentFrame,
+			endFrame: this.lns.anim.currentFrame + 10,
 			startValue: 0,
 			endValue: 'end'
 		};
 
 		const modal = new UIModal({
 			title: 'Add Tween', 
-			app: lns, 
+			app: this.lns, 
 			position: this.position, 
 			callback: () => {
 				if (tween.endValue === 'end' && 
 					(tween.prop === 'endIndex' || tween.prop === 'startIndex')) {
-					tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
+					tween.endValue = this.lns.anim.drawings[layer.drawingIndex].length;
 				}
 				layer.addTween(tween);
 				this.update();

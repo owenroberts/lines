@@ -34,32 +34,29 @@
 			<li><a href="game/editor/">game editor</a></li>
 		</ul>
 	</div>
-	<script src="build/lines.min.js"></script>
-	<script>
-		const src = 'example/lines.json';
-		const { Renderer, Animation } = Lines;
-		fetch(src)
-			.then(response => { return response.json(); })
-			.then(data => {
-				const renderer = Renderer({
-					width: data.w,
-					height: data.h,
-					bgColor: data.bg,
-					multiColor: data.mc,
-					frameRate: 30,
-				});
-				const animation = new Animation(renderer.ctx, 30, data.mc);
-				animation.loadData(data);
-				renderer.addCallback(() => {
-					animation.update();
-					animation.draw();
-				});
-				renderer.start();
-				animation.play();
-				console.log(renderer);
-			})
-			.catch(error => console.error(error));
-		
+	
+	<script type="module">
+		console.log('hello')
+		import data from './lines.json';
+		import { Renderer, Animation } from './src/Lines.js';
+
+		const renderer = Renderer({
+			width: data.w,
+			height: data.h,
+			bgColor: data.bg,
+			multiColor: data.mc,
+			frameRate: 30,
+		});
+
+		const animation = new Animation(renderer.ctx, 30, data.mc);
+		animation.loadData(data);
+		renderer.addCallback(() => {
+			animation.update();
+			animation.draw();
+		});
+
+		renderer.start();
+		animation.play();
 	</script>
 </body>
 </html>

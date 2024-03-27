@@ -4,7 +4,10 @@
 	maybe not if sequence is part of animate
 */
 
-function Capture(lns, params) {
+import { Elements } from '../../../ui/src/UI.js';
+const { UILabel } = Elements;
+
+export function Capture(lns, params) {
 
 	let useSequential = params.useSequentialNumbering || false;
 	let frameNum = 0; // number of caps per frame of animation
@@ -145,7 +148,7 @@ function Capture(lns, params) {
 		videoLoops = +prompt("Number of loops?", 1);
 
 		lns.anim.onDraw = function() {
-			videoLoopButton.setProp('--progress-percent', 
+			videoLoopButton.setStyle('--progress-percent', 
 				Math.round(100 * lns.anim.currentFrame / lns.anim.endFrame)
 			);
 		};
@@ -158,7 +161,7 @@ function Capture(lns, params) {
 				isVideo = false;
 				lns.anim.isPlaying = false;
 				lns.anim.onPlayedState = undefined;
-				videoLoopButton.setProp('--progress-percent', 0);
+				videoLoopButton.setStyle('--progress-percent', 0);
 				lns.anim.onDraw = undefined;
 			}
 		};
@@ -181,7 +184,7 @@ function Capture(lns, params) {
 		lns.anim.onDraw = function() {
 			if (videoFrames > 0) {
 				videoFrames--;
-				btn.setProp('--progress-percent', 
+				btn.setStyle('--progress-percent', 
 					Math.round(100 * (1 - (videoFrames / numFrames)))
 				);
 			} else if (isVideo) {
@@ -192,7 +195,7 @@ function Capture(lns, params) {
 					startVideo(true); // start recording
 				} else {
 					lns.anim.onDraw = undefined;
-					btn.setProp('--progress-percent', 0);
+					btn.setStyle('--progress-percent', 0);
 				}
 			}
 		};
