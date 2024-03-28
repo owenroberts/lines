@@ -1,4 +1,4 @@
-class SpatialHashGrid {
+export class SpatialHashGrid {
 	constructor(bounds, columns, rows) {
 		this.bounds = [[bounds.left, bounds.top], [bounds.right, bounds.bottom]];
 		this.columns = Math.floor(columns);

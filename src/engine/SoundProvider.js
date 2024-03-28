@@ -14,9 +14,9 @@
 	})
 */
 
-const { random } = Cool;
+import { random } from '../../../cool/cool.js';
 
-function SoundProvider(params={}, callback) {
+export function SoundProvider(params={}, callback) {
 	const sounds = {};
 	const baseUrl = params.baseUrl ?? './public/sfx/';
 	const audioFiles = params.audioFiles ?? []; // blank sound provider just does nothing
@@ -103,7 +103,4 @@ function SoundProvider(params={}, callback) {
 	}
 
 	return { sounds, play, pause, stop, keepPlaying };
-
 }
-
-window.LinesEngine.SoundProvider = SoundProvider;

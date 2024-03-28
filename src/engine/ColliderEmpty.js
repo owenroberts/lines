@@ -3,7 +3,7 @@
 */
 
 
-class ColliderEmpty {
+export class ColliderEmpty {
 	constructor(x, y, w, h) {
 		this.collider = [x, y, w, h];
 		this.position = [x, y];
@@ -23,8 +23,4 @@ class ColliderEmpty {
 		if (this.label) GAME.renderer.ctx.fillText(this.label, this.collider[0], this.collider[1]);
 		if (GAME.renderer.lineWidth !== 1) GAME.renderer.ctx.lineWidth = GAME.lineWidth;
 	}
-
-
 }
-
-LinesEngine.ColliderEmpty = ColliderEmpty;

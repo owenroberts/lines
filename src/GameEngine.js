@@ -26,3 +26,4 @@ import { TextureEntity } from './engine/TextureEntity.js';
 import { Toggle } from './engine/Toggle.js';
 import { UI } from './engine/UI.js';
 
+export { Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Counter, Entity, Game, GameAnim, Manager, Scene, SceneManager, SHGScene, SoundProvider, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, Toggle, UI };

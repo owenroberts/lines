@@ -3,7 +3,9 @@
 	a ui sprite that has text to render instead of animation
 */
 
-class TextButton extends UI {
+import { UI } from './UI.js';
+
+export class TextButton extends UI {
 	constructor(params) {
 		super(params);
 		// this.center = params.center || false;
@@ -37,5 +39,3 @@ class TextButton extends UI {
 		this.text.setPosition(x, y);
 	}
 }
-
-LinesEngine.TextButton = TextButton;

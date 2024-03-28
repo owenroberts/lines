@@ -15,11 +15,11 @@ export function Renderer(params) {
 	let height = params.height;
 	let clearBg = params.clearBg !== undefined ? params.clearBg : true;
 
-	const canvas = document.getElementById(id);
+	let canvas = document.getElementById(id);
 	if (!canvas) {
 		canvas = document.createElement("canvas");
 		canvas.id = id;
-		document.body.appendChild(this.canvas);
+		document.body.appendChild(canvas);
 	}
 
 	const ctx = canvas.getContext('2d');

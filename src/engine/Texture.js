@@ -2,7 +2,7 @@
 	draws frames from one animation in multuple places (locations)	
 */
 
-class Texture {
+export class Texture {
 	constructor(params, debug) {
 		this.debug = debug;
 		this.locations = params.locations || [];
@@ -102,5 +102,3 @@ class Texture {
 		this.offset[1] = offset[1];
 	}
 }
-
-window.LinesEngine.Texture = Texture;

@@ -19,9 +19,14 @@
 	later add sound
 */
 
-const { Renderer, Loader } = window.Lines;
+import { Renderer, Loader } from '../Lines.js';
+import { Scene } from './Scene.js';
+import { SceneManager } from './SceneManager.js';
+import { GameAnim } from './GameAnim.js';
+import Stats from 'stats.js';
+import * as Cool from '../../../cool/cool.js';
 
-class Game {
+export class Game {
 	constructor(params) {
 		window.GAME = this; // for references in sub classes
 		this.renderer = new Renderer({ dps: 60, clearBg: false, ...params }); // update 60
@@ -126,7 +131,6 @@ class Game {
 			this.drawStats.dom.style.top = '48px';
 
 		}
-		
 	}
 
 	setView(width, height) {
@@ -295,6 +299,3 @@ class Game {
 		});
 	}
 }
-
-window.LinesEngine = {};
-window.LinesEngine.Game = Game; // need for iife and prob need later, still weird

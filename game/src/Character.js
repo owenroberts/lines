@@ -1,12 +1,12 @@
 /* separate classes forlder */
 
-const { Sprite } = window.LinesEngine;
+import { Sprite } from '../../src/GameEngine.js';
 
-class Character extends Sprite {
-	constructor(x, y) {
+export class Character extends Sprite {
+	constructor(x, y, animation) {
 		super(x, y);
 		this.speed = [0, 0]; /* sprite physics has velocity ... */
-		this.addAnimation(gme.anims.data.sprite);
+		this.addAnimation(animation);
 	}
 
 	update() {

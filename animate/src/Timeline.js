@@ -235,14 +235,6 @@ export function Timeline(lns) {
 
 				const colWidth = (tlFrameWidth + 2) * (Math.floor(layer.endFrame / tlInc) - Math.floor(layer.startFrame / tlInc) + 1);
 
-				console.log({
-						width: colWidth + 'px',
-						gridRowStart: gridRowStart, // 2 + (i * 2),
-						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
-						gridColumnStart: Math.floor(layer.startFrame / tlInc) * 2 + 1,
-						gridColumnEnd: Math.floor(layer.endFrame / tlInc) * 2 + 3
-					}
-					)
 				const ui = new UILayer(layer, {
 					lns: lns,
 					group: viewGroups ? undefined : groups[layer.groupNumber],
@@ -355,8 +347,6 @@ export function Timeline(lns) {
 					}
 				});
 
-				console.log(ui);
-				
 				gridRowStart += 2;
 				gridRowEnd += 2;
 				rowCount++;

@@ -6,8 +6,9 @@
 	sprite position is draw position - origin + offset
 	origin is really map position
 */
+import { Sprite } from './Sprite.js';
 
-class Entity extends Sprite {
+export class Entity extends Sprite {
 	constructor(params, debug) {
 		super(params.x, params.y, params.animation);
 		this.debug = debug;

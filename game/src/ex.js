@@ -3,11 +3,12 @@
 	not necessarily best approach
 */
 
-const { Game, Texture, Button, TextSprite } = window.LinesEngine;
+import { Game, Texture, Button, TextSprite } from '../../src/GameEngine.js';
+import { Character } from './Character.js';
 
 const gme = new Game({
-	width: window.innerWidth, 
-	height: window.innerHeight, 
+	width: 700,
+	height: 600,
 	dps: 30,
 	stats: true,
 	debug: false,
@@ -15,37 +16,39 @@ const gme = new Game({
 	checkRetina: true,
 	scenes: ['walk', 'drag']
 });
-gme.load({ data: "ex/data.json" });
+gme.load({ animations: { sprites: "./data.json" } });
 gme.scene = 'walk';
+
+console.log('gme', gme);
 
 let char;
 let waves;
 
 gme.start = function() {
 
-	char = new Character(300, 300);
+	char = new Character(300, 300, gme.anims.sprites.sprite);
 	gme.scenes.walk.addSprite(char);
 
 	waves = new Texture({
 		frame: 'random',
 		center: true,
-		animation: gme.anims.data.waves
+		animation: gme.anims.sprites.waves
 	});
 	waves.addLocation(100, 400);
 	waves.addLocation(300, 400);
 	waves.addLocation(500, 400);
 
 	// waves = new Sprite(400, 400);
-	// waves.addAnimation(gme.anims.data.waves);
+	// waves.addAnimation(gme.anims.sprites.waves);
 	// waves.animation.randomFrames = true;
 	gme.scenes.walk.addToDisplay(waves);
 
-	const title = new TextSprite(10, 40, "welcome to the game", 10, gme.anims.data.letters, 'abcdefghijklmnopqrstuvwxyz0123456789.,:?EFASDW....MJKLQ');
+	const title = new TextSprite({ x: 10, y: 40, msg: "welcome to the game", lead: 10, letters: gme.anims.sprites.letters, letterIndexString: 'abcdefghijklmnopqrstuvwxyz0123456789.,:?EFASDW....MJKLQ' });
 	gme.scenes.walk.addToDisplay(title);
 
 	const joinGame = new Button({ 
 		x: 400, y: 100, 
-		animation: gme.anims.data['join_game'], 
+		animation: gme.anims.sprites['join_game'], 
 		states: {
 			"idle": { "start": 0, "end": 0 },
 			"over": { "start": 1, "end": 1 },
@@ -57,7 +60,6 @@ gme.start = function() {
 		}
 	});
 	gme.scenes.walk.addUI(joinGame);
-
 };
 
 gme.update = function() {

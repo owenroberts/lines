@@ -1,4 +1,6 @@
-class Scene {
+import { SpriteCollection } from './SpriteCollection.js';
+
+export class Scene {
 	constructor() {
 		this.displaySprites = new SpriteCollection();
 		this.updateSprites = new SpriteCollection();
@@ -79,5 +81,3 @@ class Scene {
 		this.uiSprites.all(sprite => { sprite.up(x, y); });
 	}
 }
-
-LinesEngine.Scene = Scene;

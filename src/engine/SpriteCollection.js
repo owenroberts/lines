@@ -3,7 +3,7 @@
 	also used by game asset managers like pack or map
 */
 
-class SpriteCollection {
+export class SpriteCollection {
 	constructor(sprites) {
 		this.sprites = sprites ? [...sprites] : [];
 	}
@@ -62,8 +62,4 @@ class SpriteCollection {
 	up(x, y) {
 		this.all(sprite => { sprite.up(x, y); });
 	}
-
-
 }
-
-LinesEngine.SpriteCollection = SpriteCollection;

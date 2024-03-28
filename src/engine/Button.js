@@ -2,7 +2,9 @@
 	ColliderSprite -> UI -> Button
 */
 
-class Button extends UI {
+import { UI } from './UI.js';
+
+export class Button extends UI {
 	constructor(params, debug) {
 		super(params, debug);
 
@@ -40,5 +42,3 @@ class Button extends UI {
 		return up;
 	}
 }
-
-window.LinesEngine.Button = Button;

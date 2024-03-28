@@ -1,4 +1,6 @@
-class SceneManager extends Manager {
+import { Manager } from './Manager.js';
+
+export class SceneManager extends Manager {
 	add(item, scenes, which) {
 		// default values?
 		if (typeof scenes == 'string') scenes = [scenes];

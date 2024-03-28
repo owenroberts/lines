@@ -1,0 +1,8 @@
+{
+	"join_game": { "src": "./sprites/join_game.json" },
+	"sprite": { "src": "./sprites/sprite.json" },
+	"trees": { "src": "./sprites/trees.json" },
+	"waves": { "src": "./sprites/waves.json" },
+	"wiggle_char": { "src": "./sprites/wiggle_char.json" },
+	"letters": { "src": "./sprites/letters.json" }
+}

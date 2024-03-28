@@ -7,8 +7,9 @@
 	and it if need both ...
 	add collider as sub class ... so a collider can be added to sprite or entity
 */
+import { ColliderSprite } from './ColliderSprite.js';
 
-class ColliderEntity extends ColliderSprite {
+export class ColliderEntity extends ColliderSprite {
 	constructor(params, debug) {
 		super(params.x, params.y);
 		this.debug = debug;
@@ -34,5 +35,3 @@ class ColliderEntity extends ColliderSprite {
 		this.origin[1] = y;
 	}
 }
-
-LinesEngine.ColliderEntity = ColliderEntity;

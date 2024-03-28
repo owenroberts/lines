@@ -3,7 +3,9 @@
 	better name like user interface element? UISprite?
 */
 
-class UI extends ColliderSprite {
+import { ColliderSprite } from './ColliderSprite.js';
+
+export class UI extends ColliderSprite {
 	constructor(params, debug) {
 		/* xy orientation to game window */
 		let x = params.x;
@@ -68,5 +70,3 @@ class UI extends ColliderSprite {
 
 	}
 }
-
-LinesEngine.UI = UI;

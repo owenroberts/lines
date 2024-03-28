@@ -1,3 +1,5 @@
+import { Game } from '../../src/GameEngine.js';
+
 const gme = new Game({
 	canvas: "map",
 	width: 1600,
@@ -11,7 +13,6 @@ const gme = new Game({
 	suspend: true,
 	isEditor: true,
 }); // maybe there's a way to use the garden js file here? modules & exports :O
-
 
 const edi = {}; /* editor app */
 edi.ui = new Interface(edi);

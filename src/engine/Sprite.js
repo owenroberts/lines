@@ -4,7 +4,7 @@
 	physics and scaling removed in recent version
 */
 
-class Sprite {
+export class Sprite {
 	constructor(x, y, animation, callback) {
 		this.position = [Math.round(x) || 0, Math.round(y) || 0];
 		this.size = [0, 0]; // set by animation
@@ -90,5 +90,3 @@ class Sprite {
 		);
 	} 
 }
-
-window.LinesEngine.Sprite = Sprite;

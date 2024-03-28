@@ -6,7 +6,7 @@
 	issue is really having mulitple classes for Entity, Sprite, ColliderSprite, ColliderEntity
 */
 
-class Collider {
+export class Collider {
 	constructor(x, y, w, h) {
 		this.position = [x, y];
 		this.size = [w, h];
@@ -22,5 +22,3 @@ class Collider {
 		this.size = [x, y];
 	}
 }
-
-LinesEngine.Collider = Collider;

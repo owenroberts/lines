@@ -1,6 +1,6 @@
-const { Animation } = window.Lines;
+import { Animation } from '../Lines.js';
 
-class GameAnim extends Animation {
+export class GameAnim extends Animation {
 	constructor(debug) {
 		const { dps, multiColor } = GAME.renderer.getProps();
 		super(GAME.renderer.ctx, dps, multiColor);
@@ -98,5 +98,3 @@ class GameAnim extends Animation {
 		return layers;
 	}
 }
-
-window.LinesEngine.GameAnim = GameAnim;

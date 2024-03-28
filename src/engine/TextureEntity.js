@@ -3,7 +3,9 @@
 	only supports index states for now
 */
 
-class TextureEntity extends Entity {
+import { Entity } from './Entity.js';
+
+export class TextureEntity extends Entity {
 	constructor(params, debug) {
 		super(params, debug);
 		this.center = false;

@@ -4,7 +4,7 @@
 	basically allows you to set with a string and get an object
 */
 
-class Manager {
+export class Manager {
 	constructor(list, className) {
 		// this.classType = className;
 		for (let i = 0; i < list.length; i++) {
@@ -29,5 +29,4 @@ class Manager {
 	get list() {
 		return this.names;
 	}
-
 }

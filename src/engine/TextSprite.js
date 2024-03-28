@@ -4,7 +4,7 @@
 	maybe just check first?
 */
 
-class TextSprite {
+export class TextSprite {
 	constructor(params) { 
 		this.x = Math.round(params.x || 0);
 		this.y = Math.round(params.y || 0);
@@ -216,5 +216,3 @@ class TextSprite {
 		}
 	}
 }
-
-LinesEngine.TextSprite = TextSprite;

@@ -3,7 +3,9 @@
 	button with added toggled state
 */
 
-class Toggle extends Button {
+import { Button } from './Button.js';
+
+export class Toggle extends Button {
 	constructor(params, debug) {
 		super(params, debug);
 		this.toggled = false;

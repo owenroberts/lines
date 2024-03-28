@@ -4,7 +4,9 @@
 	could have mouse sprite, or ui sprite ...
 */
 
-class ColliderSprite extends Sprite {
+import { Sprite } from './Sprite.js';
+
+export class ColliderSprite extends Sprite {
 	constructor(x, y, animation, callback) {
 		super(x, y);
 
@@ -140,5 +142,3 @@ class ColliderSprite extends Sprite {
 		this.clickStarted = false;
 	}
 }
-
-LinesEngine.ColliderSprite = ColliderSprite;

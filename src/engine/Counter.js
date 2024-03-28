@@ -5,7 +5,7 @@
 */
 
 
-class Counter {
+export class Counter {
 	constructor(duration=24, callback) {
 		this.count = 0;
 		this.duration = duration;
@@ -48,5 +48,3 @@ class Counter {
 		// console.log(count, this.count, this.duration)
 	}
 }
-
-LinesEngine.Counter = Counter;
