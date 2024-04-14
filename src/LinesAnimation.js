@@ -10,8 +10,7 @@ import * as Cool from '../../cool/cool.js';
 import { Drawing } from './Drawing.js';
 import { Layer } from './Layer.js';
 
-
-export class Animation {
+export class LinesAnimation {
 	constructor(ctx, dps, multiColor, multiWidth) {
 		this.ctx = ctx;
 		this.isLoaded = false;

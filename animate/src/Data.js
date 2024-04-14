@@ -78,8 +78,9 @@ export function Data(lns) {
 
 		// -1 dont copy draw frame 
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame))
+			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
 				copyFrame.push(lns.anim.layers[i]);
+			}
 		}
 	} /* c key */
 
@@ -418,5 +419,5 @@ export function Data(lns) {
 		]);
 	}
 
-	return { connect, saveState };
+	return { connect, saveState, copy, paste };
 }

@@ -94,9 +94,8 @@ export function Loader(params) {
 	}
 
 	function handleError(error, fileName) {
-		console.log(fileName);
 		console.error('file load error', error);
-		console.log(data,fileName);
+		console.log(data, fileName);
 		// assets[fileName].loaded = true; //  need this? --> prob not since i didn't use right syntax
 		// loaded[fileName].isLoaded = true; 
 	}

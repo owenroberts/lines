@@ -11,8 +11,10 @@ const AnimationMixin = {
 
 	addLayer(layer) {
 		// add before draw layer
-		if (this.layers.indexOf(layer) == -1)
-			this.layers.splice(lns.anim.layers.length - 1, 0, layer);
+		console.log(this);
+		if (this.layers.indexOf(layer) == -1) {
+			this.layers.splice(this.layers.length - 1, 0, layer);
+		}
 	},
 
 	removeLayer(layer) {

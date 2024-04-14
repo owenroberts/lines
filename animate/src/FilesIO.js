@@ -1,6 +1,10 @@
 /*
 	some of this should be in ui now
 */
+import { saveAs } from 'file-saver';
+import { LinesAnimation } from '../../src/Lines.js';
+import { Elements } from '../../../ui/src/UI.js';
+const { UIModal, UIButton } = Elements;
 
 export function FilesIO(lns, params) {
 
@@ -172,7 +176,7 @@ export function FilesIO(lns, params) {
 	function loadJSON(data, fName) {
 		const { ctx, canvas } = lns.renderer;
 		const { dps } = lns.renderer.getProps();
-		lns.anim = new Animation(ctx, dps, true);
+		lns.anim = new LinesAnimation(ctx, dps, true);
 		lns.anim.loadData(data, () => {
 			// lns.canvas.setWidth(data.w);
 			// lns.canvas.setHeight(data.h);
@@ -256,13 +260,9 @@ export function FilesIO(lns, params) {
 		}
 	}
 
-	if (window.File && window.FileReader && window.FileList && window.Blob) {
-		saveFilesEnabled = true;
-		console.log("%c Save file enabled ", "color:lightgreen;background:black;");
-		lns.renderer.canvas.addEventListener('dragover', dragOverHandler);
-		lns.renderer.canvas.addEventListener('drop', dropHandler);
-		// https://gist.github.com/andjosh/7867934
-	}
+
+	lns.renderer.canvas.addEventListener('dragover', dragOverHandler);
+	lns.renderer.canvas.addEventListener('drop', dropHandler);
 
 	function dropHandler(ev) {
  		ev.preventDefault();

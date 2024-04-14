@@ -1,3 +1,5 @@
+import { Layer } from '../../src/Lines.js';
+
 const LayerMixin = {
 
 	init(params) {

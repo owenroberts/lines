@@ -233,7 +233,16 @@ export function Playback(lns, params) {
 			// play btn
 			{ callback: toggle, type: 'UIToggle', value: false, text: 'Play', "onText": "❚❚", "offText": "▶", key: 'space' },
 			{ callback: next, key: 'e', text: '▶', args: [1] },
-			{ callback: plus, key: '+', text: '+'}
+			{ callback: plus, key: '+', text: '+'},
+			{
+				key: 'q',
+				text: '⎘',
+				callback: () => {
+					lns.data.copy();
+					next(1);
+					lns.data.paste();
+				}
+			}
 		], 'play');
 	
 		frameDisplay = lns.ui.addUI({ 

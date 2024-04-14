@@ -3,7 +3,7 @@
 */
 
 import { Elements } from '../../../ui/src/UI.js';
-const { UIFile } = Elements;
+const { UIFile, UIModal, UIButton, UIText } = Elements;
 
 export function Palette(lns) {
 	
@@ -205,7 +205,7 @@ export function Palette(lns) {
 		lns.ui.addCallbacks([
 			{ callback: saveFile, text: 'Save File', row: true, },
 			{ callback: buildFromAnimation, key: 'shift-p', text: 'Build', },
-			{ callback: quickSelect, key: 'q', text: 'Quick Select', },
+			{ callback: quickSelect, key: 'p', text: 'Quick Select', },
 		]);
 
 		panel.add(new UIFile({
@@ -215,7 +215,7 @@ export function Palette(lns) {
 		}));
 
 		lns.ui.addCallbacks([
-			{ callback: add, key: 'p', text: '+', row: true, },
+			{ callback: add, key: 'ctrl-p', text: '+', row: true, },
 		]);
 	}
 

@@ -1,6 +1,6 @@
 import '../css/animate.scss';
 
-import { Renderer, Animation, Animator, Drawing, Layer, AntiMixin, PixelMixin } from '../../src/Lines.js';
+import { Renderer, LinesAnimation, Animator, Drawing, Layer, AntiMixin, PixelMixin } from '../../src/Lines.js';
 
 import { Interface, Settings, Elements } from '../../../ui/src/UI.js';
 
@@ -36,7 +36,7 @@ import { Timeline } from './Timeline.js';
 const lns = {};
 
 Object.assign(Layer.prototype, LayerMixin);
-Object.assign(Animation.prototype, AnimationMixin);
+Object.assign(LinesAnimation.prototype, AnimationMixin);
 Object.assign(Drawing.prototype, DrawingMixin);
 
 const params = {};
@@ -59,7 +59,7 @@ lns.renderer = Renderer({
 });
 
 
-lns.anim = new Animation(lns.renderer.ctx, 30, true, true);
+lns.anim = new LinesAnimation(lns.renderer.ctx, 30, true, true);
 
 // modules
 lns.playback = Playback(lns, { stats: false }); // (dps, stats?)
@@ -141,13 +141,12 @@ lns.ui.settings = new Settings(lns, {
 		}
 	],
 	appSave() {
-
 		return {
 			palettes: lns.palette.getPalettes(), 
 		};
 	},
 	appLoad(settings) {
-		if (settings.interface) lns.palette.setup(settings.interface.palettes);
+		if (settings.inteface) lns.palette.setup(settings.inteface.palettes);
 	}
 });
 // lns.ui.settings.load();

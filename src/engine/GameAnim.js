@@ -1,4 +1,4 @@
-import { Animation } from '../Lines.js';
+import { LinesAnimation } from '../Lines.js';
 
 export class GameAnim extends Animation {
 	constructor(debug) {
