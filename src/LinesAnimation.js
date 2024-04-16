@@ -95,8 +95,9 @@ export class LinesAnimation {
 
 		// reset end of default anim to anim end
 		if (this.states.default) {
-			if (this.states.default.end !== this.endFrame)
+			if (this.states.default.end !== this.endFrame) {
 				this.states.default.end = this.endFrame;
+			}
 		}
 	}
 
@@ -113,11 +114,13 @@ export class LinesAnimation {
 
 	set state(state) {
 		if (this._state !== state && this.states[state]) {
+			console.log('new state', state)
 			this._state = state;
 			if (this.state) {
-				if (this.state.dir === 1) this.frame = this.state.start;
-				if (this.state.dir === -1) this.frame = this.state.end;
+				if (this.state.dir === 1) this.currentFrame = this.state.start;
+				if (this.state.dir === -1) this.currentFrame = this.state.end;
 			}
+			// console.log(this.currentFrame);
 			// maybe remove this from default and add it to game anim
 			// or add separate setState func with param
 		}
@@ -151,6 +154,8 @@ export class LinesAnimation {
 			if (this.drawCount >= this.drawsPerFrame - 1) { // >== instead of === in case dpf changed
 
 				if (this.sequenceIndex >= 0) {
+					// so this happens once? at the beginning ??
+					// sequence and clip class? are they managers? or FSMs?
 					const seq = this.sequences[this.sequenceIndex];
 					const clip = seq.clips[seq.clipIndex];
 					this.states[clip.state].dir = clip.dir; // this will be bad at some point ... 
@@ -162,6 +167,7 @@ export class LinesAnimation {
 					if (this.currentFrame >= this.state.end) {
 						this.currentFrame = this.state.start;
 						playedState = true;
+						// console.log(playedState, this.currentFrame);
 					} else {
 						this.currentFrame++;
 					}
@@ -190,10 +196,15 @@ export class LinesAnimation {
 							if (seq.clipIndex >= seq.clips.length) {
 								seq.clipIndex = 0;
 							}
+							const next = seq.clips[seq.clipIndex];
+							this.states[next.state].dir = next.dir; // this will be bad at some point ... 
+							this.state = next.state;
+
 						}
 					}
 				}
 
+				console.log(playedState, this.currentFrame);
 				
 				
 				this.drawCount = 0;
