@@ -211,15 +211,8 @@ export function Playback(lns, params) {
 			lns.eraser.display();
 		}
 
-		if (lns.sequencer.isActive()) {
-			const f = lns.sequencer.getFrame();
-			lns.anim.frame = f;
-			frameDisplay.value = f;
-			if (lns.sequencer.isPlaying()) lns.timeline.update();
-		} else {
-			lns.anim.update();
-		}
 
+		lns.anim.update();
 		lns.anim.draw();
 	}
 

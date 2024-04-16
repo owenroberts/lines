@@ -40,6 +40,8 @@ export class LinesAnimation {
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
 		this.states = { 'default': { start: 0, end: 0 } };
+		this.sequences = [];
+		this.sequenceIndex = -1;
 
 		this.layerColor;
 		this.suspendUpdate = false;
@@ -112,7 +114,10 @@ export class LinesAnimation {
 	set state(state) {
 		if (this._state !== state && this.states[state]) {
 			this._state = state;
-			if (this.state) this.frame = this.state.start;
+			if (this.state) {
+				if (this.state.dir === 1) this.frame = this.state.start;
+				if (this.state.dir === -1) this.frame = this.state.end;
+			}
 			// maybe remove this from default and add it to game anim
 			// or add separate setState func with param
 		}
@@ -144,13 +149,53 @@ export class LinesAnimation {
 		if (this.isPlaying) {
 			// console.log(this.currentFrame, this.drawCount, this.drawsPerFrame);
 			if (this.drawCount >= this.drawsPerFrame - 1) { // >== instead of === in case dpf changed
-				if (this.currentFrame >= this.state.end) {
-					this.currentFrame = this.state.start;
+
+				if (this.sequenceIndex >= 0) {
+					const seq = this.sequences[this.sequenceIndex];
+					const clip = seq.clips[seq.clipIndex];
+					this.states[clip.state].dir = clip.dir; // this will be bad at some point ... 
+					this.state = clip.state;
+				}
+
+				let playedState = false;
+				if (this.state.dir === 1) {
+					if (this.currentFrame >= this.state.end) {
+						this.currentFrame = this.state.start;
+						playedState = true;
+					} else {
+						this.currentFrame++;
+					}
+				} else {
+					if (this.currentFrame <= this.state.start) {
+						this.currentFrame = this.state.end;
+						playedState = true;
+					} else {
+						this.currentFrame--;
+					}
+				}
+
+				if (playedState) {
 					if (this.onPlayedState) this.onPlayedState();
 					if (this.onPlayedOnce) this.onPlayedOnce();
-				} else {
-					this.currentFrame++;
+
+					if (this.sequenceIndex >= 0) {
+						const seq = this.sequences[this.sequenceIndex];
+						const clip = seq.clips[seq.clipIndex];
+						
+						clip.count++;
+						
+						if (clip.count >= clip.repeat) {
+							clip.count = 0;
+							seq.clipIndex++;
+							if (seq.clipIndex >= seq.clips.length) {
+								seq.clipIndex = 0;
+							}
+						}
+					}
 				}
+
+				
+				
 				this.drawCount = 0;
 			} else {
 				this.drawCount++;
@@ -395,8 +440,12 @@ export class LinesAnimation {
 			this.states[key] = {
 				start: json.s[key][0],
 				end: json.s[key][1],
+				dir: json.s[key][2] ?? 1,
 			};
 		}
+
+		this.sequences = structuredClone(json.q);
+		this.sequenceIndex = json.qi;
 		
 
 		if (this.states.default) this.states.default.end = this.endFrame;

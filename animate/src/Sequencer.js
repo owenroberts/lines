@@ -8,10 +8,11 @@ import { UIClip } from './UIClip.js';
 
 export function Sequencer(lns) {
 
-	let panel, sequenceSelector, playToggle, frameDisplay, renderSequencer;
+	let panel, sequenceSelector, currentSequenceSelector;
 
 	let sequences = [];
 	let sequenceIndex = 0;
+	let currentSequence = -1;
 	let isPlaying = false;
 	let currentFrame = 0;
 	let drawCount = 0;
@@ -22,11 +23,14 @@ export function Sequencer(lns) {
 		if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();
 		const index = sequences.length;
 		if (!name) name = prompt('Name this sequence') || 'Sequence ' + index;
-		const sequence = new UISequence({ name: name, class: 'row' });
+		const sequence = new UISequence({ name: name, class: 'row', update });
 		panel.add(sequence, 'sequence-' + index);
 		sequences.push(sequence);
 		sequenceSelector.addOption(index, name);
-		sequenceSelector.value = index;
+		currentSequenceSelector.addOption(index, name);
+		sequenceSelector.update(index);
+		panel.addBreak();
+		update();
 	}
 
 	function addClip(params) {
@@ -35,16 +39,24 @@ export function Sequencer(lns) {
 		const index = sequence.clips.length;
 		const clip = new UIClip({
 			...params,
+			update,
 			remove: () => {
 				sequence.removeClip(clip);
 			}
 		});
 		sequence.addClip(clip);
+		update();
 	}
 
-	function getData() {
+	function update() {
 		if (sequences.length === 0) return false;
-		return sequences.map(s => { return { name: s.name, clips: s.getData(), }});
+		// return sequences.map(s => { return { name: s.name, clips: s.getData(), }});
+		lns.anim.sequences = sequences.map(s => { return { 
+			name: s.name,
+			clips: s.getData(),
+			clipIndex: 0,
+		}});
+		lns.anim.sequenceIndex = currentSequence;
 	}
 
 	function load(data) {
@@ -54,73 +66,20 @@ export function Sequencer(lns) {
 		});
 	}
 
-	function getFrame() {
-		if (sequences.length === 0) return; 
-
-		const sequence = sequences[sequenceIndex];
-		if (isPlaying) {
-			if (drawCount === lns.anim.dpf) {
-				drawCount = 0;
-				currentFrame++;
-				if (currentFrame >= sequence.getEndFrame()) {
-					currentFrame = 0;
-					playToggle.update(false);
-					if (isCapturing) {
-						lns.capture.stopVideo();
-						isCapturing = false;
-					}
-				}
-			} else {
-				drawCount++;
-			}
-		}
-		frameDisplay.value = currentFrame;
-		return sequence.getFrame(currentFrame);
-	}
-
 	function connect() {
 
 		panel = lns.ui.getPanel('sequencer');
 
-		renderSequencer = lns.ui.addProp('renderSequencer', {
-			type: 'UIToggleCheck',
-			value: false,
-			callback: value => { isActive = value; },
-			key: 'alt-q',
-		});
-
-		panel.addRow();
-
-		playToggle = lns.ui.addUI({
-			type: 'UIToggle', 
-			value: false,
-			"onText": "❚❚", 
-			"offText": "▶",
+		currentSequenceSelector = lns.ui.addProp('currentSequence', {
+			type: 'UISelect',
+			options: [{ value: -1, text: 'None' }],
 			callback: value => {
-				isPlaying = value;
-				if (isPlaying && !isActive) renderSequencer.update(true);
-			}, 
-			key: 'alt-space',
- 		});
-
-		frameDisplay = lns.ui.addUI({ 
-			type: "UINumberStep",
-			value: 0,
-			callback: value => { currentFrame = value }, 
-		});
-
-		lns.ui.addCallback({
-			text: 'Capture',
-			callback: () => {
-				isCapturing = true;
-				lns.capture.startVideo();
-				currentFrame = 0;
-				if (!isPlaying) playToggle.update(true);
-				if (!isActive) renderSequencer.update(true);
+				currentSequence = value;
+				update();
 			}
 		});
 
-		panel.addRow();
+		panel.addBreak();
 
 		lns.ui.addCallbacks([
 			{ callback: addSequence, text: 'Add Sequence', },
@@ -130,7 +89,6 @@ export function Sequencer(lns) {
 		// save in settings before load means it tries to set non existent value ...
 		sequenceSelector = lns.ui.addProp('sequenceSelector', {
 			type: 'UISelect',
-			options: sequences.map((seq, index) => { return { value: index, text: seq.name }}),
 			callback: value => {
 				if (!sequences[sequenceIndex]) return; // settings err
 				sequences[sequenceIndex].hide();
@@ -139,11 +97,9 @@ export function Sequencer(lns) {
 				lns.timeline.update();
 			}
 		});
+
+		panel.addBreak();
 	}
 
-	return { 
-		connect, load, getData, getFrame,
-		isActive() { return isActive && sequences.length > 0; },
-		isPlaying() { return isPlaying },
-	};
+	return { connect, load, update, };
 }

@@ -51,12 +51,16 @@ export function FilesIO(lns, params) {
 		if (states.length > 0) {
 			json.s = {};
 			states.forEach(state => {
-				json.s[state] = [lns.anim.states[state].start, lns.anim.states[state].end];
+				json.s[state] = [
+					lns.anim.states[state].start, 
+					lns.anim.states[state].end,
+					lns.anim.states[state].dir ?? 1,
+				];
 			});
 		}
 
-		const sequences = lns.sequencer.getData();
-		if (sequences) json.q = sequences;
+		// const sequences = lns.sequencer.getData();
+		json.q = structuredClone(lns.anim.sequences);
 
 		return json;
 	}

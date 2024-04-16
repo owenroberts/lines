@@ -5,38 +5,49 @@ export class UIClip extends UICollection {
 	constructor(params) {
 		super(params);
 		if (!params.state) this.setState();
-		this.state = params.state || 'default';
-		this.repeat = params.repeat || 1;
 		this.addClass('clip');
+		this.update = params.update;
 
-		this.label = new UILabel({ text: 'State ' + this.state });
+		this.state = params.state ?? 'default';
+		this.repeat = params.repeat ?? 1;
+		this.dir = params.dir ?? 1;
 
-		const repeat = new UINumberStep({
-			label: 'Repeat',
+		this.label = this.add(new UILabel({ text: this.state }));
+		this.add(new UIButton({
+			text: 'Change',
+			callback: () => { 
+				this.setState();
+				this.update();
+			},
+		}));
+
+		// repeat
+		this.add(new UINumberStep({
 			value: this.repeat,
-			callback: value => { this.repeat = value; }
-		});
+			callback: value => { 
+				this.repeat = value;
+				this.update();
+			}
+		}));
 
-		this.add(this.label);
-		const row = new UIRow();
-		this.add(row);
+		// dir override
+		this.add(new UISelect({
+			value: this.dir,
+			options: [-1, 1],
+			callback: value => { 
+				this.dir = +value;
+				this.update();
+			}
+		}))
 
-		const change = new UIButton({
-			text: 'Change State',
-			callback: () => { this.setState() },
-		});
-
-		row.add(change);
-
-		row.add(new UILabel({ text: 'Repeat' }));
-		row.add(repeat);
-
-		const remove = new UIButton({
+		// remove
+		this.add(new UIButton({
 			text: 'X',
-			callback: () => { params.remove() },
-		});
-
-		row.add(remove);
+			callback: () => { 
+				params.remove();
+				this.update();
+			},
+		}));
 
 		// edit button to return timeline
 		// swap button if its useful
@@ -51,14 +62,18 @@ export class UIClip extends UICollection {
 			callback: () => {
 				if (!state) return;
 				this.state = state;
-				this.label.text = 'State ' + this.state;
+				this.label.text = this.state;
+				this.update();
 			}
 		});
 
 		const selector = new UISelect({
 			options: Object.keys(lns.anim.states),
 			value: state,
-			callback: value => { state = value; }
+			callback: value => { 
+				state = value;
+				this.update();
+			}
 		});
 		m.add(selector);
 	}
@@ -76,6 +91,8 @@ export class UIClip extends UICollection {
 		return {
 			state: this.state,
 			repeat: this.repeat,
+			dir: this.dir,
+			count: 0,
 		};
 	}
 }

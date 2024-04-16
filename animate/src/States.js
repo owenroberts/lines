@@ -3,7 +3,7 @@
 */
 
 import { Elements } from '../../../ui/src/UI.js';
-const { UILabel, UIButton, UINumberStep } = Elements;
+const { UILabel, UIButton, UINumberStep, UISelect } = Elements;
 
 export function States(lns) {
 
@@ -31,8 +31,8 @@ export function States(lns) {
 
 		row.append(new UIButton({
 			text: '⊙',
-			callback() { set(name); }
-		}))
+			callback: () => { set(name); }
+		}));
 
 		row.append(new UINumberStep({
 			value: state.start,
@@ -43,6 +43,16 @@ export function States(lns) {
 			value: state.end,
 			callback: value => { state.end = value; }
 		}), 'end');
+
+		row.append(new UISelect({
+			value: state.dir ?? 1,
+			options: [-1, 1],
+			callback: value => { 
+				state.dir = +value; 
+				console.log(value) 
+				console.log(state);
+			}
+		}), 'dir');
 
 		row.append(new UIButton({
 			text: "x",
@@ -91,7 +101,8 @@ export function States(lns) {
 		if (!name) return;
 		addUI(name, { 
 			start: lns.anim.currentFrame, 
-			end: lns.anim.currentFrame 
+			end: lns.anim.currentFrame,
+			dir: 1, // -1 or 1, new thing 
 		}, true);
 		lns.anim.state = name;
 		lns.ui.faces.stateSelect.value = name;

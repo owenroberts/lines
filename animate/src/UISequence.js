@@ -4,19 +4,24 @@ const { UICollection } = Elements;
 export class UISequence extends UICollection {
 	constructor(params) {
 		super(params);
+		this.addClass('ui-sequence');
 		this.name = params.name;
 		this.clips = [];
+		this.update = params.update;
 	}
 
 	addClip(clip) {
 		this.clips.push(clip);
 		this.add(clip);
+		// this.addBreak();
+		this.update();
 	}
 
 	removeClip(clip) {
 		const index = this.clips.indexOf(clip);
 		this.clips.splice(index, 1);
 		this.remove(clip);
+		this.update();
 	}
 
 	show() {
