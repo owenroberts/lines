@@ -2,6 +2,8 @@
 	eraser stuff
 */
 
+import * as Cool from '../../../cool/cool.js';
+
 export function Eraser(lns) {
 
 	let isActive = false;

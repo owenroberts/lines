@@ -162,3 +162,4 @@ if (params.src) {
 }
 
 console.log('lns', lns);
+window.lns = lns;

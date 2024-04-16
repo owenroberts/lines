@@ -1,5 +1,5 @@
 import { Elements } from '../../../ui/src/UI.js';
-const { UIModal, UICollection, UIToggle, UIButton, UINumberStep } = Elements;
+const { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber } = Elements;
 
 export class UILayer extends UICollection {
 	constructor(layer, params) {

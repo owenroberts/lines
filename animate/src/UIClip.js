@@ -1,5 +1,5 @@
 import { Elements } from '../../../ui/src/UI.js';
-const { UICollection } = Elements;
+const { UICollection, UIModal, UILabel, UINumberStep, UIButton, UISelect, UIRow } = Elements;
 
 export class UIClip extends UICollection {
 	constructor(params) {

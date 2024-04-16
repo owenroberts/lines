@@ -1,3 +1,6 @@
+import { Elements } from '../../../ui/src/UI.js';
+const { UICollection } = Elements;
+
 export class UISequence extends UICollection {
 	constructor(params) {
 		super(params);

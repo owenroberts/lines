@@ -1,3 +1,6 @@
+import { Elements } from '../../../ui/src/UI.js';
+const { UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber } = Elements;
+
 export class UITimelineGroup extends UICollection {
 	constructor(layers, params) {
 		super(params);

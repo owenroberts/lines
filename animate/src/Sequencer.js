@@ -2,6 +2,10 @@
 	play sequences based on states
 */
 
+import { UISequence } from './UISequence.js';
+import { UIClip } from './UIClip.js';
+
+
 export function Sequencer(lns) {
 
 	let panel, sequenceSelector, playToggle, frameDisplay, renderSequencer;
@@ -135,7 +139,6 @@ export function Sequencer(lns) {
 				lns.timeline.update();
 			}
 		});
-
 	}
 
 	return { 

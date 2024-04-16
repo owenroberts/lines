@@ -11,7 +11,6 @@ const AnimationMixin = {
 
 	addLayer(layer) {
 		// add before draw layer
-		console.log(this);
 		if (this.layers.indexOf(layer) == -1) {
 			this.layers.splice(this.layers.length - 1, 0, layer);
 		}
@@ -31,14 +30,14 @@ const AnimationMixin = {
 	},
 
 	merge(a, b, layer) {
-		const dA = lns.anim.drawings[a]; // drawing a
-		const dB = lns.anim.drawings[b];
+		const dA = this.drawings[a]; // drawing a
+		const dB = this.drawings[b];
 		if (dA.points[dA.points.length - 1] !== 'end') dA.add('end');
 		while (dB.length > 0) {
 			dA.add(dB.shift());
 		}
 		if (!layer) console.warn('No layer'); // if need to get layer from draw index
-		lns.anim.drawings[b] = null;
+		this.drawings[b] = null;
 		layer.drawingEndIndex = dA.length;
 	},
 

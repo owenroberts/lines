@@ -13,7 +13,7 @@ export function Playback(lns, params) {
 	let showStats = params.showStats || false;
 
 	lns.renderer.addCallback(update);
-	lns.renderer.addCallback(preTime, 'pre');
+	lns.renderer.addCallback(preTime, 'pre'); // i dont think these are used /// 
 	lns.renderer.addCallback(postRender, 'post');
 
 	function toggleStats(value) {

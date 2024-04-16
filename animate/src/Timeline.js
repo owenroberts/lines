@@ -5,8 +5,9 @@
 
 import { UILayer } from './UILayer.js';
 import { UITween } from './UITween.js';
+import { UITimelineGroup } from './UITimelineGroup.js';
 import { Elements } from '../../../ui/src/UI.js';
-const { UIButton } = Elements;
+const { UIButton, UIElement,  } = Elements;
 
 export function Timeline(lns) {
 
@@ -486,6 +487,18 @@ export function Timeline(lns) {
 			{ callback: lock, text: 'Lock', key: 'shift-l', class: 'left-end', args: [true] },
 			{ callback: lock, text: 'Unlock', key: 'alt-l', class: 'right-end', args: [false] },
 			{ callback: split, text: 'Split' },
+			{
+				key: 'shift-e',
+				text: 'Layers to End',
+				callback: () => {
+					for (let i = 0, len = lns.anim.layers.length; i < len; i++) {
+						if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
+							lns.anim.layers[i].endFrame = lns.anim.endFrame;
+						}
+					}
+					update();
+				}
+			}
 		]);
 
 		lns.ui.addProps({

@@ -292,7 +292,7 @@ export function FilesIO(lns, params) {
 			{ callback: clearLocal, key: 'alt-c', text: 'Clear Local', },
 			{ callback: saveFile, key: 'alt-s', text: 'Save File', args: [false], },
 			{ callback: saveFile, key: 'shift-s', text: 'Save Frame', args: [true], },
-			{ callback: saveFramesToFiles, key: 'shift-e', text: 'Save Frames to Files', },
+			{ callback: saveFramesToFiles, key: 'alt-f', text: 'Save Frames to Files', },
 
 			{ 
 				type: 'UIFile', 
@@ -325,7 +325,6 @@ export function FilesIO(lns, params) {
 		// 	key: 'o',
 			
 		// });
-
 	}
 
 	return { 
