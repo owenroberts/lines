@@ -27,9 +27,10 @@ export function Sequencer(lns) {
 		panel.add(sequence, 'sequence-' + index);
 		sequences.push(sequence);
 		sequenceSelector.addOption(index, name);
-		currentSequenceSelector.addOption(index, name);
 		sequenceSelector.update(index);
 		panel.addBreak();
+
+		currentSequenceSelector.addOption(index, name);
 		update();
 	}
 
@@ -60,6 +61,7 @@ export function Sequencer(lns) {
 	}
 
 	function load(data) {
+		// console.log(data);
 		data.forEach(sequence => {
 			addSequence(sequence.name);
 			sequence.clips.forEach(clip => { addClip(clip); });
@@ -89,14 +91,16 @@ export function Sequencer(lns) {
 		// save in settings before load means it tries to set non existent value ...
 		sequenceSelector = lns.ui.addProp('sequenceSelector', {
 			type: 'UISelect',
+			options: [{ value: -1, text: 'None' }],
 			callback: value => {
 				if (!sequences[sequenceIndex]) return; // settings err
-				sequences[sequenceIndex].hide();
+				if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();
 				sequenceIndex = value; 
-				sequences[sequenceIndex].show();
+				if (sequences[sequenceIndex]) sequences[sequenceIndex].show();
 				lns.timeline.update();
 			}
 		});
+		console.log(sequenceSelector)
 
 		panel.addBreak();
 	}

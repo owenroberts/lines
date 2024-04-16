@@ -39,7 +39,7 @@ export class LinesAnimation {
 
 		// most animations use default state, game anims/textures have states for changing frame
 		this._state = 'default'; // set state label
-		this.states = { 'default': { start: 0, end: 0 } };
+		this.states = { 'default': { start: 0, end: 0, dir: 1 } };
 		this.sequences = [];
 		this.sequenceIndex = -1;
 
@@ -114,12 +114,12 @@ export class LinesAnimation {
 
 	set state(state) {
 		if (this._state !== state && this.states[state]) {
-			console.log('new state', state)
 			this._state = state;
 			if (this.state) {
 				if (this.state.dir === 1) this.currentFrame = this.state.start;
 				if (this.state.dir === -1) this.currentFrame = this.state.end;
 			}
+			console.log('new state', state, this.state);
 			// console.log(this.currentFrame);
 			// maybe remove this from default and add it to game anim
 			// or add separate setState func with param
@@ -153,6 +153,8 @@ export class LinesAnimation {
 			// console.log(this.currentFrame, this.drawCount, this.drawsPerFrame);
 			if (this.drawCount >= this.drawsPerFrame - 1) { // >== instead of === in case dpf changed
 
+				// console.log(this.sequenceIndex);
+				// console.log(this.state);
 				if (this.sequenceIndex >= 0) {
 					// so this happens once? at the beginning ??
 					// sequence and clip class? are they managers? or FSMs?
@@ -160,6 +162,8 @@ export class LinesAnimation {
 					const clip = seq.clips[seq.clipIndex];
 					this.states[clip.state].dir = clip.dir; // this will be bad at some point ... 
 					this.state = clip.state;
+					console.log(clip);
+					console.log(this.state, this.currentFrame);
 				}
 
 				let playedState = false;
