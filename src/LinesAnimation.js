@@ -38,8 +38,10 @@ export class LinesAnimation {
 		this.override = {};
 
 		// most animations use default state, game anims/textures have states for changing frame
-		this._state = 'default'; // set state label
+		// replace with manager ?? or is this too complicated???
+		this.stateName = 'default'; // set state label
 		this.states = { 'default': { start: 0, end: 0, dir: 1 } };
+		this.stateData = structuredClone(this.states[this.stateName]);
 		this.sequences = [];
 		this.sequenceIndex = -1;
 
@@ -112,26 +114,19 @@ export class LinesAnimation {
 		this.layers.forEach(layer => { layer.endFrame = n; });
 	}
 
-	set state(state) {
-		if (this._state !== state && this.states[state]) {
-			this._state = state;
+	set state(stateName) {
+		if (this.stateName !== stateName && this.states[stateName]) {
+			this.stateName = stateName;
+			this.stateData = structuredClone(this.states[this.stateName]); // so state dir can overwrite
 			if (this.state) {
 				if (this.state.dir === 1) this.currentFrame = this.state.start;
 				if (this.state.dir === -1) this.currentFrame = this.state.end;
 			}
-			console.log('new state', state, this.state);
-			// console.log(this.currentFrame);
-			// maybe remove this from default and add it to game anim
-			// or add separate setState func with param
 		}
 	}
 
 	get state() {
-		return this.states[this._state];
-	}
-
-	get stateName() {
-		return this._state;
+		return this.stateData;
 	}
 
 	setLinesUpdate(n) {
@@ -148,22 +143,39 @@ export class LinesAnimation {
 		this.override = {};
 	}
 
+	nextClip(playedState) {
+		const seq = this.sequences[this.sequenceIndex];
+		let clip = seq.clips[seq.clipIndex];
+
+		if (playedState) {
+			clip.count++;
+			if (clip.count >= clip.repeat) {
+				clip.count = 0;
+				seq.clipIndex++;
+				if (seq.clipIndex >= seq.clips.length) {
+					seq.clipIndex = 0;
+				}
+				clip = seq.clips[seq.clipIndex];
+			}
+		}
+
+		if (this.stateName !== clip.state) {
+			this.state = clip.state;
+		}
+		if (this.state.dir !== clip.dir) {
+			this.state.dir = clip.dir;
+			if (this.state.dir === 1) this.currentFrame = this.state.start;
+			if (this.state.dir === -1) this.currentFrame = this.state.end;
+		}
+	}
+
 	update() {
 		if (this.isPlaying) {
 			// console.log(this.currentFrame, this.drawCount, this.drawsPerFrame);
 			if (this.drawCount >= this.drawsPerFrame - 1) { // >== instead of === in case dpf changed
 
-				// console.log(this.sequenceIndex);
-				// console.log(this.state);
 				if (this.sequenceIndex >= 0) {
-					// so this happens once? at the beginning ??
-					// sequence and clip class? are they managers? or FSMs?
-					const seq = this.sequences[this.sequenceIndex];
-					const clip = seq.clips[seq.clipIndex];
-					this.states[clip.state].dir = clip.dir; // this will be bad at some point ... 
-					this.state = clip.state;
-					console.log(clip);
-					console.log(this.state, this.currentFrame);
+					this.nextClip(false);
 				}
 
 				let playedState = false;
@@ -189,28 +201,10 @@ export class LinesAnimation {
 					if (this.onPlayedOnce) this.onPlayedOnce();
 
 					if (this.sequenceIndex >= 0) {
-						const seq = this.sequences[this.sequenceIndex];
-						const clip = seq.clips[seq.clipIndex];
-						
-						clip.count++;
-						
-						if (clip.count >= clip.repeat) {
-							clip.count = 0;
-							seq.clipIndex++;
-							if (seq.clipIndex >= seq.clips.length) {
-								seq.clipIndex = 0;
-							}
-							const next = seq.clips[seq.clipIndex];
-							this.states[next.state].dir = next.dir; // this will be bad at some point ... 
-							this.state = next.state;
-
-						}
+						this.nextClip(true);
 					}
 				}
 
-				console.log(playedState, this.currentFrame);
-				
-				
 				this.drawCount = 0;
 			} else {
 				this.drawCount++;
@@ -459,11 +453,16 @@ export class LinesAnimation {
 			};
 		}
 
+
 		this.sequences = structuredClone(json.q);
 		this.sequenceIndex = json.qi;
-		
 
-		if (this.states.default) this.states.default.end = this.endFrame;
+		if (this.states.default) {
+			this.states.default.end = this.endFrame;
+			this.stateData = structuredClone(this.states[this.stateName]);
+		}
+
+		console.log('load', this.states);
 
 		this.fps = json.fps;
 

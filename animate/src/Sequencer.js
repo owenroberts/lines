@@ -8,11 +8,10 @@ import { UIClip } from './UIClip.js';
 
 export function Sequencer(lns) {
 
-	let panel, sequenceSelector, currentSequenceSelector;
+	let panel, sequenceSelector;
 
 	let sequences = [];
 	let sequenceIndex = 0;
-	let currentSequence = -1;
 	let isPlaying = false;
 	let currentFrame = 0;
 	let drawCount = 0;
@@ -30,7 +29,6 @@ export function Sequencer(lns) {
 		sequenceSelector.update(index);
 		panel.addBreak();
 
-		currentSequenceSelector.addOption(index, name);
 		update();
 	}
 
@@ -57,7 +55,7 @@ export function Sequencer(lns) {
 			clips: s.getData(),
 			clipIndex: 0,
 		}});
-		lns.anim.sequenceIndex = currentSequence;
+		lns.anim.sequenceIndex = sequenceIndex;
 	}
 
 	function load(data) {
@@ -72,14 +70,20 @@ export function Sequencer(lns) {
 
 		panel = lns.ui.getPanel('sequencer');
 
-		currentSequenceSelector = lns.ui.addProp('currentSequence', {
+		// save in settings before load means it tries to set non existent value ...
+		sequenceSelector = lns.ui.addProp('sequenceSelector', {
 			type: 'UISelect',
 			options: [{ value: -1, text: 'None' }],
 			callback: value => {
-				currentSequence = value;
+				// if (!sequences[sequenceIndex]) return; // settings err
+				if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();
+				sequenceIndex = value;
+				if (sequences[sequenceIndex]) sequences[sequenceIndex].show();
+				lns.timeline.update();
 				update();
 			}
 		});
+		console.log(sequenceSelector)
 
 		panel.addBreak();
 
@@ -87,20 +91,6 @@ export function Sequencer(lns) {
 			{ callback: addSequence, text: 'Add Sequence', },
 			{ callback: addClip, text: 'Add Clip' },
 		]);
-
-		// save in settings before load means it tries to set non existent value ...
-		sequenceSelector = lns.ui.addProp('sequenceSelector', {
-			type: 'UISelect',
-			options: [{ value: -1, text: 'None' }],
-			callback: value => {
-				if (!sequences[sequenceIndex]) return; // settings err
-				if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();
-				sequenceIndex = value; 
-				if (sequences[sequenceIndex]) sequences[sequenceIndex].show();
-				lns.timeline.update();
-			}
-		});
-		console.log(sequenceSelector)
 
 		panel.addBreak();
 	}
