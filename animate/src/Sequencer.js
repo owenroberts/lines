@@ -83,7 +83,6 @@ export function Sequencer(lns) {
 				update();
 			}
 		});
-		console.log(sequenceSelector)
 
 		panel.addBreak();
 

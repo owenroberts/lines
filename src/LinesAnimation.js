@@ -129,6 +129,11 @@ export class LinesAnimation {
 		return this.stateData;
 	}
 
+	resetDefault() {
+		this.states.default.end = this.endFrame;
+		this.stateData = structuredClone(this.states[this.stateName]);
+	}
+
 	setLinesUpdate(n) {
 		this.layers.forEach(layer => {
 			layer.linesInterval = n;
@@ -173,7 +178,6 @@ export class LinesAnimation {
 		if (this.isPlaying) {
 			// console.log(this.currentFrame, this.drawCount, this.drawsPerFrame);
 			if (this.drawCount >= this.drawsPerFrame - 1) { // >== instead of === in case dpf changed
-
 				if (this.sequenceIndex >= 0) {
 					this.nextClip(false);
 				}
@@ -457,12 +461,7 @@ export class LinesAnimation {
 		this.sequences = structuredClone(json.q);
 		this.sequenceIndex = json.qi;
 
-		if (this.states.default) {
-			this.states.default.end = this.endFrame;
-			this.stateData = structuredClone(this.states[this.stateName]);
-		}
-
-		console.log('load', this.states);
+		if (this.states.default) this.resetDefault();
 
 		this.fps = json.fps;
 

@@ -52,6 +52,8 @@ export function Draw(lns, defaults) {
 		}  
 		// or just change layer frame ?
 		lns.ui.update();
+		lns.anim.resetDefault();
+
 	} /* r key */
 
 	function getNewLayer(f) {

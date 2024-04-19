@@ -1,6 +1,6 @@
 import { LinesAnimation } from '../Lines.js';
 
-export class GameAnim extends Animation {
+export class GameAnim extends LinesAnimation {
 	constructor(debug) {
 		const { dps, multiColor } = GAME.renderer.getProps();
 		super(GAME.renderer.ctx, dps, multiColor);
@@ -13,22 +13,46 @@ export class GameAnim extends Animation {
 
 	update() { /* too many things to stick in onPlayedState etc */
 		if (this.isPlaying) {
-			if (this.drawCount == this.drawsPerFrame) {
+			if (this.drawCount >= this.drawsPerFrame - 1) {
+				
 				if (this.randomFrames) {
 					while (this.prevFrame === this.currentFrame) {
 						this.currentFrame = Cool.randomInt(this.state.start, this.state.end);
 					}
 					this.prevFrame = this.currentFrame;
-				} else if (this.currentFrame >= this.state.end) {
-					this.currentFrame = this.loop ? this.state.start : this.state.end;
-					if (this.onPlayedOnce) {
-						this.onPlayedOnce();
-						this.onPlayedOnce = undefined;
-					}
-					if (this.onPlayedState) this.onPlayedState();
 				} else {
-					this.currentFrame++;
+					if (this.sequenceIndex >= 0) {
+						this.nextClip(false);
+					}
+					let playedState = false;
+					if (this.state.dir === 1) {
+						if (this.currentFrame >= this.state.end) {
+							this.currentFrame = this.loop ? this.state.start : this.state.end;
+							playedState = true;
+						} else {
+							this.currentFrame++;
+						}
+					} else {
+						if (this.currentFrame <= this.state.start) {
+							this.currentFrame = this.loop ? this.state.end : this.state.start;
+							playedState = true;
+						} else {
+							this.currentFrame--;
+						}
+					}
+
+					if (playedState) {
+						if (this.onPlayedOnce) {
+							this.onPlayedOnce();
+							this.onPlayedOnce = undefined;
+						}
+						if (this.onPlayedState) this.onPlayedState();
+						if (this.sequenceIndex >= 0) {
+							this.nextClip(true);
+						}
+					}
 				}
+
 				this.drawCount = 0;
 			}
 			this.drawCount++;
@@ -50,16 +74,20 @@ export class GameAnim extends Animation {
 		if (this.state.start != this.state.end) this.isPlaying = true;
 	}
 
-	set state(state) {
-		if (this._state !== state && this.states[state]) {
-			this._state = state;
-			if (this.state) this.frame = this.state.start;
-			if (!this.isPlaying && state !== 'default') this.isPlaying = true; 
+	set state(stateName) {
+		if (this.stateName !== stateName && this.states[stateName]) {
+			this.stateName = stateName;
+			this.stateData = structuredClone(this.states[this.stateName]); // so state dir can overwrite
+			if (this.state) {
+				if (this.state.dir === 1) this.currentFrame = this.state.start;
+				if (this.state.dir === -1) this.currentFrame = this.state.end;
+			}
+			if (!this.isPlaying && stateName !== 'default') this.isPlaying = true; // what is this for? 
 		}
 	}
 
 	get state() {
-		return this.states[this._state];
+		return this.stateData;
 	}
 
 	playOnce(callback) {
