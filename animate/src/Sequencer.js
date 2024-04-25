@@ -4,7 +4,8 @@
 
 import { UISequence } from './UISequence.js';
 import { UIClip } from './UIClip.js';
-
+import { Elements } from '../../../ui/src/UI.js';
+const { UIModal, UISelect } = Elements;
 
 export function Sequencer(lns) {
 
@@ -21,7 +22,8 @@ export function Sequencer(lns) {
 	function addSequence(name) {
 		if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();
 		const index = sequences.length;
-		if (!name) name = prompt('Name this sequence') || 'Sequence ' + index;
+		if (!name) name = prompt('Name this sequence', 'Sequence ' + index);
+		if (!name) return;
 		const sequence = new UISequence({ name: name, class: 'row', update });
 		panel.add(sequence, 'sequence-' + index);
 		sequences.push(sequence);
@@ -30,6 +32,35 @@ export function Sequencer(lns) {
 		panel.addBreak();
 
 		update();
+	}
+
+	function deleteSequence() {
+		if (sequences.length === 0) return;
+		const m = new UIModal({
+			title: "Delete Sequence",
+			app: lns,
+			position: { x: 200, y: 200 },
+			callback: () => {
+				sequenceSelector.update(-1);
+
+				const index = select.value;
+				sequences.splice(index, 1);
+
+				sequenceSelector.clearOptions();
+
+				sequenceSelector.addOption(-1, "None");
+				sequences.forEach((seq, i) => {
+					sequenceSelector.addOption(i, seq.name);
+				});
+				
+				update();
+			}
+		});
+
+		const select = new UISelect({
+			options: sequences.map((seq, i) => { return { value: i, text: seq.name }})
+		});
+		m.add(select);
 	}
 
 	function addClip(params) {
@@ -75,6 +106,7 @@ export function Sequencer(lns) {
 			type: 'UISelect',
 			options: [{ value: -1, text: 'None' }],
 			callback: value => {
+				console.log('seq sel', value);
 				// if (!sequences[sequenceIndex]) return; // settings err
 				if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();
 				sequenceIndex = value;
@@ -88,6 +120,7 @@ export function Sequencer(lns) {
 
 		lns.ui.addCallbacks([
 			{ callback: addSequence, text: 'Add Sequence', },
+			{ callback: deleteSequence, text: 'Delete Sequence' },
 			{ callback: addClip, text: 'Add Clip' },
 		]);
 
