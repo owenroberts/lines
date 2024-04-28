@@ -2,7 +2,7 @@
 	this is more like mouse events or something ... 
 */
 
-import {  Drawing, Layer } from '../../src/Lines.js';
+import { Drawing, Layer } from '../../src/Lines.js';
 
 export function Draw(lns, defaults) {
 

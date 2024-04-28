@@ -136,6 +136,7 @@ export function Playback(lns, params) {
 			}
 		}
 
+		lns.timeline.select(false, true);
 		lns.data.saveState();
 		lns.ui.update();
 	}

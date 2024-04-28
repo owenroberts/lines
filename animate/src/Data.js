@@ -12,6 +12,8 @@
 	partly all here because it does save state after each ...
 */
 
+import * as Cool from '../../../cool/cool.js';
+
 export function Data(lns) {
 
 	let copyFrame = []; // copy layers in frame

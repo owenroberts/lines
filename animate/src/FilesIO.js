@@ -2,7 +2,7 @@
 	some of this should be in ui now
 */
 import { saveAs } from 'file-saver';
-import { LinesAnimation } from '../../src/Lines.js';
+import { LinesAnimation, Drawing, Layer } from '../../src/Lines.js';
 import { Elements } from '../../../ui/src/UI.js';
 const { UIModal, UIButton } = Elements;
 

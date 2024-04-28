@@ -395,10 +395,12 @@ export function Timeline(lns) {
 	}
 
 	// select all layers in frame
-	function select(isSelect) {
+	function select(isSelect, isAll) {
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			const layer = lns.anim.layers[i];
-			if (layer.isInFrame(lns.anim.currentFrame) && layer.isToggled !== isSelect) {
+			if (!layer.isInFrame(lns.anim.currentFrame) && !isAll) continue;
+			
+			if (layer.isToggled !== isSelect) {
 				if (layer.groupNumber >= 0) {
 					timeline[`group-${layer.groupNumber}`].toggle.update(isSelect);
 				} else {
@@ -525,7 +527,7 @@ export function Timeline(lns) {
 	}
 
 	return { 
-		connect, update, init, 
+		connect, update, init, select,
 		getGroups() { return groups; },
 		setGroups(value) { groups = value; },
 	};
