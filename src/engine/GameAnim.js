@@ -98,6 +98,7 @@ export class GameAnim extends LinesAnimation {
 
 	loadData(json, callback) {
 		super.loadData(json, callback);
+		// console.log(json.title);
 		this.setFrames();
 	}
 
@@ -109,6 +110,8 @@ export class GameAnim extends LinesAnimation {
 				this.frames[j].push(i);
 			}
 		}
+		// console.log(this);
+		// console.log(this.frames[0]);
 	}
 
 	getLayers() {
@@ -117,8 +120,8 @@ export class GameAnim extends LinesAnimation {
 			// console.log('current frame', this.currentFrame, this);
 			return false;
 		}
-		const indexes = this.frames[this.currentFrame];
-		if (!indexes) console.log(this);
+		const indexes = this.frames[this.currentFrame] ?? [];
+		// if (!indexes) console.log(this);
 		const layers = [];
 		for (let i = 0; i < indexes.length; i++) {
 			layers.push(this.layers[indexes[i]]);

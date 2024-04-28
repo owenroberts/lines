@@ -79,7 +79,7 @@ export function Sequencer(lns) {
 	}
 
 	function update() {
-		if (sequences.length === 0) return false;
+		// if (sequences.length === 0) return false;
 		// return sequences.map(s => { return { name: s.name, clips: s.getData(), }});
 		lns.anim.sequences = sequences.map(s => { return { 
 			name: s.name,
@@ -106,7 +106,7 @@ export function Sequencer(lns) {
 			type: 'UISelect',
 			options: [{ value: -1, text: 'None' }],
 			callback: value => {
-				console.log('seq sel', value);
+				// console.log('seq sel', value);
 				// if (!sequences[sequenceIndex]) return; // settings err
 				if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();
 				sequenceIndex = value;
