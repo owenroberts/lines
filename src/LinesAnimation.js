@@ -459,7 +459,7 @@ export class LinesAnimation {
 
 
 		this.sequences = structuredClone(json.q) ?? [];
-		this.sequenceIndex = json.qi ?? -1;
+		this.sequenceIndex = +json.qi ?? -1;
 
 		if (this.states.default) this.resetDefault();
 

@@ -109,7 +109,7 @@ export function Sequencer(lns) {
 				// console.log('seq sel', value);
 				// if (!sequences[sequenceIndex]) return; // settings err
 				if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();
-				sequenceIndex = value;
+				sequenceIndex = +value;
 				if (sequences[sequenceIndex]) sequences[sequenceIndex].show();
 				lns.timeline.update();
 				update();

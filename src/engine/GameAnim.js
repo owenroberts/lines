@@ -41,6 +41,7 @@ export class GameAnim extends LinesAnimation {
 						}
 					}
 
+
 					if (playedState) {
 						if (this.onPlayedOnce) {
 							this.onPlayedOnce();
@@ -60,12 +61,9 @@ export class GameAnim extends LinesAnimation {
 		}
 	}
 
-	createNewState(label, start, end) {
+	createNewState(label, start, end, dir=1) {
 		if (!this.states[label]) {
-			this.states[label] = {
-				start: start,
-				end: end
-			}
+			this.states[label] = { start, end, dir };
 		}
 		this.state = label; /* ? */
 	}
