@@ -2,6 +2,7 @@
 	view all drawings and toggle on/off in frame
 */
 
+import { Layer } from '../../src/Lines.js';
 import { Elements } from '../../../ui/src/UI.js';
 const { UIToggle } = Elements;
 

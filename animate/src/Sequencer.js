@@ -12,7 +12,7 @@ export function Sequencer(lns) {
 	let panel, sequenceSelector;
 
 	let sequences = [];
-	let sequenceIndex = 0;
+	let sequenceIndex = -1;
 	let isPlaying = false;
 	let currentFrame = 0;
 	let drawCount = 0;
