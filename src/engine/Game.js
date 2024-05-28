@@ -33,20 +33,8 @@ export class Game {
 		this.drawCount = 0;
 		this.drawInterval = Math.round(60 / (params.dps || 30));
 		this.drawTime = 1000 / (params.dps || 30);
-
-		const performanceThreshold = 0.1; // test this
-		let performanceAverage = 0.01; // high performance
 		
-		if (params.testPerformance) {
-			const perf = [];
-			console.groupCollapsed('perf test')
-			for (let i = 0; i < 5; i++) {
-				perf.push(Cool.testPerformance());
-			}
-			performanceAverage = perf.reduce((a, b) => (a + b)) / perf.length;
-			console.log('perf avg', performanceAverage); 
-			console.groupEnd('perf test');
-		}
+		let perfTestIsLow = params.testPerformance ? Cool.testLowPerformance() : false;
 
 		this.width = params.width;
 		this.height = params.height;
@@ -87,7 +75,7 @@ export class Game {
 		this.view.halfHeight = this.view.height / 2;
 
 		let userLowQuality = false;
-		if (performanceAverage > performanceThreshold || params.lowPerformance) {
+		if (perfTestIsLow || params.lowPerformance) {
 			userLowQuality = params.ignoreAlerts ?
 				true :
 				confirm('Low performance detected, click Okay to use low graphics quality, cancel to continue with high graphics quality.');
@@ -171,6 +159,13 @@ export class Game {
 			}
 			this._start();
 		});
+	}
+
+	loaded(files, callback) {
+		this.data = {};
+		for (const type in files) {
+			
+		}
 	}
 
 	_start() {
