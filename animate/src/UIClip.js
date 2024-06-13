@@ -4,7 +4,7 @@ const { UICollection, UIModal, UILabel, UINumberStep, UIButton, UISelect, UIRow 
 export class UIClip extends UICollection {
 	constructor(params) {
 		super(params);
-		if (!params.state) this.setState();
+		
 		this.addClass('clip');
 		this.update = params.update;
 
@@ -51,6 +51,8 @@ export class UIClip extends UICollection {
 
 		// edit button to return timeline
 		// swap button if its useful
+
+		if (!params.state) this.setState();
 	}
 
 	setState() {
