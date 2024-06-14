@@ -161,6 +161,7 @@ export class Game {
 		});
 	}
 
+	// placeholder for vite loads
 	loaded(files, callback) {
 		this.data = {};
 		for (const type in files) {

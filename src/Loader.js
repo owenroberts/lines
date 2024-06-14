@@ -125,7 +125,7 @@ export function Loader(params) {
 	}
 
 	function getAnimationData(fileName, key) {
-		return assets[fileName][key];
+		return assets.animations[fileName][key];
 	}
 
 	function getFile(fileName) {
