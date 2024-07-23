@@ -15,6 +15,9 @@ export function Events(lns) {
 	let prevPosition = new Cool.Vector();
 	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
 
+	// sample/snap to grid
+	let samples = 0;
+
 	function outSideCanvas(ev) {
 		if (ev.toElement === lns.renderer.canvas) return;
 		if (isDrawing) endPoint(ev);
@@ -26,6 +29,10 @@ export function Events(lns) {
 			Math.round(x / scale),
 			Math.round(y / scale),
 		];
+		if (samples > 0) {
+			point[0] = Math.floor(point[0] / samples) * samples;
+			point[1] = Math.floor(point[1] / samples) * samples;
+		}
 		return point;
 	}
 
@@ -162,6 +169,13 @@ export function Events(lns) {
 				key: 'alt-o',
 				value: connectLines,
 				callback: value => { connectLines = value; },
+			},
+			'samples': {
+				type: 'UINumberStep',
+				range: [0, 25],
+				step: 1,
+				value: samples,
+				callback: value => { samples = value; },
 			}
 		}, 'mouse');
 	}
