@@ -126,4 +126,9 @@ export class GameAnim extends LinesAnimation {
 		}
 		return layers;
 	}
+
+	// adding this for all spiders go to hell, maybe good for regular linesanimation??
+	getCurrentDrawing() {
+		return this.drawings[this.layers[this.frames[this.currentFrame][0]].drawingIndex];
+	}
 }

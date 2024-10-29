@@ -18,7 +18,7 @@ import { random } from '../../../cool/cool.js';
 
 export function SoundProvider(params={}, callback) {
 	const sounds = {};
-	const baseUrl = params.baseUrl ?? './public/sfx/';
+	const baseUrl = params.baseUrl ?? './sfx/';
 	const audioFiles = params.audioFiles ?? []; // blank sound provider just does nothing
 
 	let fileCount = 0;
