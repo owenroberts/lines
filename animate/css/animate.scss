@@ -1,5 +1,4 @@
-// @import "interface.scss";
-@import '../ui/css/style.scss';
+@use "../../../ui/css/_colors" as *;
 
 $anim-color: #9de0b1;
 $anim-select: green;
