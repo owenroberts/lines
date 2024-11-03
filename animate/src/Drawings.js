@@ -41,6 +41,7 @@ export function Drawings(lns) {
 
 	function update() {
 		clear();
+		return;
 		// -1 to ignore draw drawing
 		for (let i = 0; i < lns.anim.drawings.length - 1; i++) {
 			if (!lns.anim.drawings[i]) continue;

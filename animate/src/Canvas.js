@@ -143,7 +143,7 @@ export function Canvas(lns, params) {
 				}
 			},
 			text: 'Full Size',
-			key: '`'
+			key: 'alt-`'
 		});
 
 		lns.ui.addCallback({
@@ -159,7 +159,7 @@ export function Canvas(lns, params) {
 				}
 			},
 			text: 'x1',
-			key: '1'
+			key: 'alt-1',
 		});
 	}
 

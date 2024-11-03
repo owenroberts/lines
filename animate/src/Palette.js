@@ -3,7 +3,7 @@
 */
 
 import { Elements } from '../../../ui/src/UI.js';
-const { UIFile, UIModal, UIButton, UIText } = Elements;
+const { UIFile, UIModal, UIButton, UIText, UILabel } = Elements;
 
 export function Palette(lns) {
 	
@@ -67,13 +67,40 @@ export function Palette(lns) {
 	}
 
 	function addUI(name) {
-		panel.addRow(name);
+		panel.addRow(`${name}-palette`);
 		
+		// is this really necessary? maybe too complex
+		// const key = new UIText({
+		// 	text: thisKey,
+		// 	callback: value => {
+		// 		lns.ui.keys[+value].key.value = '';
+		// 		lns.ui.keys[+value].key.el.placeholder = '+';
+		// 		lns.ui.keys[+value] = b;
+		// 	}
+		// });
+
+		let thisKey;
+		if (keyIndex < 10) {
+			thisKey = keyIndex + '';
+			keyIndex++;
+
+			panel.add(new UILabel({
+				text: `${thisKey}`
+			}));
+		} else {
+			panel.add(new UILabel({ text: "—" }));
+		}
+
 		const b = panel.add(new UIButton({
 			text: name,
 			class: 'left-end',
+			key: thisKey,
 			callback: () => { load(name); }
 		}));
+
+		if (thisKey) {
+			lns.ui.keys[thisKey] = b; // add all keys like this ???
+		}
 
 		panel.add(new UIButton({
 			text: '✎',
@@ -81,29 +108,11 @@ export function Palette(lns) {
 			callback: () => {
 				let rename = prompt('Rename: ');
 				if (!rename) return;
-				palettes[rename] = _.cloneDeep(palettes[name]); // remove clone
+				palettes[rename] = structuredClone(palettes[name]); // remove clone
 				addUI(rename);
 				remove(name);
 			}
 		}));
-
-		let thisKey = '+';
-		if (keyIndex < 10) {
-			lns.ui.keys[keyIndex] = b; // add all keys like this ???
-			thisKey = keyIndex + '';
-			keyIndex++;
-		}
-
-		const key = new UIText({
-			text: thisKey,
-			callback: value => {
-				lns.ui.keys[+value].key.value = '';
-				lns.ui.keys[+value].key.el.placeholder = '+';
-				lns.ui.keys[+value] = b;
-			}
-		});
-		b.key = key;
-		panel.add(key);
 
 
 		panel.add(new UIButton({
@@ -127,6 +136,7 @@ export function Palette(lns) {
 
 	function load(name) {
 		if (resetOnChange) lns.draw.reset();
+
 		const palette = palettes[name];
 		for (const prop in palette) {
 			if (lns.ui.faces[prop] === undefined) continue;
