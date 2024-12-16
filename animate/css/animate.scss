@@ -53,15 +53,30 @@ $anim-off: darkgreen;
 	grid-template-rows: 
 		calc(calc(1.5 + var(--state-height)) * 1em)
 		repeat(
-			calc(var(--num-layers) + var(--num-tweens)),  
+			calc(var(--num-layers) + var(--num-tweens)),
 			calc(var(--layer-height) * 1em) 
 			1px
 			) 
 		3px
 	;
+	gap: unset;
 
 	overflow: scroll hidden;
 	* { font-family: monaco, monospace; }
+
+	button {
+		height: unset;
+		font-size: unset;
+	}
+
+	.ui-collection {
+		flex-wrap: unset;
+		gap: 1px;
+	}
+
+	.btn {
+		border-radius: 0;
+	}
 
 	.frame {
 		// overflow: hidden;
@@ -92,8 +107,8 @@ $anim-off: darkgreen;
 
 		.timeline-btn {
 			margin: 0;
-			margin-right: 1px;
-			padding: 1px;
+			// margin-right: 1px;
+			padding: 0;
 			height: 100%;
 			display: inline-block;
 			cursor: pointer;

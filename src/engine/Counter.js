@@ -2,6 +2,7 @@
 	counter or timer for scheduling events
 	returns count
 	include delay, or use another counter?
+	make it a closure?
 */
 
 
@@ -38,13 +39,18 @@ export class Counter {
 	}
 
 	set(count) {
-		// console.log('set count');
-		// console.log(count, this.count, this.duration)
 		if (count < 0) {
 			this.count = Math.min(this.duration + count, this.duration - 1);
 		} else {
-			this.count = Math.min(count, this.duration - 1)
+			this.count = Math.min(count, this.duration);
 		}
-		// console.log(count, this.count, this.duration)
+	}
+
+	setCount(value) {
+		set(value);
+	}
+
+	setDuration(value) {
+		this.duration = value;
 	}
 }

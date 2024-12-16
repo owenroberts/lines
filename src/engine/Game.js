@@ -145,6 +145,7 @@ export class Game {
 		this.loader.load(files, loadDataOnly, assets => {
 			for (const type in assets) {
 				if (type !== 'animations') {
+					console.log(type);
 					this.data[type] = assets[type];
 				} else {
 					for (const file in assets.animations) {
