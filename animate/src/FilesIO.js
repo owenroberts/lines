@@ -61,7 +61,12 @@ export function FilesIO(lns, params) {
 
 		// const sequences = lns.sequencer.getData();
 		json.q = structuredClone(lns.anim.sequences ?? []);
-		json.qi = +lns.anim.sequenceIndex ?? -1;
+		if (lns.anim.sequences.length > 0) {
+			json.qi = +lns.anim.sequenceIndex;
+		} else {
+			json.qi = -1;
+		}
+		
 
 		return json;
 	}

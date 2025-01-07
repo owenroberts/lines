@@ -187,7 +187,6 @@ export class LinesAnimation {
 					if (this.currentFrame >= this.state.end) {
 						this.currentFrame = this.state.start;
 						playedState = true;
-						// console.log(playedState, this.currentFrame);
 					} else {
 						this.currentFrame++;
 					}

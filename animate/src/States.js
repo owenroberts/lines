@@ -3,7 +3,7 @@
 */
 
 import { Elements } from '../../../ui/src/UI.js';
-const { UILabel, UIButton, UINumberStep, UISelect } = Elements;
+const { UILabel, UIButton, UINumberStep, UISelect, UIModal } = Elements;
 
 export function States(lns) {
 
