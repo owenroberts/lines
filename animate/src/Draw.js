@@ -3,6 +3,8 @@
 */
 
 import { Drawing, Layer } from '../../src/Lines.js';
+import { Elements } from '../../../ui/src/UI.js';
+const { UIButton, UIModal, UIColor } = Elements;
 
 export function Draw(lns, defaults) {
 

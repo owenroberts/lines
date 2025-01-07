@@ -1,10 +1,12 @@
 /*
 	animation params
+	need some fucking instructions here ... 
 */
+import * as Cool from '../../cool/cool.js';
 
 export class Animator {
 
-	constructor(animation, params_) {
+	constructor(animation, _params) {
 		this.animation = animation;
 		this.params = {
 			// min max, randomize
@@ -15,7 +17,7 @@ export class Animator {
 			linesInterval: [1, 10],
 			startIndex: [0, 'end'],
 			endIndex: [0, 'end'],
-			...params_
+			..._params
 		};
 	}
 

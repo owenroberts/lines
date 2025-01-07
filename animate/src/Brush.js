@@ -2,6 +2,8 @@
 	properties for drawing with brush
 */
 
+import * as Cool from "../../../cool/cool.js";
+
 export function Brush(lns) {
 	
 	let isActive = false;

@@ -6,20 +6,19 @@
 
 export class TextSprite {
 	constructor(params) { 
-		this.x = Math.round(params.x || 0);
-		this.y = Math.round(params.y || 0);
-		this.lead = params.lead || 35; // leading is space between lines
-		// console.log(params);
-		this.track = params.track || 18; // tracking is space between letters
+		this.x = Math.round(params.x ?? 0);
+		this.y = Math.round(params.y ?? 0);
+		this.lead = params.lead ?? 35; // leading is space between lines
+		this.track = params.track ?? 18; // tracking is space between letters
 
 		// this.msg = msg;
-		this.wrap = params.wrap || 12;
-		this.isActive = true;
+		this.wrap = params.wrap ?? 12;
+		this.isActive = params.isActive ?? true;
 		this.letters = params.letters;
 		this.breaks = [];
-		this.countForward = params.countForward || false;
-		this.countBackward = params.countBackward || false;
-		this.repeatCount = params.repeatCount || false; 
+		this.countForward = params.countForward ?? false;
+		this.countBackward = params.countBackward ?? false;
+		this.repeatCount = params.repeatCount ?? false; 
 
 		// this.setBreaks();
 		this.count = 0;

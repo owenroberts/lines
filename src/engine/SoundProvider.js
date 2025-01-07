@@ -67,7 +67,8 @@ export function SoundProvider(params={}, callback) {
 		s.play();
 	}
 
-	function keepPlaying(key, randomRate, rateMin, rateMax) {
+	// the way this works is weird ... 
+	function loop(key, randomRate, rateMin, rateMax) {
 		if (!sounds[key] && loaded > 0) return console.warn('No sound', key);
 		if (!sounds[key]) return;
 		if (Array.isArray(sounds[key]) && sounds[key].every(s => s.paused)) {
@@ -102,5 +103,5 @@ export function SoundProvider(params={}, callback) {
 		}
 	}
 
-	return { sounds, play, pause, stop, keepPlaying };
+	return { sounds, play, pause, stop, loop };
 }

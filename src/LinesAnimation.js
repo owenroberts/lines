@@ -202,7 +202,7 @@ export class LinesAnimation {
 
 				if (playedState) {
 					if (this.onPlayedState) this.onPlayedState();
-					if (this.onPlayedOnce) this.onPlayedOnce();
+					if (this.onPlayedOnce) this.onPlayedOnce(); // should this delete itself?
 
 					if (this.sequenceIndex >= 0) {
 						this.nextClip(true);
@@ -459,7 +459,7 @@ export class LinesAnimation {
 
 
 		this.sequences = structuredClone(json.q) ?? [];
-		this.sequenceIndex = +json.qi ?? -1;
+		this.sequenceIndex = +(json.qi ?? -1);
 
 		if (this.states.default) this.resetDefault();
 
