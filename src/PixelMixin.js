@@ -2,8 +2,7 @@
 	overwrite lines methods to render pixels
 */
 
-const PixelMixin = {
-
+export const PixelMixin = {
 	init() {
 		this.pixelSize = GAME.pixelSize || GAME.lineWidth || 2;
 	},
@@ -135,7 +134,4 @@ const PixelMixin = {
 			} while (count--);
 		}
 	}
-
 };
-
-export { PixelMixin };

@@ -49,6 +49,15 @@ export class UILayer extends UICollection {
 			}
 		});
 
+		const visible = new UIButton({
+			btnClass: 'layer-edit',
+			class: 'timeline-btn',
+			text: "V",
+			callback: () => {
+				layer.isVisible = !layer.isVisible;
+			}
+		});
+
 		if (params.group) {
 			this.groupLabel = new UILabel({ text: params.group });
 		}
@@ -59,6 +68,7 @@ export class UILayer extends UICollection {
 		this.append(toggle, 'toggle');
 		this.append(highlight);
 		this.append(edit);
+		this.append(visible);
 		if (width < 20) this.append(uis.toEnd);
 		if (width > 50) this.append(uis.lock, 'lock');
 		if (width > 60) this.append(uis.tween);
@@ -130,7 +140,7 @@ export class UILayer extends UICollection {
 		});
 
 		const toEnd = new UIButton({
-			text: '>>',
+			text: isModal ? 'Set End Frame to End' : '>>',
 			class: isModal ? '' : btnClass,
 			callback: () => {
 				this.layer.endFrame = this.lns.anim.endFrame;

@@ -114,6 +114,10 @@ export class LinesAnimation {
 		this.layers.forEach(layer => { layer.endFrame = n; });
 	}
 
+	get state() {
+		return this.stateData;
+	}
+
 	set state(stateName) {
 		if (this.stateName !== stateName && this.states[stateName]) {
 			this.stateName = stateName;
@@ -123,10 +127,6 @@ export class LinesAnimation {
 				if (this.state.dir === -1) this.currentFrame = this.state.end;
 			}
 		}
-	}
-
-	get state() {
-		return this.stateData;
 	}
 
 	resetDefault() {
@@ -259,6 +259,7 @@ export class LinesAnimation {
 
 		const layers = this.getLayers(); // GameAnim uses frames for performance upgrade
 		for (let i = 0, len = layers.length; i < len; i++) {
+			if (!layers[i].isVisible) continue;
 			// draw each layer
 			const layer = layers[i]; 
 			const drawing = this.drawings[layer.drawingIndex]; // drawing has points + offsets

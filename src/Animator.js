@@ -1,7 +1,13 @@
 /*
 	animation params
-	need some fucking instructions here ... 
+	need some fucking instructions here ...
+
+	let a = new Animator(lines_animation, params)
+	a.update();
+
+	trying to be too clever with this, need to make it more useful, specific
 */
+
 import * as Cool from '../../cool/cool.js';
 
 export class Animator {
@@ -10,7 +16,7 @@ export class Animator {
 		this.animation = animation;
 		this.params = {
 			// min max, randomize
-			segmentNum: [1, 5],
+			// segmentNum: [1, 5],
 			jiggleRange: [0, 9],
 			wiggleRange: [0, 10],
 			wiggleSpeed: [0, 4],
@@ -22,7 +28,8 @@ export class Animator {
 	}
 
 	update() {
-		this.animation.layers.forEach(layer => {
+		for (let i = 0; i < this.animation.layers.length; i++) {
+			const layer = this.animation.layers[i];
 
 			// set tween end props to current layer props
 			if (layer.tweens.length) {
@@ -58,7 +65,6 @@ export class Animator {
 				
 				layer.tweens.push(tween);
 			}
-				
-		});
+		}
 	}
 }

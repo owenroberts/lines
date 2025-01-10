@@ -1,7 +1,16 @@
+/*
+	layer includes a drawing index, start and end frame of animation
+	layer style properties - color, segNum, jiggle, wiggleRange and speed, wiggleSegments, breaks, drawInterval, drawStartIndex, drawEndIndex
+	what about xy? maybe there should not be xy? what about offset?
+	add active property?
+*/
+
 export class Layer {
 	constructor(params, drawingEndIndex) {
 		this.drawingIndex = params.drawingIndex; // fix some time
 		this.tweens = params.tweens || [];
+
+		this.isVisible = true;
 
 		this.x = params.x ?? 0;
 		this.y = params.y ?? 0;
