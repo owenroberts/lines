@@ -2,6 +2,8 @@
 	play back stfuff
 */
 
+import Stats from 'stats.js';
+
 export function Playback(lns, params) {
 
 	const { canvas, ctx } = lns.renderer;
@@ -21,9 +23,9 @@ export function Playback(lns, params) {
 
 		if (!stats && showStats) {
 			stats = new Stats();
-			stats.dom.style.position = 'absolute';
-			stats.dom.style.top = '-48px';
-			stats.dom.style.right = '0';
+			stats.dom.style.position = 'fixed';
+			stats.dom.style.top = '0';
+			stats.dom.style.right = '96px';
 			stats.dom.style.left = 'auto';
 			playPanel.el.appendChild(stats.dom);
 
@@ -156,6 +158,7 @@ export function Playback(lns, params) {
 
 	function update() {
 		
+		if (stats && showStats) stats.begin();
 		if (lns.anim.isPlaying) lns.timeline.update();
 		const { width, height, bgColor } = lns.renderer.getProps();
 
@@ -215,6 +218,8 @@ export function Playback(lns, params) {
 
 		lns.anim.update();
 		lns.anim.draw();
+
+		if (stats && showStats) stats.end();
 	}
 
 	function connect() {
@@ -292,7 +297,7 @@ export function Playback(lns, params) {
 			},
 			'viewStats': {
 				type: 'UIToggleCheck',
-				value: params.showStats,
+				value: showStats,
 				callback: value => { toggleStats(value); }
 			},
 		});

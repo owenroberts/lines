@@ -6,6 +6,8 @@
 	a.update();
 
 	trying to be too clever with this, need to make it more useful, specific
+	adds a different tween to each layer, maybe option to add same tween to all layers?
+	or maybe rewrite after changing set up to keyframes
 */
 
 import * as Cool from '../../cool/cool.js';
