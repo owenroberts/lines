@@ -10,5 +10,6 @@ import { AntiMixin } from './AntiMixin.js';
 import { Drawing } from './Drawing.js';
 import { Animator } from './Animator.js';
 import { LinesAnimation } from './LinesAnimation.js';
+import { Style } from './Style.js';
 
-export { Renderer, PixelMixin, Loader, Layer, AntiMixin, Drawing, Animator, LinesAnimation };
+export { Renderer, PixelMixin, Loader, Layer, AntiMixin, Drawing, Animator, LinesAnimation, Style };

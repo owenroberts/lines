@@ -3,12 +3,20 @@
 	layer style properties - color, segNum, jiggle, wiggleRange and speed, wiggleSegments, breaks, drawInterval, drawStartIndex, drawEndIndex
 	what about xy? maybe there should not be xy? what about offset?
 	add active property?
+
+	layer props
+	drawingIndex, styleIndex
+	tweens
+	isVisible
+	xy, startFrame, endFrame, drawingStart, drawingEnd
+	linesCount
 */
 
 export class Layer {
 	constructor(params, drawingEndIndex) {
 		this.drawingIndex = params.drawingIndex; // fix some time
-		this.tweens = params.tweens || [];
+		this.styleIndex = params.styleIndex;
+		this.tweens = params.tweens ?? [];
 
 		this.isVisible = true;
 
@@ -21,17 +29,6 @@ export class Layer {
 		this.drawingStartIndex = params.drawingStartIndex ?? 0;
 		this.drawingEndIndex = params.drawingEndIndex ?? -1;
 		
-		this.color = params.color ?? '#000000';
-		this.lineWidth = params.lineWidth ?? 1;
-
-		this.segmentNum =  params.segmentNum ?? 2; // need to fix these ... 
-		this.jiggleRange = params.jiggleRange ?? 1;
-		this.wiggleRange = params.wiggleRange ?? 1;
-		this.wiggleSpeed = params.wiggleSpeed ?? 0.1;
-		this.wiggleSegments = params.wiggleSegments ?? false; // true/false
-		this.breaks = params.breaks ?? false;
-		
-		this.linesInterval = params.linesInterval ?? 5; // draw count per line update
 		this.linesCount = params.linesCount ?? 0; // line update counter
 
 		if (this.init) this.init(params); // mixin init
@@ -60,21 +57,12 @@ export class Layer {
 		else return false;
 	}
 
-	get drawProps() {
+	getProps() {
 		const props = {
-			segmentNum: this.segmentNum,
-			jiggleRange: this.jiggleRange,
-			wiggleRange: this.wiggleRange,
-			wiggleSpeed: this.wiggleSpeed,
-			wiggleSegments: this.wiggleSegments,
 			x: this.x,
 			y: this.y,
-			color: this.color,
-			lineWidth: this.lineWidth,
 			startIndex: this.drawingStartIndex,
 			endIndex: this.drawingEndIndex,
-			breaks: this.breaks,
-			linesInterval: this.linesInterval,
 		};
 		if (this.tweens) props.tweens = this.tweens;
 		return props;

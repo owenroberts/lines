@@ -53,7 +53,7 @@ const AnimationMixin = {
 		this.drawings.splice(lns.anim.drawings.length - 1, 0, drawing);
 	},
 
-	newDrawing() {
+	addNewDrawing() {
 		this.drawings.push(new Drawing());
 	},
 

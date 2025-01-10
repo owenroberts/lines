@@ -1,6 +1,6 @@
 import '../css/animate.scss';
 
-import { Renderer, LinesAnimation, Animator, Drawing, Layer, AntiMixin, PixelMixin } from '../../src/Lines.js';
+import { Renderer, LinesAnimation, Animator, Drawing, Layer, AntiMixin, PixelMixin, Style } from '../../src/Lines.js';
 
 import { Interface, Settings, Elements } from '../../../ui/src/UI.js';
 
@@ -17,6 +17,7 @@ import { Canvas } from './Canvas.js';
 import { Capture } from './Capture.js';
 import { Data } from './Data.js';
 import { Draw } from './Draw.js';
+import { Styles } from './Styles.js';
 import { Drawings } from './Drawings.js';
 import { Eraser } from './Eraser.js';
 import { Events } from './Events.js';
@@ -60,19 +61,33 @@ lns.renderer = Renderer({
 
 
 lns.anim = new LinesAnimation(lns.renderer.ctx, 30, true, true);
+lns.anim.drawings.push(new Drawing());
+lns.anim.layers.push(new Layer({ 
+	// ...defaults, 
+	drawingIndex: 0, // Math.max(lns.anim.drawings.length - 1, 0),
+	styleIndex: 0,
+	startFrame: 0, // lns.anim.currentFrame,
+}));
+lns.anim.styles.push(new Style());
 
 // modules
 lns.playback = Playback(lns, { stats: false }); // (dps, stats?)
 lns.canvas = Canvas(lns);
-lns.draw = Draw(lns, { 
-	linesInterval: 5, 
-	segmentNum: 2,
-	jiggleRange: 1,
-	wiggleRange: 1, 
-	wiggleSpeed: 0.1,
-	color: '#000000',
-	lineWidth: 1
-});
+
+
+// lns.draw = Draw(lns, { 
+// 	linesInterval: 5, 
+// 	segmentNum: 2,
+// 	jiggleRange: 1,
+// 	wiggleRange: 1, 
+// 	wiggleSpeed: 0.1,
+// 	color: '#000000',
+// 	lineWidth: 1
+// });
+
+
+lns.styles = Styles(lns, lns.anim.styles[0].getProps());
+
 lns.brush = Brush(lns);
 lns.eraser = Eraser(lns);
 lns.events = Events(lns);
@@ -102,9 +117,11 @@ lns.animator = AnimatorUI(lns);
 
 lns.ui = Interface(lns, { useMain: false });
 lns.ui.setup();
+
 lns.canvas.connect();
 lns.playback.connect();
-lns.draw.connect();
+// lns.draw.connect();
+lns.styles.connect();
 lns.events.connect();
 lns.brush.connect();
 lns.eraser.connect();
@@ -150,7 +167,7 @@ lns.ui.settings = new Settings(lns, {
 	}
 });
 // lns.ui.settings.load();
-lns.draw.setDefaults();
+// lns.draw.setDefaults();
 
 lns.timeline.init();
 lns.playback.toggleStats();

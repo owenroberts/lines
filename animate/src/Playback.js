@@ -301,6 +301,16 @@ export function Playback(lns, params) {
 				callback: value => { toggleStats(value); }
 			},
 		});
+
+		lns.ui.addUI({
+			type: 'UIToggleCheck',
+			label: 'Suspend',
+			value: false,
+			key: '/',
+			callback: value => {
+				lns.anim.suspendUpdate = value;
+			}
+		});
 	}
 
 	return { 

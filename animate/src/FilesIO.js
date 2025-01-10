@@ -17,7 +17,7 @@ export function FilesIO(lns, params) {
 
 		const json = {
 			title: titleDisplay.value || prompt("Name this file:"),
-			v: "2.5",
+			v: "2.6",
 			w: +lns.canvas.getWidth(),
 			h: +lns.canvas.getHeight(),
 			fps: +lns.anim.fps,
@@ -58,6 +58,8 @@ export function FilesIO(lns, params) {
 				];
 			});
 		}
+
+		// styles
 
 		// const sequences = lns.sequencer.getData();
 		json.q = structuredClone(lns.anim.sequences ?? []);

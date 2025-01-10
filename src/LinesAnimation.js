@@ -20,6 +20,7 @@ export class LinesAnimation {
 
 		this.drawings = [];
 		this.layers = [];
+		this.styles = [];
 		
 		/*
 			dps is the renderer speed
@@ -263,7 +264,15 @@ export class LinesAnimation {
 			// draw each layer
 			const layer = layers[i]; 
 			const drawing = this.drawings[layer.drawingIndex]; // drawing has points + offsets
-			const props = layer.drawProps; // color, wiggle, etc
+			const props = layer.getProps();
+			const style = this.styles[layer.styleIndex];
+			// console.log('style', style);
+
+			for (const k in style) {
+				props[k] = style[k];
+			}
+
+			// console.log('props', props);
 
 			//  maybe only needed in GameAnim ?? 
 			if (x) props.x += x;
@@ -295,7 +304,7 @@ export class LinesAnimation {
 				drawing.update(props);
 			} else if (!suspendLinesUpdate && !this.suspendUpdate) { 
 				// suspend lines update can be set by renderer if fps drops
-				if (layer.linesCount >= layer.linesInterval && drawing.needsUpdate) {
+				if (layer.linesCount >= props.linesInterval && drawing.needsUpdate) {
 					// each layer has its own count for fps update
 					// drawing has count for dps update checked against global drawCount
 					drawing.update(props);
@@ -435,8 +444,10 @@ export class LinesAnimation {
 				null;
 		}
 
+		// random starting interval count
 		const randomCount = Math.round(Math.random() * 5);
 
+		// layers
 		for (let i = 0; i < json.l.length; i++) {
 			const params = this.loadParams(json.l[i]);
 			params.drawingEndIndex = this.drawings[params.drawingIndex].length;
@@ -449,6 +460,11 @@ export class LinesAnimation {
 			// this.drawings[layer.drawingIndex].update(layer); // -- this takes forever for load ...
 		}
 
+		// styles
+
+
+
+		// states
 		for (const key in json.s) {
 			this.states[key] = {
 				start: json.s[key][0],
@@ -456,7 +472,6 @@ export class LinesAnimation {
 				dir: json.s[key][2] ?? 1,
 			};
 		}
-
 
 		this.sequences = structuredClone(json.q) ?? [];
 		this.sequenceIndex = +(json.qi ?? -1);
