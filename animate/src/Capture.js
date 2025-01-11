@@ -93,7 +93,7 @@ export function Capture(lns, params) {
 
 	// make progress buttn
 	function cycle() {
-		lns.draw.reset();
+		lns.styles.reset();
 		setCaptureSettings();
 		/* set animation to last frame because it updates frames before draw */
 		lns.anim.frame = lns.anim.state.start;

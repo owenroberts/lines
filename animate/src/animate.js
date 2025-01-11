@@ -144,8 +144,6 @@ lns.ui.settings = new Settings(lns, {
 		if (settings.inteface) lns.palette.setup(settings.inteface.palettes);
 	}
 });
-// lns.ui.settings.load();
-// lns.draw.setDefaults();
 
 lns.timeline.init();
 lns.playback.toggleStats();
@@ -156,5 +154,7 @@ if (params.src) {
 	lns.fio.loadFile(params.src);
 }
 
+
 console.log('lns', lns);
+console.log('anim', lns.anim);
 window.lns = lns;

@@ -17,7 +17,7 @@ export function Styles(lns, defaults) {
 	let styleIndex = 0;
 	let changeStyle = false;
 
-	function changeStyleIndex(value) {
+	function setStyleIndex(value) {
 		if (value >= 0 && value < lns.anim.styles.length) {
 			styleIndex = value;
 			const layer = lns.anim.getDrawLayer();
@@ -73,7 +73,7 @@ export function Styles(lns, defaults) {
 			changeStyle = true;
 		}  
 		// or just change layer frame ?
-		lns.ui.update();
+		// lns.ui.update();
 		lns.anim.resetDefault();
 	} /* r key */
 
@@ -155,7 +155,7 @@ export function Styles(lns, defaults) {
 				label: 'Style Index',
 				type: 'UINumberStep',
 				value: 0,
-				callback: value => { changeStyleIndex(value) },
+				callback: value => { setStyleIndex(value) },
 			},
 			'linesInterval': {
 				type: 'UINumberStep',
@@ -220,8 +220,6 @@ export function Styles(lns, defaults) {
 
 	return { 
 		connect, reset, setDefault, 
-		changeStyleIndex,
-		// setProperties,
-		// cutEnd,
+		setStyleIndex,
 	};
 }

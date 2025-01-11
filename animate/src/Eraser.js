@@ -67,7 +67,7 @@ export function Eraser(lns) {
 			if (drawing.points.length === 0 && i !== lns.anim.layers.length - 1) {
 				layer.removeIndex(lns.anim.currentFrame, function() {
 					lns.anim.layers.splice(i, 1);
-					lns.draw.reset();
+					lns.styles.reset();
 				});
 			} else {
 				drawing.update(layer.drawProps);

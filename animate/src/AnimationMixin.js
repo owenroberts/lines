@@ -21,6 +21,17 @@ const AnimationMixin = {
 		if (index >= 0) this.layers.splice(index, 1);
 	},
 
+	cutEnd() {
+		/* make sure draw layer doesn't extend to far */
+		let endFrame = 0;
+		for (let i = 0; i < this.layers.length - 1; i++) {
+			const layer = this.layers[i];
+			if (layer.endFrame > endFrame) endFrame = layer.endFrame;
+		}
+		const layer = this.getDrawLayer();
+		if (layer.endFrame > endFrame) layer.endFrame = endFrame;
+	},
+
 	updateStates() {
 		for (const k in this.states) {
 			if (this.states[k].end > this.endFrame) {

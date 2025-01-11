@@ -54,7 +54,7 @@ export function Playback(lns, params) {
 	function toggle() {
 		if (!lns.anim.isPlaying) {
 			checkEnd();
-			lns.draw.reset();
+			lns.styles.reset();
 		} else { // ?
 			const layer = lns.anim.getDrawLayer();
 			layer.startFrame = lns.anim.currentFrame;
@@ -87,7 +87,7 @@ export function Playback(lns, params) {
 	function setFrame(f) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// no before ?? 
-			if (lns.anim.frame !== +f) lns.draw.reset();
+			if (lns.anim.frame !== +f) lns.styles.reset();
 			lns.anim.frame = +f;
 
 			const layer = lns.anim.getDrawLayer();
@@ -117,7 +117,7 @@ export function Playback(lns, params) {
 		
 		if (lns.anim.getCurrentDrawing().length > 0) {
 			// drawing to save - can add frame
-			lns.draw.reset(next);
+			lns.styles.reset(next);
 			lns.anim.frame = next;
 		} else {
 			// put in reset? 

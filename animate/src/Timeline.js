@@ -35,7 +35,7 @@ export function Timeline(lns) {
 			// quick select while moving over frames
 			if (ev.which == 1 && ev.target.classList.contains('frame') && 
 				lns.anim.currentFrame != +ev.target.textContent) {
-				lns.draw.reset();
+				lns.styles.reset();
 				lns.playback.setFrame(+ev.target.textContent);
 				lns.ui.update();
 			} else if (ev.which == 3) {
@@ -126,7 +126,7 @@ export function Timeline(lns) {
 				},
 				class: 'frame',
 				callback: function() {
-					lns.draw.reset();
+					lns.styles.reset();
 					lns.playback.setFrame(i);
 					lns.ui.update();
 				}	
@@ -259,7 +259,7 @@ export function Timeline(lns) {
 						sortLayer(layerIndex, 0);
 					},
 					addToGroup(position) {
-						lns.draw.reset(); // save current lines
+						lns.styles.reset(); // save current lines
 						if (groups.length === 0) {
 							let createGroup = prompt("Name new group", "New Group 0");
 							groups.push(createGroup);
@@ -297,13 +297,14 @@ export function Timeline(lns) {
 							}));
 						}
 					},
-					setLinesProperties: function() {
-						lns.draw.setProperties(layer.getEditProps(), true); // set ui only
+					setLinesProperties() {
+						// needs update for styles ... 
+						lns.styles.setProperties(layer.getEditProps(), true); // set ui only
 					},
 					update() { lns.ui.update(); },
 					reset() { resetLayers(); },
 					lineToLayer() {
-						lns.draw.reset();
+						lns.styles.reset();
 						const layerDrawing = lns.anim.drawings[layer.drawingIndex];
 						const currentDrawing = lns.anim.getCurrentDrawing();
 						const currentLayer = lns.anim.getDrawLayer();
@@ -320,7 +321,7 @@ export function Timeline(lns) {
 						for (let i = temp.length - 1; i > 0; i--) {
 							currentDrawing.add(temp[i]);
 						}
-						lns.draw.reset();
+						lns.styles.reset();
 						resetLayers();
 						update();
 					},
@@ -344,7 +345,7 @@ export function Timeline(lns) {
 						// });
 						// lns.anim.addLayer(newLayer);
 						
-						lns.draw.reset();
+						lns.styles.reset();
 					}
 				});
 

@@ -75,7 +75,7 @@ export function Data(lns) {
 	} /* ctrl z - undo one save state */
 
 	function copy() {
-		lns.draw.reset();
+		lns.styles.reset();
 		copyFrame = [];
 
 		// -1 dont copy draw frame 
@@ -100,7 +100,7 @@ export function Data(lns) {
 		}
 
 		pasteFrames = []; // clear pasteframes after paste ??
-		lns.draw.reset();
+		lns.styles.reset();
 		lns.ui.update();
 	} /* v key */
 
@@ -144,7 +144,7 @@ export function Data(lns) {
 			}
 			lns.playback.next(1);
 		}
-		lns.draw.reset();
+		lns.styles.reset();
 		lns.ui.update();
 	} /* alt - v */
 
@@ -233,7 +233,7 @@ export function Data(lns) {
 				deleteFrame(i);
 			}
 
-			lns.draw.cutEnd();
+			lns.anim.cutEnd();
 			lns.playback.setFrame(0);
 		}
 	} /* shift - d */
@@ -249,7 +249,7 @@ export function Data(lns) {
 	} /* shift z */
 
 	function insert(dir) {
-		lns.draw.reset();
+		lns.styles.reset();
 		saveState();
 		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
 			// insert before dir  0, after 1
@@ -262,7 +262,7 @@ export function Data(lns) {
 	} /* i, shift-i key */
 
 	function quickAnimate(type) {
-		lns.draw.reset();
+		lns.styles.reset();
 		saveState();
 		const n = +prompt('Number of frames?');
 		if (!n) return;
@@ -327,7 +327,7 @@ export function Data(lns) {
 		}
 
 		// then reset drawing to preserve any lines
-		lns.draw.reset();
+		lns.styles.reset();
 
 		if (layers) {
 			saveState();

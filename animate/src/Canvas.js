@@ -27,7 +27,7 @@ export function Canvas(lns, params) {
 	}
 
 	function fitCanvasToDrawing() {
-		lns.draw.reset();
+		lns.styles.reset();
 		
 		let tolerance = 0;
 		let min = { x: 10000, y: 10000 }; // min max size of canvas

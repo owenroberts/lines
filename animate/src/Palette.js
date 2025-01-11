@@ -47,7 +47,7 @@ export function Palette(lns) {
 	];
 
 	function add() {
-		lns.draw.reset();
+		lns.styles.reset();
 		const name = prompt('Name this palette.');
 		if (!name) return;
 		current = name;
@@ -135,7 +135,7 @@ export function Palette(lns) {
 	}
 
 	function load(name) {
-		if (resetOnChange) lns.draw.reset();
+		if (resetOnChange) lns.styles.reset();
 
 		const palette = palettes[name];
 		for (const prop in palette) {

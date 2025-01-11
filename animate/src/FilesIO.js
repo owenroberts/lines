@@ -230,7 +230,7 @@ export function FilesIO(lns, params) {
 		const drawLayer = lns.anim.getDrawLayer();
 		drawLayer.drawingIndex = lns.anim.drawings.length - 1;
 
-		lns.draw.reset();
+		lns.styles.reset();
 		lns.ui.update();
 	}
 
