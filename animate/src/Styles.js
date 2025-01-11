@@ -17,8 +17,12 @@ export function Styles(lns, defaults) {
 	let styleIndex = 0;
 	let changeStyle = false;
 
-	function update() {
-		// show style index
+	function changeStyleIndex(value) {
+		if (value >= 0 && value < lns.anim.styles.length) {
+			styleIndex = value;
+			const layer = lns.anim.getDrawLayer();
+			layer.styleIndex = styleIndex;
+		}
 	}
 
 	function getNewStyle() {
@@ -34,7 +38,6 @@ export function Styles(lns, defaults) {
 		// styleIndex = lns.anim.styles.length - 1;
 		styleIndex++;
 		lns.ui.faces.styleIndex.value = styleIndex;
-		update();
 		changeStyle = false;
 		// return style;
 		lns.anim.styles.push(style);
@@ -152,11 +155,7 @@ export function Styles(lns, defaults) {
 				label: 'Style Index',
 				type: 'UINumberStep',
 				value: 0,
-				callback: value => {
-					if (value > 0 && value < lns.anim.styles.length) {
-						styleIndex = value;
-					}
-				}
+				callback: value => { changeStyleIndex(value) },
 			},
 			'linesInterval': {
 				type: 'UINumberStep',
@@ -221,6 +220,7 @@ export function Styles(lns, defaults) {
 
 	return { 
 		connect, reset, setDefault, 
+		changeStyleIndex,
 		// setProperties,
 		// cutEnd,
 	};

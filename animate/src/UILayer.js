@@ -72,7 +72,7 @@ export class UILayer extends UICollection {
 		if (width < 20) this.append(uis.toEnd);
 		if (width > 50) this.append(uis.lock, 'lock');
 		if (width > 60) this.append(uis.tween);
-		if (width > 70) this.append(uis.remove);
+		// if (width > 70) this.append(uis.remove);
 		if (width > 80) this.append(uis.addToGroup);
 		if (width > 90) this.append(uis.merge)
 		if (width > 90 && this.canMoveUp) this.append(uis.moveUp);
@@ -101,7 +101,7 @@ export class UILayer extends UICollection {
 
 		const remove = new UIButton({
 			btnClass: 'remove',
-			text: isModal ? "Remove" : "X",
+			text: isModal ? "Remove Layer" : "X",
 			class: btnClass,
 			callback: () => {
 				this.remove(layer);
@@ -241,6 +241,19 @@ export class UILayer extends UICollection {
 			position: this.position, 
 			callback: () => { this.lns.ui.update(); }
 		});
+
+		modal.add(new UILabel({ text: "Style Index:" }));
+		modal.add(new UINumberStep({
+			debug: true,
+			value: layer.styleIndex,
+			min: 0,
+			max: this.lns.anim.styles.length - 1,
+			callback: value => {
+				console.log('callback', value);
+				layer.styleIndex = value;
+			},
+		}));
+		modal.addBreak();
 
 		const uis = this.getPropUIs(layer, params, true);
 		for (const k in uis) {
