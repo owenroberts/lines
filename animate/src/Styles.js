@@ -93,7 +93,6 @@ export function Styles(lns, defaults) {
 		const style = lns.anim.styles[styleIndex];
 		style[prop] = value;
 		// lns.ui.faces[prop].update(style[prop], true); // ui only
-
 	}
 
 	function quickColorSelect() {
@@ -217,13 +216,7 @@ export function Styles(lns, defaults) {
 			{ callback: quickColorSelect, key: 'g', text: 'Quick Color', row: true, },
 			{ callback: randomColor, key: 'shift-g', text: 'Random Color', },
 			{ callback: colorVariation, key: 'alt-g', text: 'Color Variation', },
-		], 'draw');
-
-		lns.ui.addCallbacks([
-			{ callback: quickColorSelect, key: 'g', text: 'Quick Color', row: true, },
-			{ callback: randomColor, key: 'shift-g', text: 'Random Color', },
-			{ callback: colorVariation, key: 'alt-g', text: 'Color Variation', },
-		], 'draw');
+		]);
 	}
 
 	return { 

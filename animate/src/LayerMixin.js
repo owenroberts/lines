@@ -103,17 +103,9 @@ const LayerMixin = {
 
 	getSaveProps() {
 		const props = {
-			n: this.segmentNum,
-			r: this.jiggleRange,
-			w: this.wiggleRange,
-			v: this.wiggleSpeed,
-			ws: this.wiggleSegments,
-			c: this.color,
-			lw: this.lineWidth,
 			f: [this.startFrame, this.endFrame],
 			d: this.drawingIndex,
-			b: this.breaks,
-			l: this.linesInterval,
+			s: this.styleIndex,
 			g: this.groupNumber,
 		};
 		if (this.x) props.x = this.x; // ignore if 0 or undefined

@@ -20,20 +20,22 @@ export function FilesIO(lns, params) {
 			v: "2.6",
 			w: +lns.canvas.getWidth(),
 			h: +lns.canvas.getHeight(),
-			fps: +lns.anim.fps,
+			fps: +lns.anim.fps, // use fps?
 			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1, // filter
 			mw: [...new Set(lns.anim.layers.map(layer => layer.lineWidth))].length > 1,
-
 		};
 		if (params.bg) json.bg = lns.canvas.getBGColor();
 		if (!titleDisplay.value) titleDisplay.value = json.title;
 
-		lns.draw.reset();
+		lns.styles.reset();
 		lns.playback.checkEnd();
 
 		json.d = lns.anim.drawings.map(d => d ? d.getData() : null);
 		json.d.pop(); // remove active drawing
-		if (json.d.length === 0) return;
+		if (json.d.length === 0) {
+			console.log('File not saved, no drawings to save.');
+			return;
+		}
 
 		json.l = isSingleFrame ? 
 			lns.anim.layers
@@ -60,15 +62,11 @@ export function FilesIO(lns, params) {
 		}
 
 		// styles
+		json.st = structuredClone(lns.anim.styles);
 
 		// const sequences = lns.sequencer.getData();
 		json.q = structuredClone(lns.anim.sequences ?? []);
-		if (lns.anim.sequences.length > 0) {
-			json.qi = +lns.anim.sequenceIndex;
-		} else {
-			json.qi = -1;
-		}
-		
+		json.qi = lns.anim.sequences.length > 0 ? +lns.anim.sequenceIndex : -1;
 
 		return json;
 	}
@@ -190,14 +188,12 @@ export function FilesIO(lns, params) {
 		const { dps } = lns.renderer.getProps();
 		lns.anim = new LinesAnimation(ctx, dps, true);
 		lns.anim.loadData(data, () => {
-			// lns.canvas.setWidth(data.w);
-			// lns.canvas.setHeight(data.h);
 			lns.ui.faces.width.update(data.w);
 			lns.ui.faces.height.update(data.h);
 			lns.ui.faces.fps.update(data.fps);
 			if (data.bg) lns.ui.faces.bgColor.update(data.bg);
 			if (data.g) lns.timeline.setGroups([...data.g]);
-			lns.draw.reset();
+			lns.styles.reset();
 		});
 
 		titleDisplay.value = data.title || prompt('Name animation?');
@@ -205,11 +201,8 @@ export function FilesIO(lns, params) {
 		document.title = titleDisplay.value + ' ~ animate';
 		lns.ui.faces.width.value = data.w;
 		lns.ui.faces.height.value = data.h;
-		lns.anim.layers.forEach(layer => {
-			if (layer) {
-				lns.ui.faces.color.addColor(layer.color);
-				lns.ui.faces.color.value = layer.color;
-			}
+		lns.anim.styles.forEach(style => {
+			lns.ui.faces.color.addColor(style.color);
 		});
 		if (data.bg) lns.ui.faces.bgColor.value = data.bg;
 		if (data.q) lns.sequencer.load(data.q);

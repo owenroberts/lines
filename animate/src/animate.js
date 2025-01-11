@@ -16,7 +16,6 @@ import { Brush } from './Brush.js';
 import { Canvas } from './Canvas.js';
 import { Capture } from './Capture.js';
 import { Data } from './Data.js';
-import { Draw } from './Draw.js';
 import { Styles } from './Styles.js';
 import { Drawings } from './Drawings.js';
 import { Eraser } from './Eraser.js';
@@ -28,13 +27,7 @@ import { Sequencer } from './Sequencer.js';
 import { States } from './States.js';
 import { Timeline } from './Timeline.js';
 
-// import { Clip } from './UI/Clip.js';
-// import { Layer } from './UI/Layer.js';
-// import { Sequence } from './UI/Sequence.js';
-// import { TimelineGroup } from './UI/TimelineGroup.js';
-// import { Tween } from './UI/Tween.js';
-
-const lns = {};
+const lns = {}; // app collection
 
 Object.assign(Layer.prototype, LayerMixin);
 Object.assign(LinesAnimation.prototype, AnimationMixin);
@@ -59,7 +52,6 @@ lns.renderer = Renderer({
 	lineWidth: 1,
 });
 
-
 lns.anim = new LinesAnimation(lns.renderer.ctx, 30, true, true);
 lns.anim.drawings.push(new Drawing());
 lns.anim.layers.push(new Layer({ 
@@ -73,19 +65,6 @@ lns.anim.styles.push(new Style());
 // modules
 lns.playback = Playback(lns, { stats: false }); // (dps, stats?)
 lns.canvas = Canvas(lns);
-
-
-// lns.draw = Draw(lns, { 
-// 	linesInterval: 5, 
-// 	segmentNum: 2,
-// 	jiggleRange: 1,
-// 	wiggleRange: 1, 
-// 	wiggleSpeed: 0.1,
-// 	color: '#000000',
-// 	lineWidth: 1
-// });
-
-
 lns.styles = Styles(lns, lns.anim.styles[0].getProps());
 
 lns.brush = Brush(lns);
@@ -120,7 +99,6 @@ lns.ui.setup();
 
 lns.canvas.connect();
 lns.playback.connect();
-// lns.draw.connect();
 lns.styles.connect();
 lns.events.connect();
 lns.brush.connect();

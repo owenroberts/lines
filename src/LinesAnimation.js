@@ -449,7 +449,7 @@ export class LinesAnimation {
 
 		// layers
 		for (let i = 0; i < json.l.length; i++) {
-			const params = this.loadParams(json.l[i]);
+			const params = this.loadLayerParams(json.l[i]);
 			params.drawingEndIndex = this.drawings[params.drawingIndex].length;
 			params.linesCount = randomCount;
 			
@@ -461,8 +461,7 @@ export class LinesAnimation {
 		}
 
 		// styles
-
-
+		this.styles = structuredClone(json.st);
 
 		// states
 		for (const key in json.s) {
@@ -493,30 +492,22 @@ export class LinesAnimation {
 		if (this.onLoad) this.onLoad();
 	}
 
-	loadParams(json) {
+	loadLayerParams(layerParams) {
 		const params = {
-			drawingIndex: json.d,
-			startFrame: json.f[0],
-			endFrame: json.f[1],
-			x: json.x || 0,
-			y: json.y || 0,
-			color: json.c,
-			lineWidth: json.lw || 1,
-			segmentNum: json.n,
-			jiggleRange: json.r,
-			wiggleRange: json.w,
-			wiggleSpeed: json.v,
-			wiggleSegments: json.ws,
-			breaks: json.b || false,
-			linesInterval: json.l || 5,
-			groupNumber: json.g,
+			drawingIndex: layerParams.d,
+			startFrame: layerParams.f[0],
+			endFrame: layerParams.f[1],
+			x: layerParams.x || 0,
+			y: layerParams.y || 0,
+			styleIndex: layerParams.s,
+			groupNumber: layerParams.g,
 		};
-		if (json.t) {
-			params.tweens = json.t.map(t => { 
+		if (layerParams.t) {
+			params.tweens = layerParams.t.map(t => { 
 				return { prop: t[0], startFrame: t[1], endFrame: t[2], startValue: t[3], endValue: t[4]}
 			});
 		}
-		if (json.o) params.order = json.o;
+		if (layerParams.o) params.order = layerParams.o;
 		return params;
 	}
 
