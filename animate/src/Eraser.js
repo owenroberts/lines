@@ -70,7 +70,8 @@ export function Eraser(lns) {
 					lns.styles.reset();
 				});
 			} else {
-				drawing.update(layer.drawProps);
+				console.log(layer.styleIndex, lns.anim.styles[layer.styleIndex]);
+				drawing.update({ ...layer.drawProps, ...lns.anim.styles[layer.styleIndex].getProps() });
 			}
 		}
 	}

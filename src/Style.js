@@ -23,13 +23,13 @@ export class Style {
 	reset() {
 		this.color = '#000000';
 		this.lineWidth = 1;
-		this.segmentNum =  2; // need to fix these ... 
+		this.segmentNum =  2;
 		this.jiggleRange = 1;
 		this.wiggleRange = 1;
 		this.wiggleSpeed = 0.1;
-		this.wiggleSegments = false; // true/false
+		this.wiggleSegments = false;
 		this.breaks = false;
-		this.linesInterval = 5; // draw count per line 
+		this.linesInterval = 5;
 	}
 
 	getProps() {

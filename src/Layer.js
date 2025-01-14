@@ -63,6 +63,8 @@ export class Layer {
 			y: this.y,
 			startIndex: this.drawingStartIndex,
 			endIndex: this.drawingEndIndex,
+			drawingIndex: this.drawingIndex,
+			styleIndex: this.styleIndex,
 		};
 		if (this.tweens) props.tweens = this.tweens;
 		return props;

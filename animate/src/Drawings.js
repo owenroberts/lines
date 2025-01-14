@@ -59,7 +59,7 @@ export function Drawings(lns) {
 								layer.isInFrame(lns.anim.currentFrame + 1)) {
 								layer.addIndex(lns.anim.currentFrame);
 							} else {
-								const props = layer.getCloneProps();
+								const props = layer.getProps();
 								props.startFrame = props.endFrame = lns.anim.currentFrame;
 								lns.anim.addLayer(new Layer(props));
 							}
@@ -67,12 +67,7 @@ export function Drawings(lns) {
 							// get props
 							lns.anim.addLayer(new Layer({
 								drawingIndex: i,
-								linesInterval: +lns.ui.faces.linesInterval.value,
-								segmentNum: +lns.ui.faces.segmentNum.value,
-								jiggleRange: +lns.ui.faces.jiggleRange.value,
-								wiggleRange: +lns.ui.faces.wiggleRange.value,
-								wiggleSpeed: +lns.ui.faces.wiggleSpeed.value,
-								color: lns.ui.faces.color.value,
+								styleIndex: lns.anim.styles.length - 1,
 								startFrame: lns.anim.currentFrame,
 							}));
 						}

@@ -22,6 +22,9 @@ export function Styles(lns, defaults) {
 			styleIndex = value;
 			const layer = lns.anim.getDrawLayer();
 			layer.styleIndex = styleIndex;
+			updatePropertiesUI();
+		} else {
+			lns.ui.faces.styleIndex.update(styleIndex, true);
 		}
 	}
 
@@ -80,12 +83,7 @@ export function Styles(lns, defaults) {
 	function setDefault() {
 		const style = lns.anim.styles[styleIndex];
 		style.reset();
-		// const props = style.getProps();
-		for (const prop in style.getProps()) {
-			if (lns.ui.faces[prop]) {
-				lns.ui.faces[prop].update(style[prop], true); // ui only
-			}
-		}
+		updatePropertiesUI();
 	}
 
 	function setProperty(prop, value) {
@@ -96,6 +94,15 @@ export function Styles(lns, defaults) {
 		const style = lns.anim.styles[styleIndex];
 		style[prop] = value;
 		// lns.ui.faces[prop].update(style[prop], true); // ui only
+	}
+
+	function updatePropertiesUI() {
+		const styleProps = lns.anim.styles[styleIndex].getProps();
+		for (const prop in styleProps) {
+			if (lns.ui.faces[prop]) {
+				lns.ui.faces[prop].update(styleProps[prop], true); // ui only
+			}
+		}
 	}
 
 	function quickColorSelect() {
@@ -155,7 +162,11 @@ export function Styles(lns, defaults) {
 				label: 'Style Index',
 				type: 'UINumberStep',
 				value: 0,
-				callback: value => { setStyleIndex(value) },
+				debug: true,
+				callback: value => { 
+					changeStyle = false; // fixing change style, test
+					setStyleIndex(value);
+				},
 			},
 			'linesInterval': {
 				type: 'UINumberStep',

@@ -242,7 +242,7 @@ export class UITimelineGroup extends UICollection {
 
 		modal.addBreak('Property:');
 		modal.add(new UISelect({
-			options: Object.keys(layers[0].getTweenProps()),
+			options: ['segmentNum', 'jiggleRange', 'wiggleRange', 'wiggleSpeed', 'linesInterval', 'startIndex', 'endIndex'], // put this in Contants, CNTS?
 			value: 'endIndex',
 			selected: 'endIndex',
 			callback(value) { tween.prop = value; }

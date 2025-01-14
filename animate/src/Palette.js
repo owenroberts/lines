@@ -148,7 +148,8 @@ export function Palette(lns) {
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const name = `Layer ${i}`;
 			const layer = lns.anim.layers[i];
-			const newPalette = createPallete(layer.getEditProps());
+			const style = lns.anim.styles[layer.styleIndex];
+			const newPalette = createPallete(style.getProps());
 			let isACopy = false;
 			for (const key in palettes) {
 				const palette =  palettes[key];

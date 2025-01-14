@@ -47,7 +47,7 @@ const LayerMixin = {
 			else if (this.endFrame + 1 == index) this.endFrame += 1;
 			else {
 				return new Layer({
-					...this.getCloneProps(),
+					styleIndex: this.styleIndex,
 					startFrame: index,
 					endFrame: index,
 				});
@@ -114,54 +114,18 @@ const LayerMixin = {
 		return props;
 	},
 
-	getEditProps() {
-		return {
-			segmentNum: this.segmentNum,
-			jiggleRange: this.jiggleRange,
-			wiggleRange: this.wiggleRange,
-			wiggleSpeed: this.wiggleSpeed,
-			wiggleSegments: this.wiggleSegments,
-			linesInterval: this.linesInterval,
-			breaks: this.breaks,
-			color: this.color,
-			lineWidth: this.lineWidth,
-		};
-	},
-
-	getTweenProps() {
-		return {
-			segmentNum: this.segmentNum,
-			jiggleRange: this.jiggleRange,
-			wiggleRange: this.wiggleRange,
-			wiggleSpeed: this.wiggleSpeed,
-			wiggleSegments: this.wiggleSegments,
-			linesInterval: this.linesInterval,
-			startIndex: this.drawingStartIndex,
-			endIndex: this.drawingEndIndex,
-		};
-	},
-
 	getCloneProps() {
 		return {
 			drawingIndex: this.drawingIndex,
-			segmentNum: this.segmentNum,
-			jiggleRange: this.jiggleRange,
-			wiggleRange: this.wiggleRange,
-			wiggleSpeed: this.wiggleSpeed,
-			wiggleSegments: this.wiggleSegments,
-			breaks: this.breaks,
-			linesInterval: this.linesInterval,
+			styleIndex: this.styleIndex,
 			x: this.x,
 			y: this.y,
-			color: this.color,
-			lineWidth: this.lineWidth,
 			drawingStartIndex: this.drawingStartIndex,
 			drawingEndIndex: this.drawingEndIndex,
 			startFrame: this.startFrame,
 			endFrame: this.endFrame,
 			groupNumber: this.groupNumber
 		};
-		// ignore tweens for now
 	},
 
 	setParams(json) {
@@ -170,7 +134,7 @@ const LayerMixin = {
 			this[k] = params[k];
 		}
 		// console.log(this);
-	}
+	},
 };
 
 export { LayerMixin };

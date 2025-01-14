@@ -298,8 +298,7 @@ export function Timeline(lns) {
 						}
 					},
 					setLinesProperties() {
-						// needs update for styles ... 
-						lns.styles.setProperties(layer.getEditProps(), true); // set ui only
+						lns.styles.setStyleIndex(layer.styleIndex);
 					},
 					update() { lns.ui.update(); },
 					reset() { resetLayers(); },
@@ -337,14 +336,6 @@ export function Timeline(lns) {
 						}
 						lns.anim.drawings.pop();
 						lns.anim.drawings.push(clone);
-						
-						// not sure why but dont need this
-						// const newLayer = new Layer({ 
-						// 	...props, 
-						// 	drawingIndex: lns.anim.drawings.length - 1,
-						// });
-						// lns.anim.addLayer(newLayer);
-						
 						lns.styles.reset();
 					}
 				});

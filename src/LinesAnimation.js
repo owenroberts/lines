@@ -9,6 +9,7 @@
 import * as Cool from '../../cool/cool.js';
 import { Drawing } from './Drawing.js';
 import { Layer } from './Layer.js';
+import { Style } from './Style.js';
 
 export class LinesAnimation {
 	constructor(ctx, dps, multiColor, multiWidth) {
@@ -461,7 +462,11 @@ export class LinesAnimation {
 		}
 
 		// styles
-		this.styles = structuredClone(json.st);
+		// this.styles = structuredClone(json.st);
+		for (let i = 0; i < json.st.length; i++) {
+			const params = structuredClone(json.st[i]);
+			this.styles[i] = new Style(params);
+		}
 
 		// states
 		for (const key in json.s) {

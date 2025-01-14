@@ -350,7 +350,7 @@ export class UILayer extends UICollection {
 		modal.add(new UISelect({
 			// redo props, add linesInterval 
 			// interpolation?
-			options: Object.keys(layer.getTweenProps()),
+			options: ['segmentNum', 'jiggleRange', 'wiggleRange', 'wiggleSpeed', 'linesInterval', 'startIndex', 'endIndex'],
 			value: 'endIndex',
 			selected: 'endIndex',
 			callback(value) { tween.prop = value; }
