@@ -56,9 +56,14 @@ export class Game {
 		this.bounds = params.bounds || { top: 0, bottom: 0, left: 0, right: 0 };
 		this.scenes = new SceneManager(params.scenes, Scene);
 
-		this.useMouseEvents = params.events ? params.events.includes('mouse') : true;
-		this.useKeyboardEvents = params.events ? params.events.includes('keyboard') : true;
-		this.useTouchEvents = params.events ? params.events.includes('touch') : false;
+		const isMobile = Cool.mobilecheck();
+		if (isMobile) {
+			document.body.classList.add('mobile');
+		}
+
+		this.useMouseEvents = params.events?.includes('mouse') && !isMobile;
+		this.useKeyboardEvents = params.events?.includes('keyboard') && !isMobile;
+		this.useTouchEvents = params.events?.includes('touch') && isMobile;
 
 		// view is for zooming in and out, could stay in game, could be part of renderer or its own module ...
 
@@ -117,7 +122,22 @@ export class Game {
 			this.drawStats.dom.style.left = 'auto';
 			this.drawStats.dom.style.right = '0px';
 			this.drawStats.dom.style.top = '48px';
+		}
 
+		this.loadingUpdate = false;
+		if (params.loadingMessage && params.loadingSplash) {
+			this.loadingSplash = document.getElementById(params.loadingSplash);
+			const loadingMessage = document.getElementById(params.loadingMessage);
+			if (!loadingMessage || !this.loadingSplash) {
+				console.log("Loading splash or message not found.");
+			} else {
+				this.loadingUpdate = true;
+				this.loadingAnimation = function() {
+					let t = '~' + title.textContent + '~';
+					loadingMessage.textContent = t;
+				};
+				this.loadingInterval = setInterval(this.loadingAnimation, 1000 / 12);
+			}
 		}
 	}
 
@@ -159,6 +179,10 @@ export class Game {
 				}
 			}
 			this._start();
+			if (this.loadingUpdate) {
+				clearInterval(this.loadingInterval);
+				this.loadingSplash.remove();
+			}
 		});
 	}
 
