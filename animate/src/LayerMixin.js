@@ -1,3 +1,7 @@
+/*
+	adds functionality only needed by animation editor
+*/
+
 import { Layer } from '../../src/Lines.js';
 
 const LayerMixin = {
@@ -133,7 +137,6 @@ const LayerMixin = {
 		for (const k in params) {
 			this[k] = params[k];
 		}
-		// console.log(this);
 	},
 };
 
