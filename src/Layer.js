@@ -14,8 +14,8 @@
 
 export class Layer {
 	constructor(params, drawingEndIndex) {
-		this.drawingIndex = params.drawingIndex; // fix some time
-		this.styleIndex = params.styleIndex;
+		this.drawingIndex = params.drawingIndex ?? 0; // fix some time
+		this.styleIndex = params.styleIndex ?? 0;
 		this.tweens = params.tweens ?? [];
 
 		this.isVisible = true;
