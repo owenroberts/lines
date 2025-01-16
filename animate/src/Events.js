@@ -3,6 +3,7 @@
 */
 
 import * as Cool from '../../../cool/cool.js';
+import { POINTS } from '../../src/Lines.js';
 
 export function Events(lns) {
 
@@ -91,8 +92,8 @@ export function Events(lns) {
 		isDrawing = false;
 		const drawing = lns.anim.getCurrentDrawing();
 		let last = drawing.get(-2)[0]; /* prevent saving single point drawing segments */
-		if (last !== 'end' && last !== 'add' && drawing.length > 1) {
-			drawing.add((connectLines || ev.shiftKey) ? 'add' : 'end');
+		if (last !== POINTS.END && last !== POINTS.ADD && drawing.length > 1) {
+			drawing.add((connectLines || ev.shiftKey) ? POINTS.ADD : POINTS.END);
 		} else {
 			drawing.popPoint(); // if its just one point pop it off ...
 		}

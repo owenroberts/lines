@@ -10,6 +10,7 @@ import * as Cool from '../../cool/cool.js';
 import { Drawing } from './Drawing.js';
 import { Layer } from './Layer.js';
 import { Style } from './Style.js';
+import { POINTS } from './Consts.js';
 
 export class LinesAnimation {
 	constructor(ctx, dps, multiColor, multiWidth) {
@@ -273,7 +274,7 @@ export class LinesAnimation {
 				props[k] = style[k];
 			}
 
-			// console.log('props', props);
+			// if (i === 0) console.log('props', props);
 
 			//  maybe only needed in GameAnim ?? 
 			if (x) props.x += x;
@@ -346,17 +347,17 @@ export class LinesAnimation {
 			// loop over points
 			for (let j = props.startIndex; j < endIndex; j++) {
 				const s = drawing.get(j); // returns [point, offset]
-				if (s[0] === 'end' || s[0] === 'add') continue; // end of line or connected line
+				if (s[0] === POINTS.END || s[0] === POINTS.ADD) continue; // end of line or connected line
 				let e = drawing.get(j + 1); // get next [point, offset]
-				if (e[0] === 'end') continue;
-				if (e[0] === 'add') {
+				if (e[0] === POINTS.END) continue;
+				if (e[0] === POINTS.ADD) {
 					// connect end of first point
 					// go backwards to find start point of this segment
 					// start assuming its very begining
 					e = drawing.get(0);
 					for (let k = j; k > 0; k--) {
 						let ep = drawing.get(k)[0];
-						if (ep === 'end' || ep === 'add') {
+						if (ep === POINTS.END || ep === POINTS.ADD) {
 							e = drawing.get(k + 1);
 							break;
 						}
@@ -499,13 +500,13 @@ export class LinesAnimation {
 
 	loadLayerParams(layerParams) {
 		const params = {
-			drawingIndex: layerParams.d,
-			startFrame: layerParams.f[0],
-			endFrame: layerParams.f[1],
-			x: layerParams.x || 0,
-			y: layerParams.y || 0,
-			styleIndex: layerParams.s,
-			groupNumber: layerParams.g,
+			drawingIndex: layerParams.d ?? 0,
+			startFrame: layerParams.f ? layerParams.f[0] : 0,
+			endFrame: layerParams.f ? layerParams.f[1] : 0,
+			x: layerParams.x ?? 0,
+			y: layerParams.y ?? 0,
+			styleIndex: layerParams.s ?? 0,
+			groupNumber: layerParams.g ?? -1,
 		};
 		if (layerParams.t) {
 			params.tweens = layerParams.t.map(t => { 

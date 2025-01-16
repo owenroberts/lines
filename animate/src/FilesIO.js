@@ -30,7 +30,7 @@ export function FilesIO(lns, params) {
 		lns.styles.reset();
 		lns.playback.checkEnd();
 
-		json.d = lns.anim.drawings.map(d => d ? d.getData() : null);
+		json.d = lns.anim.drawings.map(d => d ? d.getPoints() : null);
 		json.d.pop(); // remove active drawing
 		if (json.d.length === 0) {
 			console.log('File not saved, no drawings to save.');

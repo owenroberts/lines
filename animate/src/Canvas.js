@@ -38,7 +38,7 @@ export function Canvas(lns, params) {
 			const drawing = lns.anim.drawings[layer.drawingIndex];
 			for (let j = 0; j < drawing.length; j++) {
 				const point = drawing.points[j];
-				if (point === 'end' || point === 'add') continue;
+				if (point === POINTS.END || point === POINTS.ADD) continue;
 				tolerance = Math.max(tolerance, layer.jiggleRange * 4); /* account for random jiggle */
 				min.x = Math.min(min.x, point[0] + layer.x);
 				min.y = Math.min(min.y, point[1] + layer.y);

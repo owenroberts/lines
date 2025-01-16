@@ -8,6 +8,7 @@ import { UITween } from './UITween.js';
 import { UITimelineGroup } from './UITimelineGroup.js';
 import { Elements } from '../../../ui/src/UI.js';
 const { UIButton, UIElement,  } = Elements;
+import { POINTS } from '../../src/Lines.js';
 
 export function Timeline(lns) {
 
@@ -313,8 +314,7 @@ export function Timeline(lns) {
 						const temp = []; // points added backwards
 						for (let i = layerDrawing.length - 1; i > 0; i--) {
 							const p = layerDrawing.pop();
-							// if (p !== 'end') currentDrawing.add(p);
-							if (p !== 'end') temp.push(p);
+							if (p !== POINTS.END) temp.push(p);
 							else break;
 						}
 						for (let i = temp.length - 1; i > 0; i--) {
@@ -329,11 +329,8 @@ export function Timeline(lns) {
 						const props = layer.getCloneProps();
 						const drawing = lns.anim.drawings[props.drawingIndex];
 						const clone = new Drawing();
-						for (let i = 0; i < drawing.length; i++) {
-							if (drawing.get(i)[0] === 'add') clone.add('add');
-							else if (drawing.get(i)[0] === 'end') clone.add('end');
-							else clone.add([...drawing.get(i)[0]]);
-						}
+						clone.points = structuredClone(drawing.points);
+						clone.offsets = structuredClone(drawing.offsets);
 						lns.anim.drawings.pop();
 						lns.anim.drawings.push(clone);
 						lns.styles.reset();

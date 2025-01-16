@@ -1,4 +1,5 @@
 import * as Cool from '../../cool/cool.js';
+import { POINTS } from './Consts.js';
 
 export class Drawing {
 	constructor(points) {
@@ -16,10 +17,10 @@ export class Drawing {
 
 	// add a point
 	add(point) {
-		if (point === 'add' || point === 1) {
-			this.points.push('add');
-		} else if (point === 'end' || point === 0) {
-			this.points.push('end');
+		if (point === 'add' || point === POINTS.ADD) {
+			this.points.push(POINTS.ADD);
+		} else if (point === 'end' || point === POINTS.END) {
+			this.points.push(POINTS.END);
 		} else if (Array.isArray(point)) { 	// from json file
 			this.points.push(point);
 		} else {

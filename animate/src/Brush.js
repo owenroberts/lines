@@ -3,6 +3,7 @@
 */
 
 import * as Cool from "../../../cool/cool.js";
+import { POINTS } from '../../src/Lines.js';
 
 export function Brush(lns) {
 	
@@ -53,7 +54,7 @@ export function Brush(lns) {
 				drawing.add(point);
 			}
 		}
-		drawing.add('end');
+		drawing.add(POINTS.END);
 	}
 
 	function startFill(point) {
@@ -85,7 +86,7 @@ export function Brush(lns) {
 						_y + Cool.randomInt(-1, 1)
 					));
 				}
-				drawing.add('end');
+				drawing.add(POINTS.END);
 			}
 		}
 		fillActive = false;

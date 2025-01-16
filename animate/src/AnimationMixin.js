@@ -1,4 +1,4 @@
-import { Drawing } from '../../src/Lines.js';
+import { Drawing, POINTS } from '../../src/Lines.js';
 
 const AnimationMixin = {
 	
@@ -43,7 +43,7 @@ const AnimationMixin = {
 	merge(a, b, layer) {
 		const dA = this.drawings[a]; // drawing a
 		const dB = this.drawings[b];
-		if (dA.points[dA.points.length - 1] !== 'end') dA.add('end');
+		if (dA.points[dA.points.length - 1] !== POINTS.END) dA.add(POINTS.END);
 		while (dB.length > 0) {
 			dA.add(dB.shift());
 		}

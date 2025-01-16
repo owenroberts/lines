@@ -118,7 +118,7 @@ const LayerMixin = {
 		if (this.startFrame > 0 && this.endFrame > 0) props.f = [this.startFrame, this.endFrame];
 		if (this.x) props.x = this.x; // ignore if 0 or undefined
 		if (this.y) props.y = this.y;
-		if (this.tweens) props.t = this.tweens.map(tween => { return [tween.prop, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue]});
+		if (this.tweens.length > 0) props.t = this.tweens.map(tween => { return [tween.prop, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue]});
 		return props;
 	},
 

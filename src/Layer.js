@@ -65,8 +65,8 @@ export class Layer {
 			endIndex: this.drawingEndIndex,
 			drawingIndex: this.drawingIndex,
 			styleIndex: this.styleIndex,
+			tweens: this.tweens,
 		};
-		if (this.tweens) props.tweens = this.tweens;
 		return props;
 	}
 }

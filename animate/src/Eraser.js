@@ -3,6 +3,7 @@
 */
 
 import * as Cool from '../../../cool/cool.js';
+import { POINTS } from '../../src/Lines.js';
 
 export function Eraser(lns) {
 
@@ -24,8 +25,8 @@ export function Eraser(lns) {
 			const drawing = lns.anim.drawings[layer.drawingIndex];
 
 			for (let j = drawing.points.length - 1; j >= 0; j--) {
-				if (drawing.points[j] === 'end') continue;
-				if (drawing.points[j] === 'add') continue; // prob need to deal w this
+				if (drawing.points[j] === POINTS.END) continue;
+				if (drawing.points[j] === POINTS.ADD) continue; // prob need to deal w this
 
 				const point = new Cool.Vector(drawing.points[j]);
 				const d = position.distance(point);
@@ -34,31 +35,31 @@ export function Eraser(lns) {
 					if (method === 'lines') {
 						let s = j, e = j; // start and end points
 
-						while (drawing.points[s] !== 'end' && s > 0) {
+						while (drawing.points[s] !== POINTS.END && s > 0) {
 							s--;
 						}
 						
-						while (drawing.points[e] !== 'end' && e < drawing.length) {
+						while (drawing.points[e] !== POINTS.END && e < drawing.length) {
 							e++;
 						}
 					
 						drawing.points.splice(s, e - s);
 
 					} else if (method === 'points') {
-						drawing.points[j] = 'end';
+						drawing.points[j] = POINTS.END;
 					}
 				}
 			}
 
 			if (method === 'points') {
 				for (let j = drawing.points.length - 1; j >= 0; j--) {
-					if (drawing.points[j] === 'end' && drawing.points[j - 1] === 'end') {
+					if (drawing.points[j] === POINTS.END && drawing.points[j - 1] === POINTS.END) {
 						drawing.points.splice(j, 1);
 					}
-					if (drawing.points[j + 1] === 'end' && drawing.points[j - 1] === 'end') {
+					if (drawing.points[j + 1] === POINTS.END && drawing.points[j - 1] === POINTS.END) {
 						drawing.points.splice(j, 1);
 					}
-					if (drawing.points[j] === 'end' && j === 0) {
+					if (drawing.points[j] === POINTS.END && j === 0) {
 						drawing.points.splice(j, 1);
 					}
 				}

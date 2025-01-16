@@ -2,14 +2,12 @@
 	methods for animate
 */
 
-const DrawingMixin = {
+import { POINTS } from '../../src/Lines.js';
 
-	getData() {
-		return this.points.map(point => {
-			if (point === 'end') return 0;
-			if (point === 'add') return 1;
-			return [...point];
-		});
+export const DrawingMixin = {
+
+	getPoints() {
+		return structuredClone(this.points);
 	},
 	
 	reset() {
@@ -19,8 +17,8 @@ const DrawingMixin = {
 
 	popPoint() {
 		if (this.length > 0) {
-			if (this.pop() === 'end') this.pop();
-			this.add('end');
+			if (this.pop() === POINTS.END) this.pop();
+			this.add(POINTS.END);
 		}
 	},
 
@@ -29,8 +27,8 @@ const DrawingMixin = {
 			this.pop(); // remove end
 			let len = this.length - 1;
 			for (let i = len; i >= 0; i--) {
-				if (this.points[i] !== 'end' &&
-					this.points[i] !== 'add') {
+				if (this.points[i] !== POINTS.END &&
+					this.points[i] !== POINTS.ADD) {
 					this.pop();
 				}
 				else break;
@@ -38,5 +36,3 @@ const DrawingMixin = {
 		}
 	}
 };
-
-export { DrawingMixin };
