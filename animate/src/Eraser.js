@@ -71,7 +71,7 @@ export function Eraser(lns) {
 					lns.styles.reset();
 				});
 			} else {
-				console.log(layer.styleIndex, lns.anim.styles[layer.styleIndex]);
+				// console.log(layer.styleIndex, lns.anim.styles[layer.styleIndex]);
 				drawing.update({ ...layer.drawProps, ...lns.anim.styles[layer.styleIndex].getProps() });
 			}
 		}

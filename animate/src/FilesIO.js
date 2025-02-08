@@ -68,6 +68,8 @@ export function FilesIO(lns, params) {
 		json.q = structuredClone(lns.anim.sequences ?? []);
 		json.qi = lns.anim.sequences.length > 0 ? +lns.anim.sequenceIndex : -1;
 
+		console.log('save single', json);
+
 		return json;
 	}
 

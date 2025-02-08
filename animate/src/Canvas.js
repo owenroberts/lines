@@ -8,6 +8,8 @@
 	not strictly UI
 */
 
+import { POINTS } from '../../src/Lines.js';
+
 export function Canvas(lns, params) {
 
 	const { canvas, ctx } = lns.renderer;

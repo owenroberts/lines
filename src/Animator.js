@@ -12,61 +12,68 @@
 
 import * as Cool from '../../cool/cool.js';
 
-export class Animator {
+const defaultParams = {
+	jiggleRange: [0, 9],
+	wiggleRange: [0, 10],
+	wiggleSpeed: [0, 4],
+	linesInterval: [1, 10],
+	startIndex: [0, 'end'],
+	endIndex: [0, 'end'],
+};
 
-	constructor(animation, _params) {
-		this.animation = animation;
-		this.params = {
-			// min max, randomize
-			// segmentNum: [1, 5],
-			jiggleRange: [0, 9],
-			wiggleRange: [0, 10],
-			wiggleSpeed: [0, 4],
-			linesInterval: [1, 10],
-			startIndex: [0, 'end'],
-			endIndex: [0, 'end'],
-			..._params
-		};
+export function Animator(animation, params={}) {
+
+	for (const k in defaultParams) {
+		if (!params.hasOwnProperty(k)) {
+			params[k] = defaultParams[k];
+		}
 	}
 
-	update() {
-		for (let i = 0; i < this.animation.layers.length; i++) {
-			const layer = this.animation.layers[i];
+	function update() {
+		for (let i = 0; i < animation.layers.length; i++) {
+			const layer = animation.layers[i];
+			const props = { ...layer.getProps(), ...animation.styles[layer.styleIndex].getProps() };
 
 			// set tween end props to current layer props
-			if (layer.tweens.length) {
-				const p = layer.tweens[0].prop;
-				if (!['startIndex', 'endIndex'].includes(p)) {
-					layer[p] = layer.tweens[0].endValue;
-				}
-			}
+			// this doesn't work with current layer styles setup
+			// if (layer.tweens.length) {
+			// 	const p = layer.tweens[0].prop;
+			// 	if (!['startIndex', 'endIndex'].includes(p)) {
+			// 		layer[p] = layer.tweens[0].endValue;
+			// 	}
+			// }
 			
 			layer.tweens = []; // remove old tweens
-			const prop = Cool.choice(...Object.keys(this.params)); // choose prop
+			const prop = Cool.choice(...Object.keys(params)); // choose prop
 
 			// change prop or tween
 			if (prop === 'startIndex' || prop === 'endIndex') {
 				const tween = {
 					prop: prop,
 					startFrame: 0,
-					endFrame: this.animation.endFrame,
+					endFrame: animation.endFrame,
 					startValue: 0,
-					endValue: this.animation.drawings[layer.drawingIndex].length - 1,
+					endValue: animation.drawings[layer.drawingIndex].length - 1,
 				};
 				layer.tweens.push(tween);
 			}
 			else if (Cool.chance(0.5)) { // change prop
-				layer[prop] = Cool.randomInt(this.params[prop][0], this.params[prop][1]);
+				// layer[prop] = Cool.randomInt(this.params[prop][0], this.params[prop][1]);
+				const val = Cool.randomInt(...params[prop]);
+				animation.overrideProperty(prop, val);
 			} else { //  add tweens
 				const tween = { prop: prop };
 				tween.startFrame = 0;
-				tween.endFrame = this.animation.endFrame;
+				tween.endFrame = animation.endFrame;
 				
-				tween.startValue = layer[prop];
-				tween.endValue = Cool.randomInt(this.params[prop][0], this.params[prop][1]);
+				tween.startValue = props[prop];
+				tween.endValue = Cool.randomInt(...params[prop]);
 				
 				layer.tweens.push(tween);
 			}
+			// console.log('tweens', i, JSON.stringify(layer.tweens));
 		}
 	}
+
+	return { update };
 }
