@@ -79,6 +79,8 @@ export function Sequencer(lns) {
 	}
 
 	function update() {
+		// console.trace('update');
+
 		// if (sequences.length === 0) return false;
 		// return sequences.map(s => { return { name: s.name, clips: s.getData(), }});
 		lns.anim.sequences = sequences.map(s => { return { 
@@ -87,6 +89,7 @@ export function Sequencer(lns) {
 			clipIndex: 0,
 		}});
 		lns.anim.sequenceIndex = sequenceIndex;
+		// console.log('sqr', lns.anim.sequenceIndex);
 	}
 
 	function load(data) {
@@ -102,10 +105,12 @@ export function Sequencer(lns) {
 		panel = lns.ui.getPanel('sequencer');
 
 		// save in settings before load means it tries to set non existent value ...
+		// caused error but seems fine, idk ... 
 		sequenceSelector = lns.ui.addProp('sequenceSelector', {
 			type: 'UISelect',
 			options: [{ value: -1, text: 'None' }],
 			callback: value => {
+				// console.log(value, sequenceSelector);
 				// console.log('seq sel', value);
 				// if (!sequences[sequenceIndex]) return; // settings err
 				if (sequences[sequenceIndex]) sequences[sequenceIndex].hide();

@@ -52,6 +52,7 @@ export class LinesAnimation {
 		this.suspendUpdate = false;
 
 		if (this.init) this.init(); // pixel init
+		// console.log('sqi constructor', this.sequenceIndex)
 	}
 
 	randomCount() {
@@ -152,6 +153,7 @@ export class LinesAnimation {
 	}
 
 	nextClip(playedState) {
+		// console.log('sqi', this.sequenceIndex);
 		const seq = this.sequences[this.sequenceIndex];
 		let clip = seq.clips[seq.clipIndex];
 

@@ -15,8 +15,6 @@ export function Playback(lns, params) {
 	let showStats = params.showStats || false;
 
 	lns.renderer.addCallback(update);
-	lns.renderer.addCallback(preTime, 'pre'); // i dont think these are used /// 
-	lns.renderer.addCallback(postRender, 'post');
 
 	function toggleStats(value) {
 		if (value !== undefined) showStats = value;
@@ -148,15 +146,9 @@ export function Playback(lns, params) {
 		next(1);
 	}
 
-	function preTime() {
-		if (showStats) stats.begin();
-	}
-
-	function postRender() {
-		if (showStats) stats.end();
-	}
-
 	function update() {
+
+		if (showStats) stats.begin();
 		
 		if (stats && showStats) stats.begin();
 		if (lns.anim.isPlaying) lns.timeline.update();
@@ -219,7 +211,7 @@ export function Playback(lns, params) {
 		lns.anim.update();
 		lns.anim.draw();
 
-		if (stats && showStats) stats.end();
+		if (showStats) stats.end();
 	}
 
 	function connect() {

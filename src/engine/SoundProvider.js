@@ -25,17 +25,17 @@ export function SoundProvider(params={}, callback) {
 	let loaded = 0;
 
 	for (let i = 0; i < audioFiles.length; i++) {
-		const { key, url, sequence } = audioFiles[i];
+		const { key, url, sequence, volume } = audioFiles[i];
 		if (sequence) {
 			sounds[key] = [];
 			const [s, e] = sequence;
 			for (let k = s; k <= e; k++) {
 				fileCount++;
-				preloadAudio(key, `${baseUrl}${key}_${k}.wav`, true);
+				preloadAudio(key, `${baseUrl}${key}_${k}.wav`, true, volume);
 			}
 		} else {
 			fileCount++;
-			preloadAudio(key, `${baseUrl}${url}`);
+			preloadAudio(key, `${baseUrl}${url}`, false, volume);
 		}
 	}
 
@@ -46,10 +46,11 @@ export function SoundProvider(params={}, callback) {
 		}
 	}, 1000 / 30);
 
-	function preloadAudio(key, url, isSequence) {
+	function preloadAudio(key, url, isSequence, volume=1) {
 		var audio = new Audio();
 		audio.addEventListener('canplaythrough', loadedAudio, false);
 		audio.src = url;
+		audio.volume = volume;
 		audio.load();
 		if (isSequence) sounds[key].push(audio);
 		else sounds[key] = audio;
