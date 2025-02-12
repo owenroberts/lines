@@ -14,50 +14,52 @@ export class GameAnim extends LinesAnimation {
 	update() { /* too many things to stick in onPlayedState etc */
 		if (this.isPlaying) {
 			if (this.drawCount >= this.drawsPerFrame - 1) {
-				
-				if (this.randomFrames) {
-					while (this.prevFrame === this.currentFrame) {
-						this.currentFrame = Cool.randomInt(this.state.start, this.state.end);
-					}
-					this.prevFrame = this.currentFrame;
-				} else {
-					if (this.sequenceIndex >= 0) {
-						this.nextClip(false);
-					}
-					let playedState = false;
-					if (this.state.dir === 1) {
-						if (this.currentFrame >= this.state.end) {
-							this.currentFrame = this.loop ? this.state.start : this.state.end;
-							playedState = true;
-						} else {
-							this.currentFrame++;
-						}
-					} else {
-						if (this.currentFrame <= this.state.start) {
-							this.currentFrame = this.loop ? this.state.end : this.state.start;
-							playedState = true;
-						} else {
-							this.currentFrame--;
-						}
-					}
-
-
-					if (playedState) {
-						if (this.onPlayedOnce) {
-							this.onPlayedOnce();
-							this.onPlayedOnce = undefined;
-						}
-						if (this.onPlayedState) this.onPlayedState();
-						if (this.sequenceIndex >= 0) {
-							this.nextClip(true);
-						}
-					}
-				}
-
+				this.nextFrame();
 				this.drawCount = 0;
 			}
 			this.drawCount++;
 			if (this.onUpdate) this.onUpdate();
+		}
+	}
+
+	nextFrame() {
+		if (this.randomFrames) {
+			while (this.prevFrame === this.currentFrame) {
+				this.currentFrame = Cool.randomInt(this.state.start, this.state.end);
+			}
+			this.prevFrame = this.currentFrame;
+		} else {
+			if (this.sequenceIndex >= 0) {
+				this.nextClip(false);
+			}
+			let playedState = false;
+			if (this.state.dir === 1) {
+				if (this.currentFrame >= this.state.end) {
+					this.currentFrame = this.loop ? this.state.start : this.state.end;
+					playedState = true;
+				} else {
+					this.currentFrame++;
+				}
+			} else {
+				if (this.currentFrame <= this.state.start) {
+					this.currentFrame = this.loop ? this.state.end : this.state.start;
+					playedState = true;
+				} else {
+					this.currentFrame--;
+				}
+			}
+
+
+			if (playedState) {
+				if (this.onPlayedOnce) {
+					this.onPlayedOnce();
+					this.onPlayedOnce = undefined;
+				}
+				if (this.onPlayedState) this.onPlayedState();
+				if (this.sequenceIndex >= 0) {
+					this.nextClip(true);
+				}
+			}
 		}
 	}
 
