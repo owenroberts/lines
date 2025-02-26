@@ -125,16 +125,16 @@ export class Game {
 		}
 
 		this.loadingUpdate = false;
-		if (params.loadingMessage && params.loadingSplash) {
-			this.loadingSplash = document.getElementById(params.loadingSplash);
-			const loadingMessage = document.getElementById(params.loadingMessage);
-			if (!loadingMessage || !this.loadingSplash) {
-				console.log("Loading splash or message not found.");
+		const loadingTitle = document.getElementById(params.loadingTitle ?? "title");
+		this.loadingSplash = document.getElementById(params.loadingSplash ?? "splash");
+		if (loadingTitle && this.loadingSplash) {
+			if (!loadingTitle || !this.loadingSplash) {
+				console.warn("Loading splash or message not found.");
 			} else {
 				this.loadingUpdate = true;
 				this.loadingAnimation = function() {
 					let t = '~' + title.textContent + '~';
-					loadingMessage.textContent = t;
+					loadingTitle.textContent = t;
 				};
 				this.loadingInterval = setInterval(this.loadingAnimation, 1000 / 12);
 			}
@@ -165,7 +165,6 @@ export class Game {
 		this.loader.load(files, loadDataOnly, assets => {
 			for (const type in assets) {
 				if (type !== 'animations') {
-					console.log(type);
 					this.data[type] = assets[type];
 				} else {
 					for (const file in assets.animations) {
