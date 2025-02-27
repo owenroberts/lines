@@ -236,7 +236,7 @@ export function Timeline(lns) {
 				if (viewActiveLayers && !layers.includes(layer)) continue;
 
 				const colWidth = (tlFrameWidth + 2) * (Math.floor(layer.endFrame / tlInc) - Math.floor(layer.startFrame / tlInc) + 1);
-
+				
 				const ui = new UILayer(layer, {
 					lns: lns,
 					group: viewGroups ? undefined : groups[layer.groupNumber],
@@ -342,13 +342,15 @@ export function Timeline(lns) {
 				rowCount++;
 				timeline.append(ui, `layer-${i}`);
 
+
 				/* add tweens -- add methods like getTweens */
 				for (let j = 0; j < layer.tweens.length; j++) {
 					const tween = layer.tweens[j];
+					const tweenColWidth = (tlFrameWidth + 2) * (Math.floor(tween.endFrame / tlInc) - Math.floor(tween.startFrame / tlInc) + 1);
 					const tweenUI = new UITween({
 						type: 'tween',
 						css: {
-							width: frameWidth * (tween.endFrame - tween.startFrame + 1) + 'px',
+							width: tweenColWidth + 'px',
 							gridRowStart: gridRowStart, 
 							gridRowEnd: gridRowEnd, 
 							gridColumnStart: Math.floor(tween.startFrame / tlInc) * 2 + 1,

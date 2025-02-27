@@ -8,7 +8,8 @@
 		audioFiles: [
 			{ key, url }
 			{ key, sequence } ... key is base url for sequence, url_index.wav
-		]	
+		],
+		baseUrl: './sfx' // default
 	}, soundFiles => {
 	
 	})
@@ -60,12 +61,13 @@ export function SoundProvider(params={}, callback) {
 		loaded++;
 	}
 
-	function play(key, randomRate, rateMin, rateMax) {
+	function play(key, randomRate, rateMin, rateMax, callback) {
 		if (!sounds[key] && loaded > 0) return console.warn('No sound', key);
 		if (!sounds[key]) return;
 		const s = Array.isArray(sounds[key]) ? random(sounds[key]) : sounds[key];
 		if (randomRate) s.playbackRate = random(rateMin ?? 0.9, rateMax ?? 1.1);
 		s.play();
+		if (callback) s.addEventListener('ended', callback);
 	}
 
 	// the way this works is weird ... 

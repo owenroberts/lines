@@ -76,7 +76,7 @@ export function Styles(lns, defaults) {
 			changeStyle = true;
 		}  
 		// or just change layer frame ?
-		// lns.ui.update();
+		lns.ui.update();
 		lns.anim.resetDefault();
 	} /* r key */
 
