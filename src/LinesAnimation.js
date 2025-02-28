@@ -478,6 +478,7 @@ export class LinesAnimation {
 				start: json.s[key][0],
 				end: json.s[key][1],
 				dir: json.s[key][2] ?? 1,
+				loop: json.s[key][3] ?? true,
 			};
 		}
 

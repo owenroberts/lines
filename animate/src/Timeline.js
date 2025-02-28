@@ -146,8 +146,8 @@ export function Timeline(lns) {
 			const stateLine = new UIElement({
 				class: 'state',
 				css: {
-					gridColumnStart: lns.anim.state.start * 2 + 1,
-					gridColumnEnd: (lns.anim.state.end + 1) * 2 + 1,
+					gridColumnStart: Math.floor(lns.anim.state.start / tlInc) * 2 + 1,
+					gridColumnEnd: Math.floor((lns.anim.state.end + 1) / tlInc) * 2 + 1,
 				}
 			});
 			timeline.append(stateLine);

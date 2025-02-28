@@ -57,6 +57,7 @@ export function FilesIO(lns, params) {
 					lns.anim.states[state].start, 
 					lns.anim.states[state].end,
 					lns.anim.states[state].dir ?? 1,
+					lns.anim.states[state].loop ?? true,
 				];
 			});
 		}

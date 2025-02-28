@@ -110,7 +110,7 @@ const LayerMixin = {
 		if (this.groupNumber >= 0) props.g = props.groupNumber;
 		if (this.styleIndex > 0) props.s = this.styleIndex;
 		// if (this.drawingIndex >= 0) props.d = this.drawingIndex;
-		if (this.startFrame > 0 && this.endFrame > 0) props.f = [this.startFrame, this.endFrame];
+		if (this.startFrame > 0 || this.endFrame > 0) props.f = [this.startFrame, this.endFrame];
 		if (this.x) props.x = this.x; // ignore if 0 or undefined
 		if (this.y) props.y = this.y;
 		if (this.tweens.length > 0) props.t = this.tweens.map(tween => { return [tween.prop, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue]});

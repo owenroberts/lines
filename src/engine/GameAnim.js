@@ -35,7 +35,7 @@ export class GameAnim extends LinesAnimation {
 			let playedState = false;
 			if (this.state.dir === 1) {
 				if (this.currentFrame >= this.state.end) {
-					this.currentFrame = this.loop ? this.state.start : this.state.end;
+					this.currentFrame = this.state.loop ? this.state.start : this.state.end;
 					playedState = true;
 				} else {
 					this.currentFrame++;
