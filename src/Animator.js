@@ -1,6 +1,10 @@
 /*
 	animation params
 	need some fucking instructions here ...
+	don't call update every frame, it creates tweens
+	call update if you want it to change
+	maybe change that func name?
+	also call it at the beginning
 
 	let a = new Animator(lines_animation, params)
 	a.update();
