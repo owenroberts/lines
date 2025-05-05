@@ -265,7 +265,6 @@ export function FilesIO(lns, params) {
 		}
 	}
 
-
 	lns.renderer.canvas.addEventListener('dragover', dragOverHandler);
 	lns.renderer.canvas.addEventListener('drop', dropHandler);
 

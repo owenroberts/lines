@@ -4,6 +4,7 @@
 	maybe not if sequence is part of animate
 */
 
+import * as Cool from "../../../cool/cool.js";
 import { Elements } from '../../../ui/src/UI.js';
 const { UILabel } = Elements;
 
@@ -46,7 +47,6 @@ export function Capture(lns, params) {
 	}
 
 	function unsetCaptureSettings() {
-		console.log(tempSettings);
 		lns.ui.faces.lineWidth.update(tempSettings.lineWidth);
 		lns.ui.faces.canvasScale.update(tempSettings.canvasScale);
 	}
@@ -121,18 +121,14 @@ export function Capture(lns, params) {
 					fileName = `${title}-${frm}-${prev.n}.png`;
 					prev.f = frm;
 				}
-
-				const f = saveAs(blob, fileName);
-				// console.log('save as');
-				f.onwriteend = function() { 
-					// console.log('on write end');
-					setTimeout(() => {
-						// console.log('blob timeout');
-						window.requestAnimFrame(() => {
-							lns.renderer.update('capture'); 
-						});
-					}, 100); // delay fixes bug where is stops after 10-12 frames
-				};
+				saveAs(blob, fileName);
+				// onwriteend is deprecated?
+				setTimeout(() => {
+					// console.log('blob timeout');
+					window.requestAnimFrame(() => {
+						lns.renderer.update('capture'); 
+					});
+				}, 100); // delay fixes bug where is stops after 10-12 frames
 			});
 		} else {
 			// does this ever happen?
