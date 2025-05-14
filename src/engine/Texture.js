@@ -5,7 +5,7 @@
 export class Texture {
 	constructor(params, debug) {
 		this.debug = debug;
-		this.locations = params.locations || [];
+		this.locations = params.locations ?? [];
 		this.frame = params.frame ?? 'index'; // bad name
 		this.center = params.center ?? false;
 		

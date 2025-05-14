@@ -4,7 +4,7 @@
 export function Renderer(params) {
 
 	let id = params.id || 'lines';
-	let dps = params.dps || 30; // ?
+	let dps = params.dps || 30; // draw per second
 	let retina = params.retina !== undefined ? params.retina : true;
 	let dpr = Math.max(1, retina ? window.devicePixelRatio || 1 : 1);
 	let scale = params.scale || 1;
@@ -155,8 +155,6 @@ export function Renderer(params) {
 	}
 
 	function update(time) {
-		// console.log(time);
-		// const time = performance.now();
 		elapsed = time - updateTime;
 		if (elapsed > interval || time === 'capture') {
 			updateTime = time - (elapsed % interval);

@@ -1,6 +1,8 @@
 import { Manager } from './Manager.js';
 
 export class SceneManager extends Manager {
+
+	// this seems nuts, why is the scene manager addings sprites to scenes??
 	add(item, scenes, which) {
 		// default values?
 		if (typeof scenes == 'string') scenes = [scenes];

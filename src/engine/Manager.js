@@ -2,6 +2,7 @@
 	used for scenes: gme.scenes, gme.scenes.current etc
 	could also be implemented for animation states, other things with states
 	basically allows you to set with a string and get an object
+	why tho ... wtf
 */
 
 export class Manager {
@@ -12,6 +13,14 @@ export class Manager {
 		}
 		this._current = list[0];
 		this.names = list;
+	}
+
+	setCurrent(sceneName) {
+		this._current = sceneName;
+	}
+
+	getCurrent() {
+		return this[this._current];
 	}
 
 	set current(label) {

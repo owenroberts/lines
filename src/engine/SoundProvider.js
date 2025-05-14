@@ -61,13 +61,14 @@ export function SoundProvider(params={}, callback) {
 		loaded++;
 	}
 
+	// bad arg order ... 
 	function play(key, randomRate, rateMin, rateMax, callback) {
 		if (!sounds[key] && loaded > 0) return console.warn('No sound', key);
 		if (!sounds[key]) return;
 		const s = Array.isArray(sounds[key]) ? random(sounds[key]) : sounds[key];
 		if (randomRate) s.playbackRate = random(rateMin ?? 0.9, rateMax ?? 1.1);
-		s.play();
 		if (callback) s.addEventListener('ended', callback);
+		s.play();
 	}
 
 	// the way this works is weird ... 

@@ -311,7 +311,6 @@ export class Game {
 
 	startKeyboardEvents() {
 		document.addEventListener('keydown', ev => {
-			// console.log(ev.target, ev);
 			if (this.keyDown && ev.target.tagName !== "INPUT") this.keyDown(Cool.keys[ev.which]);
 		});
 

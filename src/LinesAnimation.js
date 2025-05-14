@@ -43,7 +43,7 @@ export class LinesAnimation {
 		// most animations use default state, game anims/textures have states for changing frame
 		// replace with manager ?? or is this too complicated???
 		this.stateName = 'default'; // set state label
-		this.states = { 'default': { start: 0, end: 0, dir: 1 } };
+		this.states = { 'default': { start: 0, end: 0, dir: 1, loop: true } };
 		this.stateData = structuredClone(this.states[this.stateName]);
 		this.sequences = [];
 		this.sequenceIndex = -1;

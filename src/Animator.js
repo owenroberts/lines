@@ -3,7 +3,7 @@
 	need some fucking instructions here ...
 	don't call update every frame, it creates tweens
 	call update if you want it to change
-	maybe change that func name?
+	** maybe change that func name? **
 	also call it at the beginning
 
 	let a = new Animator(lines_animation, params)
@@ -14,7 +14,7 @@
 	or maybe rewrite after changing set up to keyframes
 */
 
-import * as Cool from '../../cool/cool.js';
+import { choice, chance, randomInt } from '../../cool/cool.js';
 
 const defaultParams = {
 	jiggleRange: [0, 9],
@@ -25,6 +25,11 @@ const defaultParams = {
 	endIndex: [0, 'end'],
 };
 
+/**
+ * Animator - create a bunch of randomized tweens and add to animation layers
+ * @param {LinesAnimation} animation
+ * @param {Object} params    params to overwrite defaults
+ */
 export function Animator(animation, params={}) {
 
 	for (const k in defaultParams) {
@@ -33,7 +38,8 @@ export function Animator(animation, params={}) {
 		}
 	}
 
-	function update() {
+	/** setup new tweens */
+	function set() {
 		for (let i = 0; i < animation.layers.length; i++) {
 			const layer = animation.layers[i];
 			const props = { ...layer.getProps(), ...animation.styles[layer.styleIndex].getProps() };
@@ -48,7 +54,7 @@ export function Animator(animation, params={}) {
 			// }
 			
 			layer.tweens = []; // remove old tweens
-			const prop = Cool.choice(...Object.keys(params)); // choose prop
+			const prop = choice(...Object.keys(params)); // choose prop
 
 			// change prop or tween
 			if (prop === 'startIndex' || prop === 'endIndex') {
@@ -61,9 +67,9 @@ export function Animator(animation, params={}) {
 				};
 				layer.tweens.push(tween);
 			}
-			else if (Cool.chance(0.5)) { // change prop
+			else if (chance(0.5)) { // change prop
 				// layer[prop] = Cool.randomInt(this.params[prop][0], this.params[prop][1]);
-				const val = Cool.randomInt(...params[prop]);
+				const val = randomInt(...params[prop]);
 				animation.overrideProperty(prop, val);
 			} else { //  add tweens
 				const tween = { prop: prop };
@@ -71,7 +77,7 @@ export function Animator(animation, params={}) {
 				tween.endFrame = animation.endFrame;
 				
 				tween.startValue = props[prop];
-				tween.endValue = Cool.randomInt(...params[prop]);
+				tween.endValue = randomInt(...params[prop]);
 				
 				layer.tweens.push(tween);
 			}
@@ -79,5 +85,9 @@ export function Animator(animation, params={}) {
 		}
 	}
 
-	return { update };
+	function clear() {
+		animation.layers.forEach(l => { l.tweens = []; });
+	}
+
+	return { set, clear };
 }

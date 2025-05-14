@@ -5,6 +5,10 @@ export class Scene {
 		this.displaySprites = new SpriteCollection();
 		this.updateSprites = new SpriteCollection();
 		this.uiSprites = new SpriteCollection();
+
+		this.onUpdate = undefined;
+		this.onKeyDown = {};
+		this.onKeyUp = {};
 	}
 
 	add(sprite) {
@@ -22,6 +26,7 @@ export class Scene {
 		}
 	}
 
+	// sprites? args?
 	addSprite(sprite) {
 		if (Array.isArray(sprite)) {
 			sprite.forEach(s => { this.addSprite(s) });
@@ -62,7 +67,14 @@ export class Scene {
 	}
 
 	update(offset) {
-		this.updateSprites.all(sprite => { sprite.update(offset); });
+		
+		if (offset) {
+			this.updateSprites.all(sprite => { sprite.update(offset); });
+		}
+		
+		if (this.onUpdate) {
+			this.onUpdate();
+		}
 	}
 
 	mouseMoved(x, y) {
