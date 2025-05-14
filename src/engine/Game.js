@@ -164,9 +164,7 @@ export class Game {
 		this.data = {};
 		this.loader.load(files, loadDataOnly, assets => {
 			for (const type in assets) {
-				if (type !== 'animations') {
-					this.data[type] = assets[type];
-				} else {
+				if (type === 'animations') {
 					for (const file in assets.animations) {
 						this.anims[file] = {};
 						for (const key in assets.animations[file]) {
@@ -175,6 +173,8 @@ export class Game {
 							this.anims[file][key].src = file + '.' + key;
 						}
 					}
+				} else {
+					this.data[type] = assets[type];
 				}
 			}
 			this._start();

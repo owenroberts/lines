@@ -112,10 +112,14 @@ export function Loader(params) {
 				const file = files[type][fileName];
 				assets[type][fileName] = { loaded: false };
 				loaded[type][fileName] = { loaded: false };
-				fetch(file)
-					.then(response => { return handleResponse(response); })
-					.then(data => { handleData(type, fileName, data, loadDataOnly); })
-					.catch(error => { handleError(error, fileName); });
+				if (typeof file === 'object') {
+					handleData(type, fileName, file, loadDataOnly);
+				} else {
+					fetch(file)
+						.then(response => { return handleResponse(response); })
+						.then(data => { handleData(type, fileName, data, loadDataOnly); })
+						.catch(error => { handleError(error, fileName); });
+				}
 			}
 		}
 	}
