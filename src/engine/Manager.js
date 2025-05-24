@@ -6,7 +6,7 @@
 */
 
 export class Manager {
-	constructor(list, className) {
+	constructor(list=[], className) {
 		// this.classType = className;
 		for (let i = 0; i < list.length; i++) {
 			this[list[i]] = new className();

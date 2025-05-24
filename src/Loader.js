@@ -1,12 +1,12 @@
-/*
-	load and serve sprites
-*/
-
+/**
+ * handles loading json/csv for animations and other data
+ * @param {Object} params - { debug, relativeLoadPath }
+ * @returns { load(), getAnimation(), getAnimationData(), getFile() }
+ */
 export function Loader(params) {
 
 	let debug = params.debug || false;
 	let relativeLoadPath = params.relativeLoadPath;
-	let saveAnimationData = params.saveAnimationData || false;
 	let assets = {};
 	let loaded = {}; // mirror assets
 	let loadCallback;

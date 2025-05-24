@@ -1,9 +1,6 @@
-/*
-	draws text with lettering based on game text string
-	handled by game so that each new text object doesn't have to add all the letters...
-	maybe just check first?
-*/
-
+/**
+ * a sprite that displays text
+ */
 export class TextSprite {
 	constructor(params) { 
 		this.x = Math.round(params.x ?? 0);
@@ -166,7 +163,11 @@ export class TextSprite {
 	/* do i ever use _x, _y ?? */
 	display(countForward, countBackward, yAbove) {
 		if (!this.isActive) return true;
-		if (!this.msg) return console.warn('This TextSprite has no text.');
+		if (!this.msg) {
+			console.warn('This TextSprite has no text.');
+			this.isActive = false;
+			return;
+		}
 		countForward = countForward ? countForward : this.countForward;
 		countBackward = countBackward ? countBackward : this.countBackward;
 		yAbove = yAbove ? yAbove : this.yAbove;

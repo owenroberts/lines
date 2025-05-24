@@ -31,9 +31,9 @@ export class Game {
 		window.GAME = this; // for references in sub classes
 		this.renderer = new Renderer({ dps: 60, clearBg: false, ...params }); // update 60
 		this.drawCount = 0;
-		this.drawInterval = Math.round(60 / (params.dps || 30));
+		this.drawInterval = params.drawInterval ?? Math.round(60 / (params.dps || 30));
 		this.drawTime = 1000 / (params.dps || 30);
-		
+
 		let perfTestIsLow = params.testPerformance ? Cool.testLowPerformance() : false;
 
 		this.width = params.width;
@@ -41,7 +41,7 @@ export class Game {
 		this.halfWidth = Math.round(params.width / 2);
 		this.halfHeight = Math.round(params.height / 2);
 		
-		this.debug = params.debug || false;
+		this.debug = params.debug ?? false;
 		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
 		this.suspend = false;
 		this.editorSuspend = false;
@@ -143,7 +143,6 @@ export class Game {
 
 	setView(width, height) {
 
-		// copy paste for now, redo later
 		this.renderer.setWidth(width);
 		this.renderer.setHeight(height);
 		this.width = width;
@@ -194,7 +193,7 @@ export class Game {
 	}
 
 	_start() {
-		this.drawTime = performance.now();
+		this.drawTime = performance.now(); // not using this ... 
 
 		this.renderer.start();
 		if (this.start) this.start(); // should be this method?
@@ -227,9 +226,9 @@ export class Game {
 
 	_update(delta) {
 		// console.log('_update', delta);
-		if (this.pauseGame) return;
+		if (this.pauseGame) return; // should be isPaused
 		if (this.stats) this.stats.begin();
-		if (!this.noUpdate) this.update(delta);
+		if (!this.noUpdate) this.update(delta); // what?
 		// if (delta > this.drawTime + this.drawInterval) this._draw(delta);
 		if (this.drawCount === 0) this._draw(delta); // need time?
 		this.drawCount = (this.drawCount + 1) % this.drawInterval;

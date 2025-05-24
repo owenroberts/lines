@@ -1,10 +1,17 @@
-/*
-	base class for all game objects
-	usually has an animation
-	physics and scaling removed in recent version
-*/
-
+/**
+ * base class for game elements
+ * animation with position, size
+ * @returns {}
+ */
 export class Sprite {
+
+	/**
+	 * sprite constructor
+	 * @param  {number}   x         x position
+	 * @param  {number}   y         y position
+	 * @param  {Object}   animation 
+	 * @param  {Function} callback  after animation loaded
+	 */
 	constructor(x, y, animation, callback) {
 		this.position = [Math.round(x) || 0, Math.round(y) || 0];
 		this.size = [0, 0]; // set by animation

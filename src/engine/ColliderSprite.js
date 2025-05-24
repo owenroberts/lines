@@ -67,6 +67,7 @@ export class ColliderSprite extends Sprite {
 		return false;
 	}
 
+	// rename this shit ... 
 	tap(x, y) {
 		return (
 			x > this.colliderPosition[0] &&

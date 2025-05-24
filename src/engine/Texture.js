@@ -1,7 +1,6 @@
-/*
-	draws frames from one animation in multuple places (locations)	
-*/
-
+/**
+ * draws frames from one animation in multuple places (locations)
+ */
 export class Texture {
 	constructor(params, debug) {
 		this.debug = debug;

@@ -1,5 +1,8 @@
 import { SpriteCollection } from './SpriteCollection.js';
 
+/**
+ * basic container for sprites and events for scene in LinesEngine game
+ */
 export class Scene {
 	constructor() {
 		this.displaySprites = new SpriteCollection();
@@ -7,7 +10,7 @@ export class Scene {
 		this.uiSprites = new SpriteCollection();
 
 		this.onUpdate = undefined;
-		this.onKeyDown = {};
+		this.onKeyDown = {}; // this is nuts, should just have general key down handler
 		this.onKeyUp = {};
 	}
 
