@@ -31,6 +31,11 @@ export class Drawing {
 		this.offsets.push([[0,0], [0,0]]); // default add an offset even for end ... work on better way to update this
 	}
 
+	insert(point, indexFromEnd=1) {
+		this.points.splice(this.length - indexFromEnd, 0, point);
+		this.offsets.splice(this.length - indexFromEnd, 0, [[0,0], [0, 0]]);
+	}
+
 	pop() {
 		this.offsets.pop();
 		return this.points.pop();
