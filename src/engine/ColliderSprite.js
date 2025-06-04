@@ -1,12 +1,21 @@
-/*
-	base class for a sprite with a collider
-	for AABB, mouse
-	could have mouse sprite, or ui sprite ...
-*/
-
 import { Sprite } from './Sprite.js';
 
+/**
+ * base class for a sprite with a collider
+ * for AABB, mouse
+ * could have mouse sprite, or ui sprite ...
+ * @extends Sprite
+ */
 export class ColliderSprite extends Sprite {
+
+	/**
+	 * [constructor description]
+	 * @param  {[type]}   x         [description]
+	 * @param  {[type]}   y         [description]
+	 * @param  {[type]}   animation [description]
+	 * @param  {Function} callback  [description]
+	 * @return {[type]}             [description]
+	 */
 	constructor(x, y, animation, callback) {
 		super(x, y);
 

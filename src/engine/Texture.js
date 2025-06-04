@@ -2,14 +2,22 @@
  * draws frames from one animation in multuple places (locations)
  */
 export class Texture {
+
+	/**
+	 * creates texture
+	 * @param  {Object} params { locations, frame, center, animation }
+	 * @param  {boolean} debug  
+	 */
 	constructor(params, debug) {
 		this.debug = debug;
 		this.locations = params.locations ?? [];
 		this.frame = params.frame ?? 'index'; // bad name
 		this.center = params.center ?? false;
-		
 		this.offset = [0, 0];
-		if (params.animation) this.addAnimation(params.animation);
+
+		if (params.animation) {
+			this.addAnimation(params.animation);
+		}
 
 		if (params.locations && params.animation) {
 			this.addLocations()

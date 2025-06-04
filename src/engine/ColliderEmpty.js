@@ -1,8 +1,6 @@
-/*
-	empty collider, no animation
-*/
-
-
+/**
+ * empty collider, no animation
+ */
 export class ColliderEmpty {
 	constructor(x, y, w, h) {
 		this.collider = [x, y, w, h];

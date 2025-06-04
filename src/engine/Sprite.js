@@ -1,7 +1,6 @@
 /**
  * base class for game elements
  * animation with position, size
- * @returns {}
  */
 export class Sprite {
 
