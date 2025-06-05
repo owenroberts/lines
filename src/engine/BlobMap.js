@@ -1,6 +1,8 @@
 // https://unit.dev/posts/blobmaps/
 // useful description here: https://web.archive.org/web/20231026221613/http://www.cr31.co.uk/stagecast/wang/blob.html
 
+import { assert } from '../../../cool/cool.js';
+
 /**
  * bitmask order for blob map, indexOf maps to tilemap texture
  * see https://unit.dev/posts/blobmaps/ for order (need backup for this? ref image)
@@ -23,6 +25,7 @@ export class BlobMap {
 	 * @param  {TileMap} tileMap base tilemap used to get blobs
 	 */
 	constructor(tileMap) {
+		assert(tileMap !== undefined, "a BlobMap needs a TileMap");
 		this.tileMap = tileMap;
 	}
 

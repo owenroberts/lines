@@ -33,16 +33,30 @@ export class TileMap {
 		}
 	}
 
+	/**
+	 * get tile at x,y position
+	 * @param  {number} x - position
+	 * @param  {number} y - position
+	 * @return {Object} tile - { type, ... }
+	 */
 	getTile(x, y) {
 		return this.tiles[x + y * this.cols];
 	}
 
+	/**
+	 * filter tiles by type
+	 * @param  {number} type - from type "Enum"
+	 * @return {Array} tiles[] - array of tiles
+	 */
 	getTilesByType(type) {
 		return this.tiles.filter(t => t.type === type);
 	}
 
-	// should tiles save their own position?
-	// memory vs performance
+	/**
+	 * look up tile x,y position by index
+	 * @param  {Object} tile - the tile to look up
+	 * @return {Object} { x, y } - x,y position
+	 */
 	getPosition(tile) {
 		return this.getIndexPosition(this.tiles.indexOf(tile));
 	}
@@ -55,10 +69,8 @@ export class TileMap {
 	 * @param {*} value - value to set property
 	 */
 	setTileProperty(x, y, property, value) {
-		// console.log(x, y, property, value);
 		this.tiles[x + y * this.cols][property] = value;
 	}
-
 
 	/**
 	 * set a property on an area of tiles
@@ -80,12 +92,17 @@ export class TileMap {
 	/**
 	 * get x, y position of matrix at index
 	 * @param  {number} index 
-	 * @return {Object}       { x, y }
+	 * @return {Object} { x, y }
 	 */
 	getIndexPosition(index) {
 		return { x: index % this.cols, y: Math.floor(index / this.cols) };
 	}
 
+	// add log all props?
+	/**
+	 * print text visualization of map in console
+	 * @param  {String} [property="type"] - property to map, ie roomIndex,  
+	 */
 	log(property="type") {
 		let m = '';
 		for (let i = 0; i < this.rows; i++) {

@@ -16,6 +16,19 @@ export const BSPTileTypes = {
 	ROOM_PATH: 3,
 };
 
+/**
+ * generates a BSP Map with a tileMap, nodes, rooms and paths
+ * @param  {number}  options.cols - columns in map
+ * @param  {number}  options.rows - rows in map
+ * @param  {number}  [options.maxNodes] - maximum nodes, or splits in map
+ * @param  {number}  [options.minNodeSize] - min size of each node/area
+ * @param  {number}  [options.maxNodeSize] - max size of each node/area
+ * @param  {number}  [options.minRoomSize] - min size of room in node
+ * @param  {boolean} [options.createPaths] - add paths between rooms
+ * @param  {Object}  [options.mapBuffer] - { w, h } buffer around map
+ * @param  {Object}  [options.roomBuffer] - { w, h } buffer between room and containing node
+ * @return {Object}  {tileMap, nodes, rooms, paths} - returns tileMap and BSP data
+ */
 export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNodeSize=99, minRoomSize=3, createPaths=true, mapBuffer={ w: 0, h: 0 }, roomBuffer={ w: 0, h: 0 }, }) {
 
 	const tileMap = new TileMap(cols, rows);

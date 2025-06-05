@@ -23,8 +23,8 @@ import { TextButton } from './engine/TextButton.js';
 import { TextSprite } from './engine/TextSprite.js';
 import { Texture } from './engine/Texture.js';
 import { TextureEntity } from './engine/TextureEntity.js';
-import { TileMap } from './engine/TileMap.js';
+import { TileMap, TileTypes } from './engine/TileMap.js';
 import { Toggle } from './engine/Toggle.js';
 import { UI } from './engine/UI.js';
 
-export { BlobMap, Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Manager, Scene, SceneManager, SHGScene, SoundProvider, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, Toggle, UI };
+export { BlobMap, Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Manager, Scene, SceneManager, SHGScene, SoundProvider, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, TileTypes, Toggle, UI };
