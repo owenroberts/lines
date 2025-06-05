@@ -1,4 +1,3 @@
-import * as Cool from '../../cool/cool.js';
 import { POINTS } from './Consts.js';
 
 export class Drawing {
@@ -72,6 +71,11 @@ export class Drawing {
 		}
 	}
 
+	// simplified random function for performance
+	random(min, max) {
+		return Math.random() * (max - min) + min;
+	}
+
 	update(props) {
 
 		// test destructuring performance increase
@@ -80,10 +84,10 @@ export class Drawing {
 		// start with speed and offset based on wiggle range
 		// skip this if wiggle range is below 0?
 		const speed = [
-			Cool.random(-props.wiggleSpeed, props.wiggleSpeed), 
-			Cool.random(-props.wiggleSpeed, props.wiggleSpeed)
+			this.random(-props.wiggleSpeed, props.wiggleSpeed), 
+			this.random(-props.wiggleSpeed, props.wiggleSpeed)
 		];
-		const wiggle = [Cool.random(0, -props.wiggleRange), Cool.random(0, props.wiggleRange)];
+		const wiggle = [this.random(0, -props.wiggleRange), this.random(0, props.wiggleRange)];
 
 		// add random offsets for xy for each segment of the lines
 		for (let i = 0, len = this.points.length; i < len; i++) {
@@ -111,8 +115,8 @@ export class Drawing {
 
 					// add jiggle to wiggle -- needs to figure the fuck out!
 					this.offsets[i].push([
-						Cool.random(-props.jiggleRange, props.jiggleRange) + wiggle[0],
-						Cool.random(-props.jiggleRange, props.jiggleRange) + wiggle[1]
+						this.random(-props.jiggleRange, props.jiggleRange) + wiggle[0],
+						this.random(-props.jiggleRange, props.jiggleRange) + wiggle[1]
 					]);
 				}
 
