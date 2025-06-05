@@ -1,6 +1,7 @@
 /**
  * provide all game components
  */
+import { BlobMap } from './engine/BlobMap.js';
 import { Button } from './engine/Button.js';
 import { Collider } from './engine/Collider.js';
 import { ColliderEmpty } from './engine/ColliderEmpty.js';
@@ -9,6 +10,7 @@ import { ColliderSprite } from './engine/ColliderSprite.js';
 import { Entity } from './engine/Entity.js';
 import { Game } from './engine/Game.js';
 import { GameAnim } from './engine/GameAnim.js';
+import { generateBSPMap, BSPTileTypes } from './engine/generateBSPMap.js';
 import { Manager } from './engine/Manager.js';
 import { Scene } from './engine/Scene.js';
 import { SceneManager } from './engine/SceneManager.js';
@@ -21,7 +23,8 @@ import { TextButton } from './engine/TextButton.js';
 import { TextSprite } from './engine/TextSprite.js';
 import { Texture } from './engine/Texture.js';
 import { TextureEntity } from './engine/TextureEntity.js';
+import { TileMap } from './engine/TileMap.js';
 import { Toggle } from './engine/Toggle.js';
 import { UI } from './engine/UI.js';
 
-export { Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, Manager, Scene, SceneManager, SHGScene, SoundProvider, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, Toggle, UI };
+export { BlobMap, Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Manager, Scene, SceneManager, SHGScene, SoundProvider, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, Toggle, UI };

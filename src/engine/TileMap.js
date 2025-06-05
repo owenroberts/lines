@@ -1,0 +1,100 @@
+// should it save more data? a tile? { tileType, inRoom, etc.. }
+
+/**
+ * TileTypes "Enum"
+ * @type {Object} { OFF, ON }
+ */
+export const TileTypes = {
+	OFF: 0,
+	ON: 1,
+};
+
+/**
+ * creates a tilemap class for use with textures
+ * tilemap creator func should have TileTypes enum
+ */
+export class TileMap {
+	
+	/**
+	 * create tilemap matrix
+	 * @param  {number} cols columns in tilemap
+	 * @param  {number} rows rows in tilemap
+	 */
+	constructor(cols, rows) {
+		this.tiles = []; // save tiles in array
+		this.cols = cols;
+		this.rows = rows;
+		
+		// populate matrix with tile type off/default (0)
+		for (let x = 0; x < cols; x++) {
+			for (let y = 0; y < rows; y++) {
+				this.tiles[x + y * cols] = { type: TileTypes.OFF };
+			}
+		}
+	}
+
+	getTile(x, y) {
+		return this.tiles[x + y * this.cols];
+	}
+
+	getTilesByType(type) {
+		return this.tiles.filter(t => t.type === type);
+	}
+
+	// should tiles save their own position?
+	// memory vs performance
+	getPosition(tile) {
+		return this.getIndexPosition(this.tiles.indexOf(tile));
+	}
+
+	/**
+	 * set tile property value by xy grid position
+	 * @param {number} x     x grid position
+	 * @param {number} y     y grid position
+	 * @param {string} property - property of tile to set
+	 * @param {*} value - value to set property
+	 */
+	setTileProperty(x, y, property, value) {
+		// console.log(x, y, property, value);
+		this.tiles[x + y * this.cols][property] = value;
+	}
+
+
+	/**
+	 * set a property on an area of tiles
+	 * @param {number} x     x grid position
+	 * @param {number} y     y grid position
+	 * @param {number} w - width of area
+	 * @param {number} h - height of area
+	 * @param {string} property - property of tile to set
+	 * @param {*} value - value to set property
+	 */
+	setAreaProperty(x, y, w, h, property, value) {
+		for (let _x = x; _x < x + w; _x++) {
+			for (let _y = y; _y < y + h; _y++) {
+				this.setTileProperty(_x, _y, property, value);
+			}
+		}
+	}
+
+	/**
+	 * get x, y position of matrix at index
+	 * @param  {number} index 
+	 * @return {Object}       { x, y }
+	 */
+	getIndexPosition(index) {
+		return { x: index % this.cols, y: Math.floor(index / this.cols) };
+	}
+
+	log(property="type") {
+		let m = '';
+		for (let i = 0; i < this.rows; i++) {
+			m += this.tiles
+				.slice(i * this.cols, i * this.cols + this.cols)
+				.map(t => t.hasOwnProperty(property) ? t[property] : "X")
+				.join('·');
+			m += '\n';
+		}
+		console.log(m);
+	}	
+}
