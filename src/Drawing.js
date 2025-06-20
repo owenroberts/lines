@@ -78,6 +78,8 @@ export class Drawing {
 
 	update(props) {
 
+		// console.log('update', this);
+
 		// test destructuring performance increase
 		// const { segmentNum, jiggleRange, wiggleRange, wiggleSpeed, wiggleSegments } = props;
 
@@ -91,7 +93,7 @@ export class Drawing {
 
 		// add random offsets for xy for each segment of the lines
 		for (let i = 0, len = this.points.length; i < len; i++) {
-			if (this.points[i] !== 'end') {
+			if (this.points[i] !== POINTS.END) {
 				this.offsets[i] = [];
 
 				// one offset for each segment -- do i ever use last offset?

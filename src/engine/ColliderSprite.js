@@ -9,12 +9,11 @@ import { Sprite } from './Sprite.js';
 export class ColliderSprite extends Sprite {
 
 	/**
-	 * [constructor description]
-	 * @param  {[type]}   x         [description]
-	 * @param  {[type]}   y         [description]
-	 * @param  {[type]}   animation [description]
-	 * @param  {Function} callback  [description]
-	 * @return {[type]}             [description]
+	 * creates a sprite with a collider
+	 * @param  {number}   x         position
+	 * @param  {number}   y         position
+	 * @param  {LinesAnimation}   animation 
+	 * @param  {Function} callback  callback after loading animation
 	 */
 	constructor(x, y, animation, callback) {
 		super(x, y);

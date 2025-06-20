@@ -42,7 +42,10 @@ export function Animator(animation, params={}) {
 	function set() {
 		for (let i = 0; i < animation.layers.length; i++) {
 			const layer = animation.layers[i];
-			const props = { ...layer.getProps(), ...animation.styles[layer.styleIndex].getProps() };
+			const props = { 
+				...layer.getProps(), 
+				...animation.styles[layer.styleIndex].getProps(), 
+			};
 
 			// set tween end props to current layer props
 			// this doesn't work with current layer styles setup
@@ -87,6 +90,7 @@ export function Animator(animation, params={}) {
 
 	function clear() {
 		animation.layers.forEach(l => { l.tweens = []; });
+		animation.cancelOverride();
 	}
 
 	return { set, clear };

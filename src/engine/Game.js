@@ -113,6 +113,7 @@ export class Game {
 
 		if (params.stats) {
 			this.stats = new Stats();
+			this.stats.showPanel(2);
 			document.body.appendChild(this.stats.dom);
 			this.stats.dom.style.left = 'auto';
 			this.stats.dom.style.right = '0px';

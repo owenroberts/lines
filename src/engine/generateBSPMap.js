@@ -2,12 +2,12 @@
 // https://eskerda.com/bsp-dungeon-generation/
 // https://web.archive.org/web/20230421203555/https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
 
-import { random, randomInt, coinFlip } from '../../../cool/cool.js'
+import { random, randomInt, coinFlip, chance, assert } from '../../../cool/cool.js'
 import { TileMap } from './TileMap.js';
 
 /**
  * BSPTileTypes "Enum"
- * @type {Object}
+ * @type {Object} { WALL, ROOM, PATH, ROOM_PATH }
  */
 export const BSPTileTypes = {
 	WALL: 0,
@@ -18,6 +18,7 @@ export const BSPTileTypes = {
 
 /**
  * generates a BSP Map with a tileMap, nodes, rooms and paths
+ * @param  {Object}  options - options for bsp map generation
  * @param  {number}  options.cols - columns in map
  * @param  {number}  options.rows - rows in map
  * @param  {number}  [options.maxNodes] - maximum nodes, or splits in map
@@ -27,16 +28,20 @@ export const BSPTileTypes = {
  * @param  {boolean} [options.createPaths] - add paths between rooms
  * @param  {Object}  [options.mapBuffer] - { w, h } buffer around map
  * @param  {Object}  [options.roomBuffer] - { w, h } buffer between room and containing node
+ * @param  {Object}  [options.inject] - inject a specific node, room, or path
  * @return {Object}  {tileMap, nodes, rooms, paths} - returns tileMap and BSP data
  */
-export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNodeSize=99, minRoomSize=3, createPaths=true, mapBuffer={ w: 0, h: 0 }, roomBuffer={ w: 0, h: 0 }, }) {
+export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNodeSize=99, minRoomSize=1, createPaths=true, mapBuffer={ w: 0, h: 0 }, roomBuffer={ w: 0, h: 0 }, inject=[] }) {
+
+	assert(Number.isFinite(rows), "{rows} param must be number");
+	assert(Number.isFinite(cols), "{cols} param must be number");
 
 	const tileMap = new TileMap(cols, rows);
 
 	// start assuming everything is a wall
 	tileMap.setAreaProperty(0, 0, cols, rows, 'type', BSPTileTypes.WALL);
 
-	const nodes = [];
+	let nodes = [];
 	const rooms = [];
 	const paths = [];
 
@@ -45,17 +50,21 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 		// if the node is already split, no split
 		if (node.a || node.b) return false;
 
-		// random chance of vertical split, weighted based on size (test this weight?)
-		const verticalSplit = Math.random() > (node.w / (node.w + node.h));
+		// random chance of vertical split, weighted based on size, more likely to split larger side
+		const verticalSplit = chance(node.w / (node.w + node.h));
 
 		// if the split direction would result in split smaller than minNodeSize, no split
 		if (minNodeSize > (verticalSplit ? node.h : node.w)) return false;
+
+		// same for min room -- but maybe remove after injecting node or room
+		if (minRoomSize > (verticalSplit ? node.h : node.w)) return false;
 
 		// max node based on split direction
 		const max = (verticalSplit ? node.h : node.w) - minNodeSize;
 
 		// if max node is too small, no split
 		if (minNodeSize > max) return false;
+		if (minRoomSize > max) return false;
 
 		const splitSize = Math.floor(random(minNodeSize, max));
 
@@ -81,14 +90,21 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 			if (node.a) addRooms(node.a);
 			if (node.b) addRooms(node.b);
 			if (node.a && node.b && createPaths) addPath(node.a, node.b);
-		} else {
+		} else if (!node.room) {
 			// calc w first to adjust x with buffer
 			const w = randomInt(minRoomSize, node.w - roomBuffer.w * 2, false);
 			const h = randomInt(minRoomSize, node.h - roomBuffer.h * 2, false);
-			const x = randomInt(roomBuffer.w, node.w - w - roomBuffer.w);
-			const y = randomInt(roomBuffer.h, node.h - h - roomBuffer.h);
-			node.room = { x: x + node.x, y: y + node.y, w, h};
-			rooms.push(node.room);
+			const x = randomInt(roomBuffer.w, node.w - w - roomBuffer.w, false);
+			const y = randomInt(roomBuffer.h, node.h - h - roomBuffer.h, false);
+
+			// room is possible (test for injected rooms/nodes ... )
+			if (x >= 0 && y >= 0 && w <= node.w && h <= node.h) {
+				node.room = { x: x + node.x, y: y + node.y, w, h};
+				rooms.push(node.room);
+			} else {
+				console.log(minRoomSize, roomBuffer)
+				console.warn('cant make room', node, { x, y, w, h });
+			}
 		}
 	}
 
@@ -99,13 +115,13 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 
 		// get start and end of the path
 		let start = {
-			x: randomInt(a.room.x + 1, a.room.x + a.room.w - 2, false),
-			y: randomInt(a.room.y + 1, a.room.y + a.room.h - 2, false),
+			x: randomInt(a.room.x + roomBuffer.w, a.room.x + a.room.w - roomBuffer.w * 2, false),
+			y: randomInt(a.room.y + roomBuffer.h, a.room.y + a.room.h - roomBuffer.h * 2, false),
 		};
 
 		let end = {
-			x: randomInt(b.room.x + 1, b.room.x + b.room.w - 2, false),
-			y: randomInt(b.room.y + 1, b.room.y + b.room.h - 2, false),
+			x: randomInt(b.room.x + roomBuffer.w, b.room.x + b.room.w - roomBuffer.w * 2, false),
+			y: randomInt(b.room.y + roomBuffer.h, b.room.y + b.room.h - roomBuffer.h * 2, false),
 		};
 
 		// get delta x and y of path
@@ -186,27 +202,63 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 				h: Math.abs(dy) + 1,
 			});
 		}
+
 	}
 
-	nodes.push({ 
+	const start = { 
 		x: mapBuffer.w,
 		y: mapBuffer.h,
 		w: cols - mapBuffer.w * 2, 
 		h: rows - mapBuffer.h * 2,
-	});
+	};
+	nodes.push(start);
 
-	// will be overwritten ... does it matter if in multiple nodes?
+	// inject first
+	for (let i = 0; i < inject.length; i++) {
+		if (inject[i].type === "room") {
+			const { w, h, name } = inject[i];
+
+			let roomAdded = false;
+			let attemptCount = 0;
+
+			while (!roomAdded) {
+				if (attemptCount > 99) throw new Error("can't add room to this map");
+				
+				const result = split(start);
+				if (!result) {
+					attemptCount++;
+					continue;
+				}
+				for (let i = 0; i < 2; i++) {
+					if (roomAdded) continue;
+					const node = i === 0 ? start.a : start.b;
+					if (node.w < w || node.h < h) continue;
+					
+
+					// not dry .. 
+					const x = randomInt(roomBuffer.w, node.w - w - roomBuffer.w, false);
+					const y = randomInt(roomBuffer.h, node.h - h - roomBuffer.h, false);
+					node.room = { name, x: x + node.x, y: y + node.y, w, h};
+					rooms.push(node.room);
+					nodes.push(start.a);
+					nodes.push(start.b);
+					roomAdded = true;
+				}
+			} 
+		}
+	}
 
 	// split nodes
 	let canSplitMore = true;
 	while(canSplitMore && nodes.length < maxNodes) {
 		canSplitMore = false;
-
 		for (let i = 0; i < nodes.length; i++) {
 			const node = nodes[i];
+			// console.log(canSplitMore, i, node, maxNodes, maxNodeSize);
 			if (!node.a && !node.b && nodes.length < maxNodes - 1) {
-				if (node.w > maxNodeSize || node.h > maxNodeSize) {
+				if (node.w > maxNodeSize || node.h > maxNodeSize || chance(0.75)) {
 					const result = split(node);
+					// console.log('result', result);
 					if (result) {
 						nodes.push(node.a);
 						nodes.push(node.b);
@@ -218,8 +270,8 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 	}
 
 	// add rooms starting with first node
-	// this adds paths if they exist
-	addRooms(nodes[0]);
+	// adds paths if createPaths = true
+	addRooms(start);
 
 	// update tileMap tiles (not sure this is really necessary ... )
 	for (let i = 0; i < nodes.length; i++) {
@@ -236,6 +288,7 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 	for (let i = 0; i < paths.length; i++) {
 		const node = paths[i];
 		tileMap.setAreaProperty(node.x, node.y, node.w, node.h, "pathIndex", i);
+		// path collection index?
 		for (let x = node.x; x < node.x + node.w; x++) {
 			for (let y = node.y; y < node.y + node.h; y++) {
 				const type = tileMap.getTile(x, y).type === BSPTileTypes.ROOM ?

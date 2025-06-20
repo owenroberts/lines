@@ -29,6 +29,12 @@ export class Scene {
 		}
 	}
 
+	clear() {
+		this.displaySprites.clear();
+		this.updateSprites.clear();
+		this.uiSprites.clear();
+	}
+
 	// sprites? args?
 	addSprite(sprite) {
 		if (Array.isArray(sprite)) {

@@ -13,14 +13,15 @@ export class Texture {
 		this.locations = params.locations ?? [];
 		this.frame = params.frame ?? 'index'; // bad name
 		this.center = params.center ?? false;
-		this.offset = [0, 0];
+		this.offset = [0, 0]; // for moving maps
+		this.isActive = params.isActive ?? true;
 
 		if (params.animation) {
 			this.addAnimation(params.animation);
 		}
 
 		if (params.locations && params.animation) {
-			this.addLocations()
+			this.addLocations();
 		}
 	}
 
@@ -70,6 +71,7 @@ export class Texture {
 	}
 
 	display() {
+		if (!this.isActive) return;
 		// console.log(this.offset);
 		for (let i = 0; i < this.locations.length; i++) {
 			let x = this.locations[i][0] + this.offset[0];
@@ -83,7 +85,9 @@ export class Texture {
 			if (x + this.animation.width > 0 && x < GAME.view.width && 
 				y + this.animation.height > 0 && y < GAME.view.height) {
 
-				if (this.locations[i].i !== undefined) this.animation.state = `f-${this.locations[i].i}`;
+				if (this.locations[i].i !== undefined) {
+					this.animation.state = `f-${this.locations[i].i}`;
+				}
 				this.animation.draw(x, y, GAME.suspend);
 			}
 		}

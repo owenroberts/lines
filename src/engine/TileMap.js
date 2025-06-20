@@ -1,4 +1,6 @@
 // should it save more data? a tile? { tileType, inRoom, etc.. }
+import { assert } from '../../../cool/cool.js';
+
 
 /**
  * TileTypes "Enum"
@@ -69,6 +71,7 @@ export class TileMap {
 	 * @param {*} value - value to set property
 	 */
 	setTileProperty(x, y, property, value) {
+		assert(this.tiles[x + y * this.cols] !== undefined, `Tile map tile does not exist at ${x} ${y}`);
 		this.tiles[x + y * this.cols][property] = value;
 	}
 
@@ -98,20 +101,20 @@ export class TileMap {
 		return { x: index % this.cols, y: Math.floor(index / this.cols) };
 	}
 
-	// add log all props?
 	/**
 	 * print text visualization of map in console
-	 * @param  {String} [property="type"] - property to map, ie roomIndex,  
+	 * @param  {string} [property="type"] - property to map, ie roomIndex,  
+	 * @return {string} - string of map matrix for logging
 	 */
-	log(property="type") {
-		let m = '';
+	toString(property="type") {
+		let str = '';
 		for (let i = 0; i < this.rows; i++) {
-			m += this.tiles
+			str += this.tiles
 				.slice(i * this.cols, i * this.cols + this.cols)
 				.map(t => t.hasOwnProperty(property) ? t[property] : "X")
 				.join('·');
-			m += '\n';
+			str += '\n';
 		}
-		console.log(m);
+		return str;
 	}	
 }
