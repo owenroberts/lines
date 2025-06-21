@@ -49,6 +49,7 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 
 		// if the node is already split, no split
 		if (node.a || node.b) return false;
+		if (node.room) return false; // for injecting rooms
 
 		// random chance of vertical split, weighted based on size, more likely to split larger side
 		const verticalSplit = chance(node.w / (node.w + node.h));
@@ -233,7 +234,6 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 					if (roomAdded) continue;
 					const node = i === 0 ? start.a : start.b;
 					if (node.w < w || node.h < h) continue;
-					
 
 					// not dry .. 
 					const x = randomInt(roomBuffer.w, node.w - w - roomBuffer.w, false);
