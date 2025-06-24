@@ -20,7 +20,7 @@ export class TextSprite {
 		// this.setBreaks();
 		this.count = 0;
 		this.end = 0;
-		this.delay = params.delay || 0;
+		this.delay = params.delay ?? 0;
 		
 		this.countCount = params.countCount ?? 0.5;
 		this.endCount = params.endCount ?? 0.5;

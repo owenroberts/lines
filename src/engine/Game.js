@@ -41,7 +41,7 @@ export class Game {
 		this.halfWidth = Math.round(params.width / 2);
 		this.halfHeight = Math.round(params.height / 2);
 		
-		this.debug = params.debug ?? false;
+		this.debug = (params.debug ?? false) && import.meta.env.DEV;
 		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
 		this.suspend = false;
 		this.editorSuspend = false;
@@ -113,7 +113,7 @@ export class Game {
 
 		if (params.stats) {
 			this.stats = new Stats();
-			this.stats.showPanel(2);
+			// this.stats.showPanel(2);
 			document.body.appendChild(this.stats.dom);
 			this.stats.dom.style.left = 'auto';
 			this.stats.dom.style.right = '0px';

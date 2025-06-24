@@ -67,6 +67,7 @@ export function SoundProvider(params={}, callback) {
 		if (!sounds[key] && loaded > 0) return console.warn('No sound', key);
 		if (!sounds[key]) return;
 		const s = Array.isArray(sounds[key]) ? random(sounds[key]) : sounds[key];
+		if (!s.paused) stop(key); // default functionality?
 		if (randomRate) s.playbackRate = random(rateMin ?? 0.9, rateMax ?? 1.1);
 		if (callback) s.addEventListener('ended', callback);
 		s.play();
@@ -102,9 +103,13 @@ export function SoundProvider(params={}, callback) {
 		if (Array.isArray(sounds[key])) {
 			sounds[key]
 				.filter(a => !a.paused)
-				.forEach(a => { a.stop(); });
+				.forEach(a => { 
+					a.pause();
+					a.currentTime = 0; 
+				});
 		} else {
 			sounds[key].pause();
+			sounds[key].currentTime = 0;
 		}
 	}
 
