@@ -1,17 +1,21 @@
+import { assert } from '../../../cool/cool.js';
 /**
  * a sprite that displays text
  */
 export class TextSprite {
-	constructor(params) { 
+	constructor(params) {
+
+		assert(params.letters, "TextSprite is missing animation for letters");
+
 		this.x = Math.round(params.x ?? 0);
 		this.y = Math.round(params.y ?? 0);
 		this.lead = params.lead ?? 35; // leading is space between lines
 		this.track = params.track ?? 18; // tracking is space between letters
 
 		// this.msg = msg;
+		this.letters = params.letters; // animation
 		this.wrap = params.wrap ?? 12;
 		this.isActive = params.isActive ?? true;
-		this.letters = params.letters;
 		this.breaks = [];
 		this.countForward = params.countForward ?? false;
 		this.countBackward = params.countBackward ?? false;
