@@ -1,6 +1,7 @@
 /**
  * provide all game components
  */
+import { AudioPlayer } from './engine/AudioPlayer.js';
 import { BlobMap } from './engine/BlobMap.js';
 import { Button } from './engine/Button.js';
 import { Collider } from './engine/Collider.js';
@@ -15,7 +16,6 @@ import { Manager } from './engine/Manager.js';
 import { Scene } from './engine/Scene.js';
 import { SceneManager } from './engine/SceneManager.js';
 import { SHGScene } from './engine/SHGScene.js';
-import { SoundProvider } from './engine/SoundProvider.js';
 import { SpatialHashGrid } from './engine/SpatialHashGrid.js';
 import { Sprite } from './engine/Sprite.js';
 import { SpriteCollection } from './engine/SpriteCollection.js';
@@ -27,4 +27,4 @@ import { TileMap, TileTypes } from './engine/TileMap.js';
 import { Toggle } from './engine/Toggle.js';
 import { UI } from './engine/UI.js';
 
-export { BlobMap, Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Manager, Scene, SceneManager, SHGScene, SoundProvider, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, TileTypes, Toggle, UI };
+export { AudioPlayer, BlobMap, Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Manager, Scene, SceneManager, SHGScene, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, TileTypes, Toggle, UI };

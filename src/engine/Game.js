@@ -19,22 +19,19 @@
 	later add sound
 */
 
-import { Renderer, Loader } from '../Lines.js';
-import { Scene } from './Scene.js';
-import { SceneManager } from './SceneManager.js';
-import { GameAnim } from './GameAnim.js';
-import Stats from 'stats.js';
 import * as Cool from '../../../cool/cool.js';
+import { Renderer, Loader } from '../Lines.js';
+import { AudioPlayer, Scene, SceneManager, GameAnim } from '../Engine.js';
+import Stats from 'stats.js';
 
 export class Game {
 	constructor(params) {
 		window.GAME = this; // for references in sub classes
+
 		this.renderer = new Renderer({ dps: 60, clearBg: false, ...params }); // update 60
 		this.drawCount = 0;
 		this.drawInterval = params.drawInterval ?? Math.round(60 / (params.dps || 30));
 		this.drawTime = 1000 / (params.dps || 30);
-
-		let perfTestIsLow = params.testPerformance ? Cool.testLowPerformance() : false;
 
 		this.width = params.width;
 		this.height = params.height;
@@ -65,6 +62,8 @@ export class Game {
 		this.useKeyboardEvents = params.events?.includes('keyboard') && !isMobile;
 		this.useTouchEvents = params.events?.includes('touch') && isMobile;
 
+		this.sfx = new AudioPlayer();
+
 		// view is for zooming in and out, could stay in game, could be part of renderer or its own module ...
 
 		this.view = {
@@ -79,6 +78,7 @@ export class Game {
 		this.view.halfWidth = this.view.width / 2;
 		this.view.halfHeight = this.view.height / 2;
 
+		let perfTestIsLow = params.testPerformance ? Cool.testLowPerformance() : false;
 		let userLowQuality = false;
 		if (perfTestIsLow || params.lowPerformance) {
 			userLowQuality = params.ignoreAlerts ?
