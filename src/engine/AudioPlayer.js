@@ -1,24 +1,11 @@
-/*
-	load and serve sounds
-	not part of regular game load because silent is typically an option, so don't want to load sounds until necessary
-
-	key and url don't have to match, but key and sequence url do
-
-	sfx = SoundProvider({
-		audioFiles: [
-			{ key, url }
-			{ key, sequence } ... key is base url for sequence, url_index.wav
-		],
-		baseUrl: './sfx' // default
-	}, soundFiles => {
-	
-	})
-*/
-
 import { random } from '../../../cool/cool.js';
 
 /**
  * provide audio player, access with gm.sfx
+ * play sounds with gm.sfx.play(key, options)
+ * playing sounds that don't exist does not error (so silent option game doesn't need extra code, or error)
+ * if some sounds are loaded, and sounds don't exist, logs warning
+ * silent if no sounds are ever loaded
  */
 export class AudioPlayer {
 
@@ -30,6 +17,8 @@ export class AudioPlayer {
 		this.sounds = {};
 		this.files = [];
 		this.baseUrl = baseUrl;
+
+		this.loaded = 0;
 	}
 
 	/**
@@ -42,10 +31,9 @@ export class AudioPlayer {
 	load(files, callback) {
 
 		let fileCount = 0;
-		let loaded = 0;
 
 		function loadedCallback() {
-			loaded++;
+			this.loaded++;
 		}
 
 		for (let i = 0; i < files.length; i++) {
@@ -55,16 +43,16 @@ export class AudioPlayer {
 				const [s, e] = sequence;
 				for (let k = s; k <= e; k++) {
 					fileCount++;
-					this.preloadAudio(key, `${this.baseUrl}${key}_${k}.wav`, true, volume, loadedCallback);
+					this.preloadAudio(key, `${this.baseUrl}${key}_${k}.wav`, true, volume);
 				}
 			} else {
 				fileCount++;
-				this.preloadAudio(key, `${this.baseUrl}${url}`, false, volume, loadedCallback);
+				this.preloadAudio(key, `${this.baseUrl}${url}`, false, volume);
 			}
 		}
 
 		const loader = setInterval(() => {
-			if (loaded === fileCount) {
+			if (this.loaded === fileCount) {
 				clearInterval(loader);
 				if (callback) callback(this.sounds);
 			}
@@ -73,7 +61,9 @@ export class AudioPlayer {
 
 	preloadAudio(key, url, isSequence, volume=1, callback) {
 		var audio = new Audio();
-		audio.addEventListener('canplaythrough', callback, false);
+		audio.addEventListener('canplaythrough', () => {
+			this.loaded++;
+		}, false);
 		audio.src = url;
 		audio.volume = volume;
 		audio.load();
@@ -88,7 +78,9 @@ export class AudioPlayer {
 	 */
 	isSoundLoaded(key) {
 		if (!this.sounds[key]) {
-			console.warn(`Sound ${key} is not loaded`, this.sounds);
+			if (this.loaded > 0) {
+				console.warn(`Sound ${key} is not loaded`, this.sounds);
+			}
 			return false;
 		} else {
 			return true;
@@ -170,5 +162,4 @@ export class AudioPlayer {
 			sounds[key].currentTime = 0;
 		}
 	}
-
 }
