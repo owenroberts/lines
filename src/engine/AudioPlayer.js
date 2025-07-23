@@ -17,15 +17,28 @@
 
 import { random } from '../../../cool/cool.js';
 
+/**
+ * provide audio player, access with gm.sfx
+ */
 export class AudioPlayer {
 
-	constructor(params={}, callback) {
-	
+	/**
+	 * creates audioplayer container, no sound files loaded 
+	 * @param  {string} [options.baseUrl="./sfx/"] change baseUrl to load files from 
+	 */
+	constructor({ baseUrl="./sfx/" }={}) {
 		this.sounds = {};
-		this.baseUrl = params.baseUrl ?? './sfx/';
-		this.files = params.files ?? [];
+		this.files = [];
+		this.baseUrl = baseUrl;
 	}
 
+	/**
+	 * load audio files using
+	 * single file: { key, url }
+	 * sequence: { key, sequence [1, n] } - key must match file, adds _n.wav
+	 * @param  {Array}   files    
+	 * @param  {Function} callback - when all files loaded
+	 */
 	load(files, callback) {
 
 		let fileCount = 0;
@@ -68,6 +81,11 @@ export class AudioPlayer {
 		else this.sounds[key] = audio;
 	}
 
+	/**
+	 * check if sound key exists, is loaded
+	 * @param  {string}  key 
+	 * @return {boolean}
+	 */
 	isSoundLoaded(key) {
 		if (!this.sounds[key]) {
 			console.warn(`Sound ${key} is not loaded`, this.sounds);
@@ -77,6 +95,14 @@ export class AudioPlayer {
 		}
 	}
 
+	/**
+	 * play sound by key
+	 * @param  {string}    key                
+	 * @param  {boolean}   [options.randomRate=false] - play sound at randomized playback rate
+	 * @param  {number}    [options.rateMin=0.9]      - min value of random rate
+	 * @param  {number}    [options.rateMax=1.1]      - max value of random rate
+	 * @param  {Function}  [options.callback]         - callback after sound played
+	 */
 	play(key, { randomRate=false, rateMin=0.9, rateMax=1.1, callback }={}) {
 		if (!this.isSoundLoaded(key)) return;
 
@@ -89,7 +115,13 @@ export class AudioPlayer {
 		s.play();
 	}
 
-	// the way this works is weird ... okay elaborate on that ...
+	/**
+	 * loops sound by key, must be called in update fn
+	 * @param  {string}    key                
+	 * @param  {boolean}   [options.randomRate=false] - play sound at randomized playback rate
+	 * @param  {number}    [options.rateMin=0.9]      - min value of random rate
+	 * @param  {number}    [options.rateMax=1.1]      - max value of random rate
+	 */
 	loop(key, { randomRate=false, rateMin=0.9, rateMax=1.1 }={}) {
 		if (!this.isSoundLoaded(key)) return;
 
@@ -103,6 +135,10 @@ export class AudioPlayer {
 		}
 	}
 
+	/**
+	 * pause sound by key - restarts from where it left off
+	 * @param  {string}    key                
+	 */
 	pause(key) {
 		if (!this.isSoundLoaded(key)) return;
 
@@ -115,6 +151,10 @@ export class AudioPlayer {
 		}
 	}
 
+	/**
+	 * stop sound by key - restarts from time 0
+	 * @param  {string}    key                
+	 */
 	stop(key) {
 		if (!this.isSoundLoaded(key)) return;
 
