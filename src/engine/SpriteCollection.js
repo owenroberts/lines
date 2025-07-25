@@ -1,6 +1,8 @@
 /*
 	used mostly by SceneManager to handle sprites for each scene
 	also used by game asset managers like pack or map
+	deprecate? this is just scene
+	maybe for components?
 */
 
 export class SpriteCollection {

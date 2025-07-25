@@ -1,104 +1,51 @@
+import { assert } from '../../../cool/cool.js';
 import { SpriteCollection } from './SpriteCollection.js';
 
 /**
  * basic container for sprites and events for scene in LinesEngine game
+ * scene instances extend Scene (or MapScene or UIScene)
+ * add their own update function called by gm
+ * add scene.onKeyDown.x = fn, for key events
  */
 export class Scene {
 	constructor() {
-		this.displaySprites = new SpriteCollection();
-		this.updateSprites = new SpriteCollection();
-		this.uiSprites = new SpriteCollection();
-
-		this.onUpdate = undefined;
-		this.onKeyDown = {}; // this is nuts, should just have general key down handler
+		this.sprites = [];
+		this.onKeyDown = {};
 		this.onKeyUp = {};
 	}
 
+	/**
+	 * add sprites by single, array or args
+	 * @param {Sprite|Sprite[]|Sprite,Sprite..} sprite
+	 */
 	add(sprite) {
-		this.displaySprites.add(sprite);
-		this.updateSprites.add(sprite);
-		this.uiSprites.add(sprite);
-		return sprite;
-	}
-
-	remove(sprite, type) {
-		const types = type ? [type] : ['display', 'update', 'ui'];
-		for (let i = 0; i < types.length; i++) {
-			this[`${types[i]}Sprites`].remove(sprite);
-			// if (index >= 0) this[`${types[i]}Sprites`].splice(index, 1);
+		if (arguments.length > 1) {
+			for (const arg in arguments) {
+				this.add(arg);
+			}
 		}
-	}
 
-	clear() {
-		this.displaySprites.clear();
-		this.updateSprites.clear();
-		this.uiSprites.clear();
-	}
-
-	// sprites? args?
-	addSprite(sprite) {
 		if (Array.isArray(sprite)) {
-			sprite.forEach(s => { this.addSprite(s) });
+			sprite.forEach(s => { this.add(s) });
 			return;
 		}
 
-		this.displaySprites.add(sprite);
-		this.updateSprites.add(sprite);
+		this.sprites.push(sprite);
 		return sprite;
 	}
 
-	addUI(sprite) {
-		this.displaySprites.add(sprite);
-		this.uiSprites.add(sprite);
-		return sprite;
+	remove(sprite) {
+		this.sprites.splice(this.sprites.indexOf(sprite), 1);
 	}
 
-	addToDisplay(sprite) {
-		this.displaySprites.add(sprite);
-		return sprite;
-	}
-
-	addToUpdate(sprite) {
-		this.updateSprites.add(sprite);
-		return sprite;
-	}
-
-	addToUI(sprite) {
-		this.uiSprites.add(sprite);
-		return sprite;
+	clear() {
+		this.sprites = [];
 	}
 
 	display(view) {
-		this.displaySprites.all(sprite => {
-			if (!sprite.display) console.log(sprite);
-			sprite.display(view);
-		});
-	}
-
-	update(offset) {
-		
-		if (offset) {
-			this.updateSprites.all(sprite => { sprite.update(offset); });
+		for (let i = 0; i < this.sprites.length; i++) {
+			assert(this.sprites[i].display, `sprite at ${i} has no display fn`);
+			this.sprites[i].display(view);
 		}
-		
-		if (this.onUpdate) {
-			this.onUpdate();
-		}
-	}
-
-	mouseMoved(x, y) {
-		this.uiSprites.all(sprite => {
-			if (!sprite.over) console.log(sprite)
-			sprite.over(x, y);
-			sprite.out(x, y);
-		});
-	}
-
-	mouseDown(x, y) {
-		this.uiSprites.all(sprite => { sprite.down(x, y); });
-	}
-
-	mouseUp(x, y) {
-		this.uiSprites.all(sprite => { sprite.up(x, y); });
-	}
+	}	
 }
