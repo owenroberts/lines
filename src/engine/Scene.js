@@ -21,7 +21,7 @@ export class Scene {
 	add(sprite) {
 		if (arguments.length > 1) {
 			for (const arg in arguments) {
-				this.add(arg);
+				this.add(arguments[arg]);
 			}
 		}
 
@@ -30,6 +30,7 @@ export class Scene {
 			return;
 		}
 
+		assert(sprite.display, `sprite has no display ${sprite}`);
 		this.sprites.push(sprite);
 		return sprite;
 	}
@@ -44,7 +45,6 @@ export class Scene {
 
 	display(view) {
 		for (let i = 0; i < this.sprites.length; i++) {
-			assert(this.sprites[i].display, `sprite at ${i} has no display fn`);
 			this.sprites[i].display(view);
 		}
 	}	

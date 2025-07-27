@@ -84,6 +84,8 @@ export class Sprite {
 				if (this.isActive) this.animation.draw(this.x, this.y, GAME.suspend);
 			}
 		}
+		
+		// onDisplay?
 		if (this.displayFunc) this.displayFunc();
 	}
 

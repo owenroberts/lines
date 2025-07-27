@@ -8,18 +8,11 @@
 export class SpriteCollection {
 	constructor(sprites) {
 		this.sprites = sprites ? [...sprites] : [];
-	}
-
-	get length() {
-		return this.sprites.length;
+		this.isActive = true; // any "displayable" needs active toggle
 	}
 
 	includes(sprite) {
 		return this.sprites.includes(sprite);
-	}
-
-	sprite(index) {
-		return this.sprites[index];
 	}
 
 	remove(sprite) {
@@ -34,34 +27,45 @@ export class SpriteCollection {
 		if (!this.sprites.includes(sprite)) this.sprites.push(sprite);
 	}
 
-	// loop 
-	all(callback) {
+	update() {
+		if (!this.isActive) return;
 		for (let i = 0; i < this.sprites.length; i++) {
-			callback(this.sprites[i], i);
+			this.sprites[i].update();
 		}
 	}
 
-	update() {
-		this.all(sprite => { sprite.update(); });
-	}
-
 	display() {
-		this.all(sprite => { sprite.display(); });
+		if (!this.isActive) return;
+		for (let i = 0; i < this.sprites.length; i++) {
+			this.sprites[i].display();
+		}
 	}
 
 	over(x, y) {
-		this.all(sprite => { sprite.over(x, y); });
+		if (!this.isActive) return;
+		for (let i = 0; i < this.sprites.length; i++) {
+			this.sprites[i].over(x, y);
+		}
 	}
 
 	out(x, y) {
-		this.all(sprite => { sprite.out(x, y); });
+		if (!this.isActive) return;
+		for (let i = 0; i < this.sprites.length; i++) {
+			this.sprites[i].out(x, y);
+		}
 	}
 
 	down(x, y) {
-		this.all(sprite => { sprite.down(x, y); });
+		if (!this.isActive) return;
+		for (let i = 0; i < this.sprites.length; i++) {
+			this.sprites[i].down(x, y);
+		}
 	}
 
 	up(x, y) {
-		this.all(sprite => { sprite.up(x, y); });
+		if (!this.isActive) return;
+		for (let i = 0; i < this.sprites.length; i++) {
+			this.sprites[i].up(x, y);
+		}
 	}
 }
