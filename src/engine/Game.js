@@ -169,8 +169,8 @@ export class Game {
 						this.anims[file] = {};
 						for (const key in assets.animations[file]) {
 							this.anims[file][key] = new GameAnim();
-							this.anims[file][key].loadData(assets.animations[file][key].json);
 							this.anims[file][key].src = file + '.' + key;
+							this.anims[file][key].loadData(assets.animations[file][key].json);
 						}
 					}
 				} else {

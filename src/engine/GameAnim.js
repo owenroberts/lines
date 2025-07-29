@@ -98,7 +98,6 @@ export class GameAnim extends LinesAnimation {
 
 	loadData(json, callback) {
 		super.loadData(json, callback);
-		// console.log(json.title);
 		this.setFrames();
 	}
 
