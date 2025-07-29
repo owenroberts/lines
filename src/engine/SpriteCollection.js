@@ -6,8 +6,8 @@
 */
 
 export class SpriteCollection {
-	constructor(sprites) {
-		this.sprites = sprites ? [...sprites] : [];
+	constructor(sprites=[]) {
+		this.sprites = sprites;
 		this.isActive = true; // any "displayable" needs active toggle
 	}
 
@@ -24,7 +24,10 @@ export class SpriteCollection {
 	}
 
 	add(sprite) {
-		if (!this.sprites.includes(sprite)) this.sprites.push(sprite);
+		if (!this.sprites.includes(sprite)) {
+			this.sprites.push(sprite);
+		}
+		return sprite;
 	}
 
 	update() {

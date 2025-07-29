@@ -251,14 +251,18 @@ export class Game {
 	}
 
 	updateBounds(position) {
-		if (position.y < this.bounds.top) 
+		if (position.y < this.bounds.top) {
 			this.bounds.top = Math.round(position.y);
-		if (position.y > this.bounds.bottom) 
+		}
+		if (position.y > this.bounds.bottom) { 
 			this.bounds.bottom = Math.round(position.y + this.height);
-		if (position.x > this.bounds.right) 
+		}
+		if (position.x > this.bounds.right) {
 			this.bounds.right = Math.round(position.x + this.width / 2);
-		if (position.x < this.bounds.left) 
+		}
+		if (position.x < this.bounds.left) {
 			this.bounds.left = Math.round(position.x - this.width / 2);
+		}
 	}
 
 	startMouseEvents() {

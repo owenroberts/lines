@@ -1,3 +1,5 @@
+import { assert } from '../../../cool/cool.js';
+
 /**
  * base class for game elements
  * animation with position, size
@@ -50,6 +52,9 @@ export class Sprite {
 	}
 
 	addAnimation(animation, callback) {
+		assert(animation.width, `adding animation needs width`);
+		assert(animation.height, `adding animation needs height`);
+		
 		this.animation = animation;
 		this.size = [this.animation.width, this.animation.height];
 		this.halfWidth = Math.round(this.animation.width / 2);
@@ -77,11 +82,12 @@ export class Sprite {
 		else isDraw = this.isActive && this.isOnScreen();
 	
 		if (isDraw) {
-			// console.log(this.constructor.name, this.debug);
 			if (this.debug) this.drawDebug();
 			if (this.animation) {
 				this.animation.update();
-				if (this.isActive) this.animation.draw(this.x, this.y, GAME.suspend);
+				if (this.isActive) {
+					this.animation.draw(this.x, this.y, GAME.suspend);
+				}
 			}
 		}
 		

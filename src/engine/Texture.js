@@ -1,3 +1,6 @@
+import { assert } from '../../../cool/cool.js';
+
+// rename SpriteTexture? (vs TextSprite)
 /**
  * draws frames from one animation in multuple places (locations)
  */
@@ -21,7 +24,7 @@ export class Texture {
 		}
 
 		if (params.locations && params.animation) {
-			this.addLocations();
+			this.addLocations(); // wtf? -- is this even used?
 		}
 	}
 
@@ -31,6 +34,12 @@ export class Texture {
 		this.halfHeight = Math.round(animation.height / 2);
 	}
 
+	/**
+	 * add location to texture
+	 * @param {number} x     - x position
+	 * @param {number} y     - y position
+	 * @param {number} index - frame index
+	 */
 	addLocation(x, y, index) {
 		const loc = [x, y];
 		if (index !== undefined) {
@@ -47,6 +56,7 @@ export class Texture {
 	}
 
 	addLocations(locations) {
+		assert(false, "do i use this? deprecate?");
 		if (locations) this.locations.push(...locations);
 
 		// why doesn't this just call add location?
