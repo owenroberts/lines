@@ -269,15 +269,15 @@ export function Data(lns) {
 		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
 			const layer = lns.anim.layers[i];
 			if (!layer.isInFrame(lns.anim.currentFrame)) continue;
-			layer.endFrame = layer.startFrame + n;
+			layer.endFrame = lns.anim.currentFrame + n;
 			if (lns.anim.state.end < layer.endFrame) lns.anim.state.end = layer.endFrame;
 
 			switch(type) {
 				case "Draw":
 					layer.addTween({
 						prop: 'endIndex',
-						startFrame: layer.startFrame,
-						endFrame: layer.endFrame,
+						startFrame: lns.anim.currentFrame,
+						endFrame: lns.anim.currentFrame + n,
 						startValue: 0,
 						endValue: lns.anim.drawings[layer.drawingIndex].length
 					});
@@ -285,8 +285,8 @@ export function Data(lns) {
 				case "Reverse":
 					layer.addTween({
 						prop: 'startIndex',
-						startFrame: layer.startFrame,
-						endFrame: layer.endFrame,
+						startFrame: lns.anim.currentFrame,
+						endFrame: lns.anim.currentFrame + n,
 						startValue: 0,
 						endValue: lns.anim.drawings[layer.drawingIndex].length
 					});
@@ -295,15 +295,15 @@ export function Data(lns) {
 					const mid = Math.floor(n / 2);
 					layer.addTween({
 						prop: 'endIndex',
-						startFrame: layer.startFrame,
-						endFrame: layer.startFrame + mid,
+						startFrame: lns.anim.currentFrame,
+						endFrame: lns.anim.currentFrame + mid,
 						startValue: 0,
 						endValue: lns.anim.drawings[layer.drawingIndex].length
 					});
 					layer.addTween({
 						prop: 'startIndex',
-						startFrame: layer.startFrame + mid,
-						endFrame: layer.endFrame,
+						startFrame: lns.anim.currentFrame + mid,
+						endFrame: lns.anim.currentFrame + n,
 						startValue: 0,
 						endValue: lns.anim.drawings[layer.drawingIndex].length
 					});
