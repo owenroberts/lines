@@ -11,6 +11,7 @@ import { Drawing } from './Drawing.js';
 import { Layer } from './Layer.js';
 import { Style } from './Style.js';
 import { Points, LINES_VERSION } from './Consts.js';
+<<<<<<< HEAD:src/Anim.js
 
 /**
  * basic unit of lines animation
@@ -37,6 +38,7 @@ export class Anim {
 		 * @type {number}
 		 */
 		this.dpf = 1; // draws per frame (update, like fps)
+
 		this.currentFrame = 0;
 		this.drawCount = 0;
 		this.endFrame = 0; // set from loading layers

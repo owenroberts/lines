@@ -23,6 +23,7 @@ export class GameAnim extends Anim {
 		if (this.drawCount >= this.dpf - 1) {
 			this.nextFrame();
 			this.drawCount = 0;
+
 		}
 		this.drawCount++;
 		if (this.onUpdate) this.onUpdate();

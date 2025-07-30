@@ -238,7 +238,11 @@ export function Playback(lns, params) {
 			'dps': {
 				type: 'UINumberStep',
 				key: "'",
+<<<<<<< HEAD
 				value: lns.renderer.dps,
+=======
+				value: lns.renderer.getProps().dps,
+>>>>>>> 48b2a20 (goodbye fps holy shit)
 				callback: value => { lns.renderer.setDPS(value); },
 				prompt: 'Set Draw/Second',
 			},
