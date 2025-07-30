@@ -6,14 +6,14 @@
 	wiggle is calculated based on the layer offset, default 5 frames
 */
 
-import * as Cool from '../../cool/cool.js';
+import { assert, randomInt, map } from '../../cool/cool.js';
 import { Drawing } from './Drawing.js';
 import { Layer } from './Layer.js';
 import { Style } from './Style.js';
-import { POINTS } from './Consts.js';
+import { Points, LINES_VERSION } from './Consts.js';
 
 export class LinesAnimation {
-	constructor(ctx, dps, multiColor, multiWidth) {
+	constructor(ctx, multiColor, multiWidth) {
 		this.ctx = ctx;
 		this.isLoaded = false;
 		this.isPlaying = false;
@@ -23,18 +23,15 @@ export class LinesAnimation {
 		this.drawings = [];
 		this.layers = [];
 		this.styles = [];
-		
-		/*
-			dps is the renderer speed
-			dpf is how many draws per frame, must be int
-			fps is not really relevant but easier to understand
-			default dps is usuall 30 so 10 is good
-			with 24 use 12
-		*/
 
-		if (!dps) dps = 30; // draw per frame from renderer
-		this._fps = dps === 30 ? 10 : 12;
-		this.drawsPerFrame = Math.round(dps / this._fps);
+		/**
+		 * draws per frame
+		 * how many time to draw each frame in animation
+		 * like fps, but tied to renderer draw time
+		 * @type {number}
+		 */
+		this.dpf = 1; // draws per frame (update, like fps)
+		
 		this.currentFrame = 0;
 		this.drawCount = 0;
 
@@ -56,40 +53,7 @@ export class LinesAnimation {
 	}
 
 	randomCount() {
-		this.drawCount = Cool.randomInt(this.drawsPerFrame);
-	}
-
-	set fps(value) {
-		const dps = this.fps * this.dpf; // reverse engineer current dps
-		let dpf = dps / +value;
-		
-		// if dpf isn't int, is it +1 -1 or just a new fps
-		if (dpf % 1 > 0) {
-			if (Math.abs(+value - this._fps) === 1) {
-				dpf = this.dpf + Math.sign(this.fps - +value);
-			} else {
-				dpf = Math.round(dpf);
-			}
-		}
-		
-		this.drawsPerFrame = dpf;
-		this._fps = +(dps / this.dpf).toFixed(3);
-		this.drawCount = 0;
-	}
-
-	get fps() {
-		return this._fps;
-	}
-
-	set dpf(value) {
-		const dps = this.fps * this.dpf;
-		this.drawsPerFrame = +value;
-		this._fps = dps / this.drawsPerFrame;
-		// this.drawCount = 0;
-	}
-
-	get dpf() {
-		return this.drawsPerFrame;
+		this.drawCount = randomInt(this.dpf);
 	}
 
 	get frame() {
@@ -107,6 +71,7 @@ export class LinesAnimation {
 		}
 	}
 
+	// endframe can be calculated for playback, should be mixin
 	get endFrame() {
 		const endFrame = this.layers.map(layer => { return layer.endFrame; });
 		// when is layers.length 0 ??
@@ -180,9 +145,11 @@ export class LinesAnimation {
 	}
 
 	update() {
+		console.log(this.src, this.isPlaying);
 		if (this.isPlaying) {
-			// console.log(this.currentFrame, this.drawCount, this.drawsPerFrame);
-			if (this.drawCount >= this.drawsPerFrame - 1) { // >== instead of === in case dpf changed
+			console.log(this.currentFrame, this.drawCount, this.dpf);
+			
+			if (this.drawCount >= this.dpf - 1) { // >== instead of === in case dpf changed
 				if (this.sequenceIndex >= 0) {
 					this.nextClip(false);
 				}
@@ -287,7 +254,7 @@ export class LinesAnimation {
 					const tween = props.tweens[j];
 					if (tween.startFrame <= this.currentFrame && 
 						tween.endFrame >= this.currentFrame) {
-						props[tween.prop] = Cool.map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
+						props[tween.prop] = map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
 
 						// fix for floating point array index errors -- move to actual prop calcs?
 						if (tween.prop === 'startIndex' || tween.prop === 'endIndex' || tween.prop === 'segmentNum') {
@@ -349,17 +316,17 @@ export class LinesAnimation {
 			// loop over points
 			for (let j = props.startIndex; j < endIndex; j++) {
 				const s = drawing.get(j); // returns [point, offset]
-				if (s[0] === POINTS.END || s[0] === POINTS.ADD) continue; // end of line or connected line
+				if (s[0] === Points.END || s[0] === Points.ADD) continue; // end of line or connected line
 				let e = drawing.get(j + 1); // get next [point, offset]
-				if (e[0] === POINTS.END) continue;
-				if (e[0] === POINTS.ADD) {
+				if (e[0] === Points.END) continue;
+				if (e[0] === Points.ADD) {
 					// connect end of first point
 					// go backwards to find start point of this segment
 					// start assuming its very begining
 					e = drawing.get(0);
 					for (let k = j; k > 0; k--) {
 						let ep = drawing.get(k)[0];
-						if (ep === POINTS.END || ep === POINTS.ADD) {
+						if (ep === Points.END || ep === Points.ADD) {
 							e = drawing.get(k + 1);
 							break;
 						}
@@ -442,6 +409,9 @@ export class LinesAnimation {
 	}
 
 	loadData(json, callback) {
+
+		assert(json.v === LINES_VERSION, `json data v${json.v} is not correct version, lines version = ${LINES_VERSION}`);
+
 		this.isLoaded = true;
 		for (let i = 0; i < json.d.length; i++) {
 			this.drawings[i] = json.d[i] ? 
@@ -487,7 +457,7 @@ export class LinesAnimation {
 
 		if (this.states.default) this.resetDefault();
 
-		this.fps = json.fps;
+		this.dpf = json.dpf;
 
 		if (json.mc) this.multiColor = json.mc;
 		if (json.mw) this.multiWidth = json.mw;

@@ -64,6 +64,7 @@ export class Sprite {
 	}
 
 	drawDebug() {
+		return; // this is pre-renderer setup, also planning to fix this
 		GAME.ctx.lineWidth = 1;
 		GAME.ctx.beginPath();
 		GAME.ctx.rect(this.x, this.y, this.width, this.height);

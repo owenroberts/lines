@@ -1,4 +1,4 @@
-import { POINTS } from './Consts.js';
+import { Points } from './Consts.js';
 
 export class Drawing {
 	constructor(points) {
@@ -16,10 +16,10 @@ export class Drawing {
 
 	// add a point
 	add(point) {
-		if (point === 'add' || point === POINTS.ADD) {
-			this.points.push(POINTS.ADD);
-		} else if (point === 'end' || point === POINTS.END) {
-			this.points.push(POINTS.END);
+		if (point === 'add' || point === Points.ADD) {
+			this.points.push(Points.ADD);
+		} else if (point === 'end' || point === Points.END) {
+			this.points.push(Points.END);
 		} else if (Array.isArray(point)) { 	// from json file
 			this.points.push(point);
 		} else {
@@ -93,7 +93,7 @@ export class Drawing {
 
 		// add random offsets for xy for each segment of the lines
 		for (let i = 0, len = this.points.length; i < len; i++) {
-			if (this.points[i] !== POINTS.END) {
+			if (this.points[i] !== Points.END) {
 				this.offsets[i] = [];
 
 				// one offset for each segment -- do i ever use last offset?

@@ -13,7 +13,7 @@ export class GameAnim extends LinesAnimation {
 
 	update() { /* too many things to stick in onPlayedState etc */
 		if (this.isPlaying) {
-			if (this.drawCount >= this.drawsPerFrame - 1) {
+			if (this.drawCount >= this.dpf - 1) {
 				this.nextFrame();
 				this.drawCount = 0;
 			}

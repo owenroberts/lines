@@ -62,26 +62,6 @@ export function Playback(lns, params) {
 		lns.timeline.update();
 	}
 
-	/* ' - dps is property of render engine, not individual animations */
-	function setDPS(value) {
-		lns.renderer.setDPS(value);
-		lns.anim.drawsPerFrame = Math.max(1, Math.round(lns.renderer.getProps().dps / lns.anim.fps));
-		lns.ui.faces.fps.value = lns.anim.fps;
-		lns.ui.faces.dpf.value = lns.anim.dpf;
-	}
-
-	/* ; - fps update frame value in anim*/
-	function setFPS(value) {
-		lns.anim.fps = value;
-		lns.ui.faces.fps.value = lns.anim.fps;
-		lns.ui.faces.dpf.value = lns.anim.dpf;
-	}
-
-	function setDPF(value) {
-		lns.anim.dpf = value;
-		lns.ui.faces.fps.value = lns.anim.fps;
-	}
-
 	function setFrame(f) {
 		if (+f <= lns.anim.endFrame + 1 && +f >= 0) {
 			// no before ?? 
@@ -149,8 +129,8 @@ export function Playback(lns, params) {
 	function update() {
 
 		if (showStats) stats.begin();
-		
 		if (stats && showStats) stats.begin();
+		
 		if (lns.anim.isPlaying) lns.timeline.update();
 		const { width, height, bgColor } = lns.renderer.getProps();
 
@@ -207,7 +187,6 @@ export function Playback(lns, params) {
 			lns.eraser.display();
 		}
 
-
 		lns.anim.update();
 		lns.anim.draw();
 
@@ -250,18 +229,10 @@ export function Playback(lns, params) {
 		]);
 
 		lns.ui.addProps({
-			'fps': {
-				type: 'UINumberStep',
-				key: ";",
-				value: lns.anim.fps,
-				callback: value => { setFPS(value); },
-				min: 1,
-				prompt: 'Set Frames/Second',
-			},
 			'dpf': {
 				type: 'UINumberStep',
 				value: lns.anim.dpf,
-				callback: value => { setDPF(value); },
+				callback: value => { lns.anim.dpf = value; },
 				min: 1,
 				prompt: 'Set Draws/Frame',
 			},
@@ -269,7 +240,7 @@ export function Playback(lns, params) {
 				type: 'UINumberStep',
 				key: "'",
 				value: lns.renderer.getProps().dps,
-				callback: value => { setDPS(value); },
+				callback: value => { lns.renderer.setDPS(value); },
 				prompt: 'Set Draw/Second',
 			},
 			'onionSkinIsVisible': {
