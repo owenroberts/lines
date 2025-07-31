@@ -19,7 +19,7 @@
 	later add sound
 */
 
-import { whichKeyMap, mobilecheck, testPerformance } from '../../../cool/cool.js';
+import { mobilecheck, testPerformance } from '../../../cool/cool.js';
 import { Renderer, Loader } from '../Lines.js';
 import { AudioPlayer, Scene, Manager, GameAnim, Input } from '../Engine.js';
 import Stats from 'stats.js';
@@ -55,7 +55,7 @@ export class Game {
 			params.scenes.forEach(s => this.scenes.add(s, new Scene()));
 		}
 		this.sfx = new AudioPlayer();
-		this.input = new Input(params.keys ?? []);
+		this.input = new Input(params.keys);
 
 		const isMobile = mobilecheck();
 		if (isMobile) {
@@ -205,7 +205,12 @@ export class Game {
 		// should just be onDraw or something..
 		this.renderer.addCallback(delta => { this.update(delta) });
 
-		if (this.useKeyboardEvents) this.setupKeyboardEvents();
+		if (this.useKeyboardEvents) {
+			this.input.setupKeyboardEvents({
+				onKeyDown: this.onKeyDown,
+				onKeyUp: this.onKeyUp,
+			});
+		}
 		if (this.useMouseEvents) this.startMouseEvents();
 		if (this.useTouchEvents) this.startTouchEvents();
 		if (this.sizeCanvas) window.addEventListener('resize', this.sizeCanvas, false);
@@ -313,22 +318,5 @@ export class Game {
 			ev.preventDefault();
 			if (this.touchEnd) this.touchEnd(ev);
 		}, false);
-	}
-
-	setupKeyboardEvents() {
-		document.addEventListener('keydown', ev => {
-			// input thing is for inputs? when was that necessary?
-			if (ev.target.tagName === "INPUT") return;
-			if (this.onKeyDown) {
-				this.onKeyDown(whichKeyMap[ev.which]);
-			}
-		});
-
-		document.addEventListener('keyup', ev => {
-			if (ev.target.tagName === "INPUT") return;
-			if (this.onKeyUp) {
-				this.onKeyUp(whichKeyMap[ev.which]);
-			}
-		});
 	}
 }
