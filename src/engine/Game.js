@@ -19,9 +19,9 @@
 	later add sound
 */
 
-import { keys, mobilecheck, testPerformance } from '../../../cool/cool.js';
+import { whichKeyMap, mobilecheck, testPerformance } from '../../../cool/cool.js';
 import { Renderer, Loader } from '../Lines.js';
-import { AudioPlayer, Scene, Manager, GameAnim } from '../Engine.js';
+import { AudioPlayer, Scene, Manager, GameAnim, Input } from '../Engine.js';
 import Stats from 'stats.js';
 
 export class Game {
@@ -55,6 +55,7 @@ export class Game {
 			params.scenes.forEach(s => this.scenes.add(s, new Scene()));
 		}
 		this.sfx = new AudioPlayer();
+		this.input = new Input(params.keys ?? []);
 
 		const isMobile = mobilecheck();
 		if (isMobile) {
@@ -319,14 +320,14 @@ export class Game {
 			// input thing is for inputs? when was that necessary?
 			if (ev.target.tagName === "INPUT") return;
 			if (this.onKeyDown) {
-				this.onKeyDown(keys[ev.which]);
+				this.onKeyDown(whichKeyMap[ev.which]);
 			}
 		});
 
 		document.addEventListener('keyup', ev => {
 			if (ev.target.tagName === "INPUT") return;
 			if (this.onKeyUp) {
-				this.onKeyUp(keys[ev.which]);
+				this.onKeyUp(whichKeyMap[ev.which]);
 			}
 		});
 	}
