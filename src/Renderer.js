@@ -176,7 +176,7 @@ export function Renderer(params) {
 		reset();
 		updateTime = performance.now();
 		window.requestAnimFrame(update);
-		if (suspendRender) suspendRender = false;
+		suspendRender = false;
 	}
 
 	return { 

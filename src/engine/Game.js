@@ -19,7 +19,7 @@
 	later add sound
 */
 
-import * as Cool from '../../../cool/cool.js';
+import { keys, mobilecheck, testPerformance } from '../../../cool/cool.js';
 import { Renderer, Loader } from '../Lines.js';
 import { AudioPlayer, Scene, SceneManager, GameAnim } from '../Engine.js';
 import Stats from 'stats.js';
@@ -49,20 +49,19 @@ export class Game {
 		});
 
 		this.anims = {};
-		
-		this.bounds = params.bounds || { top: 0, bottom: 0, left: 0, right: 0 };
+		this.bounds = params.bounds ?? { top: 0, bottom: 0, left: 0, right: 0 };
 		this.scenes = new SceneManager(params.scenes, Scene);
+		this.sfx = new AudioPlayer();
 
-		const isMobile = Cool.mobilecheck();
+		const isMobile = mobilecheck();
 		if (isMobile) {
 			document.body.classList.add('mobile');
 		}
 
-		this.useMouseEvents = params.events?.includes('mouse') && !isMobile;
+		// this should just be booleans
 		this.useKeyboardEvents = params.events?.includes('keyboard') && !isMobile;
+		this.useMouseEvents = params.events?.includes('mouse') && !isMobile;
 		this.useTouchEvents = params.events?.includes('touch') && isMobile;
-
-		this.sfx = new AudioPlayer();
 
 		// view is for zooming in and out, could stay in game, could be part of renderer or its own module ...
 
@@ -78,7 +77,7 @@ export class Game {
 		this.view.halfWidth = this.view.width / 2;
 		this.view.halfHeight = this.view.height / 2;
 
-		let perfTestIsLow = params.testPerformance ? Cool.testLowPerformance() : false;
+		let perfTestIsLow = params.testPerformance ? testLowPerformance() : false;
 		let userLowQuality = false;
 		if (perfTestIsLow || params.lowPerformance) {
 			userLowQuality = params.ignoreAlerts ?
@@ -177,7 +176,7 @@ export class Game {
 					this.data[type] = assets[type];
 				}
 			}
-			this._start();
+			this.setup();
 			if (this.loadingUpdate) {
 				clearInterval(this.loadingInterval);
 				this.loadingSplash.remove();
@@ -193,45 +192,36 @@ export class Game {
 		}
 	}
 
-	_start() {
-		this.drawTime = performance.now(); // not using this ... 
+	setup() {
 
 		this.renderer.start();
-		if (this.start) this.start(); // should be this method?
-		if (!this.update) this.noUpdate = true;
+		if (this.onSetup) this.onSetup(); // should be this method?
+		if (!this.onUpdate) this.noUpdate = true;
 
-		this.renderer.addCallback(delta => { this._update(delta) });
-		
-		// if (this.stats) {
-		// 	this.renderer.addCallback(() => {
-		// 		this.stats.begin();
-		// 	}, 'pre');
-		// 	this.renderer.addCallback(() => {
-		// 		this.stats.end();
-		// 	}, 'post');
-		// }
+		// should just be onDraw or something..
+		this.renderer.addCallback(delta => { this.update(delta) });
 
+		if (this.useKeyboardEvents) this.setupKeyboardEvents();
 		if (this.useMouseEvents) this.startMouseEvents();
-		if (this.useKeyboardEvents) this.startKeyboardEvents();
 		if (this.useTouchEvents) this.startTouchEvents();
 		if (this.sizeCanvas) window.addEventListener('resize', this.sizeCanvas, false);
 	}
 
-	_draw(delta) {
+	draw(delta) {
 		if (this.stats) this.drawStats.begin();
 		// if (clearBg) ctx.clearRect(0, 0, canvas.width, canvas.height);
 		this.renderer.ctx.clearRect(0, 0, this.width, this.height);
-		this.draw(delta); // need time ??
+		this.onDraw(delta); // need time ??
 		if (this.stats) this.drawStats.end();
 	}
 
-	_update(delta) {
+	update(delta) {
 		// console.log('_update', delta);
 		if (this.pauseGame) return; // should be isPaused
 		if (this.stats) this.stats.begin();
-		if (!this.noUpdate) this.update(delta); // what?
+		if (!this.noUpdate) this.onUpdate(delta); // what?
 		// if (delta > this.drawTime + this.drawInterval) this._draw(delta);
-		if (this.drawCount === 0) this._draw(delta); // need time?
+		if (this.drawCount === 0) this.draw(delta); // need time?
 		this.drawCount = (this.drawCount + 1) % this.drawInterval;
 		// console.log(this.drawCount);
 
@@ -272,12 +262,16 @@ export class Game {
 
 		canvas.addEventListener('click', ev => {
 			ev.preventDefault();
-			if (this.mouseClicked) this.mouseClicked(ev.offsetX / this.zoom, ev.offsetY / this.zoom);
+			if (this.mouseClicked) {
+				this.mouseClicked(ev.offsetX / this.zoom, ev.offsetY / this.zoom);
+			}
 		}, false);
 
 		canvas.addEventListener('mousedown', ev => {
 			ev.preventDefault();
-			if (this.mouseDown) this.mouseDown(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which, ev.shiftKey);
+			if (this.mouseDown) {
+				this.mouseDown(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which, ev.shiftKey);
+			}
 			if (this.startDrag) {
 				dragOffset = startDrag(ev.offsetX, ev.offsetY);
 				if (dragOffset) dragStarted = true;
@@ -286,12 +280,16 @@ export class Game {
 
 		canvas.addEventListener('mouseup', ev => {
 			ev.preventDefault();
-			if (this.mouseUp) this.mouseUp(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which);
+			if (this.mouseUp) {
+				this.mouseUp(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which);
+			}
 			if (dragStarted) dragStarted = false;
 		}, false);
 
 		canvas.addEventListener('mousemove', ev => {
-			if (this.mouseMoved) this.mouseMoved(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which);
+			if (this.mouseMoved) {
+				this.mouseMoved(ev.offsetX / this.zoom, ev.offsetY / this.zoom, ev.which);
+			}
 			if (dragStarted) drag(ev.offsetX / this.zoom, ev.offsetY / this.zoom, dragOffset);
 		}, false);
 	}
@@ -313,13 +311,20 @@ export class Game {
 		}, false);
 	}
 
-	startKeyboardEvents() {
+	setupKeyboardEvents() {
 		document.addEventListener('keydown', ev => {
-			if (this.keyDown && ev.target.tagName !== "INPUT") this.keyDown(Cool.keys[ev.which]);
+			// input thing is for inputs? when was that necessary?
+			if (ev.target.tagName === "INPUT") return;
+			if (this.onKeyDown) {
+				this.onKeyDown(keys[ev.which]);
+			}
 		});
 
 		document.addEventListener('keyup', ev => {
-			if (this.keyUp && ev.target.tagName !== "INPUT") this.keyUp(Cool.keys[ev.which]);
+			if (ev.target.tagName === "INPUT") return;
+			if (this.onKeyUp) {
+				this.onKeyUp(keys[ev.which]);
+			}
 		});
 	}
 }
