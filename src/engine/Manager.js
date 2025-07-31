@@ -1,44 +1,36 @@
-/*
-	used for scenes: gme.scenes, gme.scenes.current etc
-	could also be implemented for animation states, other things with states
-	basically allows you to set with a string and get an object
-	why tho ... wtf
-*/
-
 import { assert } from '../../../cool/cool.js';
 
+/**
+ * manage a series of objs by name
+ * basically a {} with current key pointing to one of its values
+ * maybe also implement for anim states
+ */
 export class Manager {
-	constructor(list=[], classType) {
-		// this.classType = className;
-		for (let i = 0; i < list.length; i++) {
-			this[list[i]] = new classType();
-		}
-		this._current = list[0];
-		this.names = list;
+
+	constructor() {
+		this.names = [];
+		this.current = {};
+		this.currentName = '';
 	}
 
-	setCurrent(sceneName) {
-		assert(this[sceneName] !== undefined, `${sceneName} does not exist`);
-		this._current = sceneName;
+	/**
+	 * add something to the manager
+	 * @param {string} name
+	 * @param {object} obj
+	 */
+	add(name, obj) {
+		assert(!this.hasOwnProperty(name), `${name} already exists in manager, cannot be added`);
+		this[name] = obj; // this is prob weird, idk
+		this.names.push(name);
 	}
 
-	getCurrent() {
-		return this[this._current];
-	}
-
-	set current(label) {
-		this._current = label;
-	}
-
-	get current() {
-		return this[this._current];
-	}
-
-	get currentName() {
-		return this._current;
-	}
-
-	get list() {
-		return this.names;
+	/**
+	 * set the current obj by name
+	 * @param {string} name
+	 */
+	setCurrent(name) {
+		assert(this.hasOwnProperty(name), `${name} does not exists in manager`);
+		this.current = this[name];
+		this.currentName = name;
 	}
 }

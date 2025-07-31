@@ -21,7 +21,7 @@
 
 import { keys, mobilecheck, testPerformance } from '../../../cool/cool.js';
 import { Renderer, Loader } from '../Lines.js';
-import { AudioPlayer, Scene, SceneManager, GameAnim } from '../Engine.js';
+import { AudioPlayer, Scene, Manager, GameAnim } from '../Engine.js';
 import Stats from 'stats.js';
 
 export class Game {
@@ -50,7 +50,10 @@ export class Game {
 
 		this.anims = {};
 		this.bounds = params.bounds ?? { top: 0, bottom: 0, left: 0, right: 0 };
-		this.scenes = new SceneManager(params.scenes, Scene);
+		this.scenes = new Manager(params.scenes, Scene);
+		if (params.scenes) {
+			params.scenes.forEach(s => this.scenes.add(s, new Scene()));
+		}
 		this.sfx = new AudioPlayer();
 
 		const isMobile = mobilecheck();

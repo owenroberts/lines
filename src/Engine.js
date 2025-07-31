@@ -14,7 +14,6 @@ import { GameAnim } from './engine/GameAnim.js';
 import { generateBSPMap, BSPTileTypes } from './engine/generateBSPMap.js';
 import { Manager } from './engine/Manager.js';
 import { Scene } from './engine/Scene.js';
-import { SceneManager } from './engine/SceneManager.js';
 import { SHGScene } from './engine/SHGScene.js';
 import { SpatialHashGrid } from './engine/SpatialHashGrid.js';
 import { Sprite } from './engine/Sprite.js';
@@ -27,4 +26,4 @@ import { TileMap, TileTypes } from './engine/TileMap.js';
 import { Toggle } from './engine/Toggle.js';
 import { UI } from './engine/UI.js';
 
-export { AudioPlayer, BlobMap, Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Manager, Scene, SceneManager, SHGScene, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, TileTypes, Toggle, UI };
+export { AudioPlayer, BlobMap, Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Manager, Scene, SHGScene, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, TileTypes, Toggle, UI };
