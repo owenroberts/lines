@@ -55,7 +55,7 @@ export class Game {
 			params.scenes.forEach(s => this.scenes.add(s, new Scene()));
 		}
 		this.sfx = new AudioPlayer();
-		this.input = new Input(params.keys);
+		this.input = new Input({ keyMap: params.keyMap });
 
 		const isMobile = mobilecheck();
 		if (isMobile) {

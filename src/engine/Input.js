@@ -1,17 +1,25 @@
-import { whichKeyMap } from '../../../cool/cool.js';
+import { assert } from '../../../cool/cool.js';
+
+/**
+ * keys that should trigger ev.preventDefault to avoid default browser behaviors like scolling
+ * @type {array}
+ */
+const PREVENT_KEYS = ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
 /**
  * set up input to access from gm in scenes and components
+ * needs keyMap that maps ev.code to key label, { "KeyX": "BTN_1" }
  */
 export class Input {
 	
 	/**
 	 * creates input
-	 * @param  {array}  keys - list of keys to use in 
+	 * @param  {object}  keyMap - map of key names to event.code 
 	 */
-	constructor(keys=[]) {
-		this.keys = {}; // use map?
-		keys.forEach(k => { this.keys[k] = false; });
+	constructor({ keyMap={} }={}) {
+		this.keyMap = keyMap;
+		this.keys = new Map();
+		Object.values(keyMap).forEach(k => { this.keys.set(k, false); });
 	}
 
 	/**
@@ -19,7 +27,8 @@ export class Input {
 	 * @param {string} key - key from whichKeyMap in cool.js
 	 */
 	addKey(key) {
-		this.keys[key] = false;
+		assert(!this.keys.has(key), `${key} already exists in input`);
+		this.keys.set(key, false);
 	}
 
 	/**
@@ -28,7 +37,7 @@ export class Input {
 	 * @param {boolean} state - true or false
 	 */
 	setKey(key, state) {
-		this.keys[key] = state;
+		this.keys.set(key, state);
 	}
 
 	/**
@@ -37,7 +46,7 @@ export class Input {
 	 * @return {boolean}
 	 */
 	getKey(key) {
-		return this.keys[key];
+		return this.keys.get(key);
 	}
 
 	/**
@@ -46,9 +55,9 @@ export class Input {
 	 * @return {boolean}
 	 */
 	triggerKey(key) {
-		const s = this.keys[key];
-		this.keys[key] = false;
-		return s;
+		const isDown = this.keys.get(key);
+		if (isDown) this.keys.set(key, false);
+		return isDown;
 	}
 
 	/**
@@ -56,7 +65,7 @@ export class Input {
 	 */
 	reset() {
 		for (const k in this.keys) {
-			this.keys[k] = false;
+			this.keys.set(key, false);
 		}
 	}
 
@@ -65,21 +74,22 @@ export class Input {
 	 * @param  {function} [options.onKeyDown] - gm onKeyDown callback
 	 * @param  {function} [options.onKeyUp]   - gm onKeyUp callback
 	 */
-	setupKeyboardEvents({ onKeyDown, onKeyUp }) {
+	setupKeyboardEvents({ onKeyDown, onKeyUp }={}) {
 		document.addEventListener('keydown', ev => {
-			// input thing is for inputs? when was that necessary?
-			// if (ev.target.tagName === "INPUT") return;
-			const key = whichKeyMap[ev.which];
-			if (this.keys.hasOwnProperty(key)) {
+			if (ev.target.tagName === "INPUT") return;
+			if (PREVENT_KEYS.includes(ev.code)) ev.preventDefault();
+			const key = this.keyMap[ev.code];
+			if (this.keys.has(key)) {
 				this.setKey(key, true);
 				if (onKeyDown) onKeyDown(key); 
 			}
 		});
 
 		document.addEventListener('keyup', ev => {
-			// if (ev.target.tagName === "INPUT") return;
-			const key = whichKeyMap[ev.which];
-			if (this.keys.hasOwnProperty(key)) {
+			if (ev.target.tagName === "INPUT") return;
+			if (PREVENT_KEYS.includes(ev.code)) ev.preventDefault();
+			const key = this.keyMap[ev.code];
+			if (this.keys.has(key)) {
 				this.setKey(key, false);
 				if (onKeyUp) onKeyUp(key);
 			}
