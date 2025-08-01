@@ -7,7 +7,7 @@ import { UILayer } from './UILayer.js';
 import { UITween } from './UITween.js';
 import { UITimelineGroup } from './UITimelineGroup.js';
 import { Elements } from '../../../ui/src/UI.js';
-const { UIButton, UIElement,  } = Elements;
+const { UIButton, UIElement } = Elements;
 import { POINTS } from '../../src/Lines.js';
 
 export function Timeline(lns) {

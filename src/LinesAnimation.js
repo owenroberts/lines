@@ -145,11 +145,9 @@ export class LinesAnimation {
 	}
 
 	update() {
-		console.log(this.src, this.isPlaying);
 		if (this.isPlaying) {
-			console.log(this.currentFrame, this.drawCount, this.dpf);
-			
 			if (this.drawCount >= this.dpf - 1) { // >== instead of === in case dpf changed
+
 				if (this.sequenceIndex >= 0) {
 					this.nextClip(false);
 				}

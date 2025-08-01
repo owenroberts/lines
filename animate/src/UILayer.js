@@ -1,13 +1,13 @@
 import { POINTS } from '../../src/Lines.js';
 import { Elements } from '../../../ui/src/UI.js';
-const { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber } = Elements;
+const { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber, UIText } = Elements;
 
 export class UILayer extends UICollection {
 	constructor(layer, params) {
 		super(params);
 		this.addClass('layer');
 
-		this.lns = params.lns; // fuck make this better ... 
+		this.lns = params.lns; // fuck make this better ... ref anim instead of lns
 
 		this.layer = layer;
 		if (params.canMoveUp) this.canMoveUp = params.canMoveUp;
@@ -338,10 +338,15 @@ export class UILayer extends UICollection {
 			app: this.lns, 
 			position: this.position, 
 			callback: () => {
-				if (tween.endValue === 'end' && 
-					(tween.prop === 'endIndex' || tween.prop === 'startIndex')) {
-					tween.endValue = this.lns.anim.drawings[layer.drawingIndex].length;
+				if (tween.prop === 'endIndex' || tween.prop === 'startIndex') {
+					if (tween.endValue === 'end') {
+						tween.endValue = this.lns.anim.drawings[layer.drawingIndex].length;
+					}
+					if (tween.startValue === 'end') {
+						tween.startValue = this.lns.anim.drawings[layer.drawingIndex].length;
+					}
 				}
+
 				layer.addTween(tween);
 				this.update();
 			}
@@ -370,13 +375,13 @@ export class UILayer extends UICollection {
 		}));
 
 		modal.addBreak('Start Value:');
-		modal.add(new UINumber({
+		modal.add(new UIText({
 			value: tween.startValue,
 			callback(value) { tween.startValue = value; }
 		}));
 
 		modal.addBreak('End Value:');
-		modal.add(new UINumber({
+		modal.add(new UIText({
 			value: tween.endValue,
 			callback(value) { tween.endValue = value; }
 		}));
