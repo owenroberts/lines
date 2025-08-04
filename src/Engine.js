@@ -2,12 +2,9 @@
  * provide all game components
  */
 import { AudioPlayer } from './engine/AudioPlayer.js';
+import { BBox } from './engine/BBox.js';
 import { BlobMap } from './engine/BlobMap.js';
 import { Button } from './engine/Button.js';
-import { Collider } from './engine/Collider.js';
-import { ColliderEmpty } from './engine/ColliderEmpty.js';
-import { ColliderEntity } from './engine/ColliderEntity.js';
-import { ColliderSprite } from './engine/ColliderSprite.js';
 import { Entity } from './engine/Entity.js';
 import { Game } from './engine/Game.js';
 import { GameAnim } from './engine/GameAnim.js';
@@ -27,4 +24,4 @@ import { TileMap, TileTypes } from './engine/TileMap.js';
 import { Toggle } from './engine/Toggle.js';
 import { UI } from './engine/UI.js';
 
-export { AudioPlayer, BlobMap, Button, Collider, ColliderEmpty, ColliderEntity, ColliderSprite, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Input, Manager, Scene, SHGScene, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, TileTypes, Toggle, UI };
+export { AudioPlayer, BBox, BlobMap, Button, Entity, Game, GameAnim, generateBSPMap, BSPTileTypes, Input, Manager, Scene, SHGScene, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, Texture, TextureEntity, TileMap, TileTypes, Toggle, UI };

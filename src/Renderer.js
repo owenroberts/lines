@@ -93,8 +93,6 @@ export function Renderer(params) {
 	let suspendRender = false;
 
 	const callbacks = [];
-	const postTime = [];
-	const preTime = [];
 
 	function setDPS(value) {
 		dps = value;

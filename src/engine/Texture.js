@@ -1,6 +1,14 @@
-import { assert } from '../../../cool/cool.js';
+import { assert, randomInt } from '../../../cool/cool.js';
 
 // rename SpriteTexture? (vs TextSprite)
+// or SpriteMap, TileMap, TextureMap ... 
+
+export const FrameTypes = {
+	INDEX: 0, // gets index from location
+	RANDOM_INDEX: 1, // randomized location index
+	RANDOM_FRAME: 2, // just random frames all the time
+};
+ 
 /**
  * draws frames from one animation in multuple places (locations)
  */
@@ -13,8 +21,9 @@ export class Texture {
 	 */
 	constructor(params, debug) {
 		this.debug = debug;
-		this.locations = params.locations ?? [];
-		this.frame = params.frame ?? 'index'; // bad name
+		this.locations = [];
+
+		this.frameType = params.frameType ?? FrameTypes.INDEX; // bad name
 		this.center = params.center ?? false;
 		this.offset = [0, 0]; // for moving maps
 		this.isActive = params.isActive ?? true;
@@ -30,8 +39,6 @@ export class Texture {
 
 	addAnimation(animation) {
 		this.animation = animation;
-		this.halfWidth = Math.round(animation.width / 2);
-		this.halfHeight = Math.round(animation.height / 2);
 	}
 
 	/**
@@ -41,18 +48,13 @@ export class Texture {
 	 * @param {number} index - frame index
 	 */
 	addLocation(x, y, index) {
-		const loc = [x, y];
-		if (index !== undefined) {
-			this.animation.createNewState(`f-${index}`, index, index);
-			loc.i = index;
-		}  else if (this.frame === 'randomIndex') {
-			let r = Cool.randomInt(0, this.animation.endFrame);
-			this.animation.createNewState(`f-${r}`, r, r);
-			loc.i = r;
-		} else {
-			loc.i = index;
+
+		if (!Number.isFinite(index) && this.frameType === FrameTypes.RANDOM_INDEX) {
+			index = randomInt(0, this.animation.endFrame);	
 		}
-		this.locations.push(loc);
+
+		this.animation.createNewState(`f-${index}`, index, index);
+		this.locations.push([x, y, index]);
 	}
 
 	addLocations(locations) {
@@ -76,50 +78,38 @@ export class Texture {
 		}
 	}
 
-	clear() {
-		this.locations = [];
-	}
+	clear() { this.locations = []; }
 
 	display() {
 		if (!this.isActive) return;
-		// console.log(this.offset);
 		for (let i = 0; i < this.locations.length; i++) {
 			let x = this.locations[i][0] + this.offset[0];
 			let y = this.locations[i][1] + this.offset[1];
-			if (this.center) {
-				x -= this.halfWidth;
-				y -= this.halfHeight;
+			
+			// test on screen
+			if (!GAME.view.isCollidingBox(x, y, this.animation.width, this.animation.height)) {
+				continue;
 			}
 
-			//  figure out centering later, only draw textures on screen
-			if (x + this.animation.width > 0 && x < GAME.view.width && 
-				y + this.animation.height > 0 && y < GAME.view.height) {
-
-				if (this.locations[i].i !== undefined) {
-					this.animation.state = `f-${this.locations[i].i}`;
-				}
-				this.animation.draw(x, y, GAME.suspend);
-			}
+			this.animation.state = `f-${this.locations[i][2]}`;
+			this.animation.draw(x, y, GAME.suspend);
 		}
-	}
-
-	isOnScreen() {  // debugging
-		let onScreen = [];
-		for (let i = 0; i < this.locations.length; i++) {
-			let x = this.locations[i][0] + this.offset[0];
-			let y = this.locations[i][1] + this.offset[1];
-			if (this.center) {
-				x -= this.halfWidth;
-				y -= this.halfHeight;
-			}
-			onScreen.push(x + this.animation.width > 0 && x < GAME.view.width && 
-				y + this.animation.height > 0 && y < GAME.view.height);
-		}
-		return onScreen;
 	}
 
 	update(offset) {
 		this.offset[0] = offset[0];
 		this.offset[1] = offset[1];
+	}
+
+	getCollisionLocation(othr) {
+		for (let i = 0; i < this.locations.length; i++) {
+			let x = this.locations[i][0] + this.offset[0];
+			let y = this.locations[i][1] + this.offset[1];
+
+			if (othr.isCollidingBox(x, y, this.animation.width, this.animation.height)) {
+				return [x, y];
+			}
+		}
+		return false;
 	}
 }

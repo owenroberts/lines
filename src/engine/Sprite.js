@@ -1,4 +1,5 @@
 import { assert } from '../../../cool/cool.js';
+import { BBox } from './BBox.js';
 
 /**
  * base class for game elements
@@ -10,45 +11,18 @@ export class Sprite {
 	 * sprite constructor
 	 * @param  {number}   x         x position
 	 * @param  {number}   y         y position
-	 * @param  {Object}   animation 
-	 * @param  {Function} callback  after animation loaded
+	 * @param  {object}   animation 
+	 * @param  {function} callback  after animation loaded
 	 */
 	constructor(x, y, animation, callback) {
-		this.position = [Math.round(x) || 0, Math.round(y) || 0];
-		this.size = [0, 0]; // set by animation
-		this.halfWidth = 0;
-		this.halfHeight = 0;
+		
+		this.bbox = new BBox(x, y);
 
 		this.debug = false;
-		this.debugColor = "#00ffbb";
-		this.isActive = true;  // need a better name for this - disabled or something ... 
-		this.center = false;
+		this.isActive = true;
+		// this.center = false;
 		
 		if (animation) this.addAnimation(animation, callback);
-	}
-
-	get x() {
-		return this.xy[0];
-	}
-
-	get y() {
-		return this.xy[1];
-	}
-
-	get width() {
-		return this.size[0];
-	}
-
-	get height() {
-		return this.size[1];
-	}
-
-	get xy() {
-		if (!this.center) return this.position;
-		return [
-			this.position[0] - this.halfWidth,
-			this.position[1] - this.halfHeight,
-		];
 	}
 
 	addAnimation(animation, callback) {
@@ -56,52 +30,44 @@ export class Sprite {
 		assert(animation.height, `adding animation needs height`);
 		
 		this.animation = animation;
-		this.size = [this.animation.width, this.animation.height];
-		this.halfWidth = Math.round(this.animation.width / 2);
-		this.halfHeight = Math.round(this.animation.height / 2);
-
+		this.bbox.setSize(this.animation.width, this.animation.height);
 		if (callback) callback(animation);
 	}
 
-	drawDebug() {
-		return; // this is pre-renderer setup, also planning to fix this
-		GAME.ctx.lineWidth = 1;
-		GAME.ctx.beginPath();
-		GAME.ctx.rect(this.x, this.y, this.width, this.height);
-		const temp = GAME.ctx.strokeStyle;
-		GAME.ctx.strokeStyle = this.debugColor;
-		GAME.ctx.stroke();
-		GAME.ctx.strokeStyle = temp;
-		if (this.label) GAME.ctx.fillText(this.label, this.position.x, this.position.y);
-		if (GAME.lineWidth !== 1) GAME.ctx.lineWidth = GAME.lineWidth;
+	setPosition(x, y) {
+		this.bbox.setPosition(x, y);
+	}
+
+	setCollider(x, y, w, h) {
+		this.collider = new BBox(x, y, w, h);
+	}
+
+	isColliding(bbox) {
+		return this.collider.isColliding(bbox);
 	}
 
 	display(editorOnScreen) {
 		// better way to do this ... 
-		let isDraw = false;
-		if (editorOnScreen !== undefined) isDraw = editorOnScreen;
-		else isDraw = this.isActive && this.isOnScreen();
+		if (!this.isActive) return;
+		if (!this.isOnScreen()) return;
+		// if (editorOnScreen !== undefined) isDraw = editorOnScreen;
 	
-		if (isDraw) {
-			if (this.debug) this.drawDebug();
-			if (this.animation) {
-				this.animation.update();
-				if (this.isActive) {
-					this.animation.draw(this.x, this.y, GAME.suspend);
-				}
+		if (this.debug) {
+			this.bbox.drawDebug();
+			if (this.collider) {
+				this.collider.drawDebug({ 
+					color: '#ff00bb',
+				});
 			}
 		}
+		this.animation.update();
+		this.animation.draw(this.bbox.xywh[0], this.bbox.xywh[1], GAME.suspend);
 		
 		// onDisplay?
 		if (this.displayFunc) this.displayFunc();
 	}
 
 	isOnScreen() {
-		return (
-			this.x + this.width > 0 &&
-			this.y + this.height > 0 &&
-			this.x < GAME.view.width &&
-			this.y < GAME.view.height
-		);
+		return this.bbox.isColliding(GAME.view);
 	} 
 }

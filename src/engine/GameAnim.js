@@ -68,6 +68,7 @@ export class GameAnim extends LinesAnimation {
 			this.states[label] = { start, end, dir };
 		}
 		this.state = label; /* ? */
+		// sets anim to state on create, probably dont need this right?
 	}
 
 	playStateCheck() {

@@ -14,7 +14,6 @@ export class Drawing {
 		this.firstUpdate = true;
 	}
 
-	// add a point
 	add(point) {
 		if (point === 'add' || point === Points.ADD) {
 			this.points.push(Points.ADD);

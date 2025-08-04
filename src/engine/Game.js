@@ -21,7 +21,7 @@
 
 import { mobilecheck, testPerformance } from '../../../cool/cool.js';
 import { Renderer, Loader } from '../Lines.js';
-import { AudioPlayer, Scene, Manager, GameAnim, Input } from '../Engine.js';
+import { AudioPlayer, Scene, Manager, GameAnim, Input, BBox } from '../Engine.js';
 import Stats from 'stats.js';
 
 export class Game {
@@ -33,10 +33,10 @@ export class Game {
 		this.drawInterval = params.drawInterval ?? Math.round(60 / (params.dps || 30));
 		this.drawTime = 1000 / (params.dps || 30);
 
-		this.width = params.width;
-		this.height = params.height;
-		this.halfWidth = Math.round(params.width / 2);
-		this.halfHeight = Math.round(params.height / 2);
+		this.window = new BBox(0, 0, params.width, params.height);
+		this.bounds = params.bounds ? 
+			new BBox(params.bounds.x, params.bounds.y, params.bounds.width, params.bounds.height) :
+			new BBox(0, 0, params.width, params.height);
 		
 		this.debug = (params.debug ?? false) && import.meta.env.DEV;
 		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
@@ -49,7 +49,6 @@ export class Game {
 		});
 
 		this.anims = {};
-		this.bounds = params.bounds ?? { top: 0, bottom: 0, left: 0, right: 0 };
 		this.scenes = new Manager(params.scenes, Scene);
 		if (params.scenes) {
 			params.scenes.forEach(s => this.scenes.add(s, new Scene()));
@@ -69,17 +68,12 @@ export class Game {
 
 		// view is for zooming in and out, could stay in game, could be part of renderer or its own module ...
 
-		this.view = {
-			width: this.width,
-			height: this.height,
-		};
+		this.zoom = params.zoom ?? 1;
+		this.view = new BBox(0, 0, params.width, params.height);
 
-		this.zoom = params.zoom || 1;
 		let ediZoom = params.isEditor ? this.renderer.getProps().dpr : 1;
-		this.view.width = Math.round(this.width / this.zoom * ediZoom);
-		this.view.height = Math.round(this.height / this.zoom * ediZoom);
-		this.view.halfWidth = this.view.width / 2;
-		this.view.halfHeight = this.view.height / 2;
+
+		this.view.setSize(Math.round(this.window.width / this.zoom * ediZoom), Math.round(this.window.height / this.zoom * ediZoom));
 
 		let perfTestIsLow = params.testPerformance ? testLowPerformance() : false;
 		let userLowQuality = false;
@@ -91,17 +85,14 @@ export class Game {
 			
 		if (userLowQuality) {
 			if (this.zoom) {
-				this.width = Math.round(this.width / this.zoom);
-				this.height = Math.round(this.height / this.zoom);
-				this.halfWidth = Math.round(this.width / 2);
-				this.halfHeight = Math.round(this.height / 2);
-				this.renderer.setWidth(this.width);
-				this.renderer.setHeight(this.height);
+				this.window.setSize(Math.round(this.window.width / this.zoom), Math.round(this.window.height / this.zoom));
+				this.renderer.setWidth(this.window.width);
+				this.renderer.setHeight(this.window.height);
 				this.renderer.setScale(1);
 				
 				if (params.smallCanvas) {
-					this.renderer.canvas.style.width = this.width + 'px';
-					this.renderer.canvas.style.height = this.height + 'px';
+					this.renderer.canvas.style.width = this.window.width + 'px';
+					this.renderer.canvas.style.height = this.window.height + 'px';
 				} else {
 					if (params.useSVGFilterOnLow && !navigator.userAgent.includes('Firefox')) {
 						params.svgFilter = true;
@@ -128,6 +119,7 @@ export class Game {
 			this.drawStats.dom.style.top = '48px';
 		}
 
+		// preloading before anything can be displayed, just HTML
 		this.loadingUpdate = false;
 		const loadingTitle = document.getElementById(params.loadingTitle ?? "title");
 		this.loadingSplash = document.getElementById(params.loadingSplash ?? "splash");
@@ -146,20 +138,10 @@ export class Game {
 	}
 
 	setView(width, height) {
-
 		this.renderer.setWidth(width);
 		this.renderer.setHeight(height);
-		this.width = width;
-		this.height = height;
-
-		this.halfWidth = Math.round(width / 2);
-		this.halfHeight = Math.round(height / 2);
-
-		this.view.width = Math.round(this.width / this.zoom);
-		this.view.height = Math.round(this.height / this.zoom);
-		this.view.halfWidth = this.view.width / 2;
-		this.view.halfHeight = this.view.height / 2;
-
+		this.window.setSize(width, height);
+		this.view.setSize(width / this.zoom, height / this.zoom);
 		this.renderer.reset();
 	}
 
@@ -219,7 +201,7 @@ export class Game {
 	draw(delta) {
 		if (this.stats) this.drawStats.begin();
 		// if (clearBg) ctx.clearRect(0, 0, canvas.width, canvas.height);
-		this.renderer.ctx.clearRect(0, 0, this.width, this.height);
+		this.renderer.ctx.clearRect(0, 0, this.window.width, this.window.height);
 		this.onDraw(delta); // need time ??
 		if (this.stats) this.drawStats.end();
 	}
@@ -243,25 +225,6 @@ export class Game {
 			}
 		}
 		if (this.stats) this.stats.end();
-	}
-
-	setBounds(dir, value) {
-		this.bounds[dir] = Math.round(value);
-	}
-
-	updateBounds(position) {
-		if (position.y < this.bounds.top) {
-			this.bounds.top = Math.round(position.y);
-		}
-		if (position.y > this.bounds.bottom) { 
-			this.bounds.bottom = Math.round(position.y + this.height);
-		}
-		if (position.x > this.bounds.right) {
-			this.bounds.right = Math.round(position.x + this.width / 2);
-		}
-		if (position.x < this.bounds.left) {
-			this.bounds.left = Math.round(position.x - this.width / 2);
-		}
 	}
 
 	startMouseEvents() {
