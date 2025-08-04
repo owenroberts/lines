@@ -6,8 +6,8 @@ import { random, randomInt, coinFlip, chance, assert } from '../../../cool/cool.
 import { TileMap } from './TileMap.js';
 
 /**
- * BSPTileTypes "Enum"
- * @type {Object} { WALL, ROOM, PATH, ROOM_PATH }
+ * BSPTileTypes "enum"
+ * @type {object} { WALL, ROOM, PATH, ROOM_PATH }
  */
 export const BSPTileTypes = {
 	WALL: 0,
@@ -18,7 +18,7 @@ export const BSPTileTypes = {
 
 /**
  * generates a BSP Map with a tileMap, nodes, rooms and paths
- * @param  {Object}  options - options for bsp map generation
+ * @param  {object}  options - options for bsp map generation
  * @param  {number}  options.cols - columns in map
  * @param  {number}  options.rows - rows in map
  * @param  {number}  [options.maxNodes] - maximum nodes, or splits in map
@@ -26,15 +26,15 @@ export const BSPTileTypes = {
  * @param  {number}  [options.maxNodeSize] - max size of each node/area
  * @param  {number}  [options.minRoomSize] - min size of room in node
  * @param  {boolean} [options.createPaths] - add paths between rooms
- * @param  {Object}  [options.mapBuffer] - { w, h } buffer around map
- * @param  {Object}  [options.roomBuffer] - { w, h } buffer between room and containing node
- * @param  {Object}  [options.inject] - inject a specific node, room, or path
- * @return {Object}  {tileMap, nodes, rooms, paths} - returns tileMap and BSP data
+ * @param  {object}  [options.mapBuffer] - { w, h } buffer around map
+ * @param  {object}  [options.roomBuffer] - { w, h } buffer between room and containing node
+ * @param  {object}  [options.inject] - inject a specific node, room, or path
+ * @return {object}  {tileMap, nodes, rooms, paths} - returns tileMap and BSP data
  */
 export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNodeSize=99, minRoomSize=1, createPaths=true, mapBuffer={ w: 0, h: 0 }, roomBuffer={ w: 0, h: 0 }, inject=[] }) {
 
-	assert(Number.isFinite(rows), "{rows} param must be number");
-	assert(Number.isFinite(cols), "{cols} param must be number");
+	assert(Number.isFinite(rows), "rows param must be number");
+	assert(Number.isFinite(cols), "cols param must be number");
 
 	const tileMap = new TileMap(cols, rows);
 
@@ -223,7 +223,10 @@ export function generateBSPMap({ cols, rows, maxNodes=99, minNodeSize=1, maxNode
 			let attemptCount = 0;
 
 			while (!roomAdded) {
-				if (attemptCount > 99) throw new Error("can't add room to this map");
+				if (attemptCount > 99) {
+					console.log('params', { cols, rows, inject })
+					throw new Error("can't add room to this map");
+				}
 				
 				const result = split(start);
 				if (!result) {

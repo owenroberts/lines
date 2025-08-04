@@ -60,8 +60,9 @@ export class Sprite {
 				});
 			}
 		}
+		
 		this.animation.update();
-		this.animation.draw(this.bbox.xywh[0], this.bbox.xywh[1], GAME.suspend);
+		this.animation.draw(this.bbox.x, this.bbox.y, GAME.suspend);
 		
 		// onDisplay?
 		if (this.displayFunc) this.displayFunc();
