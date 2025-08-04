@@ -1,32 +1,20 @@
-/*
-	user defined functions:
-	start - create anything using loaded animations
-	draw - draw sprites, anything not in scenes
-	update - update user input only
-
-	sizeCanvas - handle canvas resize
-
-	keyDown(key)
-	keyUp(key)
-
-	mouseMoved(x, y, which)
-	mouseDown(x, y, which)
-	mouseUp(x, y, which)
-
-	load -- load animations and data
-	gme.load({ animations: {}, data: {} })
-	animations load files in each file, data returns data from whatever file
-	later add sound
-*/
-
-import { mobilecheck, testPerformance } from '../../../cool/cool.js';
+import { assert, mobilecheck, testPerformance } from '../../../cool/cool.js';
 import { Renderer, Loader } from '../Lines.js';
 import { AudioPlayer, Scene, Manager, GameAnim, Input, BBox } from '../Engine.js';
 import Stats from 'stats.js';
 
+/**
+ * game manager class
+ * includes renderer, window, view, loader, scenes, sfx, input, debug, anims list, data, bounds, sizeCanvas
+ * calls onSetup, 
+ * gm. to overwrite default for onUpdate, onDraw, onKeyDown, onKeyUp 
+ * gm.load({ animations: {}, data: {} })
+ */
 export class Game {
 	constructor(params) {
-		window.GAME = this; // for references in sub classes
+		
+		this.isDev = import.meta.env.DEV;
+		this.debug = (params.debug ?? false) && this.isDev;
 
 		this.renderer = new Renderer({ dps: 60, clearBg: false, ...params }); // update 60
 		this.drawCount = 0;
@@ -38,7 +26,6 @@ export class Game {
 			new BBox(params.bounds.x, params.bounds.y, params.bounds.width, params.bounds.height) :
 			new BBox(0, 0, params.width, params.height);
 		
-		this.debug = (params.debug ?? false) && import.meta.env.DEV;
 		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
 		this.suspend = false;
 		this.editorSuspend = false;
@@ -71,7 +58,7 @@ export class Game {
 		this.zoom = params.zoom ?? 1;
 		this.view = new BBox(0, 0, params.width, params.height);
 
-		let ediZoom = params.isEditor ? this.renderer.getProps().dpr : 1;
+		let ediZoom = params.isEditor ? this.renderer.dpr : 1;
 
 		this.view.setSize(Math.round(this.window.width / this.zoom * ediZoom), Math.round(this.window.height / this.zoom * ediZoom));
 
@@ -153,7 +140,7 @@ export class Game {
 					for (const file in assets.animations) {
 						this.anims[file] = {};
 						for (const key in assets.animations[file]) {
-							this.anims[file][key] = new GameAnim();
+							this.anims[file][key] = new GameAnim(this);
 							this.anims[file][key].src = file + '.' + key;
 							this.anims[file][key].loadData(assets.animations[file][key].json);
 						}
@@ -180,17 +167,20 @@ export class Game {
 
 	setup() {
 
-		this.renderer.start();
 		if (this.onSetup) this.onSetup(); // should be this method?
 		if (!this.onUpdate) this.noUpdate = true;
 
 		// should just be onDraw or something..
-		this.renderer.addCallback(delta => { this.update(delta) });
+		// this.renderer.addCallback(delta => { this.update(delta) });
+		this.renderer.onDraw = timeElapsed => {
+			this.update(timeElapsed);
+		};
+		this.renderer.start();
 
 		if (this.useKeyboardEvents) {
 			this.input.setupKeyboardEvents({
-				onKeyDown: this.onKeyDown,
-				onKeyUp: this.onKeyUp,
+				onKeyDown: this.onKeyDown.bind(this), // dont love bind but whatever
+				onKeyUp: this.onKeyUp.bind(this),
 			});
 		}
 		if (this.useMouseEvents) this.startMouseEvents();
@@ -198,33 +188,91 @@ export class Game {
 		if (this.sizeCanvas) window.addEventListener('resize', this.sizeCanvas, false);
 	}
 
-	draw(delta) {
+	draw(timeElapsed) {
 		if (this.stats) this.drawStats.begin();
 		// if (clearBg) ctx.clearRect(0, 0, canvas.width, canvas.height);
 		this.renderer.ctx.clearRect(0, 0, this.window.width, this.window.height);
-		this.onDraw(delta); // need time ??
+		this.onDraw(timeElapsed); // need time ??
 		if (this.stats) this.drawStats.end();
 	}
 
-	update(delta) {
+	update(timeElapsed) {
 		// console.log('_update', delta);
 		if (this.pauseGame) return; // should be isPaused
 		if (this.stats) this.stats.begin();
-		if (!this.noUpdate) this.onUpdate(delta); // what?
+		if (!this.noUpdate) this.onUpdate(timeElapsed); // what?
 		// if (delta > this.drawTime + this.drawInterval) this._draw(delta);
-		if (this.drawCount === 0) this.draw(delta); // need time?
+		if (this.drawCount === 0) this.draw(timeElapsed); // need time?
 		this.drawCount = (this.drawCount + 1) % this.drawInterval;
 		// console.log(this.drawCount);
 
 		// suspend lines update if performance is dragging
 		if (this.suspendOnTimeOver && !this.editorSuspend) {
-			if (!this.suspend && delta > this.drawTime * 1.5) {
+			if (!this.suspend && timeElapsed > this.drawTime * 1.5) {
 				this.suspend = true;
+				// need to update animations to suspend
 			} else if (this.suspend) {
 				this.suspend = false;
 			}
 		}
 		if (this.stats) this.stats.end();
+	}
+
+	onUpdate(timeElapsed) {
+		if (this.scenes.current.update) {
+			this.scenes.current.update(timeElapsed);
+		}
+	}
+
+	onDraw() {
+		this.scenes.current.display(this.view);
+
+		if (this.isDev) {
+			for (let i = 0; i < this.scenes.current.sprites.length; i++) {
+				const sprite = this.scenes.current.sprites[i];
+				if (sprite.debug) {
+					this.drawDebug({ bbox: sprite.bbox });
+					if (sprite.collider) {
+						this.drawDebug({
+							bbox: sprite.collider, 
+							color: '#ff00bb',
+						});
+					}
+				}
+			}
+		}
+	}
+
+	drawDebug({ bbox, x=0, y=0, color="#00ffbb", label }={}) {
+		assert(bbox.isBBox, `bbox is not bbox`);
+
+		this.renderer.ctx.lineWidth = 1;
+		this.renderer.ctx.beginPath();
+		this.renderer.ctx.rect(x + bbox.x, y + bbox.y, bbox.w, bbox.h);
+		const temp = this.renderer.ctx.strokeStyle;
+		this.renderer.ctx.strokeStyle = color;
+		this.renderer.ctx.stroke();
+		this.renderer.ctx.strokeStyle = temp;
+		if (label) {
+			this.renderer.ctx.fillText(label, x + bbox.x, y + bbox.y);
+		}
+		if (this.renderer.lineWidth !== 1) {
+			this.renderer.ctx.lineWidth = this.lineWidth;
+		}
+	}
+
+	onKeyDown(key) {
+		if (this.scenes.current.onKeyDown[key]) {
+			this.scenes.current.onKeyDown[key]();
+			this.input.setKey(key, false);
+		}
+	}
+
+	onKeyUp(key) {
+		if (this.scenes.current.onKeyUp[key]) {
+			this.scenes.current.onKeyUp[key]();
+			this.input.setKey(key, false);
+		}
 	}
 
 	startMouseEvents() {

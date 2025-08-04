@@ -80,19 +80,19 @@ export class Texture {
 
 	clear() { this.locations = []; }
 
-	display() {
+	display(view) {
 		if (!this.isActive) return;
 		for (let i = 0; i < this.locations.length; i++) {
 			let x = this.locations[i][0] + this.offset[0];
 			let y = this.locations[i][1] + this.offset[1];
 			
 			// test on screen
-			if (!GAME.view.isCollidingBox(x, y, this.animation.width, this.animation.height)) {
+			if (!view.isCollidingBox(x, y, this.animation.width, this.animation.height)) {
 				continue;
 			}
 
 			this.animation.state = `f-${this.locations[i][2]}`;
-			this.animation.draw(x, y, GAME.suspend);
+			this.animation.draw(x, y);
 		}
 	}
 

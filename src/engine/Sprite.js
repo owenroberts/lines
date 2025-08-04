@@ -46,29 +46,19 @@ export class Sprite {
 		return this.collider.isColliding(bbox);
 	}
 
-	display(editorOnScreen) {
-		// better way to do this ... 
+	display(view) {
 		if (!this.isActive) return;
-		if (!this.isOnScreen()) return;
+		if (!this.isOnScreen(view)) return;
 		// if (editorOnScreen !== undefined) isDraw = editorOnScreen;
-	
-		if (this.debug) {
-			this.bbox.drawDebug();
-			if (this.collider) {
-				this.collider.drawDebug({ 
-					color: '#ff00bb',
-				});
-			}
-		}
 		
 		this.animation.update();
-		this.animation.draw(this.bbox.x, this.bbox.y, GAME.suspend);
+		this.animation.draw(this.bbox.x, this.bbox.y);
 		
 		// onDisplay?
 		if (this.displayFunc) this.displayFunc();
 	}
 
-	isOnScreen() {
-		return this.bbox.isColliding(GAME.view);
+	isOnScreen(view) {
+		return this.bbox.isColliding(view);
 	} 
 }

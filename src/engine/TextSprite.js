@@ -1,4 +1,5 @@
 import { assert } from '../../../cool/cool.js';
+
 /**
  * a sprite that displays text
  */
@@ -21,14 +22,13 @@ export class TextSprite {
 		this.countBackward = params.countBackward ?? false;
 		this.repeatCount = params.repeatCount ?? false; 
 
-		// this.setBreaks();
+		this.countCount = params.countCount ?? 0.5;
+		this.endCount = params.endCount ?? 0.5;
+		this.endDelay = params.endDelay ?? 24;
+
 		this.count = 0;
 		this.end = 0;
 		this.delay = params.delay ?? 0;
-		
-		this.countCount = params.countCount ?? 0.5;
-		this.endCount = params.endCount ?? 0.5;
-		this.endDelay = params.endDelay || GAME.dps || 10;
 
 		this.hover = false;
 		this.clickStarted = false;

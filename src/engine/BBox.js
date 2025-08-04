@@ -98,20 +98,6 @@ export class BBox {
 	}
 
 	// put this in gm?
-	drawDebug({ x=0, y=0, color="#00ffbb", label }={}) {
-		GAME.renderer.ctx.lineWidth = 1;
-		GAME.renderer.ctx.beginPath();
-		GAME.renderer.ctx.rect(x + this.x, y + this.y, this.w, this.h);
-		const temp = GAME.renderer.ctx.strokeStyle;
-		GAME.renderer.ctx.strokeStyle = color;
-		GAME.renderer.ctx.stroke();
-		GAME.renderer.ctx.strokeStyle = temp;
-		if (label) {
-			GAME.renderer.ctx.fillText(this.label, x + this.x, y + this.y);
-		}
-		if (GAME.renderer.lineWidth !== 1) {
-			GAME.renderer.ctx.lineWidth = GAME.lineWidth;
-		}
-	}
+	
 
 }

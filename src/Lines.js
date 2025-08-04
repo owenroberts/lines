@@ -3,10 +3,10 @@
 */
 
 import { Renderer } from './Renderer.js';
-import { PixelMixin } from './PixelMixin.js';
+import { PixelMixin } from './effects/PixelMixin.js';
 import { Loader } from './Loader.js';
 import { Layer } from './Layer.js';
-import { AntiMixin } from './AntiMixin.js';
+import { AntiMixin } from './effects/AntiMixin.js';
 import { Drawing } from './Drawing.js';
 import { Animator } from './Animator.js';
 import { LinesAnimation } from './LinesAnimation.js';

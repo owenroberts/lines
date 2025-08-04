@@ -37,10 +37,10 @@ export class SpriteCollection {
 		}
 	}
 
-	display() {
+	display(view) {
 		if (!this.isActive) return;
 		for (let i = 0; i < this.sprites.length; i++) {
-			this.sprites[i].display();
+			this.sprites[i].display(view);
 		}
 	}
 

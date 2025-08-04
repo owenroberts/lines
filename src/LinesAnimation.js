@@ -13,12 +13,14 @@ import { Style } from './Style.js';
 import { Points, LINES_VERSION } from './Consts.js';
 
 export class LinesAnimation {
-	constructor(ctx, multiColor, multiWidth) {
-		this.ctx = ctx;
-		this.isLoaded = false;
+	constructor(renderer) {
+
+		this.ctx = renderer.ctx;
+		this.multiColor = renderer.multiColor;
+		this.multiWidth = renderer.multiWidth;
+
 		this.isPlaying = false;
-		this.multiColor = multiColor || false;
-		this.multiWidth = multiWidth || false;
+		this.isLoaded = false;
 
 		this.drawings = [];
 		this.layers = [];
@@ -31,11 +33,10 @@ export class LinesAnimation {
 		 * @type {number}
 		 */
 		this.dpf = 1; // draws per frame (update, like fps)
-		
 		this.currentFrame = 0;
 		this.drawCount = 0;
 
-		this.override = {};
+		this.override = {}; // override properties
 
 		// most animations use default state, game anims/textures have states for changing frame
 		// replace with manager ?? or is this too complicated???
@@ -215,7 +216,7 @@ export class LinesAnimation {
 		};
 	}
 
-	draw(x, y, suspendLinesUpdate) {
+	draw(x, y) {
 
 		/* 
 			get color and other funcs are bc pixel lines uses fill while regular lines uses stroke
@@ -271,7 +272,7 @@ export class LinesAnimation {
 			if (drawing.firstUpdate) { // lazy load -- way to get rid of this check?
 				drawing.firstUpdate = false;
 				drawing.update(props);
-			} else if (!suspendLinesUpdate && !this.suspendUpdate) { 
+			} else if (!this.suspendUpdate) { 
 				// suspend lines update can be set by renderer if fps drops
 				if (layer.linesCount >= props.linesInterval && drawing.needsUpdate) {
 					// each layer has its own count for fps update

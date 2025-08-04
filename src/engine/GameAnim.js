@@ -1,9 +1,9 @@
 import { LinesAnimation } from '../Lines.js';
 
 export class GameAnim extends LinesAnimation {
-	constructor(debug) {
-		const { dps, multiColor } = GAME.renderer.getProps();
-		super(GAME.renderer.ctx, dps, multiColor);
+	constructor(gm, debug) {
+		super(gm.renderer);
+
 		this.debug = debug;
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */

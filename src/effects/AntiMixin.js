@@ -2,7 +2,7 @@
 	scaling canvas to get anti-anti-alias effect
 */
 
-const AntiMixin = {
+export const AntiMixin = {
 
 	init() {
 		this.antiFactor = GAME.antiFactor;
@@ -58,5 +58,13 @@ const AntiMixin = {
 	}
 };
 
-export { AntiMixin };
-
+export function antiMixinRenderSetup(renderer, factor, smallCanvas) {
+	// 3 is good here
+	renderer.canvas.width = renderer.width * renderer.dpr * factor;
+	renderer.canvas.height = renderer.height * renderer.dpr * factor;
+	if (smallCanvas) {
+		renderer.canvas.style.width = (renderer.width * renderer.dpr) + 'px';  
+		renderer.canvas.style.height = (renderer.height * renderer.dpr) + 'px';
+	}
+	renderer.ctx.lineWidth = renderer.lineWidth * factor;
+}
