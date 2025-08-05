@@ -235,6 +235,7 @@ export class Game {
 			for (let i = 0; i < this.scenes.current.sprites.length; i++) {
 				const sprite = this.scenes.current.sprites[i];
 				if (sprite.isDebug) {
+					assert(sprite.bbox, `sprite has no bbox to debug, class: ${sprite.constructor.name}`);
 					this.drawDebug({ bbox: sprite.bbox });
 					if (sprite.collider) {
 						this.drawDebug({
