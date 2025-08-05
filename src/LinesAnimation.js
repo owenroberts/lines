@@ -16,8 +16,8 @@ export class LinesAnimation {
 	constructor(renderer) {
 
 		this.ctx = renderer.ctx;
-		this.multiColor = renderer.multiColor;
-		this.multiWidth = renderer.multiWidth;
+		this.isMultiColor = renderer.isMultiColor;
+		this.isMultiLineWidth = renderer.isMultiLineWidth;
 
 		this.isPlaying = false;
 		this.isLoaded = false;
@@ -47,7 +47,7 @@ export class LinesAnimation {
 		this.sequenceIndex = -1;
 
 		this.layerColor;
-		this.suspendUpdate = false;
+		this.isSuspended = false;
 
 		if (this.init) this.init(); // pixel init
 		// console.log('sqi constructor', this.sequenceIndex)
@@ -272,7 +272,7 @@ export class LinesAnimation {
 			if (drawing.firstUpdate) { // lazy load -- way to get rid of this check?
 				drawing.firstUpdate = false;
 				drawing.update(props);
-			} else if (!this.suspendUpdate) { 
+			} else if (!this.isSuspended) { 
 				// suspend lines update can be set by renderer if fps drops
 				if (layer.linesCount >= props.linesInterval && drawing.needsUpdate) {
 					// each layer has its own count for fps update
@@ -286,8 +286,7 @@ export class LinesAnimation {
 			}
 
 			// if props change, stroke previous layers and change to new ...
-			// console.log(this.multiWidth);
-			if (this.multiColor || this.multiWidth) {
+			if (this.isMultiColor || this.isMultiLineWidth) {
 				
 				if (props.color !== currentProps.color || props.lineWidth !== currentProps.lineWidth) {
 					this.finish();
@@ -344,7 +343,7 @@ export class LinesAnimation {
 		// move ctx to start point + start offset
 		// s,e = [point, offset] = [[x, y], [offset1, offset2]] = [[x,y], [[x,y], [x,y]]]
 
-		// prevent draw errors
+		// prevent draw errors -- get rid of this somehow ... 
 		if (typeof s[0] === 'undefined') return;
 		if (typeof e[0] === 'undefined') return;
 
@@ -382,7 +381,7 @@ export class LinesAnimation {
 				o = e[1][0];
 			} else if (s[1][k]) {
 				o = s[1][k];
-				if (!o) console.log('else k', k, o, s, e); // leave debug here
+				if (!o) console.log('else k', k, o, s, e); // leave isDebug here
 			}
 			
 			// finish line
@@ -458,8 +457,8 @@ export class LinesAnimation {
 
 		this.dpf = json.dpf;
 
-		if (json.mc) this.multiColor = json.mc;
-		if (json.mw) this.multiWidth = json.mw;
+		if (json.mc) this.isMultiColor = json.mc;
+		if (json.mw) this.isMultiLineWidth = json.mw;
 
 		this.width = json.w;
 		this.height = json.h;

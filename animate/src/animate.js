@@ -47,7 +47,7 @@ lns.renderer = Renderer({
 	width: 512,
 	height: 512,
 	bgColor: '#ffffff',
-	retina: true,
+	useRetina: true,
 	dps: 30,
 	lineWidth: 1,
 });
@@ -63,7 +63,7 @@ lns.anim.layers.push(new Layer({
 lns.anim.styles.push(new Style());
 
 // modules
-lns.playback = Playback(lns, { stats: false }); // (dps, stats?)
+lns.playback = Playback(lns, { useStats: false }); // (dps, stats?)
 lns.canvas = Canvas(lns);
 lns.styles = Styles(lns, lns.anim.styles[0].getProps());
 

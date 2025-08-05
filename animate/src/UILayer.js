@@ -245,12 +245,10 @@ export class UILayer extends UICollection {
 
 		modal.add(new UILabel({ text: "Style Index:" }));
 		modal.add(new UINumberStep({
-			debug: true,
 			value: layer.styleIndex,
 			min: 0,
 			max: this.lns.anim.styles.length - 1,
 			callback: value => {
-				console.log('callback', value);
 				layer.styleIndex = value;
 			},
 		}));

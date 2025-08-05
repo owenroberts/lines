@@ -5,8 +5,8 @@
 import { UI } from './UI.js';
 
 export class Button extends UI {
-	constructor(params, debug) {
-		super(params, debug);
+	constructor(params, isDebug) {
+		super(params, isDebug);
 
 		this.mouseOver = false;
 		this.waitToGoOut = false;

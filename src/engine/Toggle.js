@@ -6,8 +6,8 @@
 import { Button } from './Button.js';
 
 export class Toggle extends Button {
-	constructor(params, debug) {
-		super(params, debug);
+	constructor(params, isDebug) {
+		super(params, isDebug);
 		this.toggled = false;
 	}
 

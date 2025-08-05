@@ -1,79 +1,9 @@
 import { Sprite } from './Sprite.js';
 
 /**
- * base class for a sprite with a collider
- * for AABB, mouse
- * could have mouse sprite, or ui sprite ...
- * @extends Sprite
+ * leaving this here for UI update
  */
 export class ColliderSprite extends Sprite {
-
-	/**
-	 * creates a sprite with a collider
-	 * @param  {number}   x         position
-	 * @param  {number}   y         position
-	 * @param  {LinesAnimation}   animation 
-	 * @param  {Function} callback  callback after loading animation
-	 */
-	constructor(x, y, animation, callback) {
-		super(x, y);
-
-		this.collider = [0, 0, 0, 0];
-
-		this.mouseOver = false;
-		this.waitToGoOut = false;
-		this.clickStarted = false;
-		// onOver, onOut, onUp, onDown, onClick
-		if (animation) this.addAnimation(animation, callback);
-		// console.log(this);
-	}
-
-	addAnimation(animation, callback) {
-		super.addAnimation(animation, callback);
-		this.collider[2] = this.animation.width;
-		this.collider[3] = this.animation.height;
-	}
-
-	setCollider(x, y, w, h) {
-		this.collider = [x, y, w, h];
-	}
-
-	drawDebug() {
-		GAME.renderer.ctx.lineWidth = 1;
-		GAME.renderer.ctx.beginPath();
-		GAME.renderer.ctx.rect(
-			this.colliderPosition[0],
-			this.colliderPosition[1],
-			this.collider[2], 
-			this.collider[3]
-		);
-
-		const temp = GAME.renderer.ctx.strokeStyle;
-		GAME.renderer.ctx.strokeStyle = this.debugColor;
-		GAME.renderer.ctx.stroke();
-		GAME.renderer.ctx.strokeStyle = temp;
-		if (GAME.lineWidth !== 1) GAME.renderer.ctx.lineWidth = GAME.lineWidth;
-	}
-
-	get colliderPosition() {
-		return [
-			this.x + this.collider[0],
-			this.y + this.collider[1],
-		];
-	}
-
-	collide(other, callback) {
-		if (this.isActive && other.isActive) {
-			if (this.colliderPosition[0] < other.colliderPosition[0] + other.collider[2] &&
-				this.colliderPosition[0] + this.collider[2] > other.colliderPosition[0] &&
-				this.colliderPosition[1] < other.colliderPosition[1] + other.collider[3] &&
-				this.colliderPosition[1] + this.collider[3] > other.colliderPosition[1]) {
-				if (callback) callback(this);
-				return true;
-			} 
-		}
-		return false;
-	}
 
 	// rename this shit ... 
 	tap(x, y) {
@@ -104,7 +34,7 @@ export class ColliderSprite extends Sprite {
 
 	over(x, y) {
 		// console.log('over', this);
-		// if (this.debug) console.log(this.tap(x,y))
+		// if (this.isDebug) console.log(this.tap(x,y))
 			// console.log(x,y, this.x * GAME.zoom, this.y * GAME.zoom);
 		if (this.isActive && this.tap(x,y) && !this.mouseOver && !this.waitToGoOut) {
 			this.mouseOver = true;

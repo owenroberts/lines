@@ -162,7 +162,6 @@ export function Styles(lns, defaults) {
 				label: 'Style Index',
 				type: 'UINumberStep',
 				value: 0,
-				debug: true,
 				callback: value => { 
 					changeStyle = false; // fixing change style, test
 					setStyleIndex(value);

@@ -43,7 +43,7 @@ export const PixelMixin = {
 					o = e[1][0];
 				} else if (s[1][k]) {
 					o = s[1][k];
-					if (!o) console.log('else k', k, o, s, e); // leave debug here
+					if (!o) console.log('else k', k, o, s, e); // leave debug here --> haven't seen this in a while ... 
 				}
 				this.simplePixelLine(
 					props.x + p0[0] + o[0],

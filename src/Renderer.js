@@ -15,15 +15,14 @@ export class Renderer {
 		this.scale = params.scale ?? 1;
 		this.lineWidth = params.lineWidth ?? 1;
 		this.bgColor = params.bgColor || params.bg || false;
-		this.multiColor = params.multiColor ?? false;
-		this.multiWidth = params.multiWidth ?? false;
+		this.isMultiColor = params.isMultiColor ?? false;
+		this.isMultiLineWidth = params.isMultiLineWidth ?? false;
 		this.clearBg = params.clearBg !== undefined ? params.clearBg : true;
 		
 		this.width = params.width;
 		this.height = params.height;
 		
-		const retina = params.retina !== undefined ? params.retina : true;
-		this.dpr = Math.max(1, retina ? window.devicePixelRatio || 1 : 1);
+		this.dpr = Math.max(1, (params.useRetina ?? true) ? (window.devicePixelRatio ?? 1) : 1);
 
 		this.canvas = document.getElementById(this.id);
 		if (!this.canvas) {
@@ -67,7 +66,7 @@ export class Renderer {
 		this.interval = 1000 / (this.dps ?? 60);  // time interval between updates
 		this.updateTime = performance.now();
 		this.timeElapsed = null;
-		this.suspendRender = false;
+		this.isSuspended = false;
 
 		this.onDraw = params.onDraw;
 	}
@@ -116,10 +115,6 @@ export class Renderer {
 		this.canvasUpdate();
 	}
 
-	addCallback(func) {
-		this.onDraw = func;
-	}
-
 	update(time) {
 		this.timeElapsed = time - this.updateTime;
 		if (this.timeElapsed > this.interval || time === 'capture') {
@@ -130,7 +125,7 @@ export class Renderer {
 			this.onDraw(this.timeElapsed);
 			window.drawCount++;
 		}
-		if (this.suspendRender) return;
+		if (this.isSuspended) return;
 		window.requestAnimFrame((timeElapsed) => {
 			this.update(timeElapsed);
 		});
@@ -139,7 +134,7 @@ export class Renderer {
 	start() {
 		this.reset();
 		this.updateTime = performance.now();
-		this.suspendRender = false;
+		this.isSuspended = false;
 		window.requestAnimFrame((timeElapsed) => {
 			this.update(timeElapsed);
 		});

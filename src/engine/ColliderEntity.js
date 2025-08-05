@@ -1,18 +1,9 @@
-/*
-	Sprite -> ColliderSprite -> ColliderEntity
-	problem with inheritance pattern
-	sprite is just a renderer basically
-	some sprites need collisions -> ColliderSprite
-	some sprite need to update with map -> Entity
-	and it if need both ...
-	add collider as sub class ... so a collider can be added to sprite or entity
-*/
-import { ColliderSprite } from './ColliderSprite.js';
+// leaving this here for update ... this should just be entity now ... 
 
 export class ColliderEntity extends ColliderSprite {
-	constructor(params, debug) {
+	constructor(params, isDebug) {
 		super(params.x, params.y);
-		this.debug = debug;
+		this.isDebug = isDebug;
 		// this.origin = new Cool.Vector(params.x, params.y);
 		this.origin = [params.x, params.y];
 		// this.origin = { x: params.x, y: params.y };

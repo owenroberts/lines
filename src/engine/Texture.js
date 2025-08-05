@@ -16,11 +16,11 @@ export class Texture {
 
 	/**
 	 * creates texture
-	 * @param  {Object} params { locations, frame, center, animation }
-	 * @param  {boolean} debug  
+	 * @param  {object} params { locations, frame, center, animation }
+	 * @param  {boolean} isDebug  
 	 */
-	constructor(params, debug) {
-		this.debug = debug;
+	constructor(params, isDebug) {
+		this.isDebug = isDebug;
 		this.locations = [];
 
 		this.frameType = params.frameType ?? FrameTypes.INDEX; // bad name

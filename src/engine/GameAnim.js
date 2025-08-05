@@ -1,10 +1,10 @@
 import { LinesAnimation } from '../Lines.js';
 
 export class GameAnim extends LinesAnimation {
-	constructor(gm, debug) {
+	constructor(gm, isDebug) {
 		super(gm.renderer);
 
-		this.debug = debug;
+		this.isDebug = isDebug;
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */
 		this.prevFrame = 0;
@@ -110,18 +110,15 @@ export class GameAnim extends LinesAnimation {
 				this.frames[j].push(i);
 			}
 		}
-		// console.log(this);
-		// console.log(this.frames[0]);
 	}
 
 	getLayers() {
-		// current frame is -1 how?
 		if (this.currentFrame < 0) {
+			// current frame is -1 how?
 			// console.log('current frame', this.currentFrame, this);
 			return false;
 		}
 		const indexes = this.frames[this.currentFrame] ?? [];
-		// if (!indexes) console.log(this);
 		const layers = [];
 		for (let i = 0; i < indexes.length; i++) {
 			layers.push(this.layers[indexes[i]]);
@@ -129,7 +126,6 @@ export class GameAnim extends LinesAnimation {
 		return layers;
 	}
 
-	// adding this for all spiders go to hell, maybe good for regular linesanimation??
 	getCurrentDrawing() {
 		return this.drawings[this.layers[this.frames[this.currentFrame][0]].drawingIndex];
 	}

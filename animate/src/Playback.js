@@ -12,9 +12,12 @@ export function Playback(lns, params) {
 	let onionSkinIsVisible = false; /* n key */
 
 	let stats, playPanel, frameDisplay;
-	let showStats = params.showStats || false;
+	let useStats = params.useStats ?? false;
 
 	lns.renderer.addCallback(update);
+	lns.renderer.onDraw = timeElapsed => {
+		update(timeElapsed);
+	}
 
 	function toggleStats(value) {
 		if (value !== undefined) showStats = value;
@@ -128,8 +131,7 @@ export function Playback(lns, params) {
 
 	function update() {
 
-		if (showStats) stats.begin();
-		if (stats && showStats) stats.begin();
+		if (stats && useStats) stats.begin();
 		
 		if (lns.anim.isPlaying) lns.timeline.update();
 		const { width, height, bgColor } = lns.renderer.getProps();
@@ -190,7 +192,7 @@ export function Playback(lns, params) {
 		lns.anim.update();
 		lns.anim.draw();
 
-		if (showStats) stats.end();
+		if (useStats) stats.end();
 	}
 
 	function connect() {
@@ -271,7 +273,7 @@ export function Playback(lns, params) {
 			value: false,
 			key: '/',
 			callback: value => {
-				lns.anim.suspendUpdate = value;
+				lns.anim.isSuspended = value;
 			}
 		});
 	}

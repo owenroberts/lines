@@ -5,16 +5,21 @@ import Stats from 'stats.js';
 
 /**
  * game manager class
- * includes renderer, window, view, loader, scenes, sfx, input, debug, anims list, data, bounds, sizeCanvas
+ * includes renderer, window, view, loader, scenes, sfx, input, isDebug, anims list, data, bounds, sizeCanvas
  * calls onSetup, 
  * gm. to overwrite default for onUpdate, onDraw, onKeyDown, onKeyUp 
  * gm.load({ animations: {}, data: {} })
  */
 export class Game {
+
+	/**
+	 * creates game manager (gm)
+	 * @param  {object} params
+	 */
 	constructor(params) {
 		
 		this.isDev = import.meta.env.DEV;
-		this.debug = (params.debug ?? false) && this.isDev;
+		this.isDebug = (params.isDebug ?? false) && this.isDev;
 
 		this.renderer = new Renderer({ dps: 60, clearBg: false, ...params }); // update 60
 		this.drawCount = 0;
@@ -26,9 +31,9 @@ export class Game {
 			new BBox(params.bounds.x, params.bounds.y, params.bounds.width, params.bounds.height) :
 			new BBox(0, 0, params.width, params.height);
 		
-		this.suspendOnTimeOver = params.suspend || false; // whether to update lines
-		this.suspend = false;
-		this.editorSuspend = false;
+		this.isSuspendOnTimeOver = params.useSuspend ?? false; // whether to update lines
+		this.isSuspended = false;
+		this.isEditorSuspended = false;
 		
 		this.loader = new Loader({
 			relativeLoadPath: params.relativeLoadPath,
@@ -48,10 +53,9 @@ export class Game {
 			document.body.classList.add('mobile');
 		}
 
-		// this should just be booleans
-		this.useKeyboardEvents = params.events?.includes('keyboard') && !isMobile;
-		this.useMouseEvents = params.events?.includes('mouse') && !isMobile;
-		this.useTouchEvents = params.events?.includes('touch') && isMobile;
+		this.useKeyboardEvents = (params.useKeyboardEvents ?? false) && !isMobile;
+		this.useMouseEvents = (params.useMouseEvents ?? false) && !isMobile;
+		this.useTouchEvents = (params.useTouchEvents ?? false) && isMobile;
 
 		// view is for zooming in and out, could stay in game, could be part of renderer or its own module ...
 
@@ -92,7 +96,7 @@ export class Game {
 			}
 		}
 
-		if (params.stats) {
+		if (params.useStats) {
 			this.stats = new Stats();
 			// this.stats.showPanel(2);
 			document.body.appendChild(this.stats.dom);
@@ -207,12 +211,12 @@ export class Game {
 		// console.log(this.drawCount);
 
 		// suspend lines update if performance is dragging
-		if (this.suspendOnTimeOver && !this.editorSuspend) {
-			if (!this.suspend && timeElapsed > this.drawTime * 1.5) {
-				this.suspend = true;
+		if (this.isSuspendOnTimeOver && !this.isEditorSuspended) {
+			if (!this.isSuspended && timeElapsed > this.drawTime * 1.5) {
+				this.isSuspended = true;
 				// need to update animations to suspend
-			} else if (this.suspend) {
-				this.suspend = false;
+			} else if (this.isSuspended) {
+				this.isSuspended = false;
 			}
 		}
 		if (this.stats) this.stats.end();
@@ -230,7 +234,7 @@ export class Game {
 		if (this.isDev) {
 			for (let i = 0; i < this.scenes.current.sprites.length; i++) {
 				const sprite = this.scenes.current.sprites[i];
-				if (sprite.debug) {
+				if (sprite.isDebug) {
 					this.drawDebug({ bbox: sprite.bbox });
 					if (sprite.collider) {
 						this.drawDebug({
@@ -240,6 +244,20 @@ export class Game {
 					}
 				}
 			}
+		}
+	}
+
+	onKeyDown(key) {
+		if (this.scenes.current.onKeyDown[key]) {
+			this.scenes.current.onKeyDown[key]();
+			this.input.setKey(key, false);
+		}
+	}
+
+	onKeyUp(key) {
+		if (this.scenes.current.onKeyUp[key]) {
+			this.scenes.current.onKeyUp[key]();
+			this.input.setKey(key, false);
 		}
 	}
 
@@ -258,20 +276,6 @@ export class Game {
 		}
 		if (this.renderer.lineWidth !== 1) {
 			this.renderer.ctx.lineWidth = this.lineWidth;
-		}
-	}
-
-	onKeyDown(key) {
-		if (this.scenes.current.onKeyDown[key]) {
-			this.scenes.current.onKeyDown[key]();
-			this.input.setKey(key, false);
-		}
-	}
-
-	onKeyUp(key) {
-		if (this.scenes.current.onKeyUp[key]) {
-			this.scenes.current.onKeyUp[key]();
-			this.input.setKey(key, false);
 		}
 	}
 
