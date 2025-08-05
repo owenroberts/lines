@@ -18,6 +18,7 @@ export function Playback(lns, params) {
 		update(timeElapsed);
 	};
 
+
 	function toggleStats(value) {
 		if (value !== undefined) useStats = value;
 
@@ -129,6 +130,7 @@ export function Playback(lns, params) {
 	}
 
 	function update() {
+
 		if (stats && useStats) stats.begin();
 		
 		if (lns.anim.isPlaying) lns.timeline.update();
@@ -238,11 +240,7 @@ export function Playback(lns, params) {
 			'dps': {
 				type: 'UINumberStep',
 				key: "'",
-<<<<<<< HEAD
 				value: lns.renderer.dps,
-=======
-				value: lns.renderer.getProps().dps,
->>>>>>> 48b2a20 (goodbye fps holy shit)
 				callback: value => { lns.renderer.setDPS(value); },
 				prompt: 'Set Draw/Second',
 			},

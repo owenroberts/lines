@@ -1,12 +1,18 @@
-// leaving this here for update ... this should just be entity now ... 
+/*
+	Sprite -> Entity
+	Entity is basically anything that appears on the map
+	needs to be updated by offset generated in game map
 
-export class ColliderEntity extends ColliderSprite {
+	sprite position is draw position - origin + offset
+	origin is really map position
+*/
+import { Sprite } from './Sprite.js';
+
+export class Entity extends Sprite {
 	constructor(params, isDebug) {
-		super(params.x, params.y);
-		this.debug = debug;
+		super(params.x, params.y, params.animation);
+		this.isDebug = isDebug;
 		this.origin = [params.x, params.y];
-		// this.origin = { x: params.x, y: params.y };
-		if (params.animation) this.addAnimation(params.animation);
 		if (params.loop !== undefined) this.animation.loop = params.loop;
 		if (params.play) this.animation.play();
 
@@ -14,8 +20,6 @@ export class ColliderEntity extends ColliderSprite {
 	}
 
 	update(offset) {
-		// console.log(offset);
-		/* simpler than vectors */
 		this.position[0] = this.origin[0] + offset[0];
 		this.position[1] = this.origin[1] + offset[1];
 	}

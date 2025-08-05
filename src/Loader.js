@@ -5,7 +5,7 @@
  */
 export function Loader(params) {
 
-	let debug = params.debug || false;
+	let isDebug = params.isDebug || false;
 	let relativeLoadPath = params.relativeLoadPath;
 	let assets = {};
 	let loaded = {}; // mirror assets
@@ -101,8 +101,8 @@ export function Loader(params) {
 	}
 
 	function load(files, loadDataOnly, callback) {
-		if (debug) console.log('loading data');
-		if (debug) console.time('load data');
+		if (isDebug) console.log('loading data');
+		if (isDebug) console.time('load data');
 		loadCallback = callback;
 		for (const type in files) {
 			assets[type] = {};

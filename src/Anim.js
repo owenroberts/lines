@@ -11,7 +11,6 @@ import { Drawing } from './Drawing.js';
 import { Layer } from './Layer.js';
 import { Style } from './Style.js';
 import { Points, LINES_VERSION } from './Consts.js';
-<<<<<<< HEAD:src/Anim.js
 
 /**
  * basic unit of lines animation
@@ -373,7 +372,7 @@ export class Anim {
 				o = e[1][0];
 			} else if (s[1][k]) {
 				o = s[1][k];
-				if (!o) console.log('else k', k, o, s, e); // leave debug here
+				if (!o) console.log('else k', k, o, s, e); // leave isDebug here
 			}
 			
 			// finish line

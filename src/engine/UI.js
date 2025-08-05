@@ -6,7 +6,7 @@
 import { ColliderSprite } from './ColliderSprite.js';
 
 export class UI extends ColliderSprite {
-	constructor(params, debug) {
+	constructor(params, isDebug) {
 		/* xy orientation to game window */
 		let x = params.x;
 		let y = params.y;
@@ -20,7 +20,7 @@ export class UI extends ColliderSprite {
 		y = Math.round(y);
 
 		super(x, y);
-		this.debug = debug;
+		this.isDebug = isDebug;
 		this.center = params.center !== undefined ? params.center : true;
 
 		if (params.hidden) this.isActive = false; /* hidden prob in garden json ...  */
