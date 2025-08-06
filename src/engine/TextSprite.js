@@ -2,6 +2,7 @@ import { assert } from '../../../cool/cool.js';
 
 /**
  * a sprite that displays text
+ * need to rename params, countForward is more like reveal, countCount is crazy
  */
 export class TextSprite {
 	constructor(params) {
@@ -13,7 +14,7 @@ export class TextSprite {
 		this.lead = params.lead ?? 35; // leading is space between lines
 		this.track = params.track ?? 18; // tracking is space between letters
 
-		// this.msg = msg;
+		// this.message = message;
 		this.letters = params.letters; // animation
 		this.wrap = params.wrap ?? 12;
 		this.isActive = params.isActive ?? true;
@@ -33,7 +34,7 @@ export class TextSprite {
 		this.hover = false;
 		this.clickStarted = false;
 
-		if (params.msg) this.setMsg(params.msg);
+		if (params.message) this.setMessage(params.message);
 		if (params.breakWithOutSpaces) this.setBreaks(true);
 
 		if (!params.letters.states[0]) {
@@ -53,26 +54,26 @@ export class TextSprite {
 	}
 
 	center() {
-		this.x -= (this.track * Math.min(this.msg.length, this.wrap)) / 2;
+		this.x -= (this.track * Math.min(this.message.length, this.wrap)) / 2;
 	}
 	
-	setMsg(msg) {
-		this.msg = msg.replace(/\s+$/, ''); // remove trailing spaces
+	setMessage(message) {
+		this.message = message.replace(/\s+$/, ''); // remove trailing spaces
 		this.setBreaks();
 
-		// text width is the msg length, or the biggest differece between breaks
+		// text width is the message length, or the biggest differece between breaks
 		let breakLengths = this.breaks.map((n, i) => i > 0 ? n - this.breaks[i] : n);
 		this.width = this.breaks.length <= 0 ?
-			this.track * this.msg.length :
+			this.track * this.message.length :
 			this.track * Math.max(...[0, ...breakLengths]);
 
 		this.height = (this.breaks.length + 1) * this.lead;
-		// console.log(msg, this.breaks, this.wrap);
+		// console.log(message, this.breaks, this.wrap);
 		this.reset();
 	}
 
 	setBreaks(breakWithOutSpaces=false) {
-		// console.log(this.msg);
+		// console.log(this.message);
 		/* 
 			set line breaks in message, 
 			based on message length, new line & return keys
@@ -84,11 +85,11 @@ export class TextSprite {
 		let prevBreak = false; // for space break followed by \n\r
 		this.breaks = [];
 
-		for (let i = 1; i < this.msg.length; i++) {
+		for (let i = 1; i < this.message.length; i++) {
 			prevBreak = false;
 
 			// break on \n\r, check to make sure it didn't just break
-			if (this.msg[i].match(/[\n\r]/g) && !prevBreak) {
+			if (this.message[i].match(/[\n\r]/g) && !prevBreak) {
 				this.breaks.push(i);
 				offset = i % this.wrap;
 				breakOnNextSpace = false;
@@ -98,10 +99,10 @@ export class TextSprite {
 			if (i % this.wrap === offset && (!breakOnNextSpace || breakWithOutSpaces)) {
 				// check for letters left before space or \n\r
 				let halfWrap = Math.round(this.wrap / 2);
-				let lettersLeft = this.msg.substring(i, i + halfWrap);
-				// console.log('letters left', i, this.msg[i], lettersLeft);
+				let lettersLeft = this.message.substring(i, i + halfWrap);
+				// console.log('letters left', i, this.message[i], lettersLeft);
 				// if wrap falls on space break
-				if (this.msg[i] === ' ') {
+				if (this.message[i] === ' ') {
 					// console.log('break i', i);
 					this.breaks.push(i);
 					prevBreak = true;
@@ -116,8 +117,8 @@ export class TextSprite {
 				else if (!lettersLeft.match(/[\n\r\s]/g) && lettersLeft.length >= halfWrap) {
 					// go backward to previous space (and reset i??)
 					for (let j = i - 1; j >= halfWrap; j--) {
-						if (this.msg[j] === ' ') {
-							// console.log(i, j, this.msg[i], this.msg[j]);
+						if (this.message[j] === ' ') {
+							// console.log(i, j, this.message[i], this.message[j]);
 							// console.log('break j', j, 'i', i);
 							this.breaks.push(j);
 							// need to add offset ?
@@ -135,8 +136,8 @@ export class TextSprite {
 				continue;
 			}
 
-			// if (breakOnNextSpace) console.log('next space', i, this.msg[i]);
-			if (this.msg[i] === ' ' && breakOnNextSpace) {
+			// if (breakOnNextSpace) console.log('next space', i, this.message[i]);
+			if (this.message[i] === ' ' && breakOnNextSpace) {
 				// console.log('break i', i);
 				this.breaks.push(i);
 				offset = i % this.wrap;
@@ -153,35 +154,35 @@ export class TextSprite {
 	}
 
 	skip() {
-		this.count = this.msg.length;
+		this.count = this.message.length;
 		this.end = this.endDelay;
 		this.delay = this.endDelay;
 		this.countBackward = false;
 	}
 
 	isDone() {
-		return this.count >= this.msg.length;
+		return this.count >= this.message.length;
 	}
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
 	/* do i ever use _x, _y ?? */
 	display(countForward, countBackward, yAbove) {
 		if (!this.isActive) return true;
-		if (!this.msg) {
+		if (!this.message) {
 			console.warn('This TextSprite has no text.');
 			this.isActive = false;
 			return;
 		}
-		countForward = countForward ? countForward : this.countForward;
-		countBackward = countBackward ? countBackward : this.countBackward;
-		yAbove = yAbove ? yAbove : this.yAbove;
+		countForward = countForward ?? this.countForward;
+		countBackward = countBackward ?? this.countBackward;
+		yAbove = yAbove ?? this.yAbove;
 
-		const len = countForward ? Math.floor(this.count) : this.msg.length;
+		const len = countForward ? Math.floor(this.count) : this.message.length;
 		const index = countBackward ? this.end : 0;
 		let x = this.x;
 		let y = this.y - (yAbove ? (this.breaks.length + 1) * this.lead : 0);
 		for (let i = 0; i < len; i++) {
-			var letter = this.msg[i];
+			var letter = this.message[i];
 			if ((letter === ' ' || letter === '_' || i < index)) {
 				x += this.track;
 			} else if (letter === '\n' || letter === '\r') {
@@ -200,13 +201,13 @@ export class TextSprite {
 			}
 		}
 		
-		if (this.count < this.msg.length) this.count += this.countCount;
-		if (this.count >= this.msg.length) {
+		if (this.count < this.message.length) this.count += this.countCount;
+		if (this.count >= this.message.length) {
 			if (this.delay < this.endDelay) this.delay += 1;
 			else this.end += this.endCount;
 		}
 		if (countBackward) {
-			if (this.end >= this.msg.length) {
+			if (this.end >= this.message.length) {
 				if (this.repeatCount) this.reset();
 				if (this.onDialogEnd) this.onDialogEnd();
 				return true;
