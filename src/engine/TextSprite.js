@@ -166,7 +166,7 @@ export class TextSprite {
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
 	/* do i ever use _x, _y ?? */
-	display(countForward, countBackward, yAbove) {
+	display(view, countForward, countBackward, yAbove) {
 		if (!this.isActive) return true;
 		if (!this.message) {
 			console.warn('This TextSprite has no text.');

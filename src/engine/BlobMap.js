@@ -6,7 +6,7 @@ import { assert } from '../../../cool/cool.js';
 /**
  * bitmask order for blob map, indexOf maps to tilemap texture
  * see https://unit.dev/posts/blobmaps/ for order (need backup for this? ref image)
- * @type {Array}
+ * @type {array}
  */
 const bitMask48 = [
 	0, 4, 68, 64, 117, 71, 197, 93, 7, 199, 215, 193,
@@ -32,6 +32,7 @@ export class BlobMap {
 	/**
 	 * get the frame index for a texture based on blob map by position
 	 * matches tileType to surrounding tiles
+	 * @returns {number} - index from bitmap maps to animation frame
 	 */
 	getBlobIndex(x, y, tileType) {
 		const s = this.getMatrixCellBinaryString(x, y, tileType);

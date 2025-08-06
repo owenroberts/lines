@@ -1,10 +1,9 @@
 // should it save more data? a tile? { tileType, inRoom, etc.. }
 import { assert } from '../../../cool/cool.js';
 
-
 /**
  * TileTypes "Enum"
- * @type {Object} { OFF, ON }
+ * @type {object} { OFF, ON }
  */
 export const TileTypes = {
 	OFF: 0,
@@ -39,7 +38,7 @@ export class TileMap {
 	 * get tile at x,y position
 	 * @param  {number} x - position
 	 * @param  {number} y - position
-	 * @return {Object} tile - { type, ... }
+	 * @return {object} tile - { type, ... }
 	 */
 	getTile(x, y) {
 		return this.tiles[x + y * this.cols];
@@ -48,7 +47,7 @@ export class TileMap {
 	/**
 	 * filter tiles by type
 	 * @param  {number} type - from type "Enum"
-	 * @return {Array} tiles[] - array of tiles
+	 * @return {array} - array of tiles
 	 */
 	getTilesByType(type) {
 		return this.tiles.filter(t => t.type === type);
@@ -56,8 +55,8 @@ export class TileMap {
 
 	/**
 	 * look up tile x,y position by index
-	 * @param  {Object} tile - the tile to look up
-	 * @return {Object} { x, y } - x,y position
+	 * @param  {object} tile - the tile to look up
+	 * @return {object} { x, y } - x,y position
 	 */
 	getPosition(tile) {
 		return this.getIndexPosition(this.tiles.indexOf(tile));
@@ -77,8 +76,8 @@ export class TileMap {
 
 	/**
 	 * set a property on an area of tiles
-	 * @param {number} x     x grid position
-	 * @param {number} y     y grid position
+	 * @param {number} x - x grid position
+	 * @param {number} y - y grid position
 	 * @param {number} w - width of area
 	 * @param {number} h - height of area
 	 * @param {string} property - property of tile to set
@@ -95,7 +94,7 @@ export class TileMap {
 	/**
 	 * get x, y position of matrix at index
 	 * @param  {number} index 
-	 * @return {Object} { x, y }
+	 * @return {object} { x, y }
 	 */
 	getIndexPosition(index) {
 		return { x: index % this.cols, y: Math.floor(index / this.cols) };

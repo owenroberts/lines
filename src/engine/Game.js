@@ -96,7 +96,7 @@ export class Game {
 			}
 		}
 
-		if (params.useStats) {
+		if (params.useStats && this.isDebug) {
 			this.stats = new Stats();
 			// this.stats.showPanel(2);
 			document.body.appendChild(this.stats.dom);
@@ -235,7 +235,7 @@ export class Game {
 			for (let i = 0; i < this.scenes.current.sprites.length; i++) {
 				const sprite = this.scenes.current.sprites[i];
 				if (sprite.isDebug) {
-					assert(sprite.bbox, `sprite has no bbox to debug, class: ${sprite.constructor.name}`);
+					// assert(sprite.bbox, `sprite has no bbox to debug, class: ${sprite.constructor.name}`);
 					this.drawDebug({ bbox: sprite.bbox });
 					if (sprite.collider) {
 						this.drawDebug({
@@ -250,19 +250,20 @@ export class Game {
 
 	onKeyDown(key) {
 		if (this.scenes.current.onKeyDown[key]) {
-			this.scenes.current.onKeyDown[key]();
 			this.input.setKey(key, false);
+			this.scenes.current.onKeyDown[key]();
 		}
 	}
 
 	onKeyUp(key) {
 		if (this.scenes.current.onKeyUp[key]) {
-			this.scenes.current.onKeyUp[key]();
 			this.input.setKey(key, false);
+			this.scenes.current.onKeyUp[key]();
 		}
 	}
 
 	drawDebug({ bbox, x=0, y=0, color="#00ffbb", label }={}) {
+		if (!bbox) return;
 		assert(bbox.isBBox, `bbox is not bbox`);
 
 		this.renderer.ctx.lineWidth = 1;

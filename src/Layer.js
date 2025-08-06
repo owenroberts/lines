@@ -39,7 +39,7 @@ export class Layer {
 	}
 
 	set startFrame(f) {
-		this._startFrame = Math.max(0, +f);
+		this._startFrame = Math.max(0, +f); // why?
 		// if (this.resetTweens) this.resetTweens();
 	}
 

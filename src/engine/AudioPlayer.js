@@ -129,17 +129,22 @@ export class AudioPlayer {
 
 	/**
 	 * pause sound by key - restarts from where it left off
-	 * @param  {string}    key                
+	 * @param  {string}    key
+	 * @param {boolean} isStop - reset time to 0             
 	 */
-	pause(key) {
+	pause(key, isStop=false) {
 		if (!this.isSoundLoaded(key)) return;
 
 		if (Array.isArray(this.sounds[key])) {
 			this.sounds[key]
 				.filter(a => !a.paused)
-				.forEach(a => { a.pause(); });
+				.forEach(a => { 
+					a.pause();
+					if (isStop) a.currentTime = 0;
+				});
 		} else {
 			this.sounds[key].pause();
+			if (isStop) this.sounds[key].currentTime = 0;
 		}
 	}
 
@@ -148,18 +153,6 @@ export class AudioPlayer {
 	 * @param  {string}    key                
 	 */
 	stop(key) {
-		if (!this.isSoundLoaded(key)) return;
-
-		if (Array.isArray(sounds[key])) {
-			sounds[key]
-				.filter(a => !a.paused)
-				.forEach(a => { 
-					a.pause();
-					a.currentTime = 0; 
-				});
-		} else {
-			sounds[key].pause();
-			sounds[key].currentTime = 0;
-		}
+		this.pause(key, true);
 	}
 }

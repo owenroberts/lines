@@ -40,17 +40,18 @@ export class LinesAnimation {
 
 		// most animations use default state, game anims/textures have states for changing frame
 		// replace with manager ?? or is this too complicated???
+		// or use js map?
 		this.stateName = 'default'; // set state label
 		this.states = { 'default': { start: 0, end: 0, dir: 1, loop: true } };
 		this.stateData = structuredClone(this.states[this.stateName]);
+		
 		this.sequences = [];
-		this.sequenceIndex = -1;
+		this.sequenceIndex = -1; // -1 means ignore the sequencer ... 
 
-		this.layerColor;
+		this.layerColor; // wtf is this for?
 		this.isSuspended = false;
 
 		if (this.init) this.init(); // pixel init
-		// console.log('sqi constructor', this.sequenceIndex)
 	}
 
 	randomCount() {
@@ -65,6 +66,7 @@ export class LinesAnimation {
 		this.currentFrame = +n;
 
 		// reset end of default anim to anim end
+		// necessary for all lines? maybe just in animate?
 		if (this.states.default) {
 			if (this.states.default.end !== this.endFrame) {
 				this.states.default.end = this.endFrame;
