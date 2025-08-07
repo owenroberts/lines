@@ -84,7 +84,7 @@ export class Renderer {
 
 	setWidth(value) {
 		this.width = value;
-		this.canvas.width = width * dpr * scale;
+		this.canvas.width = this.width * this.dpr * this.scale;
 		this.reset();
 	}
 
@@ -98,6 +98,11 @@ export class Renderer {
 		this.lineWidth = value;
 		this.ctx.lineWidth = value;
 		this.canvasUpdate(); // idk
+	}
+
+	setBGColor(value) {
+		this.bgColor = value;
+		this.canvas.style.backgroundColor = this.bgColor;
 	}
 
 	canvasUpdate() {

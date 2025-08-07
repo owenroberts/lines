@@ -4,7 +4,6 @@ export class ColliderEntity extends ColliderSprite {
 	constructor(params, isDebug) {
 		super(params.x, params.y);
 		this.isDebug = isDebug;
-		// this.origin = new Cool.Vector(params.x, params.y);
 		this.origin = [params.x, params.y];
 		// this.origin = { x: params.x, y: params.y };
 		if (params.animation) this.addAnimation(params.animation);

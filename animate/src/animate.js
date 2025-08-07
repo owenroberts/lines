@@ -43,7 +43,7 @@ if (params.render === 'pixel') {
 	Object.assign(Lines.prototype, PixelMixin);
 }
 
-lns.renderer = Renderer({
+lns.renderer = new Renderer({
 	width: 512,
 	height: 512,
 	bgColor: '#ffffff',
@@ -52,7 +52,7 @@ lns.renderer = Renderer({
 	lineWidth: 1,
 });
 
-lns.anim = new LinesAnimation(lns.renderer.ctx, 30, true, true);
+lns.anim = new LinesAnimation(lns.renderer);
 lns.anim.drawings.push(new Drawing());
 lns.anim.layers.push(new Layer({ 
 	// ...defaults, 

@@ -2,7 +2,7 @@
 	methods for animate
 */
 
-import { POINTS } from '../../src/Lines.js';
+import { Points } from '../../src/Lines.js';
 
 export const DrawingMixin = {
 
@@ -17,8 +17,8 @@ export const DrawingMixin = {
 
 	popPoint() {
 		if (this.length > 0) {
-			if (this.pop() === POINTS.END) this.pop();
-			this.add(POINTS.END);
+			if (this.pop() === Points.END) this.pop();
+			this.add(Points.END);
 		}
 	},
 
@@ -27,8 +27,8 @@ export const DrawingMixin = {
 			this.pop(); // remove end
 			let len = this.length - 1;
 			for (let i = len; i >= 0; i--) {
-				if (this.points[i] !== POINTS.END &&
-					this.points[i] !== POINTS.ADD) {
+				if (this.points[i] !== Points.END &&
+					this.points[i] !== Points.ADD) {
 					this.pop();
 				}
 				else break;

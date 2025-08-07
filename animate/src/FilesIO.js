@@ -184,9 +184,7 @@ export function FilesIO(lns, params) {
 	}
 
 	function loadJSON(data, fName) {
-		const { ctx, canvas } = lns.renderer;
-		const { dps } = lns.renderer.getProps();
-		lns.anim = new LinesAnimation(ctx, dps, true);
+		lns.anim = new LinesAnimation(lns.renderer);
 		lns.anim.loadData(data, () => {
 			lns.ui.faces.width.update(data.w);
 			lns.ui.faces.height.update(data.h);

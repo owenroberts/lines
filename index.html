@@ -39,20 +39,20 @@
 		import data from './examples/lines.json';
 		import { Renderer, LinesAnimation } from './src/Lines.js';
 
-		const renderer = Renderer({
+		const renderer = new Renderer({
 			width: data.w,
 			height: data.h,
 			bgColor: data.bg,
-			multiColor: data.mc,
-			frameRate: 30,
+			isMultiColor: data.mc,
+			dps: 30,
 		});
 
-		const animation = new LinesAnimation(renderer.ctx, 30, data.mc);
+		const animation = new LinesAnimation(renderer);
 		animation.loadData(data);
-		renderer.addCallback(() => {
+		renderer.onDraw = _timeElapsed => {
 			animation.update();
 			animation.draw();
-		});
+		};
 
 		renderer.start();
 		animation.play();

@@ -210,7 +210,7 @@ export function Capture(lns, params) {
 			isVideo = true;
 			setCaptureSettings();
 			
-			const stream = lns.canvas.canvas.captureStream(lns.renderer.getProps().dps);
+			const stream = lns.canvas.canvas.captureStream(lns.renderer.dps);
 			recording = new MediaRecorder(stream, {
 				videoBitsPerSecond: videoBitsPerSecond,
 				mimeType: 'video/webm;codecs=vp8,vp9,opus'

@@ -14,7 +14,6 @@ import { Points, LINES_VERSION } from './Consts.js';
 
 export class LinesAnimation {
 	constructor(renderer) {
-
 		this.ctx = renderer.ctx;
 		this.isMultiColor = renderer.isMultiColor;
 		this.isMultiLineWidth = renderer.isMultiLineWidth;
@@ -52,10 +51,6 @@ export class LinesAnimation {
 		this.isSuspended = false;
 
 		if (this.init) this.init(); // pixel init
-	}
-
-	randomCount() {
-		this.drawCount = randomInt(this.dpf);
 	}
 
 	get frame() {

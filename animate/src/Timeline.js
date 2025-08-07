@@ -8,7 +8,7 @@ import { UITween } from './UITween.js';
 import { UITimelineGroup } from './UITimelineGroup.js';
 import { Elements } from '../../../ui/src/UI.js';
 const { UIButton, UIElement } = Elements;
-import { POINTS } from '../../src/Lines.js';
+import { Points } from '../../src/Lines.js';
 
 export function Timeline(lns) {
 
@@ -314,7 +314,7 @@ export function Timeline(lns) {
 						const temp = []; // points added backwards
 						for (let i = layerDrawing.length - 1; i > 0; i--) {
 							const p = layerDrawing.pop();
-							if (p !== POINTS.END) temp.push(p);
+							if (p !== Points.END) temp.push(p);
 							else break;
 						}
 						for (let i = temp.length - 1; i > 0; i--) {

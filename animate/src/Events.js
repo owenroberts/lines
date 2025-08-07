@@ -3,7 +3,7 @@
 */
 
 import * as Cool from '../../../cool/cool.js';
-import { POINTS } from '../../src/Lines.js';
+import { Points } from '../../src/Lines.js';
 
 export function Events(lns) {
 
@@ -13,8 +13,9 @@ export function Events(lns) {
 	let distanceThreshold = 2; // distance between points required to record
 	let connectLines = false;
 	let isDrawing = false; // for drawStart to drawEnd so its not always moving
-	let prevPosition = new Cool.Vector();
-	lns.mousePosition = new Cool.Vector(); // stop using vectors all together ??
+	let prevPosition = { x: 0, y: 0 };
+	lns.mousePosition = { x: 0, y: 0 }; // stop using vectors all together ??
+	// prob better way to do this ... 
 
 	// sample/snap to grid
 	let samples = 0;
@@ -25,7 +26,7 @@ export function Events(lns) {
 	}
 
 	function transformPoint(x, y) {
-		const scale = lns.renderer.getProps().scale;
+		const scale = lns.renderer.scale;
 		const point = [
 			Math.round(x / scale),
 			Math.round(y / scale),
@@ -50,10 +51,9 @@ export function Events(lns) {
 				if (lns.brush.isActive()) {
 					lns.brush.add(drawing, point);
 				} else {
-					if (lns.mousePosition.distance(prevPosition) > distanceThreshold) {
-						// addLine(Math.round(ev.offsetX), Math.round(ev.offsetY));
+					if (Cool.getPointDistance(lns.mousePosition, prevPosition) > distanceThreshold) {
 						drawing.add(point);
-						prevPosition = lns.mousePosition.clone();
+						prevPosition = structuredClone(lns.mousePosition);
 					}
 				}
 			} else if (lns.eraser.isActive()) {
@@ -80,7 +80,7 @@ export function Events(lns) {
 					lns.brush.add(drawing, point);
 				} else {
 					drawing.add(point);
-					prevPosition = lns.mousePosition.clone();
+					prevPosition = structuredClone(lns.mousePosition);
 				}
 			}
 		} else if (ev.altKey) {
@@ -92,8 +92,8 @@ export function Events(lns) {
 		isDrawing = false;
 		const drawing = lns.anim.getCurrentDrawing();
 		let last = drawing.get(-2)[0]; /* prevent saving single point drawing segments */
-		if (last !== POINTS.END && last !== POINTS.ADD && drawing.length > 1) {
-			drawing.add((connectLines || ev.shiftKey) ? POINTS.ADD : POINTS.END);
+		if (last !== Points.END && last !== Points.ADD && drawing.length > 1) {
+			drawing.add((connectLines || ev.shiftKey) ? Points.ADD : Points.END);
 		} else {
 			drawing.popPoint(); // if its just one point pop it off ...
 		}

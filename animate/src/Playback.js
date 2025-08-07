@@ -14,15 +14,14 @@ export function Playback(lns, params) {
 	let stats, playPanel, frameDisplay;
 	let useStats = params.useStats ?? false;
 
-	lns.renderer.addCallback(update);
 	lns.renderer.onDraw = timeElapsed => {
 		update(timeElapsed);
-	}
+	};
 
 	function toggleStats(value) {
-		if (value !== undefined) showStats = value;
+		if (value !== undefined) useStats = value;
 
-		if (!stats && showStats) {
+		if (!stats && useStats) {
 			stats = new Stats();
 			stats.dom.style.position = 'fixed';
 			stats.dom.style.top = '0';
@@ -38,7 +37,7 @@ export function Playback(lns, params) {
 		} 
 		
 		if (stats) {
-			stats.dom.style.display = showStats ? 'block' : 'none';
+			stats.dom.style.display = useStats ? 'block' : 'none';
 			playPanel.setStyle('overflow', 'visible');
 		} else {
 			playPanel.setStyle('overflow', 'hidden');
@@ -130,11 +129,9 @@ export function Playback(lns, params) {
 	}
 
 	function update() {
-
 		if (stats && useStats) stats.begin();
 		
 		if (lns.anim.isPlaying) lns.timeline.update();
-		const { width, height, bgColor } = lns.renderer.getProps();
 
 		/* 
 			in capture set animation onDraw 
@@ -143,13 +140,13 @@ export function Playback(lns, params) {
 
 		if (lns.capture.isActive()) {
 			if (lns.capture.withBackground()) {
-				ctx.fillStyle = bgColor;
-				ctx.fillRect(0, 0, width, height);
+				ctx.fillStyle = lns.renderer.bgColor;
+				ctx.fillRect(0, 0, lns.renderer.width, lns.renderer.height);
 			}
 		} else {
 			// ignore bg, onion, highlight while capturing
 	
-			lns.bg.display(width, height); // part of canvas module?
+			lns.bg.display(lns.renderer.width, lns.renderer.height); // part of canvas module?
 
 			// onion skin
 			if (onionSkinNum > 0 && onionSkinIsVisible) {
@@ -241,7 +238,7 @@ export function Playback(lns, params) {
 			'dps': {
 				type: 'UINumberStep',
 				key: "'",
-				value: lns.renderer.getProps().dps,
+				value: lns.renderer.dps,
 				callback: value => { lns.renderer.setDPS(value); },
 				prompt: 'Set Draw/Second',
 			},
@@ -262,7 +259,7 @@ export function Playback(lns, params) {
 			},
 			'viewStats': {
 				type: 'UIToggleCheck',
-				value: showStats,
+				value: useStats,
 				callback: value => { toggleStats(value); }
 			},
 		});
@@ -280,6 +277,5 @@ export function Playback(lns, params) {
 
 	return { 
 		connect, reset, update, toggleStats, setFrame, checkEnd, next,
-		getDPS() { return lns.renderer.getProps().dps; },
 	};
 }

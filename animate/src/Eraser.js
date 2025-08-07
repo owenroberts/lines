@@ -3,7 +3,7 @@
 */
 
 import * as Cool from '../../../cool/cool.js';
-import { POINTS } from '../../src/Lines.js';
+import { Points } from '../../src/Lines.js';
 
 export function Eraser(lns) {
 
@@ -12,9 +12,12 @@ export function Eraser(lns) {
 	let method = 'points'; // points, lines
 	let position;
 
+	function getDistance(p1, p2) {
+		
+	}
+
 	function erase(mousePosition) {
-		// let mousePosition = new Cool.Vector(x, y).divide(lns.canvas.getScale()).round();
-		position = new Cool.Vector(mousePosition);
+		position = structuredClone(mousePosition);
 		let layers = [];
 		for (let i = lns.anim.layers.length - 1; i >= 0; i--) {
 			const layer = lns.anim.layers[i];
@@ -25,41 +28,41 @@ export function Eraser(lns) {
 			const drawing = lns.anim.drawings[layer.drawingIndex];
 
 			for (let j = drawing.points.length - 1; j >= 0; j--) {
-				if (drawing.points[j] === POINTS.END) continue;
-				if (drawing.points[j] === POINTS.ADD) continue; // prob need to deal w this
+				if (drawing.points[j] === Points.END) continue;
+				if (drawing.points[j] === Points.ADD) continue; // prob need to deal w this
 
-				const point = new Cool.Vector(drawing.points[j]);
-				const d = position.distance(point);
+				const point = structuredClone(drawing.points[j]);
+				const d = Cool.getPointDistance(position, point);
 				
 				if (d < distance) {
 					if (method === 'lines') {
 						let s = j, e = j; // start and end points
 
-						while (drawing.points[s] !== POINTS.END && s > 0) {
+						while (drawing.points[s] !== Points.END && s > 0) {
 							s--;
 						}
 						
-						while (drawing.points[e] !== POINTS.END && e < drawing.length) {
+						while (drawing.points[e] !== Points.END && e < drawing.length) {
 							e++;
 						}
 					
 						drawing.points.splice(s, e - s);
 
 					} else if (method === 'points') {
-						drawing.points[j] = POINTS.END;
+						drawing.points[j] = Points.END;
 					}
 				}
 			}
 
 			if (method === 'points') {
 				for (let j = drawing.points.length - 1; j >= 0; j--) {
-					if (drawing.points[j] === POINTS.END && drawing.points[j - 1] === POINTS.END) {
+					if (drawing.points[j] === Points.END && drawing.points[j - 1] === Points.END) {
 						drawing.points.splice(j, 1);
 					}
-					if (drawing.points[j + 1] === POINTS.END && drawing.points[j - 1] === POINTS.END) {
+					if (drawing.points[j + 1] === Points.END && drawing.points[j - 1] === Points.END) {
 						drawing.points.splice(j, 1);
 					}
-					if (drawing.points[j] === POINTS.END && j === 0) {
+					if (drawing.points[j] === Points.END && j === 0) {
 						drawing.points.splice(j, 1);
 					}
 				}

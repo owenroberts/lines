@@ -1,4 +1,4 @@
-import { POINTS } from '../../src/Lines.js';
+import { Points } from '../../src/Lines.js';
 import { Elements } from '../../../ui/src/UI.js';
 const { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber, UIText } = Elements;
 
@@ -279,7 +279,7 @@ export class UILayer extends UICollection {
 				const drawing = this.lns.anim.drawings[layer.drawingIndex];
 				drawing.pop(); /* remove "end" */
 				for (let i = drawing.length - 1; i > 0; i--) {
-					if (drawing.get(i)[0] !== POINTS.END) drawing.pop();
+					if (drawing.get(i)[0] !== Points.END) drawing.pop();
 					else break;
 				}
 				layer.resetDrawingEndIndex(drawing.length);

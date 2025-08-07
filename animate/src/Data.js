@@ -331,7 +331,7 @@ export function Data(lns) {
 
 		if (layers) {
 			saveState();
-			if (!offset) offset = new Cool.Vector(+prompt("x"), +prompt("y"));
+			if (!offset) offset = { x: +prompt("x"), y: +prompt("y") };
 			if (offset) {
 				for (let i = 0; i < layers.length; i++) {
 					layers[i].x += offset.x;
@@ -349,8 +349,8 @@ export function Data(lns) {
 			const layer = lns.anim.layers[i];
 			const drawing = lns.anim.drawings[layer.drawingIndex];
 			for (let i = 0; i < drawing.length; i++) {
-				if (drawing.points[i] === POINTS.END) continue;
-				if (drawing.points[i] === POINTS.ADD) continue;
+				if (drawing.points[i] === Points.END) continue;
+				if (drawing.points[i] === Points.ADD) continue;
 				drawing.points[i][0] += layer.x;
 				drawing.points[i][1] += layer.y;
 			}
