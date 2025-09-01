@@ -9,9 +9,9 @@
 import { Sprite } from './Sprite.js';
 
 export class Entity extends Sprite {
-	constructor(params, isDebug) {
+	constructor(params, debug) {
 		super(params.x, params.y, params.animation);
-		this.isDebug = isDebug;
+		this.debug = debug;
 		this.origin = [params.x, params.y];
 		if (params.loop !== undefined) this.animation.loop = params.loop;
 		if (params.play) this.animation.play();

@@ -1,11 +1,11 @@
 /**
  * handles loading json/csv for animations and other data
- * @param {object} params - { isDebug, relativeLoadPath }
+ * @param {object} params - { debug, relativeLoadPath }
  * @returns { load(), getAnimation(), getAnimationData(), getFile() }
  */
 export function Loader(params) {
 
-	let isDebug = params.isDebug || false;
+	let debug = params.debug || false;
 	let relativeLoadPath = params.relativeLoadPath;
 	let assets = {};
 	let loaded = {}; // mirror assets
@@ -101,8 +101,8 @@ export function Loader(params) {
 	}
 
 	function load(files, loadDataOnly, callback) {
-		if (isDebug) console.log('loading data');
-		if (isDebug) console.time('load data');
+		if (debug) console.log('loading data');
+		if (debug) console.time('load data');
 		loadCallback = callback;
 		for (const type in files) {
 			assets[type] = {};

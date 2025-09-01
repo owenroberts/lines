@@ -6,8 +6,8 @@
 import { Entity } from './Entity.js';
 
 export class TextureEntity extends Entity {
-	constructor(params, isDebug) {
-		super(params, isDebug);
+	constructor(params, debug) {
+		super(params, debug);
 		this.center = false;
 		this.stateName = `frame-${params.stateIndex}`;
 		this.animation.createNewState(`frame-${params.stateIndex}`, params.stateIndex, params.stateIndex);

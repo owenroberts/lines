@@ -1,10 +1,10 @@
 import { LinesAnimation } from '../Lines.js';
 
 export class GameAnim extends LinesAnimation {
-	constructor(gm, isDebug) {
+	constructor(gm, debug) {
 		super(gm.renderer);
 
-		this.isDebug = isDebug;
+		this.debug = debug;
 		this.loop = true;
 		this.randomFrames = false; /* play random frames */
 		this.prevFrame = 0;

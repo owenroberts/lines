@@ -19,6 +19,7 @@ export class AudioPlayer {
 		this.baseUrl = baseUrl;
 
 		this.loaded = 0;
+		this.isMuted = false;
 	}
 
 	/**
@@ -96,6 +97,7 @@ export class AudioPlayer {
 	 * @param  {Function}  [options.callback]         - callback after sound played
 	 */
 	play(key, { randomRate=false, rateMin=0.9, rateMax=1.1, callback }={}) {
+		if (this.isMuted) return;
 		if (!this.isSoundLoaded(key)) return;
 
 		const s = Array.isArray(this.sounds[key]) ? 

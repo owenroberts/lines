@@ -88,8 +88,9 @@ export class LinesAnimation {
 	set state(stateName) {
 		if (this.stateName !== stateName && this.states[stateName]) {
 			this.stateName = stateName;
-			this.stateData = structuredClone(this.states[this.stateName]); // so state dir can overwrite
-			if (this.state) {
+			this.stateData = structuredClone(this.states[this.stateName]);
+			// so state dir can overwrite
+			if (this.state) { // why? what was error here ... 
 				if (this.state.dir === 1) this.currentFrame = this.state.start;
 				if (this.state.dir === -1) this.currentFrame = this.state.end;
 			}
@@ -144,7 +145,8 @@ export class LinesAnimation {
 
 	update() {
 		if (this.isPlaying) {
-			if (this.drawCount >= this.dpf - 1) { // >== instead of === in case dpf changed
+			if (this.drawCount >= this.dpf - 1) { 
+				// >= instead of === in case dpf changed
 
 				if (this.sequenceIndex >= 0) {
 					this.nextClip(false);
@@ -378,7 +380,7 @@ export class LinesAnimation {
 				o = e[1][0];
 			} else if (s[1][k]) {
 				o = s[1][k];
-				if (!o) console.log('else k', k, o, s, e); // leave isDebug here
+				if (!o) console.log('else k', k, o, s, e); // leave debug here
 			}
 			
 			// finish line

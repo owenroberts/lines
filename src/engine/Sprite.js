@@ -18,7 +18,7 @@ export class Sprite {
 		
 		this.bbox = new BBox(x, y);
 
-		this.isDebug = false;
+		this.debug = false;
 		this.isActive = true;
 		// this.center = false;
 		

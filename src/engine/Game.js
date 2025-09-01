@@ -5,7 +5,7 @@ import Stats from 'stats.js';
 
 /**
  * game manager class
- * includes renderer, window, view, loader, scenes, sfx, input, isDebug, anims list, data, bounds, sizeCanvas
+ * includes renderer, window, view, loader, scenes, sfx, input, debug, anims list, data, bounds, sizeCanvas
  * calls onSetup, 
  * gm. to overwrite default for onUpdate, onDraw, onKeyDown, onKeyUp 
  * gm.load({ animations: {}, data: {} })
@@ -19,7 +19,7 @@ export class Game {
 	constructor(params) {
 		
 		this.isDev = import.meta.env.DEV;
-		this.isDebug = (params.isDebug ?? false) && this.isDev;
+		this.debug = (params.debug ?? false) && this.isDev;
 
 		this.renderer = new Renderer({ dps: 60, clearBg: false, ...params }); // update 60
 		this.drawCount = 0;
@@ -96,7 +96,7 @@ export class Game {
 			}
 		}
 
-		if (params.useStats && this.isDebug) {
+		if (params.useStats && this.debug) {
 			this.stats = new Stats();
 			// this.stats.showPanel(2);
 			document.body.appendChild(this.stats.dom);
@@ -234,7 +234,7 @@ export class Game {
 		if (this.isDev) {
 			for (let i = 0; i < this.scenes.current.sprites.length; i++) {
 				const sprite = this.scenes.current.sprites[i];
-				if (sprite.isDebug) {
+				if (sprite.debug) {
 					// assert(sprite.bbox, `sprite has no bbox to debug, class: ${sprite.constructor.name}`);
 					this.drawDebug({ bbox: sprite.bbox });
 					if (sprite.collider) {

@@ -1,9 +1,9 @@
 // leaving this here for update ... this should just be entity now ... 
 
 export class ColliderEntity extends ColliderSprite {
-	constructor(params, isDebug) {
+	constructor(params, debug) {
 		super(params.x, params.y);
-		this.isDebug = isDebug;
+		this.debug = debug;
 		this.origin = [params.x, params.y];
 		// this.origin = { x: params.x, y: params.y };
 		if (params.animation) this.addAnimation(params.animation);
