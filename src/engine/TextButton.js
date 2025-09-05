@@ -27,9 +27,9 @@ export class TextButton extends UI {
 		this.collider[3] = (this.text.breaks.length + 1) * this.text.letters.height;
 	}
 
-	display() {
-		super.display();
-		if (this.isActive) this.text.display();
+	draw() {
+		super.draw();
+		if (this.isActive) this.text.draw();
 	}
 
 	setPosition(x, y) {

@@ -46,7 +46,7 @@ export class Sprite {
 		return this.collider.isColliding(bbox);
 	}
 
-	display(view) {
+	draw(view) {
 		if (!this.isActive) return;
 		if (!this.isOnScreen(view)) return;
 		// if (editorOnScreen !== undefined) isDraw = editorOnScreen;
@@ -54,8 +54,7 @@ export class Sprite {
 		this.animation.update();
 		this.animation.draw(this.bbox.x, this.bbox.y);
 		
-		// onDisplay?
-		if (this.displayFunc) this.displayFunc();
+		if (this.onDraw) this.onDraw();
 	}
 
 	isOnScreen(view) {

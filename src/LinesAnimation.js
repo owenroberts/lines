@@ -241,11 +241,9 @@ export class LinesAnimation {
 				props[k] = style[k];
 			}
 
-			// if (i === 0) console.log('props', props);
-
 			//  maybe only needed in GameAnim ?? 
-			if (x) props.x += x;
-			if (y) props.y += y;
+			if (Number.isFinite(x)) props.x += x;
+			if (Number.isFinite(y)) props.y += y;
 			
 			if (props.tweens.length) { // default empty array -- .length didn't hurt
 				for (let j = 0; j < props.tweens.length; j++) {

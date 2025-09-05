@@ -1,7 +1,7 @@
 import { assert } from '../../../cool/cool.js';
 
 /**
- * a sprite that displays text
+ * a sprite that draws text
  * need to rename params, countForward is more like reveal, countCount is crazy
  */
 export class TextSprite {
@@ -166,7 +166,7 @@ export class TextSprite {
 	
 	/* animate text backward and forward, maybe need to update - maybe add animate/update method? */
 	/* do i ever use _x, _y ?? */
-	display(view, countForward, countBackward, yAbove) {
+	draw(view, countForward, countBackward, yAbove) {
 		if (!this.isActive) return true;
 		if (!this.message) {
 			console.warn('This TextSprite has no text.');

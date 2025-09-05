@@ -229,7 +229,7 @@ export class Game {
 	}
 
 	onDraw() {
-		this.scenes.current.display(this.view);
+		this.scenes.current.draw(this.view);
 
 		if (this.isDev) {
 			for (let i = 0; i < this.scenes.current.sprites.length; i++) {

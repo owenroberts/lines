@@ -10,7 +10,7 @@ function Ruler() {
 		
 	};
 
-	this.display = function(ctx) {
+	this.draw = function(ctx) {
 		ctx.strokeStyle = '#bb11ff';
 		ctx.strokeRect(m.x, m.y, m.w, m.h);
 		

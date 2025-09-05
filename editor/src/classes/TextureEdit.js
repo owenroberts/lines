@@ -23,7 +23,7 @@ class TextureEdit extends Texture {
 		else super.addLocation(x, y, this.locations.length);
 	}
 
-	display(view) {
+	draw(view) {
 		if (!this.isRemoved && this.isLoaded) {
 			for (let i = 0; i < this.locations.length; i++) {
 				let x = this.locations[i].x;

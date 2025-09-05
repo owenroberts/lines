@@ -1,5 +1,5 @@
 /*
-	display background image for tracing ...
+	draw background image for tracing ...
 	should this be possible in deployed version?
 	can use css to show an image ...
 	use css for this ?
@@ -35,7 +35,7 @@ export function Background(lns) {
 		}
 	}
 
-	function display(width, height) {
+	function draw(width, height) {
 		if (img.src && show) {
 			if (rotation > 0) {
 				ctx.save();
@@ -184,5 +184,5 @@ export function Background(lns) {
 		}, 'grid');
 	}
 
-	return { connect, display };
+	return { connect, draw };
 }

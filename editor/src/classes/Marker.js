@@ -7,7 +7,7 @@ class Marker {
 		this.lineWidth = lineWidth || 2;
 	}
 
-	display(view) {
+	draw(view) {
 		if (!this.isInMapBounds(view)) return; 
 
 		if (this.lineWidth !== 1) GAME.ctx.lineWidth = this.lineWidth;

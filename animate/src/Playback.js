@@ -146,7 +146,7 @@ export function Playback(lns, params) {
 		} else {
 			// ignore bg, onion, highlight while capturing
 	
-			lns.bg.display(lns.renderer.width, lns.renderer.height); // part of canvas module?
+			lns.bg.draw(lns.renderer.width, lns.renderer.height); // part of canvas module?
 
 			// onion skin
 			if (onionSkinNum > 0 && onionSkinIsVisible) {
@@ -183,7 +183,7 @@ export function Playback(lns, params) {
 				});
 			}
 
-			lns.eraser.display();
+			lns.eraser.draw();
 		}
 
 		lns.anim.update();

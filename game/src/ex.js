@@ -24,7 +24,7 @@ console.log('gme', gme);
 let char;
 let waves;
 
-gme.start = function() {
+gme.setup = function() {
 
 	char = new Character(300, 300, gme.anims.sprites.sprite);
 	gme.scenes.walk.addSprite(char);
@@ -67,7 +67,7 @@ gme.update = function() {
 };
 
 gme.draw = function() {
-	gme.scenes[gme.scene].display();
+	gme.scenes[gme.scene].draw();
 };
 
 /* events */

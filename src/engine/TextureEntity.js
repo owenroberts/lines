@@ -13,8 +13,8 @@ export class TextureEntity extends Entity {
 		this.animation.createNewState(`frame-${params.stateIndex}`, params.stateIndex, params.stateIndex);
 	}
 
-	display(editorOnScreen) {
+	draw(editorOnScreen) {
 		this.animation.state = this.stateName;
-		super.display(editorOnScreen);
+		super.draw(editorOnScreen);
 	}
 }

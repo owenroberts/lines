@@ -27,9 +27,9 @@ class ItemUI extends Entity {
 		return this._y;
 	}
 
-	display() {
+	draw() {
 		GAME.ctx.strokeStyle = '#000000'; // game colors ???
-		super.display(true);
+		super.draw(true);
 		if (this.displayLabel) this.drawLabel();
 		if (this.outline) this.drawOutline();
 	}

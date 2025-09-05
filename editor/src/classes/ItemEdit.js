@@ -16,9 +16,9 @@ class ItemEdit extends Entity {
 		this.isRemoved = false; // idk
 	}
 
-	display(view) {
+	draw(view) {
 		if (!this.isRemoved && this.isLoaded) {
-			super.display(this.isInMapBounds(view));
+			super.draw(this.isInMapBounds(view));
 			if (this.displayLabel) this.drawLabel();
 			if (this.displayOutline) this.drawOutline();
 		}

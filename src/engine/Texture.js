@@ -80,7 +80,7 @@ export class Texture {
 
 	clear() { this.locations = []; }
 
-	display(view) {
+	draw(view) {
 		if (!this.isActive) return;
 		for (let i = 0; i < this.locations.length; i++) {
 			let x = this.locations[i][0] + this.offset[0];

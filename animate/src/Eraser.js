@@ -96,7 +96,7 @@ export function Eraser(lns) {
 		}, 'erase');
 	}
 
-	function display() {
+	function draw() {
 		if (!isActive) return;
 		if (!position) return;
 		lns.renderer.ctx.fillStyle = "rgba(150, 50, 200, 0.25)";
@@ -106,7 +106,7 @@ export function Eraser(lns) {
 	}
 
 	return {
-		connect, erase, display,
+		connect, erase, draw,
 		start(point) { 
 			isActive = true; 
 			position = point;

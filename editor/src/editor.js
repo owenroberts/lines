@@ -55,7 +55,7 @@ edi.tool = {
 edi.search = {
 	sprites: function(query) {
 		edi.ui.panels.items.itemSearchResults.clear();
-		gme.scenes.current.displaySprites.sprites.filter(s => {
+		gme.scenes.current.sprites.filter(s => {
 			return query.length && s.label.includes(query);
 		}).forEach(item => {
 			let toggle = new UIToggle({
@@ -232,13 +232,13 @@ function draw() {
 	gme.ctx.fillStyle = '#bb11ff';
 
 	for (let i = 0; i < edi.ui.markers.length; i++) {
-		edi.ui.markers[i].display(edi.zoom.view);
+		edi.ui.markers[i].draw(edi.zoom.view);
 	}
 
 	/* draw sprites -- data, scenes? */
-	gme.scenes.current.display(edi.zoom.view);
+	gme.scenes.current.draw(edi.zoom.view);
 
-	if (edi.tool.current == 'ruler') edi.ruler.display();
+	if (edi.tool.current == 'ruler') edi.ruler.draw();
 
 	edi.zoom.clear(gme.ctx);
 }
@@ -314,8 +314,8 @@ function intersectItems(x, y, move) {
 
 	// callback return doesn't work ... 
 	let returnSprite = false;
-	for (let i = 0; i < gme.scenes.current.displaySprites.length; i++) {
-		const s = gme.scenes.current.displaySprites.sprite(i);
+	for (let i = 0; i < gme.scenes.current.sprites.length; i++) {
+		const s = gme.scenes.current.sprites.sprite(i);
 		if (s.isMouseOver(x, y, edi.zoom) && !returnSprite) returnSprite = s;
 	}
 

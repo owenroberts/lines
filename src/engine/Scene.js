@@ -30,7 +30,7 @@ export class Scene {
 			return;
 		}
 
-		assert(sprite.display, `sprite has no display ${sprite}`);
+		assert(sprite.draw, `sprite has no draw ${sprite}`);
 		this.sprites.push(sprite);
 		return sprite;
 	}
@@ -43,9 +43,9 @@ export class Scene {
 		this.sprites = [];
 	}
 
-	display(view) {
+	draw(view) {
 		for (let i = 0; i < this.sprites.length; i++) {
-			this.sprites[i].display(view);
+			this.sprites[i].draw(view);
 		}
 	}	
 }

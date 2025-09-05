@@ -21,10 +21,10 @@ export class SHGScene extends Scene {
 		this.grid.addSprite(sprite);
 	}
 
-	display() {
+	draw() {
 		// const clients = this.grid.findNear(position[0] - this.view[0] / 2, position[1] - this.view[1] / 2, this.view[0], this.view[1]);
 		for (let i = 0; i < this.clients.length; i++) {
-			this.clients[i].sprite.display();
+			this.clients[i].sprite.draw();
 		}
 	}
 
