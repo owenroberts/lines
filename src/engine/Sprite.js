@@ -16,7 +16,7 @@ export class Sprite {
 	 */
 	constructor(x, y, animation, callback) {
 		
-		this.bbox = new BBox(x, y);
+		this.bbox = new BBox(x, y); // maybe viewbox?
 
 		this.debug = false;
 		this.isActive = true;
@@ -38,12 +38,13 @@ export class Sprite {
 		this.bbox.setPosition(x, y);
 	}
 
-	setCollider(x, y, w, h) {
+	addCollider(x, y, w, h) {
 		this.collider = new BBox(x, y, w, h);
 	}
 
 	isColliding(bbox) {
-		return this.collider.isColliding(bbox);
+
+		return bbox.isCollidingBox(this.bbox.x + this.collider.x, this.bbox.y + this.collider.y, this.collider.width, this.collider.height);
 	}
 
 	draw(view) {

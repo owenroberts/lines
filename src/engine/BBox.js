@@ -96,8 +96,4 @@ export class BBox {
 		}
 		return false;
 	}
-
-	// put this in gm?
-	
-
 }
