@@ -50,6 +50,8 @@ lns.renderer = new Renderer({
 	useRetina: true,
 	dps: 30,
 	lineWidth: 1,
+	isMultiColor: true,
+	isMultiLineWidth: true,
 });
 
 lns.anim = new LinesAnimation(lns.renderer);
