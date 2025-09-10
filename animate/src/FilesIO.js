@@ -20,9 +20,10 @@ export function FilesIO(lns, params) {
 			v: LINES_VERSION,
 			w: +lns.canvas.getWidth(),
 			h: +lns.canvas.getHeight(),
-			fps: +lns.anim.fps, // use fps?
+			dpf: +lns.anim.dpf, // use fps?
 			mc: [...new Set(lns.anim.layers.map(layer => layer.color))].length > 1, // filter
 			mw: [...new Set(lns.anim.layers.map(layer => layer.lineWidth))].length > 1,
+
 		};
 		if (params.bg) json.bg = lns.canvas.getBGColor();
 		if (!titleDisplay.value) titleDisplay.value = json.title;
