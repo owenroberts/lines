@@ -11,6 +11,6 @@ import { Drawing } from './Drawing.js';
 import { Animator } from './Animator.js';
 import { LinesAnimation } from './LinesAnimation.js';
 import { Style } from './Style.js';
-import { Points } from './Consts.js';
+import { Points, LINES_VERSION } from './Consts.js';
 
-export { Renderer, PixelMixin, Loader, Layer, AntiMixin, Drawing, Animator, LinesAnimation, Style, Points };
+export { Renderer, PixelMixin, Loader, Layer, AntiMixin, Drawing, Animator, LinesAnimation, Style, Points, LINES_VERSION };
