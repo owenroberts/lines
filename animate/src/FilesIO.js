@@ -2,7 +2,7 @@
 	some of this should be in ui now
 */
 import { saveAs } from 'file-saver';
-import { LinesAnimation, Drawing, Layer } from '../../src/Lines.js';
+import { LinesAnimation, Drawing, Layer, LINES_VERSION } from '../../src/Lines.js';
 import { Elements } from '../../../ui/src/UI.js';
 const { UIModal, UIButton } = Elements;
 
@@ -17,7 +17,7 @@ export function FilesIO(lns, params) {
 
 		const json = {
 			title: titleDisplay.value || prompt("Name this file:"),
-			v: "2.6",
+			v: LINES_VERSION,
 			w: +lns.canvas.getWidth(),
 			h: +lns.canvas.getHeight(),
 			fps: +lns.anim.fps, // use fps?
@@ -188,14 +188,12 @@ export function FilesIO(lns, params) {
 		lns.anim.loadData(data, () => {
 			lns.ui.faces.width.update(data.w);
 			lns.ui.faces.height.update(data.h);
-			lns.ui.faces.fps.update(data.fps);
 			if (data.bg) lns.ui.faces.bgColor.update(data.bg);
 			if (data.g) lns.timeline.setGroups([...data.g]);
 			lns.styles.reset();
 		});
 
 		titleDisplay.value = data.title || prompt('Name animation?');
-		lns.ui.faces.fps.value = data.fps;
 		document.title = titleDisplay.value + ' ~ animate';
 		lns.ui.faces.width.value = data.w;
 		lns.ui.faces.height.value = data.h;
