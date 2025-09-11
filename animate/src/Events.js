@@ -2,7 +2,7 @@
 	mouse / pointer events
 */
 
-import * as Cool from '../../../cool/cool.js';
+import { getPointDistance } from '../../../cool/cool.js';
 import { Points } from '../../src/Lines.js';
 
 export function Events(lns) {
@@ -13,8 +13,8 @@ export function Events(lns) {
 	let distanceThreshold = 2; // distance between points required to record
 	let connectLines = false;
 	let isDrawing = false; // for drawStart to drawEnd so its not always moving
-	let prevPosition = { x: 0, y: 0 };
-	lns.mousePosition = { x: 0, y: 0 }; // stop using vectors all together ??
+	let prevPosition = [0, 0];
+	lns.mousePosition = [0, 0]; // stop using vectors all together ??
 	// prob better way to do this ... 
 
 	// sample/snap to grid
@@ -41,8 +41,8 @@ export function Events(lns) {
 	function update(ev) {
 		if (performance.now() > mouseInterval + mouseTimer) {
 			mouseTimer = performance.now();
-			lns.mousePosition.x = Math.round(ev.pageX);
-			lns.mousePosition.y = Math.round(ev.pageY);
+			lns.mousePosition[0] = Math.round(ev.pageX);
+			lns.mousePosition[1] = Math.round(ev.pageY);
 
 			const drawing = lns.anim.getCurrentDrawing();
 			const point = transformPoint(ev.offsetX, ev.offsetY);
@@ -51,7 +51,7 @@ export function Events(lns) {
 				if (lns.brush.isActive()) {
 					lns.brush.add(drawing, point);
 				} else {
-					if (Cool.getPointDistance(lns.mousePosition, prevPosition) > distanceThreshold) {
+					if (getPointDistance(lns.mousePosition, prevPosition) > distanceThreshold) {
 						drawing.add(point);
 						prevPosition = structuredClone(lns.mousePosition);
 					}

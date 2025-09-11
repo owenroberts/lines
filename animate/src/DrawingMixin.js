@@ -1,9 +1,10 @@
-/*
-	methods for animate
-*/
 
 import { Points } from '../../src/Lines.js';
 
+/**
+ * methods used in animate
+ * @type {object}
+ */
 export const DrawingMixin = {
 
 	getPoints() {

@@ -2,7 +2,7 @@
 	eraser stuff
 */
 
-import * as Cool from '../../../cool/cool.js';
+import { getPointDistance } from '../../../cool/cool.js';
 import { Points } from '../../src/Lines.js';
 
 export function Eraser(lns) {
@@ -11,10 +11,6 @@ export function Eraser(lns) {
 	let distance = 10;
 	let method = 'points'; // points, lines
 	let position;
-
-	function getDistance(p1, p2) {
-		
-	}
 
 	function erase(mousePosition) {
 		position = structuredClone(mousePosition);
@@ -31,22 +27,26 @@ export function Eraser(lns) {
 				if (drawing.points[j] === Points.END) continue;
 				if (drawing.points[j] === Points.ADD) continue; // prob need to deal w this
 
-				const point = structuredClone(drawing.points[j]);
-				const d = Cool.getPointDistance(position, point);
 				
+				const point = structuredClone(drawing.points[j]);
+				const d = getPointDistance(position, point);
+
 				if (d < distance) {
 					if (method === 'lines') {
 						let s = j, e = j; // start and end points
 
+						// work backward to start of line segment
 						while (drawing.points[s] !== Points.END && s > 0) {
 							s--;
 						}
 						
+						// work forward to end of line segment
 						while (drawing.points[e] !== Points.END && e < drawing.length) {
 							e++;
 						}
 					
-						drawing.points.splice(s, e - s);
+						drawing.points.splice(s, e - s + 1);
+						break;
 
 					} else if (method === 'points') {
 						drawing.points[j] = Points.END;
@@ -101,7 +101,7 @@ export function Eraser(lns) {
 		if (!position) return;
 		lns.renderer.ctx.fillStyle = "rgba(150, 50, 200, 0.25)";
 		lns.renderer.ctx.beginPath();
-		lns.renderer.ctx.arc(position.x, position.y, distance, 0, Math.PI * 2);
+		lns.renderer.ctx.arc(position[0], position[1], distance, 0, Math.PI * 2);
 		lns.renderer.ctx.fill();
 	}
 
@@ -113,5 +113,5 @@ export function Eraser(lns) {
 		},
 		end() { isActive = false; },
 		isActive() { return isActive; },
-	}
+	};
 }
