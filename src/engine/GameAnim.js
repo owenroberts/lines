@@ -5,7 +5,7 @@ export class GameAnim extends LinesAnimation {
 		super(gm.renderer);
 
 		this.debug = debug;
-		this.loop = true;
+		// this.loop = true;
 		this.randomFrames = false; /* play random frames */
 		this.prevFrame = 0;
 		this.frames = [];
@@ -51,6 +51,7 @@ export class GameAnim extends LinesAnimation {
 
 
 			if (playedState) {
+				// do not loop in callback dummy
 				if (this.onPlayedOnce) {
 					this.onPlayedOnce();
 					this.onPlayedOnce = undefined;

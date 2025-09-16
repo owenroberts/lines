@@ -26,22 +26,38 @@ const defaultParams = {
 };
 
 /**
- * Animator - create a bunch of randomized tweens and add to animation layers
- * @param {LinesAnimation} animation
- * @param {Object} params    params to overwrite defaults
+ * animator - create a bunch of randomized tweens and add to animation layers
+ * @param {LinesAnimation} 		- animation
+ * @param {object} params    	- params to overwrite defaults
+ * @param {string[]} ignore 	- list of params to ignore making tweens
  */
-export function Animator(animation, params={}) {
+export function Animator(animation, params={}, ignore=[]) {
+
+	let animTweens = [];
 
 	for (const k in defaultParams) {
-		if (!params.hasOwnProperty(k)) {
+		if (!params.hasOwnProperty(k) && !ignore.includes(k)) {
 			params[k] = defaultParams[k];
 		}
 	}
 
-	/** setup new tweens */
+	/**
+	 * set new tweens
+	 */
 	function set() {
+
 		for (let i = 0; i < animation.layers.length; i++) {
 			const layer = animation.layers[i];
+
+			// remove prev tweens
+			for (let j = layer.tweens.length - 1; j >= 0; j--) {
+				if (animTweens.includes(layer.tweens[j])) {
+					layers.tweens.splice(j, 1);
+				}
+			}
+
+			animTweens = [];
+
 			const props = { 
 				...layer.getProps(), 
 				...animation.styles[layer.styleIndex].getProps(), 
@@ -56,7 +72,6 @@ export function Animator(animation, params={}) {
 			// 	}
 			// }
 			
-			layer.tweens = []; // remove old tweens
 			const prop = choice(...Object.keys(params)); // choose prop
 
 			// change prop or tween
@@ -83,6 +98,7 @@ export function Animator(animation, params={}) {
 				tween.endValue = randomInt(...params[prop]);
 				
 				layer.tweens.push(tween);
+				animTweens.push(tween);
 			}
 			// console.log('tweens', i, JSON.stringify(layer.tweens));
 		}

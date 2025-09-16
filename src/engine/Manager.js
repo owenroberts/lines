@@ -28,7 +28,7 @@ export class Manager {
 	 * set the current obj by name
 	 * @param {string} name
 	 */
-	setCurrent(name) {
+	set(name) {
 		assert(this.hasOwnProperty(name), `${name} does not exists in manager`);
 		this.current = this[name];
 		this.currentName = name;
