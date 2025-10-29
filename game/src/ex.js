@@ -3,7 +3,7 @@
 	not necessarily best approach
 */
 
-import { Game, TileSet, Button, TextSprite } from '../../src/GameEngine.js';
+import { Game, TileSet, Button, TextSprite } from '../../src/Engine.js';
 import { Character } from './Character.js';
 
 const gme = new Game({

@@ -1,5 +1,5 @@
 /*
-	basic unit of lines animation
+	
 	animation contains drawings and layers
 	draw per second determined by renderer framerate and target fps
 	fps effects frame updates and line rendering
@@ -12,7 +12,11 @@ import { Layer } from './Layer.js';
 import { Style } from './Style.js';
 import { Points, LINES_VERSION } from './Consts.js';
 
-export class LinesAnimation {
+/**
+ * basic unit of lines animation
+ * drawings, layers, styles, states, sequences
+ */
+export class Anim {
 	constructor(renderer) {
 		this.ctx = renderer.ctx;
 		this.isMultiColor = renderer.isMultiColor;
@@ -20,6 +24,7 @@ export class LinesAnimation {
 
 		this.isPlaying = false;
 		this.isLoaded = false;
+		this.isSuspended = false; // suspend updates during performance drag
 
 		this.drawings = [];
 		this.layers = [];
@@ -34,6 +39,7 @@ export class LinesAnimation {
 		this.dpf = 1; // draws per frame (update, like fps)
 		this.currentFrame = 0;
 		this.drawCount = 0;
+		this.endFrame = 0; // set from loading layers
 
 		this.override = {}; // override properties
 
@@ -48,9 +54,8 @@ export class LinesAnimation {
 		this.sequenceIndex = -1; // -1 means ignore the sequencer ... 
 
 		this.layerColor; // wtf is this for?
-		this.isSuspended = false;
 
-		if (this.init) this.init(); // pixel init
+		if (this.init) this.init(); // pixel init -- put in pixel mixin (or class?)
 	}
 
 	get frame() {
@@ -67,19 +72,7 @@ export class LinesAnimation {
 				this.states.default.end = this.endFrame;
 			}
 		}
-	}
-
-	// endframe can be calculated for playback, should be mixin
-	get endFrame() {
-		const endFrame = this.layers.map(layer => { return layer.endFrame; });
-		// when is layers.length 0 ??
-		// return this.layers.length > 0 ? Math.max.apply(Math, endFrame) : 0;
-		return Math.max.apply(Math, endFrame);
-	}
-
-	set endFrame(n) {
-		this.layers.forEach(layer => { layer.endFrame = n; });
-	}
+	}	
 
 	get state() {
 		return this.stateData;
@@ -429,6 +422,9 @@ export class LinesAnimation {
 			// maybe load when not debuggin -- add loading progress
 			// this.drawings[layer.drawingIndex].update(layer); // -- this takes forever for load ...
 		}
+
+		const endFrame = this.layers.map(layer => { return layer.endFrame; });
+		this.endFrame = Math.max.apply(Math, endFrame);
 
 		// styles
 		// this.styles = structuredClone(json.st);

@@ -8,7 +8,7 @@ export const FrameTypes = {
 };
  
 /**
- * set of frames from LinesAnimation
+ * set of frames from Anim
  * draw at tiles
  */
 export class TileSet {

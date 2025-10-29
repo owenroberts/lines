@@ -2,7 +2,8 @@
 	some of this should be in ui now
 */
 import { saveAs } from 'file-saver';
-import { LinesAnimation, Drawing, Layer, LINES_VERSION } from '../../src/Lines.js';
+import { Drawing, Layer, LINES_VERSION } from '../../src/Lines.js';
+import { AnimateAnim } from './AnimateAnim.js';
 import { Elements } from '../../../ui/src/UI.js';
 const { UIModal, UIButton } = Elements;
 
@@ -185,7 +186,7 @@ export function FilesIO(lns, params) {
 	}
 
 	function loadJSON(data, fName) {
-		lns.anim = new LinesAnimation(lns.renderer);
+		lns.anim = new AnimateAnim(lns.renderer);
 		lns.anim.loadData(data, () => {
 			lns.ui.faces.width.update(data.w);
 			lns.ui.faces.height.update(data.h);

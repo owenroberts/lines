@@ -32,7 +32,7 @@ export class Animator {
 	
 	/**
 	 * creates an animator
-	 * @param {LinesAnimation} 		- animation
+	 * @param {Anim} 		- animation
  	 * @param {object} params    	- params to overwrite defaults
  	 * @param {string[]} ignore 	- list of params to ignore making tweens
 	 */

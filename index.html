@@ -37,7 +37,7 @@
 	
 	<script type="module">
 		import data from './examples/lines.json';
-		import { Renderer, LinesAnimation } from './src/Lines.js';
+		import { Renderer, Anim } from './src/Lines.js';
 
 		const renderer = new Renderer({
 			width: data.w,
@@ -47,7 +47,7 @@
 			dps: 30,
 		});
 
-		const animation = new LinesAnimation(renderer);
+		const animation = new Anim(renderer);
 		animation.loadData(data);
 		renderer.onDraw = _timeElapsed => {
 			animation.update();

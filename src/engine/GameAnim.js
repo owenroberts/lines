@@ -1,6 +1,12 @@
-import { LinesAnimation } from '../Lines.js';
+import { Anim } from '../Lines.js';
 
-export class GameAnim extends LinesAnimation {
+/**
+ * game implementation of Anim
+ * uses frames isntead of layers for drawing lookup for better performance
+ * update separated for random playback (do i still use this?)
+ * slightly different state get/set -- prob wanna kill these anyway
+ */
+export class GameAnim extends Anim {
 	constructor(gm, debug) {
 		super(gm.renderer);
 
@@ -12,14 +18,14 @@ export class GameAnim extends LinesAnimation {
 	}
 
 	update() { /* too many things to stick in onPlayedState etc */
-		if (this.isPlaying) {
-			if (this.drawCount >= this.dpf - 1) {
-				this.nextFrame();
-				this.drawCount = 0;
-			}
-			this.drawCount++;
-			if (this.onUpdate) this.onUpdate();
+		if (!this.isPlaying) return;
+
+		if (this.drawCount >= this.dpf - 1) {
+			this.nextFrame();
+			this.drawCount = 0;
 		}
+		this.drawCount++;
+		if (this.onUpdate) this.onUpdate();
 	}
 
 	nextFrame() {

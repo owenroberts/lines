@@ -1,13 +1,13 @@
 import '../css/animate.scss';
 
-import { Renderer, LinesAnimation, Animator, Drawing, Layer, AntiMixin, PixelMixin, Style } from '../../src/Lines.js';
+import { Renderer, Animator, Drawing, Layer, AntiMixin, PixelMixin, Style } from '../../src/Lines.js';
 
 import { Interface, Settings, Elements } from '../../../ui/src/UI.js';
 
 const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText, UIElement, UIRow } = Elements;
 
 import { LayerMixin } from './LayerMixin.js';
-import { AnimationMixin } from './AnimationMixin.js';
+import { AnimateAnim } from './AnimateAnim.js';
 import { DrawingMixin } from './DrawingMixin.js';
 
 import { AnimatorUI } from './AnimatorUI.js';
@@ -30,7 +30,6 @@ import { Timeline } from './Timeline.js';
 const lns = {}; // app collection
 
 Object.assign(Layer.prototype, LayerMixin);
-Object.assign(LinesAnimation.prototype, AnimationMixin);
 Object.assign(Drawing.prototype, DrawingMixin);
 
 const params = {};
@@ -54,7 +53,7 @@ lns.renderer = new Renderer({
 	isMultiLineWidth: true,
 });
 
-lns.anim = new LinesAnimation(lns.renderer);
+lns.anim = new AnimateAnim(lns.renderer);
 lns.anim.drawings.push(new Drawing());
 lns.anim.layers.push(new Layer({ 
 	// ...defaults, 

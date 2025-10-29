@@ -1,6 +1,6 @@
 /* separate classes forlder */
 
-import { Sprite } from '../../src/GameEngine.js';
+import { Sprite } from '../../src/Engine.js';
 
 export class Character extends Sprite {
 	constructor(x, y, animation) {
