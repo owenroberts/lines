@@ -1,4 +1,5 @@
 import { assert, randomInt } from '../../../cool/cool.js';
+import { BBox } from '../Engine.js';
 
 export const FrameTypes = {
 	INDEX: 0, // gets index from location
@@ -8,30 +9,30 @@ export const FrameTypes = {
  
 /**
  * set of frames from LinesAnimation
- * draw at locations
+ * draw at tiles
  */
 export class TileSet {
 
 	/**
 	 * creates TileSet
-	 * @param  {object} params { locations, frame, center, animation }
-	 * @param  {boolean} debug  
+	 * @param  {object} 	[params] 
+	 * @param  {number} 	[params.frameType=FrameTypes.INDEX] - type of frame to display
+	 * @param  {boolean} 	[params.isActive=true]
+	 * @param  {boolean} 	[params.hasColliders=false]
+	 * @param  {boolean} 	debug
 	 */
 	constructor(params, debug) {
 		this.debug = debug;
-		this.locations = [];
 
 		this.frameType = params.frameType ?? FrameTypes.INDEX; // bad name
-		this.center = params.center ?? false;
-		this.offset = [0, 0]; // for moving maps
 		this.isActive = params.isActive ?? true;
+		this.hasColliders = params.hasColliders ?? false;
 
+		this.tiles = [];
+		this.offset = { x: 0, y: 0 }; // for moving maps
+		
 		if (params.animation) {
 			this.addAnimation(params.animation);
-		}
-
-		if (params.locations && params.animation) {
-			this.addLocations(); // wtf? -- is this even used?
 		}
 	}
 
@@ -40,29 +41,35 @@ export class TileSet {
 	}
 
 	/**
-	 * add location to tileSet
+	 * add tile
 	 * @param {number} x     - x position
 	 * @param {number} y     - y position
 	 * @param {number} index - frame index
 	 */
-	addLocation(x, y, index) {
+	add(x, y, frameIndex) {
 
-		if (!Number.isFinite(index) && this.frameType === FrameTypes.RANDOM_INDEX) {
-			index = randomInt(0, this.animation.endFrame);	
+		if (!Number.isFinite(frameIndex) && this.frameType === FrameTypes.RANDOM_INDEX) {
+			frameIndex = randomInt(0, this.animation.endFrame);	
 		}
 
-		this.animation.createNewState(`f-${index}`, index, index);
-		this.locations.push([x, y, index]);
+		this.animation.createNewState(`f-${frameIndex}`, frameIndex, frameIndex);
+		let tile = { x, y, frameIndex };
+
+		if (this.hasColliders) {
+			tile.collider = new BBox(x, y, this.animation.width, this.animation.height);
+		}
+
+		this.tiles.push(tile);
 	}
 
-	addLocations(locations) {
+	addLocations(tiles) {
 		assert(false, "do i use this? deprecate?");
-		if (locations) this.locations.push(...locations);
+		if (tiles) this.tiles.push(...tiles);
 
 		// why doesn't this just call add location?
-		for (let i = 0; i < this.locations.length; i++) {
+		for (let i = 0; i < this.tiles.length; i++) {
 			if (this.frame === 'index') {
-				this.locations[i].i = i;
+				this.tiles[i].i = i;
 				this.animation.createNewState(`f-${i}`, i, i);
 			}
 			else if (this.frame === 'random') {
@@ -70,42 +77,54 @@ export class TileSet {
 			}
 			else if (this.frame === 'randomIndex') {
 				let randomIndex = Cool.randomInt(0, this.animation.endFrame);
-				this.locations[i].i = randomIndex;
+				this.tiles[i].i = randomIndex;
 				this.animation.createNewState(`f-${randomIndex}`, randomIndex, randomIndex);
 			}
 		}
 	}
 
-	clear() { this.locations = []; }
+	clear() { this.tiles = []; }
 
 	draw(view) {
 		if (!this.isActive) return;
-		for (let i = 0; i < this.locations.length; i++) {
-			let x = this.locations[i][0] + this.offset[0];
-			let y = this.locations[i][1] + this.offset[1];
+		for (let i = 0; i < this.tiles.length; i++) {
+			// need to rewrite for moving map to update colliders
+			// let x = this.tiles[i].x + this.offset[0];
+			// let y = this.tiles[i].y + this.offset[1];
 			
-			// test on screen
-			if (!view.isCollidingBox(x, y, this.animation.width, this.animation.height)) {
-				continue;
-			}
+			// test on screen -- tackle this later
+			// if (!view.isColliding(this.tiles[i].collider)) {
+				// continue;
+			// }
 
-			this.animation.state = `f-${this.locations[i][2]}`;
-			this.animation.draw(x, y);
+			this.animation.state = `f-${this.tiles[i].frameIndex}`;
+			this.animation.draw(this.tiles[i].x, this.tiles[i].y);
 		}
 	}
 
+	// tackle later with moving game
 	update(offset) {
 		this.offset[0] = offset[0];
 		this.offset[1] = offset[1];
+
+		if (this.hasColliders) {
+			// add later
+		}
+	}
+
+	isColliding(othr) {
+		for (let i = 0; i < this.tiles.length; i++) {
+			if (othr.isColliding(this.tiles[i].collider)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	getCollisionLocation(othr) {
-		for (let i = 0; i < this.locations.length; i++) {
-			let x = this.locations[i][0] + this.offset[0];
-			let y = this.locations[i][1] + this.offset[1];
-
-			if (othr.isCollidingTileSet(x, y, this.animation.width, this.animation.height)) {
-				return [x, y];
+		for (let i = 0; i < this.tiles.length; i++) {
+			if (othr.isColliding(this.tiles[i].collider)) {
+				return [this.tiles[i].x, this.tiles[i].y];
 			}
 		}
 		return false;

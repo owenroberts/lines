@@ -11,7 +11,7 @@ export const TileTypes = {
 
 /**
  * creates a TileMap class for use with TileSet
- * TileMap maps tile types, used by TileSet to add locations
+ * TileMap maps tile types, used by TileSet to add tiles
  * tilemap creator func should have TileTypes enum
  */
 export class TileMap {

@@ -246,8 +246,6 @@ export class Game {
 					this.drawDebug({ bbox: sprite.bbox });
 					if (sprite.collider) {
 						this.drawDebug({
-							x: sprite.bbox.x,
-							y: sprite.bbox.y,
 							bbox: sprite.collider, 
 							color: '#ff00bb',
 						});

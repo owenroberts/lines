@@ -43,17 +43,16 @@ export class Sprite {
 	}
 
 	isColliding(bbox) {
-
-		return bbox.isCollidingBox(this.bbox.x + this.collider.x, this.bbox.y + this.collider.y, this.collider.w, this.collider.h);
+		return bbox.isColliding(this.collider);
 	}
 
 	// this is fucked i fucking fucked up  ... 
 	isCollidingTileSet(x, y, w, h) {
 		if (
-			this.bbox.x + this.collider.x < x + w &&
-			this.bbox.x + this.collider.x + this.collider.w > x &&
-			this.bbox.y + this.collider.y < y + h &&
-			this.bbox.y + this.collider.y + this.collider.h > y
+			this.collider.x < x + w &&
+			this.collider.x + this.collider.w > x &&
+			this.collider.y < y + h &&
+			this.collider.y + this.collider.h > y
 		) {
 			return true;
 		}
