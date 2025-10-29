@@ -7,7 +7,7 @@ import { BlobMap } from './engine/BlobMap.js';
 import { Button } from './engine/Button.js';
 import { Game } from './engine/Game.js';
 import { GameAnim } from './engine/GameAnim.js';
-import { generateBSPMap, BSPTileTypes } from './engine/generateBSPMap.js';
+import { BSPMap, BSPTileTypes } from './engine/BSPMap.js';
 import { Input } from './engine/Input.js';
 import { Manager } from './engine/Manager.js';
 import { Scene } from './engine/Scene.js';
@@ -22,4 +22,4 @@ import { TileMap, TileTypes } from './engine/TileMap.js';
 import { Toggle } from './engine/Toggle.js';
 import { UI } from './engine/UI.js';
 
-export { AudioPlayer, BBox, BlobMap, Button, Game, GameAnim, generateBSPMap, BSPTileTypes, Input, Manager, Scene, SHGScene, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, TileSet, TileMap, TileTypes, Toggle, UI };
+export { AudioPlayer, BBox, BlobMap, Button, Game, GameAnim, BSPMap, BSPTileTypes, Input, Manager, Scene, SHGScene, SpatialHashGrid, Sprite, SpriteCollection, TextButton, TextSprite, TileSet, TileMap, TileTypes, Toggle, UI };
