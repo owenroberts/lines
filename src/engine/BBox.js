@@ -76,7 +76,7 @@ export class BBox {
 
 		if (
 			this.x < othr.x + othr.w &&
-			this.x + this.h > othr.x &&
+			this.x + this.w > othr.x &&
 			this.y < othr.y + othr.h &&
 			this.y + this.h > othr.y
 		) {

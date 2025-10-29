@@ -106,7 +106,7 @@ export class Texture {
 			let x = this.locations[i][0] + this.offset[0];
 			let y = this.locations[i][1] + this.offset[1];
 
-			if (othr.isCollidingBox(x, y, this.animation.width, this.animation.height)) {
+			if (othr.isCollidingTexture(x, y, this.animation.width, this.animation.height)) {
 				return [x, y];
 			}
 		}

@@ -112,7 +112,7 @@ export class Renderer {
 	}
 
 	reset() {
-		this.ctx.scale(1, 1); // prevent multiple scales
+		this.ctx.resetTransform(); // prevent multiple scales
 		this.ctx.scale(this.dpr * this.scale, this.dpr * this.scale);
 		// this is the part i dont want i think
 		// canvas.style.zoom = 1 / dpr; 

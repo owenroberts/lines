@@ -44,7 +44,20 @@ export class Sprite {
 
 	isColliding(bbox) {
 
-		return bbox.isCollidingBox(this.bbox.x + this.collider.x, this.bbox.y + this.collider.y, this.collider.width, this.collider.height);
+		return bbox.isCollidingBox(this.bbox.x + this.collider.x, this.bbox.y + this.collider.y, this.collider.w, this.collider.h);
+	}
+
+	// this is fucked i fucking fucked up  ... 
+	isCollidingTexture(x, y, w, h) {
+		if (
+			this.bbox.x + this.collider.x < x + w &&
+			this.bbox.x + this.collider.x + this.collider.w > x &&
+			this.bbox.y + this.collider.y < y + h &&
+			this.bbox.y + this.collider.y + this.collider.h > y
+		) {
+			return true;
+		}
+		return false;
 	}
 
 	draw(view) {

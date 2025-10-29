@@ -62,6 +62,7 @@ export class Game {
 		this.zoom = params.zoom ?? 1;
 		this.view = new BBox(0, 0, params.width, params.height);
 
+
 		let ediZoom = params.isEditor ? this.renderer.dpr : 1;
 
 		this.view.setSize(Math.round(this.window.width / this.zoom * ediZoom), Math.round(this.window.height / this.zoom * ediZoom));
@@ -134,6 +135,12 @@ export class Game {
 		this.window.setSize(width, height);
 		this.view.setSize(width / this.zoom, height / this.zoom);
 		this.renderer.reset();
+	}
+
+	setScale(value) {
+		// this.window.setSize(this.window.width * value, this.window.height * value);
+		// this.view.setSize(this.window.width * value, this.window.height * value);
+		this.renderer.setScale(value);
 	}
 
 	load(files, loadDataOnly, callback) {

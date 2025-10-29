@@ -39,7 +39,6 @@ export class Animator {
 	constructor(animation, params={}, ignore=[]) {
 
 		this.animation = animation;
-		this.animTweens = [];
 		this.params = {};
 
 		for (const k in defaultParams) {
@@ -73,25 +72,23 @@ export class Animator {
 					endFrame: this.animation.endFrame,
 					startValue: 0,
 					endValue: this.animation.drawings[layer.drawingIndex].length - 1,
+					isAnimatorTween: true,
 				};
 				layer.tweens.push(tween);
-			}
-			else if (chance(0.5)) { // change prop
-				// layer[prop] = Cool.randomInt(this.params[prop][0], this.params[prop][1]);
+			} else if (chance(0.5)) { // change prop
 				const val = randomInt(...this.params[prop]);
 				this.animation.overrideProperty(prop, val);
 			} else { //  add tweens
-				const tween = { prop: prop };
-				tween.startFrame = 0;
-				tween.endFrame = this.animation.endFrame;
-				
-				tween.startValue = props[prop];
-				tween.endValue = randomInt(...this.params[prop]);
-				
+				const tween = { 
+					prop: prop, 
+					startFrame: 0,
+					endFrame: this.animation.endFrame,
+					startValue: props[prop],
+					endValue: randomInt(...this.params[prop]),
+					isAnimatorTween: true,
+				};
 				layer.tweens.push(tween);
-				this.animTweens.push(tween);
 			}
-			// console.log('tweens', i, JSON.stringify(layer.tweens));
 		}
 	}
 
@@ -104,12 +101,13 @@ export class Animator {
 
 			// remove prev tweens
 			for (let j = layer.tweens.length - 1; j >= 0; j--) {
-				if (this.animTweens.includes(layer.tweens[j])) {
+				if (layer.tweens[j].isAnimatorTween) {
 					layer.tweens.splice(j, 1);
 				}
 			}
 		}
 
-		this.animTweens = [];
+		this.tweenIndexes = [];
+		this.animation.cancelOverride();
 	}
 }
