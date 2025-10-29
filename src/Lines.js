@@ -14,4 +14,3 @@ import { Style } from './Style.js';
 import { Points, LINES_VERSION } from './Consts.js';
 
 export { Renderer, PixelMixin, Loader, Layer, AntiMixin, Drawing, Animator, Anim, Style, Points, LINES_VERSION };
-
