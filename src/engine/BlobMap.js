@@ -4,7 +4,7 @@
 import { assert } from '../../../cool/cool.js';
 
 /**
- * bitmask order for blob map, indexOf maps to tilemap texture
+ * bitmask order for blob map, indexOf maps to tilemap tileSet
  * see https://unit.dev/posts/blobmaps/ for order (need backup for this? ref image)
  * @type {array}
  */
@@ -30,7 +30,7 @@ export class BlobMap {
 	}
 
 	/**
-	 * get the frame index for a texture based on blob map by position
+	 * get the frame index for a tileSet based on blob map by position
 	 * matches tileType to surrounding tiles
 	 * @returns {number} - index from bitmap maps to animation frame
 	 */

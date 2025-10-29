@@ -48,7 +48,7 @@ export class Sprite {
 	}
 
 	// this is fucked i fucking fucked up  ... 
-	isCollidingTexture(x, y, w, h) {
+	isCollidingTileSet(x, y, w, h) {
 		if (
 			this.bbox.x + this.collider.x < x + w &&
 			this.bbox.x + this.collider.x + this.collider.w > x &&

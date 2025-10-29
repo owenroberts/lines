@@ -1,4 +1,3 @@
-// should it save more data? a tile? { tileType, inRoom, etc.. }
 import { assert } from '../../../cool/cool.js';
 
 /**
@@ -11,7 +10,8 @@ export const TileTypes = {
 };
 
 /**
- * creates a tilemap class for use with textures
+ * creates a TileMap class for use with TileSet
+ * TileMap maps tile types, used by TileSet to add locations
  * tilemap creator func should have TileTypes enum
  */
 export class TileMap {

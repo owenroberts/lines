@@ -1,8 +1,5 @@
 import { assert, randomInt } from '../../../cool/cool.js';
 
-// rename SpriteTexture? (vs TextSprite)
-// or SpriteMap, TileMap, TextureMap ... 
-
 export const FrameTypes = {
 	INDEX: 0, // gets index from location
 	RANDOM_INDEX: 1, // randomized location index
@@ -10,12 +7,13 @@ export const FrameTypes = {
 };
  
 /**
- * draws frames from one animation in multuple places (locations)
+ * set of frames from LinesAnimation
+ * draw at locations
  */
-export class Texture {
+export class TileSet {
 
 	/**
-	 * creates texture
+	 * creates TileSet
 	 * @param  {object} params { locations, frame, center, animation }
 	 * @param  {boolean} debug  
 	 */
@@ -42,7 +40,7 @@ export class Texture {
 	}
 
 	/**
-	 * add location to texture
+	 * add location to tileSet
 	 * @param {number} x     - x position
 	 * @param {number} y     - y position
 	 * @param {number} index - frame index
@@ -106,7 +104,7 @@ export class Texture {
 			let x = this.locations[i][0] + this.offset[0];
 			let y = this.locations[i][1] + this.offset[1];
 
-			if (othr.isCollidingTexture(x, y, this.animation.width, this.animation.height)) {
+			if (othr.isCollidingTileSet(x, y, this.animation.width, this.animation.height)) {
 				return [x, y];
 			}
 		}

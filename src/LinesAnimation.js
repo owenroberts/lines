@@ -37,7 +37,7 @@ export class LinesAnimation {
 
 		this.override = {}; // override properties
 
-		// most animations use default state, game anims/textures have states for changing frame
+		// most animations use default state, game anims/tileSets have states for changing frame
 		// replace with manager ?? or is this too complicated???
 		// or use js map?
 		this.stateName = 'default'; // set state label

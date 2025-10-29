@@ -3,7 +3,7 @@
 	not necessarily best approach
 */
 
-import { Game, Texture, Button, TextSprite } from '../../src/GameEngine.js';
+import { Game, TileSet, Button, TextSprite } from '../../src/GameEngine.js';
 import { Character } from './Character.js';
 
 const gme = new Game({
@@ -29,7 +29,7 @@ gme.setup = function() {
 	char = new Character(300, 300, gme.anims.sprites.sprite);
 	gme.scenes.walk.addSprite(char);
 
-	waves = new Texture({
+	waves = new TileSet({
 		frame: 'random',
 		center: true,
 		animation: gme.anims.sprites.waves
