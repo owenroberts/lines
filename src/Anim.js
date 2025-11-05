@@ -422,6 +422,7 @@ export class Anim {
 			// maybe load when not debuggin -- add loading progress
 			// this.drawings[layer.drawingIndex].update(layer); // -- this takes forever for load ...
 		}
+		console.log(this.layers);
 
 		const endFrame = this.layers.map(layer => { return layer.endFrame; });
 		this.endFrame = Math.max.apply(Math, endFrame);

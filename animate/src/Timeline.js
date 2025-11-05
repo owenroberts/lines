@@ -299,7 +299,8 @@ export function Timeline(lns) {
 						}
 					},
 					setLinesProperties() {
-						lns.styles.setStyleIndex(layer.styleIndex);
+						console.log("don't update lines props based on current layer");
+						// lns.styles.setStyleIndex(layer.styleIndex);
 					},
 					update() { lns.ui.update(); },
 					reset() { resetLayers(); },

@@ -106,9 +106,11 @@ const LayerMixin = {
 	},
 
 	getSaveProps() {
-		const props = { d: this.drawingIndex };
+		const props = { 
+			d: this.drawingIndex, 
+			s: this.styleIndex,
+		};
 		if (this.groupNumber >= 0) props.g = props.groupNumber;
-		if (this.styleIndex > 0) props.s = this.styleIndex;
 		// if (this.drawingIndex >= 0) props.d = this.drawingIndex;
 		if (this.startFrame > 0 || this.endFrame > 0) props.f = [this.startFrame, this.endFrame];
 		if (this.x) props.x = this.x; // ignore if 0 or undefined

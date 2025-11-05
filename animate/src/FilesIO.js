@@ -132,6 +132,7 @@ export function FilesIO(lns, params) {
 		if (params.fit && confirm("Fit canvas?")) lns.canvas.fitCanvasToDrawing();
 		
 		const json = getSaveData(isSingleFrame);
+		console.log(json.l, json.st);
 		if (!json) return alert('No data.');
 
 		// const drawingIndexes = new Set(json.l.map(layer => layer.d));
@@ -140,7 +141,7 @@ export function FilesIO(lns, params) {
 
 		json.d = json.d.map((d, i) => drawingIndexes.includes(i) ? d : null); 
 
-		// prune out drawings
+		// prune out drawings -- wtf i need to better comments ... 
 		if (json.d.includes(null)) {
 			const nonNulls = json.d
 				.map((v, i) => { if (json.d[i]) return i; })
@@ -152,6 +153,21 @@ export function FilesIO(lns, params) {
 
 			json.d = json.d.filter(d => d !== null);
 		}
+
+		// prune styles
+		const stylesInUse = [...new Set(json.l.map(l => l.s))];
+		for (let i = json.st.length - 1; i >= 0; i--) {
+			if (!stylesInUse.includes(i)) {
+				json.st.splice(i, 1);
+				for (let j = 0; j < json.l.length; j++) {
+					if (json.l[j].s >= i) {
+						json.l[j].s--;
+					}
+				}
+			}
+		}
+
+		console.log(json.l)
 
 		const jsonFile = JSON.stringify(json);
 
