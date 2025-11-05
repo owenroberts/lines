@@ -8,6 +8,7 @@
 	but only want new style when changing a style ... 
 */
 
+import { randomInt } from '../../../cool/cool.js';
 import { Elements } from '../../../ui/src/UI.js';
 import { Style, Layer } from '../../src/Lines.js';
 const { UIButton, UIModal, UIColor } = Elements;
@@ -15,18 +16,6 @@ const { UIButton, UIModal, UIColor } = Elements;
 export function Styles(lns, defaults) {
 
 	let styleIndex = 0;
-	let changeStyle = false;
-
-	function setStyleIndex(value) {
-		if (value >= 0 && value < lns.anim.styles.length) {
-			styleIndex = value;
-			const layer = lns.anim.getDrawLayer();
-			layer.styleIndex = styleIndex;
-			updatePropertiesUI();
-		} else {
-			lns.ui.faces.styleIndex.update(styleIndex, true);
-		}
-	}
 
 	function getNewStyle() {
 		const style = new Style({
@@ -39,9 +28,9 @@ export function Styles(lns, defaults) {
 			lineWidth: lns.ui.faces.lineWidth.value,
 		});
 		// styleIndex = lns.anim.styles.length - 1;
-		styleIndex++;
+		// styleIndex++;
 		lns.ui.faces.styleIndex.value = styleIndex;
-		changeStyle = false;
+
 		// return style;
 		lns.anim.styles.push(style);
 		const layer = lns.anim.getDrawLayer();
@@ -73,11 +62,11 @@ export function Styles(lns, defaults) {
 			// lns.anim.styles.push(getNewStyle());
 			lns.anim.layers.push(getNewLayer(f));
 			lns.data.saveState();
-			changeStyle = true;
 		}  
 		// or just change layer frame ?
 		lns.ui.update();
 		lns.anim.resetDefault();
+		
 	} /* r key */
 
 	function setDefault() {
@@ -87,16 +76,17 @@ export function Styles(lns, defaults) {
 	}
 
 	function setProperty(prop, value) {
-		if (changeStyle) {
-			getNewStyle();
-		}
 
 		const style = lns.anim.styles[styleIndex];
 		style[prop] = value;
+		// console.log(style);
 		// lns.ui.faces[prop].update(style[prop], true); // ui only
 	}
 
 	function updatePropertiesUI() {
+		if (styleIndex > lns.anim.styles.length - 1) {
+			getNewStyle();
+		}
 		const styleProps = lns.anim.styles[styleIndex].getProps();
 		for (const prop in styleProps) {
 			if (lns.ui.faces[prop]) {
@@ -140,8 +130,8 @@ export function Styles(lns, defaults) {
 	} /* shift-g */
 
 	function colorVariation() {
-		let n = parseInt(lns.anim.getDrawLayer().color.substr(1), 16);
-		n += Cool.randomInt(-500, 500);
+		let n = parseInt(lns.anim.getDrawStyle().color.substr(1), 16);
+		n += randomInt(-500, 500);
 		n = Math.max(0, n);
 		const color = '#' + n.toString(16);
 		setProperty('color', color);
@@ -161,11 +151,13 @@ export function Styles(lns, defaults) {
 			'styleIndex': {
 				label: 'Style Index',
 				type: 'UINumberStep',
-				value: 0,
+				value: styleIndex,
 				debug: true,
 				callback: value => { 
-					changeStyle = false; // fixing change style, test
-					setStyleIndex(value);
+					// changeStyle = false; // fixing change style, test
+					// setStyleIndex(value);
+					styleIndex = value;
+					updatePropertiesUI();
 				},
 			},
 			'linesInterval': {
@@ -231,6 +223,6 @@ export function Styles(lns, defaults) {
 
 	return { 
 		connect, reset, setDefault, 
-		setStyleIndex,
+		// setStyleIndex,
 	};
 }

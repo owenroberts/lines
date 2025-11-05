@@ -442,6 +442,7 @@ export class LinesAnimation {
 	}
 
 	loadData(json, callback) {
+		console.log(json.l)
 		this.isLoaded = true;
 		for (let i = 0; i < json.d.length; i++) {
 			this.drawings[i] = json.d[i] ? 
@@ -464,6 +465,7 @@ export class LinesAnimation {
 			// maybe load when not debuggin -- add loading progress
 			// this.drawings[layer.drawingIndex].update(layer); // -- this takes forever for load ...
 		}
+		console.log(this.layers);
 
 		// styles
 		// this.styles = structuredClone(json.st);

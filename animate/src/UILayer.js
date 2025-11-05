@@ -250,7 +250,6 @@ export class UILayer extends UICollection {
 			min: 0,
 			max: this.lns.anim.styles.length - 1,
 			callback: value => {
-				console.log('callback', value);
 				layer.styleIndex = value;
 			},
 		}));
