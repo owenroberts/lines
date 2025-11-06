@@ -65,7 +65,7 @@ export function Capture(lns, params) {
 
 	/* put capture code in callback */
 	function start(advanceFrame) {
-		lns.renderer.suspend();
+		lns.renderer.isSuspended = true;
 		let waitFrame = true; // wait once so render isn't called twice
 		frameNum = 0;
 
@@ -106,7 +106,7 @@ export function Capture(lns, params) {
 	function capture() {
 		if (saveFilesEnabled) { // face or getter
 			// console.log('start cap');
-			lns.canvas.canvas.toBlob(blob =>  {
+			lns.renderer.canvas.toBlob(blob =>  {
 				const title = lns.fio.getTitle(); // this is a UI
 				const frm = Cool.padNumber(lns.anim.currentFrame, 3);
 
