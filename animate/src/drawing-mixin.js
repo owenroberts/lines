@@ -1,5 +1,5 @@
 
-import { Points } from '../../src/Lines.js';
+import { Points } from '../../src/lines.js';
 
 /**
  * methods used in animate

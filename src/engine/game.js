@@ -1,5 +1,5 @@
 import { assert, mobilecheck, testPerformance } from '../../../cool/cool.js';
-import { Renderer, Loader } from '../Lines.js';
+import { Renderer, Loader } from '../lines.js';
 import { AudioPlayer, Scene, Manager, GameAnim, Input, BBox } from '../Engine.js';
 import Stats from 'stats.js';
 

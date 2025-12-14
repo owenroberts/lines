@@ -4,8 +4,7 @@
 
 import { UISequence } from './UISequence.js';
 import { UIClip } from './UIClip.js';
-import { Elements } from '../../../ui/src/UI.js';
-const { UIModal, UISelect } = Elements;
+import { UIModal, UISelect } from '../../../oi/src/oi.js';
 
 export function Sequencer(lns) {
 

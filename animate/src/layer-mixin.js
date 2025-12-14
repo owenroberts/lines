@@ -2,7 +2,7 @@
 	adds functionality only needed by animation editor
 */
 
-import { Layer } from '../../src/Lines.js';
+import { Layer } from '../../src/lines.js';
 
 const LayerMixin = {
 

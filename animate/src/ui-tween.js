@@ -1,5 +1,4 @@
-import { Elements } from '../../../ui/src/UI.js';
-const { UICollection, UIButton, UINumberStep, UIModal } = Elements;
+import { UICollection, UIButton, UINumberStep, UIModal } from '../../../oi/src/oi.js';
 
 export class UITween extends UICollection {
 	constructor(params, tween, layer) {

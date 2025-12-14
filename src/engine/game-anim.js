@@ -1,4 +1,4 @@
-import { Anim } from '../Lines.js';
+import { Anim } from '../lines.js';
 
 /**
  * game implementation of Anim

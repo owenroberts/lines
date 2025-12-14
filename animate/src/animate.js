@@ -1,161 +1,139 @@
 import '../css/animate.scss';
 
-import { Renderer, Animator, Drawing, Layer, AntiMixin, PixelMixin, Style } from '../../src/Lines.js';
+import { Renderer, Animator, Drawing, Layer, AntiMixin, PixelMixin, Style } from '../../src/lines.js';
 
-import { Interface, Settings, Elements } from '../../../ui/src/UI.js';
+import { Interface, Settings, UISection } from '../../../oi/src/oi.js';
 
-const { UIFile, UILabel, UIModal, UIButton, UINumberStep, UICollection, UIColor, UIToggle, UIDragButton, UISelect, UINumber, UIText, UIElement, UIRow } = Elements;
+import { LayerMixin } from './layer-mixin.js';
+import { AnimateAnim } from './animate-anim.js';
+import { DrawingMixin } from './drawing-mixin.js';
 
-import { LayerMixin } from './LayerMixin.js';
-import { AnimateAnim } from './AnimateAnim.js';
-import { DrawingMixin } from './DrawingMixin.js';
+import { PlaybackPanel } from './playback.js';
+import { CanvasPanel } from './canvas.js';
+import { EventsPanel } from './events.js';
+import { StylesPanel } from './styles.js';
 
-import { AnimatorUI } from './AnimatorUI.js';
-import { Background } from './Background.js';
-import { Brush } from './Brush.js';
-import { Canvas } from './Canvas.js';
-import { Capture } from './Capture.js';
-import { Data } from './Data.js';
-import { Styles } from './Styles.js';
-import { Drawings } from './Drawings.js';
-import { Eraser } from './Eraser.js';
-import { Events } from './Events.js';
-import { FilesIO } from './FilesIO.js';
-import { Palette } from './Palette.js';
-import { Playback } from './Playback.js';
-import { Sequencer } from './Sequencer.js';
-import { States } from './States.js';
-import { Timeline } from './Timeline.js';
-
-const lns = {}; // app collection
+// import { AnimatorUI } from './animator-ui.js';
+// import { Background } from './background.js';
+// import { Brush } from './brush.js';
+// import { Capture } from './capture.js';
+// import { Data } from './cata.js';
+// import { Drawings } from './drawings.js';
+// import { Eraser } from './eraser.js';
+// import { FilesIO } from './files-io.js';
+// import { Palette } from './palette.js';
+// import { Sequencer } from './sequencer.js';
+// import { States } from './states.js';
+// import { Timeline } from './timeline.js';
 
 Object.assign(Layer.prototype, LayerMixin);
 Object.assign(Drawing.prototype, DrawingMixin);
 
-const params = {};
-location.search.substr(1).split('&').map(a => {
-	let [key, value] = a.split('=');
-	params[key] = value;
-});
-
-if (params.render === 'pixel') {
-	Object.assign(Lines.prototype, PixelMixin);
-}
-
-lns.renderer = new Renderer({
+const renderer = new Renderer({
 	width: 512,
 	height: 512,
 	bgColor: '#ffffff',
-	useRetina: true,
-	dps: 30,
-	lineWidth: 1,
 	isMultiColor: true,
 	isMultiLineWidth: true,
 });
 
-lns.anim = new AnimateAnim(lns.renderer);
-lns.anim.drawings.push(new Drawing());
-lns.anim.layers.push(new Layer({ 
-	// ...defaults, 
-	drawingIndex: 0, // Math.max(lns.anim.drawings.length - 1, 0),
-	styleIndex: 0,
-	startFrame: 0, // lns.anim.currentFrame,
-}));
-lns.anim.styles.push(new Style());
+const anim = new AnimateAnim(renderer);
+anim.drawings.push(new Drawing());
+anim.layers.push(new Layer());
+anim.styles.push(new Style());
 
-// modules
-lns.playback = Playback(lns, { useStats: false }); // (dps, stats?)
-lns.canvas = Canvas(lns);
-lns.styles = Styles(lns, lns.anim.styles[0].getProps());
-
-lns.brush = Brush(lns);
-lns.eraser = Eraser(lns);
-lns.events = Events(lns);
-lns.bg = Background(lns);
-lns.data = Data(lns);
-lns.fio = FilesIO(lns, { // verbose params ...
-	fit: false, // fit to canvas when saving
-	save: false, // save settings on unload
-	load: true, // load setttings after file load
-	reload: false, // confirm reload
-	bg: true // bg color
-});
-
-lns.capture = Capture(lns, {
-	useSequentialNumbering: true,
-	captureSettings: {
-		lineWidth: 1,
-		canvasScale: 2,
-	}
-});
-lns.states = States(lns);
-lns.palette = Palette(lns);
-lns.drawings = Drawings(lns);
-lns.timeline = Timeline(lns);
-lns.sequencer = Sequencer(lns);
-lns.animator = AnimatorUI(lns);
-
-lns.ui = Interface(lns, { useMain: false });
-lns.ui.setup();
-
-lns.canvas.connect();
-lns.playback.connect();
-lns.styles.connect();
-lns.events.connect();
-lns.brush.connect();
-lns.eraser.connect();
-lns.bg.connect();
-lns.data.connect();
-lns.fio.connect();
-lns.capture.connect();
-lns.states.connect();
-lns.palette.connect();
-lns.drawings.connect();
-lns.animator.connect();
-lns.timeline.connect();
-lns.sequencer.connect();
-
-lns.ui.update = function() {
-	lns.timeline.update();
-	lns.drawings.update();
-	lns.states.update();
-};
-lns.ui.update();
-
-
-lns.ui.settings = new Settings(lns, {
-	name: 'lns', 
-	workspaceFields: ['hideCursor'],
-	workspaces: [
-		{
-			text: 'Animation',
-			url: 'workspaces/Animation.json',
-		},
-		{
-			text: 'Drawing',
-			url: 'workspaces/Drawing.json',
-		}
-	],
-	appSave() {
-		return {
-			palettes: lns.palette.getPalettes(), 
-		};
+const ui = new Interface({
+	name: "lines",
+	workspaces: [{
+		text: 'animation',
+		url: 'workspaces/animation.json',
 	},
-	appLoad(settings) {
-		if (settings.inteface) lns.palette.setup(settings.inteface.palettes);
-	}
+	{
+		text: 'drawing',
+		url: 'workspaces/drawing.json',
+	}],
+	
 });
 
-lns.timeline.init();
-lns.playback.toggleStats();
-lns.renderer.start();
-lns.ui.settings.load();
+ui.update = () => {
+	// ui.panels.timeline.update();
+	// ui.panels.drawings.update();
+	// ui.panels.states.update();
+};
 
-if (params.src) {
-	lns.fio.loadFile(params.src);
-}
+ui.addPanel(new PlaybackPanel(anim, renderer, ui));
+ui.addPanel(new CanvasPanel(anim, renderer, ui));
+ui.addPanel(new EventsPanel(anim, renderer, ui));
+ui.addPanel(new StylesPanel(anim, ui));
+// lns.styles = Styles(lns, lns.anim.styles[0].getProps());
+
+ui.addSection("canvas");
+ui.sections.canvas.el.appendChild(renderer.canvas);
+
+ui.settings.load();
+renderer.start();
+
+console.log(anim, renderer, ui);
+
+// lns.brush = Brush(lns);
+// lns.eraser = Eraser(lns);
+// lns.bg = Background(lns);
+// lns.data = Data(lns);
+// lns.fio = FilesIO(lns, { // verbose params ...
+// 	fit: false, // fit to canvas when saving
+// 	save: false, // save settings on unload
+// 	load: true, // load setttings after file load
+// 	reload: false, // confirm reload
+// 	bg: true // bg color
+// });
+
+// lns.capture = Capture(lns, {
+// 	useSequentialNumbering: true,
+// 	captureSettings: {
+// 		lineWidth: 1,
+// 		canvasScale: 2,
+// 	}
+// });
+// lns.states = States(lns);
+// lns.palette = Palette(lns);
+// lns.drawings = Drawings(lns);
+// lns.timeline = Timeline(lns);
+// lns.sequencer = Sequencer(lns);
+// lns.animator = AnimatorUI(lns);
+
+// lns.ui.update = function() {
+// 	lns.timeline.update();
+// 	lns.drawings.update();
+// 	lns.states.update();
+// };
+// lns.ui.update();
 
 
-console.log('lns', lns);
-console.log('anim', lns.anim);
-window.lns = lns;
+// lns.ui.settings = new Settings(lns, {
+// 	name: 'lns', 
+// 	workspaceFields: ['hideCursor'],
+// 	workspaces: [
+// 		{
+// 			text: 'Animation',
+// 			url: 'workspaces/Animation.json',
+// 		},
+// 		{
+// 			text: 'Drawing',
+// 			url: 'workspaces/Drawing.json',
+// 		}
+// 	],
+// 	appSave() {
+// 		return {
+// 			palettes: lns.palette.getPalettes(), 
+// 		};
+// 	},
+// 	appLoad(settings) {
+// 		if (settings.inteface) lns.palette.setup(settings.inteface.palettes);
+// 	}
+// });
+
+// lns.timeline.init();
+// lns.playback.toggleStats();
+
+
+

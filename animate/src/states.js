@@ -2,8 +2,7 @@
 	animation states, subset of frames 
 */
 
-import { Elements } from '../../../ui/src/UI.js';
-const { UILabel, UIButton, UINumberStep, UISelect, UIModal, UIToggleCheck } = Elements;
+import { UILabel, UIButton, UINumberStep, UISelect, UIModal, UIToggleCheck } from '../../../oi/src/oi.js';
 
 export function States(lns) {
 

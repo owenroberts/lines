@@ -2,8 +2,7 @@
 	collection of lines layeer settings
 */
 
-import { Elements } from '../../../ui/src/UI.js';
-const { UIFile, UIModal, UIButton, UIText, UILabel } = Elements;
+import { UIFile, UIModal, UIButton, UIText, UILabel } from '../../../oi/src/oi.js';
 
 export function Palette(lns) {
 	

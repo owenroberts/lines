@@ -3,7 +3,7 @@
 */
 
 import { getPointDistance } from '../../../cool/cool.js';
-import { Points } from '../../src/Lines.js';
+import { Points } from '../../src/lines.js';
 
 export function Eraser(lns) {
 

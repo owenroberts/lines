@@ -1,5 +1,4 @@
-import { Elements } from '../../../ui/src/UI.js';
-const { UICollection } = Elements;
+import { UICollection } from '../../../oi/src/oi.js';
 
 export class UISequence extends UICollection {
 	constructor(params) {

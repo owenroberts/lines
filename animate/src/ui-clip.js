@@ -1,5 +1,4 @@
-import { Elements } from '../../../ui/src/UI.js';
-const { UICollection, UIModal, UILabel, UINumberStep, UIButton, UISelect, UIRow } = Elements;
+import { UICollection, UIModal, UILabel, UINumberStep, UIButton, UISelect, UIRow } from '../../../oi/src/oi.js';
 
 export class UIClip extends UICollection {
 	constructor(params) {
@@ -64,7 +63,7 @@ export class UIClip extends UICollection {
 			callback: () => {
 				if (!state) return;
 				this.state = state;
-				this.label.text = this.state;
+				this.label.setText(this.state);
 				this.update();
 			}
 		});

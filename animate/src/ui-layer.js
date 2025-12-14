@@ -1,6 +1,5 @@
-import { Points } from '../../src/Lines.js';
-import { Elements } from '../../../ui/src/UI.js';
-const { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber, UIText } = Elements;
+import { Points } from '../../src/lines.js';
+import { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber, UIText } from '../../../oi/src/oi.js';
 
 export class UILayer extends UICollection {
 	constructor(layer, params) {

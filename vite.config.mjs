@@ -3,6 +3,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
 	server:	{ port: 5463 },
+	css: { devSourcemap: true, },
 	build: {
 		rollupOptions: {
 			input: {

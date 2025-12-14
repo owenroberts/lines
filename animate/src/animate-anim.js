@@ -1,4 +1,4 @@
-import { Anim, Drawing, Points } from '../../src/Lines.js';
+import { Anim, Drawing, Points } from '../../src/lines.js';
 
 /**
  * Anim methods for working in animate app
@@ -71,9 +71,9 @@ export class AnimateAnim extends Anim {
 		return this.layers[this.layers.length - 1];
 	}
 
-	getDrawStyle() {
-		return this.styles[this.getDrawLayer().styleIndex];
-	},
+	// getDrawStyle() {
+	// 	return this.styles[this.getDrawLayer().styleIndex];
+	// },
 
 	getCurrentDrawing() {
 		return this.drawings[this.drawings.length - 1];

@@ -5,8 +5,7 @@
 */
 
 import * as Cool from "../../../cool/cool.js";
-import { Elements } from '../../../ui/src/UI.js';
-const { UILabel } = Elements;
+import { UILabel } from '../../../oi/src/oi.js';
 
 export function Capture(lns, params) {
 

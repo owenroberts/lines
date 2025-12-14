@@ -1,6 +1,6 @@
-import { PixelMixin } from './effects/PixelMixin.js';
-import { AntiMixin, antiMixinRenderSetup } from './effects/AntiMixin.js';
-import { setupSVGFilter } from './effects/SVGFilter.js';
+import { PixelMixin } from './effects/pixel-mixin.js';
+import { AntiMixin, antiMixinRenderSetup } from './effects/anti-mixin.js';
+import { setupSVGFilter } from './effects/svg-filter.js';
 
 /**
  * renderer, sets up canvas, gets ctx, runs animationFrame loop
@@ -14,15 +14,15 @@ export class Renderer {
 		this.dps = params.dps ?? 30; // draw per second
 		this.scale = params.scale ?? 1;
 		this.lineWidth = params.lineWidth ?? 1;
-		this.bgColor = params.bgColor || params.bg || false;
+		this.bgColor = params.bgColor ?? params.bg ?? false;
+		this.clearBg = params.clearBg ?? true;
 		this.isMultiColor = params.isMultiColor ?? false;
 		this.isMultiLineWidth = params.isMultiLineWidth ?? false;
-		this.clearBg = params.clearBg !== undefined ? params.clearBg : true;
 		
 		this.width = params.width;
 		this.height = params.height;
 		
-		this.dpr = Math.max(1, (params.useRetina ?? true) ? (window.devicePixelRatio ?? 1) : 1);
+		this.dpr = Math.max(1, (params.isHDPI ?? true) ? (window.devicePixelRatio ?? 1) : 1);
 
 		this.canvas = document.getElementById(this.id);
 		if (!this.canvas) {

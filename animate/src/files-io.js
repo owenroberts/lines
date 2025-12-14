@@ -2,10 +2,9 @@
 	some of this should be in ui now
 */
 import { saveAs } from 'file-saver';
-import { Drawing, Layer, LINES_VERSION } from '../../src/Lines.js';
+import { Drawing, Layer, LINES_VERSION } from '../../src/lines.js';
 import { AnimateAnim } from './AnimateAnim.js';
-import { Elements } from '../../../ui/src/UI.js';
-const { UIModal, UIButton } = Elements;
+import { UIModal, UIButton } from '../../../oi/src/oi.js';
 
 export function FilesIO(lns, params) {
 

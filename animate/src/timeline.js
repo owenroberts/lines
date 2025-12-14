@@ -6,9 +6,8 @@
 import { UILayer } from './UILayer.js';
 import { UITween } from './UITween.js';
 import { UITimelineGroup } from './UITimelineGroup.js';
-import { Elements } from '../../../ui/src/UI.js';
-const { UIButton, UIElement } = Elements;
-import { Points } from '../../src/Lines.js';
+import { UIButton, UIElement } from '../../../oi/src/oi.js';
+import { Points } from '../../src/lines.js';
 
 export function Timeline(lns) {
 
@@ -55,7 +54,7 @@ export function Timeline(lns) {
 	function update() {
 		let prevFrame = lns.ui.faces.frameDisplay.value;
 		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame;
-		bigFrameDisplay.text = lns.anim.currentFrame;
+		bigFrameDisplay.setText(lns.anim.currentFrame);
 		if (!lns.anim.isPlaying) {
 			timeline.clear();
 			// if (autoFit) fit();
