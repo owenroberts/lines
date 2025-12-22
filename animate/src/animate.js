@@ -12,19 +12,20 @@ import { PlaybackPanel } from './playback.js';
 import { CanvasPanel } from './canvas.js';
 import { EventsPanel } from './events.js';
 import { StylesPanel } from './styles.js';
+import { DataPanel } from './data.js';
+import { QuickAnimatePanel } from './quick-animate.js';
+import { AnimatorPanel } from './animator.js';
+import { BrushPanel } from './brush.js';
+import { EraserPanel } from './eraser.js';
+import { TimelinePanel } from './timeline.js';
+import { BackgroundPanel } from './background.js';
+import { DrawingsPanel } from './drawings.js'; // really need this??
+import { StatesPanel } from './states.js';
+import { FilesPanel } from './files-lines.js';
+import { CapturePanel } from './capture.js';
 
-// import { AnimatorUI } from './animator-ui.js';
-// import { Background } from './background.js';
-// import { Brush } from './brush.js';
-// import { Capture } from './capture.js';
-// import { Data } from './cata.js';
-// import { Drawings } from './drawings.js';
-// import { Eraser } from './eraser.js';
-// import { FilesIO } from './files-io.js';
-// import { Palette } from './palette.js';
 // import { Sequencer } from './sequencer.js';
-// import { States } from './states.js';
-// import { Timeline } from './timeline.js';
+// import { Palette } from './palette.js'; // this prob not needed anymore with styles ... but maybe for brush? maybe add to brush ... 
 
 Object.assign(Layer.prototype, LayerMixin);
 Object.assign(Drawing.prototype, DrawingMixin);
@@ -52,76 +53,45 @@ const ui = new Interface({
 		text: 'drawing',
 		url: 'workspaces/drawing.json',
 	}],
-	
 });
 
 ui.update = () => {
-	// ui.panels.timeline.update();
-	// ui.panels.drawings.update();
-	// ui.panels.states.update();
+	ui.panels.timeline.update();
+	ui.panels.drawings.update();
+	ui.panels.states.update();
 };
 
-ui.addPanel(new PlaybackPanel(anim, renderer, ui));
-ui.addPanel(new CanvasPanel(anim, renderer, ui));
-ui.addPanel(new EventsPanel(anim, renderer, ui));
-ui.addPanel(new StylesPanel(anim, ui));
-// lns.styles = Styles(lns, lns.anim.styles[0].getProps());
+ui.addPanel(new PlaybackPanel(ui, anim, renderer));
+ui.addPanel(new FilesPanel(ui, anim, renderer));
+ui.addPanel(new CanvasPanel(ui, anim, renderer));
+ui.addPanel(new EventsPanel(ui, anim, renderer));
+ui.addPanel(new StylesPanel(ui, anim));
+ui.addPanel(new DataPanel(ui, anim));
+ui.addPanel(new QuickAnimatePanel(ui, anim));
+ui.addPanel(new BrushPanel(ui, anim, renderer));
+ui.addPanel(new EraserPanel(ui, anim, renderer));
+ui.addPanel(new TimelinePanel(ui, anim));
+ui.addPanel(new BackgroundPanel(ui, anim, renderer));
+ui.addPanel(new StatesPanel(ui, anim));
+ui.addPanel(new CapturePanel(ui, anim, renderer));
+
+ui.addPanel(new DrawingsPanel(ui, anim));
+ui.addPanel(new AnimatorPanel(ui, anim));
 
 ui.addSection("canvas");
 ui.sections.canvas.el.appendChild(renderer.canvas);
 
 ui.settings.load();
 renderer.start();
+ui.panels.timeline.init();
 
 console.log(anim, renderer, ui);
 
-// lns.brush = Brush(lns);
-// lns.eraser = Eraser(lns);
-// lns.bg = Background(lns);
-// lns.data = Data(lns);
-// lns.fio = FilesIO(lns, { // verbose params ...
-// 	fit: false, // fit to canvas when saving
-// 	save: false, // save settings on unload
-// 	load: true, // load setttings after file load
-// 	reload: false, // confirm reload
-// 	bg: true // bg color
-// });
-
-// lns.capture = Capture(lns, {
-// 	useSequentialNumbering: true,
-// 	captureSettings: {
-// 		lineWidth: 1,
-// 		canvasScale: 2,
-// 	}
-// });
-// lns.states = States(lns);
-// lns.palette = Palette(lns);
-// lns.drawings = Drawings(lns);
-// lns.timeline = Timeline(lns);
 // lns.sequencer = Sequencer(lns);
-// lns.animator = AnimatorUI(lns);
-
-// lns.ui.update = function() {
-// 	lns.timeline.update();
-// 	lns.drawings.update();
-// 	lns.states.update();
-// };
-// lns.ui.update();
-
 
 // lns.ui.settings = new Settings(lns, {
 // 	name: 'lns', 
 // 	workspaceFields: ['hideCursor'],
-// 	workspaces: [
-// 		{
-// 			text: 'Animation',
-// 			url: 'workspaces/Animation.json',
-// 		},
-// 		{
-// 			text: 'Drawing',
-// 			url: 'workspaces/Drawing.json',
-// 		}
-// 	],
 // 	appSave() {
 // 		return {
 // 			palettes: lns.palette.getPalettes(), 
@@ -132,7 +102,6 @@ console.log(anim, renderer, ui);
 // 	}
 // });
 
-// lns.timeline.init();
 // lns.playback.toggleStats();
 
 

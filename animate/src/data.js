@@ -12,54 +12,100 @@
 	partly all here because it does save state after each ...
 */
 
-import * as Cool from '../../../cool/cool.js';
+import { UIPanel } from '../../../oi/src/oi.js';
 
-export function Data(lns) {
+export class DataPanel extends UIPanel {
+	constructor(ui, anim) {
+		super({ id: "data", ui });
 
-	let copyFrame = []; // copy layers in frame
-	let copyFrames = []; // copy multiple frames
-	let pasteFrames = []; // frame indexes to paste copy frame to
-	let saveStates = {
-		current: {
-			drawings: undefined,
-			layers: undefined
-		},
-		prev: {
-			drawings: undefined,
-			layers: undefined
-		}
-	};
+		this.anim = anim;
 
-	/* save current state of frames and drawing - one undo */
-	function saveState() {
-		// only thing that uses lodash
-		/*
-			if save state already exists, save current to previous state
-			if not save previous to new
-			always save current to new
-		*/
+		this.copyFrameLayers = [];
+		this.copyMultiFrameLayers = [];
+		this.pasteFrameIndexes = [];
 
-		/*
-			use this? https://stackoverflow.com/questions/728360/how-do-i-correctly-clone-a-javascript-object
-		*/
+		this.saveStates = {
+			current: {
+				drawings: undefined,
+				layers: undefined
+			},
+			prev: {
+				drawings: undefined,
+				layers: undefined
+			}
+		};
 
-		if (saveStates.current.drawings) {
-			saveStates.prev.drawings = structuredClone(saveStates.current.drawings);
-			saveStates.prev.layers = structuredClone(saveStates.current.layers);
+		// copy paste 
+		this.addLabel("copy/paste");
+		// *** redo all the panel labels ... maybe need row? collection ... 
+		this.addBreak();
+
+		// *** do this in other modules
+		this.addButtons(
+			{ obj: this },
+			[
+				{ key: "c", ref: "copy", },
+				{ key: "shift-c", ref: "addMultipleCopies", },
+				{ key: "v", ref: "paste", },
+				{ key: "alt-c", ref: "copyRange", },
+				{ key: "alt-v", ref: "pasteRange", },
+			]
+		);
+
+		this.addBreak();
+		this.addLabel("cut");
+		this.addBreak();
+
+		this.addButtons(
+			{ obj: this },
+			[
+				{ key: "x", ref: "clearLines", },
+				{ key: "z", ref: "cutLastLine", },
+				{ key: "shift-z", ref: "cutLastSegment", },
+				{ key: "d", ref: "deleteFrame", },
+				{ key: "shift-d", ref: "deleteFrameRange", },
+				{ key: "ctrl-x", ref: "cutTopLayer", },
+				{ key: "alt-x", ref: "cutBottomLayer", },
+				{ key: "shift-x", ref: "clearFrame", },
+			]
+		);
+
+		this.addBreak();
+		this.addLabel("data");
+		this.addBreak();
+
+		this.addButtons(
+			{ obj: this },
+			[
+				{ key: 'ctrl-z', ref: "undo",  },
+				{ key: 'shift-o', ref: "offsetDrawing" },
+				{ key: 'i', ref: "insertBefore" },
+				{ key: 'shift-i', ref: "insertAfter" },
+				{ ref: "applyOffset", },
+				{ ref: "pruneDrawings", },
+			]
+		);
+	}
+
+	saveState() {
+		if (this.saveStates.current.drawings) {
+			this.saveStates.prev.drawings = structuredClone(this.saveStates.current.drawings);
+			this.saveStates.prev.layers = structuredClone(this.saveStates.current.layers);
 		} else {
-			saveStates.prev.drawings = structuredClone(lns.anim.drawings);
-			saveStates.prev.layers = structuredClone(lns.anim.layers);
+			this.saveStates.prev.drawings = structuredClone(this.anim.drawings);
+			this.saveStates.prev.layers = structuredClone(this.anim.layers);
 		}
 
-		saveStates.current.drawings = structuredClone(lns.anim.drawings);
-		saveStates.current.layers = structuredClone(lns.anim.layers);
+		this.saveStates.current.drawings = structuredClone(this.anim.drawings);
+		this.saveStates.current.layers = structuredClone(this.anim.layers);
 	}
 	
-	function undo() {
+	// *** needs later testing
+	undo() {
 
 		if (saveStates.prev.drawings) {
-			lns.anim.drawings = structuredClone(saveStates.prev.drawings);
-			lns.anim.layers = structuredClone(saveStates.prev.layers);
+			this.anim.drawings = structuredClone(saveStates.prev.drawings);
+			this.anim.layers = structuredClone(saveStates.prev.layers);
 			
 			saveStates.current.drawings = structuredClone(saveStates.prev.drawings);
 			saveStates.current.layers = structuredClone(saveStates.prev.layers);
@@ -72,142 +118,151 @@ export function Data(lns) {
 		/* these functions just call one function, should just call directly .. but this is still being worked on */
 		lns.drawings.clear();
 		lns.ui.update();
-	} /* ctrl z - undo one save state */
+	}
 
-	function copy() {
-		lns.styles.reset();
-		copyFrame = [];
-
-		// -1 dont copy draw frame 
-		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
-				copyFrame.push(lns.anim.layers[i]);
+	copy() {
+		this.ui.panels.styles.reset();
+		this.copyFrameLayers = [];
+		// -1 dont copy draw frame -- *** redo this part
+		// use getLayersInFrame ***
+		for (let i = 0; i < this.anim.layers.length - 1; i++) {
+			if (this.anim.layers[i].isInFrame(this.anim.currentFrame)) {
+				this.copyFrameLayers.push(this.anim.layers[i]);
 			}
 		}
-	} /* c key */
+	}
 
-	function paste() {
-		saveState();
+	paste() {
+		this.saveState();
 
-		if (pasteFrames.length == 0) pasteFrames.push(lns.anim.currentFrame);
+		if (this.pasteFrameIndexes.length === 0) {
+			this.pasteFrameIndexes.push(this.anim.currentFrame);
+		}
 
-		/* copy one frame onto multiple */
-		for (let i = 0; i < pasteFrames.length; i++) {
-			for (let j = 0; j < copyFrame.length; j++) {
-				const layer = copyFrame[j].addIndex(pasteFrames[i]);
-				if (layer) lns.anim.addLayer(layer);
+		for (let i = 0; i < this.pasteFrameIndexes.length; i++) {
+			for (let j = 0; j < this.copyFrameLayers.length; j++) {
+				const layer = this.copyFrameLayers[j].addIndex(this.pasteFrameIndexes[i]);
+				if (layer) this.anim.addLayer(layer);
 			}
 		}
 
-		pasteFrames = []; // clear pasteframes after paste ??
-		lns.styles.reset();
-		lns.ui.update();
-	} /* v key */
+		// clear paste frame indexes
+		this.pasteFrameIndexes = [];
+		
+		this.ui.panels.styles.reset();
+		this.ui.update();
+	}
 
-	function addMultipleCopies() {
-		saveState();
-		copyFrame = [];
-		let n = +prompt("Number of copies: ", 1);
-		copy();
+	addMultipleCopies() {
+		this.saveState();
+		this.copyFrameLayers = [];
+		let n = +prompt("numer of frames to add copy: ", 1);
+		this.copy();
 		if (n) {
 			for (let i = 0; i < n; i++) {
-				lns.playback.next(1);
-				paste();
+				this.ui.panels.playback.next(1);
+				this.paste();
 			}
 		}
-		lns.ui.update();
-	} /* shift - c */
+		this.ui.update();
+	}
 
-	function copyRange() {
-		saveState();
+	copyRange() {
+		this.saveState();
 		const start = +prompt("Start frame:");
 		const end = +prompt("end frame:");
-		copyFrames = [];
+		this.copyMultiFrameLayers = [];
 		for (let i = start; i <= end; i++) {
-			copyFrames[i] = [];
-			for (let j = 0; j < lns.anim.layers.length - 1; j++) {
-				if (lns.anim.layers[j].isInFrame(i))
-					copyFrames[i].push(lns.anim.layers[j]);
+			this.copyMultiFrameLayers[i] = [];
+			for (let j = 0; j < this.anim.layers.length - 1; j++) {
+				if (this.anim.layers[j].isInFrame(i))
+					this.copyMultiFrameLayers[i].push(this.anim.layers[j]);
 			}
 		}
-	} /* alt - c */
+	}
 
-	function pasteRange() {
-		saveState();
-		for (let i = 0; i < copyFrames.length; i++) {
-			const layers = copyFrames[i];
+	pasteRange() {
+		this.saveState();
+		for (let i = 0; i < this.copyMultiFrameLayers.length; i++) {
+			const layers = this.copyMultiFrameLayers[i];
 			if (layers) {
 				for (let j = 0; j < layers.length; j++) {
-					const layer = layers[j].addIndex(lns.anim.currentFrame);
-					if (layer) lns.anim.addLayer(layer);
+					const layer = layers[j].addIndex(this.anim.currentFrame);
+					if (layer) this.anim.addLayer(layer);
 				}
 			}
-			lns.playback.next(1);
+			this.ui.panels.playback.next(1);
 		}
-		lns.styles.reset();
+		this.ui.panels.styles.reset();
 		lns.ui.update();
-	} /* alt - v */
+	}
 
-	function clearLines() {
-		saveState();
-		lns.anim.getCurrentDrawing().reset();
-	} /* x key */
+	clearLines() {
+		this.saveState();
+		this.anim.getCurrentDrawing().reset();
+	}
 
-	function clearLayers() {
-		saveState(); /* will save lines ... */
-		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
-			// console.log(i, lns.anim.layers[i].startFrame);
-			if (!lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) continue;
-			lns.anim.layers[i].removeIndex(lns.anim.currentFrame, () => {
-				lns.anim.layers.splice(i, 1);
+	// *** needs later testing
+	clearLayers() {
+		this.saveState(); /* will save lines ... */
+		for (let i = this.anim.layers.length - 2; i >= 0; i--) {
+			// console.log(i, this.anim.layers[i].startFrame);
+			if (!this.anim.layers[i].isInFrame(this.anim.currentFrame)) continue;
+			this.anim.layers[i].removeIndex(this.anim.currentFrame, () => {
+				this.anim.layers.splice(i, 1);
 			});
 		}
 		lns.ui.update();
-	} /* called by clear frame */
+	}
 
-	function cutTopLayer() {
-		saveState();
-		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
-			if (!lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) continue;
-			if (lns.anim.layers[i].groupNumber >= 0) continue;
-			lns.anim.layers[i].removeIndex(lns.anim.currentFrame, () => {
-				lns.anim.layers.splice(i, 1);
-			});
-			break;
-		}
-		lns.ui.update();
-	} /* ctrl - x */
-
-	function cutBottomLayer() {
-		saveState();
-		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			if (!lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) continue;
-			if (lns.anim.layers[i].groupNumber >= 0) continue;
-			lns.anim.layers[i].removeIndex(lns.anim.currentFrame, function() {
-				lns.anim.layers.splice(i, 1);
+	// *** needs later testing
+	cutTopLayer() {
+		this.saveState();
+		for (let i = this.anim.layers.length - 2; i >= 0; i--) {
+			if (!this.anim.layers[i].isInFrame(this.anim.currentFrame)) continue;
+			if (this.anim.layers[i].groupNumber >= 0) continue;
+			this.anim.layers[i].removeIndex(this.anim.currentFrame, () => {
+				this.anim.layers.splice(i, 1);
 			});
 			break;
 		}
 		lns.ui.update();
-	} /* alt - x */
+	}
 
-	function clearFrame() {
-		saveState();
-		clearLines();
-		clearLayers();
-	}	/* shift - x */
+	// *** needs later testing
+	cutBottomLayer() {
+		this.saveState();
+		for (let i = 0; i < this.anim.layers.length - 1; i++) {
+			if (!this.anim.layers[i].isInFrame(this.anim.currentFrame)) continue;
+			if (this.anim.layers[i].groupNumber >= 0) continue;
+			this.anim.layers[i].removeIndex(this.anim.currentFrame, function() {
+				this.anim.layers.splice(i, 1);
+			});
+			break;
+		}
+		lns.ui.update();
+	}
 
-	function deleteFrame(_index) {
-		saveState();
+	// *** needs later testing
+	clearFrame() {
+		this.saveState();
+		this.clearLines();
+		this.clearLayers();
+	}
 
-		const index = _index !== undefined ? _index : lns.anim.currentFrame;
-		const f = lns.anim.currentFrame;
-		// -2 to skip draw layer
-		for (let i = lns.anim.layers.length - 2; i >= 0; i--) {
-			const layer = lns.anim.layers[i];
+	// *** needs later testing
+	deleteFrame(_index) {
+		this.saveState();
+
+		const index = _index !== undefined ? _index : this.anim.currentFrame;
+		const f = this.anim.currentFrame;
+		// -2 to skip draw layer *** fix anything with draw layer ... maybe
+		// 
+		for (let i = this.anim.layers.length - 2; i >= 0; i--) {
+			const layer = this.anim.layers[i];
 			if (layer.endFrame < f) continue;
 			else if (layer.startFrame === f && layer.endFrame === f) {
-				lns.anim.removeLayer(layer);
+				this.anim.removeLayer(layer);
 			}
 			else if (layer.endFrame > f && layer.startFrame > f) {
 				layer.startFrame -= 1;
@@ -218,119 +273,67 @@ export function Data(lns) {
 			}
 			layer.resetTweens();
 		}
-		lns.anim.updateStates();
+		this.anim.updateStates();
 		lns.ui.update();
-	} /* d key */
+	}
 
-	function deleteFrameRange() {
-		saveState();
+	// *** needs later testing
+	deleteFrameRange() {
+		this.saveState();
 
 		const startFrame = +prompt("Start frame:");
 		const endFrame = +prompt("End frame:");
 
 		if (endFrame > 0) {
 			for (let i = endFrame; i >= startFrame; i--) {
-				deleteFrame(i);
+				this.deleteFrame(i);
 			}
 
-			lns.anim.cutEnd();
-			lns.playback.setFrame(0);
+			this.anim.cutEnd();
+			this.ui.panels.playback.setFrame(0);
 		}
-	} /* shift - d */
+	}
 
-	function cutLastSegment() {
-		saveState();
-		lns.anim.getCurrentDrawing().popPoint();
-	} /* z key */
+	cutLastSegment() {
+		this.saveState();
+		this.anim.getCurrentDrawing().popPoint();
+	}
 
-	function cutLastLine() {
-		saveState();
-		lns.anim.getCurrentDrawing().popLine();
-	} /* shift z */
+	cutLastLine() {
+		this.saveState();
+		this.anim.getCurrentDrawing().popLine();
+	}
 
-	function insert(dir) {
-		lns.styles.reset();
-		saveState();
-		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
+	insert(dir=0) {
+		this.ui.panels.styles.reset();
+		this.saveState();
+		for (let i = 0, len = this.anim.layers.length - 1; i < len; i++) {
 			// insert before dir  0, after 1
-			lns.anim.layers[i].shiftIndex(lns.anim.currentFrame + dir, 1);
-			lns.anim.addLayer(lns.anim.layers[i].removeIndex(lns.anim.currentFrame + dir));
+			this.anim.layers[i].shiftIndex(this.anim.currentFrame + dir, 1);
+			this.anim.addLayer(this.anim.layers[i].removeIndex(this.anim.currentFrame + dir));
 		}
-		lns.anim.shiftStates(lns.anim.currentFrame + dir);
-		lns.playback.next(dir);
-		lns.ui.update();
-	} /* i, shift-i key */
+		this.anim.shiftStates(this.anim.currentFrame + dir);
+		this.ui.panels.playback.next(dir);
+		this.ui.update();
+	}
 
-	function quickAnimate(type) {
-		lns.styles.reset();
-		saveState();
-		const n = +prompt('Number of frames?');
-		if (!n) return;
-		for (let i = 0; i < lns.anim.layers.length - 1; i++) {
-			const layer = lns.anim.layers[i];
-			if (!layer.isInFrame(lns.anim.currentFrame)) continue;
-			layer.endFrame = lns.anim.currentFrame + n;
-			if (lns.anim.state.end < layer.endFrame) lns.anim.state.end = layer.endFrame;
+	insertBefore() { this.insert(0); }
+	insertAfter() { this.insert(1); }
 
-			switch(type) {
-				case "Draw":
-					layer.addTween({
-						prop: 'endIndex',
-						startFrame: lns.anim.currentFrame,
-						endFrame: lns.anim.currentFrame + n,
-						startValue: 0,
-						endValue: lns.anim.drawings[layer.drawingIndex].length
-					});
-				break;
-				case "Reverse":
-					layer.addTween({
-						prop: 'startIndex',
-						startFrame: lns.anim.currentFrame,
-						endFrame: lns.anim.currentFrame + n,
-						startValue: 0,
-						endValue: lns.anim.drawings[layer.drawingIndex].length
-					});
-				break;
-				case "DrawReverse":
-					const mid = Math.floor(n / 2);
-					layer.addTween({
-						prop: 'endIndex',
-						startFrame: lns.anim.currentFrame,
-						endFrame: lns.anim.currentFrame + mid,
-						startValue: 0,
-						endValue: lns.anim.drawings[layer.drawingIndex].length
-					});
-					layer.addTween({
-						prop: 'startIndex',
-						startFrame: lns.anim.currentFrame + mid,
-						endFrame: lns.anim.currentFrame + n,
-						startValue: 0,
-						endValue: lns.anim.drawings[layer.drawingIndex].length
-					});
-				break;
-			}
-
-			// reset end of anim
-			if (lns.anim.stateName == 'default' && lns.anim.state.end < layer.endFrame) {
-				lns.anim.state.end = layer.endFrame;
-			}
-		}
-		lns.ui.update();
-	} /* a key */
-
-	function offsetDrawing(offset) {
-		saveState();
+	// any real reason not to apply to begin with?
+	offsetDrawing(offset) {
+		this.saveState();
 		// get toggled layers or offset all layers in frame
-		let layers = lns.anim.layers.filter(layer => layer.isToggled);
+		let layers = this.anim.layers.filter(layer => layer.isToggled);
 		if (layers.length == 0) {
-			layers = lns.anim.layers.filter(layer => layer.isInFrame(lns.anim.currentFrame));
+			layers = this.anim.layers.filter(layer => layer.isInFrame(this.anim.currentFrame));
 		}
 
 		// then reset drawing to preserve any lines
-		lns.styles.reset();
+		this.ui.panels.styles.reset();
 
 		if (layers) {
-			saveState();
+			this.saveState();
 			if (!offset) offset = { x: +prompt("x"), y: +prompt("y") };
 			if (offset) {
 				for (let i = 0; i < layers.length; i++) {
@@ -341,13 +344,14 @@ export function Data(lns) {
 		} else {
 			console.log("%c No layers in frame ", "color:yellow; background:black;");
 		}
-	} /* q key  */
+	}
 
-	function applyOffset() {
-		saveState();
-		for (let i = 0; i < lns.anim.layers.length; i++) {
-			const layer = lns.anim.layers[i];
-			const drawing = lns.anim.drawings[layer.drawingIndex];
+	// *** needs later testing
+	applyOffset() {
+		this.saveState();
+		for (let i = 0; i < this.anim.layers.length; i++) {
+			const layer = this.anim.layers[i];
+			const drawing = this.anim.drawings[layer.drawingIndex];
 			for (let i = 0; i < drawing.length; i++) {
 				if (drawing.points[i] === Points.END) continue;
 				if (drawing.points[i] === Points.ADD) continue;
@@ -359,67 +363,42 @@ export function Data(lns) {
 		}
 	}
 
-	function pruneDrawings() {
-		saveState();
+	// *** needs later testing
+	pruneDrawings() {
+		this.saveState();
 
 		const nonNulls = [];
 
-		for (let i = 0; i < lns.anim.drawings.length; i++) {
-			const drawing = lns.anim.drawings[i];
+		for (let i = 0; i < this.anim.drawings.length; i++) {
+			const drawing = this.anim.drawings[i];
 			if (drawing) nonNulls.push(i);
 		}
 
-		for (let i = 0; i < lns.anim.layers.length; i++) {
-			const layer = lns.anim.layers[i];
+		for (let i = 0; i < this.anim.layers.length; i++) {
+			const layer = this.anim.layers[i];
 			const index = nonNulls.indexOf(layer.drawingIndex);
 			layer.drawingIndex = index;
 		}
 
-		for (let i = lns.anim.drawings.length; i >= 0; i--) {
-			if (lns.anim.drawings[i] == null) lns.anim.drawings.splice(i, 1);
+		for (let i = this.anim.drawings.length; i >= 0; i--) {
+			if (this.anim.drawings[i] == null) this.anim.drawings.splice(i, 1);
 		}
 	}
 
-	function connect() {
-
-		const copyPanel = lns.ui.getPanel('copy', { label: 'Copy / Paste' });
-		lns.ui.addCallbacks([
-			{ callback: copy, key: 'c', text: 'Copy' },
-			{ callback: addMultipleCopies, key: 'shift-c', text: 'Multi Copy' },
-			{ callback: paste, key: 'v', text: 'Paste' },
-			{ callback: copyRange, key: 'alt-c', text: 'Copy Range' },
-			{ callback: pasteRange, key: 'alt-v', text: 'Paste Range' },
-		]);
-
-		const cutPanel = lns.ui.getPanel('cut', { label: 'Cut' });
-		lns.ui.addCallbacks([
-			{ callback: clearLines, key: 'x', text: 'Clear Lines' },
-			{ callback: cutLastLine, key: 'z', text: 'Cut Last Line' },
-			{ callback: cutLastSegment, key: 'shift-z', text: 'Cut Last Segment' },
-			{ callback: deleteFrame, key: 'd', text: 'Delete Frame' },
-			{ callback: deleteFrameRange, key: 'shift-d', text: 'Delete Frame Range' },
-			{ callback: cutTopLayer, key: 'ctrl-x', text: 'Cut Top Layer' },
-			{ callback: cutBottomLayer, key: 'alt-x', text: 'Cut Bottom Layer' },
-			{ callback: clearFrame, key: 'shift-x', text: 'Clear Frame' },
-		]);
-
-		const dataPanel = lns.ui.getPanel('data');
-		lns.ui.addCallbacks([
-			{ callback: undo, key: 'ctrl-z', text: 'Undo', },
-			{ callback: offsetDrawing, key: 'shift-o', text: 'Offset', },
-			{ callback: insert, key: 'i', text: 'Insert Before', args: [0], },
-			{ callback: insert, key: 'shift-i', text: 'Insert After', args: [1], },
-			{ callback: applyOffset, text: 'Apply Offset', },
-			{ callback: pruneDrawings, text: 'Prune Drawings', },
-		]);
-
-		const animatePanel = lns.ui.getPanel('animate');
-		lns.ui.addCallbacks([
-			{ callback: quickAnimate, key: 'a', text: 'Draw', args: ['Draw'], },
-			{ callback: quickAnimate, key: 'shift-a', text: 'Reverse', args: ['Reverse'], },
-			{ callback: quickAnimate, key: 'ctrl-a', text: 'Draw + Reverse', args: ['DrawReverse'], },
-		]);
+	// *** test
+	pruneStyles() {
+		const stylesInUse = [
+			...new Set(this.anim.layers.map(l => l.styleIndex))
+		];
+		for (let i = this.anim.styles.length - 1; i >= 0; i--) {
+			if (!stylesInUse.includes(i)) {
+				this.anim.styles.splice(i, 1);
+				for (let j = 0; j < this.anim.layers.length; j++) {
+					if (this.anim.layers[j].styleIndex >= i) {
+						this.anim.layers[j].styleIndex--;
+					}
+				}
+			}
+		}
 	}
-
-	return { connect, saveState, copy, paste };
 }

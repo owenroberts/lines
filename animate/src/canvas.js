@@ -12,7 +12,7 @@ import { Points } from '../../src/lines.js';
 import { UIPanel } from '../../../oi/src/oi.js';
 
 export class CanvasPanel extends UIPanel {
-	constructor(anim, renderer, ui) {
+	constructor(ui, anim, renderer) {
 		super({ id: 'canvas', ui });
 
 		this.anim = anim;
@@ -66,9 +66,10 @@ export class CanvasPanel extends UIPanel {
 
 		this.addButton({
 			key: "`",
-			obj: this,
-			ref: "isFullSize",
+			// obj: this,
+			// ref: "isFullSize",
 			text: "full",
+			type: "UIToggle",
 			callback: value => { this.setFullSize(value); },
 		});
 
@@ -87,6 +88,7 @@ export class CanvasPanel extends UIPanel {
 		}
 	}
 
+	// *** test this
 	fitCanvasToDrawing() {
 		// this.ui.panels.styles.reset();
 		
@@ -119,7 +121,9 @@ export class CanvasPanel extends UIPanel {
 	}
 
 	setFullSize(value) {
-		if (value) {
+		this.isFullSize = value;
+		console.log(this.isFullSize);
+		if (this.isFullSize) {
 			this.tempScale = this.renderer.scale;
 			
 			// const rect = container.el.getBoundingClientRect();

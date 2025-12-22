@@ -1,178 +1,120 @@
-/*
-	properties for drawing with brush
-*/
-
-import * as Cool from "../../../cool/cool.js";
+import { random, randomInt } from "../../../cool/cool.js";
 import { Points } from '../../src/lines.js';
+import { UIPanel } from '../../../oi/src/oi.js';
 
-export function Brush(lns) {
+/**
+ * props for drawing in "brush" mode
+ */
+export class BrushPanel extends UIPanel {
+	constructor(ui, anim, renderer) {
+		super({ id: 'brush', ui });
+
+		this.anim = anim;
+		this.renderer = renderer;
 	
-	let isActive = false;
-	let isGrass = false;
+		this.isActive = false;
+		this.isGrass = false;
 
-	let brushSpreadXLeft = 0;
-	let brushSpreadXRight = 0;
-	let brushSpreadYDown = 0;
-	let brushSpreadYUp = 0;
-	let brushSpreadMultiplier = 1;
-	let brushRandomX = 0;
-	let brushRandomY = 0;
-	let brushSegmentsMin = 1;
-	let brushSegmentsMax = 3;
-	
-	let fillActive = false;
-	let fillArea = 10;
-	let fillStartPoint;
+		this.spreadXLeft = 0;
+		this.spreadXRight = 0;
+		this.spreadYDown = 0;
+		this.spreadYUp = 0;
+		this.spreadMultiplier = 1;
+		this.randomX = 0;
+		this.randomY = 0;
+		this.segmentsMin = 1;
+		this.segmentsMax = 3;
+		
+		this.fillActive = false;
+		this.fillArea = 10;
+		this.fillStartPoint = [];
 
-	function add(drawing, origin) {
+		this.addRefs(
+			{ obj: this, },
+			[
+				{ ref: "isActive", key: 'b', },	
+				{ ref: "isGrass", key: 'ctrl-b', },	
+				{ ref: "spreadXLeft", range: [0, 10], },	
+				{ ref: "spreadXRight", range: [0, 10], },	
+				{ ref: "spreadYDown", range: [0, 10], },	
+				{ ref: "spreadYUp", range: [0, 10], },	
+				{ ref: "randomX", range: [0, 1], },	
+				{ ref: "randomY", range: [0, 1], },	
+				{ ref: "segmentsMin", range: [1, 5], },	
+				{ ref: "segmentsMax", range: [2, 5], },	
+				{ ref: "spreadMultiplier", range: [1, 32], },	
+				{ ref: "fillArea", range: [10, 50], },	
+			]
+		);
 
+	}
 
-		const numPoints = Cool.randomInt(brushSegmentsMin, brushSegmentsMax);
+	draw(drawing, origin) {
+
+		const numPoints = randomInt(this.segmentsMin, this.segmentsMax);
 		const dist = [
-			Cool.random(-brushSpreadXLeft, brushSpreadXRight) * brushSpreadMultiplier,  
-			Cool.random(-brushSpreadYDown, brushSpreadYUp) * brushSpreadMultiplier
+			random(-this.spreadXLeft, this.spreadXRight) * this.spreadMultiplier,  
+			random(-this.spreadYDown, this.spreadYUp) * this.spreadMultiplier
 		];
+
 		for (let i = 1; i <= numPoints; i ++) {
-			
-			let _x = (isGrass ? 
-				Cool.random(-brushSpreadXLeft, brushSpreadXRight)
-			 	* brushSpreadMultiplier 
-				* (1 - Cool.random(brushRandomX)) : // this does nothing ... already random
+			let _x = (this.isGrass ? 
+				random(-this.spreadXLeft, this.spreadXRight)
+			 	* this.spreadMultiplier 
+				* (1 - random(this.randomX)) : // this does nothing ... already random
 			 	dist[0])
-				* (isGrass ? (i / numPoints) : 1);
+				* (this.isGrass ? (i / numPoints) : 1);
 			
-			let _y = (isGrass ? 
-				Cool.random(-brushSpreadYDown, brushSpreadYUp)
-			 	* brushSpreadMultiplier
-			 	* (1 - Cool.random(brushRandomY)) :
+			let _y = (this.isGrass ? 
+				random(-this.spreadYDown,this. spreadYUp)
+			 	* this.spreadMultiplier
+			 	* (1 - random(this.randomY)) :
 			 	dist[1])
-				* (isGrass ? (i / numPoints) : 1);
+				* (this.isGrass ? (i / numPoints) : 1);
 			
 			let point = [origin[0] + Math.round(_x), origin[1] - Math.round(_y)];
-			if (point[0] > 0 && point[0] < lns.canvas.getWidth() && 
-				point[1] > 0 && point[1] < lns.canvas.getHeight()) {
+			if (point[0] > 0 && point[0] < this.renderer.width && 
+				point[1] > 0 && point[1] < this.renderer.height) {
 				drawing.add(point);
 			}
 		}
 		drawing.add(Points.END);
 	}
 
-	function startFill(point) {
-		fillStartPoint = point;
-		fillActive = true;
+	startFill(point) {
+		this.fillStartPoint = point;
+		this.fillActive = true;
 	}
 
-	function endFill(drawing, point) {
-		const w = Math.abs(fillStartPoint.x - point.x);
-		const h = Math.abs(fillStartPoint.y - point.y);
+	endFill(drawing, point) {
+		const w = Math.abs(this.fillStartPoint[0] - point[0]);
+		const h = Math.abs(this.fillStartPoint[1] - point[1]);
 		const ratio =  w / h;
-		const c = w / (ratio * fillArea / 2);
-		const r = h / (1 / ratio * fillArea / 2);
-		let [startX, endX] = fillStartPoint.x < point.x ? 
-			[fillStartPoint.x, point.x] : 
-			[x, fillStartPoint.x];
-		let [startY, endY] = fillStartPoint.y < point.y ? 
-			[fillStartPoint.y, point.y] : 
-			[y, fillStartPoint.y];
+		const c = w / (ratio * this.fillArea / 2);
+		const r = h / (1 / ratio * this.fillArea / 2);
+		
+		let [startX, endX] = this.fillStartPoint[0] < point[0] ? 
+			[this.fillStartPoint[0], point[0]] : 
+			[point[0], this.fillStartPoint[0]];
+		
+		let [startY, endY] = this.fillStartPoint[1] < point[1] ? 
+			[this.fillStartPoint[1], point[1]] : 
+			[point[1], this.fillStartPoint[1]];
 		
 		for (let x = startX; x < endX; x += c) {
 			for (let y = startY; y < endY; y += r) {
-				const _x = Math.round(x) + Cool.randomInt(-c/2, c/2);
-				const _y = Math.round(y) + Cool.randomInt(-r/2, r/2);
-				const points = Cool.randomInt(1,3);
+				const _x = Math.round(x) + randomInt(-c/2, c/2);
+				const _y = Math.round(y) + randomInt(-r/2, r/2);
+				const points = randomInt(1,3);
 				for (let i = 0; i < points; i ++) {
 					drawing.add([
-						_x + Cool.randomInt(-1, 1),
-						_y + Cool.randomInt(-1, 1)
+						_x + randomInt(-1, 1),
+						_y + randomInt(-1, 1)
 					]);
 				}
 				drawing.add(Points.END);
 			}
 		}
-		fillActive = false;
+		this.fillActive = false;
 	}
-
-	function connect() {
-
-		lns.ui.addProps({
-			'brushIsActive': {
-				type: 'UIToggleCheck',
-				value: isActive,
-				label: 'Use Brush',
-				key: 'b',
-				callback: value => { isActive = value; }
-			},
-			'isGrass': {
-				type: 'UIToggleCheck',
-				value: isGrass,
-				label: 'Is Grass',
-				key: 'ctrl-b',
-				callback: value => { isGrass = value; }
-			},
-			'brushSpreadXLeft': {
-				row: true,
-				type: 'UINumberRange',
-				range: [0, 10],
-				callback: value => { brushSpreadXLeft = value; },
-			},
-			'brushSpreadXRight': {
-				type: 'UINumberRange',
-				range: [0, 10],
-				callback: value => { brushSpreadXRight = value; },
-			},
-			'brushSpreadYDown': {
-				type: 'UINumberRange',
-				range: [0, 10],
-				callback: value => { brushSpreadYDown = value; },
-			},
-			'brushSpreadYUp': {
-				type: 'UINumberRange',
-				range: [0, 10],
-				callback: value => { brushSpreadYUp = value; },
-			},
-			'brushRandomX': {
-				type: 'UINumberRange',
-				range: [0, 1],
-				step: 0.01,
-				callback: value => { brushRandomX = value; },
-			},
-			'brushRandomY': {
-				type: 'UINumberRange',
-				range: [0, 1],
-				step: 0.01,
-				callback: value => { brushRandomY = value; },
-			},
-			'brushSegmentsMin': {
-				type: 'UINumberStep',
-				range: [1, 5],
-				value: 1,
-				callback: value => { brushSegmentsMin = value; },
-			},
-			'brushSegmentsMax': {
-				type: 'UINumberStep',
-				range: [2, 5],
-				value: 3,
-				callback: value => { brushSegmentsMax = value; },
-			},
-			'brushSpreadMultiplier': {
-				type: 'UINumberStep',
-				range: [1, 32],
-				value: 1,
-				callback: value => { brushSpreadMultiplier = value; },
-			},
-			'brushFillArea': {
-				type: 'UINumberRange',
-				range: [10, 50],
-				value: 10,
-				callback: value => { fillArea = value; }
-			},
-		}, 'brush');
-	}
-
-	return {
-		connect, add,
-		startFill, endFill,
-		isActive() { return isActive; },
-		fillActive() { return fillActive; },
-	};
 }

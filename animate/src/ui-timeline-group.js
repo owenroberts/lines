@@ -3,6 +3,8 @@ import { UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINu
 export class UITimelineGroup extends UICollection {
 	constructor(layers, params) {
 		super(params);
+		this.ui = params.ui;
+		this.anim = params.anim;
 		this.index = params.index;
 		this.layers = layers;
 		this.addClass('group');
@@ -111,21 +113,20 @@ export class UITimelineGroup extends UICollection {
 
 				const modal = new UIModal({
 					title: 'Remove Layers', 
-					app: lns, 
-					position: this.position, 
+					ui: this.ui, 
 					callback: clearFunc, 
 					onClear: clearFunc
 				});
 
-				for (let i = 0, len = lns.anim.layers.length; i < len; i++) {
-					if (lns.anim.layers[i].groupNumber !== this.index) continue;
-					const layer = lns.anim.layers[i];
+				for (let i = 0, len = this.anim.layers.length; i < len; i++) {
+					if (this.anim.layers[i].groupNumber !== this.index) continue;
+					const layer = this.anim.layers[i];
 					// current highlight system cant do diff layers
 					// const color = '#' + Math.floor(Math.random()*16777215).toString(16);
 					// layer.isHighlighted = true;
 					// layer.highlightColor = color;
 					const layerButton = new UIButton({
-						text: `Layer ${i}, Drawing ${layer.drawingIndex}`,
+						text: `layer ${i}, drawing ${layer.drawingIndex}`,
 						// css: { "background": color },
 						callback: function() {
 							layer.groupNumber = -1;
@@ -197,8 +198,7 @@ export class UITimelineGroup extends UICollection {
 
 		const modal = new UIModal({
 			title: 'Edit Group', 
-			app: lns,
-			position: this.position, 
+			ui: this.ui,
 			callback: () => { this.update(); }
 		});
 
@@ -218,20 +218,20 @@ export class UITimelineGroup extends UICollection {
 
 		const tween = {
 			prop: 'endIndex',
-			startFrame: lns.anim.currentFrame,
-			endFrame: lns.anim.currentFrame + 10,
+			startFrame: this.anim.currentFrame,
+			endFrame: this.anim.currentFrame + 10,
 			startValue: 0,
 			endValue: 'end'
 		};
 
 		const modal = new UIModal({
 			title: 'Add Tween', 
-			app: lns, 
+			ui: this.ui,
 			position: this.position, 
 			callback: () => {
 				layers.forEach(layer => {
 					if (tween.endValue === 'end' && tween.prop === 'endIndex') {
-						tween.endValue = lns.anim.drawings[layer.drawingIndex].length;
+						tween.endValue = this.anim.drawings[layer.drawingIndex].length;
 					}
 					layer.addTween({ ...tween });
 				});

@@ -13,8 +13,7 @@ import { UIButton, UIModal, UIColor, UIPanel } from "../../../oi/src/oi.js";
 import { Style, Layer } from "../../src/lines.js";
 
 export class StylesPanel extends UIPanel {
-
-	constructor(anim, ui) {
+	constructor(ui, anim) {
 		super({ id: "styles", ui });
 
 		this.anim = anim;
@@ -22,6 +21,13 @@ export class StylesPanel extends UIPanel {
 		// not a anim prop bc refers to style of current layer, can change
 		// maybe define prop?
 		this.styleIndex = 0;
+
+		// set up obj/ref with changing ref
+		Object.defineProperty(this, "activeStyle", {
+			get: () => {
+				return this.anim.styles[this.styleIndex];
+			},
+		});
 
 		this.addButton({
 			key: "r", 
@@ -43,64 +49,55 @@ export class StylesPanel extends UIPanel {
 		});
 
 		this.addRef({
-			face: "linesInterval",
-			value: this.anim.styles[this.styleIndex].linesInterval,
+			obj: this.activeStyle,
+			ref: "linesInterval",
 			range: [1, 10],
-			callback: value => { this.setProperty("linesInterval", value); }
 		});
 
 		this.addRef({
-			face: "segmentNum",
-			value: this.anim.styles[this.styleIndex].segmentNum,
+			obj: this.activeStyle,
+			ref: "segmentNum",
 			range: [1, 10],
-			callback: value => { this.setProperty("segmentNum", value); }
 		});
 
 		this.addRef({
-			face: "jiggleRange",
-			value: this.anim.styles[this.styleIndex].jiggleRange,
+			obj: this.activeStyle,
+			ref: "jiggleRange",
 			range: [0, 10],
-			callback: value => { this.setProperty("jiggleRange", value); }
 		});
 
 		this.addRef({
-			face: "wiggleRange",
-			value: this.anim.styles[this.styleIndex].wiggleRange,
+			obj: this.activeStyle,
+			ref: "wiggleRange",
 			range: [0, 16],
-			callback: value => { this.setProperty("wiggleRange", value); }
 		});
 
 		this.addRef({
-			face: "wiggleSpeed",
-			value: this.anim.styles[this.styleIndex].wiggleSpeed,
+			obj: this.activeStyle,
+			ref: "wiggleSpeed",
 			range: [0, 8],
 			step: 0.05,
-			callback: value => { this.setProperty("wiggleSpeed", value); }
 		});
 
 		this.addRef({
-			face: "wiggleSegments",
-			value: this.anim.styles[this.styleIndex].wiggleSegments,
-			callback: value => { this.setProperty("wiggleSegments", value); }
+			obj: this.activeStyle,
+			ref: "wiggleSegments",
 		});
 
 		this.addRef({
-			face: "breaks",
-			value: this.anim.styles[this.styleIndex].breaks,
-			callback: value => { this.setProperty("breaks", value); }
+			obj: this.activeStyle,
+			ref: "breaks",
 		});
 
 		this.addRef({
-			face: "color",
+			obj: this.activeStyle,
+			ref: "color",
 			type: "UIColor",
-			value: this.anim.styles[this.styleIndex].color,
-			callback: value => { this.setProperty("color", value); }
 		});
 
 		this.addRef({
-			face: "lineWidth",
-			value: this.anim.styles[this.styleIndex].lineWidth,
-			callback: value => { this.setProperty("lineWidth", value); }
+			obj: this.activeStyle,
+			ref: "lineWidth",
 		});
 
 		this.addBreak();
@@ -126,15 +123,15 @@ export class StylesPanel extends UIPanel {
 
 	getNewStyle() {
 		const style = new Style({
-			linesInterval: +this.ui.faces.linesInterval.value,
-			segmentNum: +this.ui.faces.segmentNum.value,
-			jiggleRange: +this.ui.faces.jiggleRange.value,
-			wiggleRange: +this.ui.faces.wiggleRange.value,
-			wiggleSpeed: +this.ui.faces.wiggleSpeed.value,
-			color: this.ui.faces.color.value,
-			lineWidth: this.ui.faces.lineWidth.value,
+			linesInterval: +this.children.linesInterval.value,
+			segmentNum: +this.children.segmentNum.value,
+			jiggleRange: +this.children.jiggleRange.value,
+			wiggleRange: +this.children.wiggleRange.value,
+			wiggleSpeed: +this.children.wiggleSpeed.value,
+			color: this.children.color.value,
+			lineWidth: this.children.lineWidth.value,
 		});
-		this.ui.faces.styleIndex.value = styleIndex;
+		this.children.styleIndex.value = styleIndex;
 
 		this.anim.styles.push(style);
 		const layer = this.anim.getDrawLayer();
@@ -162,7 +159,7 @@ export class StylesPanel extends UIPanel {
 		if (isNewDrawing) {
 			this.anim.addNewDrawing();
 			/* seems repetietive - settings class ... ? */
-			this.ui.faces.color.addColor(layer.color); // add color to color pallette
+			this.children.color.addColor(layer.color); // add color to color pallette
 			this.anim.layers.push(this.getNewLayer(f));
 			// this.ui.panels.data.saveState();
 		}  
@@ -172,7 +169,7 @@ export class StylesPanel extends UIPanel {
 	}
 
 	setDefault() {
-		this.anim.styles[this.styleIndex].reset();
+		this.activeStyle.reset();
 		this.updatePropertiesUI();
 	}
 
@@ -193,15 +190,23 @@ export class StylesPanel extends UIPanel {
 	}
 
 	quickColorSelect() {
+
+		const tempColor = this.activeStyle.color;
+
 		const modal = new UIModal({ 
 			title: "select color", 
 			ui: this.ui,
+			callback: () => {
+				this.children.color.update(color.value);
+			},
+			onEscape: () => {
+				this.activeStyle.color = tempColor;
+			}
 		});
 
-		modal.add(new UIColor({
+		const color = modal.add(new UIColor({
 			callback: value => {
-				this.setProperty("color", value);
-				this.ui.faces.color.el.value = value;
+				this.activeStyle.color = value;
 			}
 		}));
 
@@ -211,8 +216,7 @@ export class StylesPanel extends UIPanel {
 				css: { background: color },
 				value: color,
 				callback: () => {
-					this.setProperty("color", color);
-					this.ui.faces.color.el.value = color; // need? move to set property?
+					this.children.color.update(color);
 					modal.clear();
 				}
 			}));
@@ -221,8 +225,7 @@ export class StylesPanel extends UIPanel {
 
 	randomColor() {
 		const color = "#" + Math.floor(Math.random()*16777215).toString(16);
-		this.setProperty("color", color);
-		this.ui.faces.color.el.value = color; // need?
+		this.children.color.update(color);
 	}
 
 	colorVariation() {
@@ -230,8 +233,7 @@ export class StylesPanel extends UIPanel {
 		n += randomInt(-500, 500); // wtf 
 		n = Math.max(0, n);
 		const color = "#" + n.toString(16);
-		this.setProperty("color", color);
-		this.ui.faces.color.el.value = color; // el ? need ?
+		this.children.color.update(color);
 	}
 
 }

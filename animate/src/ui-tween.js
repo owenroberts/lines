@@ -13,8 +13,7 @@ export class UITween extends UICollection {
 			callback: () => {
 				const modal = new UIModal({
 					title: 'Edit Tween', 
-					app: lns, 
-					position: this.position, 
+					ui: params.ui,
 					callback: () => { params.update(); }
 				});	
 
@@ -37,7 +36,7 @@ export class UITween extends UICollection {
 			btnClass: 'timeline-btn',
 			callback: () => {
 				layer.tweens.splice(layer.tweens.indexOf(this), 1);
-				lns.ui.update();
+				params.ui.update();
 			}
 		});
 

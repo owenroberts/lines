@@ -23,7 +23,7 @@ export class Anim {
 		this.isMultiLineWidth = renderer.isMultiLineWidth;
 
 		this.isPlaying = false;
-		this.isLoaded = false;
+		this.isLoaded = false; // need this???
 		this.isSuspended = false; // suspend updates during performance drag
 
 		this.drawings = [];
@@ -59,6 +59,7 @@ export class Anim {
 		if (this.init) this.init(); // pixel init -- put in pixel mixin (or class?)
 	}
 
+	// get rid of these get/sets
 	get frame() {
 		return this.currentFrame;
 	}
@@ -185,7 +186,9 @@ export class Anim {
 	}
 
 	setColor(color) {
-		if (this.ctx.strokeStyle !== color) this.ctx.strokeStyle = color;
+		if (this.ctx.strokeStyle !== color) {
+			this.ctx.strokeStyle = color;
+		}
 	}
 
 	getColor() {
@@ -278,6 +281,7 @@ export class Anim {
 
 			// if props change, stroke previous layers and change to new ...
 			if (this.isMultiColor || this.isMultiLineWidth) {
+				// console.log(this.ctx.strokeStyle);
 				
 				if (props.color !== currentProps.color || props.lineWidth !== currentProps.lineWidth) {
 					this.finish();
@@ -398,90 +402,9 @@ export class Anim {
 	}
 
 	loadData(json, callback) {
-
-		assert(json.v === LINES_VERSION, `json data v${json.v} is not correct version, lines version = ${LINES_VERSION}`);
-
-		this.isLoaded = true;
-		for (let i = 0; i < json.d.length; i++) {
-			this.drawings[i] = json.d[i] ? 
-				new Drawing(json.d[i]) : 
-				null;
-		}
-
-		// random starting interval count
-		const randomCount = Math.round(Math.random() * 5);
-
-		// layers
-		for (let i = 0; i < json.l.length; i++) {
-			const params = this.loadLayerParams(json.l[i]);
-			params.drawingEndIndex = this.drawings[params.drawingIndex].length;
-			params.linesCount = randomCount;
-			
-			const layer = new Layer(params);
-			this.layers[i] = layer;
-
-			// maybe load when not debuggin -- add loading progress
-			// this.drawings[layer.drawingIndex].update(layer); // -- this takes forever for load ...
-		}
-		console.log(this.layers);
-
-		const endFrame = this.layers.map(layer => { return layer.endFrame; });
-		this.endFrame = Math.max.apply(Math, endFrame);
-
-		// styles
+		
+		this.isLoaded = true; // still necessary?
 		// this.styles = structuredClone(json.st);
-		for (let i = 0; i < json.st.length; i++) {
-			const params = structuredClone(json.st[i]);
-			this.styles[i] = new Style(params);
-		}
-
-		// states
-		for (const key in json.s) {
-			this.states[key] = {
-				start: json.s[key][0],
-				end: json.s[key][1],
-				dir: json.s[key][2] ?? 1,
-				loop: json.s[key][3] ?? true,
-			};
-		}
-
-		this.sequences = structuredClone(json.q) ?? [];
-		this.sequenceIndex = +(json.qi ?? -1);
-
-		if (this.states.default) this.resetDefault();
-
-		this.dpf = json.dpf;
-
-		if (json.mc) this.isMultiColor = json.mc;
-		if (json.mw) this.isMultiLineWidth = json.mw;
-
-		this.width = json.w;
-		this.height = json.h;
-
-		this.halfWidth = Math.round(json.w / 2);
-		this.halfHeight = Math.round(json.h / 2);
-
-		if (callback) callback(json);
-		if (this.onLoad) this.onLoad();
-	}
-
-	loadLayerParams(layerParams) {
-		const params = {
-			drawingIndex: layerParams.d ?? 0,
-			startFrame: layerParams.f ? layerParams.f[0] : 0,
-			endFrame: layerParams.f ? layerParams.f[1] : 0,
-			x: layerParams.x ?? 0,
-			y: layerParams.y ?? 0,
-			styleIndex: layerParams.s ?? 0,
-			groupNumber: layerParams.g ?? -1,
-		};
-		if (layerParams.t) {
-			params.tweens = layerParams.t.map(t => { 
-				return { prop: t[0], startFrame: t[1], endFrame: t[2], startValue: t[3], endValue: t[4]}
-			});
-		}
-		if (layerParams.o) params.order = layerParams.o;
-		return params;
 	}
 
 	setOnLoad(callback) {

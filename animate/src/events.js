@@ -6,11 +6,24 @@ import { UIPanel } from '../../../oi/src/oi.js';
  * mouse / pointer events
  */
 export class EventsPanel extends UIPanel {
-	constructor(anim, renderer, ui) {
+	constructor(ui, anim, renderer) {
 		super({ id: 'events', ui });
 
 		this.anim = anim;
 		this.renderer = renderer;
+
+		this.renderer.canvas.oncontextmenu = () => {
+			return false;
+		};
+
+		// nice but doesn't matter for refs
+		// should this just be part of animate.js? or AnimateAnim???
+		// activeDrawing, activeLayer, activeStyle
+		Object.defineProperty(this, "activeDrawing", {
+			get: () => {
+				return this.anim.drawings.at(-1);
+			}
+		});
 
 		// how often the mousemove records, default 30ms
 		this.mouseTimer = performance.now();  //  independent of draw timer
@@ -115,7 +128,7 @@ export class EventsPanel extends UIPanel {
 			Math.round(y / this.renderer.scale),
 		];
 
-		if (this.samples > 0) {
+		if (this.samples > 0) {	
 			point[0] = Math.floor(point[0] / this.samples) * this.samples;
 			point[1] = Math.floor(point[1] / this.samples) * this.samples;
 		}
@@ -128,22 +141,19 @@ export class EventsPanel extends UIPanel {
 			this.mousePosition[0] = Math.round(ev.pageX);
 			this.mousePosition[1] = Math.round(ev.pageY);
 
-			const drawing = this.anim.getCurrentDrawing();
 			const point = this.transformPoint(ev.offsetX, ev.offsetY);
 
 			if (this.isDrawing) {
-				if (false) {
-				// if (lns.brush.isActive()) {
-					// this.ui.panels.brush.add(drawing, point);
+				if (this.ui.panels.brush.isActive) {
+					this.ui.panels.brush.draw(this.activeDrawing, point);
 				} else {
 					if (getPointDistance(this.mousePosition, this.prevPosition) > this.distanceThreshold) {
-						drawing.add(point);
+						this.activeDrawing.add(point);
 						this.prevPosition = structuredClone(this.mousePosition);
 					}
 				}
-			// } else if (this.ui.panels.eraser.isActive()) {
-			} else if (false) {
-				// lns.eraser.erase(point);
+			} else if (this.ui.panels.eraser.isActive) {
+				this.ui.panels.eraser.erase(point);
 			}
 		}
 	}
@@ -151,48 +161,45 @@ export class EventsPanel extends UIPanel {
 	start(ev) {
 		ev.preventDefault();
 
-		const drawing = this.anim.getCurrentDrawing();
 		const point = this.transformPoint(ev.offsetX, ev.offsetY);
 
-		// if (ev.which >= 2) this.ui.panels.eraser.start();
-		if (ev.which == 1 && !this.anim.isPlaying && !ev.altKey) {
+		if (ev.which >= 2) {
+			this.ui.panels.eraser.start(point);
+		}
 
+		if (ev.which == 1 && !this.anim.isPlaying && !ev.altKey) {
 			if (ev.ctrlKey) {
-				// this.ui.panels.eraser.start(point);
+				this.ui.panels.eraser.start(point);
 			} else {
 				this.isDrawing = true;
 				this.mouseTimer = performance.now();
-				// if (this.ui.panels.brush.isActive()) {
-				if (false) {
-					this.ui.panels.brush.add(drawing, point);
+				if (this.ui.panels.brush.isActive) {
+					this.ui.panels.brush.draw(this.activeDrawing, point);
 				} else {
-					drawing.add(point);
+					this.activeDrawing.add(point);
 					this.prevPosition = structuredClone(this.mousePosition);
 				}
 			}
 		} else if (ev.altKey) {
-			// this.ui.panels.brush.startFill(point);
+			this.ui.panels.brush.startFill(point);
 		}
 	}
 
 	endPoint(ev) {
 		this.isDrawing = false;
-		const drawing = this.anim.getCurrentDrawing();
-		let last = drawing.get(-2)[0]; /* prevent saving single point drawing segments */
-		if (last !== Points.END && last !== Points.ADD && drawing.length > 1) {
-			drawing.add((this.isConnectLines || ev.shiftKey) ? Points.ADD : Points.END);
+		let last = this.activeDrawing.get(-2)[0]; /* prevent saving single point drawing segments */
+		if (last !== Points.END && last !== Points.ADD && this.activeDrawing.length > 1) {
+			this.activeDrawing.add((this.isConnectLines || ev.shiftKey) ? Points.ADD : Points.END);
 		} else {
-			drawing.popPoint(); // if its just one point pop it off ...
+			this.activeDrawing.popPoint(); // if its just one point pop it off ...
 		}
 	}
 
 	end(ev) {
-		// this.ui.panels.eraser.end();
-		// if (this.ui.panels.brush.fillActive()) {
-		if (false) {
-			const drawing = this.anim.getCurrentDrawing();
+		this.ui.panels.eraser.end();
+		if (this.ui.panels.brush.fillActive) {
 			const point = this.transformPoint(ev.offsetX, ev.offsetY);
-			this.ui.panels.brush.endFill(drawing, point);
+			this.ui.panels.brush.endFill(this.activeDrawing, point);
 		} else if (ev.which === 1) {
 			this.endPoint(ev);
 		}

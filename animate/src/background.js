@@ -1,188 +1,130 @@
-/*
-	draw background image for tracing ...
-	should this be possible in deployed version?
-	can use css to show an image ...
-	use css for this ?
-*/
+import { UIPanel } from '../../../oi/src/oi.js';
 
-export function Background(lns) {
+/**
+ * bg image or grid
+ */
+export class BackgroundPanel extends UIPanel {
+	constructor(ui, anim, renderer) {
+		super({ id: 'bg', ui });
 
-	const { canvas, ctx } = lns.renderer;
+		this.anim = anim;
+		this.renderer = renderer;
+		this.canvas = renderer.canvas;
+		this.ctx = renderer.ctx;
 
-	let img = new Image();
-	let show = true;
-	let x = 0;
-	let y = 0;
-	let width = 0;
-	let height = 0;
-	let size = 1;
-	let rotation = 0;
+		this.img = new Image();
+		this.show = true;
+		this.x = 0;
+		this.y = 0;
+		this.width = 0;
+		this.height = 0;
+		this.size = 1;
+		this.rotation = 0;
+		
+		this.dotGrid = false;
+		this.lineGrid = false;
+		this.gridColumns = 1;
+		this.gridRows = 1;
+		this.gridColor = '#808080';
+		this.dotSize = 2;
+		this.dotEdges = true;
 
-	let dotGrid = false;
-	let lineGrid = false;
-	let gridColumns = 1;
-	let gridRows = 1;
-	let gridColor = '#808080';
-	let dotSize = 2;
-	let dotEdges = true;
+		this.addRef({
+			label: "add bg image",
+			value: "URL",
+			css: { 'flex-basis': '100%' },
+			callback: value => { this.loadImage(value) },
+		});
 
-	function loadImage(url) {
+		this.addRefs(
+			{ obj: this, },
+			[
+
+				{ ref: "show", key: 'alt-b', },
+				{ ref: "x", range: [-1024, 1024], },
+				{ ref: "y", range: [-1024, 1024], },
+				{ ref: "size", range: [0.1, 2], step: 0.1, },
+				{ ref: "rotation", range: [0, 360], },
+				{ ref: "dotGrid", },
+				{ ref: "lineGrid", },
+				{ ref: "gridColumns", },
+				{ ref: "gridRows", },
+				{ ref: "gridColor", type: "UIColor" },
+				{ ref: "dotSize", },
+				{ ref: "dotEdges", },
+			]
+		);
+	}
+
+	loadImage(url) {
 		if (url === 'URL') return; // dumb default to prevent error
-		img.src = url;
-		img.onload = function() {
-			width = img.width;
-			height = img.height;
+		this.img.src = url;
+		this.img.onload = () => {
+			this.width = this.img.width;
+			this.height = this.img.height;
 		}
 	}
 
-	function draw(width, height) {
-		if (img.src && show) {
-			if (rotation > 0) {
-				ctx.save();
-				ctx.rotate(rotation * Math.PI / 180);
+	draw() {
+		if (this.img.src && this.show) {
+			if (this.rotation > 0) {
+				this.ctx.save();
+				this.ctx.rotate(this.rotation * Math.PI / 180);
 			}
-			ctx.drawImage(img, x, y, size * width, height * size);
-			if (rotation > 0) ctx.restore();
+			this.ctx.drawImage(this.img, this.x, this.y, this.size * this.width, this.height * this.size);
+			if (this.rotation > 0) this.ctx.restore();
 		}
 
-		if (dotGrid || lineGrid) {
-			let w = width / gridColumns;
-			let h = height / gridRows;
+		if (this.dotGrid || this.lineGrid) {
+			let w = this.renderer.width / this.gridColumns;
+			let h = this.renderer.height / this.gridRows;
 
-			for (let x = 0; x <= gridColumns; x++) {
-				for (let y = 0; y <= gridRows; y++){
+			for (let x = 0; x <= this.gridColumns; x++) {
+				for (let y = 0; y <= this.gridRows; y++){
 					
 					let _x = x * w;
 					let _y = y * h;
 
-					const tempWidth = lns.canvas.getLineWidth();
-					ctx.lineWidth = 1;
-					ctx.strokeStyle = gridColor;
-					ctx.fillStyle = gridColor;
+					const tempWidth = this.renderer.lineWidth;
 					
-					if (lineGrid && y > 0 && y < gridRows) {
-						ctx.beginPath();
-						ctx.moveTo(_x, _y);
-						ctx.lineTo(_x + w, _y);
-						ctx.stroke();
+					this.ctx.lineWidth = 1;
+					this.ctx.strokeStyle = this.gridColor;
+					this.ctx.fillStyle = this.gridColor;
+					
+					if (this.lineGrid && y > 0 && y < this.gridRows) {
+						this.ctx.beginPath();
+						this.ctx.moveTo(_x, _y);
+						this.ctx.lineTo(_x + w, _y);
+						this.ctx.stroke();
 					}
 
-					if (lineGrid && x > 0 && x < gridColumns) {
-						ctx.beginPath();
-						ctx.moveTo(_x, _y);
-						ctx.lineTo(_x, _y + h);
-						ctx.stroke();
+					if (this.lineGrid && x > 0 && x < this.gridColumns) {
+						this.ctx.beginPath();
+						this.ctx.moveTo(_x, _y);
+						this.ctx.lineTo(_x, _y + h);
+						this.ctx.stroke();
 					}
 					
-					if (dotGrid) {
+					if (this.dotGrid) {
+						
 						let drawDot = true;
-						if (!dotEdges && (x === 0 || x === gridColumns)) drawDot = false;
-						if (!dotEdges && (y === 0 || y === gridRows)) drawDot = false;
-					
+						if (!this.dotEdges && (x === 0 || x === this.gridColumns)) {
+							drawDot = false;
+						}
+						if (!this.dotEdges && (y === 0 || y === this.gridRows)) {
+							drawDot = false;
+						}
+						
 						if (drawDot) {
-							ctx.beginPath();
-							ctx.arc(_x, _y, dotSize, 0, Math.PI * 2);
-							ctx.fill();
+							this.ctx.beginPath();
+							this.ctx.arc(_x, _y, this.dotSize, 0, Math.PI * 2);
+							this.ctx.fill();
 						}
 					}
 					
-					ctx.lineWidth = tempWidth; // remove after adding lw to layers later
+					this.ctx.lineWidth = tempWidth; // remove after adding lw to layers later
 				}
 			}
 		}
 	}
-
-	function connect() {
-		lns.ui.addProps({
-			'bgImage': {
-				type: 'UIText',
-				// placeholder: 'URL',
-				css: { 'flex-basis': '100%' },
-				callback: value => { loadImage(value); },
-			},
-			'showBG': {
-				value: show,
-				key: 'alt-b',
-				onText: 'Hide',
-				offText: 'Show',
-				callback: value => { show = value; },
-			},
-			'bgX': {
-				row: true,
-				type: 'UINumberRange',
-				value: x,
-				label: 'X',
-				range: [-1024, 1024],
-				callback: value => { x = value; },
-				// input: 'x-range' ??
-			},
-			'bgY': {
-				row: true,
-				type: 'UINumberRange',
-				value: y,
-				label: 'Y',
-				range: [-1024, 1024],
-				callback: value => { y = value; },
-			},
-			'bgSize': {
-				row: true,
-				type: 'UINumberRange',
-				value: size,
-				label: 'Size',
-				range: [0.1, 2],
-				step: 0.1,
-				callback: value => { size = value; },
-				// input: 'x-range' ??
-			},
-			'bgRotation': {
-				row: true,
-				type: 'UINumberRange',
-				value: rotation,
-				label: 'Rotation',
-				range: [0, 360],
-				callback: value => { rotation = value; },
-				// input: 'x-range' ??
-			},
-		}, 'background');
-
-		lns.ui.addProps({
-			'dotGrid': {
-				type: 'UIToggleCheck',
-				value: dotGrid,
-				callback: value => { dotGrid = value; },
-			},
-			'dotEdges': {
-				type: 'UIToggleCheck',
-				value: dotEdges,
-				callback: value => { dotEdges = value; },
-			},
-			'lineGrid': {
-				type: 'UIToggleCheck',
-				value: lineGrid,
-				callback: value => { lineGrid = value; },
-			},
-			gridColumns: {
-				type: 'UINumberStep',
-				value: gridColumns,
-				callback: value => { gridColumns = value; }
-			},
-			gridRows: {
-				type: 'UINumberStep',
-				value: gridRows,
-				callback: value => { gridRows = value; }
-			},
-			dotSize: {
-				type: 'UINumberStep',
-				value: dotSize,
-				callback: value => { dotSize = value; }
-			},
-			gridColor: {
-				type: 'UIColor',
-				value: gridColor,
-				callback: value => { gridColor = value; }
-			},
-		}, 'grid');
-	}
-
-	return { connect, draw };
 }

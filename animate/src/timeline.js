@@ -1,223 +1,329 @@
-/*
-	main editing timeline
-	timeline grid structure
-*/
-
-import { UILayer } from './UILayer.js';
-import { UITween } from './UITween.js';
-import { UITimelineGroup } from './UITimelineGroup.js';
-import { UIButton, UIElement } from '../../../oi/src/oi.js';
+import { UILayer } from './ui-layer.js';
+import { UITween } from './ui-tween.js';
+import { UITimelineGroup } from './ui-timeline-group.js';
+import { UIButton, UIElement, UIPanel, UILabel } from '../../../oi/src/oi.js';
 import { Points } from '../../src/lines.js';
 
-export function Timeline(lns) {
+export class TimelinePanel extends UIPanel {
+	constructor(ui, anim) {
+		super({ id: "timeline", ui });
 
-	let panel, timeline, bigFrameDisplay;
+		this.anim = anim;
 
-	let frameWidth = 120; // not part of ui ... either make part of ui or member var
-	let viewLayers = true;
-	let viewActiveLayers = false;
-	let viewLayerRange = 0;
-	let viewGroups = true;
-	let lastGroup; // set last group
-	let viewState = false;
-	let useScrollToFrame = false;
-	let autoFit = false;
-	let groups = [];
+		this.frameWidth = 120; // not part of ui ... either make part of ui or member var
+		
+		// is?
+		this.viewLayers = true;
+		this.viewActiveLayers = false;
+		this.viewLayerRange = 0;
+		this.viewGroups = true;
+		this.viewState = false;
+		
+		this.lastGroup; // set last group
+		this.useScrollToFrame = false;
+		this.autoFit = false;
+		this.groups = [];
 
-	// timeline frames
-	const tlSteps = [1, 2, 4, 5, 6, 10, 12, 20, 30, 40, 50, 100, 200, 500, 1000];
-	let tlInc = 1;
-	let tlWidth, tlFrameWidth;
+		this.tlSteps = [1, 2, 4, 5, 6, 10, 12, 20, 30, 40, 50, 100, 200, 500, 1000];
+		this.tlInc = 1;
+		this.tlWidth = 0;
+		this.tlFrameWidth = 0;
+	
+		this.addRef({
+			obj: this,
+			ref: "viewGroups",
+			text: "G",
+			noLabel: true,
+			noRow: true,
+			key: "backslash",
+			type: "UIToggle",
+			callback: () => { this.update(); },
+		});
 
+		this.addRef({
+			obj: this,
+			ref: "viewLayers",
+			key: "[",
+			text: "V",
+			class: "left-end",
+			noLabel: true,
+			noRow: true,
+			type: "UIToggle",
+			callback: () => { this.update(); },
+		});
 
-	function init() {
-		panel.el.addEventListener('mousemove', ev => {
+		this.addRef({
+			obj: this,
+			ref: "viewActiveLayers",
+			key: ']',
+			text: 'V', // toggle text in check ??
+			class: 'right-end',
+			noLabel: true,
+			noRow: true,
+			type: "UIToggle",
+			callback: value => { this.update(); }
+		});
+
+		this.addRef({
+			obj: this,
+			ref: "viewLayerRange",
+			noLabel: true,
+			range: [0, 10],
+		});
+
+		this.addRef({
+			obj: this,
+			ref: "useScrollToFrame",
+			text: 'follow',
+			noLabel: true,
+			type: "UIToggle",
+		});
+
+		// { callback: scrollToFrame, key: 'shift-f', text: '⊙', args: [true], },
+		// { callback: fit, text: '⇿', key: 'alt-f', class: 'left-end', },	
+		// { callback: fitFrame, text: '⏛', key: 'ctrl-f', class: 'right-end', },
+
+		this.addButtons(
+			{ obj: this, },
+			[
+				{ 
+					ref: "select", 
+					key: 'shift-v', 
+					class: 'left-end', 
+				},
+				{ 
+					callback: () => { this.select(false); }, 
+					text: 'deselect', 
+					key: 'alt-d', 
+					class: 'right-end',
+				},
+				{ 
+					ref: "lock", 
+					key: 'shift-l', 
+					class: 'left-end',
+				},
+				{ 
+					callback: () => { this.lock(false); },
+					text: 'unlock', 
+					key: 'alt-l',
+					class: 'right-end',
+				},
+				{ ref: "split", },
+				{ ref: "layersToEnd", key: 'shift-e', },
+			]
+		);
+
+		// 'autoFit': {
+		
+		this.addRef({
+			face: "stateSelect",
+			key: "ctrl-t",
+			label: "state",
+			value: "default",
+			options: Object.keys(this.anim.states),
+			callback: value => {
+				this.ui.panels.states.set(value);
+			}
+		});
+
+		this.bigFrameDisplay = this.add(new UILabel({
+			text: '0',
+			id: 'big-frame-display'
+		}));
+
+		this.timelineRow = this.addRow({ id: "timeline" });
+	}
+
+	init() {
+		this.el.addEventListener('mousemove', ev => {
 			// quick select while moving over frames
 			if (ev.which == 1 && ev.target.classList.contains('frame') && 
-				lns.anim.currentFrame != +ev.target.textContent) {
-				lns.styles.reset();
-				lns.playback.setFrame(+ev.target.textContent);
-				lns.ui.update();
+				this.anim.currentFrame != +ev.target.textContent) {
+				this.ui.panels.styles.reset();
+				this.ui.panels.playback.setFrame(+ev.target.textContent);
+				this.ui.update();
 			} else if (ev.which == 3) {
 				// scroll right/left -- do this shit ...
 			}
 		});
 	}
 
-	function scrollToFrame(overrideScroll) {
-		if (!useScrollToFrame && !overrideScroll) return;
-		const closestFrame = Math.round(lns.anim.currentFrame / tlInc) * tlInc;
-		timeline.el.scrollTo(timeline[`frm-${closestFrame}`].el.offsetLeft - 10, 0);
+	scrollToFrame(overrideScroll) {
+		if (!this.useScrollToFrame && !overrideScroll) return;
+		const closestFrame = Math.round(this.anim.currentFrame / this.tlInc) * this.tlInc;
+		this.timelineRow.el.scrollTo(this.timelineRow.children[`frm-${closestFrame}`].el.offsetLeft - 10, 0);
 	}
 
 	/* creates all the layer ui new each time */
-	function update() {
-		let prevFrame = lns.ui.faces.frameDisplay.value;
-		lns.ui.faces.frameDisplay.value = lns.anim.currentFrame;
-		bigFrameDisplay.setText(lns.anim.currentFrame);
-		if (!lns.anim.isPlaying) {
-			timeline.clear();
+	update() {
+		let prevFrame = this.ui.faces.currentFrame.value;
+		this.ui.faces.currentFrame.value = this.anim.currentFrame;
+		this.bigFrameDisplay.setText(this.anim.currentFrame);
+		
+		if (!this.anim.isPlaying) {
+			this.timelineRow.clear();
 			// if (autoFit) fit();
-			drawFrames();
-			drawLayers();
+			this.drawFrames();
+			this.drawLayers();
 		} else {
-			updateFrame(prevFrame);
+			this.updateFrame(prevFrame);
 		}
 	}
 
-	function updateFrame(prevFrame) {
-		let prevFrameDisplay = Math.floor(prevFrame / tlInc) * tlInc;
-		let nextFrameDisplay = Math.floor(lns.anim.currentFrame / tlInc) * tlInc;
+	updateFrame(prevFrame) {
+		let prevFrameDisplay = Math.floor(prevFrame / this.tlInc) * this.tlInc;
+		let nextFrameDisplay = Math.floor(this.anim.currentFrame / this.tlInc) * this.tlInc;
 
 		if (prevFrameDisplay === nextFrameDisplay) return;
 
-		timeline['frm-' + prevFrameDisplay].removeClass('current');
-		timeline['frm-' + nextFrameDisplay].addClass('current');
+		this.timelineRow.children['frm-' + prevFrameDisplay].removeClass('current');
+		this.timelineRow.children['frm-' + nextFrameDisplay].addClass('current');
 	}
 
-	function swapLayer(layerIndex, swapIndex) {
+	swapLayer(layerIndex, swapIndex) {
 		if (swapIndex < 0) return;
-		[lns.anim.layers[swapIndex], lns.anim.layers[layerIndex]] = [lns.anim.layers[layerIndex], lns.anim.layers[swapIndex]];
-		update();
+		[this.anim.layers[swapIndex], this.anim.layers[layerIndex]] = [this.anim.layers[layerIndex], this.anim.layers[swapIndex]];
+		this.update();
 	}
 
-	function sortLayer(layerIndex, swapIndex) {
+	sortLayer(layerIndex, swapIndex) {
 		if (swapIndex < 0) return;
-		const layer = lns.anim.layers.splice(layerIndex, 1);
-		lns.anim.layers.splice(swapIndex, 0, layer[0]);
-		update();
+		const layer = this.anim.layers.splice(layerIndex, 1);
+		this.anim.layers.splice(swapIndex, 0, layer[0]);
+		this.update();
 	}
 
-	function drawFrames() {
-		timeline.setStyle('--num-frames', lns.anim.endFrame + 1);
+	drawFrames() {
+		this.timelineRow.setStyle('--num-frames', this.anim.endFrame + 1);
 
 		// skip frames at various thresholds
-		const numFrames = lns.anim.endFrame + 1;
-		tlWidth = panel.el.clientWidth - 11; /* 11 for padding */
-		const maxFrameWidth = tlWidth / numFrames;
-		frameWidth = Math.floor(tlWidth / numFrames); // +1 ??
-		// const roundedFrameWidth = 
-		// console.log('df', tlWidth, numFrames, maxFrameWidth);
-		if (tlWidth < 0) return;
+		const numFrames = this.anim.endFrame + 1;
+		this.tlWidth = this.el.clientWidth - 11; /* 11 for padding */
+		const maxFrameWidth = this.tlWidth / numFrames;
+		this.frameWidth = Math.floor(this.tlWidth / numFrames); // +1 ??
+
+		if (this.tlWidth < 0) return;
 		const minFrameWidth = 24;
 		let nFrameWidth = maxFrameWidth;
 		
 		let index = 0;
 		while (nFrameWidth < minFrameWidth) {
-			nFrameWidth = tlWidth / (numFrames / tlSteps[index]);
+			nFrameWidth = this.tlWidth / (numFrames / this.tlSteps[index]);
 			index++;
 		}
-		tlInc = tlSteps[index];
+		this.tlInc = this.tlSteps[index];
 		
-		const nf = Math.floor(numFrames / tlInc) + 1;
-		tlFrameWidth = Math.floor(tlWidth / nf) - 2; // border ... 
+		const nf = Math.floor(numFrames / this.tlInc) + 1;
+		this.tlFrameWidth = Math.floor(this.tlWidth / nf) - 2; // border ... 
 
-		timeline.setStyle('--num-frames', nf);
-		timeline.setStyle('--frame-width', tlFrameWidth);
+		this.timelineRow.setStyle('--num-frames', nf);
+		this.timelineRow.setStyle('--frame-width', this.tlFrameWidth);
 
-		// console.log('tl', Math.floor(numFrames / tlInc) + 1, Math.floor(nFrameWidth), tlWidth)
-
-		for (let i = 0; i < numFrames; i += tlInc) {
+		for (let i = 0; i < numFrames; i += this.tlInc) {
 			const frameBtn = new UIButton({
 				text: `${i}`,
 				css: {
-					gridColumnStart:  1 + (Math.floor(i / tlInc) * 2),
-					gridColumnEnd:  3 + (Math.floor(i / tlInc) * 2)
+					gridColumnStart:  1 + (Math.floor(i / this.tlInc) * 2),
+					gridColumnEnd:  3 + (Math.floor(i / this.tlInc) * 2)
 				},
 				class: 'frame',
-				callback: function() {
-					lns.styles.reset();
-					lns.playback.setFrame(i);
-					lns.ui.update();
+				callback: () => {
+					this.ui.panels.styles.reset();
+					this.ui.panels.playback.setFrame(i);
+					this.ui.update();
 				}	
 			});
-			// if (i === lns.anim.currentFrame) frameBtn.addClass('current');
-			if (Math.floor(i / tlInc) === Math.floor(lns.anim.currentFrame / tlInc)) {
+			// if (i === this.anim.currentFrame) frameBtn.addClass('current');
+			if (Math.floor(i / this.tlInc) === Math.floor(this.anim.currentFrame / this.tlInc)) {
 				frameBtn.addClass('current');
 			}
-			frameBtn.removeClass('btn');
-			// lns.ui.keys[i] = frameBtn;
-			timeline.append(frameBtn, `frm-${i}`);
+			// this.ui.keys[i] = frameBtn;
+			this.timelineRow.append(frameBtn, `frm-${i}`);
 		}
 
-		if (lns.anim.stateName !== 'default') {
-			timeline.setStyle('--state-height', 1);
+		if (this.anim.stateName !== 'default') {
+			this.timelineRow.setStyle('--state-height', 1);
 			const stateLine = new UIElement({
 				class: 'state',
 				css: {
-					gridColumnStart: Math.floor(lns.anim.state.start / tlInc) * 2 + 1,
-					gridColumnEnd: Math.floor((lns.anim.state.end + 1) / tlInc) * 2 + 1,
+					gridColumnStart: Math.floor(this.anim.state.start / this.tlInc) * 2 + 1,
+					gridColumnEnd: Math.floor((this.anim.state.end + 1) / this.tlInc) * 2 + 1,
 				}
 			});
-			timeline.append(stateLine);
+			this.timelineRow.append(stateLine);
 		} else {
-			timeline.setStyle('--state-height', 0);
+			this.timelineRow.setStyle('--state-height', 0);
 		}
 		
-		scrollToFrame();
+		this.scrollToFrame();
 	}
 
-	function drawLayers() {
+	drawLayers() {
 
 		let rowCount = 0; // set rows
 		let tweenCount = 0; // tweens
 
-		if (viewLayers) {
-			const layers = viewActiveLayers ?
-				lns.anim.layers.filter(layer => {
-					const f = lns.anim.currentFrame;
-					for (let i = f - viewLayerRange; i <= f + viewLayerRange; i++) {
+		if (this.viewLayers) {
+			const layers = this.viewActiveLayers ?
+				this.anim.layers.filter(layer => {
+					const f = this.anim.currentFrame;
+					for (let i = f - this.viewLayerRange; i <= f + this.viewLayerRange; i++) {
 						if (layer.isInFrame(i)) return true;
 					}
 					return false;
 				}) :
-				lns.anim.layers;
+				this.anim.layers;
 
 			let gridRowStart = 2;
 			let gridRowEnd = 3;
 
-			if (viewGroups) {
-				for (let i = 0, len = groups.length; i < len; i++) {
+			if (this.viewGroups) {
+				for (let i = 0, len = this.groups.length; i < len; i++) {
 					let groupLayers = layers.filter(l => l.groupNumber === i);
 					if (groupLayers.length === 0) continue;
+					
 					const startFrame = groupLayers.reduce((a, b) => { 
 						return a.startFrame < b.startFrame ? a : b;
 					}).startFrame;
+					
 					const endFrame = groupLayers.reduce((a, b) => { 
 						return a.endFrame < b.endFrame ? a : b;
 					}).endFrame;
+
 					groupLayers.forEach(layer => {
 						if (layer.startFrame !== startFrame) layer.startFrame = startFrame;
 						if (layer.endFrame !== startFrame) layer.endFrame = endFrame;
 					});
 
-					const ui = new UITimelineGroup(groupLayers, {
-						name: groups[i],
+					const tlGroup = new UITimelineGroup(groupLayers, {
+						anim: this.anim,
+						ui: this.ui,
+						name: this.groups[i],
 						index: i,
 						class: 'group',
 						startFrame: startFrame,
 						endFrame: endFrame,
-						width: frameWidth * (endFrame - startFrame + 1),
+						width: this.frameWidth * (endFrame - startFrame + 1),
 						css: {
 							gridRowStart: gridRowStart, // 2 + (i * 2),
 							gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
 							gridColumnStart: startFrame * 2 + 1,
 							gridColumnEnd: endFrame * 2 + 3
 						},
-						update() { lns.ui.update(); },
-						reset() { resetLayers(); },
-						moveUp() {
+						update: () => { this.ui.update(); },
+						reset: () => { this.resetLayers(); },
+						moveUp: () => {
 							// not sure this will work ...
 							groupLayers.forEach(layer => {
-								const layerIndex = lns.anim.layers.indexOf(layer);
+								const layerIndex = this.anim.layers.indexOf(layer);
 								const swapIndex = layerIndex - 1;
 								swapLayer(layerIndex, swapIndex);
 							});
 						},
-						moveToBack() {
+						moveToBack: () => {
 							// go backwards to keep the order
 							for (let i = groupLayers.length - 1; i >= 0; i--) {
-								const layerIndex = lns.anim.layers.indexOf(groupLayers[i]);
+								const layerIndex = this.anim.layers.indexOf(groupLayers[i]);
 								sortLayer(layerIndex, 0);
 							}
 						}
@@ -225,20 +331,22 @@ export function Timeline(lns) {
 					gridRowStart += 2;
 					gridRowEnd += 2;
 					rowCount++;
-					timeline.append(ui, `group-${i}`);
+					this.timelineRow.append(tlGroup, `group-${i}`);
 				}
 			}
 
-			for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
-				const layer = lns.anim.layers[i];
-				if (layer.groupNumber >= 0 && viewGroups) continue;
-				if (viewActiveLayers && !layers.includes(layer)) continue;
+			for (let i = 0, len = this.anim.layers.length - 1; i < len; i++) {
+				const layer = this.anim.layers[i];
+				if (layer.groupNumber >= 0 && this.viewGroups) continue;
+				if (this.viewActiveLayers && !layers.includes(layer)) continue;
 
-				const colWidth = (tlFrameWidth + 2) * (Math.floor(layer.endFrame / tlInc) - Math.floor(layer.startFrame / tlInc) + 1);
+				const colWidth = (this.tlFrameWidth + 2) * (Math.floor(layer.endFrame / this.tlInc) - Math.floor(layer.startFrame / this.tlInc) + 1);
 				
-				const ui = new UILayer(layer, {
-					lns: lns,
-					group: viewGroups ? undefined : groups[layer.groupNumber],
+				const uiLayer = new UILayer(layer, {
+					// this: this, // wtf
+					anim: this.anim,
+					ui: this.ui,
+					group: this.viewGroups ? undefined : this.groups[layer.groupNumber],
 					canMoveUp: i > 0 && layers.length > 2,
 					type: 'layer',
 					width: colWidth,
@@ -246,68 +354,69 @@ export function Timeline(lns) {
 						width: colWidth + 'px',
 						gridRowStart: gridRowStart, // 2 + (i * 2),
 						gridRowEnd: gridRowEnd, 	// 3 + (i * 2),
-						gridColumnStart: Math.floor(layer.startFrame / tlInc) * 2 + 1,
-						gridColumnEnd: Math.floor(layer.endFrame / tlInc) * 2 + 3
+						gridColumnStart: Math.floor(layer.startFrame / this.tlInc) * 2 + 1,
+						gridColumnEnd: Math.floor(layer.endFrame / this.tlInc) * 2 + 3
 					},
-					moveUp() {
-						const layerIndex = lns.anim.layers.indexOf(layer);
+					moveUp: () => {
+						const layerIndex = this.anim.layers.indexOf(layer);
 						const swapIndex = layerIndex - 1;
-						swapLayer(layerIndex, swapIndex);
+						this.swapLayer(layerIndex, swapIndex);
 					},
-					moveToBack() {
-						const layerIndex = lns.anim.layers.indexOf(layer);
-						sortLayer(layerIndex, 0);
+					moveToBack: () => {
+						const layerIndex = this.anim.layers.indexOf(layer);
+						this.sortLayer(layerIndex, 0);
 					},
-					addToGroup(position) {
-						lns.styles.reset(); // save current lines
-						if (groups.length === 0) {
-							let createGroup = prompt("Name new group", "New Group 0");
-							groups.push(createGroup);
+					addToGroup: position => {
+						this.ui.panels.styles.reset(); // save current lines
+						if (this.groups.length === 0) {
+							let groupName = prompt("name new group", "new group 0");
+							this.groups.push(createGroup);
 							layer.groupNumber = 0;
-							lns.ui.update();
+							this.ui.update();
 						} else {
 							let groupSelector = new UIModal({
 								title: 'Select Group',
-								app: lns,
-								position: position, 
-								callback: function() {
+								ui: this.ui,
+								callback: () => {
 									layer.groupNumber = +groupSelect.value;
-									lastGroup = +groupSelect.value;
-									lns.ui.update();
+									this.lastGroup = +groupSelect.value;
+									this.ui.update();
 								}
 							});
-							groupSelector.addBreak('Groups:');
+							
+							groupSelector.addBreak('groups:');
+							
 							let groupSelect = new UISelect({});
-							for (let i = 0; i < groups.length; i++) {
-								groupSelect.addOption(i, groups[i]);
+							for (let i = 0; i < this.groups.length; i++) {
+								groupSelect.addOption(i, this.groups[i]);
 							}
-							if (lastGroup) groupSelect.value = lastGroup;
+							if (this.lastGroup) groupSelect.value = this.lastGroup;
 							groupSelector.add(groupSelect);
 							groupSelector.addBreak();
 							groupSelector.add(new UIButton({
-								text: 'New Group',
+								text: 'new group',
 								callback: function() {
 									groupSelector.clear();
-									let createGroup = prompt("Name new group", "New Group " + groups.length);
-									groups.push(createGroup);
-									layer.groupNumber = groups.length - 1;
-									lastGroup = layer.groupNumber;
-									lns.ui.update();
+									let groupName = prompt("name new group", `new group ${this.groups.length}`);
+									this.groups.push(createGroup);
+									layer.groupNumber = this.groups.length - 1;
+									this.lastGroup = layer.groupNumber;
+									this.ui.update();
 								}
 							}));
 						}
 					},
-					setLinesProperties() {
+					setLinesProperties: () => {
 						console.log("don't update lines props based on current layer");
-						// lns.styles.setStyleIndex(layer.styleIndex);
+						// this.styles.setStyleIndex(layer.styleIndex);
 					},
-					update() { lns.ui.update(); },
-					reset() { resetLayers(); },
-					lineToLayer() {
-						lns.styles.reset();
-						const layerDrawing = lns.anim.drawings[layer.drawingIndex];
-						const currentDrawing = lns.anim.getCurrentDrawing();
-						const currentLayer = lns.anim.getDrawLayer();
+					update: () => { this.ui.update(); },
+					reset: () => { resetLayers(); },
+					lineToLayer: () => {
+						this.ui.panels.styles.reset();
+						const layerDrawing = this.anim.drawings[layer.drawingIndex];
+						const currentDrawing = this.anim.getCurrentDrawing();
+						const currentLayer = this.anim.getDrawLayer();
 						currentLayer.startFrame = layer.startFrame;
 						currentLayer.endFrame = layer.endFrame;
 						const points = [layerDrawing.pop()]; // end
@@ -320,46 +429,47 @@ export function Timeline(lns) {
 						for (let i = temp.length - 1; i > 0; i--) {
 							currentDrawing.add(temp[i]);
 						}
-						lns.styles.reset();
-						resetLayers();
-						update();
+						this.ui.panels.styles.reset();
+						this.resetLayers();
+						this.update();
 					},
-					remove(layer) { lns.anim.removeLayer(layer); },
-					cloneDrawing() {
+					remove: layer => { this.anim.removeLayer(layer); },
+					cloneDrawing: () => {
 						const props = layer.getCloneProps();
-						const drawing = lns.anim.drawings[props.drawingIndex];
+						const drawing = this.anim.drawings[props.drawingIndex];
 						const clone = new Drawing();
 						clone.points = structuredClone(drawing.points);
 						clone.offsets = structuredClone(drawing.offsets);
-						lns.anim.drawings.pop();
-						lns.anim.drawings.push(clone);
-						lns.styles.reset();
+						this.anim.drawings.pop();
+						this.anim.drawings.push(clone);
+						this.ui.panels.styles.reset();
 					}
 				});
 
 				gridRowStart += 2;
 				gridRowEnd += 2;
 				rowCount++;
-				timeline.append(ui, `layer-${i}`);
-
+				this.timelineRow.append(uiLayer, `layer-${i}`);
 
 				/* add tweens -- add methods like getTweens */
 				for (let j = 0; j < layer.tweens.length; j++) {
 					const tween = layer.tweens[j];
-					const tweenColWidth = (tlFrameWidth + 2) * (Math.floor(tween.endFrame / tlInc) - Math.floor(tween.startFrame / tlInc) + 1);
-					const tweenUI = new UITween({
+					const tweenColWidth = (this.tlFrameWidth + 2) * (Math.floor(tween.endFrame / this.tlInc) - Math.floor(tween.startFrame / this.tlInc) + 1);
+					
+					const uiTween = new UITween({
+						ui: this.ui,
 						type: 'tween',
 						css: {
 							width: tweenColWidth + 'px',
 							gridRowStart: gridRowStart, 
 							gridRowEnd: gridRowEnd, 
-							gridColumnStart: Math.floor(tween.startFrame / tlInc) * 2 + 1,
-							gridColumnEnd: Math.floor(tween.endFrame / tlInc) * 2 + 3
+							gridColumnStart: Math.floor(tween.startFrame / this.tlInc) * 2 + 1,
+							gridColumnEnd: Math.floor(tween.endFrame / this.tlInc) * 2 + 3
 						},
-						update() { lns.ui.update(); },
+						update: () => { this.ui.update(); },
 					}, tween, layer);
 					
-					timeline.append(tweenUI, `tween-${j}-layer-${i}`);
+					this.timelineRow.append(uiTween, `tween-${j}-layer-${i}`);
 					tweenCount++;
 					gridRowStart += 2;
 					gridRowEnd += 2;
@@ -367,160 +477,63 @@ export function Timeline(lns) {
 			}
 		}
 
-		timeline.setStyle('--num-layers', rowCount);
-		timeline.setStyle('--num-tweens', tweenCount);
+		this.timelineRow.setStyle('--num-layers', rowCount);
+		this.timelineRow.setStyle('--num-tweens', tweenCount);
 	}
 
-	function split() {
-		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.isInFrame(lns.anim.currentFrame)) {
+	split() {
+		for (let i = 0, len = this.anim.layers.length - 1; i < len; i++) {
+			const layer = this.anim.layers[i];
+			if (layer.isInFrame(this.anim.currentFrame)) {
 				/* this is repeated in ui layer */
 				const props = layer.getCloneProps();
-				props.startFrame = lns.anim.currentFrame + 1;
-				lns.anim.addLayer(new Layer(props));
-				layer.endFrame = lns.anim.currentFrame;
+				props.startFrame = this.anim.currentFrame + 1;
+				this.anim.addLayer(new Layer(props));
+				layer.endFrame = this.anim.currentFrame;
 			}
 		}
-		lns.playback.setFrame(lns.anim.currentFrame + 1);
+		this.ui.panels.playback.setFrame(this.anim.currentFrame + 1);
 	}
 
 	// select all layers in frame
-	function select(isSelect, isAll) {
-		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
-			const layer = lns.anim.layers[i];
-			if (!layer.isInFrame(lns.anim.currentFrame) && !isAll) continue;
+	select(isSelect=true, isAll) {
+		for (let i = 0, len = this.anim.layers.length - 1; i < len; i++) {
+			const layer = this.anim.layers[i];
+			if (!layer.isInFrame(this.anim.currentFrame) && !isAll) continue;
 			
 			if (layer.isToggled !== isSelect) {
 				if (layer.groupNumber >= 0) {
-					timeline[`group-${layer.groupNumber}`].toggle.update(isSelect);
+					this.timelineRow[`group-${layer.groupNumber}`].toggle.update(isSelect);
 				} else {
-					timeline[`layer-${i}`].toggle.update(isSelect);
+					this.timelineRow[`layer-${i}`].toggle.update(isSelect);
 				}
 			}
 		}
 	}
 
-	function lock(isLock) {
-		for (let i = 0, len = lns.anim.layers.length - 1; i < len; i++) {
-			const layer = lns.anim.layers[i];
-			if (layer.isInFrame(lns.anim.currentFrame) && layer.isLocked !== isLock) {
-				timeline[`layer-${i}`].lock.update(isLock);
+	lock(isLock=true) {
+		for (let i = 0, len = this.anim.layers.length - 1; i < len; i++) {
+			const layer = this.anim.layers[i];
+			if (layer.isInFrame(this.anim.currentFrame) && layer.isLocked !== isLock) {
+				this.timelineRow[`layer-${i}`].lock.update(isLock);
 			}
 		}
 	}
 
-	function resetLayers() {
-		for (let i = 0, len = lns.anim.layers.length; i < len; i++) {
-			const layer = lns.anim.layers[i];
+	layersToEnd() {
+		for (let i = 0, len = this.anim.layers.length; i < len; i++) {
+			if (this.anim.layers[i].isInFrame(this.anim.currentFrame)) {
+				this.anim.layers[i].endFrame = this.anim.endFrame;
+			}
+		}
+		this.update();
+	}
+
+	resetLayers() {
+		for (let i = 0, len = this.anim.layers.length; i < len; i++) {
+			const layer = this.anim.layers[i];
 			layer.reset();
 		}
-		drawLayers();
+		this.drawLayers();
 	}
-
-	function connect() {
-		panel = lns.ui.getPanel('timeline');
-
-		// toggle checks with text need to ignore prop label
-		lns.ui.addProps({
-			'viewGroups': {
-				value: viewGroups,
-				text: 'G',
-				noLabel: true,
-				key: 'backslash',
-				callback: value => {
-					viewGroups = value;
-					update();
-				}
-			},
-			'viewLayers': {
-				value: viewLayers,
-				key: '[',
-				text: 'V',
-				class: 'left-end',
-				noLabel: true,
-				callback: value => {
-					viewLayers = value;
-					update();
-				}
-			},
-			'viewActiveLayers': {
-				value: viewActiveLayers,
-				key: ']',
-				text: 'V', // toggle text in check ??
-				class: 'right-end',
-				noLabel: true,
-				callback: value => {
-					viewActiveLayers = value;
-					update();
-				}
-			},
-			'viewLayerRange': {
-				type: 'UINumberStep',
-				value: viewLayerRange,
-				noLabel: true,
-				callback: value => { viewLayerRange = value; },
-				range: [0, 10],
-			},
-			'useScrollToFrame': {
-				type: 'UIToggle',
-				text: 'Follow',
-				noLabel: true,
-				value: useScrollToFrame,
-				callback: value => { useScrollToFrame = value; }
-			}
-		});
-
-		lns.ui.addCallbacks([
-			// { callback: scrollToFrame, key: 'shift-f', text: '⊙', args: [true], },
-			// { callback: fit, text: '⇿', key: 'alt-f', class: 'left-end', },
-			// { callback: fitFrame, text: '⏛', key: 'ctrl-f', class: 'right-end', },
-			{ callback: select, text: 'Select', key: 'shift-v', class: 'left-end', args: [true] },
-			{ callback: select, text: 'Deselect', key: 'alt-d', class: 'right-end', args: [false] },
-			{ callback: lock, text: 'Lock', key: 'shift-l', class: 'left-end', args: [true] },
-			{ callback: lock, text: 'Unlock', key: 'alt-l', class: 'right-end', args: [false] },
-			{ callback: split, text: 'Split' },
-			{
-				key: 'shift-e',
-				text: 'Layers to End',
-				callback: () => {
-					for (let i = 0, len = lns.anim.layers.length; i < len; i++) {
-						if (lns.anim.layers[i].isInFrame(lns.anim.currentFrame)) {
-							lns.anim.layers[i].endFrame = lns.anim.endFrame;
-						}
-					}
-					update();
-				}
-			}
-		]);
-
-		lns.ui.addProps({
-			// 'autoFit': {
-			// 	type: 'UIToggleCheck',
-			// 	value: autoFit,
-			// 	callback(value) { autoFit = value; }
-			// },
-			'stateSelect': {
-				type: 'UISelect',
-				key: 'ctrl-t',
-				label: 'State',
-				callback(value) { lns.states.set(value); }
-			}
-		});
-
-		bigFrameDisplay = lns.ui.addUI({
-			type: 'UILabel',
-			text: '0',
-			id: 'big-frame-display'
-		});
-
-		timeline = panel.addRow('timeline');
-	}
-
-	return { 
-		connect, update, init, select,
-		getGroups() { return groups; },
-		setGroups(value) { groups = value; },
-	};
-
 }

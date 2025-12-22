@@ -80,7 +80,8 @@ export class AnimateAnim extends Anim {
 	}
 
 	addDrawing(drawing) {
-		this.drawings.splice(lns.anim.drawings.length - 1, 0, drawing);
+		// *** change to layer
+		this.drawings.splice(this.drawings.length - 1, 0, drawing);
 	}
 
 	addNewDrawing() {

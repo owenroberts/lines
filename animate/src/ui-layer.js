@@ -6,7 +6,9 @@ export class UILayer extends UICollection {
 		super(params);
 		this.addClass('layer');
 
-		this.lns = params.lns; // fuck make this better ... ref anim instead of lns
+		// this.lns = params.lns; // fuck make this better ... ref anim instead of lns
+		this.anim = params.anim;
+		this.ui = params.ui;
 
 		this.layer = layer;
 		if (params.canMoveUp) this.canMoveUp = params.canMoveUp;
@@ -113,7 +115,7 @@ export class UILayer extends UICollection {
 			value: layer.startFrame,
 			class: isModal ? '' : btnClass,
 			min: 0,
-			max: this.lns.anim.endFrame + 1,
+			max: this.anim.endFrame + 1,
 			callback: value => {
 				layer.startFrame = value;
 				// if frame is set move everything -- right functionality?
@@ -143,7 +145,7 @@ export class UILayer extends UICollection {
 			text: isModal ? 'Set End Frame to End' : '>>',
 			class: isModal ? '' : btnClass,
 			callback: () => {
-				this.layer.endFrame = this.lns.anim.endFrame;
+				this.layer.endFrame = this.anim.endFrame;
 				this.update();
 			}
 		});
@@ -193,18 +195,17 @@ export class UILayer extends UICollection {
 			callback: () => {
 				const modal = new UIModal({
 					text: 'Merge Layer',
-					app: this.lns,
-					position: this.position,
+					ui: this.ui,
 					callback: clearFunc,
 					clearFunc: clearFunc
 				});
 
-				for (let i = 0, len = this.lns.anim.layers.length - 1; i < len; i++) {
-					const mergeLayer = this.lns.anim.layers[i];
+				for (let i = 0, len = this.anim.layers.length - 1; i < len; i++) {
+					const mergeLayer = this.anim.layers[i];
 					if (mergeLayer === layer) continue;
-					if (!mergeLayer.isInFrame(this.lns.anim.currentFrame)) continue;
+					if (!mergeLayer.isInFrame(this.anim.currentFrame)) continue;
 
-					modal.add(new UILabel({ text: `Layer ${i}, Drawing ${mergeLayer.drawingIndex}` }));
+					modal.add(new UILabel({ text: `layer ${i}, drawing ${mergeLayer.drawingIndex}` }));
 
 					modal.add(new UIToggle({
 						text: "*",
@@ -219,8 +220,8 @@ export class UILayer extends UICollection {
 						text: "Merge",
 						class: 'right-end',
 						callback: () => {
-							this.lns.anim.merge(layer.drawingIndex, mergeLayer.drawingIndex, layer);
-							this.lns.anim.removeLayer(mergeLayer);
+							this.anim.merge(layer.drawingIndex, mergeLayer.drawingIndex, layer);
+							this.anim.removeLayer(mergeLayer);
 							clearFunc();
 							modal.clear();
 						}
@@ -236,17 +237,16 @@ export class UILayer extends UICollection {
 	editModal(layer, params) {
 		
 		const modal = new UIModal({
-			title: 'Edit Layer', 
-			app: this.lns, 
-			position: this.position, 
-			callback: () => { this.lns.ui.update(); }
+			title: 'edit layer', 
+			ui: this.ui,
+			callback: () => { this.ui.update(); }
 		});
 
-		modal.add(new UILabel({ text: "Style Index:" }));
+		modal.add(new UILabel({ text: "style index:" }));
 		modal.add(new UINumberStep({
 			value: layer.styleIndex,
 			min: 0,
-			max: this.lns.anim.styles.length - 1,
+			max: this.anim.styles.length - 1,
 			callback: value => {
 				layer.styleIndex = value;
 			},
@@ -264,7 +264,7 @@ export class UILayer extends UICollection {
 		modal.add(new UIButton({ 
 			text: "Cut Segment",
 			callback: () => {
-				const drawing = this.lns.anim.drawings[layer.drawingIndex];
+				const drawing = this.anim.drawings[layer.drawingIndex];
 				drawing.pop(); /* remove "end" */
 				drawing.pop(); /* remove segment */
 				drawing.add('end'); /* new end */
@@ -275,7 +275,7 @@ export class UILayer extends UICollection {
 		modal.add(new UIButton({
 			text: "Cut Line",
 			callback: () => {
-				const drawing = this.lns.anim.drawings[layer.drawingIndex];
+				const drawing = this.anim.drawings[layer.drawingIndex];
 				drawing.pop(); /* remove "end" */
 				for (let i = drawing.length - 1; i > 0; i--) {
 					if (drawing.get(i)[0] !== Points.END) drawing.pop();
@@ -295,8 +295,8 @@ export class UILayer extends UICollection {
 			callback: () => {
 				const props = layer.getCloneProps();
 				props.startFrame = props.endFrame = layer.endFrame + 1;
-				this.lns.anim.addLayer(new Layer(props));
-				this.lns.playback.setFrame(layer.endFrame + 1);
+				this.anim.addLayer(new Layer(props));
+				this.ui.panels.playback.setFrame(layer.endFrame + 1);
 			}
 		}));
 
@@ -307,8 +307,8 @@ export class UILayer extends UICollection {
 				const props = layer.getCloneProps();
 				props.startFrame = this.lns.anim.currentFrame + 1;
 				layer.endFrame = this.lns.anim.currentFrame;
-				this.lns.anim.addLayer(new Layer(props));
-				this.lns.playback.setFrame(layer.endFrame + 1);
+				this.anim.addLayer(new Layer(props));
+				this.ui.panels.playback.setFrame(layer.endFrame + 1);
 			}
 		}));
 
@@ -324,23 +324,22 @@ export class UILayer extends UICollection {
 
 		const tween = {
 			prop: 'endIndex',
-			startFrame: this.lns.anim.currentFrame,
-			endFrame: this.lns.anim.currentFrame + 10,
+			startFrame: this.anim.currentFrame,
+			endFrame: this.anim.currentFrame + 10,
 			startValue: 0,
 			endValue: 'end'
 		};
 
 		const modal = new UIModal({
 			title: 'Add Tween', 
-			app: this.lns, 
-			position: this.position, 
+			ui: this.ui, 
 			callback: () => {
 				if (tween.prop === 'endIndex' || tween.prop === 'startIndex') {
 					if (tween.endValue === 'end') {
-						tween.endValue = this.lns.anim.drawings[layer.drawingIndex].length;
+						tween.endValue = this.anim.drawings[layer.drawingIndex].length;
 					}
 					if (tween.startValue === 'end') {
-						tween.startValue = this.lns.anim.drawings[layer.drawingIndex].length;
+						tween.startValue = this.anim.drawings[layer.drawingIndex].length;
 					}
 				}
 
@@ -356,31 +355,31 @@ export class UILayer extends UICollection {
 			options: ['segmentNum', 'jiggleRange', 'wiggleRange', 'wiggleSpeed', 'linesInterval', 'startIndex', 'endIndex'],
 			value: 'endIndex',
 			selected: 'endIndex',
-			callback(value) { tween.prop = value; }
+			callback: value => { tween.prop = value; }
 		}));
 
 		modal.addBreak('Start Frame:');
 		modal.add(new UINumber({
 			value: tween.startFrame,
-			callback(value) { tween.startFrame = value; }
+			callback: value => { tween.startFrame = value; }
 		}));
 
 		modal.addBreak('End Frame:');
 		modal.add(new UINumber({
 			value: tween.endFrame,
-			callback(value) { tween.endFrame = value; }
+			callback: value => { tween.endFrame = value; }
 		}));
 
 		modal.addBreak('Start Value:');
 		modal.add(new UIText({
 			value: tween.startValue,
-			callback(value) { tween.startValue = value; }
+			callback: value => { tween.startValue = value; }
 		}));
 
 		modal.addBreak('End Value:');
 		modal.add(new UIText({
 			value: tween.endValue,
-			callback(value) { tween.endValue = value; }
+			callback: value => { tween.endValue = value; }
 		}));
 	}
 }

@@ -2,10 +2,11 @@ import Stats from 'stats.js';
 import { UIPanel } from '../../../oi/src/oi.js';
 
 export class PlaybackPanel extends UIPanel {
-	constructor(anim, renderer, ui) {
+	constructor(ui, anim, renderer) {
 		super({ id: 'playback', ui });
 
 		this.anim = anim;
+		this.renderer = renderer;
 		this.canvas = renderer.canvas;
 		this.ctx = renderer.ctx;
 
@@ -171,7 +172,7 @@ export class PlaybackPanel extends UIPanel {
 
 	/* just set drawing back to 0 but might do other things */
 	reset() {
-		this.anim.frame = 0;
+		this.anim.currentFrame = 0;
 		this.anim.isPlaying = false;
 		this.ui.update();
 	}
@@ -202,13 +203,13 @@ export class PlaybackPanel extends UIPanel {
 
 		const nextFrame = this.anim.currentFrame + dir;
 		
-		if (this.anim.isPlaying) ui.faces.play.update(); // ?
+		// if (this.anim.isPlaying) ui.faces.play.update(); // ?
 		this.ui.panels.events.stop();
 		
 		if (this.anim.getCurrentDrawing().length > 0) {
 			// drawing to save - can add frame
-			// this.ui.panels.styles.reset(nextFrame);
-			this.anim.frame = nextFrame;
+			this.ui.panels.styles.reset(nextFrame);
+			this.anim.currentFrame = nextFrame;
 		} else {
 			// put in reset? 
 			const layer = this.anim.getDrawLayer();
@@ -229,32 +230,26 @@ export class PlaybackPanel extends UIPanel {
 		}
 
 		this.frameDisplay.update(this.anim.currentFrame, true);
-		// this.ui.panels.timeline.select(false, true);
-		// this.ui.panels.data.saveState();
-		// this.ui.update();
+		this.ui.panels.timeline.select(false, true);
+		this.ui.panels.data.saveState();
+		this.ui.update();
 	}
 
 	update() {
 
 		if (this.stats && this.isStatsVisible) this.stats.begin();
 		
-		// if (this.anim.isPlaying) this.ui.panels.timeline.update();
+		if (this.anim.isPlaying) this.ui.panels.timeline.update();
 
-		/* 
-			in capture set animation onDraw 
-			move this logic to capture
-		*/
-
-		// if (this.ui.panels.capture.isActive()) {
-		if (false) {
-			if (this.ui.panels.capture.withBackground()) {
-				ctx.fillStyle = lns.renderer.bgColor;
-				ctx.fillRect(0, 0, lns.renderer.width, lns.renderer.height);
+		if (this.ui.panels.capture.isCapturing()) {
+			if (this.ui.panels.capture.isWithBg) {
+				this.ctx.fillStyle = this.renderer.bgColor;
+				this.ctx.fillRect(0, 0, this.renderer.width, this.renderer.height);
 			}
 		} else {
 			// ignore bg, onion, highlight while capturing
 	
-			// this.ui.panels.bg.draw(lns.renderer.width, lns.renderer.height); // part of canvas module?
+			this.ui.panels.bg.draw();
 
 			// onion skin
 			if (this.onionSkinFrameCount > 0 && this.isOnionSkinVisible) {
@@ -291,7 +286,7 @@ export class PlaybackPanel extends UIPanel {
 				});
 			}
 
-			// this.ui.panels.eraser.draw();
+			this.ui.panels.eraser.draw();
 		}
 
 		this.anim.update();

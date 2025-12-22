@@ -1,134 +1,136 @@
-/*
-	animation states, subset of frames 
-*/
+import { UIPanel, UILabel, UIButton, UINumberStep, UISelect, UIModal, UIToggleCheck } from '../../../oi/src/oi.js';
 
-import { UILabel, UIButton, UINumberStep, UISelect, UIModal, UIToggleCheck } from '../../../oi/src/oi.js';
+/**
+ * animation states, subset of frames 
+ * rename clips?
+ */
+export class StatesPanel extends UIPanel {
+	constructor(ui, anim) {
+		super({ id: 'states', ui });
+		this.setStyle("max-width", "360px");
 
-export function States(lns) {
+		this.anim = anim;
 
-	let panel;
+		this.addButtons(
+			{ obj: this },
+			[
+				{ callback: () => { this.set('default'); }, key: 'shift-t', text: 'default' },
+				{ ref: "create", key: 't', text: "+" },
+			]
+		);
+	}
 
-	function update() {
-		for (const key in lns.anim.states) {
-			const state = lns.anim.states[key];
-			const ui = panel[key] ? panel[key] : addUI(key, state, false);
-			for (const part in state) {
-				if (ui[part].value !== state[part]) ui[part].value = state[part];
+	update() {
+		for (const name in this.anim.states) {
+			const state = this.anim.states[name];
+			const component = this.children[`${name}-state`] ?? this.addUI(name, state, false);
+			for (const k in state) {
+				// console.log(k, state, component)
+				component.children[k].value = state[k];
 			}
 		}
 	}
 
-	function addUI(name, state, focus) {
+	addUI(name, state, focus) {
 
-		const row = panel.addRow(name, 'break');
-		lns.anim.states[name] = state;
+		const row = this.addRow({ id: `${name}-state`, class: "break" });
+
+		this.anim.states[name] = state;
 		
-		// selector.addOption(name);
-		lns.ui.faces.stateSelect.addOption(name);
+		this.ui.faces.stateSelect.addOption(name);
 
-		row.append(new UILabel({ text: name }));
+		row.addLabel(name);
 
-		row.append(new UIButton({
+		if (name !== "default") {
+			row.add(new UIButton({
+				text: "x",
+				callback: function() {
+					delete this.anim.states[name];
+					this.removeRow(row);
+					this.anim.state = 'default';
+					this.ui.faces.stateSelect.value = 'default';
+					this.ui.faces.stateSelect.removeOption(name);
+				}
+			}));
+		}
+
+		row.add(new UIButton({
 			text: '⊙',
-			callback: () => { set(name); }
+			callback: () => { this.set(name); }
 		}));
 
-		row.append(new UINumberStep({
-			value: state.start,
-			callback: value => { state.start = value; }
+		row.add(new UINumberStep({
+			obj: state,
+			ref: "start",
+			callback: () => { this.ui.update(); },
 		}), 'start');
 
-		row.append(new UINumberStep({
-			value: state.end,
-			callback: value => { state.end = value; }
+		row.add(new UINumberStep({
+			obj: state,
+			ref: "end",
+			callback: () => { this.ui.update(); },
 		}), 'end');
 
-		row.append(new UILabel({ text: '↹' }));
+		row.addLabel('↹');
 
-		row.append(new UISelect({
+		row.add(new UISelect({
 			value: state.dir ?? 1,
 			options: [-1, 1],
 			callback: value => { 
-				state.dir = +value; 
+				state.dir = +value;
+				this.ui.update(); 
 			}
 		}), 'dir');
 
-		row.append(new UILabel({ text: '↻' }));
+		row.add(new UILabel({ text: '↻' }));
 
-		row.append(new UIToggleCheck({
-			value: state.loop ?? true,
-			callback: value => { 
-				state.loop = value; 
-				console.log(value) 
-				console.log(state);
-			}
+		row.add(new UIToggleCheck({
+			obj: state,
+			ref: "loop",
 		}), 'loop');
 
-		row.append(new UIButton({
-			text: "x",
-			callback: function() {
-				delete lns.anim.states[name];
-				panel.removeRow(row);
-				lns.anim.state = 'default';
-				lns.ui.faces.stateSelect.value = 'default';
-				lns.ui.faces.stateSelect.removeOption(name);
-			}
-		}));
 		return row;
 	}
 
-	function set(state) {
+	set(state) {
 		if (state) {
-			const f = lns.anim.state.start;
-			lns.anim.state = state;
-			lns.ui.faces.stateSelect.value = state;
-			if (state === 'default') lns.anim.currentFrame = f;
-			lns.ui.update();
+			this.anim.state = state;
+			this.ui.faces.stateSelect.value = state;
+			if (state === 'default') {
+				this.anim.currentFrame = this.anim.state.start;
+			}
+			this.ui.update();
 			return;
 		}
 
 		const m = new UIModal({
-			app: lns,
-			title: "Choose State",
-			position: lns.mousePosition,
+			ui: this.ui,
+			title: "select state",
 		});
 
-		for (const key in lns.anim.states) {
+		for (const name in this.anim.states) {
 			m.add(new UIButton({
-				text: key,
+				text: name,
 				callback: () => {
-					lns.anim.state = key;
-					lns.ui.faces.stateSelect.value = key;
+					this.anim.state = name;
+					this.ui.faces.stateSelect.value = name;
 					m.clear();
-					lns.ui.update();
+					this.ui.update();
 				}
 			}));
 		}
 	}
 
-	function create() {
-		const name = prompt('Name?');
+	create() {
+		const name = prompt('name?');
 		if (!name) return;
-		addUI(name, { 
-			start: lns.anim.currentFrame, 
-			end: lns.anim.currentFrame,
-			dir: 1, // -1 or 1, new thing
-			loop: true, // new thing too jesus christ
+		this.addUI(name, { 
+			start: this.anim.currentFrame, 
+			end: this.anim.currentFrame,
+			dir: 1,
+			loop: true,
 		}, true);
-		lns.anim.state = name;
-		lns.ui.faces.stateSelect.value = name;
+		this.anim.state = name;
+		this.ui.faces.stateSelect.value = name;
 	}
-
-	function connect() {
-		panel = lns.ui.getPanel('states');
-
-		lns.ui.addCallbacks([
-			{ callback: create, key: 't', text: 'Create New',  },
-			{ callback() { set('default'); }, key: 'shift-t', text: 'Default' },
-		]);
-
-		panel.addRow(undefined, 'break');
-	}
-
-	return { connect, update, set };
 }
