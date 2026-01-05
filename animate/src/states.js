@@ -15,7 +15,7 @@ export class StatesPanel extends UIPanel {
 			{ obj: this },
 			[
 				{ callback: () => { this.set('default'); }, key: 'shift-t', text: 'default' },
-				{ ref: "create", key: 't', text: "+" },
+				{ ref: "create", key: 'alt-t', text: "+" },
 			]
 		);
 	}

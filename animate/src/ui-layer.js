@@ -2,43 +2,25 @@ import { Points } from '../../src/lines.js';
 import { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber, UIText } from '../../../oi/src/oi.js';
 
 export class UILayer extends UICollection {
-	constructor(layer, params) {
+	constructor(params) {
 		super(params);
 		this.addClass('layer');
 
-		// this.lns = params.lns; // fuck make this better ... ref anim instead of lns
 		this.anim = params.anim;
 		this.ui = params.ui;
 
-		this.layer = layer;
-		if (params.canMoveUp) this.canMoveUp = params.canMoveUp;
+		this.index = params.index;
+		this.layer = params.layer;
+		this.groups = params.groups;
+		
 		const width = params.width;
-		this.update = params.update;
-		this.reset = params.reset;
-		this.remove = params.remove;
-		this.lineToLayer = params.lineToLayer;
 
-		const toggle = new UIToggle({
+		const toggle = new UIButton({
 			btnClass: 'layer-toggle',
 			class: 'timeline-btn',
-			text: `${layer.drawingIndex}`,
-			isOn: layer.isToggled,
+			text: this.index,
 			callback: value => {
-				// better way to do this annoying long line?
-				layer.isToggled = value;
-				// set properties
-				if (layer.isToggled && params.setLinesProperties) params.setLinesProperties(); 
-				highlight.update(layer.isToggled);
-			}
-		});
-
-		const highlight = new UIToggle({
-			btnClass: 'layer-highlight',
-			class: 'timeline-btn',
-			text: '*',
-			isOn: layer.isHighlighted,
-			callback: value => {
-				layer.isHighlighted = value;
+				this.ui.faces.activeLayerIndex.update(this.index);
 			}
 		});
 
@@ -47,7 +29,7 @@ export class UILayer extends UICollection {
 			class: 'timeline-btn',
 			text: "E",
 			callback: () => {
-				this.editModal(layer, params);
+				this.editModal();
 			}
 		});
 
@@ -56,19 +38,19 @@ export class UILayer extends UICollection {
 			class: 'timeline-btn',
 			text: "V",
 			callback: () => {
-				layer.isVisible = !layer.isVisible;
+				this.layer.isVisible = !this.layer.isVisible;
 			}
 		});
 
 		if (params.group) {
-			this.groupLabel = new UILabel({ text: params.group });
+			this.groupLabel = new UILabel({ text: this.params.group });
 		}
 
-		const uis = this.getPropUIs(layer, params, false);
+		const uis = this.getUIs(false);
 
-		if (width > 40) this.append(uis.startFrameNumber);
+		if (width > 40) this.append(uis.startFrameIndex);
 		this.append(toggle, 'toggle');
-		this.append(highlight);
+		this.append(uis.highlight);
 		this.append(edit);
 		this.append(visible);
 		if (width < 20) this.append(uis.toEnd);
@@ -77,132 +59,164 @@ export class UILayer extends UICollection {
 		// if (width > 70) this.append(uis.remove);
 		if (width > 80) this.append(uis.addToGroup);
 		if (width > 90) this.append(uis.merge)
-		if (width > 90 && this.canMoveUp) this.append(uis.moveUp);
+		if (width > 90 && params.canMoveUp) this.append(uis.moveUp);
 	// move to back
 		if (width > 100 && this.groupLabel) this.append(this.groupLabel);
 
 		// has to go last
 		if (width > 80) {
-			this.append(uis.endFrameNumber);
-			uis.endFrameNumber.addClass('right-margin');
+			this.append(uis.endFrameIndex);
+			uis.endFrameIndex.addClass('right-margin');
 		}
 	}
 
-	getPropUIs(layer, params, isModal) {
+	getUIs(isModal) {
 
 		const btnClass = isModal ? 'btn' : 'timeline-btn';
 
+		const highlight = new UIToggle({
+			btnClass: 'layer-highlight',
+			class: 'timeline-btn',
+			text: isModal ? "highlight" : "*",
+			isOn: this.layer.isHighlighted,
+			callback: value => {
+				this.layer.isHighlighted = value;
+			}
+		});
+
 		const tween = new UIButton({
-			text: isModal ? "Add Tween" : "T",
+			text: isModal ? "add tween" : "T",
 			class: btnClass,
 			btnClass: 'layer-tween',
-			callback: () => {
-				this.tweenModal(layer);
-			}
+			callback: () => { this.tweenModal(this.layer); }
 		});
 
 		const remove = new UIButton({
 			btnClass: 'remove',
-			text: isModal ? "Remove Layer" : "X",
+			text: isModal ? "remove" : "X",
 			class: btnClass,
 			callback: () => {
-				this.remove(layer);
-				this.update();
+				this.anim.removeLayer(this.layer);
+				this.ui.update();
 			}
 		});
 
-		const startFrameNumber = new UINumberStep({
-			value: layer.startFrame,
+		const startFrameIndex = new UINumberStep({
+			value: this.layer.startFrame,
 			class: isModal ? '' : btnClass,
 			min: 0,
 			max: this.anim.endFrame + 1,
 			callback: value => {
-				layer.startFrame = value;
+				this.layer.startFrame = value;
 				// if frame is set move everything -- right functionality?
-				if (value > layer.endFrame) {
-					layer.endFrame = value;
+				if (value > this.layer.endFrame) {
+					this.layer.endFrame = value;
 				}
-				layer.resetTweens();
-				this.update();
+				this.layer.resetTweens();
+				this.ui.update();
 			}
 		});
 
-		const endFrameNumber = new UINumberStep({
-			value: layer.endFrame,
+		const endFrameIndex = new UINumberStep({
+			value: this.layer.endFrame,
 			class: isModal ? '' : btnClass,
 			min: 0,
 			callback: value => {
-				layer.endFrame = value;
-				if (value < layer.startFrame) {
-					layer.startFrame = value;
+				this.layer.endFrame = value;
+				if (value < this.layer.startFrame) {
+					this.layer.startFrame = value;
 				}
-				layer.resetTweens();
+				this.layer.resetTweens();
 				this.update();
 			}
 		});
 
 		const toEnd = new UIButton({
-			text: isModal ? 'Set End Frame to End' : '>>',
+			text: isModal ? 'to end' : '>>',
 			class: isModal ? '' : btnClass,
 			callback: () => {
 				this.layer.endFrame = this.anim.endFrame;
-				this.update();
+				this.ui.update();
 			}
 		});
 
 		const lock = new UIToggle({
 			btnClass: 'layer-lock',
-			text: isModal ? 'Lock' : 'L',
+			text: isModal ? 'lock' : 'L',
 			class: btnClass,
-			isOn: layer.isLocked,
+			isOn: this.layer.isLocked,
 			callback: (value) => {
-				layer.isLocked = value;
+				this.layer.isLocked = value;
 			}
 		});
 
 		const moveUp = new UIButton({
-			text: isModal ? "Move Up" : '^',
+			text: isModal ? "move up" : '^',
 			btnClass:'move-up',
-			class: btnClass,
-			callback: params.moveUp
-		});
-
-		const moveToBack = new UIButton({
-			text: isModal ? "Move To Back" : '^',
-			btnClass:'move-up',
-			class: btnClass,
-			callback: params.moveToBack
-		});
-
-		const addToGroup = new UIButton({
-			text: isModal ? 'Add to Group' : 'G',
-			btnClass: 'add-to-group',
 			class: btnClass,
 			callback: () => {
-				params.addToGroup(this.position); // cant get position, node from original is gone?
+				this.anim.swapLayer(this.index, this.index - 1);
+				this.ui.update();
 			}
 		});
 
-		const clearFunc = () => {
-			this.reset()
-			this.update();
-		};
+		const moveToBack = new UIButton({
+			text: isModal ? "move to back" : '^',
+			btnClass:'move-up',
+			class: btnClass,
+			callback: () => {
+				this.anim.sortLayer(this.index, 0);
+				this.ui.update();
+			}
+		});
+
+		const addToGroup = new UIButton({
+			text: isModal ? 'group' : 'G',
+			btnClass: 'add-to-group',
+			class: btnClass,
+			callback: () => {
+				if (this.groups.length === 0) {
+					alert("add groups");
+					return;
+				}
+
+				this.ui.panels.styles.reset(); // save current lines
+				let groupSelector = new UIModal({
+					title: 'group',
+					ui: this.ui,
+					callback: () => {
+						layer.groupNumber = +groupSelect.value;
+						this.lastGroup = +groupSelect.value;
+						this.ui.update();
+					}
+				});
+				
+				groupSelector.addBreak('groups:');
+				
+				let groupSelect = new UISelect({});
+				for (let i = 0; i < this.groups.length; i++) {
+					groupSelect.addOption(i, this.groups[i]);
+				}
+				if (this.lastGroup) groupSelect.value = this.lastGroup;
+				groupSelector.add(groupSelect);
+			}
+		});
 
 		const merge = new UIButton({
-			text: isModal ? "Merge Layer" : 'M',
+			text: isModal ? "merge" : 'M',
 			class: btnClass,
 			btnClass: 'merge-layer',
 			callback: () => {
 				const modal = new UIModal({
-					text: 'Merge Layer',
+					text: 'merge with layer',
 					ui: this.ui,
-					callback: clearFunc,
-					clearFunc: clearFunc
+					callback: () => { this.ui.update(); },
+					onClear: () => { this.ui.update(); },
 				});
 
 				for (let i = 0, len = this.anim.layers.length - 1; i < len; i++) {
 					const mergeLayer = this.anim.layers[i];
-					if (mergeLayer === layer) continue;
+					if (mergeLayer === this.layer) continue;
 					if (!mergeLayer.isInFrame(this.anim.currentFrame)) continue;
 
 					modal.add(new UILabel({ text: `layer ${i}, drawing ${mergeLayer.drawingIndex}` }));
@@ -217,12 +231,12 @@ export class UILayer extends UICollection {
 					}));
 
 					modal.add(new UIButton({
-						text: "Merge",
+						text: "merge",
 						class: 'right-end',
 						callback: () => {
-							this.anim.merge(layer.drawingIndex, mergeLayer.drawingIndex, layer);
+							this.anim.merge(this.layer.drawingIndex, mergeLayer.drawingIndex, this.layer);
 							this.anim.removeLayer(mergeLayer);
-							clearFunc();
+							this.ui.update();
 							modal.clear();
 						}
 					}));
@@ -231,96 +245,142 @@ export class UILayer extends UICollection {
 			}
 		});
 
-		return { tween, remove, startFrameNumber, endFrameNumber, lock, moveUp, moveToBack, addToGroup, merge, toEnd };
+		return { tween, remove, startFrameIndex, endFrameIndex, lock, moveUp, moveToBack, addToGroup, merge, toEnd, highlight };
 	}
 
-	editModal(layer, params) {
+	editModal() {
 		
 		const modal = new UIModal({
-			title: 'edit layer', 
+			title: `edit layer ${this.index}`, 
 			ui: this.ui,
 			callback: () => { this.ui.update(); }
 		});
 
-		modal.add(new UILabel({ text: "style index:" }));
+		const uis = this.getUIs(true);
+
+		modal.add(uis.highlight);
+		modal.add(uis.lock);
+		
+		modal.add(new UILabel({ text: "style" }));
 		modal.add(new UINumberStep({
-			value: layer.styleIndex,
+			value: this.layer.styleIndex,
 			min: 0,
 			max: this.anim.styles.length - 1,
 			callback: value => {
-				layer.styleIndex = value;
+				this.layer.styleIndex = value;
 			},
 		}));
+
+		
 		modal.addBreak();
 
-		const uis = this.getPropUIs(layer, params, true);
-		for (const k in uis) {
-			if (k === 'startFrameNumber') modal.addBreak("Start Frame:");
-			if (k === 'endFrameNumber') modal.addBreak("End Frame:");
-			modal.add(uis[k]);
-			if (k === 'endFrameNumber') modal.addBreak();
-		}
+		modal.addLabel("start");
+		modal.add(uis.startFrameIndex);
+		modal.addLabel("end");
+		modal.add(uis.endFrameIndex);
+
+		modal.addBreak();
+
+		modal.add(uis.tween);
+		modal.add(uis.toEnd);
+
+		modal.addBreak();
+
+		modal.add(uis.remove);
+		modal.add(uis.merge);
+		modal.add(uis.moveUp);
+		modal.add(uis.moveToBack);
+		modal.add(uis.addToGroup);
+
+		modal.addBreak();
 
 		modal.add(new UIButton({ 
-			text: "Cut Segment",
+			text: "cut segment",
 			callback: () => {
-				const drawing = this.anim.drawings[layer.drawingIndex];
+				const drawing = this.anim.drawings[this.layer.drawingIndex];
 				drawing.pop(); /* remove "end" */
 				drawing.pop(); /* remove segment */
 				drawing.add('end'); /* new end */
-				layer.resetDrawingEndIndex(drawing.length);
+				this.layer.drawingEndIndex = drawing.length;
 			}
 		}));
 
 		modal.add(new UIButton({
-			text: "Cut Line",
+			text: "cut line",
 			callback: () => {
-				const drawing = this.anim.drawings[layer.drawingIndex];
+				const drawing = this.anim.drawings[this.layer.drawingIndex];
 				drawing.pop(); /* remove "end" */
 				for (let i = drawing.length - 1; i > 0; i--) {
 					if (drawing.get(i)[0] !== Points.END) drawing.pop();
 					else break;
 				}
-				layer.resetDrawingEndIndex(drawing.length);
+				this.layer.drawingEndIndex = drawing.length;
 			}
 		}));
 
 		modal.add(new UIButton({
-			text: "Line to Layer",
-			callback: () => { this.lineToLayer(); }
-		}));
-
-		modal.add(new UIButton({
-			text: "Clone Layer",
+			text: "separate last line",
 			callback: () => {
-				const props = layer.getCloneProps();
-				props.startFrame = props.endFrame = layer.endFrame + 1;
-				this.anim.addLayer(new Layer(props));
-				this.ui.panels.playback.setFrame(layer.endFrame + 1);
+				// this.lineToLayer(); 
+				this.ui.panels.styles.reset();
+				const layerDrawing = this.anim.drawings[layer.drawingIndex];
+				this.anim.activeLayer.startFrame = layer.startFrame;
+				this.anim.activeLayer.endFrame = layer.endFrame;
+				const points = [layerDrawing.pop()]; // end
+				const temp = []; // points added backwards
+				for (let i = layerDrawing.length - 1; i > 0; i--) {
+					const p = layerDrawing.pop();
+					if (p !== Points.END) temp.push(p);
+					else break;
+				}
+				for (let i = temp.length - 1; i > 0; i--) {
+					this.anim.activeDrawing.add(temp[i]);
+				}
+				this.ui.panels.styles.reset();
+				this.ui.update();
 			}
 		}));
 
 		modal.add(new UIButton({
-			text: "Split",
+			text: "clone",
+			callback: () => {
+				const props = this.layer.getCloneProps();
+				props.startFrame = props.endFrame = this.layer.endFrame + 1;
+				this.anim.addLayer(new Layer(props));
+				this.ui.panels.playback.setFrame(this.layer.endFrame + 1);
+			}
+		}));
+
+		modal.add(new UIButton({
+			text: "split",
 			callback: () => {
 				// move to layer mixin
-				const props = layer.getCloneProps();
-				props.startFrame = this.lns.anim.currentFrame + 1;
-				layer.endFrame = this.lns.anim.currentFrame;
+				const props = this.layer.getCloneProps();
+				props.startFrame = this.anim.currentFrame + 1;
+				this.layer.endFrame = this.anim.currentFrame;
 				this.anim.addLayer(new Layer(props));
-				this.ui.panels.playback.setFrame(layer.endFrame + 1);
+				this.ui.panels.playback.setFrame(this.layer.endFrame + 1);
 			}
 		}));
 
 		modal.add(new UIButton({
-			text: 'Clone Drawing',
-			callback: params.cloneDrawing
+			text: 'clone drawing',
+			callback: () => {
+				const props = this.layer.getCloneProps();
+				const drawing = this.anim.drawings[props.drawingIndex];
+				const clone = new Drawing();
+				clone.points = structuredClone(drawing.points);
+				clone.offsets = structuredClone(drawing.offsets);
+				// this.anim.drawings.pop();
+				this.anim.drawings.push(clone);
+				this.ui.panels.styles.reset();
+			}
 		}));
 
 		modal.adjustPosition();
 	}
 
-	tweenModal(layer) {
+	tweenModal() {
 
 		const tween = {
 			prop: 'endIndex',
@@ -336,15 +396,15 @@ export class UILayer extends UICollection {
 			callback: () => {
 				if (tween.prop === 'endIndex' || tween.prop === 'startIndex') {
 					if (tween.endValue === 'end') {
-						tween.endValue = this.anim.drawings[layer.drawingIndex].length;
+						tween.endValue = this.anim.drawings[this.layer.drawingIndex].length;
 					}
 					if (tween.startValue === 'end') {
-						tween.startValue = this.anim.drawings[layer.drawingIndex].length;
+						tween.startValue = this.anim.drawings[this.layer.drawingIndex].length;
 					}
 				}
 
-				layer.addTween(tween);
-				this.update();
+				this.layer.addTween(tween);
+				this.ui.update();
 			}
 		});
 

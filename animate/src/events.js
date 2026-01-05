@@ -19,11 +19,11 @@ export class EventsPanel extends UIPanel {
 		// nice but doesn't matter for refs
 		// should this just be part of animate.js? or AnimateAnim???
 		// activeDrawing, activeLayer, activeStyle
-		Object.defineProperty(this, "activeDrawing", {
-			get: () => {
-				return this.anim.drawings.at(-1);
-			}
-		});
+		// Object.defineProperty(this, "activeDrawing", {
+		// 	get: () => {
+		// 		return this.anim.drawings.at(-1);
+		// 	}
+		// });
 
 		// how often the mousemove records, default 30ms
 		this.mouseTimer = performance.now();  //  independent of draw timer
@@ -145,10 +145,11 @@ export class EventsPanel extends UIPanel {
 
 			if (this.isDrawing) {
 				if (this.ui.panels.brush.isActive) {
-					this.ui.panels.brush.draw(this.activeDrawing, point);
+					this.ui.panels.brush.draw(this.anim.activeDrawing, point);
 				} else {
 					if (getPointDistance(this.mousePosition, this.prevPosition) > this.distanceThreshold) {
-						this.activeDrawing.add(point);
+						this.anim.activeDrawing.add(point);
+						this.anim.activeLayer.drawingEndIndex = this.anim.activeDrawing.length;
 						this.prevPosition = structuredClone(this.mousePosition);
 					}
 				}
@@ -174,9 +175,9 @@ export class EventsPanel extends UIPanel {
 				this.isDrawing = true;
 				this.mouseTimer = performance.now();
 				if (this.ui.panels.brush.isActive) {
-					this.ui.panels.brush.draw(this.activeDrawing, point);
+					this.ui.panels.brush.draw(this.anim.activeDrawing, point);
 				} else {
-					this.activeDrawing.add(point);
+					this.anim.activeDrawing.add(point);
 					this.prevPosition = structuredClone(this.mousePosition);
 				}
 			}
@@ -187,22 +188,24 @@ export class EventsPanel extends UIPanel {
 
 	endPoint(ev) {
 		this.isDrawing = false;
-		let last = this.activeDrawing.get(-2)[0]; /* prevent saving single point drawing segments */
-		if (last !== Points.END && last !== Points.ADD && this.activeDrawing.length > 1) {
-			this.activeDrawing.add((this.isConnectLines || ev.shiftKey) ? Points.ADD : Points.END);
+		let last = this.anim.activeDrawing.get(-2)[0]; /* prevent saving single point drawing segments */
+		if (last !== Points.END && last !== Points.ADD && this.anim.activeDrawing.length > 1) {
+			this.anim.activeDrawing.add((this.isConnectLines || ev.shiftKey) ? Points.ADD : Points.END);
 		} else {
-			this.activeDrawing.popPoint(); // if its just one point pop it off ...
+			this.anim.activeDrawing.popPoint(); // if its just one point pop it off ...
 		}
+		this.anim.activeLayer.drawingEndIndex = this.anim.activeDrawing.length;
 	}
 
 	end(ev) {
 		this.ui.panels.eraser.end();
 		if (this.ui.panels.brush.fillActive) {
 			const point = this.transformPoint(ev.offsetX, ev.offsetY);
-			this.ui.panels.brush.endFill(this.activeDrawing, point);
+			this.ui.panels.brush.endFill(this.anim.activeDrawing, point);
 		} else if (ev.which === 1) {
 			this.endPoint(ev);
 		}
+		this.anim.activeLayer.drawingEndIndex = this.anim.activeDrawing.length;
 		this.prevPosition = undefined;
 	}
 

@@ -79,6 +79,7 @@ export class BrushPanel extends UIPanel {
 			}
 		}
 		drawing.add(Points.END);
+		this.anim.activeLayer.drawingEndIndex = this.anim.activeDrawing.length;
 	}
 
 	startFill(point) {
@@ -116,5 +117,6 @@ export class BrushPanel extends UIPanel {
 			}
 		}
 		this.fillActive = false;
+		this.anim.activeLayer.drawingEndIndex = this.anim.activeDrawing.length;
 	}
 }

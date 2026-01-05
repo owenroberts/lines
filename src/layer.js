@@ -20,6 +20,7 @@ export class Layer {
 
 		this.isVisible = true;
 
+		// *** ever use this?
 		this.x = params.x ?? 0;
 		this.y = params.y ?? 0;
 		

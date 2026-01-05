@@ -65,7 +65,7 @@ export class CapturePanel extends UIPanel {
 		this.addBreak();
 
 		this.addButton({
-			key: "alt-k",
+			// key: "alt-k",
 			onText: "stop video",
 			offText: "record video",
 			callback: value => {

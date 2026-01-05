@@ -199,7 +199,7 @@ export class DataPanel extends UIPanel {
 
 	clearLines() {
 		this.saveState();
-		this.anim.getCurrentDrawing().reset();
+		this.anim.activeDrawing.reset();
 	}
 
 	// *** needs later testing
@@ -296,12 +296,12 @@ export class DataPanel extends UIPanel {
 
 	cutLastSegment() {
 		this.saveState();
-		this.anim.getCurrentDrawing().popPoint();
+		this.anim.activeDrawing.popPoint();
 	}
 
 	cutLastLine() {
 		this.saveState();
-		this.anim.getCurrentDrawing().popLine();
+		this.anim.activeDrawing.popLine();
 	}
 
 	insert(dir=0) {

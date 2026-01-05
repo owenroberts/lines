@@ -4,7 +4,7 @@
 
 import { Layer } from '../../src/lines.js';
 
-const LayerMixin = {
+export const LayerMixin = {
 
 	init(params) {
 		this.isToggled = false;
@@ -140,5 +140,3 @@ const LayerMixin = {
 		}
 	},
 };
-
-export { LayerMixin };

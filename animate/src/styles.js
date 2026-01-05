@@ -43,61 +43,68 @@ export class StylesPanel extends UIPanel {
 		this.addRef({
 			obj: this,
 			ref: "styleIndex",
-			callback: () => {
-				this.updatePropertiesUI();
-			}
+			callback: value => { this.setStyleIndex(value); }
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.linesInterval,
 			ref: "linesInterval",
+			callback: value => { this.setProperty("linesInterval", value)},
 			range: [1, 10],
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.segmentNum,
 			ref: "segmentNum",
+			callback: value => { this.setProperty("segmentNum", value)},
 			range: [1, 10],
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.jiggleRange,
 			ref: "jiggleRange",
+			callback: value => { this.setProperty("jiggleRange", value)},
 			range: [0, 10],
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.wiggleRange,
 			ref: "wiggleRange",
+			callback: value => { this.setProperty("wiggleRange", value)},
 			range: [0, 16],
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.wiggleSpeed,
 			ref: "wiggleSpeed",
+			callback: value => { this.setProperty("wiggleSpeed", value)},
 			range: [0, 8],
 			step: 0.05,
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.wiggleSegments,
 			ref: "wiggleSegments",
+			callback: value => { this.setProperty("wiggleSegments", value)},
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.breaks,
 			ref: "breaks",
+			callback: value => { this.setProperty("breaks", value)},
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.color,
 			ref: "color",
+			callback: value => { this.setProperty("color", value)},
 			type: "UIColor",
 		});
 
 		this.addRef({
-			obj: this.activeStyle,
+			value: this.activeStyle.lineWidth,
 			ref: "lineWidth",
+			callback: value => { this.setProperty("lineWidth", value)},
 		});
 
 		this.addBreak();
@@ -110,7 +117,7 @@ export class StylesPanel extends UIPanel {
 
 		this.addButton({ 
 			key: "shift-g",
-			 text: "random color",
+			text: "random color",
 			callback: () => { this.randomColor(); },
 		});
 
@@ -119,6 +126,15 @@ export class StylesPanel extends UIPanel {
 			text: "color variation",
 			callback: () => { this.colorVariation(); },
 		});
+	}
+
+	setStyleIndex(value) {
+		if (this.styleIndex > this.anim.styles.length - 1) {
+			this.getNewStyle();
+		}
+		this.styleIndex = value;
+		this.anim.activeLayer.styleIndex = value;
+		this.updateUI();
 	}
 
 	getNewStyle() {
@@ -131,37 +147,38 @@ export class StylesPanel extends UIPanel {
 			color: this.children.color.value,
 			lineWidth: this.children.lineWidth.value,
 		});
-		this.children.styleIndex.value = styleIndex;
 
+		this.children.styleIndex.value = this.styleIndex;
 		this.anim.styles.push(style);
-		const layer = this.anim.getDrawLayer();
-		layer.styleIndex = styleIndex;
+		// const layer = this.anim.getDrawLayer();
+		this.anim.activeLayer.styleIndex = this.styleIndex;
 	}
 
-	getNewLayer(f) {
-		return new Layer({
+	getNewLayer(frameIndex) {
+		const layer = new Layer({
 			styleIndex: this.styleIndex,
 			drawingIndex: this.anim.drawings.length - 1,
-			startFrame: +f ?? this.anim.currentFrame,
+			startFrame: +frameIndex,
 		});
+		return layer;
 	}
 
-	reset(f) {
-		const drawing = this.anim.getCurrentDrawing();
-		const layer = this.anim.getDrawLayer();
+	reset(frameIndex) {
+		const drawing = this.anim.activeDrawing;
 		let isNewDrawing = drawing ? false : true;
 		if (drawing) {
 			if (drawing.length > 0) {
 				isNewDrawing = true;
 			}
 		}
-
+		
 		if (isNewDrawing) {
 			this.anim.addNewDrawing();
 			/* seems repetietive - settings class ... ? */
-			this.children.color.addColor(layer.color); // add color to color pallette
-			this.anim.layers.push(this.getNewLayer(f));
-			// this.ui.panels.data.saveState();
+			this.children.color.addColor(this.anim.activeLayer.color); // add color to color pallette
+			this.anim.layers.push(this.getNewLayer(frameIndex ?? this.anim.currentFrame));
+			this.ui.faces.activeLayerIndex.update(this.anim.layers.length - 1);
+			this.ui.panels.data.saveState();
 		}  
 		
 		this.ui.update();
@@ -170,17 +187,14 @@ export class StylesPanel extends UIPanel {
 
 	setDefault() {
 		this.activeStyle.reset();
-		this.updatePropertiesUI();
+		this.updateUI();
 	}
 
 	setProperty(prop, value) {
 		this.anim.styles[this.styleIndex][prop] = value;
 	}
 
-	updatePropertiesUI() {
-		if (this.styleIndex > this.anim.styles.length - 1) {
-			this.getNewStyle();
-		}
+	updateUI() {
 		const styleProps = this.anim.styles[this.styleIndex].getProps();
 		for (const prop in styleProps) {
 			if (this.ui.faces[prop]) {

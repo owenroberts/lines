@@ -5,6 +5,10 @@ import { Anim, Drawing, Points } from '../../src/lines.js';
  * get/set endFrame to adjust to changing animation length
  */
 export class AnimateAnim extends Anim {
+	constructor(renderer) {
+		super(renderer);
+		this.activeLayerIndex = 0;
+	}
 
 	get endFrame() {
 		const endFrame = this.layers.map(layer => { return layer.endFrame; });
@@ -19,15 +23,16 @@ export class AnimateAnim extends Anim {
 
 	updateProperty(prop, value) {
 		/* args from ui */
-		for (let i = 0; i < this.layers.length - 1; i++) {
+		for (let i = 0; i < this.layers.length; i++) {
 			if (this.layers[i].isToggled) this.layers[i][prop] = value;
 		}
 	}
 
 	addLayer(layer) {
 		// add before draw layer
-		if (this.layers.indexOf(layer) == -1) {
-			this.layers.splice(this.layers.length - 1, 0, layer);
+		if (this.layers.indexOf(layer) === -1) {
+			// this.layers.splice(this.layers.length - 1, 0, layer);
+			this.layers.push(layer);
 		}
 	}
 
@@ -39,12 +44,15 @@ export class AnimateAnim extends Anim {
 	cutEnd() {
 		/* make sure draw layer doesn't extend to far */
 		let endFrame = 0;
-		for (let i = 0; i < this.layers.length - 1; i++) {
+		for (let i = 0; i < this.layers.length; i++) {
 			const layer = this.layers[i];
 			if (layer.endFrame > endFrame) endFrame = layer.endFrame;
 		}
-		const layer = this.getDrawLayer();
-		if (layer.endFrame > endFrame) layer.endFrame = endFrame;
+		
+		// const layer = this.getDrawLayer();
+		if (this.activeLayer.endFrame > endFrame) {
+			this.activeLayer.endFrame = endFrame;
+		}
 	}
 
 	updateStates() {
@@ -67,21 +75,16 @@ export class AnimateAnim extends Anim {
 		layer.drawingEndIndex = dA.length;
 	}
 
-	getDrawLayer() {
-		return this.layers[this.layers.length - 1];
+	get activeLayer() {
+		return this.layers[this.activeLayerIndex];
 	}
 
-	// getDrawStyle() {
-	// 	return this.styles[this.getDrawLayer().styleIndex];
-	// },
-
-	getCurrentDrawing() {
-		return this.drawings[this.drawings.length - 1];
+	get activeDrawing() {
+		return this.drawings[this.activeLayer.drawingIndex];
 	}
 
 	addDrawing(drawing) {
-		// *** change to layer
-		this.drawings.splice(this.drawings.length - 1, 0, drawing);
+		this.drawings.push(drawing);
 	}
 
 	addNewDrawing() {
@@ -106,6 +109,18 @@ export class AnimateAnim extends Anim {
 			if (state.start >= index) state.start++;
 			if (state.end >= index) state.end++;
 		}
+	}
+
+	swapLayer(layerIndex, swapIndex) {
+		if (swapIndex < 0) return;
+		[this.layers[swapIndex], this.layers[layerIndex]] = [this.layers[layerIndex], this.layers[swapIndex]];
+		this.update();
+	}
+
+	sortLayer(layerIndex, swapIndex) {
+		if (swapIndex < 0) return;
+		const layer = this.layers.splice(layerIndex, 1);
+		this.layers.splice(swapIndex, 0, layer[0]);
 	}
 }
 

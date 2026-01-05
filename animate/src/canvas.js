@@ -90,7 +90,7 @@ export class CanvasPanel extends UIPanel {
 
 	// *** test this
 	fitCanvasToDrawing() {
-		// this.ui.panels.styles.reset();
+		this.ui.panels.styles.reset();
 		
 		let tolerance = 0;
 		let min = { x: 10000, y: 10000 }; // min max size of canvas

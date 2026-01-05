@@ -67,9 +67,9 @@ export class PlaybackPanel extends UIPanel {
 			key: 'shift-e',
 			text: '⎘',
 			callback: () => {
-				this.ui.panels.data.copy();
-				this.next(1);
-				this.ui.panels.data.paste();
+				// this.ui.panels.data.copy();
+				this.next(1, true);
+				// this.ui.panels.data.paste();
 			}
 		});
 
@@ -135,9 +135,9 @@ export class PlaybackPanel extends UIPanel {
 	setFrame(f) {
 		if (+f <= this.anim.endFrame + 1 && +f >= 0) {
 			this.anim.frame = +f;
-			const layer = this.anim.getDrawLayer();
-			layer.startFrame = this.anim.currentFrame;
-			layer.endFrame = this.anim.currentFrame;
+			// const layer = this.anim.getDrawLayer();
+			this.anim.activeLayer.startFrame = this.anim.currentFrame;
+			this.anim.activeLayer.endFrame = this.anim.currentFrame;
 			this.ui.update();
 		} else {
 			this.frameDisplay.update(this.anim.currentFrame, true);
@@ -199,33 +199,32 @@ export class PlaybackPanel extends UIPanel {
 	}
 
 	/* call before changing a frame */
-	next(dir) {
+	next(direction, isCopyLayer=false) {
 
-		const nextFrame = this.anim.currentFrame + dir;
+		const nextFrame = this.anim.currentFrame + direction;
+		if (nextFrame < 0) return;
 		
-		// if (this.anim.isPlaying) ui.faces.play.update(); // ?
 		this.ui.panels.events.stop();
-		
-		if (this.anim.getCurrentDrawing().length > 0) {
-			// drawing to save - can add frame
+
+		if (this.anim.activeDrawing.length > 0 && !isCopyLayer) {
 			this.ui.panels.styles.reset(nextFrame);
 			this.anim.currentFrame = nextFrame;
 		} else {
 			// put in reset? 
-			const layer = this.anim.getDrawLayer();
-			if (dir > 0) {
+			// const layer = this.anim.getDrawLayer();
+			if (direction > 0) {
 				if (this.anim.currentFrame < this.anim.state.end || 
 					(this.anim.stateName == 'default' && this.anim.isDrawingInFrame())) {
-					layer.startFrame = nextFrame;
-					layer.endFrame = nextFrame;	
-					this.anim.frame = nextFrame;
+					if (!isCopyLayer) this.anim.activeLayer.startFrame = nextFrame;
+					this.anim.activeLayer.endFrame = nextFrame;	
+					this.anim.currentFrame = nextFrame;
 				}
 			}
 
-			if (dir < 0 && this.anim.currentFrame > this.anim.state.start) {
-				layer.startFrame = nextFrame;
-				layer.endFrame = nextFrame;
-				this.anim.frame = nextFrame;
+			if (direction < 0 && this.anim.currentFrame > this.anim.state.start) {
+				this.anim.activeLayer.startFrame = nextFrame;
+				if (!isCopyLayer) this.anim.activeLayer.endFrame = nextFrame;
+				this.anim.currentFrame = nextFrame;
 			}
 		}
 

@@ -99,8 +99,6 @@ export class FileManager {
 				new Drawing(json.d[i]) : 
 				null; // still necessary? do i prune drawings on save??
 		}
-		
-
 
 		for (let i = 0; i < json.l.length; i++) {
 			const params = this.loadLayerParams(json.l[i]);

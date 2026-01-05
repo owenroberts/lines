@@ -301,13 +301,9 @@ export class Anim {
 					this.ctx.beginPath();
 				}
 			}
-			
-			// layers save the end index except in lines/animate
-			// also works with tweens that set endIndex to 0
-			let endIndex = props.endIndex < 0 ? drawing.length - 1 : props.endIndex - 1;
 
 			// loop over points
-			for (let j = props.startIndex; j < endIndex; j++) {
+			for (let j = props.startIndex; j < props.endIndex; j++) {
 				const s = drawing.get(j); // returns [point, offset]
 				if (s[0] === Points.END || s[0] === Points.ADD) continue; // end of line or connected line
 				let e = drawing.get(j + 1); // get next [point, offset]

@@ -112,6 +112,7 @@ export class FilesPanel extends UIPanel {
 		try {
 			localStorage.setItem('lines-' + json.title, JSON.stringify(json));
 			localStorage.setItem('lines-title', json.title);
+			this.children.fileName.value = this.fileName;
 		} catch(error) {
 			if (error.name === 'QuotaExceededError') alert('Local storage full');
 			else alert(error.name);
@@ -130,6 +131,7 @@ export class FilesPanel extends UIPanel {
 		}
 		const data = JSON.parse(localData);
 		this.ui.faces.fileName.update(data.title);
+		console.log('load local', data);
 		this.loadJSON(data);
 	}
 
@@ -238,8 +240,8 @@ export class FilesPanel extends UIPanel {
 			this.anim.addLayer(layer);
 		}
 
-		const drawLayer = this.anim.getDrawLayer(); // *** get rid of this
-		drawLayer.drawingIndex = this.anim.drawings.length - 1;
+		// const drawLayer = this.anim.getDrawLayer();
+		this.anim.activeLayer.drawingIndex = this.anim.drawings.length - 1;
 
 		this.ui.panels.styles.reset();
 		this.ui.update();
