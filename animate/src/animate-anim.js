@@ -39,6 +39,9 @@ export class AnimateAnim extends Anim {
 	removeLayer(layer) {
 		const index = this.layers.indexOf(layer);
 		if (index >= 0) this.layers.splice(index, 1);
+		if (this.activeLayerIndex === index) {
+			this.activeLayerIndex--;
+		}
 	}
 
 	cutEnd() {
@@ -70,9 +73,57 @@ export class AnimateAnim extends Anim {
 		while (dB.length > 0) {
 			dA.add(dB.shift());
 		}
-		if (!layer) console.warn('No layer'); // if need to get layer from draw index
-		this.drawings[b] = null;
+		if (!layer) console.warn('no layer'); // if need to get layer from draw index
+		// this.drawings[b] = null;
+		const dBIndex = this.drawings.indexOf(dB);
+		this.drawings.splice(dBIndex, 1);
+		
 		layer.drawingEndIndex = dA.length;
+	}
+
+	pruneDrawings() {
+
+
+		const drawingIndexes = this.layers.map(l => l.drawingIndex);
+
+		for (let i = this.drawings.length - 1; i >= 0; i--) {
+			// remove drawings with no points
+			// remove drawings not used by a layer
+			if (this.drawings[i].points.length === 0 || !drawingIndexes.includes(i)) {
+				this.drawings.splice(i, 1);
+
+				// remove layers that reference the drawing
+				// update layer index 
+				for (let j = this.layers.length - 1; j >= 0; j--) {
+
+					// remove first to avoid removing new index
+					if (this.layers[j].drawingIndex === i) {
+						this.removeLayer(this.layers[j]);
+						continue;
+					}
+
+					if (this.layers[j].drawingIndex > i) {
+						this.layers[j].drawingIndex--;
+					}
+				}
+			}
+		}
+	}
+
+	pruneStyles() {
+		const stylesInUse = [
+			...new Set(this.layers.map(l => l.styleIndex))
+		];
+		for (let i = this.styles.length - 1; i >= 0; i--) {
+			if (!stylesInUse.includes(i)) {
+				this.styles.splice(i, 1);
+				for (let j = 0; j < this.layers.length; j++) {
+					if (this.layers[j].styleIndex >= i) {
+						this.layers[j].styleIndex--;
+					}
+				}
+			}
+		}
 	}
 
 	get activeLayer() {

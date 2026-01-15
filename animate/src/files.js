@@ -2,7 +2,7 @@ import { saveAs } from 'file-saver';
 import { Drawing, Layer, LINES_VERSION } from '../../src/lines.js';
 import { AnimateAnim } from './animate-anim.js';
 import { UIModal, UIButton, UIPanel } from '../../../oi/src/oi.js';
-import { FileManager } from '../../src/lines-file-manager.js';
+import { LinesFiles } from '../../src/lines-files.js';
 
 export class FilesPanel extends UIPanel {
 	constructor(ui, anim, renderer) {
@@ -10,7 +10,7 @@ export class FilesPanel extends UIPanel {
 		
 		this.anim = anim;
 		this.renderer = renderer;
-		this.fm = new FileManager(anim, renderer);
+		this.fm = new LinesFiles(anim, renderer);
 
 		this.fitCanvasToDrawing = false;
 		this.isReloadWarning = false;
@@ -97,8 +97,8 @@ export class FilesPanel extends UIPanel {
 		
 		this.ui.panels.styles.reset();
 		this.ui.panels.playback.checkEnd();
-		this.ui.panels.data.pruneDrawings();
-		this.ui.panels.data.pruneStyles();
+		this.anim.pruneDrawings();
+		this.anim.pruneStyles();
 
 		if (this.fileName === "name this file") {
 			this.fileName = prompt("name file");
@@ -142,10 +142,10 @@ export class FilesPanel extends UIPanel {
 		this.anim.isMultiColor = true;
 		this.anim.isMultiLineWidth = true;
 
-		this.ui.faces.width.update(data.w);
-		this.ui.faces.height.update(data.h);
-		if (data.bg) this.ui.faces.bgColor.update(data.bg);
-		if (data.g) this.ui.panels.timeline.groups = [...data.g];
+		this.ui.faces.width.update(data.width);
+		this.ui.faces.height.update(data.height);
+		if (data.bgColor) this.ui.faces.bgColor.update(data.bgColor);
+		if (data.groups) this.ui.panels.timeline.groups = [...data.groups];
 		
 		this.ui.panels.styles.reset();
 

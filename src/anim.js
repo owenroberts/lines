@@ -1,16 +1,5 @@
-/*
-	
-	animation contains drawings and layers
-	draw per second determined by renderer framerate and target fps
-	fps effects frame updates and line rendering
-	wiggle is calculated based on the layer offset, default 5 frames
-*/
-
-import { assert, randomInt, map } from '../../cool/cool.js';
-import { Drawing } from './Drawing.js';
-import { Layer } from './Layer.js';
-import { Style } from './Style.js';
-import { Points, LINES_VERSION } from './Consts.js';
+import { map } from '../../cool/cool.js';
+import { Points } from './Consts.js';
 
 /**
  * basic unit of lines animation
@@ -181,7 +170,7 @@ export class Anim {
 		}
 	}
 
-	finish(props) {
+	finish() {
 		this.ctx.stroke();
 	}
 
@@ -381,31 +370,6 @@ export class Anim {
 				props.y + p[1] + v[1] + o[1]
 			);
 		}
-	}
-
-	load(src, callback) {
-		if (typeof src === 'object') loadJSON(src, callback);
-		else {
-			fetch(src)
-				.then(response => { return response.json() })
-				.then(data => { this.loadData(data, callback); })
-				.catch(error => { console.error(error) });
-		}
-	}
-
-	loadJSON(json, callback) {
-		this.loadData(json, callback);
-	}
-
-	loadData(json, callback) {
-		
-		this.isLoaded = true; // still necessary?
-		// this.styles = structuredClone(json.st);
-	}
-
-	setOnLoad(callback) {
-		if (this.isLoaded) callback();
-		else this.onLoad = callback;
 	}
 
 	play() {

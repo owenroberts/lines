@@ -87,10 +87,13 @@ export class EraserPanel extends UIPanel {
 			}
 			
 			if (drawing.points.length === 0 && i !== this.anim.layers.length - 1) {
-				layer.removeIndex(this.anim.currentFrame, function() {
-					this.anim.layers.splice(i, 1);
-					this.ui.panels.styles.reset();
-				});
+
+				// *** error here, maybe don't need to remove layer here 
+
+				// layer.removeIndex(this.anim.currentFrame, () => {
+					// this.anim.layers.splice(i, 1);
+					// this.ui.panels.styles.reset();
+				// });
 			} else {
 				drawing.update({ 
 					...layer.drawProps, 

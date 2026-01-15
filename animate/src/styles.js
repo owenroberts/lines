@@ -174,7 +174,7 @@ export class StylesPanel extends UIPanel {
 		
 		if (isNewDrawing) {
 			this.anim.addNewDrawing();
-			/* seems repetietive - settings class ... ? */
+			/* seems repetitive - settings class ... ? */
 			this.children.color.addColor(this.anim.activeLayer.color); // add color to color pallette
 			this.anim.layers.push(this.getNewLayer(frameIndex ?? this.anim.currentFrame));
 			this.ui.faces.activeLayerIndex.update(this.anim.layers.length - 1);

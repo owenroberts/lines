@@ -366,39 +366,13 @@ export class DataPanel extends UIPanel {
 	// *** needs later testing
 	pruneDrawings() {
 		this.saveState();
-
-		const nonNulls = [];
-
-		for (let i = 0; i < this.anim.drawings.length; i++) {
-			const drawing = this.anim.drawings[i];
-			if (drawing) nonNulls.push(i);
-		}
-
-		for (let i = 0; i < this.anim.layers.length; i++) {
-			const layer = this.anim.layers[i];
-			const index = nonNulls.indexOf(layer.drawingIndex);
-			layer.drawingIndex = index;
-		}
-
-		for (let i = this.anim.drawings.length; i >= 0; i--) {
-			if (this.anim.drawings[i] == null) this.anim.drawings.splice(i, 1);
-		}
+		this.anim.pruneDrawings();
+		this.ui.update();
 	}
 
 	// *** test
 	pruneStyles() {
-		const stylesInUse = [
-			...new Set(this.anim.layers.map(l => l.styleIndex))
-		];
-		for (let i = this.anim.styles.length - 1; i >= 0; i--) {
-			if (!stylesInUse.includes(i)) {
-				this.anim.styles.splice(i, 1);
-				for (let j = 0; j < this.anim.layers.length; j++) {
-					if (this.anim.layers[j].styleIndex >= i) {
-						this.anim.layers[j].styleIndex--;
-					}
-				}
-			}
-		}
+		this.saveState();
+		this.anim.pruneStyles();
 	}
 }

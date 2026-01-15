@@ -37,7 +37,7 @@
 	
 	<script type="module">
 		import data from './examples/lines.json';
-		import { Renderer, Anim } from './src/lines.js';
+		import { Renderer, Anim, LinesFiles } from './src/lines.js';
 
 		const renderer = new Renderer({
 			width: data.w,
@@ -48,7 +48,9 @@
 		});
 
 		const animation = new Anim(renderer);
-		animation.loadData(data);
+		const fm = new LinesFiles(animation, renderer);
+		fm.loadData(data);
+		
 		renderer.onDraw = _timeElapsed => {
 			animation.update();
 			animation.draw();

@@ -60,14 +60,14 @@ export const LayerMixin = {
 		return this;
 	},
 
-	removeIndex(index, removeFunc) {
+	removeIndex(index, callback) {
 		/*
 			returns a layer to add to layers to calling function
 			if no match return "remove" to remove the layer	
 			is that sort of stupid?
 		*/
 
-		if (this.startFrame === index && this.endFrame === index) removeFunc();
+		if (this.startFrame === index && this.endFrame === index) callback();
 		else if (this.startFrame === index) this.startFrame += 1;
 		else if (this.endFrame === index) this.endFrame -= 1;
 		else if (index > this.startFrame && index < this.endFrame) {

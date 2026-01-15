@@ -21,7 +21,7 @@ import { TimelinePanel } from './timeline.js';
 import { BackgroundPanel } from './background.js';
 import { DrawingsPanel } from './drawings.js'; // really need this??
 import { StatesPanel } from './states.js';
-import { FilesPanel } from './files-lines.js';
+import { FilesPanel } from './files.js';
 import { CapturePanel } from './capture.js';
 
 // import { Sequencer } from './sequencer.js';

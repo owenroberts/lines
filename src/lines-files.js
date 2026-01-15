@@ -6,7 +6,7 @@ import { Drawing, Layer, Style, LINES_VERSION } from './lines.js';
 /**
  * load and save files for lines
  */
-export class FileManager {
+export class LinesFiles {
 	
 	constructor(anim, renderer) {
 		this.anim = anim;
@@ -17,44 +17,43 @@ export class FileManager {
 
 		const json = {
 			title: title ?? prompt("name file"),
-			v: LINES_VERSION,
-			w: this.renderer.width,
-			h: this.renderer.height,
+			version: LINES_VERSION,
+			width: this.renderer.width,
+			height: this.renderer.height,
 			dpf: this.anim.dpf,
-			mc: [...new Set(this.anim.layers.map(layer => layer.color))].length > 1, // filter
-			mw: [...new Set(this.anim.layers.map(layer => layer.lineWidth))].length > 1,
-			bg: this.renderer.bgColor,
-			d: this.anim.drawings.map(d => d ? d.getPoints() : null), // *** pruned
+			isMultiColor: [...new Set(this.anim.layers.map(layer => layer.color))].length > 1, // filter
+			isMultiLineWidth: [...new Set(this.anim.layers.map(layer => layer.lineWidth))].length > 1,
+			bgColor: this.renderer.bgColor,
+			drawings: structuredClone(this.anim.drawings.map(d => d.points)),
 		};
 
-		json.d.pop(); // *** remove active drawing
-		if (json.d.length === 0) {
+		if (json.drawings.length === 0) {
 			console.log('File not saved, no drawings to save.');
 			return;
 		}
 
-		json.l = isSingleFrame ? 
+		json.layers = isSingleFrame ? 
 			this.anim.layers
-				.filter(l => l.isInFrame(this.anim.currentFrame)) 
+				.filter(l => l.isInFrame(this.anim.currentFrame))
 				.map(l => { return { ...l.getSaveProps(), f: [0, 0] }}) :
 			this.anim.layers.map(l => l.getSaveProps());
 
 		// need to prune drawings after
-
-		json.l.pop(); // *** remove active layer
-		if (json.l.length === 0) return;
+		// 
+		if (json.layers.length === 0) return;
 
 		// this is part of layers already right? just need to load ... 
 		// const groups = this.timeline.groups();
-		if (groups.length > 0) json.g = [...groups];
+		// *** redo groups
+		if (groups.length > 0) json.groups = [...groups];
 
 		const states = Object.keys(this.anim.states)
 			.filter(s => s !== 'default');
 
 		if (states.length > 0) {
-			json.s = {};
+			json.states = {};
 			states.forEach(state => {
-				json.s[state] = [
+				json.states[state] = [
 					this.anim.states[state].start, 
 					this.anim.states[state].end,
 					this.anim.states[state].dir ?? 1,
@@ -64,10 +63,10 @@ export class FileManager {
 		}
 
 		// styles
-		json.st = structuredClone(this.anim.styles);
+		json.styles = structuredClone(this.anim.styles);
 
-		json.q = structuredClone(this.anim.sequences ?? []);
-		json.qi = +(this.anim.sequenceIndex ?? -1);
+		json.sequences = structuredClone(this.anim.sequences ?? []);
+		json.sequenceIndex = +(this.anim.sequenceIndex ?? -1);
 		return json;
 	}
 
@@ -92,16 +91,15 @@ export class FileManager {
 	}
 
 	loadData(json, callback) {
-		assert(json.v === LINES_VERSION, `json data v${json.v} is not correct version, lines version = ${LINES_VERSION}`);
 
-		for (let i = 0; i < json.d.length; i++) {
-			this.anim.drawings[i] = json.d[i] ? 
-				new Drawing(json.d[i]) : 
-				null; // still necessary? do i prune drawings on save??
+		assert(json.version === LINES_VERSION, `json data v${json.v} is not correct version, lines version = ${LINES_VERSION}`);
+
+		for (let i = 0; i < json.drawings.length; i++) {
+			this.anim.drawings[i] = new Drawing(json.drawings[i]);
 		}
 
-		for (let i = 0; i < json.l.length; i++) {
-			const params = this.loadLayerParams(json.l[i]);
+		for (let i = 0; i < json.layers.length; i++) {
+			const params = this.loadLayerParams(json.layers[i]);
 			const layer = new Layer(params);
 			layer.drawingEndIndex = this.anim.drawings[params.drawingIndex].length;
 			layer.linesCount = randomInt(5); // weird this is here?
@@ -114,38 +112,37 @@ export class FileManager {
 		this.anim.endFrame = Math.max.apply(Math, endFrame);
 
 		// states
-		for (const key in json.s) {
+		for (const key in json.states) {
 			this.anim.states[key] = {
-				start: json.s[key][0],
-				end: json.s[key][1],
-				dir: json.s[key][2] ?? 1,
-				loop: json.s[key][3] ?? true,
+				start: json.states[key][0],
+				end: json.states[key][1],
+				dir: json.states[key][2] ?? 1,
+				loop: json.states[key][3] ?? true,
 			};
 		}
 
-		for (let i = 0; i < json.st.length; i++) {
-			const params = structuredClone(json.st[i]);
-			this.anim.styles[i] = new Style(params);
+		for (let i = 0; i < json.styles.length; i++) {
+			this.anim.styles[i] = new Style(json.styles[i]);
 		}
 
-		this.anim.sequences = structuredClone(json.q) ?? [];
-		this.anim.sequenceIndex = +(json.qi ?? -1);
+		this.anim.sequences = json.sequences ?? [];
+		this.anim.sequenceIndex = +(json.sequenceIndex ?? -1);
 
 		if (this.anim.states.default) this.anim.resetDefault();
 		this.dpf = json.dpf;
 
-		this.anim.isMultiColor = json.mc ?? false;
-		this.anim.isMultiLineWidth = json.mw ?? false;
+		this.anim.isMultiColor = json.isMultiColor ?? false;
+		this.anim.isMultiLineWidth = json.isMultiLineWidth ?? false;
 
-		this.anim.width = json.w;
-		this.anim.height = json.h;
+		this.anim.width = json.width;
+		this.anim.height = json.height;
 
-		this.renderer.setWidth(json.w);
-		this.renderer.setHeight(json.h);
+		this.renderer.setWidth(json.width);
+		this.renderer.setHeight(json.height);
 
 		// need this ???
-		this.anim.halfWidth = Math.round(json.w / 2);
-		this.anim.halfHeight = Math.round(json.h / 2);
+		this.anim.halfWidth = Math.round(json.width / 2);
+		this.anim.halfHeight = Math.round(json.height / 2);
 
 		if (callback) callback(json);
 		if (this.anim.onLoad) this.anim.onLoad();
