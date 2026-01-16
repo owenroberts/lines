@@ -100,7 +100,7 @@ export class GameAnim extends Anim {
 
 	playOnce(callback) {
 		if (!this.isPlaying) this.isPlaying = true;
-		this.frame = this.state.start;
+		this.currentFrame = this.state.start;
 		this.onPlayedOnce = callback;
 	}
 

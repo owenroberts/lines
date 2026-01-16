@@ -134,8 +134,7 @@ export class PlaybackPanel extends UIPanel {
 
 	setFrame(f) {
 		if (+f <= this.anim.endFrame + 1 && +f >= 0) {
-			this.anim.frame = +f;
-			// const layer = this.anim.getDrawLayer();
+			this.anim.currentFrame = +f;
 			this.anim.activeLayer.startFrame = this.anim.currentFrame;
 			this.anim.activeLayer.endFrame = this.anim.currentFrame;
 			this.ui.update();
@@ -182,9 +181,8 @@ export class PlaybackPanel extends UIPanel {
 			this.checkEnd();
 			// this.ui.panels.styles.reset();
 		} else { // ?
-			const layer = this.anim.getDrawLayer();
-			layer.startFrame = this.anim.currentFrame;
-			layer.endFrame = this.anim.currentFrame;
+			this.anim.activeLayer.startFrame = this.anim.currentFrame;
+			this.anim.activeLayer.endFrame = this.anim.currentFrame;
 		}
 		this.anim.isPlaying = !this.anim.isPlaying;
 		// this.ui.panels.timeline.update();

@@ -43,27 +43,8 @@ export class Anim {
 		this.sequences = [];
 		this.sequenceIndex = -1; // -1 means ignore the sequencer ... 
 
-		this.layerColor; // wtf is this for?
-
 		if (this.init) this.init(); // pixel init -- put in pixel mixin (or class?)
 	}
-
-	// get rid of these get/sets
-	get frame() {
-		return this.currentFrame;
-	}
-
-	set frame(n) {
-		this.currentFrame = +n;
-
-		// reset end of default anim to anim end
-		// necessary for all lines? maybe just in animate?
-		if (this.states.default) {
-			if (this.states.default.end !== this.endFrame) {
-				this.states.default.end = this.endFrame;
-			}
-		}
-	}	
 
 	get state() {
 		return this.stateData;
@@ -72,6 +53,8 @@ export class Anim {
 	set state(stateName) {
 		if (this.stateName !== stateName && this.states[stateName]) {
 			this.stateName = stateName;
+
+			// dont remember why this is setup this way ... 
 			this.stateData = structuredClone(this.states[this.stateName]);
 			// so state dir can overwrite
 			if (this.state) { // why? what was error here ... 
@@ -128,46 +111,45 @@ export class Anim {
 	}
 
 	update() {
-		if (this.isPlaying) {
-			if (this.drawCount >= this.dpf - 1) { 
-				// >= instead of === in case dpf changed
+		if (!this.isPlaying) return;
+		if (this.drawCount >= this.dpf - 1) { 
+			// >= instead of === in case dpf changed
+
+			if (this.sequenceIndex >= 0) {
+				this.nextClip(false);
+			}
+
+			let playedState = false;
+			if (this.state.dir === 1) {
+				if (this.currentFrame >= this.state.end) {
+					this.currentFrame = this.state.start;
+					playedState = true;
+				} else {
+					this.currentFrame++;
+				}
+			} else {
+				if (this.currentFrame <= this.state.start) {
+					this.currentFrame = this.state.end;
+					playedState = true;
+				} else {
+					this.currentFrame--;
+				}
+			}
+
+			if (playedState) {
+				if (this.onPlayedState) this.onPlayedState();
+				if (this.onPlayedOnce) this.onPlayedOnce(); // should this delete itself?
 
 				if (this.sequenceIndex >= 0) {
-					this.nextClip(false);
+					this.nextClip(true);
 				}
-
-				let playedState = false;
-				if (this.state.dir === 1) {
-					if (this.currentFrame >= this.state.end) {
-						this.currentFrame = this.state.start;
-						playedState = true;
-					} else {
-						this.currentFrame++;
-					}
-				} else {
-					if (this.currentFrame <= this.state.start) {
-						this.currentFrame = this.state.end;
-						playedState = true;
-					} else {
-						this.currentFrame--;
-					}
-				}
-
-				if (playedState) {
-					if (this.onPlayedState) this.onPlayedState();
-					if (this.onPlayedOnce) this.onPlayedOnce(); // should this delete itself?
-
-					if (this.sequenceIndex >= 0) {
-						this.nextClip(true);
-					}
-				}
-
-				this.drawCount = 0;
-			} else {
-				this.drawCount++;
 			}
-			if (this.onUpdate) this.onUpdate();
+
+			this.drawCount = 0;
+		} else {
+			this.drawCount++;
 		}
+		if (this.onUpdate) this.onUpdate();
 	}
 
 	finish() {

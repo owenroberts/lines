@@ -77,7 +77,7 @@ export class QuickAnimatePanel extends UIPanel {
 			}
 
 			// reset end of anim
-			if (this.anim.stateName == "default" && this.anim.state.end < layer.endFrame) {
+			if (this.anim.stateName === "default" && this.anim.state.end < layer.endFrame) {
 				this.anim.state.end = layer.endFrame;
 			}
 		}
