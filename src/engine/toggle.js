@@ -1,34 +1,34 @@
 /*
 	Sprite -> UI -> Button -> Toggle
-	button with added toggled state
+	button with added isToggled state
 */
 
-import { Button } from './Button.js';
+import { Button } from './button.js';
 
 export class Toggle extends Button {
 	constructor(params, isDebug) {
 		super(params, isDebug);
-		this.toggled = false;
+		this.isToggled = false;
 	}
 
 	toggle(state, callFuncs=true) {
-		if (!state) this.toggled = !this.toggled;
-		else this.toggled = state == 'on' ? true : false;
-		this.animation.state = this.toggled ? 'selected' : 'idle';
+		if (!state) this.isToggled = !this.isToggled;
+		else this.isToggled = state == 'on' ? true : false;
+		this.animation.state = this.isToggled ? 'selected' : 'idle';
 		
 		this.waitToGoOut = false;
 		this.mouseOver = false;
 		this.clickStarted = false;
 
 		if (callFuncs) {
-			if (this.func) this.func(this.toggled);
-			if (this.onClick) this.onClick(this.toggled);
+			if (this.func) this.func(this.isToggled);
+			if (this.onClick) this.onClick(this.isToggled);
 		}
 	}
 
 	out(x, y) {
 		super.out(x, y);
-		this.animation.state = this.toggled ? 'selected' : 'idle';
+		this.animation.state = this.isToggled ? 'selected' : 'idle';
 	}
 	
 	up(x, y) {

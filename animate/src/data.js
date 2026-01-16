@@ -1,19 +1,12 @@
-/*
-	data module 
-	what is this really?
-	prob need multiple modules
-	really just a bunch of ui, callbacks ...
-	separate
-		- save states
-		- animation
-		- clear delete etc
-		- copy paste
-	some stuff can be moved to lines mixin
-	partly all here because it does save state after each ...
-*/
-
 import { UIPanel } from '../../../oi/src/oi.js';
 
+/**
+ * data panel
+ * ui for various data manipulations
+ * copy, cut, paste, delete frames
+ * quick animations
+ * save state (add states?)
+ */
 export class DataPanel extends UIPanel {
 	constructor(ui, anim) {
 		super({ id: "data", ui });
@@ -273,7 +266,7 @@ export class DataPanel extends UIPanel {
 			}
 			layer.resetTweens();
 		}
-		this.anim.updateStates();
+		this.anim.updateClips();
 		lns.ui.update();
 	}
 

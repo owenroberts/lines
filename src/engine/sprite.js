@@ -1,5 +1,5 @@
 import { assert } from '../../../cool/cool.js';
-import { BBox } from './BBox.js';
+import { BBox } from './bbox.js';
 
 /**
  * base class for game elements

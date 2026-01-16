@@ -47,17 +47,16 @@ export class LinesFiles {
 		// *** redo groups
 		if (groups.length > 0) json.groups = [...groups];
 
-		const states = Object.keys(this.anim.states)
-			.filter(s => s !== 'default');
+		const clips = this.anim.clips.names.filter(n => n !== "default");
 
-		if (states.length > 0) {
-			json.states = {};
-			states.forEach(state => {
-				json.states[state] = [
-					this.anim.states[state].start, 
-					this.anim.states[state].end,
-					this.anim.states[state].dir ?? 1,
-					this.anim.states[state].loop ?? true,
+		if (clips.length > 0) {
+			json.clips = {};
+			clips.forEach(clip => {
+				json.clips[clip] = [
+					this.anim.clips[clip].start, 
+					this.anim.clips[clip].end,
+					this.anim.clips[clip].dir ?? 1,
+					this.anim.clips[clip].loop ?? true,
 				];
 			});
 		}
@@ -111,14 +110,13 @@ export class LinesFiles {
 			.map(layer => { return layer.endFrame; });
 		this.anim.endFrame = Math.max.apply(Math, endFrame);
 
-		// states
-		for (const key in json.states) {
-			this.anim.states[key] = {
-				start: json.states[key][0],
-				end: json.states[key][1],
-				dir: json.states[key][2] ?? 1,
-				loop: json.states[key][3] ?? true,
-			};
+		for (const name in json.clips) {
+			this.anim.clips.add(name, {
+				start: json.clips[name][0],
+				end: json.clips[name][1],
+				dir: json.clips[name][2] ?? 1,
+				loop: json.clips[name][3] ?? true,
+			});
 		}
 
 		for (let i = 0; i < json.styles.length; i++) {
@@ -128,7 +126,7 @@ export class LinesFiles {
 		this.anim.sequences = json.sequences ?? [];
 		this.anim.sequenceIndex = +(json.sequenceIndex ?? -1);
 
-		if (this.anim.states.default) this.anim.resetDefault();
+		if (this.anim.clips.default) this.anim.resetDefault();
 		this.dpf = json.dpf;
 
 		this.anim.isMultiColor = json.isMultiColor ?? false;

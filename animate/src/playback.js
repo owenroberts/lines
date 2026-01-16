@@ -77,6 +77,7 @@ export class PlaybackPanel extends UIPanel {
 			obj: anim,
 			ref: "currentFrame",
 			key: "f",
+			ignoreSettings: true,
 			callback: value => {
 				this.setFrame(value);
 			}
@@ -211,15 +212,15 @@ export class PlaybackPanel extends UIPanel {
 			// put in reset? 
 			// const layer = this.anim.getDrawLayer();
 			if (direction > 0) {
-				if (this.anim.currentFrame < this.anim.state.end || 
-					(this.anim.stateName == 'default' && this.anim.isDrawingInFrame())) {
+				if (this.anim.currentFrame < this.anim.clips.current.end || 
+					(this.anim.clips.current.name === 'default' && this.anim.isDrawingInFrame())) {
 					if (!isCopyLayer) this.anim.activeLayer.startFrame = nextFrame;
 					this.anim.activeLayer.endFrame = nextFrame;	
 					this.anim.currentFrame = nextFrame;
 				}
 			}
 
-			if (direction < 0 && this.anim.currentFrame > this.anim.state.start) {
+			if (direction < 0 && this.anim.currentFrame > this.anim.clips.current.start) {
 				this.anim.activeLayer.startFrame = nextFrame;
 				if (!isCopyLayer) this.anim.activeLayer.endFrame = nextFrame;
 				this.anim.currentFrame = nextFrame;

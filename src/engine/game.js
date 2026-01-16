@@ -1,6 +1,6 @@
 import { assert, mobilecheck, testPerformance } from '../../../cool/cool.js';
-import { Renderer, Loader } from '../lines.js';
-import { AudioPlayer, Scene, Manager, GameAnim, Input, BBox } from '../Engine.js';
+import { Renderer, Loader, Manager } from '../lines.js';
+import { AudioPlayer, Scene, GameAnim, Input, BBox } from '../engine.js';
 import Stats from 'stats.js';
 
 /**
@@ -154,6 +154,7 @@ export class Game {
 							this.anims[file][key] = new GameAnim(this);
 							this.anims[file][key].src = file + '.' + key;
 							this.anims[file][key].loadData(assets.animations[file][key].json);
+							this.anims[file][key].onLoad();
 						}
 					}
 				} else {

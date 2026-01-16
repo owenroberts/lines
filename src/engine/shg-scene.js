@@ -2,7 +2,7 @@
 	scene with a grid
 */
 
-import { Scene } from './Scene.js';
+import { Scene } from './scene.js';
 
 export class SHGScene extends Scene {
 	constructor(bounds, width, height) {

@@ -1,20 +1,20 @@
 /*
-	simplified entity with state reference for animation
-	only supports index states for now
+	simplified entity with clip reference for animation
+	only supports index clips for now
 */
 
-import { Entity } from './Entity.js';
+import { Entity } from './entity.js';
 
 export class TextureEntity extends Entity {
 	constructor(params, isDebug) {
 		super(params, isDebug);
 		this.center = false;
-		this.stateName = `frame-${params.stateIndex}`;
-		this.animation.createNewState(`frame-${params.stateIndex}`, params.stateIndex, params.stateIndex);
+		this.clipName = `frame-${params.clipIndex}`;
+		this.animation.createNewClip(`frame-${params.clipIndex}`, params.clipIndex, params.clipIndex);
 	}
 
 	display(editorOnScreen) {
-		this.animation.state = this.stateName;
+		this.animation.clips.set(this.clipName);
 		super.display(editorOnScreen);
 	}
 }

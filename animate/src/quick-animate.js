@@ -36,7 +36,7 @@ export class QuickAnimatePanel extends UIPanel {
 			const layer = this.anim.layers[i];
 			if (!layer.isInFrame(this.anim.currentFrame)) continue;
 			layer.endFrame = this.anim.currentFrame + n;
-			if (this.anim.state.end < layer.endFrame) this.anim.state.end = layer.endFrame;
+			if (this.anim.clips.current.end < layer.endFrame) this.anim.clips.current.end = layer.endFrame;
 
 			switch(type) {
 				case "Draw":
@@ -77,8 +77,8 @@ export class QuickAnimatePanel extends UIPanel {
 			}
 
 			// reset end of anim
-			if (this.anim.stateName === "default" && this.anim.state.end < layer.endFrame) {
-				this.anim.state.end = layer.endFrame;
+			if (this.anim.clips.current.name === "default" && this.anim.clips.current.end < layer.endFrame) {
+				this.anim.clips.current.end = layer.endFrame;
 			}
 		}
 		

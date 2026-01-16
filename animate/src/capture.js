@@ -173,7 +173,7 @@ export class CapturePanel extends UIPanel {
 		this.ui.panels.styles.reset();
 		this.setCaptureSettings();
 		/* set animation to last frame because it updates frames before draw */
-		this.anim.currentFrame = this.anim.state.start; // *** fix with states
+		this.anim.currentFrame = this.anim.clips.current.start; // *** fix with states (?)
 		this.anim.isPlaying = true;	
 		// capture as many frames as necessary for lines ratio or 1 of every frame
 		this.frameCount = this.anim.endFrame * Math.max(1, this.anim.dpf) * this.loopCount;

@@ -1,5 +1,5 @@
 import { assert } from '../../../cool/cool.js';
-import { SpriteCollection } from './SpriteCollection.js';
+import { SpriteCollection } from './sprite-collection.js';
 
 /**
  * basic container for sprites and events for scene in LinesEngine game

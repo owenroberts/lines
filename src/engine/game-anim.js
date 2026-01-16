@@ -4,7 +4,6 @@ import { Anim } from '../lines.js';
  * game implementation of Anim
  * uses frames isntead of layers for drawing lookup for better performance
  * update separated for random playback (do i still use this?)
- * slightly different state get/set -- prob wanna kill these anyway
  */
 export class GameAnim extends Anim {
 	constructor(gm, debug) {
@@ -17,7 +16,7 @@ export class GameAnim extends Anim {
 		this.frames = [];
 	}
 
-	update() { /* too many things to stick in onPlayedState etc */
+	update() { /* too many things to stick in onPlayedClip etc */
 		if (!this.isPlaying) return;
 
 		if (this.drawCount >= this.dpf - 1) {
@@ -31,38 +30,38 @@ export class GameAnim extends Anim {
 	nextFrame() {
 		if (this.randomFrames) {
 			while (this.prevFrame === this.currentFrame) {
-				this.currentFrame = Cool.randomInt(this.state.start, this.state.end);
+				this.currentFrame = Cool.randomInt(this.clips.current.start, this.clips.current.end);
 			}
 			this.prevFrame = this.currentFrame;
 		} else {
 			if (this.sequenceIndex >= 0) {
 				this.nextClip(false);
 			}
-			let playedState = false;
-			if (this.state.dir === 1) {
-				if (this.currentFrame >= this.state.end) {
-					this.currentFrame = this.state.loop ? this.state.start : this.state.end;
-					playedState = true;
+			let isClipDone = false;
+			if (this.clips.current.dir === 1) {
+				if (this.currentFrame >= this.clips.current.end) {
+					this.currentFrame = this.clips.current.loop ? this.clips.current.start : this.clips.current.end;
+					isClipDone = true;
 				} else {
 					this.currentFrame++;
 				}
 			} else {
-				if (this.currentFrame <= this.state.start) {
-					this.currentFrame = this.loop ? this.state.end : this.state.start;
-					playedState = true;
+				if (this.currentFrame <= this.clips.current.start) {
+					this.currentFrame = this.loop ? this.clips.current.end : this.clips.current.start;
+					isClipDone = true;
 				} else {
 					this.currentFrame--;
 				}
 			}
 
 
-			if (playedState) {
+			if (isClipDone) {
 				// do not loop in callback dummy
 				if (this.onPlayedOnce) {
 					this.onPlayedOnce();
 					this.onPlayedOnce = undefined;
 				}
-				if (this.onPlayedState) this.onPlayedState();
+				if (this.onPlayedClip) this.onPlayedClip();
 				if (this.sequenceIndex >= 0) {
 					this.nextClip(true);
 				}
@@ -70,16 +69,16 @@ export class GameAnim extends Anim {
 		}
 	}
 
-	createNewState(label, start, end, dir=1) {
-		if (!this.states[label]) {
-			this.states[label] = { start, end, dir };
+	createNewClip(name, start, end, dir=1, loop=true) {
+		if (!this.clips[name]) {
+			this.clips.add(name, { start, end, dir, loop });
 		}
-		this.state = label; /* ? */
-		// sets anim to state on create, probably dont need this right?
 	}
 
-	playStateCheck() {
-		if (this.state.start != this.state.end) this.isPlaying = true;
+	playClipCheck() {
+		if (this.clips.current.start != this.clips.current.end) {
+			this.isPlaying = true;
+		}
 	}
 
 	set state(stateName) {
@@ -100,12 +99,12 @@ export class GameAnim extends Anim {
 
 	playOnce(callback) {
 		if (!this.isPlaying) this.isPlaying = true;
-		this.currentFrame = this.state.start;
+		this.currentFrame = this.clips.current.start;
 		this.onPlayedOnce = callback;
 	}
 
-	loadData(json, callback) {
-		super.loadData(json, callback);
+	onLoad() {
+		// super.loadData(json, callback);
 		this.setFrames();
 	}
 

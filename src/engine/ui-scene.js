@@ -1,3 +1,4 @@
+import { Scene } from './scene.js';
 /**
  * scene with mouse events for ui
  */

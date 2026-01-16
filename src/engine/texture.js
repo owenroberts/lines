@@ -91,7 +91,7 @@ export class Texture {
 				continue;
 			}
 
-			this.animation.state = `f-${this.locations[i][2]}`;
+			this.animation.clips.set(`f-${this.locations[i][2]}`);
 			this.animation.draw(x, y);
 		}
 	}

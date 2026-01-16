@@ -1,3 +1,5 @@
+import { Scene } from './scene.js';
+
 /**
  * scene with offset for map
  */

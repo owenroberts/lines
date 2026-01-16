@@ -37,11 +37,11 @@ export class TextSprite {
 		if (params.message) this.setMessage(params.message);
 		if (params.breakWithOutSpaces) this.setBreaks(true);
 
-		if (!params.letters.states[0]) {
+		if (!params.letters.clips[0]) {
 			const indexString = params.letterIndexString || 
 				"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,:?-+'&$;\"!";
 			for (let i = 0; i < indexString.length; i++) {
-				params.letters.createNewState(indexString[i], i, i);
+				params.letters.creatNewClip(indexString[i], i, i);
 			}
 		}
 
@@ -190,7 +190,7 @@ export class TextSprite {
 				// x = _x || this.x;
 				// ? just make this else !== || !== -->
 			} else {
-				this.letters.state = letter;
+				this.letters.clips.set(letter);
 				// only do a line update when its the first instance of letter in message
 				this.letters.draw(x, y);
 				x += this.track;

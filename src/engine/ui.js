@@ -3,7 +3,7 @@
 	better name like user interface element? UISprite?
 */
 
-import { ColliderSprite } from './ColliderSprite.js';
+import { ColliderSprite } from './collider-sprite';
 
 export class UI extends ColliderSprite {
 	constructor(params, isDebug) {
@@ -29,31 +29,37 @@ export class UI extends ColliderSprite {
 			this.animation.isPlaying = true;
 		}
 		
-		if (params.states) {
-			this.animation.states = params.states;
+		if (params.clips) {
+			for (const name in params.clips) {
+				this.animation.clips.add(name, params.clips[name]);
+			}
 		}
-		this.animation.state = 'idle';
+		
+		this.animation.clip.set("idle");
 
 		if (params.isButton) {
-			this.animation.states = {
-				idle: { start: 0, end: 0 },
-				over: { start: 1, end: 1 },
-				down: { start: 2, end: 2 },
-			}
+
+			this.animation.createNewClip("idle", 0, 0);
+			this.animation.createNewClip("over", 1, 1);
+			this.animation.createNewClip("down", 2, 2);
+
 			this.onOver = function() {
-				this.animation.state = 'over';
+				this.animation.clips.set("over");
 			};
+
 			this.onOut = function() {
-				this.animation.state = 'idle';
+				this.animation.clips.set("idle");
 			};
+
 			this.onDown = function() {
-				this.animation.state = 'down';
+				this.animation.clips.set("down");
 			};
 
 			this.onUp = function() {
-				this.animation.state = 'over';
+				this.animation.clips.set("over");
 			};
-			this.animation.state = 'idle';
+
+			this.animation.clips.set("idle");
 		}
 
 		this.scenes = params.scenes; // deprecate ? 

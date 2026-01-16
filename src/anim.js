@@ -1,9 +1,10 @@
 import { map } from '../../cool/cool.js';
-import { Points } from './Consts.js';
+import { Points } from './consts.js';
+import { Manager } from './manager.js';
 
 /**
  * basic unit of lines animation
- * drawings, layers, styles, states, sequences
+ * drawings, layers, styles, clips, sequences
  */
 export class Anim {
 	constructor(renderer) {
@@ -31,42 +32,21 @@ export class Anim {
 		this.drawCount = 0;
 		this.endFrame = 0; // set from loading layers
 
-		this.override = {}; // override properties
+		this.clips = new Manager();
+		this.clips.add("default", { start: 0, end: 0, dir: 1, loop: true });
+		this.clips.set("default");
 
-		// most animations use default state, game anims/tileSets have states for changing frame
-		// replace with manager ?? or is this too complicated???
-		// or use js map?
-		this.stateName = 'default'; // set state label
-		this.states = { 'default': { start: 0, end: 0, dir: 1, loop: true } };
-		this.stateData = structuredClone(this.states[this.stateName]);
-		
 		this.sequences = [];
 		this.sequenceIndex = -1; // -1 means ignore the sequencer ... 
+
+		this.override = {}; // override properties
 
 		if (this.init) this.init(); // pixel init -- put in pixel mixin (or class?)
 	}
 
-	get state() {
-		return this.stateData;
-	}
-
-	set state(stateName) {
-		if (this.stateName !== stateName && this.states[stateName]) {
-			this.stateName = stateName;
-
-			// dont remember why this is setup this way ... 
-			this.stateData = structuredClone(this.states[this.stateName]);
-			// so state dir can overwrite
-			if (this.state) { // why? what was error here ... 
-				if (this.state.dir === 1) this.currentFrame = this.state.start;
-				if (this.state.dir === -1) this.currentFrame = this.state.end;
-			}
-		}
-	}
-
 	resetDefault() {
-		this.states.default.end = this.endFrame;
-		this.stateData = structuredClone(this.states[this.stateName]);
+		this.clips.default.end = this.endFrame;
+		// this.stateData = structuredClone(this.states[this.stateName]);
 	}
 
 	setLinesUpdate(n) {
@@ -83,12 +63,12 @@ export class Anim {
 		this.override = {};
 	}
 
-	nextClip(playedState) {
+	nextClip(isClipDone) {
 		// console.log('sqi', this.sequenceIndex);
 		const seq = this.sequences[this.sequenceIndex];
 		let clip = seq.clips[seq.clipIndex];
 
-		if (playedState) {
+		if (isClipDone) {
 			clip.count++;
 			if (clip.count >= clip.repeat) {
 				clip.count = 0;
@@ -100,13 +80,13 @@ export class Anim {
 			}
 		}
 
-		if (this.stateName !== clip.state) {
-			this.state = clip.state;
+		if (this.clips.current.name !== clip.clipName) {
+			this.clips.set(clip.clipName);
 		}
-		if (this.state.dir !== clip.dir) {
-			this.state.dir = clip.dir;
-			if (this.state.dir === 1) this.currentFrame = this.state.start;
-			if (this.state.dir === -1) this.currentFrame = this.state.end;
+		if (this.clips.current.dir !== clip.dir) {
+			this.clips.current.dir = clip.dir;
+			if (this.clips.current.dir === 1) this.currentFrame = this.clips.current.start;
+			if (this.clips.current.dir === -1) this.currentFrame = this.clips.current.end;
 		}
 	}
 
@@ -119,25 +99,25 @@ export class Anim {
 				this.nextClip(false);
 			}
 
-			let playedState = false;
-			if (this.state.dir === 1) {
-				if (this.currentFrame >= this.state.end) {
-					this.currentFrame = this.state.start;
-					playedState = true;
+			let isClipDone = false;
+			if (this.clips.current.dir === 1) {
+				if (this.currentFrame >= this.clips.current.end) {
+					this.currentFrame = this.clips.current.start;
+					isClipDone = true;
 				} else {
 					this.currentFrame++;
 				}
 			} else {
-				if (this.currentFrame <= this.state.start) {
-					this.currentFrame = this.state.end;
-					playedState = true;
+				if (this.currentFrame <= this.clips.current.start) {
+					this.currentFrame = this.clips.current.end;
+					isClipDone = true;
 				} else {
 					this.currentFrame--;
 				}
 			}
 
-			if (playedState) {
-				if (this.onPlayedState) this.onPlayedState();
+			if (isClipDone) {
+				if (this.onPlayedClip) this.onPlayedClip();
 				if (this.onPlayedOnce) this.onPlayedOnce(); // should this delete itself?
 
 				if (this.sequenceIndex >= 0) {

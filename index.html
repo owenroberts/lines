@@ -50,6 +50,8 @@
 		const animation = new Anim(renderer);
 		const fm = new LinesFiles(animation, renderer);
 		fm.loadData(data);
+
+		console.log(animation, renderer, fm, data)
 		
 		renderer.onDraw = _timeElapsed => {
 			animation.update();

@@ -58,10 +58,10 @@ export class AnimateAnim extends Anim {
 		}
 	}
 
-	updateStates() {
-		for (const k in this.states) {
-			if (this.states[k].end > this.endFrame) {
-				this.states[k].end = this.endFrame;
+	updateClips() {
+		for (const k of this.clips.names) {
+			if (this.clips[k].end > this.endFrame) {
+				this.clips[k].end = this.endFrame;
 			}
 		}
 	}
@@ -153,12 +153,12 @@ export class AnimateAnim extends Anim {
 		return this.layers.filter(l => l.isInFrame(frame));
 	}
 
-	shiftStates(index) {
-		// shift states when inserting
-		for (const name in this.states) {
-			const state = this.states[name];
-			if (state.start >= index) state.start++;
-			if (state.end >= index) state.end++;
+	shiftClips(index) {
+		// shift clips when inserting
+		for (const name of this.clips.names) {
+			const clip = this.clips[name];
+			if (clip.start >= index) clip.start++;
+			if (clip.end >= index) clip.end++;
 		}
 	}
 

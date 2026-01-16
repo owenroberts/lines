@@ -33,6 +33,7 @@ export class TimelinePanel extends UIPanel {
 			label: "layer",
 			obj: anim,
 			ref: "activeLayerIndex",
+			ignoreSettings: true,
 			callback: () => {
 				this.ui.panels.styles.setStyleIndex(this.anim.activeLayer.styleIndex);
 			}
@@ -169,13 +170,14 @@ export class TimelinePanel extends UIPanel {
 		// 'autoFit': {
 		
 		this.addRef({
-			face: "stateSelect",
+			face: "clipSelect",
 			key: "ctrl-t",
-			label: "state",
+			label: "clip",
 			value: "default",
-			options: Object.keys(this.anim.states),
+			ignoreSettings: true,
+			options: this.anim.clips.names,
 			callback: value => {
-				this.ui.panels.states.set(value);
+				this.ui.panels.clips.set(value);
 			}
 		});
 
@@ -281,18 +283,18 @@ export class TimelinePanel extends UIPanel {
 			this.timelineRow.append(frameBtn, `frm-${i}`);
 		}
 
-		if (this.anim.stateName !== 'default') {
-			this.timelineRow.setStyle('--state-height', 1);
-			const stateLine = new UIElement({
-				class: 'state',
+		if (this.anim.clips.current.name !== 'default') {
+			this.timelineRow.setStyle('--clip-height', 1);
+			const clipLine = new UIElement({
+				class: 'clip',
 				css: {
-					gridColumnStart: Math.floor(this.anim.state.start / this.tlInc) * 2 + 1,
-					gridColumnEnd: Math.floor((this.anim.state.end + 1) / this.tlInc) * 2 + 1,
+					gridColumnStart: Math.floor(this.anim.clips.current.start / this.tlInc) * 2 + 1,
+					gridColumnEnd: Math.floor((this.anim.clips.current.end + 1) / this.tlInc) * 2 + 1,
 				}
 			});
-			this.timelineRow.append(stateLine);
+			this.timelineRow.append(clipLine);
 		} else {
-			this.timelineRow.setStyle('--state-height', 0);
+			this.timelineRow.setStyle('--clip-height', 0);
 		}
 		
 		this.scrollToFrame();

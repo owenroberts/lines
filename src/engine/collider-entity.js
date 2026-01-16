@@ -1,4 +1,5 @@
 // leaving this here for update ... this should just be entity now ... 
+import { ColliderSprite } from "./collider-sprite.js";
 
 export class ColliderEntity extends ColliderSprite {
 	constructor(params, isDebug) {

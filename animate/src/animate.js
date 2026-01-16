@@ -20,7 +20,7 @@ import { EraserPanel } from './eraser.js';
 import { TimelinePanel } from './timeline.js';
 import { BackgroundPanel } from './background.js';
 import { DrawingsPanel } from './drawings.js'; // really need this??
-import { StatesPanel } from './states.js';
+import { ClipsPanel } from './clips.js';
 import { FilesPanel } from './files.js';
 import { CapturePanel } from './capture.js';
 
@@ -58,7 +58,7 @@ const ui = new Interface({
 ui.update = () => {
 	ui.panels.timeline.update();
 	ui.panels.drawings.update();
-	ui.panels.states.update();
+	ui.panels.clips.update();
 };
 
 ui.addPanel(new PlaybackPanel(ui, anim, renderer));
@@ -72,7 +72,7 @@ ui.addPanel(new BrushPanel(ui, anim, renderer));
 ui.addPanel(new EraserPanel(ui, anim, renderer));
 ui.addPanel(new TimelinePanel(ui, anim));
 ui.addPanel(new BackgroundPanel(ui, anim, renderer));
-ui.addPanel(new StatesPanel(ui, anim));
+ui.addPanel(new ClipsPanel(ui, anim));
 ui.addPanel(new CapturePanel(ui, anim, renderer));
 
 ui.addPanel(new DrawingsPanel(ui, anim));

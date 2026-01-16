@@ -1,5 +1,5 @@
 import { assert, randomInt } from '../../../cool/cool.js';
-import { BBox } from '../Engine.js';
+import { BBox } from '../engine.js';
 
 export const FrameTypes = {
 	INDEX: 0, // gets index from location
@@ -70,7 +70,7 @@ export class TileSet {
 		for (let i = 0; i < this.tiles.length; i++) {
 			if (this.frame === 'index') {
 				this.tiles[i].i = i;
-				this.animation.createNewState(`f-${i}`, i, i);
+				this.animation.createNewClip(`f-${i}`, i, i);
 			}
 			else if (this.frame === 'random') {
 				this.animation.randomFrames = true;
@@ -78,7 +78,7 @@ export class TileSet {
 			else if (this.frame === 'randomIndex') {
 				let randomIndex = Cool.randomInt(0, this.animation.endFrame);
 				this.tiles[i].i = randomIndex;
-				this.animation.createNewState(`f-${randomIndex}`, randomIndex, randomIndex);
+				this.animation.createNewClip(`f-${randomIndex}`, randomIndex, randomIndex);
 			}
 		}
 	}
@@ -97,7 +97,7 @@ export class TileSet {
 				// continue;
 			// }
 
-			this.animation.state = `f-${this.tiles[i].frameIndex}`;
+			this.animation.clips.set(`f-${this.tiles[i].frameIndex}`);
 			this.animation.draw(this.tiles[i].x, this.tiles[i].y);
 		}
 	}

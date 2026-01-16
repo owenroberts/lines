@@ -1,5 +1,5 @@
 /*
-	play sequences based on states
+	play sequences based on clips
 */
 
 import { UISequence } from './UISequence.js';

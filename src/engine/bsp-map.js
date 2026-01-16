@@ -3,7 +3,7 @@
 // https://web.archive.org/web/20230421203555/https://gamedevelopment.tutsplus.com/tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
 
 import { random, randomInt, coinFlip, chance, assert } from '../../../cool/cool.js'
-import { TileMap } from './TileMap.js';
+import { TileMap } from './tile-map.js';
 
 /**
  * BSPTileTypes "enum"

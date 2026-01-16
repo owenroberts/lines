@@ -2,7 +2,7 @@
 	ColliderSprite -> UI -> Button
 */
 
-import { UI } from './UI.js';
+import { UI } from './ui.js';
 
 export class Button extends UI {
 	constructor(params, isDebug) {
@@ -20,25 +20,25 @@ export class Button extends UI {
 
 	over(x, y) {
 		const over = super.over(x, y);
-		if (over) this.animation.state = 'over';
+		if (over) this.animation.clips.set("over");
 		return over;
 	}
 
 	out(x, y) {
 		const out = super.out(x, y);
-		if (out) this.animation.state = 'idle';
+		if (out) this.animation.clips.set("idle");
 		return out;
 	}
 
 	down(x, y) {
 		const down = super.down(x, y);
-		if (down)  this.animation.state = 'active';
+		if (down)  this.animation.clips.set("active");
 		return down;
 	}
 
 	up(x, y) {
 		const up = super.up(x, y);
-		if (up) this.animation.state = 'idle';
+		if (up) this.animation.clips.set("idle");
 		return up;
 	}
 }

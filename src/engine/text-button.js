@@ -3,7 +3,7 @@
 	a ui sprite that has text to render instead of animation
 */
 
-import { UI } from './UI.js';
+import { UI } from './ui.js';
 
 export class TextButton extends UI {
 	constructor(params) {
