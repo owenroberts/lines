@@ -83,9 +83,7 @@ export class AnimateAnim extends Anim {
 
 	pruneDrawings() {
 
-
 		const drawingIndexes = this.layers.map(l => l.drawingIndex);
-
 		for (let i = this.drawings.length - 1; i >= 0; i--) {
 			// remove drawings with no points
 			// remove drawings not used by a layer

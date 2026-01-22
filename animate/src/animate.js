@@ -1,12 +1,11 @@
 import '../css/animate.scss';
 
 import { Renderer, Animator, Drawing, Layer, AntiMixin, PixelMixin, Style } from '../../src/lines.js';
+import { AnimateAnim } from './animate-anim.js';
+import { LayerMixin } from './layer-mixin.js';
+import { DrawingMixin } from './drawing-mixin.js';
 
 import { Interface, Settings, UISection } from '../../../oi/src/oi.js';
-
-import { LayerMixin } from './layer-mixin.js';
-import { AnimateAnim } from './animate-anim.js';
-import { DrawingMixin } from './drawing-mixin.js';
 
 import { PlaybackPanel } from './playback.js';
 import { CanvasPanel } from './canvas.js';
@@ -23,8 +22,8 @@ import { DrawingsPanel } from './drawings.js'; // really need this??
 import { ClipsPanel } from './clips.js';
 import { FilesPanel } from './files.js';
 import { CapturePanel } from './capture.js';
+import { SequencerPanel } from './sequencer.js';
 
-// import { Sequencer } from './sequencer.js';
 // import { Palette } from './palette.js'; // this prob not needed anymore with styles ... but maybe for brush? maybe add to brush ... 
 
 Object.assign(Layer.prototype, LayerMixin);
@@ -74,7 +73,7 @@ ui.addPanel(new TimelinePanel(ui, anim));
 ui.addPanel(new BackgroundPanel(ui, anim, renderer));
 ui.addPanel(new ClipsPanel(ui, anim));
 ui.addPanel(new CapturePanel(ui, anim, renderer));
-
+ui.addPanel(new SequencerPanel(ui, anim));
 ui.addPanel(new DrawingsPanel(ui, anim));
 ui.addPanel(new AnimatorPanel(ui, anim));
 
@@ -86,23 +85,3 @@ renderer.start();
 ui.panels.timeline.init();
 
 console.log(anim, renderer, ui);
-
-// lns.sequencer = Sequencer(lns);
-
-// lns.ui.settings = new Settings(lns, {
-// 	name: 'lns', 
-// 	workspaceFields: ['hideCursor'],
-// 	appSave() {
-// 		return {
-// 			palettes: lns.palette.getPalettes(), 
-// 		};
-// 	},
-// 	appLoad(settings) {
-// 		if (settings.inteface) lns.palette.setup(settings.inteface.palettes);
-// 	}
-// });
-
-// lns.playback.toggleStats();
-
-
-

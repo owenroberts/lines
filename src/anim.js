@@ -63,30 +63,38 @@ export class Anim {
 		this.override = {};
 	}
 
-	nextClip(isClipDone) {
-		// console.log('sqi', this.sequenceIndex);
+	nextClip() {
 		const seq = this.sequences[this.sequenceIndex];
-		let clip = seq.clips[seq.clipIndex];
-
-		if (isClipDone) {
-			clip.count++;
-			if (clip.count >= clip.repeat) {
-				clip.count = 0;
-				seq.clipIndex++;
-				if (seq.clipIndex >= seq.clips.length) {
-					seq.clipIndex = 0;
-				}
-				clip = seq.clips[seq.clipIndex];
+		const clip = seq.clips[seq.clipIndex];
+		
+		clip.count++;
+		if (clip.count >= clip.repeat) {
+			clip.count = 0;
+			seq.clipIndex++;
+			if (seq.clipIndex >= seq.clips.length) {
+				seq.clipIndex = 0;
 			}
+			this.getClip();
+		}
+	}
+
+	getClip() {
+		const seq = this.sequences[this.sequenceIndex];
+		const clip = seq.clips[seq.clipIndex];
+
+		if (this.clips.current.name !== clip.name) {
+			this.clips.set(clip.name);
+			this.currentFrame = this.clips[clip.name].start;
 		}
 
-		if (this.clips.current.name !== clip.clipName) {
-			this.clips.set(clip.clipName);
-		}
 		if (this.clips.current.dir !== clip.dir) {
 			this.clips.current.dir = clip.dir;
-			if (this.clips.current.dir === 1) this.currentFrame = this.clips.current.start;
-			if (this.clips.current.dir === -1) this.currentFrame = this.clips.current.end;
+			if (this.clips.current.dir === 1) {
+				this.currentFrame = this.clips.current.start;
+			}
+			if (this.clips.current.dir === -1) {
+				this.currentFrame = this.clips.current.end;
+			}
 		}
 	}
 
@@ -96,7 +104,7 @@ export class Anim {
 			// >= instead of === in case dpf changed
 
 			if (this.sequenceIndex >= 0) {
-				this.nextClip(false);
+				this.getClip();
 			}
 
 			let isClipDone = false;
@@ -118,10 +126,13 @@ export class Anim {
 
 			if (isClipDone) {
 				if (this.onPlayedClip) this.onPlayedClip();
-				if (this.onPlayedOnce) this.onPlayedOnce(); // should this delete itself?
+				if (this.onPlayedOnce) {
+					this.onPlayedOnce();
+					this.onPlayedOnce = undefined;
+				}
 
 				if (this.sequenceIndex >= 0) {
-					this.nextClip(true);
+					this.nextClip();
 				}
 			}
 

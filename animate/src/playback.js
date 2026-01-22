@@ -93,6 +93,7 @@ export class PlaybackPanel extends UIPanel {
 		this.addRef({
 			obj: anim,
 			ref: "dpf",
+			ignoreSettings: true,
 			min: 1,
 		});
 
@@ -237,8 +238,6 @@ export class PlaybackPanel extends UIPanel {
 
 		if (this.stats && this.isStatsVisible) this.stats.begin();
 		
-		if (this.anim.isPlaying) this.ui.panels.timeline.update();
-
 		if (this.ui.panels.capture.isCapturing()) {
 			if (this.ui.panels.capture.isWithBg) {
 				this.ctx.fillStyle = this.renderer.bgColor;
@@ -289,7 +288,11 @@ export class PlaybackPanel extends UIPanel {
 
 		this.anim.update();
 		this.anim.draw();
-
+		
+		if (this.anim.isPlaying) {
+			this.ui.panels.timeline.update();
+			this.frameDisplay.update(this.anim.currentFrame, true);
+		}
 		if (this.isStatsVisible) this.stats.end();
 	}
 }

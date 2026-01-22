@@ -127,7 +127,7 @@ export class UILayer extends UICollection {
 					this.layer.startFrame = value;
 				}
 				this.layer.resetTweens();
-				this.update();
+				this.ui.update();
 			}
 		});
 

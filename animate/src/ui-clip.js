@@ -3,40 +3,48 @@ import { UICollection, UIModal, UILabel, UINumberStep, UIButton, UISelect, UIRow
 export class UIClip extends UICollection {
 	constructor(params) {
 		super(params);
-		
 		this.addClass('clip');
-		this.update = params.update;
 
-		this.clipName = params.clipName ?? 'default';
-		this.repeat = params.repeat ?? 1;
-		this.dir = params.dir ?? 1;
+		this.ui = params.ui;
+		this.anim = params.anim;
+		this.clip = params.clip;
 
-		this.label = this.add(new UILabel({ text: this.clipName }));
+		this.label = this.add(new UILabel({ text: this.clip.name }));
 		this.add(new UIButton({
-			text: 'Change',
-			callback: () => { 
-				this.setState();
-				this.update();
+			text: 'set',
+			callback: () => {
+				let clipName = this.clipName;
+				const m = new UIModal({
+					title: "set clip",
+					ui: this.ui,
+					callback: () => {
+						if (!clipName) return;
+						this.clipName = clipName;
+						this.label.setText(this.clipName);
+					}
+				});
+
+				m.add(new UISelect({
+					options: this.anim.clips.names,
+					value: clipName,
+					callback: value => { 
+						clipName = value;
+					}
+				}));
 			},
 		}));
 
 		// repeat
 		this.add(new UINumberStep({
-			value: this.repeat,
-			callback: value => { 
-				this.repeat = value;
-				this.update();
-			}
+			obj: this.clip,
+			ref: "repeat",
 		}));
 
 		// dir override
 		this.add(new UISelect({
-			value: this.dir,
+			obj: this.clip,
+			ref: "dir",
 			options: [-1, 1],
-			callback: value => { 
-				this.dir = +value;
-				this.update();
-			}
 		}))
 
 		// remove
@@ -44,56 +52,7 @@ export class UIClip extends UICollection {
 			text: 'X',
 			callback: () => { 
 				params.remove();
-				this.update();
 			},
 		}));
-
-		// edit button to return timeline
-		// swap button if its useful
-
-		if (!params.clip) this.setState();
-	}
-
-	setState() {
-		let clipName = this.clipName;
-		const m = new UIModal({
-			title: 'Set State',
-			app: lns,
-			position: this.position || lns.mousePosition,
-			callback: () => {
-				if (!clipName) return;
-				this.clipName = clipName;
-				this.label.setText(this.clipName);
-				this.update();
-			}
-		});
-
-		const selector = new UISelect({
-			options: this.anim.clips.names,
-			value: clipName,
-			callback: value => { 
-				clipName = value;
-				this.update();
-			}
-		});
-		m.add(selector);
-	}
-
-	get duration() {
-		return (lns.anim.clips[this.clipName].end - lns.anim.clips[this.clipName].start + 1) * this.repeat;
-	}
-
-	getFrame(frame) {
-		const duration = lns.anim.clips[this.clipName].end - lns.anim.clips[this.clipName].start + 1;
-		return lns.anim.clips[this.clipName].start + frame % duration;
-	}
-
-	getData() {
-		return {
-			clipName: this.clipName,
-			repeat: this.repeat,
-			dir: this.dir,
-			count: 0,
-		};
 	}
 }

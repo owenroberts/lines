@@ -35,8 +35,13 @@ export class QuickAnimatePanel extends UIPanel {
 		for (let i = 0; i < this.anim.layers.length - 1; i++) {
 			const layer = this.anim.layers[i];
 			if (!layer.isInFrame(this.anim.currentFrame)) continue;
-			layer.endFrame = this.anim.currentFrame + n;
-			if (this.anim.clips.current.end < layer.endFrame) this.anim.clips.current.end = layer.endFrame;
+			
+			// layer.endFrame = this.anim.currentFrame + n; why ?? 
+
+			// why?
+			if (this.anim.clips.current.end < layer.endFrame) {
+				this.anim.clips.current.end = layer.endFrame;
+			}
 
 			switch(type) {
 				case "Draw":

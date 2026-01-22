@@ -153,7 +153,11 @@ export class FilesPanel extends UIPanel {
 		this.anim.styles.forEach(style => {
 			this.ui.faces.color.addColor(style.color);
 		});
-		// if (data.q) this.ui.panels.sequencer.load(); // *** add sequencer
+
+		this.ui.panels.sequencer.update();
+		if (data.sequenceIndex >= 0) {
+			this.ui.faces.sequenceIndex.update(data.sequenceIndex);
+		}
 		this.ui.update();
 	}
 
