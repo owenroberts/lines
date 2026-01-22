@@ -125,8 +125,7 @@ export class LinesFiles {
 		this.anim.resetDefault();
 
 		this.dpf = json.dpf;
-		console.log(this.anim.clips.current);
-
+		
 		this.anim.isMultiColor = json.isMultiColor ?? false;
 		this.anim.isMultiLineWidth = json.isMultiLineWidth ?? false;
 
@@ -139,8 +138,6 @@ export class LinesFiles {
 		// need this ???
 		this.anim.halfWidth = Math.round(json.width / 2);
 		this.anim.halfHeight = Math.round(json.height / 2);
-
-		console.log(this.anim.clips.current);
 
 		if (callback) callback(json);
 		if (this.anim.onLoad) this.anim.onLoad();
