@@ -1,4 +1,6 @@
 import { UIPanel, UILabel, UIButton, UINumberStep, UISelect, UIModal, UIToggleCheck, UIText } from '../../../oi/src/oi.js';
+import { createClip } from '../../src/lines.js';
+
 
 /**
  * animation clips, subset of frames 
@@ -136,12 +138,10 @@ export class ClipsPanel extends UIPanel {
 	create() {
 		const name = prompt('name?');
 		if (!name) return;
-		const clip = {
+		const clip = createClip({
 			start: this.anim.currentFrame, 
 			end: this.anim.currentFrame,
-			dir: 1,
-			loop: true,
-		};
+		});
 		this.anim.clips.add(name, clip);
 		this.anim.clips.set(name);
 		this.ui.faces.clipSelect.value = name;

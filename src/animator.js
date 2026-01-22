@@ -59,7 +59,7 @@ export class Animator {
 
 			const props = { 
 				...layer.getProps(), 
-				...this.animation.styles[layer.styleIndex].getProps(), 
+				...this.animation.styles[layer.styleIndex], 
 			};
 			
 			const prop = choice(...Object.keys(this.params)); // choose prop

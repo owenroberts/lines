@@ -214,15 +214,13 @@ export class UITimelineGroup extends UICollection {
 
 	tweenModal(layers) {
 
-		// not DRY
-
-		const tween = {
+		const tween = createTween({
 			prop: 'endIndex',
 			startFrame: this.anim.currentFrame,
 			endFrame: this.anim.currentFrame + 10,
 			startValue: 0,
 			endValue: 'end'
-		};
+		});
 
 		const modal = new UIModal({
 			title: 'Add Tween', 

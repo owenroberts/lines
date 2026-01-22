@@ -97,7 +97,7 @@ export class EraserPanel extends UIPanel {
 			} else {
 				drawing.update({ 
 					...layer.drawProps, 
-					...this.anim.styles[layer.styleIndex].getProps(),
+					...this.anim.styles[layer.styleIndex],
 				});
 			}
 		}

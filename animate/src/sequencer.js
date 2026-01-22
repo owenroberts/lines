@@ -1,6 +1,8 @@
 import { UISequence } from './ui-sequence';
 import { UIClip } from './ui-clip.js';
 import { UIModal, UISelect, UIPanel, UIRow } from '../../../oi/src/oi.js';
+import { createSequence } from '../../src/lines.js';
+
 
 export class SequencerPanel extends UIPanel {
 	
@@ -50,7 +52,7 @@ export class SequencerPanel extends UIPanel {
 		if (!name) name = prompt('name sequence', 'sequence ' + index);
 		if (!name) return;
 
-		const sequence = { name, clips: [], clipIndex: 0 };
+		const sequence = createSequence({ name });
 		this.anim.sequences.push(sequence);
 
 		this.sequenceSelector.addOption(index, name);

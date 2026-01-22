@@ -1,5 +1,6 @@
 import { UICollection, UIButton, UIModal, UISelect } from '../../../oi/src/oi.js';
 import { UIClip } from './ui-clip.js';
+import { createSequenceClip } from '../../src/lines.js';
 
 export class UISequence extends UICollection {
 	constructor(params) {
@@ -51,8 +52,8 @@ export class UISequence extends UICollection {
 		}
 	}
 
-	addClip(clipName) {
-		const clip = { name: clipName, repeat: 1, dir: 1, count: 0 };
+	addClip(name) {
+		const clip = createSequenceClip({ name });
 		this.sequence.clips.push(clip);
 		this.addClipUI(clip);
 	}

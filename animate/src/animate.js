@@ -1,6 +1,6 @@
 import '../css/animate.scss';
 
-import { Renderer, Animator, Drawing, Layer, AntiMixin, PixelMixin, Style } from '../../src/lines.js';
+import { Renderer, Animator, Drawing, Layer, AntiMixin, PixelMixin, createStyle } from '../../src/lines.js';
 import { AnimateAnim } from './animate-anim.js';
 import { LayerMixin } from './layer-mixin.js';
 import { DrawingMixin } from './drawing-mixin.js';
@@ -38,7 +38,7 @@ const renderer = new Renderer({
 const anim = new AnimateAnim(renderer);
 anim.drawings.push(new Drawing());
 anim.layers.push(new Layer());
-anim.styles.push(new Style());
+anim.styles.push(createStyle());
 
 const ui = new Interface({
 	name: "lines",

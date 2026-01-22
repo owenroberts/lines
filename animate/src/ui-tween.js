@@ -8,32 +8,29 @@ export class UITween extends UICollection {
 
 		const edit = new UIButton({
 			text: 'E',
-			btnClass: 'timeline-btn',
+			buttonClass: 'timeline-btn',
 			class: 'tween-edit',
 			callback: () => {
+
 				const modal = new UIModal({
-					title: 'Edit Tween', 
+					title: "edit tween",
 					ui: params.ui,
 					callback: () => { params.update(); }
 				});	
 
 				const uis = this.getPropUIs(tween, layer, params, true);
 
-				modal.addBreak('Start Frame');
-				modal.add(uis.startFrame);
-				modal.addBreak('End Frame');
-				modal.add(uis.endFrame);
-				modal.addBreak('Start Value');
-				modal.add(uis.startValue);
-				modal.addBreak('End Value');
-				modal.add(uis.endValue);
+				for (const k in uis) {
+					modal.addBreak(k);
+					modal.add(uis[k]);	
+				}
 			}
 		});
 
 		const remove = new UIButton({
 			class: 'remove',
 			text: 'X',
-			btnClass: 'timeline-btn',
+			buttonClass: 'timeline-btn',
 			callback: () => {
 				layer.tweens.splice(layer.tweens.indexOf(this), 1);
 				params.ui.update();
@@ -52,11 +49,11 @@ export class UITween extends UICollection {
 
 	getPropUIs(tween, layer, params, isModal) {
 
-		const btnClass = isModal ? 'btn' : 'timeline-btn';
+		const buttonClass = isModal ? 'btn' : 'timeline-btn';
 
 		const startFrame = new UINumberStep({
 			value: tween.startFrame,
-			class: isModal ? '' : btnClass,
+			class: isModal ? '' : buttonClass,
 			callback: value => {
 				tween.startFrame = value >= layer.startFrame ?
 					value :
@@ -67,7 +64,7 @@ export class UITween extends UICollection {
 
 		const endFrame = new UINumberStep({
 			value: tween.endFrame,
-			class: isModal ? '' : btnClass,
+			class: isModal ? '' : buttonClass,
 			callback: value => {
 				tween.endFrame = value <= layer.endFrame ?
 					value :
@@ -77,19 +74,15 @@ export class UITween extends UICollection {
 		});
 
 		const startValue = new UINumberStep({
-			value: tween.startValue,
-			class: isModal ? '' : btnClass,
-			callback(value) {
-				tween.startValue = value;
-			}
+			obj: tween,
+			ref: "startValue",
+			class: isModal ? '' : buttonClass,
 		});
 
 		const endValue = new UINumberStep({
-			value: tween.endValue,
-			class: isModal ? '' : btnClass,
-			callback(value) {
-				tween.endValue = value;
-			}
+			obj: tween,
+			ref: "endValue",
+			class: isModal ? '' : buttonClass,
 		});	
 
 		return { startFrame, endFrame, startValue, endValue };

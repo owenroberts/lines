@@ -1,4 +1,4 @@
-import { Points } from '../../src/lines.js';
+import { Points, createTween } from '../../src/lines.js';
 import { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber, UIText } from '../../../oi/src/oi.js';
 
 export class UILayer extends UICollection {
@@ -382,16 +382,16 @@ export class UILayer extends UICollection {
 
 	tweenModal() {
 
-		const tween = {
+		const tween = createTween({
 			prop: 'endIndex',
 			startFrame: this.anim.currentFrame,
 			endFrame: this.anim.currentFrame + 10,
 			startValue: 0,
 			endValue: 'end'
-		};
+		});
 
 		const modal = new UIModal({
-			title: 'Add Tween', 
+			title: "add tween", 
 			ui: this.ui, 
 			callback: () => {
 				if (tween.prop === 'endIndex' || tween.prop === 'startIndex') {
@@ -408,38 +408,22 @@ export class UILayer extends UICollection {
 			}
 		});
 
-		modal.addBreak('Property:');
-		modal.add(new UISelect({
-			// redo props, add linesInterval 
-			// interpolation?
-			options: ['segmentNum', 'jiggleRange', 'wiggleRange', 'wiggleSpeed', 'linesInterval', 'startIndex', 'endIndex'],
-			value: 'endIndex',
-			selected: 'endIndex',
-			callback: value => { tween.prop = value; }
-		}));
+		for (const k in tween) {
+			modal.addBreak(k);
 
-		modal.addBreak('Start Frame:');
-		modal.add(new UINumber({
-			value: tween.startFrame,
-			callback: value => { tween.startFrame = value; }
-		}));
-
-		modal.addBreak('End Frame:');
-		modal.add(new UINumber({
-			value: tween.endFrame,
-			callback: value => { tween.endFrame = value; }
-		}));
-
-		modal.addBreak('Start Value:');
-		modal.add(new UIText({
-			value: tween.startValue,
-			callback: value => { tween.startValue = value; }
-		}));
-
-		modal.addBreak('End Value:');
-		modal.add(new UIText({
-			value: tween.endValue,
-			callback: value => { tween.endValue = value; }
-		}));
+			if (k === "prop") {
+				modal.add(new UISelect({
+					obj: tween,
+					ref: k,
+					options: ['segmentNum', 'jiggleRange', 'wiggleRange', 'wiggleSpeed', 'linesInterval', 'startIndex', 'endIndex'],
+					value: 'endIndex',
+				}));
+			} else {
+				modal.add(new UINumberStep({
+					obj: tween,
+					ref: k,
+				}));
+			}
+		}
 	}
 }

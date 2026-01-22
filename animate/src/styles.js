@@ -10,7 +10,7 @@
 
 import { randomInt } from "../../../cool/cool.js";
 import { UIButton, UIModal, UIColor, UIPanel } from "../../../oi/src/oi.js";
-import { Style, Layer } from "../../src/lines.js";
+import { createStyle, Layer } from "../../src/lines.js";
 
 export class StylesPanel extends UIPanel {
 	constructor(ui, anim) {
@@ -142,7 +142,7 @@ export class StylesPanel extends UIPanel {
 	}
 
 	getNewStyle() {
-		const style = new Style({
+		const style = createStyle({
 			linesInterval: +this.children.linesInterval.value,
 			segmentNum: +this.children.segmentNum.value,
 			jiggleRange: +this.children.jiggleRange.value,
@@ -190,7 +190,7 @@ export class StylesPanel extends UIPanel {
 	}
 
 	setDefault() {
-		this.activeStyle.reset();
+		this.activeStyle = createStyle();
 		this.updateUI();
 	}
 
@@ -199,10 +199,9 @@ export class StylesPanel extends UIPanel {
 	}
 
 	updateUI() {
-		const styleProps = this.anim.styles[this.styleIndex].getProps();
-		for (const prop in styleProps) {
+		for (const prop in this.activeStyle) {
 			if (this.ui.faces[prop]) {
-				this.ui.faces[prop].update(styleProps[prop], true); // ui only
+				this.ui.faces[prop].update(this.activeStyle[prop], true); // ui only
 			}
 		}
 	}

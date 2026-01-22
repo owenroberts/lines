@@ -1,5 +1,5 @@
 import { assert, randomInt } from '../../cool/cool.js';
-import { Drawing, Layer, Style, LINES_VERSION } from './lines.js';
+import { Drawing, Layer, createStyle, LINES_VERSION } from './lines.js';
 
 // ** update example with this
 
@@ -115,7 +115,7 @@ export class LinesFiles {
 		}
 
 		for (let i = 0; i < json.styles.length; i++) {
-			this.anim.styles[i] = new Style(json.styles[i]);
+			this.anim.styles[i] = createStyle(json.styles[i]);
 		}
 
 		this.anim.sequences = json.sequences ?? [];
