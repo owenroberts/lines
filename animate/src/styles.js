@@ -23,28 +23,32 @@ export class StylesPanel extends UIPanel {
 		this.styleIndex = 0;
 
 		// set up obj/ref with changing ref
+		// why not getter? ***
 		Object.defineProperty(this, "activeStyle", {
 			get: () => {
 				return this.anim.styles[this.styleIndex];
 			},
 		});
 
-		this.addButton({
-			key: "r", 
-			text: "save",
-			callback: () => { this.reset(); },
-		});
-
-		this.addButton({
-			text: "reset",
-			callback: () => { this.setDefault(); },
-		});
+		this.addButtons({}, [
+			{
+				key: "r", 
+				text: "save",
+				callback: () => { this.reset(); },
+			},
+			{
+				text: "reset",
+				callback: () => { this.setDefault(); },
+			}
+		]);
 
 		this.addRef({
 			obj: this,
 			ref: "styleIndex",
 			callback: value => { this.setStyleIndex(value); }
 		});
+
+		// *** nenver really figued this out huh ...
 
 		this.addRef({
 			value: this.activeStyle.linesInterval,

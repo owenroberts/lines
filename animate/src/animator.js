@@ -14,20 +14,20 @@ export class AnimatorPanel extends UIPanel {
 		this.animator = new Animator(anim);
 
 		// show values
-		this.addButton({
-			obj: this.animator,
-			ref: "set",
-			callback: () => {
-				if (anim.endFrame === 0) {
-					alert("animator requires more than 1 frame of animation");
-				}
-			}
-		});
-
-		this.addButton({
-			obj: this.animator,
-			ref: "clear",
-		});
+		this.addButtons(
+			{ obj: this.animator },
+			[
+				{ 
+					ref: "set",
+					callback: () => {
+						if (anim.endFrame === 0) {
+							alert("animator requires more than 1 frame of animation");
+						}
+					},
+				},
+				{ ref: "clear", }
+			]
+		);
 		
 		this.addBreak();
 		this.addUI();

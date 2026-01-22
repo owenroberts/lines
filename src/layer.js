@@ -23,9 +23,9 @@ export class Layer {
 		// *** ever use this?
 		this.x = params.x ?? 0;
 		this.y = params.y ?? 0;
-		
+
 		this._startFrame = params.startFrame ?? 0;
-		this._endFrame = params.endFrame || params.startFrame || 0;
+		this._endFrame = params.endFrame ?? params.startFrame ?? 0;
 
 		this.drawingStartIndex = params.drawingStartIndex ?? 0;
 		this.drawingEndIndex = params.drawingEndIndex ?? -1;

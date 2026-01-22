@@ -10,6 +10,8 @@ export class AnimateAnim extends Anim {
 		this.activeLayerIndex = 0;
 	}
 
+	init() {}
+
 	get endFrame() {
 		const endFrame = this.layers.map(layer => { return layer.endFrame; });
 		// when is layers.length 0 ??

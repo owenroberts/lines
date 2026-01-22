@@ -13,7 +13,6 @@ export class Anim {
 		this.isMultiLineWidth = renderer.isMultiLineWidth;
 
 		this.isPlaying = false;
-		this.isLoaded = false; // need this???
 		this.isSuspended = false; // suspend updates during performance drag
 
 		this.drawings = [];
@@ -41,12 +40,17 @@ export class Anim {
 
 		this.override = {}; // override properties
 
-		if (this.init) this.init(); // pixel init -- put in pixel mixin (or class?)
+		if (this.init) this.init(); // set end frame based on layers ... diff in editor ...
+	}
+
+	init() {
+		const endFrame = this.layers.map(l => l.endFrame);
+		this.endFrame = Math.max.apply(Math, endFrame);
 	}
 
 	resetDefault() {
+		if (!this.clips.default) return;
 		this.clips.default.end = this.endFrame;
-		// this.stateData = structuredClone(this.states[this.stateName]);
 	}
 
 	setLinesUpdate(n) {

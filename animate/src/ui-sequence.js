@@ -55,7 +55,6 @@ export class UISequence extends UICollection {
 		const clip = { name: clipName, repeat: 1, dir: 1, count: 0 };
 		this.sequence.clips.push(clip);
 		this.addClipUI(clip);
-		// this.update();
 	}
 
 	addClipUI(clip) {

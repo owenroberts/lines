@@ -137,7 +137,7 @@ export class FilesPanel extends UIPanel {
 
 	loadJSON(data, fName) {
 		this.fm.loadData(data);
-		
+
 		// avoid errors with grid
 		this.anim.isMultiColor = true;
 		this.anim.isMultiLineWidth = true;

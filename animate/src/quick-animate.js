@@ -1,28 +1,34 @@
 import { UIPanel } from '../../../oi/src/oi.js';
 
+const AnimTypes = {
+	DRAW: "draw",
+	REVERSE: "reverse",
+	DRAW_REVERSE: "draw_reverse",
+}
+
 export class QuickAnimatePanel extends UIPanel {
 	constructor(ui, anim) {
 		super({ id: "quick-animate", ui });
 
 		this.anim = anim;
 
-		this.addButton({ 
-			text: "draw",
-			key: "a", 
-			callback: () => { this.addAnimation("Draw"); },
-		});
-
-		this.addButton({ 
-			key: "shift-a", 
-			text: "reverse",
-			callback: () => { this.addAnimation("Reverse"); },
-		});
-
-		this.addButton({ 
-			key: "ctrl-a", 
-			text: "draw + reverse",
-			callback: () => { this.addAnimation("DrawReverse"); },
-		});
+		this.addButtons({}, [
+			{
+				text: "draw",
+				key: "a", 
+				callback: () => { this.addAnimation(AnimTypes.DRAW); },
+			}, 
+			{ 
+				key: "shift-a", 
+				text: "reverse",
+				callback: () => { this.addAnimation(AnimTypes.REVERSE); },
+			},
+			{ 
+				key: "ctrl-a", 
+				text: "draw + reverse",
+				callback: () => { this.addAnimation(AnimTypes.DRAW_REVERSE); },
+			}
+		]);
 	}
 
 	addAnimation(type) {
@@ -44,7 +50,7 @@ export class QuickAnimatePanel extends UIPanel {
 			}
 
 			switch(type) {
-				case "Draw":
+				case AnimTypes.DRAW:
 					layer.addTween({
 						prop: "endIndex",
 						startFrame: this.anim.currentFrame,
@@ -53,7 +59,7 @@ export class QuickAnimatePanel extends UIPanel {
 						endValue: this.anim.drawings[layer.drawingIndex].length
 					});
 				break;
-				case "Reverse":
+				case AnimTypes.REVERSE:
 					layer.addTween({
 						prop: "startIndex",
 						startFrame: this.anim.currentFrame,
@@ -62,7 +68,7 @@ export class QuickAnimatePanel extends UIPanel {
 						endValue: this.anim.drawings[layer.drawingIndex].length
 					});
 				break;
-				case "DrawReverse":
+				case AnimTypes.DRAW_REVERSE:
 					const mid = Math.floor(n / 2);
 					layer.addTween({
 						prop: "endIndex",
@@ -82,7 +88,8 @@ export class QuickAnimatePanel extends UIPanel {
 			}
 
 			// reset end of anim
-			if (this.anim.clips.current.name === "default" && this.anim.clips.current.end < layer.endFrame) {
+			if (this.anim.clips.current.name === "default" && 
+				this.anim.clips.current.end < layer.endFrame) {
 				this.anim.clips.current.end = layer.endFrame;
 			}
 		}

@@ -105,11 +105,6 @@ export class LinesFiles {
 			this.anim.layers[i] = layer;
 		}
 
-		// no DRY with animate-anim ... 
-		const endFrame = this.anim.layers
-			.map(layer => { return layer.endFrame; });
-		this.anim.endFrame = Math.max.apply(Math, endFrame);
-
 		for (const name in json.clips) {
 			this.anim.clips.add(name, {
 				start: json.clips[name][0],
@@ -126,8 +121,11 @@ export class LinesFiles {
 		this.anim.sequences = json.sequences ?? [];
 		this.anim.sequenceIndex = +(json.sequenceIndex ?? -1);
 
-		if (this.anim.clips.default) this.anim.resetDefault();
+		this.anim.init(); // fml *** this is for non editor anim loads to have right endFrame
+		this.anim.resetDefault();
+
 		this.dpf = json.dpf;
+		console.log(this.anim.clips.current);
 
 		this.anim.isMultiColor = json.isMultiColor ?? false;
 		this.anim.isMultiLineWidth = json.isMultiLineWidth ?? false;
@@ -141,6 +139,8 @@ export class LinesFiles {
 		// need this ???
 		this.anim.halfWidth = Math.round(json.width / 2);
 		this.anim.halfHeight = Math.round(json.height / 2);
+
+		console.log(this.anim.clips.current);
 
 		if (callback) callback(json);
 		if (this.anim.onLoad) this.anim.onLoad();

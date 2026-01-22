@@ -30,32 +30,27 @@ export class CanvasPanel extends UIPanel {
 			key: 'shift-f',
 		});
 
-		this.addRef({
-			obj: renderer,
-			ref: "width",
-			callback: value => { renderer.setWidth(value) },
-		});
-
-		this.addRef({
-			obj: renderer,
-			ref: "height",
-			callback: value => { renderer.setHeight(value) },
-		});
-
-		this.addRef({
-			obj: renderer,
-			ref: "scale",
-			range: [0.5, 8],
-			step: 0.25,
-			callback: value => {  renderer.setScale(value); },
-		});
-
-		this.addRef({
-			obj: renderer,
-			ref: "bgColor",
-			type: "UIColor",
-			callback: value => { renderer.setBGColor(value); },
-		});
+		this.addRefs({ obj: renderer, }, [
+			{
+				ref: "width",
+				callback: value => { renderer.setWidth(value) },
+			},
+			{
+				ref: "height",
+				callback: value => { renderer.setHeight(value) },
+			},
+			{
+				ref: "scale",
+				range: [0.5, 8],
+				step: 0.25,
+				callback: value => {  renderer.setScale(value); },
+			},
+			{
+				ref: "bgColor",
+				type: "UIColor",
+				callback: value => { renderer.setBGColor(value); },
+			},
+		]);
 
 		this.addRef({
 			obj: this,
@@ -64,20 +59,20 @@ export class CanvasPanel extends UIPanel {
 			key: "alt-m",
 		});
 
-		this.addButton({
-			key: "`",
-			// obj: this,
-			// ref: "isFullSize",
-			text: "full",
-			type: "UIToggle",
-			callback: value => { this.setFullSize(value); },
-		});
+		this.addButtons({}, [
+			{
+				key: "`",
+				text: "full",
+				type: "UIToggle",
+				callback: value => { this.setFullSize(value); },
+			},
+			{
+				key: "alt-1",
+				text: "x1",
+				callback: () => { this.toggleScale(); }
+			}
+		]);
 
-		this.addButton({
-			key: "alt-1",
-			text: "x1",
-			callback: () => { this.toggleScale(); }
-		});
 	}
 
 	cursorToggle(value) {

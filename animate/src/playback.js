@@ -19,21 +19,26 @@ export class PlaybackPanel extends UIPanel {
 		this.onionSkinFrameCount = 0;
 		this.isOnionSkinVisible = false; /* n key */
 
-		this.addButton({
-			text: "0",
-			key: "0",
-			class: "left-end",
-			callback: () => {
-				this.setFrame(0);
-			}
-		});
+		this.addButtons({},
+			[
+				{
+					text: "0",
+					key: "0",
+					class: "left-end",
+					callback: () => {
+						this.setFrame(0);
+					}
+				},
+				{
+					key: 'w', 
+					text: '◀',
+					class: "middle",
+					callback: () => { this.next(-1); }, 
+				},
 
-		this.addButton({
-			key: 'w', 
-			text: '◀',
-			class: "middle",
-			callback: () => { this.next(-1); }, 
-		});
+
+			]
+		);
 
 		this.addButton({
 			obj: anim,
@@ -45,33 +50,35 @@ export class PlaybackPanel extends UIPanel {
 			class: "middle",
 		});
 
-		this.addButton({
-			callback: () => { this.next(1); }, 
-			class: "middle",
-			key: 'e', 
-			text: '▶', 
-		});
-
-		this.addButton({
-			class: "middle",
-			key: '+', 
-			text: '+',
-			callback: () => {
-				this.setFrame(this.anim.endFrame);
-				this.next(1);
-			},
-		});
-		
-		this.addButton({
-			class: "right-end",
-			key: 'shift-e',
-			text: '⎘',
-			callback: () => {
-				// this.ui.panels.data.copy();
-				this.next(1, true);
-				// this.ui.panels.data.paste();
-			}
-		});
+		this.addButtons({},
+			[
+				{
+					key: 'e', 
+					text: '▶', 
+					class: "middle",
+					callback: () => { this.next(1); },
+				},
+				{
+					key: '+', 
+					text: '+',
+					class: "middle",
+					callback: () => {
+						this.setFrame(this.anim.endFrame);
+						this.next(1);
+					},
+				},
+				{
+					class: "right-end",
+					key: 'shift-e',
+					text: '⎘',
+					callback: () => {
+						// this.ui.panels.data.copy();
+						this.next(1, true);
+						// this.ui.panels.data.paste();
+					}
+				},
+			]
+		);
 
 		this.frameDisplay = this.addRef({
 			obj: anim,
@@ -107,25 +114,25 @@ export class PlaybackPanel extends UIPanel {
 			},
 		});
 
-		this.addRef({
-			obj: this,
-			ref: "isOnionSkinVisible",
-			key: "n",
-		});
-
-		this.addRef({
-			obj: this,
-			ref: "onionSkinFrameCount",
-			key: "shift-n",
-		});
-
-		this.addRef({
-			obj: this,
-			ref: "isStatsVisible",
-			callback: value => {
-				this.toggleStats(value);
-			},
-		});
+		this.addRefs(
+			{ obj: this, },
+			[
+				{
+					ref: "isOnionSkinVisible",
+					key: "n",
+				},
+				{
+					ref: "onionSkinFrameCount",
+					key: "shift-n",
+				},
+				{
+					ref: "isStatsVisible",
+					callback: value => {
+						this.toggleStats(value);
+					},
+				}
+			]
+		);
 
 		this.addRef({
 			obj: anim,
@@ -288,11 +295,12 @@ export class PlaybackPanel extends UIPanel {
 
 		this.anim.update();
 		this.anim.draw();
-		
+
 		if (this.anim.isPlaying) {
 			this.ui.panels.timeline.update();
 			this.frameDisplay.update(this.anim.currentFrame, true);
 		}
+		
 		if (this.isStatsVisible) this.stats.end();
 	}
 }

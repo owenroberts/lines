@@ -71,55 +71,49 @@ export class TimelinePanel extends UIPanel {
 			}
 		});
 	
-		this.addRef({
-			obj: this,
-			ref: "viewGroups",
-			text: "g",
-			noLabel: true,
-			noRow: true,
-			key: "backslash",
-			type: "UIToggle",
-			callback: () => { this.update(); },
-		});
+		this.addRefs({ obj: this, }, [
+			{
+				ref: "viewGroups",
+				text: "g",
+				noLabel: true,
+				noRow: true,
+				key: "backslash",
+				type: "UIToggle",
+				callback: () => { this.update(); },
+			},
+			{
+				ref: "viewLayers",
+				key: "[",
+				text: "V",
+				class: "left-end",
+				noLabel: true,
+				noRow: true,
+				type: "UIToggle",
+				callback: () => { this.update(); },
+			},
+			{
+				ref: "viewActiveLayers",
+				key: ']',
+				text: 'V', // toggle text in check ??
+				class: 'right-end',
+				noLabel: true,
+				noRow: true,
+				type: "UIToggle",
+				callback: value => { this.update(); }
+			},
+			{
+				ref: "useScrollToFrame",
+				text: 'follow',
+				noLabel: true,
+				type: "UIToggle",
+			},
+			{
+				ref: "viewLayerRange",
+				label: "view range",
+				range: [0, 10],
+			}
+		]);
 
-		this.addRef({
-			obj: this,
-			ref: "viewLayers",
-			key: "[",
-			text: "V",
-			class: "left-end",
-			noLabel: true,
-			noRow: true,
-			type: "UIToggle",
-			callback: () => { this.update(); },
-		});
-
-		this.addRef({
-			obj: this,
-			ref: "viewActiveLayers",
-			key: ']',
-			text: 'V', // toggle text in check ??
-			class: 'right-end',
-			noLabel: true,
-			noRow: true,
-			type: "UIToggle",
-			callback: value => { this.update(); }
-		});
-
-		this.addRef({
-			obj: this,
-			ref: "useScrollToFrame",
-			text: 'follow',
-			noLabel: true,
-			type: "UIToggle",
-		});
-
-		this.addRef({
-			obj: this,
-			ref: "viewLayerRange",
-			label: "view range",
-			range: [0, 10],
-		});
 
 		this.addButton({
 			text: "add group",
@@ -131,7 +125,7 @@ export class TimelinePanel extends UIPanel {
 				}
 				if (newGroup) this.groups.push(newGroup);
 			}
-		})
+		});
 
 		// { callback: scrollToFrame, key: 'shift-f', text: '⊙', args: [true], },
 		// { callback: fit, text: '⇿', key: 'alt-f', class: 'left-end', },	
@@ -231,8 +225,16 @@ export class TimelinePanel extends UIPanel {
 
 		if (prevFrameDisplay === nextFrameDisplay) return;
 
-		this.timelineRow.children['frm-' + prevFrameDisplay].removeClass('current');
-		this.timelineRow.children['frm-' + nextFrameDisplay].addClass('current');
+		// error fix after moving timeline update to after anim update 
+
+		if (this.timelineRow.children['frm-' + nextFrameDisplay]) {
+			this.timelineRow.children['frm-' + nextFrameDisplay].addClass('current');
+		}
+
+		if (this.timelineRow.children['frm-' + prevFrameDisplay]) {
+
+			this.timelineRow.children['frm-' + prevFrameDisplay].removeClass('current');
+		}
 	}
 
 	drawFrames() {
