@@ -24,8 +24,8 @@ export class Layer {
 		this.x = params.x ?? 0;
 		this.y = params.y ?? 0;
 
-		this._startFrame = params.startFrame ?? 0;
-		this._endFrame = params.endFrame ?? params.startFrame ?? 0;
+		this.startFrame = params.startFrame ?? 0;
+		this.endFrame = params.endFrame ?? params.startFrame ?? 0;
 
 		this.drawingStartIndex = params.drawingStartIndex ?? 0;
 		this.drawingEndIndex = params.drawingEndIndex ?? -1;
@@ -33,23 +33,6 @@ export class Layer {
 		this.linesCount = params.linesCount ?? 0; // line update counter
 
 		if (this.init) this.init(params); // mixin init
-	}
-
-	get startFrame() {
-		return this._startFrame;
-	}
-
-	set startFrame(f) {
-		this._startFrame = Math.max(0, +f); // why?
-		// if (this.resetTweens) this.resetTweens();
-	}
-
-	get endFrame() {
-		return this._endFrame;
-	}
-
-	set endFrame(f) {
-		this._endFrame = Math.max(0, +f);
 	}
 
 	isInFrame(index) {

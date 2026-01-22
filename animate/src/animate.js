@@ -24,8 +24,6 @@ import { FilesPanel } from './files.js';
 import { CapturePanel } from './capture.js';
 import { SequencerPanel } from './sequencer.js';
 
-// import { Palette } from './palette.js'; // this prob not needed anymore with styles ... but maybe for brush? maybe add to brush ... 
-
 Object.assign(Layer.prototype, LayerMixin);
 Object.assign(Drawing.prototype, DrawingMixin);
 
