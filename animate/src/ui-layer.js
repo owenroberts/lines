@@ -174,30 +174,41 @@ export class UILayer extends UICollection {
 			buttonClass: 'add-to-group',
 			class: buttonClass,
 			callback: () => {
-				if (!this.anim.groups) {
-					alert("no groups, create groups");
+				
+				if (this.anim.groups.length === 0) {
+					const newGroup = prompt("create first group");
+					if (newGroup) this.layer.group = newGroup;
+					console.log(this.layer);
+					console.log(this.anim);
 					return;
 				}
 
-				this.ui.panels.styles.reset(); // save current lines
-				let groupSelector = new UIModal({
+				let selectedGroup = this.anim.groups[this.anim.groups.length - 1];
+
+				let m = new UIModal({
 					title: 'group',
 					ui: this.ui,
 					callback: () => {
-						this.layer.groupNumber = +groupSelect.value;
-						this.lastGroup = +groupSelect.value;
+						this.layer.group = selectedGroup;
 						this.ui.update();
 					}
 				});
 				
-				groupSelector.addBreak('groups:');
+				m.addBreak('groups:');
 				
-				let groupSelect = new UISelect({});
-				for (let i = 0; i < this.anim.groups.length; i++) {
-					groupSelect.addOption(i, this.anim.groups[i]);
-				}
-				if (this.lastGroup) groupSelect.value = this.lastGroup;
-				groupSelector.add(groupSelect);
+				console.log(this.anim.groups);
+
+				m.add(new UISelect({
+					options: this.anim.groups,
+					value: selectedGroup,
+					callback: value => { selectedGroup = value; },
+				}));
+
+				m.addBreak("new:");
+				m.add(new UIText({
+					placeholder: "new group",
+					callback: value => { selectedGroup = value; },
+				}));
 			}
 		});
 

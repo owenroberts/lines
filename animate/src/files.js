@@ -138,12 +138,13 @@ export class FilesPanel extends UIPanel {
 	loadJSON(data, fName) {
 		this.fm.loadData(data);
 
-		this.anim.groups = data.groups;
+		for (let i = 0; i < data.layers.length; i++) {
+			this.anim.layers[i].group = data.layers[i].g;
+		}
 
 		// avoid errors with grid
 		this.anim.isMultiColor = true;
 		this.anim.isMultiLineWidth = true;
-
 
 		this.ui.faces.width.update(data.width);
 		this.ui.faces.height.update(data.height);

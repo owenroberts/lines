@@ -325,10 +325,11 @@ export class TimelinePanel extends UIPanel {
 		let gridRowStart = 2;
 		let gridRowEnd = 3;
 
-		if (this.viewGroups && this.anim.groups) {
+		
+		if (this.viewGroups && this.anim.groups.length > 0) {
 			for (let i = 0, len = this.anim.groups.length; i < len; i++) {
-				let groupLayers = layers.filter(l => l.groupNumber === i);
-				if (groupLayers.length === 0) continue;
+				const group = this.anim.groups[i];
+				let groupLayers = layers.filter(l => l.group === group);
 				
 				const startFrame = groupLayers.reduce((a, b) => { 
 					return a.startFrame < b.startFrame ? a : b;
@@ -385,7 +386,7 @@ export class TimelinePanel extends UIPanel {
 
 		for (let i = 0, len = this.anim.layers.length; i < len; i++) {
 			const layer = this.anim.layers[i];
-			if (layer.groupNumber >= 0 && this.viewGroups) continue;
+			if (layer.group && this.viewGroups) continue;
 			if (this.viewActiveLayers && !layers.includes(layer)) continue;
 
 			const colWidth = (this.tlFrameWidth + 2) * (Math.floor(layer.endFrame / this.tlInc) - Math.floor(layer.startFrame / this.tlInc) + 1);

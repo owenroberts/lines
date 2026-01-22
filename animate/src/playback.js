@@ -41,9 +41,9 @@ export class PlaybackPanel extends UIPanel {
 		);
 
 		this.addButton({
-			obj: anim,
+			obj: this.anim,
 			ref: "isPlaying",
-			callback: value => { this.toggle(value); }, 
+			callback: value => { this.toggle(value); },
 			onText: "❚❚", 
 			offText: "▶", 
 			key: "space",
@@ -185,7 +185,7 @@ export class PlaybackPanel extends UIPanel {
 		this.ui.update();
 	}
 
-	toggle() {
+	toggle(value) {
 		if (!this.anim.isPlaying) {
 			this.checkEnd();
 			// this.ui.panels.styles.reset();
@@ -193,7 +193,7 @@ export class PlaybackPanel extends UIPanel {
 			this.anim.activeLayer.startFrame = this.anim.currentFrame;
 			this.anim.activeLayer.endFrame = this.anim.currentFrame;
 		}
-		this.anim.isPlaying = !this.anim.isPlaying;
+		// this.anim.isPlaying = !this.anim.isPlaying;
 		// this.ui.panels.timeline.update();
 	}
 
@@ -242,7 +242,7 @@ export class PlaybackPanel extends UIPanel {
 	}
 
 	update() {
-
+		
 		if (this.stats && this.isStatsVisible) this.stats.begin();
 		
 		if (this.ui.panels.capture.isCapturing()) {

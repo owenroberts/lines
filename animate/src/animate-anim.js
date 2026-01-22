@@ -1,4 +1,5 @@
 import { Anim, Drawing, Points } from '../../src/lines.js';
+import { uniqueArrayFilter } from '../../../cool/cool.js';
 
 /**
  * Anim methods for working in animate app
@@ -132,6 +133,10 @@ export class AnimateAnim extends Anim {
 
 	get activeDrawing() {
 		return this.drawings[this.activeLayer.drawingIndex];
+	}
+
+	get groups() {
+		return this.layers.filter(l => l.group).map(l => l.group).filter(uniqueArrayFilter);
 	}
 
 	addDrawing(drawing) {

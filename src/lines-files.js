@@ -43,7 +43,7 @@ export class LinesFiles {
 
 		// this is part of layers already right? just need to load ... 
 		// *** redo groups
-		if (this.anim.groups) json.groups = this.anim.groups;
+		// if (this.anim.groups) json.groups = this.anim.groups;
 
 		const clips = this.anim.clips.names.filter(n => n !== "default");
 

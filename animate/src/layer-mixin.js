@@ -106,12 +106,11 @@ export const LayerMixin = {
 	},
 
 	getSaveProps() {
-		console.log(this.groupNumber, );
 		const props = { 
 			d: this.drawingIndex, 
 			s: this.styleIndex,
 		};
-		if (this.groupNumber >= 0) props.g = this.groupNumber;
+		if (this.group) props.g = this.group;
 		// if (this.drawingIndex >= 0) props.d = this.drawingIndex;
 		if (this.startFrame > 0 || this.endFrame > 0) props.f = [this.startFrame, this.endFrame];
 		if (this.x) props.x = this.x; // ignore if 0 or undefined

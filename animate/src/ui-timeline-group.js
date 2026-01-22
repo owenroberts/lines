@@ -3,18 +3,17 @@ import { UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINu
 export class UITimelineGroup extends UICollection {
 	constructor(layers, params) {
 		super(params);
+		this.addClass('group');
 		
 		this.ui = params.ui;
 		this.anim = params.anim;
 		this.index = params.index;
 		this.layers = layers;
-		this.addClass('group');
 		this.startFrame = params.startFrame;
 		this.endFrame = params.endFrame;
 		this.update = params.update;
 		this.reset = params.reset;
 		this.isToggled = false;
-
 
 		const toggle = new UIToggle({
 			class: 'group-toggle',
