@@ -11,12 +11,11 @@ export class UILayer extends UICollection {
 
 		this.index = params.index;
 		this.layer = params.layer;
-		this.groups = params.groups;
 		
 		const width = params.width;
 
 		const toggle = new UIButton({
-			btnClass: 'layer-toggle',
+			buttonClass: 'layer-toggle',
 			class: 'timeline-btn',
 			text: this.index,
 			callback: value => {
@@ -25,7 +24,7 @@ export class UILayer extends UICollection {
 		});
 
 		const edit = new UIButton({
-			btnClass: 'layer-edit',
+			buttonClass: 'layer-edit',
 			class: 'timeline-btn',
 			text: "E",
 			callback: () => {
@@ -34,7 +33,7 @@ export class UILayer extends UICollection {
 		});
 
 		const visible = new UIButton({
-			btnClass: 'layer-edit',
+			buttonClass: 'layer-edit',
 			class: 'timeline-btn',
 			text: "V",
 			callback: () => {
@@ -43,7 +42,7 @@ export class UILayer extends UICollection {
 		});
 
 		if (params.group) {
-			this.groupLabel = new UILabel({ text: this.params.group });
+			this.groupLabel = new UILabel({ text: params.group });
 		}
 
 		const uis = this.getUIs(false);
@@ -72,10 +71,10 @@ export class UILayer extends UICollection {
 
 	getUIs(isModal) {
 
-		const btnClass = isModal ? 'btn' : 'timeline-btn';
+		const buttonClass = isModal ? 'btn' : 'timeline-btn';
 
 		const highlight = new UIToggle({
-			btnClass: 'layer-highlight',
+			buttonClass: 'layer-highlight',
 			class: 'timeline-btn',
 			text: isModal ? "highlight" : "*",
 			isOn: this.layer.isHighlighted,
@@ -86,15 +85,15 @@ export class UILayer extends UICollection {
 
 		const tween = new UIButton({
 			text: isModal ? "add tween" : "T",
-			class: btnClass,
-			btnClass: 'layer-tween',
+			class: buttonClass,
+			buttonClass: 'layer-tween',
 			callback: () => { this.tweenModal(this.layer); }
 		});
 
 		const remove = new UIButton({
-			btnClass: 'remove',
+			buttonClass: 'remove',
 			text: isModal ? "remove" : "X",
-			class: btnClass,
+			class: buttonClass,
 			callback: () => {
 				this.anim.removeLayer(this.layer);
 				this.ui.update();
@@ -103,7 +102,7 @@ export class UILayer extends UICollection {
 
 		const startFrameIndex = new UINumberStep({
 			value: this.layer.startFrame,
-			class: isModal ? '' : btnClass,
+			class: isModal ? '' : buttonClass,
 			min: 0,
 			max: this.anim.endFrame + 1,
 			callback: value => {
@@ -119,7 +118,7 @@ export class UILayer extends UICollection {
 
 		const endFrameIndex = new UINumberStep({
 			value: this.layer.endFrame,
-			class: isModal ? '' : btnClass,
+			class: isModal ? '' : buttonClass,
 			min: 0,
 			callback: value => {
 				this.layer.endFrame = value;
@@ -133,7 +132,7 @@ export class UILayer extends UICollection {
 
 		const toEnd = new UIButton({
 			text: isModal ? 'to end' : '>>',
-			class: isModal ? '' : btnClass,
+			class: isModal ? '' : buttonClass,
 			callback: () => {
 				this.layer.endFrame = this.anim.endFrame;
 				this.ui.update();
@@ -141,9 +140,9 @@ export class UILayer extends UICollection {
 		});
 
 		const lock = new UIToggle({
-			btnClass: 'layer-lock',
+			buttonClass: 'layer-lock',
 			text: isModal ? 'lock' : 'L',
-			class: btnClass,
+			class: buttonClass,
 			isOn: this.layer.isLocked,
 			callback: (value) => {
 				this.layer.isLocked = value;
@@ -152,8 +151,8 @@ export class UILayer extends UICollection {
 
 		const moveUp = new UIButton({
 			text: isModal ? "move up" : '^',
-			btnClass:'move-up',
-			class: btnClass,
+			buttonClass:'move-up',
+			class: buttonClass,
 			callback: () => {
 				this.anim.swapLayer(this.index, this.index - 1);
 				this.ui.update();
@@ -162,8 +161,8 @@ export class UILayer extends UICollection {
 
 		const moveToBack = new UIButton({
 			text: isModal ? "move to back" : '^',
-			btnClass:'move-up',
-			class: btnClass,
+			buttonClass:'move-up',
+			class: buttonClass,
 			callback: () => {
 				this.anim.sortLayer(this.index, 0);
 				this.ui.update();
@@ -172,11 +171,11 @@ export class UILayer extends UICollection {
 
 		const addToGroup = new UIButton({
 			text: isModal ? 'group' : 'G',
-			btnClass: 'add-to-group',
-			class: btnClass,
+			buttonClass: 'add-to-group',
+			class: buttonClass,
 			callback: () => {
-				if (this.groups.length === 0) {
-					alert("add groups");
+				if (!this.anim.groups) {
+					alert("no groups, create groups");
 					return;
 				}
 
@@ -185,7 +184,7 @@ export class UILayer extends UICollection {
 					title: 'group',
 					ui: this.ui,
 					callback: () => {
-						layer.groupNumber = +groupSelect.value;
+						this.layer.groupNumber = +groupSelect.value;
 						this.lastGroup = +groupSelect.value;
 						this.ui.update();
 					}
@@ -194,8 +193,8 @@ export class UILayer extends UICollection {
 				groupSelector.addBreak('groups:');
 				
 				let groupSelect = new UISelect({});
-				for (let i = 0; i < this.groups.length; i++) {
-					groupSelect.addOption(i, this.groups[i]);
+				for (let i = 0; i < this.anim.groups.length; i++) {
+					groupSelect.addOption(i, this.anim.groups[i]);
 				}
 				if (this.lastGroup) groupSelect.value = this.lastGroup;
 				groupSelector.add(groupSelect);
@@ -204,8 +203,8 @@ export class UILayer extends UICollection {
 
 		const merge = new UIButton({
 			text: isModal ? "merge" : 'M',
-			class: btnClass,
-			btnClass: 'merge-layer',
+			class: buttonClass,
+			buttonClass: 'merge-layer',
 			callback: () => {
 				const modal = new UIModal({
 					text: 'merge with layer',

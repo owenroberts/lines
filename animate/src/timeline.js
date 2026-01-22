@@ -22,7 +22,6 @@ export class TimelinePanel extends UIPanel {
 		this.lastGroup; // set last group
 		this.useScrollToFrame = false;
 		this.autoFit = false;
-		this.groups = [];
 
 		this.tlSteps = [1, 2, 4, 5, 6, 10, 12, 20, 30, 40, 50, 100, 200, 500, 1000];
 		this.tlInc = 1;
@@ -79,7 +78,7 @@ export class TimelinePanel extends UIPanel {
 				noRow: true,
 				key: "backslash",
 				type: "UIToggle",
-				callback: () => { this.update(); },
+				callback: value => { this.update(); },
 			},
 			{
 				ref: "viewLayers",
@@ -119,11 +118,16 @@ export class TimelinePanel extends UIPanel {
 			text: "add group",
 			callback: () => {
 				const newGroup = prompt("group name?");
-				if (this.groups.includes(newGroup)) {
+				if (this.anim.groups.includes(newGroup)) {
 					alert(`group ${newGroup} exists`);
 					return;
 				}
-				if (newGroup) this.groups.push(newGroup);
+				if (newGroup) {
+					if (!this.anim.hasOwnProperty("groups")) {
+						this.anim.groups = [];
+					}
+					this.anim.groups.push(newGroup);
+				}
 			}
 		});
 
@@ -321,8 +325,8 @@ export class TimelinePanel extends UIPanel {
 		let gridRowStart = 2;
 		let gridRowEnd = 3;
 
-		if (this.viewGroups) {
-			for (let i = 0, len = this.groups.length; i < len; i++) {
+		if (this.viewGroups && this.anim.groups) {
+			for (let i = 0, len = this.anim.groups.length; i < len; i++) {
 				let groupLayers = layers.filter(l => l.groupNumber === i);
 				if (groupLayers.length === 0) continue;
 				
@@ -342,7 +346,7 @@ export class TimelinePanel extends UIPanel {
 				const tlGroup = new UITimelineGroup(groupLayers, {
 					anim: this.anim,
 					ui: this.ui,
-					name: this.groups[i],
+					name: this.anim.groups[i],
 					index: i,
 					class: 'group',
 					startFrame: startFrame,
@@ -391,8 +395,6 @@ export class TimelinePanel extends UIPanel {
 				layer,
 				anim: this.anim,
 				ui: this.ui,
-				group: this.viewGroups ? undefined : this.groups[layer.groupNumber],
-				groups: this.groups,
 				canMoveUp: i > 0 && layers.length > 2,
 				type: 'layer',
 				width: colWidth,

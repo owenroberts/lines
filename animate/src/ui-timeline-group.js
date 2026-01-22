@@ -3,6 +3,7 @@ import { UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINu
 export class UITimelineGroup extends UICollection {
 	constructor(layers, params) {
 		super(params);
+		
 		this.ui = params.ui;
 		this.anim = params.anim;
 		this.index = params.index;
@@ -12,15 +13,12 @@ export class UITimelineGroup extends UICollection {
 		this.endFrame = params.endFrame;
 		this.update = params.update;
 		this.reset = params.reset;
-		const width = params.width;
-
-
 		this.isToggled = false;
-		const self = this;
+
 
 		const toggle = new UIToggle({
 			class: 'group-toggle',
-			btnClass: 'timeline-btn',
+			buttonClass: 'timeline-btn',
 			text: params.name,
 			isOn: this.isToggled,
 			callback: value => {
@@ -34,7 +32,7 @@ export class UITimelineGroup extends UICollection {
 
 		const highlight = new UIToggle({
 			class: 'group-highlight',
-			btnClass: 'timeline-btn',
+			buttonClass: 'timeline-btn',
 			text: '*',
 			isOn: false,
 			callback: value => {
@@ -46,7 +44,7 @@ export class UITimelineGroup extends UICollection {
 
 		const edit = new UIButton({
 			class: 'layer-edit',
-			btnClass: 'timeline-btn',
+			buttonClass: 'timeline-btn',
 			text: "E",
 			callback: () => {
 				this.editModal(layers, params);
@@ -54,6 +52,7 @@ export class UITimelineGroup extends UICollection {
 		});
 
 		const uis = this.getPropUIs(layers, params, false);
+		const width = params.width;
 
 		if (width > 30) this.append(uis.startFrameNumber);
 		this.append(toggle, 'toggle');
@@ -65,7 +64,6 @@ export class UITimelineGroup extends UICollection {
 		if (width > 80) this.append(uis.tween);
 		if (width > 90) this.append(uis.moveUp);
 
-
 		if (width > 80) {
 			this.append(uis.endFrameNumber);
 			uis.endFrameNumber.addClass('right-margin');
@@ -74,12 +72,12 @@ export class UITimelineGroup extends UICollection {
 
 	getPropUIs(layers, params, isModal) {
 
-		const btnClass = isModal ? 'btn' : 'timeline-btn';		
+		const buttonClass = isModal ? 'btn' : 'timeline-btn';		
 
 		const lock = new UIToggle({
 			class: 'group-lock',
 			text: isModal ? 'Lock' : 'L',
-			btnClass: btnClass,
+			buttonClass: buttonClass,
 			isOn: false,
 			callback: function() {
 				layers.forEach(layer => {
@@ -90,7 +88,7 @@ export class UITimelineGroup extends UICollection {
 
 		const breakUp = new UIButton({
 			class: 'group-breakup',
-			btnClass: btnClass,
+			buttonClass: buttonClass,
 			text: isModal ? 'Break up' : 'X',
 			callback: () => {
 				layers.forEach(layer => {
@@ -102,7 +100,7 @@ export class UITimelineGroup extends UICollection {
 
 		const removeLayer = new UIButton({
 			class: 'group-remove-layer',
-			btnClass: btnClass,
+			buttonClass: buttonClass,
 			text: isModal ? 'Remove Layer' : 'R',
 			callback: () => {
 				
@@ -140,7 +138,7 @@ export class UITimelineGroup extends UICollection {
 
 		const startFrameNumber = new UINumberStep({
 			value: this.startFrame,
-			class: isModal ? '' : btnClass,
+			class: isModal ? '' : buttonClass,
 			min: 0,
 			callback: value => {
 				layers.forEach(layer => {
@@ -156,7 +154,7 @@ export class UITimelineGroup extends UICollection {
 
 		const endFrameNumber = new UINumberStep({
 			value: this.endFrame,
-			class: isModal ? '' : btnClass,
+			class: isModal ? '' : buttonClass,
 			min: 0,
 			callback: value => {
 				layers.forEach(layer => {
@@ -172,22 +170,22 @@ export class UITimelineGroup extends UICollection {
 
 		const tween = new UIButton({
 			text: isModal ? "Add Tween" : "T",
-			class: btnClass,
-			btnClass: 'group-tween',
+			class: buttonClass,
+			buttonClass: 'group-tween',
 			callback: () => { this.tweenModal(layers); }
 		});
 
 		const moveUp = new UIButton({
 			text: isModal ? "Move Up" : '^',
-			btnClass:'move-up',
-			class: btnClass,
+			buttonClass:'move-up',
+			class: buttonClass,
 			callback: params.moveUp
 		});
 
 		const moveToBack = new UIButton({
 			text: isModal ? "Move To Back" : '^',
-			btnClass:'move-up',
-			class: btnClass,
+			buttonClass:'move-up',
+			class: buttonClass,
 			callback: params.moveToBack
 		});
 
@@ -268,6 +266,5 @@ export class UITimelineGroup extends UICollection {
 			value: tween.endValue,
 			callback(value) { tween.endValue = value; }
 		}));
-
 	}
 }

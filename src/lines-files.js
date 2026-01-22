@@ -13,7 +13,7 @@ export class LinesFiles {
 		this.renderer = renderer;
 	}
 
-	saveData(title, groups, isSingleFrame) {
+	saveData(title, isSingleFrame) {
 
 		const json = {
 			title: title ?? prompt("name file"),
@@ -39,13 +39,11 @@ export class LinesFiles {
 			this.anim.layers.map(l => l.getSaveProps());
 
 		// need to prune drawings after
-		// 
 		if (json.layers.length === 0) return;
 
 		// this is part of layers already right? just need to load ... 
-		// const groups = this.timeline.groups();
 		// *** redo groups
-		if (groups.length > 0) json.groups = [...groups];
+		if (this.anim.groups) json.groups = this.anim.groups;
 
 		const clips = this.anim.clips.names.filter(n => n !== "default");
 

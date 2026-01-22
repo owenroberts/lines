@@ -104,7 +104,7 @@ export class FilesPanel extends UIPanel {
 			this.fileName = prompt("name file");
 		}
 
-		const json = this.fm.saveData(this.fileName, this.ui.panels.timeline.groups, isSingleFrame);
+		const json = this.fm.saveData(this.fileName, isSingleFrame);
 		console.log('save local', json);
 		
 		if (!json) return alert('no data.');
@@ -138,9 +138,12 @@ export class FilesPanel extends UIPanel {
 	loadJSON(data, fName) {
 		this.fm.loadData(data);
 
+		this.anim.groups = data.groups;
+
 		// avoid errors with grid
 		this.anim.isMultiColor = true;
 		this.anim.isMultiLineWidth = true;
+
 
 		this.ui.faces.width.update(data.width);
 		this.ui.faces.height.update(data.height);
