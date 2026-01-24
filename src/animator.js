@@ -1,19 +1,3 @@
-/*
-	animation params
-	need some fucking instructions here ...
-	don't call update every frame, it creates tweens
-	call update if you want it to change
-	** maybe change that func name? **
-	also call it at the beginning
-
-	let a = new Animator(lines_animation, params)
-	a.update();
-
-	trying to be too clever with this, need to make it more useful, specific
-	adds a different tween to each layer, maybe option to add same tween to all layers?
-	or maybe rewrite after changing set up to keyframes
-*/
-
 import { choice, chance, randomInt } from '../../cool/cool.js';
 
 const defaultParams = {
@@ -26,19 +10,19 @@ const defaultParams = {
 };
 
 /**
- * animator - create a bunch of randomized tweens and add to animation layers
+ * animator - create a bunch of randomized keyframes and add to anim layers
  */
 export class Animator {
 	
 	/**
 	 * creates an animator
-	 * @param {Anim} 		- animation
- 	 * @param {object} params    	- params to overwrite defaults
- 	 * @param {string[]} ignore 	- list of params to ignore making tweens
+	 * @param {Anim} 			- anim
+ 	 * @param {object} params	- params to overwrite defaults
+ 	 * @param {string[]} ignore	- list of props to ignore
 	 */
-	constructor(animation, params={}, ignore=[]) {
+	constructor(anim, params={}, ignore=[]) {
 
-		this.animation = animation;
+		this.anim = anim;
 		this.params = {};
 
 		for (const k in defaultParams) {
@@ -49,65 +33,52 @@ export class Animator {
 	}
 
 	/**
-	 * set new tweens
+	 * set new keyframes
 	 */
 	set() {
 		this.clear();
 
-		for (let i = 0; i < this.animation.layers.length; i++) {
-			const layer = this.animation.layers[i];
+		for (let i = 0; i < this.anim.layers.length; i++) {
+			const layer = this.anim.layers[i];
 
 			const props = { 
 				...layer.getProps(), 
-				...this.animation.styles[layer.styleIndex], 
+				...this.anim.styles[layer.styleIndex], 
 			};
 			
 			const prop = choice(...Object.keys(this.params)); // choose prop
+			const keyframe = { prop, isAnimatorKeyframe: true };
 
-			// change prop or tween
 			if (prop === 'startIndex' || prop === 'endIndex') {
-				const tween = {
-					prop: prop,
-					startFrame: 0,
-					endFrame: this.animation.endFrame,
-					startValue: 0,
-					endValue: this.animation.drawings[layer.drawingIndex].length - 1,
-					isAnimatorTween: true,
-				};
-				layer.tweens.push(tween);
+				keyframe.frames = [
+					[0, 0], 
+					[this.anim.endFrame, this.anim.drawings[layer.drawingIndex].length - 1]
+				];
 			} else if (chance(0.5)) { // change prop
-				const val = randomInt(...this.params[prop]);
-				this.animation.overrideProperty(prop, val);
-			} else { //  add tweens
-				const tween = { 
-					prop: prop, 
-					startFrame: 0,
-					endFrame: this.animation.endFrame,
-					startValue: props[prop],
-					endValue: randomInt(...this.params[prop]),
-					isAnimatorTween: true,
-				};
-				layer.tweens.push(tween);
+				keyframe.frames = [[0, randomInt(...this.params[prop])]];
+			} else {
+				keyframe.frames = [
+					[0, props[prop]],
+					[this.anim.endFrame, randomInt(...this.params[prop])],
+				];
 			}
+			layer.keyframes.push(keyframe);
 		}
 	}
 
 	/**
-	 * clear anim tweens
+	 * clear anim keyframes
 	 */
 	clear() {
-		for (let i = 0; i < this.animation.layers.length; i++) {
-			const layer = this.animation.layers[i];
+		for (let i = 0; i < this.anim.layers.length; i++) {
+			const layer = this.anim.layers[i];
 
-			// remove prev tweens
-			for (let j = layer.tweens.length - 1; j >= 0; j--) {
-				if (layer.tweens[j].isAnimatorTween) {
-					layer.tweens.splice(j, 1);
+			// remove prev keyframes
+			for (let j = layer.keyframes.length - 1; j >= 0; j--) {
+				if (layer.keyframes[j].isAnimatorKeyframe) {
+					layer.keyframes.splice(j, 1);
 				}
 			}
 		}
-
-		this.tweenIndexes = [];
-		this.animation.cancelOverride();
 	}
 }

@@ -2,7 +2,7 @@ import { Animator } from '../../src/animator.js';
 import { UIPanel, UINumberStep } from '../../../oi/src/oi.js';
 
 /**
- * add randomized tweens
+ * add randomized keyframes
  * anim needs to be longer than 1 frame
  * should have multiple animators?
  */

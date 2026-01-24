@@ -85,6 +85,7 @@ export class PlaybackPanel extends UIPanel {
 			ref: "currentFrame",
 			key: "f",
 			ignoreSettings: true,
+			value: 0,
 			callback: value => {
 				this.setFrame(value);
 			}
@@ -100,6 +101,7 @@ export class PlaybackPanel extends UIPanel {
 		this.addRef({
 			obj: anim,
 			ref: "dpf",
+			value: 1,
 			ignoreSettings: true,
 			min: 1,
 		});

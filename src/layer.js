@@ -1,13 +1,14 @@
 /**
  * creates a layer, organizes animation
  * ref one drawing, style
- * add tweens
+ * add keyframes
  */
 export class Layer {
 	constructor(params={}, drawingEndIndex) {
+		
 		this.drawingIndex = params.drawingIndex ?? 0; // fix some time
 		this.styleIndex = params.styleIndex ?? 0;
-		this.tweens = params.tweens ?? [];
+		this.keyframes = params.keyframes ?? [];
 
 		this.isVisible = true;
 
@@ -40,7 +41,7 @@ export class Layer {
 			endIndex: this.drawingEndIndex,
 			drawingIndex: this.drawingIndex,
 			styleIndex: this.styleIndex,
-			tweens: this.tweens,
+			keyframes: this.keyframes,
 		};
 		return props;
 	}

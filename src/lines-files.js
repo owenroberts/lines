@@ -151,10 +151,8 @@ export class LinesFiles {
 			styleIndex: layerParams.s ?? 0,
 			groupNumber: layerParams.g ?? -1,
 		};
-		if (layerParams.t) {
-			params.tweens = layerParams.t.map(t => { 
-				return { prop: t[0], startFrame: t[1], endFrame: t[2], startValue: t[3], endValue: t[4]}
-			});
+		if (layerParams.k) {
+			params.keyframes = layerParams.k;
 		}
 		if (layerParams.o) params.order = layerParams.o;
 		return params;

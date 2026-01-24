@@ -1,5 +1,6 @@
 import { Points, createTween } from '../../src/lines.js';
 import { UIModal, UICollection, UIToggle, UIButton, UINumberStep, UILabel, UISelect, UINumber, UIText } from '../../../oi/src/oi.js';
+import { UIKeyFrameModal } from './ui-keyframe-modal.js';
 
 export class UILayer extends UICollection {
 	constructor(params) {
@@ -16,7 +17,7 @@ export class UILayer extends UICollection {
 
 		const toggle = new UIButton({
 			buttonClass: 'layer-toggle',
-			class: 'timeline-btn',
+			class: 'timeline-button',
 			text: this.index,
 			callback: value => {
 				this.ui.faces.activeLayerIndex.update(this.index);
@@ -25,7 +26,7 @@ export class UILayer extends UICollection {
 
 		const edit = new UIButton({
 			buttonClass: 'layer-edit',
-			class: 'timeline-btn',
+			class: 'timeline-button',
 			text: "E",
 			callback: () => {
 				this.editModal();
@@ -34,7 +35,7 @@ export class UILayer extends UICollection {
 
 		const visible = new UIButton({
 			buttonClass: 'layer-edit',
-			class: 'timeline-btn',
+			class: 'timeline-button',
 			text: "V",
 			callback: () => {
 				this.layer.isVisible = !this.layer.isVisible;
@@ -54,7 +55,7 @@ export class UILayer extends UICollection {
 		this.append(visible);
 		if (width < 20) this.append(uis.toEnd);
 		if (width > 50) this.append(uis.lock, 'lock');
-		if (width > 60) this.append(uis.tween);
+		if (width > 60) this.append(uis.keyframes);
 		// if (width > 70) this.append(uis.remove);
 		if (width > 80) this.append(uis.addToGroup);
 		if (width > 90) this.append(uis.merge)
@@ -71,11 +72,11 @@ export class UILayer extends UICollection {
 
 	getUIs(isModal) {
 
-		const buttonClass = isModal ? 'btn' : 'timeline-btn';
+		const buttonClass = isModal ? 'btn' : 'timeline-button';
 
 		const highlight = new UIToggle({
 			buttonClass: 'layer-highlight',
-			class: 'timeline-btn',
+			class: 'timeline-button',
 			text: isModal ? "highlight" : "*",
 			isOn: this.layer.isHighlighted,
 			callback: value => {
@@ -83,11 +84,17 @@ export class UILayer extends UICollection {
 			}
 		});
 
-		const tween = new UIButton({
-			text: isModal ? "add tween" : "T",
+		const keyframes = new UIButton({
+			text: isModal ? "add keyframe" : "K",
 			class: buttonClass,
-			buttonClass: 'layer-tween',
-			callback: () => { this.tweenModal(this.layer); }
+			buttonClass: 'layer-keyframe',
+			callback: () => { 
+				const keyFrameModal = new UIKeyFrameModal({
+					ui: this.ui,
+					anim: this.anim,
+					layer: this.layer,
+				});
+			}
 		});
 
 		const remove = new UIButton({
@@ -111,7 +118,7 @@ export class UILayer extends UICollection {
 				if (value > this.layer.endFrame) {
 					this.layer.endFrame = value;
 				}
-				this.layer.resetTweens();
+				this.layer.resetKeyframes();
 				this.ui.update();
 			}
 		});
@@ -125,7 +132,7 @@ export class UILayer extends UICollection {
 				if (value < this.layer.startFrame) {
 					this.layer.startFrame = value;
 				}
-				this.layer.resetTweens();
+				this.layer.resetKeyframes();
 				this.ui.update();
 			}
 		});
@@ -178,8 +185,6 @@ export class UILayer extends UICollection {
 				if (this.anim.groups.length === 0) {
 					const newGroup = prompt("create first group");
 					if (newGroup) this.layer.group = newGroup;
-					console.log(this.layer);
-					console.log(this.anim);
 					return;
 				}
 
@@ -255,7 +260,7 @@ export class UILayer extends UICollection {
 			}
 		});
 
-		return { tween, remove, startFrameIndex, endFrameIndex, lock, moveUp, moveToBack, addToGroup, merge, toEnd, highlight };
+		return { keyframes, remove, startFrameIndex, endFrameIndex, lock, moveUp, moveToBack, addToGroup, merge, toEnd, highlight };
 	}
 
 	editModal() {
@@ -291,7 +296,7 @@ export class UILayer extends UICollection {
 
 		modal.addBreak();
 
-		modal.add(uis.tween);
+		modal.add(uis.addKeyframe);
 		modal.add(uis.toEnd);
 
 		modal.addBreak();
@@ -388,52 +393,5 @@ export class UILayer extends UICollection {
 		}));
 
 		modal.adjustPosition();
-	}
-
-	tweenModal() {
-
-		const tween = createTween({
-			prop: 'endIndex',
-			startFrame: this.anim.currentFrame,
-			endFrame: this.anim.currentFrame + 10,
-			startValue: 0,
-			endValue: 'end'
-		});
-
-		const modal = new UIModal({
-			title: "add tween", 
-			ui: this.ui, 
-			callback: () => {
-				if (tween.prop === 'endIndex' || tween.prop === 'startIndex') {
-					if (tween.endValue === 'end') {
-						tween.endValue = this.anim.drawings[this.layer.drawingIndex].length;
-					}
-					if (tween.startValue === 'end') {
-						tween.startValue = this.anim.drawings[this.layer.drawingIndex].length;
-					}
-				}
-
-				this.layer.addTween(tween);
-				this.ui.update();
-			}
-		});
-
-		for (const k in tween) {
-			modal.addBreak(k);
-
-			if (k === "prop") {
-				modal.add(new UISelect({
-					obj: tween,
-					ref: k,
-					options: ['segmentNum', 'jiggleRange', 'wiggleRange', 'wiggleSpeed', 'linesInterval', 'startIndex', 'endIndex'],
-					value: 'endIndex',
-				}));
-			} else {
-				modal.add(new UINumberStep({
-					obj: tween,
-					ref: k,
-				}));
-			}
-		}
 	}
 }

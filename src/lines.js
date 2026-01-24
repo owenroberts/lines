@@ -12,7 +12,7 @@ import { Animator } from './animator.js';
 import { Anim } from './anim.js';
 import { Manager } from './manager.js';
 import { LinesFiles } from './lines-files.js';
-import { Points, LINES_VERSION } from './consts.js';
-import { createStyle, createTween, createClip, createSequence, createSequenceClip } from './factory.js';
+import { Points, LINES_VERSION, INT_PROP_LIST, KEYFRAME_PROP_LIST } from './consts.js';
+import { createStyle, createTween, createClip, createSequence, createSequenceClip, createKeyframeChannel } from './factory.js';
 
-export { Renderer, PixelMixin, Loader, Layer, AntiMixin, Drawing, Animator, Anim, Points, LINES_VERSION, LinesFiles, Manager, createClip, createSequence, createSequenceClip, createTween, createStyle };
+export { Renderer, PixelMixin, Loader, Layer, AntiMixin, Drawing, Animator, Anim, Points, LINES_VERSION, LinesFiles, Manager, createClip, createSequence, createSequenceClip, createTween, createStyle, INT_PROP_LIST, createKeyframeChannel, KEYFRAME_PROP_LIST };

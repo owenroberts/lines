@@ -17,7 +17,7 @@ export class UITimelineGroup extends UICollection {
 
 		const toggle = new UIToggle({
 			class: 'group-toggle',
-			buttonClass: 'timeline-btn',
+			buttonClass: 'timeline-button',
 			text: params.name,
 			isOn: this.isToggled,
 			callback: value => {
@@ -31,7 +31,7 @@ export class UITimelineGroup extends UICollection {
 
 		const highlight = new UIToggle({
 			class: 'group-highlight',
-			buttonClass: 'timeline-btn',
+			buttonClass: 'timeline-button',
 			text: '*',
 			isOn: false,
 			callback: value => {
@@ -43,7 +43,7 @@ export class UITimelineGroup extends UICollection {
 
 		const edit = new UIButton({
 			class: 'layer-edit',
-			buttonClass: 'timeline-btn',
+			buttonClass: 'timeline-button',
 			text: "E",
 			callback: () => {
 				this.editModal(layers, params);
@@ -60,7 +60,7 @@ export class UITimelineGroup extends UICollection {
 		if (width > 50) this.append(uis.lock, 'lock');
 		if (width > 60) this.append(uis.breakUp);
 		if (width > 70) this.append(uis.removeLayer);
-		if (width > 80) this.append(uis.tween);
+		if (width > 80) this.append(uis.keyframes);
 		if (width > 90) this.append(uis.moveUp);
 
 		if (width > 80) {
@@ -71,7 +71,7 @@ export class UITimelineGroup extends UICollection {
 
 	getPropUIs(layers, params, isModal) {
 
-		const buttonClass = isModal ? 'btn' : 'timeline-btn';		
+		const buttonClass = isModal ? 'btn' : 'timeline-button';		
 
 		const lock = new UIToggle({
 			class: 'group-lock',
@@ -145,7 +145,7 @@ export class UITimelineGroup extends UICollection {
 					if (value > layer.endFrame) {
 						layer.endFrame = value;
 					}
-					layer.resetTweens();
+					layer.resetKeyframes();
 				});
 				this.update();
 			}
@@ -161,17 +161,24 @@ export class UITimelineGroup extends UICollection {
 					if (value < layer.startFrame) {
 						layer.startFrame = value;
 					}
-					layer.resetTweens();
+					layer.resetKeyframes();
 				});
 				this.update();
 			}
 		});
 
-		const tween = new UIButton({
-			text: isModal ? "Add Tween" : "T",
+		const keyframes = new UIButton({
+			text: isModal ? "add keyframe" : "K",
 			class: buttonClass,
-			buttonClass: 'group-tween',
-			callback: () => { this.tweenModal(layers); }
+			buttonClass: 'layer-keyframe',
+			callback: () => {
+				throw new Error("figure out group layers thing");
+				const keyFrameModal = new UIKeyFrameModal({
+					ui: this.ui,
+					anim: this.anim,
+					layer: this.layer,
+				});
+			}
 		});
 
 		const moveUp = new UIButton({
@@ -188,7 +195,7 @@ export class UITimelineGroup extends UICollection {
 			callback: params.moveToBack
 		});
 
-		return { lock, breakUp, removeLayer, startFrameNumber, endFrameNumber, tween, moveUp, moveToBack };
+		return { lock, breakUp, removeLayer, startFrameNumber, endFrameNumber, keyframes, moveUp, moveToBack };
 	}
 
 	editModal(layers, params) {
@@ -209,9 +216,9 @@ export class UITimelineGroup extends UICollection {
 		modal.adjustPosition();	
 	}
 
-	tweenModal(layers) {
+	keyframesModal(layers) {
 
-		const tween = createTween({
+		const keyframes = createTween({
 			prop: 'endIndex',
 			startFrame: this.anim.currentFrame,
 			endFrame: this.anim.currentFrame + 10,
@@ -225,10 +232,10 @@ export class UITimelineGroup extends UICollection {
 			position: this.position, 
 			callback: () => {
 				layers.forEach(layer => {
-					if (tween.endValue === 'end' && tween.prop === 'endIndex') {
-						tween.endValue = this.anim.drawings[layer.drawingIndex].length;
+					if (keyframes.endValue === 'end' && keyframes.prop === 'endIndex') {
+						keyframes.endValue = this.anim.drawings[layer.drawingIndex].length;
 					}
-					layer.addTween({ ...tween });
+					layer.addTween({ ...keyframes });
 				});
 				this.update();
 			}
@@ -239,31 +246,31 @@ export class UITimelineGroup extends UICollection {
 			options: ['segmentNum', 'jiggleRange', 'wiggleRange', 'wiggleSpeed', 'linesInterval', 'startIndex', 'endIndex'], // put this in Contants, CNTS?
 			value: 'endIndex',
 			selected: 'endIndex',
-			callback(value) { tween.prop = value; }
+			callback(value) { keyframes.prop = value; }
 		}));
 
 		modal.addBreak('Start Frame:');
 		modal.add(new UINumber({
-			value: tween.startFrame,
-			callback(value) { tween.startFrame = value; }
+			value: keyframes.startFrame,
+			callback(value) { keyframes.startFrame = value; }
 		}));
 
 		modal.addBreak('End Frame:');
 		modal.add(new UINumber({
-			value: tween.endFrame,
-			callback(value) { tween.endFrame = value; }
+			value: keyframes.endFrame,
+			callback(value) { keyframes.endFrame = value; }
 		}));
 
 		modal.addBreak('Start Value:');
 		modal.add(new UINumber({
-			value: tween.startValue,
-			callback(value) { tween.startValue = value; }
+			value: keyframes.startValue,
+			callback(value) { keyframes.startValue = value; }
 		}));
 
 		modal.addBreak('End Value:');
 		modal.add(new UINumber({
-			value: tween.endValue,
-			callback(value) { tween.endValue = value; }
+			value: keyframes.endValue,
+			callback(value) { keyframes.endValue = value; }
 		}));
 	}
 }

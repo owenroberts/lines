@@ -51,38 +51,62 @@ export class QuickAnimatePanel extends UIPanel {
 
 			switch(type) {
 				case AnimTypes.DRAW:
-					layer.addTween({
+					layer.addKeyframe({
 						prop: "endIndex",
-						startFrame: this.anim.currentFrame,
-						endFrame: this.anim.currentFrame + n,
-						startValue: 0,
-						endValue: this.anim.drawings[layer.drawingIndex].length
+						frames: [
+							[
+								this.anim.currentFrame, 
+								0
+							],
+							[
+								this.anim.currentFrame + n,
+								this.anim.drawings[layer.drawingIndex].length - 1,
+							]
+						],
 					});
 				break;
 				case AnimTypes.REVERSE:
-					layer.addTween({
+					layer.addKeyframe({
 						prop: "startIndex",
-						startFrame: this.anim.currentFrame,
-						endFrame: this.anim.currentFrame + n,
-						startValue: 0,
-						endValue: this.anim.drawings[layer.drawingIndex].length
+						frames: [
+							[
+								this.anim.currentFrame, 
+								0
+							],
+							[
+								this.anim.currentFrame + n,
+								this.anim.drawings[layer.drawingIndex].length - 1,
+							]
+						],
 					});
 				break;
 				case AnimTypes.DRAW_REVERSE:
 					const mid = Math.floor(n / 2);
-					layer.addTween({
+					layer.addKeyframe({
 						prop: "endIndex",
-						startFrame: this.anim.currentFrame,
-						endFrame: this.anim.currentFrame + mid,
-						startValue: 0,
-						endValue: this.anim.drawings[layer.drawingIndex].length
+						frames: [
+							[
+								this.anim.currentFrame, 
+								0
+							],
+							[
+								this.anim.currentFrame + mid,
+								this.anim.drawings[layer.drawingIndex].length - 1,
+							]
+						],
 					});
-					layer.addTween({
+					layer.addKeyframe({
 						prop: "startIndex",
-						startFrame: this.anim.currentFrame + mid,
-						endFrame: this.anim.currentFrame + n,
-						startValue: 0,
-						endValue: this.anim.drawings[layer.drawingIndex].length
+						frames: [
+							[
+								this.anim.currentFrame + mid,
+								0
+							],
+							[
+								this.anim.currentFrame + n,
+								this.anim.drawings[layer.drawingIndex].length - 1,
+							]
+						],
 					});
 				break;
 			}

@@ -146,6 +146,7 @@ export class FilesPanel extends UIPanel {
 		this.anim.isMultiColor = true;
 		this.anim.isMultiLineWidth = true;
 
+		this.ui.faces.dpf.update(data.dpf);
 		this.ui.faces.width.update(data.width);
 		this.ui.faces.height.update(data.height);
 		if (data.bgColor) this.ui.faces.bgColor.update(data.bgColor);

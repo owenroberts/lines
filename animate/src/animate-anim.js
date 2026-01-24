@@ -15,8 +15,6 @@ export class AnimateAnim extends Anim {
 
 	get endFrame() {
 		const endFrame = this.layers.map(layer => { return layer.endFrame; });
-		// when is layers.length 0 ??
-		// return this.layers.length > 0 ? Math.max.apply(Math, endFrame) : 0;
 		return Math.max.apply(Math, endFrame);
 	}
 

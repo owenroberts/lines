@@ -1,5 +1,5 @@
 import { map } from '../../cool/cool.js';
-import { Points } from './consts.js';
+import { Points, INT_PROP_LIST } from './consts.js';
 import { Manager } from './manager.js';
 
 /**
@@ -57,14 +57,6 @@ export class Anim {
 		this.layers.forEach(layer => {
 			layer.linesInterval = n;
 		});
-	}
-
-	overrideProperty(prop, value) {
-		this.override[prop] = value;
-	}
-
-	cancelOverride() {
-		this.override = {};
 	}
 
 	nextClip() {
@@ -207,25 +199,23 @@ export class Anim {
 			//  maybe only needed in GameAnim ?? 
 			if (Number.isFinite(x)) props.x += x;
 			if (Number.isFinite(y)) props.y += y;
-			
-			if (props.tweens.length) { // default empty array -- .length didn't hurt
-				for (let j = 0; j < props.tweens.length; j++) {
-					const tween = props.tweens[j];
-					if (tween.startFrame <= this.currentFrame && 
-						tween.endFrame >= this.currentFrame) {
-						props[tween.prop] = map(this.currentFrame, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue);
 
-						// fix for floating point array index errors -- move to actual prop calcs?
-						if (tween.prop === 'startIndex' || tween.prop === 'endIndex' || tween.prop === 'segmentNum') {
-							props[tween.prop] = Math.round(props[tween.prop]);
+			// keyframes -- channel = [{ prop, frames }]
+			// frame = [frame, value]
+			if (props.keyframes.length > 0) {
+				for (let j = 0; j < props.keyframes.length; j++) {
+					const channel = props.keyframes[j];
+					for (let k = 0; k < channel.frames.length; k++) {
+						if (channel.frames[k][0] > this.currentFrame) continue;
+						if (k === channel.frames.length - 1) {
+							props[channel.prop] = channel.frames[k][1];
+							continue;
 						}
+						const value = map(this.currentFrame, channel.frames[k][0], channel.frames[k + 1][0], channel.frames[k][1], channel.frames[k + 1][1]);
+						props[channel.prop] = INT_PROP_LIST.includes(channel.prop) ? Math.round(value) : value;
+
 					}
 				}
-			}
-
-			// over ride animation data from renderer (usually effects)
-			for (const key in this.override) {
-				props[key] = this.override[key];
 			}
 
 			// how often to reset wiggle

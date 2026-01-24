@@ -29,19 +29,32 @@ export const LayerMixin = {
 		return (index >= this.startFrame && index <= this.endFrame && !this.dontDraw);
 	},
 
-	addTween(tween) {
-		this.tweens.push(tween);
-		if (tween.startFrame < this.startFrame) this.startFrame = tween.startFrame;
-		if (tween.endFrame > this.endFrame) this.endFrame = tween.endFrame;
+	addKeyframe(keyframe) {
+		for (let i = 0; i < keyframe.frames.length; i++) {
+			if (keyframe.frames[i][0] < this.startFrame) {
+				keyframe.frames[i][0] = this.startFrame;
+			}
+			if (keyframe.frames[i][0] > this.endFrame) {
+				keyframe.frames[i][0] = this.startFrame;
+			}
+		}
+		this.keyframes.push(keyframe);
 	},
 
-	resetTweens() {
-		for (let i = 0; i < this.tweens.length; i++) {
-			const tween = this.tweens[i];
-			if (tween.startFrame < this.startFrame) tween.startFrame = this.startFrame;
-			if (tween.endFrame > this.endFrame) tween.endFrame = this.endFrame;
+	resetKeyframes() {
+		for (let i = 0; i < this.keyframes.length; i++) {
+			if (keyframe.frames[i][0] < this.startFrame) {
+				keyframe.frames[i][0] = this.startFrame;
+			}
+			if (keyframe.frames[i][0] > this.endFrame) {
+				keyframe.frames[i][0] = this.startFrame;
+			}
 
-			if (tween.endFrame < tween.startFrame) tween.endFrame = tween.startFrame;
+			if (i > 0) {
+				if (keyframe.frames[i][0] < keyframe.frames[i - 1][0]) {
+					keyframe.frames[i][0] = keyframe.frames[i - 1][0];
+				}
+			}
 		}
 	},
 
@@ -74,16 +87,16 @@ export const LayerMixin = {
 			const clone = new Layer(this.getCloneProps());
 			clone.startFrame = index + 1;
 			clone.endFrame = this.endFrame;
-			clone.resetTweens();
+			clone.resetKeyframes();
 			this.endFrame = index - 1;
-			this.resetTweens();
+			this.resetKeyframes();
 			return clone;
 		} else {
 			// outside range? fixes insert?
 			return this;
 		}
 		
-		this.resetTweens();
+		this.resetKeyframes();
 	},
 
 	shiftIndex(index, n) {
@@ -97,7 +110,7 @@ export const LayerMixin = {
 		if (this.startFrame >= index) this.startFrame += n;
 		if (this.endFrame >= index) this.endFrame += n;
 
-		this.resetTweens(); // can i check this somewhere else ? 
+		this.resetKeyframes();
 		return this;
 	},
 
@@ -110,12 +123,12 @@ export const LayerMixin = {
 			d: this.drawingIndex, 
 			s: this.styleIndex,
 		};
+		if (this.keyframes) props.k = this.keyframes;
 		if (this.group) props.g = this.group;
 		// if (this.drawingIndex >= 0) props.d = this.drawingIndex;
 		if (this.startFrame > 0 || this.endFrame > 0) props.f = [this.startFrame, this.endFrame];
 		if (this.x) props.x = this.x; // ignore if 0 or undefined
 		if (this.y) props.y = this.y;
-		if (this.tweens.length > 0) props.t = this.tweens.map(tween => { return [tween.prop, tween.startFrame, tween.endFrame, tween.startValue, tween.endValue]});
 		return props;
 	},
 

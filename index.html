@@ -41,6 +41,8 @@
 		const fm = new LinesFiles(animation, renderer);
 		fm.loadData(data);
 
+		console.log({ renderer, animation, fm })
+
 		renderer.onDraw = _timeElapsed => {
 			animation.update();
 			animation.draw();

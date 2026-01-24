@@ -14,6 +14,10 @@ export function createStyle({
 	return { color, lineWidth,segmentNum,jiggleRange,wiggleRange,wiggleSpeed,wiggleSegments,breaks,linesInterval, };
 }
 
+export function createKeyframeChannel({ prop, frames=[] }) {
+	return { prop, frames };
+}
+
 export function createTween({ prop, startFrame, endFrame, startValue, endValue }) {
 	return { prop, startFrame, endFrame, startValue, endValue };
 }

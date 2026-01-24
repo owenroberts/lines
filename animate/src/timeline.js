@@ -1,5 +1,5 @@
 import { UILayer } from './ui-layer.js';
-import { UITween } from './ui-tween.js';
+import { UIKeyFrameChannel } from './ui-keyframe-channel';
 import { UITimelineGroup } from './ui-timeline-group.js';
 import { UIButton, UIElement, UIPanel, UILabel, UIModal } from '../../../oi/src/oi.js';
 import { Points } from '../../src/lines.js';
@@ -310,7 +310,7 @@ export class TimelinePanel extends UIPanel {
 		if (!this.viewLayers) return;
 
 		let rowCount = 0; // set rows
-		let tweenCount = 0; // tweens
+		let keyFrameChannelCount = 0;
 
 		const layers = this.viewActiveLayers ?
 			this.anim.layers.filter(layer => {
@@ -413,33 +413,40 @@ export class TimelinePanel extends UIPanel {
 			rowCount++;
 			this.timelineRow.append(uiLayer, `layer-${i}`);
 
-			/* add tweens -- add methods like getTweens */
-			for (let j = 0; j < layer.tweens.length; j++) {
-				const tween = layer.tweens[j];
-				const tweenColWidth = (this.tlFrameWidth + 2) * (Math.floor(tween.endFrame / this.tlInc) - Math.floor(tween.startFrame / this.tlInc) + 1);
-				
-				const uiTween = new UITween({
+			for (let j = 0; j < layer.keyframes.length; j++) {
+				const channel = layer.keyframes[j];
+				const startFrame = channel.frames[0][0];
+				const endFrame = channel.frames[channel.frames.length - 1][0];
+				const channelWidth = (this.tlFrameWidth + 2) *
+					(
+						Math.floor(startFrame / this.tlInc) -
+						Math.floor(endFrame / this.tlInc) + 1
+					);
+
+				const uiKeyframeChannel = new UIKeyFrameChannel({
 					ui: this.ui,
-					type: 'tween',
+					anim: this.anim,
+					layer,
+					channel,
+					class: "keyframe",
 					css: {
-						width: tweenColWidth + 'px',
+						width: channelWidth + 'px',
 						gridRowStart: gridRowStart, 
 						gridRowEnd: gridRowEnd, 
-						gridColumnStart: Math.floor(tween.startFrame / this.tlInc) * 2 + 1,
-						gridColumnEnd: Math.floor(tween.endFrame / this.tlInc) * 2 + 3
+						gridColumnStart: Math.floor(startFrame / this.tlInc) * 2 + 1,
+						gridColumnEnd: Math.floor(endFrame / this.tlInc) * 2 + 3
 					},
-					update: () => { this.ui.update(); },
-				}, tween, layer);
-				
-				this.timelineRow.append(uiTween, `tween-${j}-layer-${i}`);
-				tweenCount++;
+				});
+
+				this.timelineRow.append(uiKeyframeChannel, `keyframe-${j}-layer-${i}`);
+				keyFrameChannelCount++;
 				gridRowStart += 2;
 				gridRowEnd += 2;
 			}
 		}
 
 		this.timelineRow.setStyle('--num-layers', rowCount);
-		this.timelineRow.setStyle('--num-tweens', tweenCount);
+		this.timelineRow.setStyle('--num-keyframe-channels', keyFrameChannelCount);
 	}
 
 	split() {

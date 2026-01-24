@@ -56,6 +56,7 @@ ui.update = () => {
 	ui.panels.timeline.update();
 	ui.panels.drawings.update();
 	ui.panels.clips.update();
+	anim.resetDefault();
 };
 
 ui.addPanel(new PlaybackPanel(ui, anim, renderer));

@@ -264,7 +264,7 @@ export class DataPanel extends UIPanel {
 			else if (layer.endFrame > f) {
 				layer.endFrame -= 1;
 			}
-			layer.resetTweens();
+			layer.resetKeyframes();
 		}
 		this.anim.updateClips();
 		lns.ui.update();
