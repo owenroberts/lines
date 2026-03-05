@@ -35,7 +35,7 @@ export class UIKeyFrameModal extends UIModal {
 		}
 
 		this.callback = () => {
-			if (!channel) this.layer.keyframes.push(channel);
+			if (!channel) this.layer.keyframes.push(this.channel);
 			this.ui.update();
 		};
 	}

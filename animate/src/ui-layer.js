@@ -296,7 +296,7 @@ export class UILayer extends UICollection {
 
 		modal.addBreak();
 
-		modal.add(uis.addKeyframe);
+		modal.add(uis.keyframes);
 		modal.add(uis.toEnd);
 
 		modal.addBreak();

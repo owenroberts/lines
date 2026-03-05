@@ -117,7 +117,6 @@ export class CanvasPanel extends UIPanel {
 
 	setFullSize(value) {
 		this.isFullSize = value;
-		console.log(this.isFullSize);
 		if (this.isFullSize) {
 			this.tempScale = this.renderer.scale;
 			
