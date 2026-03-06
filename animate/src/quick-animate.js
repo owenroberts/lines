@@ -42,9 +42,10 @@ export class QuickAnimatePanel extends UIPanel {
 			const layer = this.anim.layers[i];
 			if (!layer.isInFrame(this.anim.currentFrame)) continue;
 			
-			// layer.endFrame = this.anim.currentFrame + n; why ?? 
+			// add length of animation from end of layer
+			// this should account for anims starting middle of layer but fine for default
+			layer.endFrame = this.anim.currentFrame + n;
 
-			// why?
 			if (this.anim.clips.current.end < layer.endFrame) {
 				this.anim.clips.current.end = layer.endFrame;
 			}

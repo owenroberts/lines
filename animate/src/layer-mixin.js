@@ -43,6 +43,7 @@ export const LayerMixin = {
 
 	resetKeyframes() {
 		for (let i = 0; i < this.keyframes.length; i++) {
+			const keyframe = this.keyframes[i];
 			if (keyframe.frames[i][0] < this.startFrame) {
 				keyframe.frames[i][0] = this.startFrame;
 			}

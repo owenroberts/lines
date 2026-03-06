@@ -42,9 +42,14 @@ anim.styles.push(createStyle());
 
 const ui = new Interface({
 	name: "lines",
-	workspaces: [{
+	workspaces: 
+	[{
 		text: 'animation',
 		url: 'workspaces/animation.json',
+	},
+	{
+		text: 'basic',
+		url: 'workspaces/basic.json',
 	},
 	{
 		text: 'drawing',
